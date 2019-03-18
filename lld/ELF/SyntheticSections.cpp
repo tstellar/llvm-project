@@ -819,7 +819,7 @@ bool MipsGotSection::updateAllocSize() {
   return false;
 }
 
-template <class ELFT> void MipsGotSection::build() {
+void MipsGotSection::build() {
   if (Gots.empty())
     return;
 
@@ -1205,25 +1205,6 @@ DynamicSection<ELFT>::DynamicSection()
   // ftp://www.linux-mips.org/pub/linux/mips/doc/ABI/mipsabi.pdf
   if (Config->EMachine == EM_MIPS || Config->ZRodynamic)
     this->Flags = SHF_ALLOC;
-
-  // Add strings to .dynstr early so that .dynstr's size will be
-  // fixed early.
-  for (StringRef S : Config->FilterList)
-    addInt(DT_FILTER, In.DynStrTab->addString(S));
-  for (StringRef S : Config->AuxiliaryList)
-    addInt(DT_AUXILIARY, In.DynStrTab->addString(S));
-
-  if (!Config->Rpath.empty())
-    addInt(Config->EnableNewDtags ? DT_RUNPATH : DT_RPATH,
-           In.DynStrTab->addString(Config->Rpath));
-
-  for (InputFile *File : SharedFiles) {
-    SharedFile<ELFT> *F = cast<SharedFile<ELFT>>(File);
-    if (F->IsNeeded)
-      addInt(DT_NEEDED, In.DynStrTab->addString(F->SoName));
-  }
-  if (!Config->SoName.empty())
-    addInt(DT_SONAME, In.DynStrTab->addString(Config->SoName));
 }
 
 template <class ELFT>
@@ -1277,6 +1258,23 @@ static uint64_t addPltRelSz() {
 
 // Add remaining entries to complete .dynamic contents.
 template <class ELFT> void DynamicSection<ELFT>::finalizeContents() {
+  for (StringRef S : Config->FilterList)
+    addInt(DT_FILTER, In.DynStrTab->addString(S));
+  for (StringRef S : Config->AuxiliaryList)
+    addInt(DT_AUXILIARY, In.DynStrTab->addString(S));
+
+  if (!Config->Rpath.empty())
+    addInt(Config->EnableNewDtags ? DT_RUNPATH : DT_RPATH,
+           In.DynStrTab->addString(Config->Rpath));
+
+  for (InputFile *File : SharedFiles) {
+    SharedFile<ELFT> *F = cast<SharedFile<ELFT>>(File);
+    if (F->IsNeeded)
+      addInt(DT_NEEDED, In.DynStrTab->addString(F->SoName));
+  }
+  if (!Config->SoName.empty())
+    addInt(DT_SONAME, In.DynStrTab->addString(Config->SoName));
+
   // Set DT_FLAGS and DT_FLAGS_1.
   uint32_t DtFlags = 0;
   uint32_t DtFlags1 = 0;
@@ -1405,16 +1403,16 @@ template <class ELFT> void DynamicSection<ELFT>::finalizeContents() {
     if (B->isDefined())
       addSym(DT_FINI, B);
 
-  bool HasVerNeed = InX<ELFT>::VerNeed->getNeedNum() != 0;
+  bool HasVerNeed = In.VerNeed->getNeedNum() != 0;
   if (HasVerNeed || In.VerDef)
-    addInSec(DT_VERSYM, InX<ELFT>::VerSym);
+    addInSec(DT_VERSYM, In.VerSym);
   if (In.VerDef) {
     addInSec(DT_VERDEF, In.VerDef);
     addInt(DT_VERDEFNUM, getVerDefNum());
   }
   if (HasVerNeed) {
-    addInSec(DT_VERNEED, InX<ELFT>::VerNeed);
-    addInt(DT_VERNEEDNUM, InX<ELFT>::VerNeed->getNeedNum());
+    addInSec(DT_VERNEED, In.VerNeed);
+    addInt(DT_VERNEEDNUM, In.VerNeed->getNeedNum());
   }
 
   if (Config->EMachine == EM_MIPS) {
@@ -2769,24 +2767,23 @@ size_t VersionDefinitionSection::getSize() const {
 }
 
 // .gnu.version is a table where each entry is 2 byte long.
-template <class ELFT>
-VersionTableSection<ELFT>::VersionTableSection()
+VersionTableSection::VersionTableSection()
     : SyntheticSection(SHF_ALLOC, SHT_GNU_versym, sizeof(uint16_t),
                        ".gnu.version") {
   this->Entsize = 2;
 }
 
-template <class ELFT> void VersionTableSection<ELFT>::finalizeContents() {
+void VersionTableSection::finalizeContents() {
   // At the moment of june 2016 GNU docs does not mention that sh_link field
   // should be set, but Sun docs do. Also readelf relies on this field.
   getParent()->Link = In.DynSymTab->getParent()->SectionIndex;
 }
 
-template <class ELFT> size_t VersionTableSection<ELFT>::getSize() const {
+size_t VersionTableSection::getSize() const {
   return (In.DynSymTab->getSymbols().size() + 1) * 2;
 }
 
-template <class ELFT> void VersionTableSection<ELFT>::writeTo(uint8_t *Buf) {
+void VersionTableSection::writeTo(uint8_t *Buf) {
   Buf += 2;
   for (const SymbolTableEntry &S : In.DynSymTab->getSymbols()) {
     write16(Buf, S.Sym->VersionId);
@@ -2794,12 +2791,11 @@ template <class ELFT> void VersionTableSection<ELFT>::writeTo(uint8_t *Buf) {
   }
 }
 
-template <class ELFT> bool VersionTableSection<ELFT>::empty() const {
-  return !In.VerDef && InX<ELFT>::VerNeed->empty();
+bool VersionTableSection::empty() const {
+  return !In.VerDef && In.VerNeed->empty();
 }
 
-template <class ELFT>
-VersionNeedSection<ELFT>::VersionNeedSection()
+VersionNeedBaseSection::VersionNeedBaseSection()
     : SyntheticSection(SHF_ALLOC, SHT_GNU_verneed, sizeof(uint32_t),
                        ".gnu.version_r") {
   // Identifiers in verneed section start at 2 because 0 and 1 are reserved
@@ -3194,11 +3190,6 @@ template void PltSection::addEntry<ELF32BE>(Symbol &Sym);
 template void PltSection::addEntry<ELF64LE>(Symbol &Sym);
 template void PltSection::addEntry<ELF64BE>(Symbol &Sym);
 
-template void MipsGotSection::build<ELF32LE>();
-template void MipsGotSection::build<ELF32BE>();
-template void MipsGotSection::build<ELF64LE>();
-template void MipsGotSection::build<ELF64BE>();
-
 template class elf::MipsAbiFlagsSection<ELF32LE>;
 template class elf::MipsAbiFlagsSection<ELF32BE>;
 template class elf::MipsAbiFlagsSection<ELF64LE>;
@@ -3238,11 +3229,6 @@ template class elf::SymbolTableSection<ELF32LE>;
 template class elf::SymbolTableSection<ELF32BE>;
 template class elf::SymbolTableSection<ELF64LE>;
 template class elf::SymbolTableSection<ELF64BE>;
-
-template class elf::VersionTableSection<ELF32LE>;
-template class elf::VersionTableSection<ELF32BE>;
-template class elf::VersionTableSection<ELF64LE>;
-template class elf::VersionTableSection<ELF64BE>;
 
 template class elf::VersionNeedSection<ELF32LE>;
 template class elf::VersionNeedSection<ELF32BE>;

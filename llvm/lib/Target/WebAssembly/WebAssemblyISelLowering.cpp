@@ -174,6 +174,23 @@ WebAssemblyTargetLowering::WebAssemblyTargetLowering(
           setOperationAction(Op, T, Expand);
     }
 
+    // Expand integer operations supported for scalars but not SIMD
+    for (auto Op : {ISD::CTLZ, ISD::CTTZ, ISD::CTPOP, ISD::SDIV, ISD::UDIV,
+                    ISD::SREM, ISD::UREM, ISD::ROTL, ISD::ROTR}) {
+      for (auto T : {MVT::v16i8, MVT::v8i16, MVT::v4i32})
+        setOperationAction(Op, T, Expand);
+      if (Subtarget->hasUnimplementedSIMD128())
+        setOperationAction(Op, MVT::v2i64, Expand);
+    }
+
+    // Expand float operations supported for scalars but not SIMD
+    for (auto Op : {ISD::FCEIL, ISD::FFLOOR, ISD::FTRUNC, ISD::FNEARBYINT,
+                    ISD::FCOPYSIGN}) {
+      setOperationAction(Op, MVT::v4f32, Expand);
+      if (Subtarget->hasUnimplementedSIMD128())
+        setOperationAction(Op, MVT::v2f64, Expand);
+    }
+
     // Expand additional SIMD ops that V8 hasn't implemented yet
     if (!Subtarget->hasUnimplementedSIMD128()) {
       setOperationAction(ISD::FSQRT, MVT::v4f32, Expand);
@@ -341,8 +358,7 @@ static MachineBasicBlock *LowerFPToInt(MachineInstr &MI, DebugLoc DL,
   F->insert(It, DoneMBB);
 
   // Transfer the remainder of BB and its successor edges to DoneMBB.
-  DoneMBB->splice(DoneMBB->begin(), BB,
-                  std::next(MachineBasicBlock::iterator(MI)), BB->end());
+  DoneMBB->splice(DoneMBB->begin(), BB, std::next(MI.getIterator()), BB->end());
   DoneMBB->transferSuccessorsAndUpdatePHIs(BB);
 
   BB->addSuccessor(TrueMBB);
@@ -986,11 +1002,11 @@ WebAssemblyTargetLowering::LowerExternalSymbol(SDValue Op,
   EVT VT = Op.getValueType();
   assert(ES->getTargetFlags() == 0 &&
          "Unexpected target flags on generic ExternalSymbolSDNode");
-  // Set the TargetFlags to 0x1 which indicates that this is a "function"
-  // symbol rather than a data symbol. We do this unconditionally even though
-  // we don't know anything about the symbol other than its name, because all
-  // external symbols used in target-independent SelectionDAG code are for
-  // functions.
+  // Set the TargetFlags to MO_SYMBOL_FUNCTION which indicates that this is a
+  // "function" symbol rather than a data symbol. We do this unconditionally
+  // even though we don't know anything about the symbol other than its name,
+  // because all external symbols used in target-independent SelectionDAG code
+  // are for functions.
   return DAG.getNode(
       WebAssemblyISD::Wrapper, DL, VT,
       DAG.getTargetExternalSymbol(ES->getSymbol(), VT,

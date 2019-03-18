@@ -41,12 +41,12 @@ def LaneIdx#SIZE : ImmLeaf<i32, "return 0 <= Imm && Imm < "#SIZE#";">;
 
 // Load: v128.load
 multiclass SIMDLoad<ValueType vec_t> {
-  let mayLoad = 1 in
+  let mayLoad = 1, UseNamedOperandTable = 1 in
   defm LOAD_#vec_t :
-    SIMD_I<(outs V128:$dst), (ins P2Align:$align, offset32_op:$off, I32:$addr),
-           (outs), (ins P2Align:$align, offset32_op:$off), [],
-           "v128.load\t$dst, ${off}(${addr})$align",
-           "v128.load\t$off$align", 0>;
+    SIMD_I<(outs V128:$dst), (ins P2Align:$p2align, offset32_op:$off, I32:$addr),
+           (outs), (ins P2Align:$p2align, offset32_op:$off), [],
+           "v128.load\t$dst, ${off}(${addr})$p2align",
+           "v128.load\t$off$p2align", 0>;
 }
 
 foreach vec_t = [v16i8, v8i16, v4i32, v2i64, v4f32, v2f64] in {
@@ -57,20 +57,18 @@ def : LoadPatNoOffset<vec_t, load, !cast<NI>("LOAD_"#vec_t)>;
 def : LoadPatImmOff<vec_t, load, regPlusImm, !cast<NI>("LOAD_"#vec_t)>;
 def : LoadPatImmOff<vec_t, load, or_is_add, !cast<NI>("LOAD_"#vec_t)>;
 def : LoadPatGlobalAddr<vec_t, load, !cast<NI>("LOAD_"#vec_t)>;
-def : LoadPatExternalSym<vec_t, load, !cast<NI>("LOAD_"#vec_t)>;
 def : LoadPatOffsetOnly<vec_t, load, !cast<NI>("LOAD_"#vec_t)>;
 def : LoadPatGlobalAddrOffOnly<vec_t, load, !cast<NI>("LOAD_"#vec_t)>;
-def : LoadPatExternSymOffOnly<vec_t, load, !cast<NI>("LOAD_"#vec_t)>;
 }
 
 // Store: v128.store
 multiclass SIMDStore<ValueType vec_t> {
-  let mayStore = 1 in
+  let mayStore = 1, UseNamedOperandTable = 1 in
   defm STORE_#vec_t :
-    SIMD_I<(outs), (ins P2Align:$align, offset32_op:$off, I32:$addr, V128:$vec),
-           (outs), (ins P2Align:$align, offset32_op:$off), [],
-           "v128.store\t${off}(${addr})$align, $vec",
-           "v128.store\t$off$align", 1>;
+    SIMD_I<(outs), (ins P2Align:$p2align, offset32_op:$off, I32:$addr, V128:$vec),
+           (outs), (ins P2Align:$p2align, offset32_op:$off), [],
+           "v128.store\t${off}(${addr})$p2align, $vec",
+           "v128.store\t$off$p2align", 1>;
 }
 
 foreach vec_t = [v16i8, v8i16, v4i32, v2i64, v4f32, v2f64] in {
@@ -81,10 +79,8 @@ def : StorePatNoOffset<vec_t, store, !cast<NI>("STORE_"#vec_t)>;
 def : StorePatImmOff<vec_t, store, regPlusImm, !cast<NI>("STORE_"#vec_t)>;
 def : StorePatImmOff<vec_t, store, or_is_add, !cast<NI>("STORE_"#vec_t)>;
 def : StorePatGlobalAddr<vec_t, store, !cast<NI>("STORE_"#vec_t)>;
-def : StorePatExternalSym<vec_t, store, !cast<NI>("STORE_"#vec_t)>;
 def : StorePatOffsetOnly<vec_t, store, !cast<NI>("STORE_"#vec_t)>;
 def : StorePatGlobalAddrOffOnly<vec_t, store, !cast<NI>("STORE_"#vec_t)>;
-def : StorePatExternSymOffOnly<vec_t, store, !cast<NI>("STORE_"#vec_t)>;
 }
 
 //===----------------------------------------------------------------------===//

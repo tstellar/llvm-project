@@ -1401,6 +1401,8 @@ bool UnwrappedLineParser::tryToParseLambda() {
   if (!tryToParseLambdaIntroducer())
     return false;
 
+  bool SeenArrow = false;
+
   while (FormatTok->isNot(tok::l_brace)) {
     if (FormatTok->isSimpleTypeSpecifier()) {
       nextToken();
@@ -1425,11 +1427,47 @@ bool UnwrappedLineParser::tryToParseLambda() {
     case tok::kw_noexcept:
       nextToken();
       break;
+    // Specialization of a template with an integer parameter can contain
+    // arithmetic, logical, comparison and ternary operators.
+    //
+    // FIXME: This also accepts sequences of operators that are not in the scope
+    // of a template argument list.
+    //
+    // In a C++ lambda a template type can only occur after an arrow. We use
+    // this as an heuristic to distinguish between Objective-C expressions
+    // followed by an `a->b` expression, such as:
+    // ([obj func:arg] + a->b)
+    // Otherwise the code below would parse as a lambda.
+    case tok::plus:
+    case tok::minus:
+    case tok::exclaim:
+    case tok::tilde:
+    case tok::slash:
+    case tok::percent:
+    case tok::lessless:
+    case tok::pipe:
+    case tok::pipepipe:
+    case tok::ampamp:
+    case tok::caret:
+    case tok::equalequal:
+    case tok::exclaimequal:
+    case tok::greaterequal:
+    case tok::lessequal:
+    case tok::question:
+    case tok::colon:
+    case tok::kw_true:
+    case tok::kw_false:
+      if (SeenArrow) {
+        nextToken();
+        break;
+      }
+      return true;
     case tok::arrow:
       // This might or might not actually be a lambda arrow (this could be an
       // ObjC method invocation followed by a dereferencing arrow). We might
       // reset this back to TT_Unknown in TokenAnnotator.
       FormatTok->Type = TT_LambdaArrow;
+      SeenArrow = true;
       nextToken();
       break;
     default:

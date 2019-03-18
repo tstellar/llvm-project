@@ -10,7 +10,6 @@
 #include "AArch64ErrataFix.h"
 #include "CallGraphSort.h"
 #include "Config.h"
-#include "Filesystem.h"
 #include "LinkerScript.h"
 #include "MapFile.h"
 #include "OutputSections.h"
@@ -19,6 +18,7 @@
 #include "Symbols.h"
 #include "SyntheticSections.h"
 #include "Target.h"
+#include "lld/Common/Filesystem.h"
 #include "lld/Common/Memory.h"
 #include "lld/Common/Strings.h"
 #include "lld/Common/Threads.h"
@@ -332,16 +332,16 @@ template <class ELFT> static void createSyntheticSections() {
     In.DynSymTab = make<SymbolTableSection<ELFT>>(*In.DynStrTab);
     Add(In.DynSymTab);
 
-    InX<ELFT>::VerSym = make<VersionTableSection<ELFT>>();
-    Add(InX<ELFT>::VerSym);
+    In.VerSym = make<VersionTableSection>();
+    Add(In.VerSym);
 
     if (!Config->VersionDefinitions.empty()) {
       In.VerDef = make<VersionDefinitionSection>();
       Add(In.VerDef);
     }
 
-    InX<ELFT>::VerNeed = make<VersionNeedSection<ELFT>>();
-    Add(InX<ELFT>::VerNeed);
+    In.VerNeed = make<VersionNeedSection<ELFT>>();
+    Add(In.VerNeed);
 
     if (Config->GnuHash) {
       In.GnuHashTab = make<GnuHashTableSection>();
@@ -725,16 +725,15 @@ static bool isRelroSection(const OutputSection *Sec) {
 // * It is easy to check if a give branch was taken.
 // * It is easy two see how similar two ranks are (see getRankProximity).
 enum RankFlags {
-  RF_NOT_ADDR_SET = 1 << 18,
-  RF_NOT_ALLOC = 1 << 17,
-  RF_NOT_INTERP = 1 << 16,
-  RF_NOT_NOTE = 1 << 15,
-  RF_WRITE = 1 << 14,
-  RF_EXEC_WRITE = 1 << 13,
-  RF_EXEC = 1 << 12,
-  RF_RODATA = 1 << 11,
-  RF_NON_TLS_BSS = 1 << 10,
-  RF_NON_TLS_BSS_RO = 1 << 9,
+  RF_NOT_ADDR_SET = 1 << 17,
+  RF_NOT_ALLOC = 1 << 16,
+  RF_NOT_INTERP = 1 << 15,
+  RF_NOT_NOTE = 1 << 14,
+  RF_WRITE = 1 << 13,
+  RF_EXEC_WRITE = 1 << 12,
+  RF_EXEC = 1 << 11,
+  RF_RODATA = 1 << 10,
+  RF_NOT_RELRO = 1 << 9,
   RF_NOT_TLS = 1 << 8,
   RF_BSS = 1 << 7,
   RF_PPC_NOT_TOCBSS = 1 << 6,
@@ -803,37 +802,26 @@ static unsigned getSectionRank(const OutputSection *Sec) {
     Rank |= RF_RODATA;
   }
 
+  // Place RelRo sections first. After considering SHT_NOBITS below, the
+  // ordering is PT_LOAD(PT_GNU_RELRO(.data.rel.ro .bss.rel.ro) | .data .bss),
+  // where | marks where page alignment happens. An alternative ordering is
+  // PT_LOAD(.data | PT_GNU_RELRO( .data.rel.ro .bss.rel.ro) | .bss), but it may
+  // waste more bytes due to 2 alignment places.
+  if (!isRelroSection(Sec))
+    Rank |= RF_NOT_RELRO;
+
   // If we got here we know that both A and B are in the same PT_LOAD.
-
-  bool IsTls = Sec->Flags & SHF_TLS;
-  bool IsNoBits = Sec->Type == SHT_NOBITS;
-
-  // The first requirement we have is to put (non-TLS) nobits sections last. The
-  // reason is that the only thing the dynamic linker will see about them is a
-  // p_memsz that is larger than p_filesz. Seeing that it zeros the end of the
-  // PT_LOAD, so that has to correspond to the nobits sections.
-  bool IsNonTlsNoBits = IsNoBits && !IsTls;
-  if (IsNonTlsNoBits)
-    Rank |= RF_NON_TLS_BSS;
-
-  // We place nobits RelRo sections before plain r/w ones, and non-nobits RelRo
-  // sections after r/w ones, so that the RelRo sections are contiguous.
-  bool IsRelRo = isRelroSection(Sec);
-  if (IsNonTlsNoBits && !IsRelRo)
-    Rank |= RF_NON_TLS_BSS_RO;
-  if (!IsNonTlsNoBits && IsRelRo)
-    Rank |= RF_NON_TLS_BSS_RO;
 
   // The TLS initialization block needs to be a single contiguous block in a R/W
   // PT_LOAD, so stick TLS sections directly before the other RelRo R/W
-  // sections. The TLS NOBITS sections are placed here as they don't take up
-  // virtual address space in the PT_LOAD.
-  if (!IsTls)
+  // sections. Since p_filesz can be less than p_memsz, place NOBITS sections
+  // after PROGBITS.
+  if (!(Sec->Flags & SHF_TLS))
     Rank |= RF_NOT_TLS;
 
-  // Within the TLS initialization block, the non-nobits sections need to appear
-  // first.
-  if (IsNoBits)
+  // Within TLS sections, or within other RelRo sections, or within non-RelRo
+  // sections, place non-NOBITS sections first.
+  if (Sec->Type == SHT_NOBITS)
     Rank |= RF_BSS;
 
   // Some architectures have additional ordering restrictions for sections
@@ -1054,7 +1042,6 @@ static bool shouldSkip(BaseCommand *Cmd) {
 // We want to place orphan sections so that they share as much
 // characteristics with their neighbors as possible. For example, if
 // both are rw, or both are tls.
-template <typename ELFT>
 static std::vector<BaseCommand *>::iterator
 findOrphanPos(std::vector<BaseCommand *>::iterator B,
               std::vector<BaseCommand *>::iterator E) {
@@ -1379,7 +1366,7 @@ template <class ELFT> void Writer<ELFT>::sortSections() {
   I = FirstSectionOrDotAssignment;
 
   while (NonScriptI != E) {
-    auto Pos = findOrphanPos<ELFT>(I, NonScriptI);
+    auto Pos = findOrphanPos(I, NonScriptI);
     OutputSection *Orphan = cast<OutputSection>(*NonScriptI);
 
     // As an optimization, find all sections with the same sort rank
@@ -1714,7 +1701,7 @@ template <class ELFT> void Writer<ELFT>::finalizeSections() {
       In.DynSymTab->addSymbol(Sym);
       if (auto *File = dyn_cast_or_null<SharedFile<ELFT>>(Sym->File))
         if (File->IsNeeded && !Sym->isUndefined())
-          InX<ELFT>::VerNeed->addSymbol(Sym);
+          In.VerNeed->addSymbol(Sym);
     }
   }
 
@@ -1723,7 +1710,7 @@ template <class ELFT> void Writer<ELFT>::finalizeSections() {
     return;
 
   if (In.MipsGot)
-    In.MipsGot->build<ELFT>();
+    In.MipsGot->build();
 
   removeUnusedSyntheticSections();
 
@@ -1792,7 +1779,6 @@ template <class ELFT> void Writer<ELFT>::finalizeSections() {
   finalizeSynthetic(In.ShStrTab);
   finalizeSynthetic(In.StrTab);
   finalizeSynthetic(In.VerDef);
-  finalizeSynthetic(In.DynStrTab);
   finalizeSynthetic(In.Got);
   finalizeSynthetic(In.MipsGot);
   finalizeSynthetic(In.IgotPlt);
@@ -1804,8 +1790,8 @@ template <class ELFT> void Writer<ELFT>::finalizeSections() {
   finalizeSynthetic(In.Plt);
   finalizeSynthetic(In.Iplt);
   finalizeSynthetic(In.EhFrameHdr);
-  finalizeSynthetic(InX<ELFT>::VerSym);
-  finalizeSynthetic(InX<ELFT>::VerNeed);
+  finalizeSynthetic(In.VerSym);
+  finalizeSynthetic(In.VerNeed);
   finalizeSynthetic(In.Dynamic);
 
   if (!Script->HasSectionsCommand && !Config->Relocatable)
@@ -1835,7 +1821,7 @@ template <class ELFT> void Writer<ELFT>::finalizeSections() {
   // at the end because some tags like RELSZ depend on result
   // of finalizing other sections.
   for (OutputSection *Sec : OutputSections)
-    Sec->finalize<ELFT>();
+    Sec->finalize();
 }
 
 // Ensure data sections are not mixed with executable sections when
@@ -1958,6 +1944,29 @@ template <class ELFT> std::vector<PhdrEntry *> Writer<ELFT>::createPhdrs() {
   Load->add(Out::ElfHeader);
   Load->add(Out::ProgramHeaders);
 
+  // PT_GNU_RELRO includes all sections that should be marked as
+  // read-only by dynamic linker after proccessing relocations.
+  // Current dynamic loaders only support one PT_GNU_RELRO PHDR, give
+  // an error message if more than one PT_GNU_RELRO PHDR is required.
+  PhdrEntry *RelRo = make<PhdrEntry>(PT_GNU_RELRO, PF_R);
+  bool InRelroPhdr = false;
+  OutputSection *RelroEnd = nullptr;
+  for (OutputSection *Sec : OutputSections) {
+    if (!needsPtLoad(Sec))
+      continue;
+    if (isRelroSection(Sec)) {
+      InRelroPhdr = true;
+      if (!RelroEnd)
+        RelRo->add(Sec);
+      else
+        error("section: " + Sec->Name + " is not contiguous with other relro" +
+              " sections");
+    } else if (InRelroPhdr) {
+      InRelroPhdr = false;
+      RelroEnd = Sec;
+    }
+  }
+
   for (OutputSection *Sec : OutputSections) {
     if (!(Sec->Flags & SHF_ALLOC))
       break;
@@ -1975,8 +1984,8 @@ template <class ELFT> std::vector<PhdrEntry *> Writer<ELFT>::createPhdrs() {
     if (((Sec->LMAExpr ||
           (Sec->LMARegion && (Sec->LMARegion != Load->FirstSec->LMARegion))) &&
          Load->LastSec != Out::ProgramHeaders) ||
-        Sec->MemRegion != Load->FirstSec->MemRegion || Flags != NewFlags) {
-
+        Sec->MemRegion != Load->FirstSec->MemRegion || Flags != NewFlags ||
+        Sec == RelroEnd) {
       Load = AddHdr(PT_LOAD, NewFlags);
       Flags = NewFlags;
     }
@@ -1996,28 +2005,6 @@ template <class ELFT> std::vector<PhdrEntry *> Writer<ELFT>::createPhdrs() {
   if (OutputSection *Sec = In.Dynamic->getParent())
     AddHdr(PT_DYNAMIC, Sec->getPhdrFlags())->add(Sec);
 
-  // PT_GNU_RELRO includes all sections that should be marked as
-  // read-only by dynamic linker after proccessing relocations.
-  // Current dynamic loaders only support one PT_GNU_RELRO PHDR, give
-  // an error message if more than one PT_GNU_RELRO PHDR is required.
-  PhdrEntry *RelRo = make<PhdrEntry>(PT_GNU_RELRO, PF_R);
-  bool InRelroPhdr = false;
-  bool IsRelroFinished = false;
-  for (OutputSection *Sec : OutputSections) {
-    if (!needsPtLoad(Sec))
-      continue;
-    if (isRelroSection(Sec)) {
-      InRelroPhdr = true;
-      if (!IsRelroFinished)
-        RelRo->add(Sec);
-      else
-        error("section: " + Sec->Name + " is not contiguous with other relro" +
-              " sections");
-    } else if (InRelroPhdr) {
-      InRelroPhdr = false;
-      IsRelroFinished = true;
-    }
-  }
   if (RelRo->FirstSec)
     Ret.push_back(RelRo);
 

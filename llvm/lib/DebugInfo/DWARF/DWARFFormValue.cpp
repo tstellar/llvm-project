@@ -97,14 +97,11 @@ DWARFFormValue DWARFFormValue::createFromBlockValue(dwarf::Form F,
   return DWARFFormValue(F, V);
 }
 
-DWARFFormValue DWARFFormValue::createFromData(dwarf::Form F,
-                                              dwarf::FormParams FormParams,
-                                              const DWARFUnit &U,
-                                              const DWARFDataExtractor &Data,
-                                              uint32_t *OffsetPtr,
-                                              const DWARFContext *Ctx) {
+DWARFFormValue DWARFFormValue::createFromUnit(dwarf::Form F, const DWARFUnit *U,
+                                              uint32_t *OffsetPtr) {
   DWARFFormValue FormValue(F);
-  FormValue.extractValue(Data, OffsetPtr, FormParams, &U, Ctx);
+  FormValue.extractValue(U->getDebugInfoExtractor(), OffsetPtr,
+                         U->getFormParams(), U);
   return FormValue;
 }
 
@@ -223,19 +220,23 @@ bool DWARFFormValue::isFormClass(DWARFFormValue::FormClass FC) const {
   default:
     break;
   }
-  // In DWARF3 DW_FORM_data4 and DW_FORM_data8 served also as a section offset.
-  // Don't check for DWARF version here, as some producers may still do this
-  // by mistake. Also accept DW_FORM_[line_]strp since these are
-  // .debug_[line_]str section offsets.
-  return (Form == DW_FORM_data4 || Form == DW_FORM_data8 ||
-          Form == DW_FORM_strp || Form == DW_FORM_line_strp) &&
-         FC == FC_SectionOffset;
+
+  if (FC == FC_SectionOffset) {
+    if (Form == DW_FORM_strp || Form == DW_FORM_line_strp)
+      return true;
+    // In DWARF3 DW_FORM_data4 and DW_FORM_data8 served also as a section
+    // offset. If we don't have a DWARFUnit, default to the old behavior.
+    if (Form == DW_FORM_data4 || Form == DW_FORM_data8)
+      return !U || U->getVersion() <= 3;
+  }
+
+  return false;
 }
 
 bool DWARFFormValue::extractValue(const DWARFDataExtractor &Data,
                                   uint32_t *OffsetPtr, dwarf::FormParams FP,
-                                  const DWARFUnit *CU,
-                                  const DWARFContext *Ctx) {
+                                  const DWARFContext *Ctx,
+                                  const DWARFUnit *CU) {
   if (!Ctx && CU)
     Ctx = &CU->getContext();
   C = Ctx;

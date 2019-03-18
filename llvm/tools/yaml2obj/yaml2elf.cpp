@@ -133,8 +133,7 @@ class ELFState {
   const ELFYAML::Object &Doc;
 
   bool buildSectionIndex();
-  bool buildSymbolIndex(std::size_t &StartIndex,
-                        const std::vector<ELFYAML::Symbol> &Symbols);
+  bool buildSymbolIndex(const ELFYAML::LocalGlobalWeakSymbols &);
   void initELFHeader(Elf_Ehdr &Header);
   void initProgramHeaders(std::vector<Elf_Phdr> &PHeaders);
   bool initSectionHeaders(std::vector<Elf_Shdr> &SHeaders,
@@ -207,8 +206,7 @@ void ELFState<ELFT>::initELFHeader(Elf_Ehdr &Header) {
   Header.e_ident[EI_MAG2] = 'L';
   Header.e_ident[EI_MAG3] = 'F';
   Header.e_ident[EI_CLASS] = ELFT::Is64Bits ? ELFCLASS64 : ELFCLASS32;
-  bool IsLittleEndian = ELFT::TargetEndianness == support::little;
-  Header.e_ident[EI_DATA] = IsLittleEndian ? ELFDATA2LSB : ELFDATA2MSB;
+  Header.e_ident[EI_DATA] = Doc.Header.Data;
   Header.e_ident[EI_VERSION] = EV_CURRENT;
   Header.e_ident[EI_OSABI] = Doc.Header.OSABI;
   Header.e_ident[EI_ABIVERSION] = Doc.Header.ABIVersion;
@@ -399,44 +397,58 @@ void ELFState<ELFT>::setProgramHeaderLayout(std::vector<Elf_Phdr> &PHeaders,
   for (auto &YamlPhdr : Doc.ProgramHeaders) {
     auto &PHeader = PHeaders[PhdrIdx++];
 
-    if (YamlPhdr.Sections.size())
-      PHeader.p_offset = UINT32_MAX;
-    else
-      PHeader.p_offset = 0;
-
-    // Find the minimum offset for the program header.
-    for (auto SecName : YamlPhdr.Sections) {
-      uint32_t Index = 0;
-      SN2I.lookup(SecName.Section, Index);
-      const auto &SHeader = SHeaders[Index];
-      PHeader.p_offset = std::min(PHeader.p_offset, SHeader.sh_offset);
-    }
-
-    // Find the maximum offset of the end of a section in order to set p_filesz.
-    PHeader.p_filesz = 0;
-    for (auto SecName : YamlPhdr.Sections) {
-      uint32_t Index = 0;
-      SN2I.lookup(SecName.Section, Index);
-      const auto &SHeader = SHeaders[Index];
-      uint64_t EndOfSection;
-      if (SHeader.sh_type == llvm::ELF::SHT_NOBITS)
-        EndOfSection = SHeader.sh_offset;
+    if (YamlPhdr.Offset) {
+      PHeader.p_offset = *YamlPhdr.Offset;
+    } else {
+      if (YamlPhdr.Sections.size())
+        PHeader.p_offset = UINT32_MAX;
       else
-        EndOfSection = SHeader.sh_offset + SHeader.sh_size;
-      uint64_t EndOfSegment = PHeader.p_offset + PHeader.p_filesz;
-      EndOfSegment = std::max(EndOfSegment, EndOfSection);
-      PHeader.p_filesz = EndOfSegment - PHeader.p_offset;
+        PHeader.p_offset = 0;
+
+      // Find the minimum offset for the program header.
+      for (auto SecName : YamlPhdr.Sections) {
+        uint32_t Index = 0;
+        SN2I.lookup(SecName.Section, Index);
+        const auto &SHeader = SHeaders[Index];
+        PHeader.p_offset = std::min(PHeader.p_offset, SHeader.sh_offset);
+      }
     }
 
-    // Find the memory size by adding the size of sections at the end of the
-    // segment. These should be empty (size of zero) and NOBITS sections.
-    PHeader.p_memsz = PHeader.p_filesz;
-    for (auto SecName : YamlPhdr.Sections) {
-      uint32_t Index = 0;
-      SN2I.lookup(SecName.Section, Index);
-      const auto &SHeader = SHeaders[Index];
-      if (SHeader.sh_offset == PHeader.p_offset + PHeader.p_filesz)
-        PHeader.p_memsz += SHeader.sh_size;
+    // Find the maximum offset of the end of a section in order to set p_filesz,
+    // if not set explicitly.
+    if (YamlPhdr.FileSize) {
+      PHeader.p_filesz = *YamlPhdr.FileSize;
+    } else {
+      PHeader.p_filesz = 0;
+      for (auto SecName : YamlPhdr.Sections) {
+        uint32_t Index = 0;
+        SN2I.lookup(SecName.Section, Index);
+        const auto &SHeader = SHeaders[Index];
+        uint64_t EndOfSection;
+        if (SHeader.sh_type == llvm::ELF::SHT_NOBITS)
+          EndOfSection = SHeader.sh_offset;
+        else
+          EndOfSection = SHeader.sh_offset + SHeader.sh_size;
+        uint64_t EndOfSegment = PHeader.p_offset + PHeader.p_filesz;
+        EndOfSegment = std::max(EndOfSegment, EndOfSection);
+        PHeader.p_filesz = EndOfSegment - PHeader.p_offset;
+      }
+    }
+
+    // If not set explicitly, find the memory size by adding the size of
+    // sections at the end of the segment. These should be empty (size of zero)
+    // and NOBITS sections.
+    if (YamlPhdr.MemSize) {
+      PHeader.p_memsz = *YamlPhdr.MemSize;
+    } else {
+      PHeader.p_memsz = PHeader.p_filesz;
+      for (auto SecName : YamlPhdr.Sections) {
+        uint32_t Index = 0;
+        SN2I.lookup(SecName.Section, Index);
+        const auto &SHeader = SHeaders[Index];
+        if (SHeader.sh_offset == PHeader.p_offset + PHeader.p_filesz)
+          PHeader.p_memsz += SHeader.sh_size;
+      }
     }
 
     // Set the alignment of the segment to be the same as the maximum alignment
@@ -532,11 +544,14 @@ ELFState<ELFT>::writeSectionContent(Elf_Shdr &SHeader,
 
   for (const auto &Rel : Section.Relocations) {
     unsigned SymIdx = 0;
-    // Some special relocation, R_ARM_v4BX for instance, does not have
-    // an external reference.  So it ignores the return value of lookup()
-    // here.
-    if (Rel.Symbol)
-      SymN2I.lookup(*Rel.Symbol, SymIdx);
+    // If a relocation references a symbol, try to look one up in the symbol
+    // table. If it is not there, treat the value as a symbol index.
+    if (Rel.Symbol && SymN2I.lookup(*Rel.Symbol, SymIdx) &&
+        !to_integer(*Rel.Symbol, SymIdx)) {
+      WithColor::error() << "Unknown symbol referenced: '" << *Rel.Symbol
+                         << "' at YAML section '" << Section.Name << "'.\n";
+      return false;
+    }
 
     if (IsRela) {
       Elf_Rela REntry;
@@ -780,16 +795,19 @@ template <class ELFT> bool ELFState<ELFT>::buildSectionIndex() {
 }
 
 template <class ELFT>
-bool
-ELFState<ELFT>::buildSymbolIndex(std::size_t &StartIndex,
-                                 const std::vector<ELFYAML::Symbol> &Symbols) {
-  for (const auto &Sym : Symbols) {
-    ++StartIndex;
-    if (Sym.Name.empty())
-      continue;
-    if (SymN2I.addName(Sym.Name, StartIndex)) {
-      WithColor::error() << "Repeated symbol name: '" << Sym.Name << "'.\n";
-      return false;
+bool ELFState<ELFT>::buildSymbolIndex(
+    const ELFYAML::LocalGlobalWeakSymbols &Symbols) {
+  std::size_t I = 0;
+  for (const std::vector<ELFYAML::Symbol> &V :
+       {Symbols.Local, Symbols.Global, Symbols.Weak}) {
+    for (const auto &Sym : V) {
+      ++I;
+      if (Sym.Name.empty())
+        continue;
+      if (SymN2I.addName(Sym.Name, I)) {
+        WithColor::error() << "Repeated symbol name: '" << Sym.Name << "'.\n";
+        return false;
+      }
     }
   }
   return true;
@@ -847,10 +865,7 @@ int ELFState<ELFT>::writeELF(raw_ostream &OS, const ELFYAML::Object &Doc) {
   if (!State.buildSectionIndex())
     return 1;
 
-  std::size_t StartSymIndex = 0;
-  if (!State.buildSymbolIndex(StartSymIndex, Doc.Symbols.Local) ||
-      !State.buildSymbolIndex(StartSymIndex, Doc.Symbols.Global) ||
-      !State.buildSymbolIndex(StartSymIndex, Doc.Symbols.Weak))
+  if (!State.buildSymbolIndex(Doc.Symbols))
     return 1;
 
   Elf_Ehdr Header;

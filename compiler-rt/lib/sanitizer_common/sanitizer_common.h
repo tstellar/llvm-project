@@ -238,7 +238,6 @@ char **GetArgv();
 char **GetEnviron();
 void PrintCmdline();
 bool StackSizeIsUnlimited();
-uptr GetStackSizeLimitInBytes();
 void SetStackSizeLimitInBytes(uptr limit);
 bool AddressSpaceIsUnlimited();
 void SetAddressSpaceUnlimited();
@@ -804,7 +803,7 @@ enum AndroidApiLevel {
 
 void WriteToSyslog(const char *buffer);
 
-#if defined(SANITIZER_WINDOWS) && defined(_MSC_VER)
+#if defined(SANITIZER_WINDOWS) && defined(_MSC_VER) && !defined(__clang__)
 #define SANITIZER_WIN_TRACE 1
 #else
 #define SANITIZER_WIN_TRACE 0

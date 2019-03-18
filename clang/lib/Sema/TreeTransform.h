@@ -691,7 +691,6 @@ public:
 #define OPENMP_CLAUSE(Name, Class)                        \
   LLVM_ATTRIBUTE_NOINLINE \
   OMPClause *Transform ## Class(Class *S);
-  OPENMP_CLAUSE(flush, OMPFlushClause)
 #include "clang/Basic/OpenMPKinds.def"
 
   /// Build a new qualified type given its unqualified type and type location.
@@ -1553,6 +1552,16 @@ public:
                                      SourceLocation LParenLoc,
                                      SourceLocation EndLoc) {
     return getSema().ActOnOpenMPSimdlenClause(Len, StartLoc, LParenLoc, EndLoc);
+  }
+
+  /// Build a new OpenMP 'allocator' clause.
+  ///
+  /// By default, performs semantic analysis to build the new OpenMP clause.
+  /// Subclasses may override this routine to provide different behavior.
+  OMPClause *RebuildOMPAllocatorClause(Expr *A, SourceLocation StartLoc,
+                                       SourceLocation LParenLoc,
+                                       SourceLocation EndLoc) {
+    return getSema().ActOnOpenMPAllocatorClause(A, StartLoc, LParenLoc, EndLoc);
   }
 
   /// Build a new OpenMP 'collapse' clause.
@@ -3323,7 +3332,6 @@ OMPClause *TreeTransform<Derived>::TransformOMPClause(OMPClause *S) {
 #define OPENMP_CLAUSE(Name, Class)                                             \
   case OMPC_ ## Name :                                                         \
     return getDerived().Transform ## Class(cast<Class>(S));
-  OPENMP_CLAUSE(flush, OMPFlushClause)
 #include "clang/Basic/OpenMPKinds.def"
   }
 
@@ -8342,6 +8350,16 @@ TreeTransform<Derived>::TransformOMPSafelenClause(OMPSafelenClause *C) {
   if (E.isInvalid())
     return nullptr;
   return getDerived().RebuildOMPSafelenClause(
+      E.get(), C->getBeginLoc(), C->getLParenLoc(), C->getEndLoc());
+}
+
+template <typename Derived>
+OMPClause *
+TreeTransform<Derived>::TransformOMPAllocatorClause(OMPAllocatorClause *C) {
+  ExprResult E = getDerived().TransformExpr(C->getAllocator());
+  if (E.isInvalid())
+    return nullptr;
+  return getDerived().RebuildOMPAllocatorClause(
       E.get(), C->getBeginLoc(), C->getLParenLoc(), C->getEndLoc());
 }
 

@@ -18,6 +18,7 @@
 #include "lld/Common/Args.h"
 #include "lld/Common/Driver.h"
 #include "lld/Common/ErrorHandler.h"
+#include "lld/Common/Filesystem.h"
 #include "lld/Common/Memory.h"
 #include "lld/Common/Threads.h"
 #include "lld/Common/Timer.h"
@@ -264,7 +265,13 @@ static bool isDecorated(StringRef Sym) {
 
 // Parses .drectve section contents and returns a list of files
 // specified by /defaultlib.
-void LinkerDriver::parseDirectives(StringRef S) {
+void LinkerDriver::parseDirectives(InputFile *File) {
+  StringRef S = File->getDirectives();
+  if (S.empty())
+    return;
+
+  log("Directives: " + toString(File) + ": " + S);
+
   ArgParser Parser;
   // .drectve is always tokenized using Windows shell rules.
   // /EXPORT: option can appear too many times, processing in fastpath.
@@ -307,7 +314,7 @@ void LinkerDriver::parseDirectives(StringRef S) {
       Config->Entry = addUndefined(mangle(Arg->getValue()));
       break;
     case OPT_failifmismatch:
-      checkFailIfMismatch(Arg->getValue());
+      checkFailIfMismatch(Arg->getValue(), toString(File));
       break;
     case OPT_incl:
       addUndefined(Arg->getValue());
@@ -993,6 +1000,8 @@ void LinkerDriver::link(ArrayRef<const char *> ArgsArr) {
   if (Args.hasArg(OPT_show_timing))
     Config->ShowTiming = true;
 
+  Config->ShowSummary = Args.hasArg(OPT_summary);
+
   ScopedTimer T(Timer::root());
   // Handle --version, which is an lld extension. This option is a bit odd
   // because it doesn't start with "/", but we deliberately chose "--" to
@@ -1073,6 +1082,9 @@ void LinkerDriver::link(ArrayRef<const char *> ArgsArr) {
     Config->Debug = true;
     Config->Incremental = true;
   }
+
+  // Handle /demangle
+  Config->Demangle = Args.hasFlag(OPT_demangle, OPT_demangle_no);
 
   // Handle /debugtype
   Config->DebugTypes = parseDebugTypes(Args);
@@ -1271,7 +1283,7 @@ void LinkerDriver::link(ArrayRef<const char *> ArgsArr) {
 
   // Handle /failifmismatch
   for (auto *Arg : Args.filtered(OPT_failifmismatch))
-    checkFailIfMismatch(Arg->getValue());
+    checkFailIfMismatch(Arg->getValue(), "cmd-line");
 
   // Handle /merge
   for (auto *Arg : Args.filtered(OPT_merge))
@@ -1517,6 +1529,12 @@ void LinkerDriver::link(ArrayRef<const char *> ArgsArr) {
   if (Config->OutputFile.empty()) {
     Config->OutputFile =
         getOutputPath((*Args.filtered(OPT_INPUT).begin())->getValue());
+  }
+
+  // Fail early if an output file is not writable.
+  if (auto E = tryCreateFile(Config->OutputFile)) {
+    error("cannot open output file " + Config->OutputFile + ": " + E.message());
+    return;
   }
 
   if (ShouldCreatePDB) {

@@ -6,6 +6,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+// XFAIL: *
 // UNSUPPORTED: c++98, c++03, c++11, c++14
 // UNSUPPORTED: libcpp-no-exceptions, libcpp-no-if-constexpr
 // MODULES_DEFINES: _LIBCPP_DEBUG=1
@@ -40,6 +41,7 @@ public:
   static void run() {
     Base::run();
     try {
+      SanityTest();
       FrontOnEmptyContainer();
 
       if constexpr (CT != CT_ForwardList) {
@@ -64,6 +66,7 @@ public:
       }
       if constexpr (CT == CT_List) {
         SpliceFirstElem();
+        SpliceSameContainer();
       }
     } catch (...) {
       assert(false && "uncaught debug exception");
@@ -71,6 +74,12 @@ public:
   }
 
 private:
+  static void SanityTest() {
+    CHECKPOINT("sanity test");
+    Container C = {1, 1, 1, 1};
+    ::DoNotOptimize(&C);
+  }
+
   static void RemoveFirstElem() {
     // See llvm.org/PR35564
     CHECKPOINT("remove(<first-elem>)");
@@ -103,6 +112,11 @@ private:
     }
   }
 
+  static void SpliceSameContainer() {
+    CHECKPOINT("splice(<same-container>)");
+    Container C = {1, 1};
+    C.splice(C.end(), C, C.begin());
+  }
 
   static void SpliceFirstElemAfter() {
     // See llvm.org/PR35564

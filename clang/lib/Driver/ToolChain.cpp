@@ -362,16 +362,27 @@ std::string ToolChain::getCompilerRTPath() const {
 }
 
 std::string ToolChain::getCompilerRT(const ArgList &Args, StringRef Component,
-                                     bool Shared) const {
+                                     FileType Type) const {
   const llvm::Triple &TT = getTriple();
   bool IsITANMSVCWindows =
       TT.isWindowsMSVCEnvironment() || TT.isWindowsItaniumEnvironment();
 
-  const char *Prefix = IsITANMSVCWindows ? "" : "lib";
-  const char *Suffix = Shared ? (Triple.isOSWindows() ? ".lib" : ".so")
-                              : (IsITANMSVCWindows ? ".lib" : ".a");
-  if (Shared && Triple.isWindowsGNUEnvironment())
-    Suffix = ".dll.a";
+  const char *Prefix =
+      IsITANMSVCWindows || Type == ToolChain::FT_Object ? "" : "lib";
+  const char *Suffix;
+  switch (Type) {
+  case ToolChain::FT_Object:
+    Suffix = IsITANMSVCWindows ? ".obj" : ".o";
+    break;
+  case ToolChain::FT_Static:
+    Suffix = IsITANMSVCWindows ? ".lib" : ".a";
+    break;
+  case ToolChain::FT_Shared:
+    Suffix = Triple.isOSWindows()
+                 ? (Triple.isWindowsGNUEnvironment() ? ".dll.a" : ".lib")
+                 : ".so";
+    break;
+  }
 
   for (const auto &LibPath : getLibraryPaths()) {
     SmallString<128> P(LibPath);
@@ -390,8 +401,8 @@ std::string ToolChain::getCompilerRT(const ArgList &Args, StringRef Component,
 
 const char *ToolChain::getCompilerRTArgString(const llvm::opt::ArgList &Args,
                                               StringRef Component,
-                                              bool Shared) const {
-  return Args.MakeArgString(getCompilerRT(Args, Component, Shared));
+                                              FileType Type) const {
+  return Args.MakeArgString(getCompilerRT(Args, Component, Type));
 }
 
 std::string ToolChain::getArchSpecificLibPath() const {
@@ -405,9 +416,12 @@ bool ToolChain::needsProfileRT(const ArgList &Args) {
   if (needsGCovInstrumentation(Args) ||
       Args.hasArg(options::OPT_fprofile_generate) ||
       Args.hasArg(options::OPT_fprofile_generate_EQ) ||
+      Args.hasArg(options::OPT_fcs_profile_generate) ||
+      Args.hasArg(options::OPT_fcs_profile_generate_EQ) ||
       Args.hasArg(options::OPT_fprofile_instr_generate) ||
       Args.hasArg(options::OPT_fprofile_instr_generate_EQ) ||
-      Args.hasArg(options::OPT_fcreate_profile))
+      Args.hasArg(options::OPT_fcreate_profile) ||
+      Args.hasArg(options::OPT_forder_file_instrumentation)) 
     return true;
 
   return false;

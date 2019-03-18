@@ -85,6 +85,12 @@ Improvements to clang-tidy
   Finds and fixes cases where ``absl::Duration`` values are being converted to
   numeric types and back again.
 
+- New :doc:`abseil-time-comparison
+  <clang-tidy/checks/abseil-time-comparison>` check.
+
+  Prefer comparisons in the ``absl::Time`` domain instead of the integer
+  domain.
+
 - New :doc:`abseil-time-subtraction
   <clang-tidy/checks/abseil-time-subtraction>` check.
 
@@ -126,3 +132,9 @@ Improvements to modularize
 --------------------------
 
 The improvements are...
+
+Improvements to pp-trace
+------------------------
+
+- Added a new option `-callbacks` to filter preprocessor callbacks. It replaces
+  the `-ignore` option.

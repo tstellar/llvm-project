@@ -1684,6 +1684,8 @@ static void findUnwindDestinations(
 
   if (IsWasmCXX) {
     findWasmUnwindDestinations(FuncInfo, EHPadBB, Prob, UnwindDests);
+    assert(UnwindDests.size() <= 1 &&
+           "There should be at most one unwind destination for wasm");
     return;
   }
 
@@ -2535,6 +2537,12 @@ SelectionDAGBuilder::visitSPDescriptorFailure(StackProtectorDescriptor &SPD) {
   SDValue Chain =
       TLI.makeLibCall(DAG, RTLIB::STACKPROTECTOR_CHECK_FAIL, MVT::isVoid,
                       None, false, getCurSDLoc(), false, false).second;
+  // On PS4, the "return address" must still be within the calling function,
+  // even if it's at the very end, so emit an explicit TRAP here.
+  // Passing 'true' for doesNotReturn above won't generate the trap for us.
+  if (TM.getTargetTriple().isPS4CPU())
+    Chain = DAG.getNode(ISD::TRAP, getCurSDLoc(), MVT::Other, Chain);
+
   DAG.setRoot(Chain);
 }
 
@@ -2689,6 +2697,20 @@ void SelectionDAGBuilder::visitInvoke(const InvokeInst &I) {
     case Intrinsic::experimental_gc_statepoint:
       LowerStatepoint(ImmutableStatepoint(&I), EHPadBB);
       break;
+    case Intrinsic::wasm_rethrow_in_catch: {
+      // This is usually done in visitTargetIntrinsic, but this intrinsic is
+      // special because it can be invoked, so we manually lower it to a DAG
+      // node here.
+      SmallVector<SDValue, 8> Ops;
+      Ops.push_back(getRoot()); // inchain
+      const TargetLowering &TLI = DAG.getTargetLoweringInfo();
+      Ops.push_back(
+          DAG.getTargetConstant(Intrinsic::wasm_rethrow_in_catch, getCurSDLoc(),
+                                TLI.getPointerTy(DAG.getDataLayout())));
+      SDVTList VTs = DAG.getVTList(ArrayRef<EVT>({MVT::Other})); // outchain
+      DAG.setRoot(DAG.getNode(ISD::INTRINSIC_VOID, getCurSDLoc(), VTs, Ops));
+      break;
+    }
     }
   } else if (I.countOperandBundlesOfType(LLVMContext::OB_deopt)) {
     // Currently we do not lower any intrinsic calls with deopt operand bundles.
@@ -5304,12 +5326,14 @@ bool SelectionDAGBuilder::EmitFuncArgumentDbgValue(
     }
   }
 
-  if (!Op && N.getNode())
+  if (!Op && N.getNode()) {
     // Check if frame index is available.
-    if (LoadSDNode *LNode = dyn_cast<LoadSDNode>(N.getNode()))
+    SDValue LCandidate = peekThroughBitcasts(N);
+    if (LoadSDNode *LNode = dyn_cast<LoadSDNode>(LCandidate.getNode()))
       if (FrameIndexSDNode *FINode =
           dyn_cast<FrameIndexSDNode>(LNode->getBasePtr().getNode()))
         Op = MachineOperand::CreateFI(FINode->getIndex());
+  }
 
   if (!Op) {
     // Check if ValueMap has reg number.

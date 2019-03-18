@@ -412,3 +412,12 @@ bool CheckValueTypeMatcher::isContradictoryImpl(const Matcher *M) const {
   return false;
 }
 
+bool CheckImmAllOnesVMatcher::isContradictoryImpl(const Matcher *M) const {
+  // AllZeros is contradictory.
+  return isa<CheckImmAllZerosVMatcher>(M);
+}
+
+bool CheckImmAllZerosVMatcher::isContradictoryImpl(const Matcher *M) const {
+  // AllOnes is contradictory.
+  return isa<CheckImmAllOnesVMatcher>(M);
+}

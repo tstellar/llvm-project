@@ -178,7 +178,7 @@ public:
 
     std::error_code EC;
     m_stream_up = llvm::make_unique<raw_fd_ostream>(history_file.GetPath(), EC,
-                                                    sys::fs::OpenFlags::F_None);
+                                                    sys::fs::OpenFlags::F_Text);
     return m_stream_up.get();
   }
 
@@ -4213,7 +4213,7 @@ StructuredData::ObjectSP ProcessGDBRemote::GetSharedCacheInfo() {
 }
 
 Status ProcessGDBRemote::ConfigureStructuredData(
-    const ConstString &type_name, const StructuredData::ObjectSP &config_sp) {
+    ConstString type_name, const StructuredData::ObjectSP &config_sp) {
   return m_gdb_comm.ConfigureRemoteStructuredData(type_name, config_sp);
 }
 

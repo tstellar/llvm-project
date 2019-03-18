@@ -1970,9 +1970,13 @@ SDValue SelectionDAG::FoldSetCC(EVT VT, SDValue N1, SDValue N2,
   case ISD::SETUO:
   case ISD::SETUEQ:
   case ISD::SETUNE:
-    assert(!N1.getValueType().isInteger() && "Illegal setcc for integer!");
+    assert(!OpVT.isInteger() && "Illegal setcc for integer!");
     break;
   }
+
+  // We can always fold X == X for integer setcc's.
+  if (N1 == N2 && OpVT.isInteger())
+    return getBoolConstant(ISD::isTrueWhenEqual(Cond), dl, VT, OpVT);
 
   if (ConstantSDNode *N2C = dyn_cast<ConstantSDNode>(N2)) {
     const APInt &C2 = N2C->getAPIntValue();
@@ -1994,71 +1998,83 @@ SDValue SelectionDAG::FoldSetCC(EVT VT, SDValue N1, SDValue N2,
       }
     }
   }
-  if (ConstantFPSDNode *N1C = dyn_cast<ConstantFPSDNode>(N1)) {
-    if (ConstantFPSDNode *N2C = dyn_cast<ConstantFPSDNode>(N2)) {
-      APFloat::cmpResult R = N1C->getValueAPF().compare(N2C->getValueAPF());
-      switch (Cond) {
-      default: break;
-      case ISD::SETEQ:  if (R==APFloat::cmpUnordered)
-                          return getUNDEF(VT);
-                        LLVM_FALLTHROUGH;
-      case ISD::SETOEQ: return getBoolConstant(R==APFloat::cmpEqual, dl, VT,
-                                               OpVT);
-      case ISD::SETNE:  if (R==APFloat::cmpUnordered)
-                          return getUNDEF(VT);
-                        LLVM_FALLTHROUGH;
-      case ISD::SETONE: return getBoolConstant(R==APFloat::cmpGreaterThan ||
-                                               R==APFloat::cmpLessThan, dl, VT,
-                                               OpVT);
-      case ISD::SETLT:  if (R==APFloat::cmpUnordered)
-                          return getUNDEF(VT);
-                        LLVM_FALLTHROUGH;
-      case ISD::SETOLT: return getBoolConstant(R==APFloat::cmpLessThan, dl, VT,
-                                               OpVT);
-      case ISD::SETGT:  if (R==APFloat::cmpUnordered)
-                          return getUNDEF(VT);
-                        LLVM_FALLTHROUGH;
-      case ISD::SETOGT: return getBoolConstant(R==APFloat::cmpGreaterThan, dl,
-                                               VT, OpVT);
-      case ISD::SETLE:  if (R==APFloat::cmpUnordered)
-                          return getUNDEF(VT);
-                        LLVM_FALLTHROUGH;
-      case ISD::SETOLE: return getBoolConstant(R==APFloat::cmpLessThan ||
-                                               R==APFloat::cmpEqual, dl, VT,
-                                               OpVT);
-      case ISD::SETGE:  if (R==APFloat::cmpUnordered)
-                          return getUNDEF(VT);
-                        LLVM_FALLTHROUGH;
-      case ISD::SETOGE: return getBoolConstant(R==APFloat::cmpGreaterThan ||
-                                           R==APFloat::cmpEqual, dl, VT, OpVT);
-      case ISD::SETO:   return getBoolConstant(R!=APFloat::cmpUnordered, dl, VT,
-                                               OpVT);
-      case ISD::SETUO:  return getBoolConstant(R==APFloat::cmpUnordered, dl, VT,
-                                               OpVT);
-      case ISD::SETUEQ: return getBoolConstant(R==APFloat::cmpUnordered ||
-                                               R==APFloat::cmpEqual, dl, VT,
-                                               OpVT);
-      case ISD::SETUNE: return getBoolConstant(R!=APFloat::cmpEqual, dl, VT,
-                                               OpVT);
-      case ISD::SETULT: return getBoolConstant(R==APFloat::cmpUnordered ||
-                                               R==APFloat::cmpLessThan, dl, VT,
-                                               OpVT);
-      case ISD::SETUGT: return getBoolConstant(R==APFloat::cmpGreaterThan ||
-                                               R==APFloat::cmpUnordered, dl, VT,
-                                               OpVT);
-      case ISD::SETULE: return getBoolConstant(R!=APFloat::cmpGreaterThan, dl,
-                                               VT, OpVT);
-      case ISD::SETUGE: return getBoolConstant(R!=APFloat::cmpLessThan, dl, VT,
-                                               OpVT);
-      }
-    } else {
-      // Ensure that the constant occurs on the RHS.
-      ISD::CondCode SwappedCond = ISD::getSetCCSwappedOperands(Cond);
-      MVT CompVT = N1.getValueType().getSimpleVT();
-      if (!TLI->isCondCodeLegal(SwappedCond, CompVT))
-        return SDValue();
 
-      return getSetCC(dl, VT, N2, N1, SwappedCond);
+  auto *N1CFP = dyn_cast<ConstantFPSDNode>(N1);
+  auto *N2CFP = dyn_cast<ConstantFPSDNode>(N2);
+
+  if (N1CFP && N2CFP) {
+    APFloat::cmpResult R = N1CFP->getValueAPF().compare(N2CFP->getValueAPF());
+    switch (Cond) {
+    default: break;
+    case ISD::SETEQ:  if (R==APFloat::cmpUnordered)
+                        return getUNDEF(VT);
+                      LLVM_FALLTHROUGH;
+    case ISD::SETOEQ: return getBoolConstant(R==APFloat::cmpEqual, dl, VT,
+                                             OpVT);
+    case ISD::SETNE:  if (R==APFloat::cmpUnordered)
+                        return getUNDEF(VT);
+                      LLVM_FALLTHROUGH;
+    case ISD::SETONE: return getBoolConstant(R==APFloat::cmpGreaterThan ||
+                                             R==APFloat::cmpLessThan, dl, VT,
+                                             OpVT);
+    case ISD::SETLT:  if (R==APFloat::cmpUnordered)
+                        return getUNDEF(VT);
+                      LLVM_FALLTHROUGH;
+    case ISD::SETOLT: return getBoolConstant(R==APFloat::cmpLessThan, dl, VT,
+                                             OpVT);
+    case ISD::SETGT:  if (R==APFloat::cmpUnordered)
+                        return getUNDEF(VT);
+                      LLVM_FALLTHROUGH;
+    case ISD::SETOGT: return getBoolConstant(R==APFloat::cmpGreaterThan, dl,
+                                             VT, OpVT);
+    case ISD::SETLE:  if (R==APFloat::cmpUnordered)
+                        return getUNDEF(VT);
+                      LLVM_FALLTHROUGH;
+    case ISD::SETOLE: return getBoolConstant(R==APFloat::cmpLessThan ||
+                                             R==APFloat::cmpEqual, dl, VT,
+                                             OpVT);
+    case ISD::SETGE:  if (R==APFloat::cmpUnordered)
+                        return getUNDEF(VT);
+                      LLVM_FALLTHROUGH;
+    case ISD::SETOGE: return getBoolConstant(R==APFloat::cmpGreaterThan ||
+                                         R==APFloat::cmpEqual, dl, VT, OpVT);
+    case ISD::SETO:   return getBoolConstant(R!=APFloat::cmpUnordered, dl, VT,
+                                             OpVT);
+    case ISD::SETUO:  return getBoolConstant(R==APFloat::cmpUnordered, dl, VT,
+                                             OpVT);
+    case ISD::SETUEQ: return getBoolConstant(R==APFloat::cmpUnordered ||
+                                             R==APFloat::cmpEqual, dl, VT,
+                                             OpVT);
+    case ISD::SETUNE: return getBoolConstant(R!=APFloat::cmpEqual, dl, VT,
+                                             OpVT);
+    case ISD::SETULT: return getBoolConstant(R==APFloat::cmpUnordered ||
+                                             R==APFloat::cmpLessThan, dl, VT,
+                                             OpVT);
+    case ISD::SETUGT: return getBoolConstant(R==APFloat::cmpGreaterThan ||
+                                             R==APFloat::cmpUnordered, dl, VT,
+                                             OpVT);
+    case ISD::SETULE: return getBoolConstant(R!=APFloat::cmpGreaterThan, dl,
+                                             VT, OpVT);
+    case ISD::SETUGE: return getBoolConstant(R!=APFloat::cmpLessThan, dl, VT,
+                                             OpVT);
+    }
+  } else if (N1CFP && OpVT.isSimple()) {
+    // Ensure that the constant occurs on the RHS.
+    ISD::CondCode SwappedCond = ISD::getSetCCSwappedOperands(Cond);
+    if (!TLI->isCondCodeLegal(SwappedCond, OpVT.getSimpleVT()))
+      return SDValue();
+    return getSetCC(dl, VT, N2, N1, SwappedCond);
+  } else if (N2CFP && N2CFP->getValueAPF().isNaN()) {
+    // If an operand is known to be a nan, we can fold it.
+    switch (ISD::getUnorderedFlavor(Cond)) {
+    default:
+      llvm_unreachable("Unknown flavor!");
+    case 0: // Known false.
+      return getBoolConstant(false, dl, VT, OpVT);
+    case 1: // Known true.
+      return getBoolConstant(true, dl, VT, OpVT);
+    case 2: // Undefined.
+      return getUNDEF(VT);
     }
   }
 
@@ -3784,8 +3800,7 @@ bool SelectionDAG::isBaseWithConstantOffset(SDValue Op) const {
     return false;
 
   if (Op.getOpcode() == ISD::OR &&
-      !MaskedValueIsZero(Op.getOperand(0),
-                     cast<ConstantSDNode>(Op.getOperand(1))->getAPIntValue()))
+      !MaskedValueIsZero(Op.getOperand(0), Op.getConstantOperandAPInt(1)))
     return false;
 
   return true;
@@ -4735,6 +4750,76 @@ SDValue SelectionDAG::FoldConstantVectorArithmetic(unsigned Opcode,
   return V;
 }
 
+SDValue SelectionDAG::foldConstantFPMath(unsigned Opcode, const SDLoc &DL,
+                                         EVT VT, SDValue N1, SDValue N2) {
+  auto *N1CFP = dyn_cast<ConstantFPSDNode>(N1.getNode());
+  auto *N2CFP = dyn_cast<ConstantFPSDNode>(N2.getNode());
+  bool HasFPExceptions = TLI->hasFloatingPointExceptions();
+  if (N1CFP && N2CFP) {
+    APFloat C1 = N1CFP->getValueAPF(), C2 = N2CFP->getValueAPF();
+    APFloat::opStatus Status;
+    switch (Opcode) {
+    case ISD::FADD:
+      Status = C1.add(C2, APFloat::rmNearestTiesToEven);
+      if (!HasFPExceptions || Status != APFloat::opInvalidOp)
+        return getConstantFP(C1, DL, VT);
+      break;
+    case ISD::FSUB:
+      Status = C1.subtract(C2, APFloat::rmNearestTiesToEven);
+      if (!HasFPExceptions || Status != APFloat::opInvalidOp)
+        return getConstantFP(C1, DL, VT);
+      break;
+    case ISD::FMUL:
+      Status = C1.multiply(C2, APFloat::rmNearestTiesToEven);
+      if (!HasFPExceptions || Status != APFloat::opInvalidOp)
+        return getConstantFP(C1, DL, VT);
+      break;
+    case ISD::FDIV:
+      Status = C1.divide(C2, APFloat::rmNearestTiesToEven);
+      if (!HasFPExceptions || (Status != APFloat::opInvalidOp &&
+                               Status != APFloat::opDivByZero)) {
+        return getConstantFP(C1, DL, VT);
+      }
+      break;
+    case ISD::FREM:
+      Status = C1.mod(C2);
+      if (!HasFPExceptions || (Status != APFloat::opInvalidOp &&
+                               Status != APFloat::opDivByZero)) {
+        return getConstantFP(C1, DL, VT);
+      }
+      break;
+    case ISD::FCOPYSIGN:
+      C1.copySign(C2);
+      return getConstantFP(C1, DL, VT);
+    default: break;
+    }
+  }
+  if (N1CFP && Opcode == ISD::FP_ROUND) {
+    APFloat C1 = N1CFP->getValueAPF();    // make copy
+    bool Unused;
+    // This can return overflow, underflow, or inexact; we don't care.
+    // FIXME need to be more flexible about rounding mode.
+    (void) C1.convert(EVTToAPFloatSemantics(VT), APFloat::rmNearestTiesToEven,
+                     &Unused);
+    return getConstantFP(C1, DL, VT);
+  }
+
+  switch (Opcode) {
+  case ISD::FADD:
+  case ISD::FSUB:
+  case ISD::FMUL:
+  case ISD::FDIV:
+  case ISD::FREM:
+    // If both operands are undef, the result is undef. If 1 operand is undef,
+    // the result is NaN. This should match the behavior of the IR optimizer.
+    if (N1.isUndef() && N2.isUndef())
+      return getUNDEF(VT);
+    if (N1.isUndef() || N2.isUndef())
+      return getConstantFP(APFloat::getNaN(EVTToAPFloatSemantics(VT)), DL, VT);
+  }
+  return SDValue();
+}
+
 SDValue SelectionDAG::getNode(unsigned Opcode, const SDLoc &DL, EVT VT,
                               SDValue N1, SDValue N2, const SDNodeFlags Flags) {
   ConstantSDNode *N1C = dyn_cast<ConstantSDNode>(N1);
@@ -5080,73 +5165,8 @@ SDValue SelectionDAG::getNode(unsigned Opcode, const SDLoc &DL, EVT VT,
           FoldConstantArithmetic(Opcode, DL, VT, N1.getNode(), N2.getNode()))
     return SV;
 
-  // Constant fold FP operations.
-  bool HasFPExceptions = TLI->hasFloatingPointExceptions();
-  if (N1CFP) {
-    if (N2CFP) {
-      APFloat V1 = N1CFP->getValueAPF(), V2 = N2CFP->getValueAPF();
-      APFloat::opStatus s;
-      switch (Opcode) {
-      case ISD::FADD:
-        s = V1.add(V2, APFloat::rmNearestTiesToEven);
-        if (!HasFPExceptions || s != APFloat::opInvalidOp)
-          return getConstantFP(V1, DL, VT);
-        break;
-      case ISD::FSUB:
-        s = V1.subtract(V2, APFloat::rmNearestTiesToEven);
-        if (!HasFPExceptions || s!=APFloat::opInvalidOp)
-          return getConstantFP(V1, DL, VT);
-        break;
-      case ISD::FMUL:
-        s = V1.multiply(V2, APFloat::rmNearestTiesToEven);
-        if (!HasFPExceptions || s!=APFloat::opInvalidOp)
-          return getConstantFP(V1, DL, VT);
-        break;
-      case ISD::FDIV:
-        s = V1.divide(V2, APFloat::rmNearestTiesToEven);
-        if (!HasFPExceptions || (s!=APFloat::opInvalidOp &&
-                                 s!=APFloat::opDivByZero)) {
-          return getConstantFP(V1, DL, VT);
-        }
-        break;
-      case ISD::FREM :
-        s = V1.mod(V2);
-        if (!HasFPExceptions || (s!=APFloat::opInvalidOp &&
-                                 s!=APFloat::opDivByZero)) {
-          return getConstantFP(V1, DL, VT);
-        }
-        break;
-      case ISD::FCOPYSIGN:
-        V1.copySign(V2);
-        return getConstantFP(V1, DL, VT);
-      default: break;
-      }
-    }
-
-    if (Opcode == ISD::FP_ROUND) {
-      APFloat V = N1CFP->getValueAPF();    // make copy
-      bool ignored;
-      // This can return overflow, underflow, or inexact; we don't care.
-      // FIXME need to be more flexible about rounding mode.
-      (void)V.convert(EVTToAPFloatSemantics(VT),
-                      APFloat::rmNearestTiesToEven, &ignored);
-      return getConstantFP(V, DL, VT);
-    }
-  }
-
-  switch (Opcode) {
-  case ISD::FADD:
-  case ISD::FSUB:
-  case ISD::FMUL:
-  case ISD::FDIV:
-  case ISD::FREM:
-    // If both operands are undef, the result is undef. If 1 operand is undef,
-    // the result is NaN. This should match the behavior of the IR optimizer.
-    if (N1.isUndef() && N2.isUndef())
-      return getUNDEF(VT);
-    if (N1.isUndef() || N2.isUndef())
-      return getConstantFP(APFloat::getNaN(EVTToAPFloatSemantics(VT)), DL, VT);
-  }
+  if (SDValue V = foldConstantFPMath(Opcode, DL, VT, N1, N2))
+    return V;
 
   // Canonicalize an UNDEF to the RHS, even over a constant.
   if (N1.isUndef()) {
@@ -9105,6 +9125,15 @@ SelectionDAG::SplitVector(const SDValue &N, const SDLoc &DL, const EVT &LoVT,
                getConstant(LoVT.getVectorNumElements(), DL,
                            TLI->getVectorIdxTy(getDataLayout())));
   return std::make_pair(Lo, Hi);
+}
+
+/// Widen the vector up to the next power of two using INSERT_SUBVECTOR.
+SDValue SelectionDAG::WidenVector(const SDValue &N, const SDLoc &DL) {
+  EVT VT = N.getValueType();
+  EVT WideVT = EVT::getVectorVT(*getContext(), VT.getVectorElementType(),
+                                NextPowerOf2(VT.getVectorNumElements()));
+  return getNode(ISD::INSERT_SUBVECTOR, DL, WideVT, getUNDEF(WideVT), N,
+                 getConstant(0, DL, TLI->getVectorIdxTy(getDataLayout())));
 }
 
 void SelectionDAG::ExtractVectorElements(SDValue Op,

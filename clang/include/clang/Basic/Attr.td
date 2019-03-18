@@ -1566,13 +1566,6 @@ def PassObjectSize : InheritableParamAttr {
   let Documentation = [PassObjectSizeDocs];
 }
 
-def FortifyStdLib : InheritableAttr {
-  let Spellings = [Clang<"fortify_stdlib">];
-  let Args = [IntArgument<"Type">, IntArgument<"Flag">];
-  let Subjects = SubjectList<[Function]>;
-  let Documentation = [FortifyStdLibDocs];
-}
-
 // Nullability type attributes.
 def TypeNonNull : TypeAttr {
   let Spellings = [Keyword<"_Nonnull">];
@@ -3150,6 +3143,14 @@ def OMPDeclareTargetDecl : InheritableAttr {
       return llvm::None;
     }
   }];
+}
+
+def OMPAllocateDecl : InheritableAttr {
+  // This attribute has no spellings as it is only ever created implicitly.
+  let Spellings = [];
+  let SemaHandler = 0;
+  let Args = [ExprArgument<"Allocator">];
+  let Documentation = [Undocumented];
 }
 
 def InternalLinkage : InheritableAttr {

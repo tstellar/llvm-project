@@ -232,8 +232,9 @@ void ScalarEnumerationTraits<ELFYAML::ELF_ELFCLASS>::enumeration(
 void ScalarEnumerationTraits<ELFYAML::ELF_ELFDATA>::enumeration(
     IO &IO, ELFYAML::ELF_ELFDATA &Value) {
 #define ECase(X) IO.enumCase(Value, #X, ELF::X)
-  // Since the semantics of ELFDATANONE is "invalid", just don't accept it
-  // here.
+  // ELFDATANONE is an invalid data encoding, but we accept it because
+  // we want to be able to produce invalid binaries for the tests.
+  ECase(ELFDATANONE);
   ECase(ELFDATA2LSB);
   ECase(ELFDATA2MSB);
 #undef ECase
@@ -818,6 +819,9 @@ void MappingTraits<ELFYAML::ProgramHeader>::mapping(
   IO.mapOptional("VAddr", Phdr.VAddr, Hex64(0));
   IO.mapOptional("PAddr", Phdr.PAddr, Hex64(0));
   IO.mapOptional("Align", Phdr.Align);
+  IO.mapOptional("FileSize", Phdr.FileSize);
+  IO.mapOptional("MemSize", Phdr.MemSize);
+  IO.mapOptional("Offset", Phdr.Offset);
 }
 
 namespace {

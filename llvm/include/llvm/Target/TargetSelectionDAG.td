@@ -782,6 +782,9 @@ class FPImmLeaf<ValueType vt, code pred, SDNodeXForm xform = NOOP_SDNodeXForm>
 def vtInt      : PatLeaf<(vt),  [{ return N->getVT().isInteger(); }]>;
 def vtFP       : PatLeaf<(vt),  [{ return N->getVT().isFloatingPoint(); }]>;
 
+// Use ISD::isBuildVectorAllOnes or ISD::isBuildVectorAllZeros to look for
+// the corresponding build_vector. Will look through bitcasts except when used
+// as a pattern root.
 def immAllOnesV; // ISD::isBuildVectorAllOnes
 def immAllZerosV; // ISD::isBuildVectorAllZeros
 

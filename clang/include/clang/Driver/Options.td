@@ -747,6 +747,12 @@ def fprofile_generate : Flag<["-"], "fprofile-generate">,
 def fprofile_generate_EQ : Joined<["-"], "fprofile-generate=">,
     Group<f_Group>, Flags<[DriverOption]>, MetaVarName<"<directory>">,
     HelpText<"Generate instrumented code to collect execution counts into <directory>/default.profraw (overridden by LLVM_PROFILE_FILE env var)">;
+def fcs_profile_generate : Flag<["-"], "fcs-profile-generate">,
+    Group<f_Group>, Flags<[DriverOption]>,
+    HelpText<"Generate instrumented code to collect context sensitive execution counts into default.profraw (overridden by LLVM_PROFILE_FILE env var)">;
+def fcs_profile_generate_EQ : Joined<["-"], "fcs-profile-generate=">,
+    Group<f_Group>, Flags<[DriverOption]>, MetaVarName<"<directory>">,
+    HelpText<"Generate instrumented code to collect context sensitive execution counts into <directory>/default.profraw (overridden by LLVM_PROFILE_FILE env var)">;
 def fprofile_use : Flag<["-"], "fprofile-use">, Group<f_Group>,
     Alias<fprofile_instr_use>;
 def fprofile_use_EQ : Joined<["-"], "fprofile-use=">,
@@ -769,6 +775,9 @@ def fprofile_filter_files_EQ : Joined<["-"], "fprofile-filter-files=">,
 def fprofile_exclude_files_EQ : Joined<["-"], "fprofile-exclude-files=">,
     Group<f_Group>, Flags<[CC1Option, CoreOption]>,
     HelpText<"Instrument only functions from files where names don't match all the regexes separated by a semi-colon">;
+def forder_file_instrumentation : Flag<["-"], "forder-file-instrumentation">,
+    Group<f_Group>, Flags<[CC1Option, CoreOption]>,
+    HelpText<"Generate instrumented code to collect order file into default.profraw file (overridden by '=' form of option or LLVM_PROFILE_FILE env var)">;
 
 def faddrsig : Flag<["-"], "faddrsig">, Group<f_Group>, Flags<[CoreOption, CC1Option]>,
   HelpText<"Emit an address-significance table">;
@@ -1706,6 +1715,10 @@ def fno_save_optimization_record : Flag<["-"], "fno-save-optimization-record">,
 def foptimization_record_file_EQ : Joined<["-"], "foptimization-record-file=">,
   Group<f_Group>,
   HelpText<"Specify the file name of any generated YAML optimization record">;
+def foptimization_record_passes_EQ : Joined<["-"], "foptimization-record-passes=">,
+  Group<f_Group>,
+  HelpText<"Only include passes which match a specified regular expression in the generated optimization record (by default, include all passes)">;
+
 
 def ftest_coverage : Flag<["-"], "ftest-coverage">, Group<f_Group>;
 def fvectorize : Flag<["-"], "fvectorize">, Group<f_Group>,

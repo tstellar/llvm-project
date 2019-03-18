@@ -1734,7 +1734,8 @@ Parser::DeclGroupPtrTy Parser::ParseDeclaration(DeclaratorContext Context,
 /// [C++11] attribute-specifier-seq decl-specifier-seq[opt]
 ///             init-declarator-list ';'
 ///[C90/C++]init-declarator-list ';'                             [TODO]
-/// [OMP]   threadprivate-directive                              [TODO]
+/// [OMP]   threadprivate-directive
+/// [OMP]   allocate-directive                                   [TODO]
 ///
 ///       for-range-declaration: [C++11 6.5p1: stmt.ranged]
 ///         attribute-specifier-seq[opt] type-specifier-seq declarator
@@ -3887,6 +3888,9 @@ void Parser::ParseDeclarationSpecifiers(DeclSpec &DS,
 
 /// ParseStructDeclaration - Parse a struct declaration without the terminating
 /// semicolon.
+///
+/// Note that a struct declaration refers to a declaration in a struct,
+/// not to the declaration of a struct.
 ///
 ///       struct-declaration:
 /// [C2x]   attributes-specifier-seq[opt]

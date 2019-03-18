@@ -701,7 +701,7 @@ void Target::AddBreakpointName(BreakpointName *bp_name) {
   m_breakpoint_names.insert(std::make_pair(bp_name->GetName(), bp_name));
 }
 
-BreakpointName *Target::FindBreakpointName(const ConstString &name, 
+BreakpointName *Target::FindBreakpointName(ConstString name, 
                                            bool can_create, 
                                            Status &error)
 {
@@ -726,7 +726,7 @@ BreakpointName *Target::FindBreakpointName(const ConstString &name,
 }
 
 void
-Target::DeleteBreakpointName(const ConstString &name)
+Target::DeleteBreakpointName(ConstString name)
 {
   BreakpointNameList::iterator iter = m_breakpoint_names.find(name);
   
@@ -739,7 +739,7 @@ Target::DeleteBreakpointName(const ConstString &name)
 }
 
 void Target::RemoveNameFromBreakpoint(lldb::BreakpointSP &bp_sp,
-                                const ConstString &name)
+                                ConstString name)
 {
   bp_sp->RemoveName(name.AsCString());
 }
@@ -2401,12 +2401,11 @@ ExpressionResults Target::EvaluateExpression(
   } else {
     llvm::StringRef prefix = GetExpressionPrefixContents();
     Status error;
-    execution_results = UserExpression::Evaluate(exe_ctx, options, expr, prefix,
-                                                 result_valobj_sp, error,
-                                                 0, // Line Number
-                                                 fixed_expression,
-                                                 nullptr, // Module
-                                                 ctx_obj);
+    execution_results =
+        UserExpression::Evaluate(exe_ctx, options, expr, prefix,
+                                 result_valobj_sp, error, fixed_expression,
+                                 nullptr, // Module
+                                 ctx_obj);
   }
 
   m_suppress_stop_hooks = old_suppress_value;
@@ -2415,7 +2414,7 @@ ExpressionResults Target::EvaluateExpression(
 }
 
 lldb::ExpressionVariableSP
-Target::GetPersistentVariable(const ConstString &name) {
+Target::GetPersistentVariable(ConstString name) {
   lldb::ExpressionVariableSP variable_sp;
   m_scratch_type_system_map.ForEach(
       [name, &variable_sp](TypeSystem *type_system) -> bool {
@@ -2431,7 +2430,7 @@ Target::GetPersistentVariable(const ConstString &name) {
   return variable_sp;
 }
 
-lldb::addr_t Target::GetPersistentSymbol(const ConstString &name) {
+lldb::addr_t Target::GetPersistentSymbol(ConstString name) {
   lldb::addr_t address = LLDB_INVALID_ADDRESS;
 
   m_scratch_type_system_map.ForEach(
@@ -3328,6 +3327,9 @@ static constexpr PropertyDefinition g_properties[] = {
     {"auto-import-clang-modules", OptionValue::eTypeBoolean, false, true,
      nullptr, {},
      "Automatically load Clang modules referred to by the program."},
+    {"import-std-module", OptionValue::eTypeBoolean, false, false,
+     nullptr, {},
+     "Import the C++ std module to improve debugging STL containers."},
     {"auto-apply-fixits", OptionValue::eTypeBoolean, false, true, nullptr,
      {}, "Automatically apply fix-it hints to expressions."},
     {"notify-about-fixits", OptionValue::eTypeBoolean, false, true, nullptr,
@@ -3466,6 +3468,7 @@ enum {
   ePropertyDebugFileSearchPaths,
   ePropertyClangModuleSearchPaths,
   ePropertyAutoImportClangModules,
+  ePropertyImportStdModule,
   ePropertyAutoApplyFixIts,
   ePropertyNotifyAboutFixIts,
   ePropertySaveObjects,
@@ -3503,7 +3506,7 @@ enum {
 
 class TargetOptionValueProperties : public OptionValueProperties {
 public:
-  TargetOptionValueProperties(const ConstString &name)
+  TargetOptionValueProperties(ConstString name)
       : OptionValueProperties(name), m_target(nullptr), m_got_host_env(false) {}
 
   // This constructor is used when creating TargetOptionValueProperties when it
@@ -3888,6 +3891,12 @@ bool TargetProperties::GetEnableAutoImportClangModules() const {
       nullptr, idx, g_properties[idx].default_uint_value != 0);
 }
 
+bool TargetProperties::GetEnableImportStdModule() const {
+  const uint32_t idx = ePropertyImportStdModule;
+  return m_collection_sp->GetPropertyAtIndexAsBoolean(
+      nullptr, idx, g_properties[idx].default_uint_value != 0);
+}
+
 bool TargetProperties::GetEnableAutoApplyFixIts() const {
   const uint32_t idx = ePropertyAutoApplyFixIts;
   return m_collection_sp->GetPropertyAtIndexAsBoolean(
@@ -4207,7 +4216,7 @@ Target::TargetEventData::TargetEventData(const lldb::TargetSP &target_sp,
 
 Target::TargetEventData::~TargetEventData() = default;
 
-const ConstString &Target::TargetEventData::GetFlavorString() {
+ConstString Target::TargetEventData::GetFlavorString() {
   static ConstString g_flavor("Target::TargetEventData");
   return g_flavor;
 }

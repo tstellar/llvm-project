@@ -37,7 +37,6 @@ add_host_subdirectory(common
   common/NativeWatchpointList.cpp
   common/OptionParser.cpp
   common/PipeBase.cpp
-  common/ProcessInfo.cpp
   common/ProcessLaunchInfo.cpp
   common/ProcessRunLock.cpp
   common/PseudoTerminal.cpp
@@ -163,7 +162,6 @@ add_lldb_library(lldbHost
   ${HOST_SOURCES}
 
   LINK_LIBS
-    lldbTarget
     lldbUtility
     ${EXTRA_LIBS}
     ${LLDBObjCLibs}

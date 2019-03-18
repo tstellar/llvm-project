@@ -1407,6 +1407,11 @@ public:
                                        ArrayRef<SDValue> Ops,
                                        const SDNodeFlags Flags = SDNodeFlags());
 
+  /// Fold floating-point operations with 2 operands when both operands are
+  /// constants and/or undefined.
+  SDValue foldConstantFPMath(unsigned Opcode, const SDLoc &DL, EVT VT,
+                             SDValue N1, SDValue N2);
+
   /// Constant fold a setcc to true or false.
   SDValue FoldSetCC(EVT VT, SDValue N1, SDValue N2, ISD::CondCode Cond,
                     const SDLoc &dl);
@@ -1582,6 +1587,9 @@ public:
   {
     return SplitVector(N->getOperand(OpNo), SDLoc(N));
   }
+
+  /// Widen the vector up to the next power of two using INSERT_SUBVECTOR.
+  SDValue WidenVector(const SDValue &N, const SDLoc &DL);
 
   /// Append the extracted elements from Start to Count out of the vector Op
   /// in Args. If Count is 0, all of the elements will be extracted.

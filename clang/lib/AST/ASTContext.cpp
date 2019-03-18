@@ -9565,10 +9565,12 @@ QualType ASTContext::GetBuiltinType(unsigned Id,
   assert((TypeStr[0] != '.' || TypeStr[1] == 0) &&
          "'.' should only occur at end of builtin type list!");
 
-  FunctionType::ExtInfo EI(CC_C);
+  bool Variadic = (TypeStr[0] == '.');
+
+  FunctionType::ExtInfo EI(
+      getDefaultCallingConvention(Variadic, /*IsCXXMethod=*/false));
   if (BuiltinInfo.isNoReturn(Id)) EI = EI.withNoReturn(true);
 
-  bool Variadic = (TypeStr[0] == '.');
 
   // We really shouldn't be making a no-proto type here.
   if (ArgTypes.empty() && Variadic && !getLangOpts().CPlusPlus)
@@ -9796,11 +9798,11 @@ bool ASTContext::DeclMustBeEmitted(const Decl *D) {
       return false;
   } else if (isa<PragmaCommentDecl>(D))
     return true;
-  else if (isa<OMPThreadPrivateDecl>(D))
-    return true;
   else if (isa<PragmaDetectMismatchDecl>(D))
     return true;
   else if (isa<OMPThreadPrivateDecl>(D))
+    return !D->getDeclContext()->isDependentContext();
+  else if (isa<OMPAllocateDecl>(D))
     return !D->getDeclContext()->isDependentContext();
   else if (isa<OMPDeclareReductionDecl>(D))
     return !D->getDeclContext()->isDependentContext();
