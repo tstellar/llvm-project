@@ -105,6 +105,7 @@ set(LLVM_CONFIG_BINARY_DIR "\${LLVM_INSTALL_PREFIX}")
 set(LLVM_CONFIG_TOOLS_BINARY_DIR "\${LLVM_INSTALL_PREFIX}/bin")
 set(LLVM_CONFIG_EXPORTS_FILE "\${LLVM_CMAKE_DIR}/LLVMExports.cmake")
 set(LLVM_CONFIG_EXPORTS "${LLVM_EXPORTS}")
+set(LLVM_CONFIG_STATIC_EXPORTS_FILE "\${LLVM_CMAKE_DIR}/LLVMStaticExports.cmake")
 configure_file(
   LLVMConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/LLVMConfig.cmake
@@ -120,6 +121,8 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
   get_property(llvm_has_exports GLOBAL PROPERTY LLVM_HAS_EXPORTS)
   if(llvm_has_exports)
     install(EXPORT LLVMExports DESTINATION ${LLVM_INSTALL_PACKAGE_DIR}
+            COMPONENT cmake-exports)
+    install(EXPORT LLVMStaticExports DESTINATION ${LLVM_INSTALL_PACKAGE_DIR}
             COMPONENT cmake-exports)
   endif()
 

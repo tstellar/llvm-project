@@ -691,7 +691,11 @@ macro(add_llvm_library name)
       if(${name} IN_LIST LLVM_DISTRIBUTION_COMPONENTS OR
           (in_llvm_libs AND "llvm-libraries" IN_LIST LLVM_DISTRIBUTION_COMPONENTS) OR
           NOT LLVM_DISTRIBUTION_COMPONENTS)
-        set(export_to_llvmexports EXPORT LLVMExports)
+        if (ARG_SHARED)
+          set(export_to_llvmexports EXPORT LLVMExports)
+        else()
+          set(export_to_llvmexports EXPORT LLVMStaticExports)
+        endif()
         set_property(GLOBAL PROPERTY LLVM_HAS_EXPORTS True)
       endif()
 
