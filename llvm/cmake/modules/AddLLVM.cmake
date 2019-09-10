@@ -953,7 +953,12 @@ macro(add_llvm_utility name)
       set(export_to_llvmexports)
       if (${name} IN_LIST LLVM_DISTRIBUTION_COMPONENTS OR
           NOT LLVM_DISTRIBUTION_COMPONENTS)
-        set(export_to_llvmexports EXPORT LLVMExports)
+        if (${name} STREQUAL "not" OR ${name} STREQUAL "count" OR
+            ${name} STREQUAL "yaml-bench" OR ${name} STREQUAL "lli-child-target")
+          set(export_to_llvmexports EXPORT LLVMTestExports)
+        else()
+          set(export_to_llvmexports EXPORT LLVMExports)
+        endif()
         set_property(GLOBAL PROPERTY LLVM_HAS_EXPORTS True)
       endif()
 

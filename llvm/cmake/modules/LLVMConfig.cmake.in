@@ -91,6 +91,7 @@ if(NOT TARGET LLVMSupport)
   @llvm_config_include_buildtree_only_exports@
 
   include("@LLVM_CONFIG_STATIC_EXPORTS_FILE@" OPTIONAL)
+  include("@LLVM_CONFIG_TEST_EXPORTS_FILE@" OPTIONAL)
 endif()
 
 # By creating intrinsics_gen here, subprojects that depend on LLVM's
