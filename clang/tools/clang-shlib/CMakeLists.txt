@@ -8,7 +8,6 @@ get_property(clang_libs GLOBAL PROPERTY CLANG_STATIC_LIBS)
 foreach (lib ${clang_libs})
   list(APPEND _OBJECTS $<TARGET_OBJECTS:obj.${lib}>)
   list(APPEND _DEPS $<TARGET_PROPERTY:${lib},INTERFACE_LINK_LIBRARIES>)
-  list(APPEND _DEPS $<TARGET_PROPERTY:${lib},LINK_LIBRARIES>)
 endforeach ()
 
 if (CLANG_LINK_CLANG_DYLIB)
