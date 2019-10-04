@@ -872,7 +872,11 @@ void DwarfCompileUnit::constructAbstractSubprogramScopeDIE(
     ContextDIE = &getUnitDie();
     getOrCreateSubprogramDIE(SPDecl);
   } else {
+<<<<<<< HEAD
     ContextDIE = getOrCreateContextDIE(SP->getScope());
+=======
+    ContextDIE = getOrCreateContextDIE(resolve(SP->getScope()));
+>>>>>>> origin/release/5.x
     // The scope may be shared with a subprogram that has already been
     // constructed in another CU, in which case we need to construct this
     // subprogram in the same CU.
@@ -883,6 +887,7 @@ void DwarfCompileUnit::constructAbstractSubprogramScopeDIE(
   // shouldn't be found by lookup.
   AbsDef = &ContextCU->createAndAddDIE(dwarf::DW_TAG_subprogram, *ContextDIE, nullptr);
   ContextCU->applySubprogramAttributesToDefinition(SP, *AbsDef);
+<<<<<<< HEAD
 
   if (!ContextCU->includeMinimalInlineScopes())
     ContextCU->addUInt(*AbsDef, dwarf::DW_AT_inline, None, dwarf::DW_INL_inlined);
@@ -999,6 +1004,13 @@ void DwarfCompileUnit::constructCallSiteParmEntryDIEs(
 
     CallSiteDIE.addChild(CallSiteDieParam);
   }
+=======
+
+  if (!ContextCU->includeMinimalInlineScopes())
+    ContextCU->addUInt(*AbsDef, dwarf::DW_AT_inline, None, dwarf::DW_INL_inlined);
+  if (DIE *ObjectPointer = ContextCU->createAndAddScopeChildren(Scope, *AbsDef))
+    ContextCU->addDIEEntry(*AbsDef, dwarf::DW_AT_object_pointer, *ObjectPointer);
+>>>>>>> origin/release/5.x
 }
 
 DIE *DwarfCompileUnit::constructImportedEntityDIE(

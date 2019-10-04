@@ -1202,10 +1202,17 @@ SDValue DAGCombiner::PromoteIntBinOp(SDValue Op) {
     Replace0 &= !N0->hasOneUse();
     Replace1 &= (N0 != N1) && !N1->hasOneUse();
 
+<<<<<<< HEAD
     // Combine Op here so it is preserved past replacements.
     CombineTo(Op.getNode(), RV);
 
     // If operands have a use ordering, make sure we deal with
+=======
+    // Combine Op here so it is presreved past replacements.
+    CombineTo(Op.getNode(), RV);
+
+    // If operands have a use ordering, make sur we deal with
+>>>>>>> origin/release/5.x
     // predecessor first.
     if (Replace0 && Replace1 && N0.getNode()->isPredecessorOf(N1.getNode())) {
       std::swap(N0, N1);
@@ -15275,14 +15282,21 @@ void DAGCombiner::getStoreMergeCandidates(
 // indirectly through its operand (we already consider dependencies
 // through the chain). Check in parallel by searching up from
 // non-chain operands of candidates.
+
 bool DAGCombiner::checkMergeStoreCandidatesForDependencies(
+<<<<<<< HEAD
     SmallVectorImpl<MemOpLink> &StoreNodes, unsigned NumStores,
     SDNode *RootNode) {
+=======
+    SmallVectorImpl<MemOpLink> &StoreNodes, unsigned NumStores) {
+
+>>>>>>> origin/release/5.x
   // FIXME: We should be able to truncate a full search of
   // predecessors by doing a BFS and keeping tabs the originating
   // stores from which worklist nodes come from in a similar way to
   // TokenFactor simplfication.
 
+<<<<<<< HEAD
   SmallPtrSet<const SDNode *, 32> Visited;
   SmallVector<const SDNode *, 8> Worklist;
 
@@ -15334,6 +15348,25 @@ bool DAGCombiner::checkMergeStoreCandidatesForDependencies(
         else
           RootCount = {RootNode, 1};
       }
+=======
+  SmallPtrSet<const SDNode *, 16> Visited;
+  SmallVector<const SDNode *, 8> Worklist;
+  unsigned int Max = 8192;
+  // Search Ops of store candidates.
+  for (unsigned i = 0; i < NumStores; ++i) {
+    SDNode *n = StoreNodes[i].MemNode;
+    // Potential loops may happen only through non-chain operands
+    for (unsigned j = 1; j < n->getNumOperands(); ++j)
+      Worklist.push_back(n->getOperand(j).getNode());
+  }
+  // Search through DAG. We can stop early if we find a store node.
+  for (unsigned i = 0; i < NumStores; ++i) {
+    if (SDNode::hasPredecessorHelper(StoreNodes[i].MemNode, Visited, Worklist,
+                                     Max))
+      return false;
+    // Check if we ended early, failing conservatively if so.
+    if (Visited.size() >= Max)
+>>>>>>> origin/release/5.x
       return false;
     }
   return true;

@@ -3974,7 +3974,11 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
 
   CmdArgs.push_back("-mthread-model");
   if (Arg *A = Args.getLastArg(options::OPT_mthread_model)) {
+<<<<<<< HEAD
     if (!TC.isThreadModelSupported(A->getValue()))
+=======
+    if (!getToolChain().isThreadModelSupported(A->getValue()))
+>>>>>>> origin/release/5.x
       D.Diag(diag::err_drv_invalid_thread_model_for_target)
           << A->getValue() << A->getAsString(Args);
     CmdArgs.push_back(A->getValue());
@@ -4170,9 +4174,92 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
     CmdArgs.push_back("-mpie-copy-relocations");
   }
 
+<<<<<<< HEAD
   if (Args.hasFlag(options::OPT_fno_plt, options::OPT_fplt, false)) {
     CmdArgs.push_back("-fno-plt");
   }
+=======
+  // This is a coarse approximation of what llvm-gcc actually does, both
+  // -fasynchronous-unwind-tables and -fnon-call-exceptions interact in more
+  // complicated ways.
+  bool AsynchronousUnwindTables =
+      Args.hasFlag(options::OPT_fasynchronous_unwind_tables,
+                   options::OPT_fno_asynchronous_unwind_tables,
+                   (getToolChain().IsUnwindTablesDefault(Args) ||
+                    getToolChain().getSanitizerArgs().needsUnwindTables()) &&
+                       !KernelOrKext);
+  if (Args.hasFlag(options::OPT_funwind_tables, options::OPT_fno_unwind_tables,
+                   AsynchronousUnwindTables))
+    CmdArgs.push_back("-munwind-tables");
+
+  getToolChain().addClangTargetOptions(Args, CmdArgs,
+                                       JA.getOffloadingDeviceKind());
+
+  if (Arg *A = Args.getLastArg(options::OPT_flimited_precision_EQ)) {
+    CmdArgs.push_back("-mlimit-float-precision");
+    CmdArgs.push_back(A->getValue());
+  }
+
+  // FIXME: Handle -mtune=.
+  (void)Args.hasArg(options::OPT_mtune_EQ);
+
+  if (Arg *A = Args.getLastArg(options::OPT_mcmodel_EQ)) {
+    CmdArgs.push_back("-mcode-model");
+    CmdArgs.push_back(A->getValue());
+  }
+
+  // Add the target cpu
+  std::string CPU = getCPUName(Args, Triple, /*FromAs*/ false);
+  if (!CPU.empty()) {
+    CmdArgs.push_back("-target-cpu");
+    CmdArgs.push_back(Args.MakeArgString(CPU));
+  }
+
+  if (const Arg *A = Args.getLastArg(options::OPT_mfpmath_EQ)) {
+    CmdArgs.push_back("-mfpmath");
+    CmdArgs.push_back(A->getValue());
+  }
+
+  // Add the target features
+  getTargetFeatures(getToolChain(), Triple, Args, CmdArgs, false);
+
+  // Add target specific flags.
+  switch (getToolChain().getArch()) {
+  default:
+    break;
+
+  case llvm::Triple::arm:
+  case llvm::Triple::armeb:
+  case llvm::Triple::thumb:
+  case llvm::Triple::thumbeb:
+    // Use the effective triple, which takes into account the deployment target.
+    AddARMTargetArgs(Triple, Args, CmdArgs, KernelOrKext);
+    break;
+
+  case llvm::Triple::aarch64:
+  case llvm::Triple::aarch64_be:
+    AddAArch64TargetArgs(Args, CmdArgs);
+    break;
+
+  case llvm::Triple::mips:
+  case llvm::Triple::mipsel:
+  case llvm::Triple::mips64:
+  case llvm::Triple::mips64el:
+    AddMIPSTargetArgs(Args, CmdArgs);
+    break;
+
+  case llvm::Triple::ppc:
+  case llvm::Triple::ppc64:
+  case llvm::Triple::ppc64le:
+    AddPPCTargetArgs(Args, CmdArgs);
+    break;
+
+  case llvm::Triple::sparc:
+  case llvm::Triple::sparcel:
+  case llvm::Triple::sparcv9:
+    AddSparcTargetArgs(Args, CmdArgs);
+    break;
+>>>>>>> origin/release/5.x
 
   // -fhosted is default.
   // TODO: Audit uses of KernelOrKext and see where it'd be more appropriate to
@@ -4315,12 +4402,21 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
 
   Args.AddLastArg(CmdArgs, options::OPT_fclang_abi_compat_EQ);
 
+<<<<<<< HEAD
   // Add runtime flag for PS4 when PGO, coverage, or sanitizers are enabled.
   if (RawTriple.isPS4CPU() &&
       !Args.hasArg(options::OPT_nostdlib, options::OPT_nodefaultlibs)) {
     PS4cpu::addProfileRTArgs(TC, Args, CmdArgs);
     PS4cpu::addSanitizerArgs(TC, CmdArgs);
   }
+=======
+  if (auto *ABICompatArg = Args.getLastArg(options::OPT_fclang_abi_compat_EQ))
+    ABICompatArg->render(Args, CmdArgs);
+
+  // Add runtime flag for PS4 when PGO or Coverage are enabled.
+  if (getToolChain().getTriple().isPS4CPU())
+    PS4cpu::addProfileRTArgs(getToolChain(), Args, CmdArgs);
+>>>>>>> origin/release/5.x
 
   // Pass options for controlling the default header search paths.
   if (Args.hasArg(options::OPT_nostdinc)) {

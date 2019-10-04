@@ -66,9 +66,24 @@ public:
 
   bool classifyReturnType(CGFunctionInfo &FI) const override;
 
+  bool passClassIndirect(const CXXRecordDecl *RD) const {
+    // Clang <= 4 used the pre-C++11 rule, which ignores move operations.
+    // The PS4 platform ABI follows the behavior of Clang 3.2.
+    if (CGM.getCodeGenOpts().getClangABICompat() <=
+            CodeGenOptions::ClangABI::Ver4 ||
+        CGM.getTriple().getOS() == llvm::Triple::PS4)
+      return RD->hasNonTrivialDestructor() ||
+             RD->hasNonTrivialCopyConstructor();
+    return !canCopyArgument(RD);
+  }
+
   RecordArgABI getRecordArgABI(const CXXRecordDecl *RD) const override {
     // If C++ prohibits us from making a copy, pass by address.
+<<<<<<< HEAD
     if (!RD->canPassInRegisters())
+=======
+    if (passClassIndirect(RD))
+>>>>>>> origin/release/5.x
       return RAA_Indirect;
     return RAA_Default;
   }
@@ -1115,7 +1130,11 @@ bool ItaniumCXXABI::classifyReturnType(CGFunctionInfo &FI) const {
     return false;
 
   // If C++ prohibits us from making a copy, return by address.
+<<<<<<< HEAD
   if (!RD->canPassInRegisters()) {
+=======
+  if (passClassIndirect(RD)) {
+>>>>>>> origin/release/5.x
     auto Align = CGM.getContext().getTypeAlignInChars(FI.getReturnType());
     FI.getReturnInfo() = ABIArgInfo::getIndirect(Align, /*ByVal=*/false);
     return true;

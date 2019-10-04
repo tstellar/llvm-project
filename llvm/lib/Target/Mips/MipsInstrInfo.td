@@ -245,6 +245,7 @@ def UseIndirectJumpsHazard : Predicate<"Subtarget->useIndirectJumpsHazard()">,
                             AssemblerPredicate<"FeatureUseIndirectJumpsHazard">;
 def NoIndirectJumpGuards : Predicate<"!Subtarget->useIndirectJumpsHazard()">,
                            AssemblerPredicate<"!FeatureUseIndirectJumpsHazard">;
+<<<<<<< HEAD
 def HasCRC   : Predicate<"Subtarget->hasCRC()">,
                AssemblerPredicate<"FeatureCRC">;
 def HasVirt  : Predicate<"Subtarget->hasVirt()">,
@@ -254,6 +255,8 @@ def HasGINV  : Predicate<"Subtarget->hasGINV()">,
 // TODO: Add support for FPOpFusion::Standard
 def AllowFPOpFusion : Predicate<"TM.Options.AllowFPOpFusion =="
                                 " FPOpFusion::Fast">;
+=======
+>>>>>>> origin/release/5.x
 //===----------------------------------------------------------------------===//
 // Mips GPR size adjectives.
 // They are mutually exclusive.
@@ -1653,9 +1656,13 @@ let isCall = 1, isTerminator = 1, isReturn = 1, isBarrier = 1, hasDelaySlot = 1,
 
   class TailCallReg<Instruction JumpInst, RegisterOperand RO> :
     PseudoSE<(outs), (ins RO:$rs), [(MipsTailCall RO:$rs)], II_JR>,
+<<<<<<< HEAD
     PseudoInstExpansion<(JumpInst RO:$rs)> {
     let hasPostISelHook = 1;
   }
+=======
+    PseudoInstExpansion<(JumpInst RO:$rs)>;
+>>>>>>> origin/release/5.x
 }
 
 class BAL_BR_Pseudo<Instruction RealInst, DAGOperand opnd> :
@@ -2265,7 +2272,15 @@ def BLTZL   : MMRel, CBranchZeroLikely<"bltzl", brtarget, GPR32Opnd>,
               BGEZ_FM<1, 2>, ISA_MIPS2_NOT_32R6_64R6;
 def B       : UncondBranch<BEQ, brtarget>, ISA_MIPS1;
 
+<<<<<<< HEAD
 def JAL  : MMRel, JumpLink<"jal", calltarget>, FJ<3>, ISA_MIPS1;
+=======
+def JAL  : MMRel, JumpLink<"jal", calltarget>, FJ<3>;
+let AdditionalPredicates = [NotInMicroMips, NoIndirectJumpGuards] in {
+  def JALR : JumpLinkReg<"jalr", GPR32Opnd>, JALR_FM;
+  def JALRPseudo : JumpLinkRegPseudo<GPR32Opnd, JALR, RA>;
+}
+>>>>>>> origin/release/5.x
 
 }
 
@@ -2273,6 +2288,7 @@ let AdditionalPredicates = [NotInMicroMips, NoIndirectJumpGuards] in {
   def JALR : JumpLinkReg<"jalr", GPR32Opnd>, JALR_FM, ISA_MIPS1;
   def JALRPseudo : JumpLinkRegPseudo<GPR32Opnd, JALR, RA>, ISA_MIPS1;
 }
+<<<<<<< HEAD
 
 let AdditionalPredicates = [NotInMicroMips] in {
   def JALX : MMRel, JumpLink<"jalx", calltarget>, FJ<0x1D>,
@@ -2290,6 +2306,8 @@ let AdditionalPredicates = [NotInMicroMips] in {
 let AdditionalPredicates = [NotInMips16Mode, NotInMicroMips] in {
   def TAILCALL : TailCall<J, jmptarget>, ISA_MIPS1;
 }
+=======
+>>>>>>> origin/release/5.x
 let AdditionalPredicates = [NotInMips16Mode, NotInMicroMips,
                             NoIndirectJumpGuards] in
   def TAILCALLREG : TailCallReg<JR, GPR32Opnd>, ISA_MIPS1_NOT_32R6_64R6;
@@ -2669,6 +2687,36 @@ multiclass OneOrTwoOperandMacroImmediateAlias<string Memnomic,
                                         Imm:$imm), 0>;
 }
 
+<<<<<<< HEAD
+=======
+def : MipsInstAlias<"move $dst, $src",
+                    (OR GPR32Opnd:$dst, GPR32Opnd:$src, ZERO), 1>,
+      GPR_32 {
+  let AdditionalPredicates = [NotInMicroMips];
+}
+def : MipsInstAlias<"move $dst, $src",
+                    (ADDu GPR32Opnd:$dst, GPR32Opnd:$src, ZERO), 1>,
+      GPR_32 {
+  let AdditionalPredicates = [NotInMicroMips];
+}
+def : MipsInstAlias<"bal $offset", (BGEZAL ZERO, brtarget:$offset), 0>,
+      ISA_MIPS1_NOT_32R6_64R6;
+
+def : MipsInstAlias<"j $rs", (JR GPR32Opnd:$rs), 0>;
+let Predicates = [NotInMicroMips] in {
+def : MipsInstAlias<"jalr $rs", (JALR RA, GPR32Opnd:$rs), 0>;
+}
+def : MipsInstAlias<"jalr.hb $rs", (JALR_HB RA, GPR32Opnd:$rs), 1>,
+      ISA_MIPS32;
+def : MipsInstAlias<"neg $rt, $rs",
+                    (SUB GPR32Opnd:$rt, ZERO, GPR32Opnd:$rs), 1>;
+def : MipsInstAlias<"neg $rt",
+                    (SUB GPR32Opnd:$rt, ZERO, GPR32Opnd:$rt), 1>;
+def : MipsInstAlias<"negu $rt, $rs",
+                    (SUBu GPR32Opnd:$rt, ZERO, GPR32Opnd:$rs), 1>;
+def : MipsInstAlias<"negu $rt",
+                    (SUBu GPR32Opnd:$rt, ZERO, GPR32Opnd:$rt), 1>;
+>>>>>>> origin/release/5.x
 let AdditionalPredicates = [NotInMicroMips] in {
   def : MipsInstAlias<"move $dst, $src",
                       (OR GPR32Opnd:$dst, GPR32Opnd:$src, ZERO), 1>,

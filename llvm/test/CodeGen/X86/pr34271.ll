@@ -6,7 +6,11 @@
 
 define <4 x i32> @f(<4 x i32> %a) {
 ; CHECK-LABEL: f:
+<<<<<<< HEAD
 ; CHECK:       # %bb.0:
+=======
+; CHECK:       # BB#0:
+>>>>>>> origin/release/5.x
 ; CHECK-NEXT:    paddd .LCPI0_0(%rip), %xmm0
 ; CHECK-NEXT:    retq
   %v = add nuw nsw <4 x i32> %a, <i32 16843009, i32 16843009, i32 16843009, i32 16843009>

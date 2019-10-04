@@ -117,10 +117,13 @@ class JR_HB64_R6_DESC : JR_HB_DESC_BASE<"jr.hb", GPR64Opnd> {
   bit isCTI = 1;
   InstrItinClass Itinerary = II_JR_HB;
 }
+<<<<<<< HEAD
 
 class CRC32D_DESC  : CRC_DESC_BASE<"crc32d", GPR32Opnd, II_CRC32D>;
 class CRC32CD_DESC : CRC_DESC_BASE<"crc32cd", GPR32Opnd, II_CRC32CD>;
 
+=======
+>>>>>>> origin/release/5.x
 //===----------------------------------------------------------------------===//
 //
 // Instruction Definitions
@@ -301,6 +304,7 @@ def : MipsPat<(select (i32 (seteq i32:$cond, immz)), immz, i64:$f),
               (SELNEZ64 i64:$f, (SLL64_32 i32:$cond))>,
               ISA_MIPS64R6;
 
+<<<<<<< HEAD
 // Patterns used for matching away redundant sign extensions.
 // MIPS32 arithmetic instructions sign extend their result implicitly.
 def : MipsPat<(i64 (sext (i32 (mul GPR32:$src, GPR32:$src2)))),
@@ -319,6 +323,8 @@ def : MipsPat<(i64 (sext (i32 (urem GPR32:$src, GPR32:$src2)))),
               (INSERT_SUBREG (i64 (IMPLICIT_DEF)),
               (MODU GPR32:$src, GPR32:$src2), sub_32)>, ISA_MIPS64R6;
 
+=======
+>>>>>>> origin/release/5.x
 // Pseudo instructions
 
 let AdditionalPredicates = [NotInMips16Mode, NotInMicroMips,

@@ -4013,6 +4013,18 @@ static bool hasAnyVptr(const QualType Type, const ASTContext &Context) {
 LValue CodeGenFunction::EmitLValueForField(LValue base,
                                            const FieldDecl *field) {
   LValueBaseInfo BaseInfo = base.getBaseInfo();
+<<<<<<< HEAD
+=======
+  AlignmentSource fieldAlignSource =
+    getFieldAlignmentSource(BaseInfo.getAlignmentSource());
+  LValueBaseInfo FieldBaseInfo(fieldAlignSource, BaseInfo.getMayAlias());
+
+  QualType type = field->getType();
+  const RecordDecl *rec = field->getParent();
+  if (rec->isUnion() || rec->hasAttr<MayAliasAttr>() || type->isVectorType())
+    FieldBaseInfo.setMayAlias(true);
+  bool mayAlias = FieldBaseInfo.getMayAlias();
+>>>>>>> origin/release/5.x
 
   if (field->isBitField()) {
     const CGRecordLayout &RL =

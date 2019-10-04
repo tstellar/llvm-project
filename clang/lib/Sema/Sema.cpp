@@ -73,6 +73,7 @@ void Sema::ActOnTranslationUnitScope(Scope *S) {
   PushDeclContext(S, Context.getTranslationUnitDecl());
 }
 
+<<<<<<< HEAD
 namespace clang {
 namespace sema {
 
@@ -126,6 +127,8 @@ public:
 } // end namespace sema
 } // end namespace clang
 
+=======
+>>>>>>> origin/release/5.x
 Sema::Sema(Preprocessor &pp, ASTContext &ctxt, ASTConsumer &consumer,
            TranslationUnitKind TUKind, CodeCompleteConsumer *CodeCompleter)
     : ExternalSource(nullptr), isMultiplexExternalSource(false),
@@ -180,12 +183,15 @@ Sema::Sema(Preprocessor &pp, ASTContext &ctxt, ASTConsumer &consumer,
 
   // Initialization of data sharing attributes stack for OpenMP
   InitDataSharingAttributesStack();
+<<<<<<< HEAD
 
   std::unique_ptr<sema::SemaPPCallbacks> Callbacks =
       std::make_unique<sema::SemaPPCallbacks>();
   SemaPPCallbackHandler = Callbacks.get();
   PP.addPPCallbacks(std::move(Callbacks));
   SemaPPCallbackHandler->set(*this);
+=======
+>>>>>>> origin/release/5.x
 }
 
 void Sema::addImplicitTypedef(StringRef Name, QualType T) {
@@ -379,10 +385,6 @@ Sema::~Sema() {
 
   // Destroys data sharing attributes stack for OpenMP
   DestroyDataSharingAttributesStack();
-
-  // Detach from the PP callback handler which outlives Sema since it's owned
-  // by the preprocessor.
-  SemaPPCallbackHandler->reset();
 
   assert(DelayedTypos.empty() && "Uncorrected typos!");
 }
@@ -669,6 +671,7 @@ void Sema::getUndefinedButUsed(
     if (isa<CXXDeductionGuideDecl>(ND))
       continue;
 
+<<<<<<< HEAD
     if (ND->hasAttr<DLLImportAttr>() || ND->hasAttr<DLLExportAttr>()) {
       // An exported function will always be emitted when defined, so even if
       // the function is inline, it doesn't have to be emitted in this TU. An
@@ -676,6 +679,8 @@ void Sema::getUndefinedButUsed(
       continue;
     }
 
+=======
+>>>>>>> origin/release/5.x
     if (FunctionDecl *FD = dyn_cast<FunctionDecl>(ND)) {
       if (FD->isDefined())
         continue;
@@ -975,7 +980,6 @@ void Sema::ActOnEndOfTranslationUnit() {
     LateParsedInstantiations.clear();
   }
 
-  DiagnoseUnterminatedPragmaPack();
   DiagnoseUnterminatedPragmaAttribute();
 
   // All delayed member exception specs should be checked or we end up accepting

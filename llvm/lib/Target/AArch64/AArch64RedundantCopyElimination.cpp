@@ -182,8 +182,12 @@ bool AArch64RedundantCopyElimination::knownRegValInBlock(
     case AArch64::SUBSXri: {
       // Sometimes the first operand is a FrameIndex. Bail if tht happens.
       if (!PredI.getOperand(1).isReg())
+<<<<<<< HEAD
         return false;
       MCPhysReg DstReg = PredI.getOperand(0).getReg();
+=======
+        return None;
+>>>>>>> origin/release/5.x
       MCPhysReg SrcReg = PredI.getOperand(1).getReg();
 
       bool Res = false;

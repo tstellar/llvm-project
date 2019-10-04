@@ -132,7 +132,8 @@ bool ConstantFPSDNode::isValueValidForType(EVT VT,
 //                              ISD Namespace
 //===----------------------------------------------------------------------===//
 
-bool ISD::isConstantSplatVector(const SDNode *N, APInt &SplatVal) {
+bool ISD::isConstantSplatVector(const SDNode *N, APInt &SplatVal,
+                                bool AllowShrink) {
   auto *BV = dyn_cast<BuildVectorSDNode>(N);
   if (!BV)
     return false;
@@ -141,9 +142,16 @@ bool ISD::isConstantSplatVector(const SDNode *N, APInt &SplatVal) {
   unsigned SplatBitSize;
   bool HasUndefs;
   unsigned EltSize = N->getValueType(0).getVectorElementType().getSizeInBits();
+<<<<<<< HEAD
   return BV->isConstantSplat(SplatVal, SplatUndef, SplatBitSize, HasUndefs,
                              EltSize) &&
          EltSize == SplatBitSize;
+=======
+  unsigned MinSplatBits = AllowShrink ? 0 : EltSize;
+  return BV->isConstantSplat(SplatVal, SplatUndef, SplatBitSize, HasUndefs,
+                             MinSplatBits) &&
+         EltSize >= SplatBitSize;
+>>>>>>> origin/release/5.x
 }
 
 // FIXME: AllOnes and AllZeros duplicate a lot of code. Could these be
@@ -8624,7 +8632,11 @@ SDValue SelectionDAG::makeEquivalentMemoryOrdering(LoadSDNode *OldLoad,
   // TokenFactor.
   SDValue OldChain = SDValue(OldLoad, 1);
   SDValue NewChain = SDValue(NewMemOp.getNode(), 1);
+<<<<<<< HEAD
   if (OldChain == NewChain || !OldLoad->hasAnyUseOfValue(1))
+=======
+  if (!OldLoad->hasAnyUseOfValue(1))
+>>>>>>> origin/release/5.x
     return NewChain;
 
   SDValue TokenFactor =
@@ -8632,6 +8644,7 @@ SDValue SelectionDAG::makeEquivalentMemoryOrdering(LoadSDNode *OldLoad,
   ReplaceAllUsesOfValueWith(OldChain, TokenFactor);
   UpdateNodeOperands(TokenFactor.getNode(), OldChain, NewChain);
   return TokenFactor;
+<<<<<<< HEAD
 }
 
 SDValue SelectionDAG::getSymbolFunctionGlobalAddress(SDValue Op,
@@ -8658,6 +8671,8 @@ SDValue SelectionDAG::getSymbolFunctionGlobalAddress(SDValue Op,
   ErrorFormatter.flush();
 
   report_fatal_error(ErrorStr);
+=======
+>>>>>>> origin/release/5.x
 }
 
 //===----------------------------------------------------------------------===//

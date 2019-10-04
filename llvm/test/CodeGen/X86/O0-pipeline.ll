@@ -66,7 +66,10 @@
 ; CHECK-NEXT:       Insert XRay ops
 ; CHECK-NEXT:       Implement the 'patchable-function' attribute
 ; CHECK-NEXT:       X86 Retpoline Thunks
+<<<<<<< HEAD
 ; CHECK-NEXT:       Check CFA info and insert CFI instructions if needed
+=======
+>>>>>>> origin/release/5.x
 ; CHECK-NEXT:       Lazy Machine Block Frequency Analysis
 ; CHECK-NEXT:       Machine Optimization Remark Emitter
 ; CHECK-NEXT:       X86 Assembly Printer

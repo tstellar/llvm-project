@@ -362,6 +362,7 @@ void mips::getMIPSTargetFeatures(const Driver &D, const llvm::Triple &Triple,
                    options::OPT_modd_spreg, "nooddspreg");
   AddTargetFeature(Args, Features, options::OPT_mno_madd4, options::OPT_mmadd4,
                    "nomadd4");
+<<<<<<< HEAD
   AddTargetFeature(Args, Features, options::OPT_mmt, options::OPT_mno_mt, "mt");
   AddTargetFeature(Args, Features, options::OPT_mcrc, options::OPT_mno_crc,
                    "crc");
@@ -369,6 +370,11 @@ void mips::getMIPSTargetFeatures(const Driver &D, const llvm::Triple &Triple,
                    "virt");
   AddTargetFeature(Args, Features, options::OPT_mginv, options::OPT_mno_ginv,
                    "ginv");
+=======
+  AddTargetFeature(Args, Features, options::OPT_mlong_calls,
+                   options::OPT_mno_long_calls, "long-calls");
+  AddTargetFeature(Args, Features, options::OPT_mmt, options::OPT_mno_mt,"mt");
+>>>>>>> origin/release/5.x
 
   if (Arg *A = Args.getLastArg(options::OPT_mindirect_jump_EQ)) {
     StringRef Val = StringRef(A->getValue());
@@ -415,6 +421,23 @@ mips::IEEE754Standard mips::getIEEE754Standard(StringRef &CPU) {
       .Case("mips64r5", Legacy | Std2008)
       .Case("mips64r6", Std2008)
       .Default(Std2008);
+}
+
+bool mips::supportsIndirectJumpHazardBarrier(StringRef &CPU) {
+  // Supporting the hazard barrier method of dealing with indirect
+  // jumps requires MIPSR2 support.
+  return llvm::StringSwitch<bool>(CPU)
+      .Case("mips32r2", true)
+      .Case("mips32r3", true)
+      .Case("mips32r5", true)
+      .Case("mips32r6", true)
+      .Case("mips64r2", true)
+      .Case("mips64r3", true)
+      .Case("mips64r5", true)
+      .Case("mips64r6", true)
+      .Case("octeon", true)
+      .Case("p5600", true)
+      .Default(false);
 }
 
 bool mips::hasCompactBranches(StringRef &CPU) {

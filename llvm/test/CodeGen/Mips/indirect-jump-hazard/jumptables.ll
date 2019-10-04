@@ -36,8 +36,14 @@
 
 define i8* @_Z3fooi(i32 signext %Letter) {
 ; MIPS32R2-LABEL: _Z3fooi:
+<<<<<<< HEAD
 ; MIPS32R2:       # %bb.0: # %entry
 ; MIPS32R2-NEXT:    addiu $sp, $sp, -16
+=======
+; MIPS32R2:       # BB#0: # %entry
+; MIPS32R2-NEXT:    addiu $sp, $sp, -16
+; MIPS32R2-NEXT:  $cfi0:
+>>>>>>> origin/release/5.x
 ; MIPS32R2-NEXT:    .cfi_def_cfa_offset 16
 ; MIPS32R2-NEXT:    sltiu $1, $4, 7
 ; MIPS32R2-NEXT:    beqz $1, $BB0_3
@@ -94,8 +100,14 @@ define i8* @_Z3fooi(i32 signext %Letter) {
 ; MIPS32R2-NEXT:    addiu $sp, $sp, 16
 ;
 ; MIPS32R6-LABEL: _Z3fooi:
+<<<<<<< HEAD
 ; MIPS32R6:       # %bb.0: # %entry
 ; MIPS32R6-NEXT:    addiu $sp, $sp, -16
+=======
+; MIPS32R6:       # BB#0: # %entry
+; MIPS32R6-NEXT:    addiu $sp, $sp, -16
+; MIPS32R6-NEXT:  $cfi0:
+>>>>>>> origin/release/5.x
 ; MIPS32R6-NEXT:    .cfi_def_cfa_offset 16
 ; MIPS32R6-NEXT:    sltiu $1, $4, 7
 ; MIPS32R6-NEXT:    beqz $1, $BB0_3
@@ -152,6 +164,7 @@ define i8* @_Z3fooi(i32 signext %Letter) {
 ; MIPS32R6-NEXT:    addiu $sp, $sp, 16
 ;
 ; MIPS64R2-LABEL: _Z3fooi:
+<<<<<<< HEAD
 ; MIPS64R2:       # %bb.0: # %entry
 ; MIPS64R2-NEXT:    daddiu $sp, $sp, -16
 ; MIPS64R2-NEXT:    .cfi_def_cfa_offset 16
@@ -161,6 +174,21 @@ define i8* @_Z3fooi(i32 signext %Letter) {
 ; MIPS64R2-NEXT:    sw $4, 4($sp)
 ; MIPS64R2-NEXT:  .LBB0_1: # %entry
 ; MIPS64R2-NEXT:    dsll $1, $2, 3
+=======
+; MIPS64R2:       # BB#0: # %entry
+; MIPS64R2-NEXT:    daddiu $sp, $sp, -16
+; MIPS64R2-NEXT:  .Lcfi0:
+; MIPS64R2-NEXT:    .cfi_def_cfa_offset 16
+; MIPS64R2-NEXT:    sw $4, 4($sp)
+; MIPS64R2-NEXT:    lwu $2, 4($sp)
+; MIPS64R2-NEXT:    sltiu $1, $2, 7
+; MIPS64R2-NEXT:    beqz $1, .LBB0_3
+; MIPS64R2-NEXT:    nop
+; MIPS64R2-NEXT:  .LBB0_1: # %entry
+; MIPS64R2-NEXT:    daddiu $1, $zero, 8
+; MIPS64R2-NEXT:    dmult $2, $1
+; MIPS64R2-NEXT:    mflo $1
+>>>>>>> origin/release/5.x
 ; MIPS64R2-NEXT:    lui $2, %highest(.LJTI0_0)
 ; MIPS64R2-NEXT:    daddiu $2, $2, %higher(.LJTI0_0)
 ; MIPS64R2-NEXT:    dsll $2, $2, 16
@@ -247,6 +275,7 @@ define i8* @_Z3fooi(i32 signext %Letter) {
 ; MIPS64R2-NEXT:    daddiu $sp, $sp, 16
 ;
 ; MIPS64R6-LABEL: _Z3fooi:
+<<<<<<< HEAD
 ; MIPS64R6:       # %bb.0: # %entry
 ; MIPS64R6-NEXT:    daddiu $sp, $sp, -16
 ; MIPS64R6-NEXT:    .cfi_def_cfa_offset 16
@@ -254,6 +283,16 @@ define i8* @_Z3fooi(i32 signext %Letter) {
 ; MIPS64R6-NEXT:    sltiu $1, $2, 7
 ; MIPS64R6-NEXT:    beqz $1, .LBB0_3
 ; MIPS64R6-NEXT:    sw $4, 4($sp)
+=======
+; MIPS64R6:       # BB#0: # %entry
+; MIPS64R6-NEXT:    daddiu $sp, $sp, -16
+; MIPS64R6-NEXT:  .Lcfi0:
+; MIPS64R6-NEXT:    .cfi_def_cfa_offset 16
+; MIPS64R6-NEXT:    sw $4, 4($sp)
+; MIPS64R6-NEXT:    lwu $2, 4($sp)
+; MIPS64R6-NEXT:    sltiu $1, $2, 7
+; MIPS64R6-NEXT:    beqzc $1, .LBB0_3
+>>>>>>> origin/release/5.x
 ; MIPS64R6-NEXT:  .LBB0_1: # %entry
 ; MIPS64R6-NEXT:    dsll $1, $2, 3
 ; MIPS64R6-NEXT:    lui $2, %highest(.LJTI0_0)
@@ -342,10 +381,18 @@ define i8* @_Z3fooi(i32 signext %Letter) {
 ; MIPS64R6-NEXT:    daddiu $sp, $sp, 16
 ;
 ; PIC-MIPS32R2-LABEL: _Z3fooi:
+<<<<<<< HEAD
 ; PIC-MIPS32R2:       # %bb.0: # %entry
 ; PIC-MIPS32R2-NEXT:    lui $2, %hi(_gp_disp)
 ; PIC-MIPS32R2-NEXT:    addiu $2, $2, %lo(_gp_disp)
 ; PIC-MIPS32R2-NEXT:    addiu $sp, $sp, -16
+=======
+; PIC-MIPS32R2:       # BB#0: # %entry
+; PIC-MIPS32R2-NEXT:    lui $2, %hi(_gp_disp)
+; PIC-MIPS32R2-NEXT:    addiu $2, $2, %lo(_gp_disp)
+; PIC-MIPS32R2-NEXT:    addiu $sp, $sp, -16
+; PIC-MIPS32R2-NEXT:  $cfi0:
+>>>>>>> origin/release/5.x
 ; PIC-MIPS32R2-NEXT:    .cfi_def_cfa_offset 16
 ; PIC-MIPS32R2-NEXT:    addu $2, $2, $25
 ; PIC-MIPS32R2-NEXT:    sltiu $1, $4, 7
@@ -404,10 +451,18 @@ define i8* @_Z3fooi(i32 signext %Letter) {
 ; PIC-MIPS32R2-NEXT:    addiu $sp, $sp, 16
 ;
 ; PIC-MIPS32R6-LABEL: _Z3fooi:
+<<<<<<< HEAD
 ; PIC-MIPS32R6:       # %bb.0: # %entry
 ; PIC-MIPS32R6-NEXT:    lui $2, %hi(_gp_disp)
 ; PIC-MIPS32R6-NEXT:    addiu $2, $2, %lo(_gp_disp)
 ; PIC-MIPS32R6-NEXT:    addiu $sp, $sp, -16
+=======
+; PIC-MIPS32R6:       # BB#0: # %entry
+; PIC-MIPS32R6-NEXT:    lui $2, %hi(_gp_disp)
+; PIC-MIPS32R6-NEXT:    addiu $2, $2, %lo(_gp_disp)
+; PIC-MIPS32R6-NEXT:    addiu $sp, $sp, -16
+; PIC-MIPS32R6-NEXT:  $cfi0:
+>>>>>>> origin/release/5.x
 ; PIC-MIPS32R6-NEXT:    .cfi_def_cfa_offset 16
 ; PIC-MIPS32R6-NEXT:    addu $2, $2, $25
 ; PIC-MIPS32R6-NEXT:    sltiu $1, $4, 7
@@ -466,18 +521,36 @@ define i8* @_Z3fooi(i32 signext %Letter) {
 ; PIC-MIPS32R6-NEXT:    addiu $sp, $sp, 16
 ;
 ; PIC-MIPS64R2-LABEL: _Z3fooi:
+<<<<<<< HEAD
 ; PIC-MIPS64R2:       # %bb.0: # %entry
 ; PIC-MIPS64R2-NEXT:    daddiu $sp, $sp, -16
+=======
+; PIC-MIPS64R2:       # BB#0: # %entry
+; PIC-MIPS64R2-NEXT:    daddiu $sp, $sp, -16
+; PIC-MIPS64R2-NEXT:  .Lcfi0:
+>>>>>>> origin/release/5.x
 ; PIC-MIPS64R2-NEXT:    .cfi_def_cfa_offset 16
 ; PIC-MIPS64R2-NEXT:    lui $1, %hi(%neg(%gp_rel(_Z3fooi)))
 ; PIC-MIPS64R2-NEXT:    daddu $1, $1, $25
 ; PIC-MIPS64R2-NEXT:    daddiu $2, $1, %lo(%neg(%gp_rel(_Z3fooi)))
+<<<<<<< HEAD
 ; PIC-MIPS64R2-NEXT:    dext $3, $4, 0, 32
 ; PIC-MIPS64R2-NEXT:    sltiu $1, $3, 7
 ; PIC-MIPS64R2-NEXT:    beqz $1, .LBB0_3
 ; PIC-MIPS64R2-NEXT:    sw $4, 4($sp)
 ; PIC-MIPS64R2-NEXT:  .LBB0_1: # %entry
 ; PIC-MIPS64R2-NEXT:    dsll $1, $3, 3
+=======
+; PIC-MIPS64R2-NEXT:    sw $4, 4($sp)
+; PIC-MIPS64R2-NEXT:    lwu $3, 4($sp)
+; PIC-MIPS64R2-NEXT:    sltiu $1, $3, 7
+; PIC-MIPS64R2-NEXT:    beqz $1, .LBB0_3
+; PIC-MIPS64R2-NEXT:    nop
+; PIC-MIPS64R2-NEXT:  .LBB0_1: # %entry
+; PIC-MIPS64R2-NEXT:    daddiu $1, $zero, 8
+; PIC-MIPS64R2-NEXT:    dmult $3, $1
+; PIC-MIPS64R2-NEXT:    mflo $1
+>>>>>>> origin/release/5.x
 ; PIC-MIPS64R2-NEXT:    ld $3, %got_page(.LJTI0_0)($2)
 ; PIC-MIPS64R2-NEXT:    daddu $1, $1, $3
 ; PIC-MIPS64R2-NEXT:    ld $1, %got_ofst(.LJTI0_0)($1)
@@ -529,16 +602,29 @@ define i8* @_Z3fooi(i32 signext %Letter) {
 ; PIC-MIPS64R2-NEXT:    daddiu $sp, $sp, 16
 ;
 ; PIC-MIPS64R6-LABEL: _Z3fooi:
+<<<<<<< HEAD
 ; PIC-MIPS64R6:       # %bb.0: # %entry
 ; PIC-MIPS64R6-NEXT:    daddiu $sp, $sp, -16
+=======
+; PIC-MIPS64R6:       # BB#0: # %entry
+; PIC-MIPS64R6-NEXT:    daddiu $sp, $sp, -16
+; PIC-MIPS64R6-NEXT:  .Lcfi0:
+>>>>>>> origin/release/5.x
 ; PIC-MIPS64R6-NEXT:    .cfi_def_cfa_offset 16
 ; PIC-MIPS64R6-NEXT:    lui $1, %hi(%neg(%gp_rel(_Z3fooi)))
 ; PIC-MIPS64R6-NEXT:    daddu $1, $1, $25
 ; PIC-MIPS64R6-NEXT:    daddiu $2, $1, %lo(%neg(%gp_rel(_Z3fooi)))
+<<<<<<< HEAD
 ; PIC-MIPS64R6-NEXT:    dext $3, $4, 0, 32
 ; PIC-MIPS64R6-NEXT:    sltiu $1, $3, 7
 ; PIC-MIPS64R6-NEXT:    beqz $1, .LBB0_3
 ; PIC-MIPS64R6-NEXT:    sw $4, 4($sp)
+=======
+; PIC-MIPS64R6-NEXT:    sw $4, 4($sp)
+; PIC-MIPS64R6-NEXT:    lwu $3, 4($sp)
+; PIC-MIPS64R6-NEXT:    sltiu $1, $3, 7
+; PIC-MIPS64R6-NEXT:    beqzc $1, .LBB0_3
+>>>>>>> origin/release/5.x
 ; PIC-MIPS64R6-NEXT:  .LBB0_1: # %entry
 ; PIC-MIPS64R6-NEXT:    dsll $1, $3, 3
 ; PIC-MIPS64R6-NEXT:    ld $3, %got_page(.LJTI0_0)($2)

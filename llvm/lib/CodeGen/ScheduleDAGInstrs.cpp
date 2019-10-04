@@ -121,11 +121,17 @@ ScheduleDAGInstrs::ScheduleDAGInstrs(MachineFunction &mf,
   SchedModel.init(&ST);
 }
 
+<<<<<<< HEAD
 /// If this machine instr has memory reference information and it can be
 /// tracked to a normal reference to a known object, return the Value
 /// for that object. This function returns false the memory location is
 /// unknown or may alias anything.
 static bool getUnderlyingObjectsForInstr(const MachineInstr *MI,
+=======
+/// If this machine instr has memory reference information and it can be tracked
+/// to a normal reference to a known object, return the Value for that object.
+static void getUnderlyingObjectsForInstr(const MachineInstr *MI,
+>>>>>>> origin/release/5.x
                                          const MachineFrameInfo &MFI,
                                          UnderlyingObjectsVector &Objects,
                                          const DataLayout &DL) {
@@ -154,8 +160,12 @@ static bool getUnderlyingObjectsForInstr(const MachineInstr *MI,
         Objects.push_back(UnderlyingObjectsVector::value_type(PSV, MayAlias));
       } else if (const Value *V = MMO->getValue()) {
         SmallVector<Value *, 4> Objs;
+<<<<<<< HEAD
         if (!getUnderlyingObjectsForCodeGen(V, Objs, DL))
           return false;
+=======
+        getUnderlyingObjectsForCodeGen(V, Objs, DL);
+>>>>>>> origin/release/5.x
 
         for (Value *V : Objs) {
           assert(isIdentifiedObject(V));

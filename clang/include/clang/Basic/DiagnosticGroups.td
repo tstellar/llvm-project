@@ -279,6 +279,7 @@ def CXX14CompatPedantic : DiagGroup<"c++14-compat-pedantic",
 
 def CXX17Compat : DiagGroup<"c++17-compat", [DeprecatedRegister,
                                              DeprecatedIncrementBool,
+<<<<<<< HEAD
                                              CXX17CompatMangling,
                                              CXXPre2aCompat]>;
 def CXX17CompatPedantic : DiagGroup<"c++17-compat-pedantic",
@@ -289,6 +290,10 @@ def : DiagGroup<"c++1z-compat", [CXX17Compat]>;
 def CXX2aCompat : DiagGroup<"c++2a-compat">;
 def CXX2aCompatPedantic : DiagGroup<"c++2a-compat-pedantic",
                                     [CXX2aCompat]>;
+=======
+                                             CXX17CompatMangling]>;
+def : DiagGroup<"c++1z-compat", [CXX17Compat]>;
+>>>>>>> origin/release/5.x
 
 def ExitTimeDestructors : DiagGroup<"exit-time-destructors">;
 def FlexibleArrayExtensions : DiagGroup<"flexible-array-extensions">;
@@ -591,10 +596,13 @@ def UnknownPragmas : DiagGroup<"unknown-pragmas">;
 def IgnoredPragmas : DiagGroup<"ignored-pragmas",
     [IgnoredPragmaIntrinsic, IgnoredPragmaOptimize]>;
 def PragmaClangAttribute : DiagGroup<"pragma-clang-attribute">;
+<<<<<<< HEAD
 def PragmaPackSuspiciousInclude : DiagGroup<"pragma-pack-suspicious-include">;
 def PragmaPack : DiagGroup<"pragma-pack", [PragmaPackSuspiciousInclude]>;
+=======
+>>>>>>> origin/release/5.x
 def Pragmas : DiagGroup<"pragmas", [UnknownPragmas, IgnoredPragmas,
-                                    PragmaClangAttribute, PragmaPack]>;
+                                    PragmaClangAttribute]>;
 def UnknownWarningOption : DiagGroup<"unknown-warning-option">;
 def NSobjectAttribute : DiagGroup<"NSObject-attribute">;
 def NSConsumedMismatch : DiagGroup<"nsconsumed-mismatch">;
@@ -915,7 +923,11 @@ def CXX17 : DiagGroup<"c++17-extensions">;
 
 // A warning group for warnings about using C++2a features as extensions in
 // earlier C++ versions.
+<<<<<<< HEAD
 def CXX2a : DiagGroup<"c++2a-extensions", [CXX2aDesignator]>;
+=======
+def CXX17 : DiagGroup<"c++17-extensions">;
+>>>>>>> origin/release/5.x
 
 def : DiagGroup<"c++0x-extensions", [CXX11]>;
 def : DiagGroup<"c++1y-extensions", [CXX14]>;

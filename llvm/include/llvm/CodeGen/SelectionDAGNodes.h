@@ -85,7 +85,10 @@ namespace ISD {
 
   /// If N is a BUILD_VECTOR node whose elements are all the same constant or
   /// undefined, return true and return the constant value in \p SplatValue.
-  bool isConstantSplatVector(const SDNode *N, APInt &SplatValue);
+  /// This sets \p SplatValue to the smallest possible splat unless AllowShrink
+  /// is set to false.
+  bool isConstantSplatVector(const SDNode *N, APInt &SplatValue,
+                             bool AllowShrink = true);
 
   /// Return true if the specified node is a BUILD_VECTOR where all of the
   /// elements are ~0 or undef.
@@ -875,9 +878,13 @@ public:
   static bool hasPredecessorHelper(const SDNode *N,
                                    SmallPtrSetImpl<const SDNode *> &Visited,
                                    SmallVectorImpl<const SDNode *> &Worklist,
+<<<<<<< HEAD
                                    unsigned int MaxSteps = 0,
                                    bool TopologicalPrune = false) {
     SmallVector<const SDNode *, 8> DeferredNodes;
+=======
+                                   unsigned int MaxSteps = 0) {
+>>>>>>> origin/release/5.x
     if (Visited.count(N))
       return true;
 
@@ -914,9 +921,15 @@ public:
           Found = true;
       }
       if (Found)
+<<<<<<< HEAD
         break;
       if (MaxSteps != 0 && Visited.size() >= MaxSteps)
         break;
+=======
+        return true;
+      if (MaxSteps != 0 && Visited.size() >= MaxSteps)
+        return false;
+>>>>>>> origin/release/5.x
     }
     // Push deferred nodes back on worklist.
     Worklist.append(DeferredNodes.begin(), DeferredNodes.end());

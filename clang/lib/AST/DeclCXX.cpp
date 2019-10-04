@@ -93,6 +93,7 @@ CXXRecordDecl::DefinitionData::DefinitionData(CXXRecordDecl *D)
       DeclaredNonTrivialSpecialMembersForCall(0), HasIrrelevantDestructor(true),
       HasConstexprNonCopyMoveConstructor(false),
       HasDefaultedDefaultConstructor(false),
+      CanPassInRegisters(true),
       DefaultedDefaultConstructorIsConstexpr(true),
       HasConstexprDefaultConstructor(false),
       DefaultedDestructorIsConstexpr(true),
@@ -1038,7 +1039,10 @@ void CXXRecordDecl::addedMember(Decl *D) {
       //   A standard-layout class is a class that:
       //    -- has no non-static data members of type [...] reference,
       data().IsStandardLayout = false;
+<<<<<<< HEAD
       data().IsCXX11StandardLayout = false;
+=======
+>>>>>>> origin/release/5.x
 
       // C++1z [class.copy.ctor]p10:
       //   A defaulted copy constructor for a class X is defined as deleted if X has:

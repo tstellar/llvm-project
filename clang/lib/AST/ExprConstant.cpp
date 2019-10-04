@@ -748,8 +748,12 @@ namespace {
   /// rules.  For example, the RHS of (0 && foo()) is not evaluated.  We can
   /// evaluate the expression regardless of what the RHS is, but C only allows
   /// certain things in certain situations.
+<<<<<<< HEAD
   class EvalInfo : public interp::State {
   public:
+=======
+  struct EvalInfo {
+>>>>>>> origin/release/5.x
     ASTContext &Ctx;
 
     /// EvalStatus - Contains information about the evaluation.
@@ -1240,12 +1244,19 @@ namespace {
   class SpeculativeEvaluationRAII {
     EvalInfo *Info = nullptr;
     Expr::EvalStatus OldStatus;
+<<<<<<< HEAD
     unsigned OldSpeculativeEvaluationDepth;
+=======
+    bool OldIsSpeculativelyEvaluating;
+>>>>>>> origin/release/5.x
 
     void moveFromAndCancel(SpeculativeEvaluationRAII &&Other) {
       Info = Other.Info;
       OldStatus = Other.OldStatus;
+<<<<<<< HEAD
       OldSpeculativeEvaluationDepth = Other.OldSpeculativeEvaluationDepth;
+=======
+>>>>>>> origin/release/5.x
       Other.Info = nullptr;
     }
 
@@ -1254,7 +1265,11 @@ namespace {
         return;
 
       Info->EvalStatus = OldStatus;
+<<<<<<< HEAD
       Info->SpeculativeEvaluationDepth = OldSpeculativeEvaluationDepth;
+=======
+      Info->IsSpeculativelyEvaluating = OldIsSpeculativelyEvaluating;
+>>>>>>> origin/release/5.x
     }
 
   public:
@@ -1263,7 +1278,11 @@ namespace {
     SpeculativeEvaluationRAII(
         EvalInfo &Info, SmallVectorImpl<PartialDiagnosticAt> *NewDiag = nullptr)
         : Info(&Info), OldStatus(Info.EvalStatus),
+<<<<<<< HEAD
           OldSpeculativeEvaluationDepth(Info.SpeculativeEvaluationDepth) {
+=======
+          OldIsSpeculativelyEvaluating(Info.IsSpeculativelyEvaluating) {
+>>>>>>> origin/release/5.x
       Info.EvalStatus.Diag = NewDiag;
       Info.SpeculativeEvaluationDepth = Info.CallStackDepth + 1;
     }

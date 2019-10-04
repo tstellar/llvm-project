@@ -488,17 +488,32 @@ define i1 @length16_eq_const(i8* %X) nounwind minsize {
 
 define i32 @length24(i8* %X, i8* %Y) nounwind minsize {
 ; X86-LABEL: length24:
+<<<<<<< HEAD
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl $0
 ; X86-NEXT:    pushl $24
 ; X86-NEXT:    pushl {{[0-9]+}}(%esp)
 ; X86-NEXT:    pushl {{[0-9]+}}(%esp)
+=======
+; X86:       # BB#0:
+; X86-NEXT:    subl $16, %esp
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl %eax, (%esp)
+; X86-NEXT:    andl $0, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $24, {{[0-9]+}}(%esp)
+>>>>>>> origin/release/5.x
 ; X86-NEXT:    calll memcmp
 ; X86-NEXT:    addl $16, %esp
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: length24:
+<<<<<<< HEAD
 ; X64:       # %bb.0:
+=======
+; X64:       # BB#0:
+>>>>>>> origin/release/5.x
 ; X64-NEXT:    pushq $24
 ; X64-NEXT:    popq %rdx
 ; X64-NEXT:    jmp memcmp # TAILCALL
@@ -508,6 +523,7 @@ define i32 @length24(i8* %X, i8* %Y) nounwind minsize {
 
 define i1 @length24_eq(i8* %x, i8* %y) nounwind minsize {
 ; X86-LABEL: length24_eq:
+<<<<<<< HEAD
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl $0
 ; X86-NEXT:    pushl $24
@@ -521,6 +537,24 @@ define i1 @length24_eq(i8* %x, i8* %y) nounwind minsize {
 ;
 ; X64-LABEL: length24_eq:
 ; X64:       # %bb.0:
+=======
+; X86:       # BB#0:
+; X86-NEXT:    subl $16, %esp
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %ecx
+; X86-NEXT:    movl %ecx, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl %eax, (%esp)
+; X86-NEXT:    andl $0, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $24, {{[0-9]+}}(%esp)
+; X86-NEXT:    calll memcmp
+; X86-NEXT:    testl %eax, %eax
+; X86-NEXT:    sete %al
+; X86-NEXT:    addl $16, %esp
+; X86-NEXT:    retl
+;
+; X64-LABEL: length24_eq:
+; X64:       # BB#0:
+>>>>>>> origin/release/5.x
 ; X64-NEXT:    pushq %rax
 ; X64-NEXT:    pushq $24
 ; X64-NEXT:    popq %rdx
@@ -536,6 +570,7 @@ define i1 @length24_eq(i8* %x, i8* %y) nounwind minsize {
 
 define i1 @length24_eq_const(i8* %X) nounwind minsize {
 ; X86-LABEL: length24_eq_const:
+<<<<<<< HEAD
 ; X86:       # %bb.0:
 ; X86-NEXT:    pushl $0
 ; X86-NEXT:    pushl $24
@@ -549,6 +584,23 @@ define i1 @length24_eq_const(i8* %X) nounwind minsize {
 ;
 ; X64-LABEL: length24_eq_const:
 ; X64:       # %bb.0:
+=======
+; X86:       # BB#0:
+; X86-NEXT:    subl $16, %esp
+; X86-NEXT:    movl {{[0-9]+}}(%esp), %eax
+; X86-NEXT:    movl %eax, (%esp)
+; X86-NEXT:    andl $0, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $24, {{[0-9]+}}(%esp)
+; X86-NEXT:    movl $.L.str, {{[0-9]+}}(%esp)
+; X86-NEXT:    calll memcmp
+; X86-NEXT:    testl %eax, %eax
+; X86-NEXT:    setne %al
+; X86-NEXT:    addl $16, %esp
+; X86-NEXT:    retl
+;
+; X64-LABEL: length24_eq_const:
+; X64:       # BB#0:
+>>>>>>> origin/release/5.x
 ; X64-NEXT:    pushq %rax
 ; X64-NEXT:    pushq $24
 ; X64-NEXT:    popq %rdx

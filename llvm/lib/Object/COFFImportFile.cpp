@@ -568,9 +568,15 @@ NewArchiveMember ObjectFactory::createWeakExternal(StringRef Sym,
   return {MemoryBufferRef(StringRef(Buf, Buffer.size()), ImportName)};
 }
 
+<<<<<<< HEAD
 Error writeImportLibrary(StringRef ImportName, StringRef Path,
                          ArrayRef<COFFShortExport> Exports,
                          MachineTypes Machine, bool MinGW) {
+=======
+std::error_code writeImportLibrary(StringRef ImportName, StringRef Path,
+                                   ArrayRef<COFFShortExport> Exports,
+                                   MachineTypes Machine, bool MakeWeakAliases) {
+>>>>>>> origin/release/5.x
 
   std::vector<NewArchiveMember> Members;
   ObjectFactory OF(llvm::sys::path::filename(ImportName), Machine);
@@ -588,6 +594,15 @@ Error writeImportLibrary(StringRef ImportName, StringRef Path,
     if (E.Private)
       continue;
 
+<<<<<<< HEAD
+=======
+    if (E.isWeak() && MakeWeakAliases) {
+      Members.push_back(OF.createWeakExternal(E.Name, E.ExtName, false));
+      Members.push_back(OF.createWeakExternal(E.Name, E.ExtName, true));
+      continue;
+    }
+
+>>>>>>> origin/release/5.x
     ImportType ImportType = IMPORT_CODE;
     if (E.Data)
       ImportType = IMPORT_DATA;
@@ -595,10 +610,14 @@ Error writeImportLibrary(StringRef ImportName, StringRef Path,
       ImportType = IMPORT_CONST;
 
     StringRef SymbolName = E.SymbolName.empty() ? E.Name : E.SymbolName;
+<<<<<<< HEAD
     ImportNameType NameType = E.Noname
                                   ? IMPORT_ORDINAL
                                   : getNameType(SymbolName, E.Name,
                                                 Machine, MinGW);
+=======
+    ImportNameType NameType = getNameType(SymbolName, E.Name, Machine);
+>>>>>>> origin/release/5.x
     Expected<std::string> Name = E.ExtName.empty()
                                      ? SymbolName
                                      : replace(SymbolName, E.Name, E.ExtName);

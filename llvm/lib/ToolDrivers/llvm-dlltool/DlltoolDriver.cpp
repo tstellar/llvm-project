@@ -54,12 +54,22 @@ public:
 } // namespace
 
 // Opens a file. Path has to be resolved already.
+<<<<<<< HEAD
 static std::unique_ptr<MemoryBuffer> openFile(const Twine &Path) {
   ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> MB = MemoryBuffer::getFile(Path);
 
   if (std::error_code EC = MB.getError()) {
     llvm::errs() << "cannot open file " << Path << ": " << EC.message() << "\n";
     return nullptr;
+=======
+// Newly created memory buffers are owned by this driver.
+Optional<MemoryBufferRef> openFile(StringRef Path) {
+  ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> MB = MemoryBuffer::getFile(Path);
+
+  if (std::error_code EC = MB.getError()) {
+    llvm::errs() << "fail openFile: " << EC.message() << "\n";
+    return None;
+>>>>>>> origin/release/5.x
   }
 
   return std::move(*MB);
@@ -109,8 +119,12 @@ int llvm::dlltoolDriverMain(llvm::ArrayRef<const char *> ArgsArr) {
     return 1;
   }
 
+<<<<<<< HEAD
   std::unique_ptr<MemoryBuffer> MB =
       openFile(Args.getLastArg(OPT_d)->getValue());
+=======
+  Optional<MemoryBufferRef> MB = openFile(Args.getLastArg(OPT_d)->getValue());
+>>>>>>> origin/release/5.x
   if (!MB)
     return 1;
 
@@ -148,6 +162,7 @@ int llvm::dlltoolDriverMain(llvm::ArrayRef<const char *> ArgsArr) {
 
   std::string Path = Args.getLastArgValue(OPT_l);
 
+<<<<<<< HEAD
   // If ExtName is set (if the "ExtName = Name" syntax was used), overwrite
   // Name with ExtName and clear ExtName. When only creating an import
   // library and not linking, the internal name is irrelevant. This avoids
@@ -163,13 +178,23 @@ int llvm::dlltoolDriverMain(llvm::ArrayRef<const char *> ArgsArr) {
   if (Machine == IMAGE_FILE_MACHINE_I386 && Args.getLastArg(OPT_k)) {
     for (COFFShortExport& E : Def->Exports) {
       if (!E.AliasTarget.empty() || (!E.Name.empty() && E.Name[0] == '?'))
+=======
+  if (Machine == IMAGE_FILE_MACHINE_I386 && Args.getLastArg(OPT_k)) {
+    for (COFFShortExport& E : Def->Exports) {
+      if (E.isWeak() || (!E.Name.empty() && E.Name[0] == '?'))
+>>>>>>> origin/release/5.x
         continue;
       E.SymbolName = E.Name;
       // Trim off the trailing decoration. Symbols will always have a
       // starting prefix here (either _ for cdecl/stdcall, @ for fastcall
+<<<<<<< HEAD
       // or ? for C++ functions). Vectorcall functions won't have any
       // fixed prefix, but the function base name will still be at least
       // one char.
+=======
+      // or ? for C++ functions). (Vectorcall functions also will end up having
+      // a prefix here, even if they shouldn't.)
+>>>>>>> origin/release/5.x
       E.Name = E.Name.substr(0, E.Name.find('@', 1));
       // By making sure E.SymbolName != E.Name for decorated symbols,
       // writeImportLibrary writes these symbols with the type
@@ -177,8 +202,12 @@ int llvm::dlltoolDriverMain(llvm::ArrayRef<const char *> ArgsArr) {
     }
   }
 
+<<<<<<< HEAD
   if (!Path.empty() &&
       writeImportLibrary(Def->OutputFile, Path, Def->Exports, Machine, true))
+=======
+  if (writeImportLibrary(Def->OutputFile, Path, Def->Exports, Machine, true))
+>>>>>>> origin/release/5.x
     return 1;
   return 0;
 }

@@ -78,6 +78,7 @@
 // RUN: FileCheck -check-prefix=ARM64-APPLE %s
 // ARM64-APPLE: -munwind-table
 
+<<<<<<< HEAD
 // RUN: %clang -target arm64-apple-ios10 -### -ffreestanding -S %s -arch arm64 2>&1 | \
 // RUN: FileCheck -check-prefix=ARM64-FREESTANDING-APPLE %s
 //
@@ -94,6 +95,8 @@
 //
 // ARM64-EXPLICIT-UWTABLE-APPLE: -munwind-table
 
+=======
+>>>>>>> origin/release/5.x
 // RUN: %clang -target arm64-apple-ios10 -fno-exceptions -### -S %s -arch arm64 2>&1 | \
 // RUN: FileCheck -check-prefix=ARM64-APPLE-EXCEP %s
 // ARM64-APPLE-EXCEP-NOT: -munwind-table

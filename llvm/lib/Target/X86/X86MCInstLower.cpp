@@ -1128,7 +1128,11 @@ void X86AsmPrinter::LowerSTATEPOINT(const MachineInstr &MI,
       break;
     case MachineOperand::MO_Register:
       // FIXME: Add retpoline support and remove this.
+<<<<<<< HEAD
       if (Subtarget->useRetpolineIndirectCalls())
+=======
+      if (Subtarget->useRetpoline())
+>>>>>>> origin/release/5.x
         report_fatal_error("Lowering register statepoints with retpoline not "
                            "yet implemented.");
       CallTargetMCOp = MCOperand::createReg(CallTarget.getReg());
@@ -1286,7 +1290,11 @@ void X86AsmPrinter::LowerPATCHPOINT(const MachineInstr &MI,
     EmitAndCountInstruction(
         MCInstBuilder(X86::MOV64ri).addReg(ScratchReg).addOperand(CalleeMCOp));
     // FIXME: Add retpoline support and remove this.
+<<<<<<< HEAD
     if (Subtarget->useRetpolineIndirectCalls())
+=======
+    if (Subtarget->useRetpoline())
+>>>>>>> origin/release/5.x
       report_fatal_error(
           "Lowering patchpoint with retpoline not yet implemented.");
     EmitAndCountInstruction(MCInstBuilder(X86::CALL64r).addReg(ScratchReg));

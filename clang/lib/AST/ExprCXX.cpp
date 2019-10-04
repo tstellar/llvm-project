@@ -1314,6 +1314,7 @@ ExprWithCleanups *ExprWithCleanups::Create(const ASTContext &C,
   return new (buffer) ExprWithCleanups(empty, numObjects);
 }
 
+<<<<<<< HEAD
 CXXUnresolvedConstructExpr::CXXUnresolvedConstructExpr(TypeSourceInfo *TSI,
                                                        SourceLocation LParenLoc,
                                                        ArrayRef<Expr *> Args,
@@ -1331,6 +1332,27 @@ CXXUnresolvedConstructExpr::CXXUnresolvedConstructExpr(TypeSourceInfo *TSI,
       TSI(TSI), LParenLoc(LParenLoc), RParenLoc(RParenLoc) {
   CXXUnresolvedConstructExprBits.NumArgs = Args.size();
   auto **StoredArgs = getTrailingObjects<Expr *>();
+=======
+CXXUnresolvedConstructExpr::CXXUnresolvedConstructExpr(TypeSourceInfo *Type,
+                                                 SourceLocation LParenLoc,
+                                                 ArrayRef<Expr*> Args,
+                                                 SourceLocation RParenLoc)
+  : Expr(CXXUnresolvedConstructExprClass, 
+         Type->getType().getNonReferenceType(),
+         (Type->getType()->isLValueReferenceType() ? VK_LValue
+          :Type->getType()->isRValueReferenceType()? VK_XValue
+          :VK_RValue),
+         OK_Ordinary,
+         Type->getType()->isDependentType() ||
+             Type->getType()->getContainedDeducedType(),
+         true, true,
+         Type->getType()->containsUnexpandedParameterPack()),
+    Type(Type),
+    LParenLoc(LParenLoc),
+    RParenLoc(RParenLoc),
+    NumArgs(Args.size()) {
+  Expr **StoredArgs = getTrailingObjects<Expr *>();
+>>>>>>> origin/release/5.x
   for (unsigned I = 0; I != Args.size(); ++I) {
     if (Args[I]->containsUnexpandedParameterPack())
       ExprBits.ContainsUnexpandedParameterPack = true;

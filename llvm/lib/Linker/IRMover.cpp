@@ -691,7 +691,11 @@ GlobalValue *IRLinker::copyGlobalValueProto(const GlobalValue *SGV,
     NewGV = copyFunctionProto(SF);
   } else {
     if (ForDefinition)
+<<<<<<< HEAD
       NewGV = copyGlobalIndirectSymbolProto(cast<GlobalIndirectSymbol>(SGV));
+=======
+      NewGV = copyGlobalAliasProto(cast<GlobalAlias>(SGV));
+>>>>>>> origin/release/5.x
     else if (SGV->getValueType()->isFunctionTy())
       NewGV =
           Function::Create(cast<FunctionType>(TypeMap.get(SGV->getValueType())),

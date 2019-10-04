@@ -942,8 +942,13 @@ void X86DAGToDAGISel::PreprocessISelDAG() {
     if (OptLevel != CodeGenOpt::None &&
         // Only do this when the target can fold the load into the call or
         // jmp.
+<<<<<<< HEAD
         !Subtarget->useRetpolineIndirectCalls() &&
         ((N->getOpcode() == X86ISD::CALL && !Subtarget->slowTwoMemOps()) ||
+=======
+        !Subtarget->useRetpoline() &&
+        ((N->getOpcode() == X86ISD::CALL && !Subtarget->callRegIndirect()) ||
+>>>>>>> origin/release/5.x
          (N->getOpcode() == X86ISD::TC_RETURN &&
           (Subtarget->is64Bit() ||
            !getTargetMachine().isPositionIndependent())))) {

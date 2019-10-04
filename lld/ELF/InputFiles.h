@@ -22,6 +22,10 @@
 #include "llvm/Object/ELF.h"
 #include "llvm/Object/IRObjectFile.h"
 #include "llvm/Support/Threading.h"
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/release/5.x
 #include <map>
 
 namespace llvm {
@@ -298,6 +302,7 @@ private:
   // reporting. Linker may find reasonable number of errors in a
   // single object file, so we cache debugging information in order to
   // parse it only once for each object file we link.
+<<<<<<< HEAD
   std::unique_ptr<llvm::DWARFContext> dwarf;
   std::vector<const llvm::DWARFDebugLine::LineTable *> lineTables;
   struct VarLoc {
@@ -307,6 +312,10 @@ private:
   };
   llvm::DenseMap<StringRef, VarLoc> variableLoc;
   llvm::once_flag initDwarfLine;
+=======
+  std::unique_ptr<llvm::DWARFDebugLine> DwarfLine;
+  llvm::once_flag InitDwarfLine;
+>>>>>>> origin/release/5.x
 };
 
 // LazyObjFile is analogous to ArchiveFile in the sense that

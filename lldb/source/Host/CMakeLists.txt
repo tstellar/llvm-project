@@ -158,11 +158,30 @@ if (NOT LLDB_DISABLE_LIBEDIT)
   list(APPEND EXTRA_LIBS ${libedit_LIBRARIES})
 endif()
 
+<<<<<<< HEAD
 if (NOT LLDB_DISABLE_LIBEDIT)
   list(APPEND LLDB_LIBEDIT_LIBS ${libedit_LIBRARIES})
   if (LLVM_BUILD_STATIC)
     list(APPEND LLDB_SYSTEM_LIBS gpm)
   endif()
+=======
+set(EXTRA_LIBS)
+if (CMAKE_SYSTEM_NAME MATCHES "NetBSD")
+  list(APPEND EXTRA_LIBS kvm)
+endif ()
+if (APPLE)
+  list(APPEND EXTRA_LIBS xml2)
+else ()
+  if (LIBXML2_FOUND)
+    list(APPEND EXTRA_LIBS ${LIBXML2_LIBRARIES})
+  endif()
+endif ()
+if (HAVE_LIBDL)
+  list(APPEND EXTRA_LIBS ${CMAKE_DL_LIBS})
+endif()
+if (NOT LLDB_DISABLE_LIBEDIT)
+  list(APPEND EXTRA_LIBS edit)
+>>>>>>> origin/release/5.x
 endif()
 
 add_lldb_library(lldbHost

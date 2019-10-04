@@ -15,6 +15,10 @@ if(CLANGD_BUILD_XPC)
   list(APPEND CLANGD_XPC_LIBS "clangdXpcJsonConversions" "clangdXpcTransport")
 endif()
 
+set(LLVM_LINK_COMPONENTS
+  support
+  )
+
 target_link_libraries(clangd
   PRIVATE
   clangAST
@@ -26,7 +30,10 @@ target_link_libraries(clangd
   clangSema
   clangTooling
   clangToolingCore
+<<<<<<< HEAD
   clangToolingRefactoring
   clangToolingSyntax
   ${CLANGD_XPC_LIBS}
+=======
+>>>>>>> origin/release/5.x
   )

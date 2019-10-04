@@ -1802,9 +1802,119 @@ bool AArch64LoadStoreOpt::optimizeBlock(MachineBasicBlock &MBB,
   //        ldr x0, [x2], #4
   for (MachineBasicBlock::iterator MBBI = MBB.begin(), E = MBB.end();
        MBBI != E;) {
+<<<<<<< HEAD
     if (isMergeableLdStUpdate(*MBBI) && tryToMergeLdStUpdate(MBBI))
       Modified = true;
     else
+=======
+    MachineInstr &MI = *MBBI;
+    // Do update merging. It's simpler to keep this separate from the above
+    // switchs, though not strictly necessary.
+    unsigned Opc = MI.getOpcode();
+    switch (Opc) {
+    default:
+      // Just move on to the next instruction.
+      ++MBBI;
+      break;
+    // Scaled instructions.
+    case AArch64::STRSui:
+    case AArch64::STRDui:
+    case AArch64::STRQui:
+    case AArch64::STRXui:
+    case AArch64::STRWui:
+    case AArch64::STRHHui:
+    case AArch64::STRBBui:
+    case AArch64::LDRSui:
+    case AArch64::LDRDui:
+    case AArch64::LDRQui:
+    case AArch64::LDRXui:
+    case AArch64::LDRWui:
+    case AArch64::LDRHHui:
+    case AArch64::LDRBBui:
+    // Unscaled instructions.
+    case AArch64::STURSi:
+    case AArch64::STURDi:
+    case AArch64::STURQi:
+    case AArch64::STURWi:
+    case AArch64::STURXi:
+    case AArch64::LDURSi:
+    case AArch64::LDURDi:
+    case AArch64::LDURQi:
+    case AArch64::LDURWi:
+    case AArch64::LDURXi:
+    // Paired instructions.
+    case AArch64::LDPSi:
+    case AArch64::LDPSWi:
+    case AArch64::LDPDi:
+    case AArch64::LDPQi:
+    case AArch64::LDPWi:
+    case AArch64::LDPXi:
+    case AArch64::STPSi:
+    case AArch64::STPDi:
+    case AArch64::STPQi:
+    case AArch64::STPWi:
+    case AArch64::STPXi: {
+      // Make sure this is a reg+imm (as opposed to an address reloc).
+      if (!getLdStOffsetOp(MI).isImm()) {
+        ++MBBI;
+        break;
+      }
+      // Look forward to try to form a post-index instruction. For example,
+      // ldr x0, [x20]
+      // add x20, x20, #32
+      //   merged into:
+      // ldr x0, [x20], #32
+      MachineBasicBlock::iterator Update =
+          findMatchingUpdateInsnForward(MBBI, 0, UpdateLimit);
+      if (Update != E) {
+        // Merge the update into the ld/st.
+        MBBI = mergeUpdateInsn(MBBI, Update, /*IsPreIdx=*/false);
+        Modified = true;
+        ++NumPostFolded;
+        break;
+      }
+
+      // Don't know how to handle unscaled pre/post-index versions below, so
+      // move to the next instruction.
+      if (TII->isUnscaledLdSt(Opc)) {
+        ++MBBI;
+        break;
+      }
+
+      // Look back to try to find a pre-index instruction. For example,
+      // add x0, x0, #8
+      // ldr x1, [x0]
+      //   merged into:
+      // ldr x1, [x0, #8]!
+      Update = findMatchingUpdateInsnBackward(MBBI, UpdateLimit);
+      if (Update != E) {
+        // Merge the update into the ld/st.
+        MBBI = mergeUpdateInsn(MBBI, Update, /*IsPreIdx=*/true);
+        Modified = true;
+        ++NumPreFolded;
+        break;
+      }
+      // The immediate in the load/store is scaled by the size of the memory
+      // operation. The immediate in the add we're looking for,
+      // however, is not, so adjust here.
+      int UnscaledOffset = getLdStOffsetOp(MI).getImm() * getMemScale(MI);
+
+      // Look forward to try to find a post-index instruction. For example,
+      // ldr x1, [x0, #64]
+      // add x0, x0, #64
+      //   merged into:
+      // ldr x1, [x0, #64]!
+      Update = findMatchingUpdateInsnForward(MBBI, UnscaledOffset, UpdateLimit);
+      if (Update != E) {
+        // Merge the update into the ld/st.
+        MBBI = mergeUpdateInsn(MBBI, Update, /*IsPreIdx=*/true);
+        Modified = true;
+        ++NumPreFolded;
+        break;
+      }
+
+      // Nothing found. Just move to the next instruction.
+>>>>>>> origin/release/5.x
       ++MBBI;
   }
 

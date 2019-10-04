@@ -36,6 +36,10 @@
 #include "llvm/CodeGen/MachineMemOperand.h"
 #include "llvm/CodeGen/MachineOperand.h"
 #include "llvm/CodeGen/Passes.h"
+<<<<<<< HEAD
+=======
+#include "llvm/CodeGen/PseudoSourceValue.h"
+>>>>>>> origin/release/5.x
 #include "llvm/CodeGen/SelectionDAGNodes.h"
 #include "llvm/CodeGen/SlotIndexes.h"
 #include "llvm/CodeGen/TargetOpcodes.h"
@@ -929,6 +933,7 @@ void StackColoring::remapInstructions(DenseMap<int, int> &SlotRemap) {
     MergedAllocas.insert(From);
     MergedAllocas.insert(To);
 
+<<<<<<< HEAD
     // Transfer the stack protector layout tag, but make sure that SSPLK_AddrOf
     // does not overwrite SSPLK_SmallArray or SSPLK_LargeArray, and make sure
     // that SSPLK_SmallArray does not overwrite SSPLK_LargeArray.
@@ -940,6 +945,11 @@ void StackColoring::remapInstructions(DenseMap<int, int> &SlotRemap) {
          (ToKind != MachineFrameInfo::SSPLK_LargeArray &&
           FromKind != MachineFrameInfo::SSPLK_AddrOf)))
       MFI->setObjectSSPLayout(SI.second, FromKind);
+=======
+    // Allow the stack protector to adjust its value map to account for the
+    // upcoming replacement.
+    SP->adjustForColoring(From, To);
+>>>>>>> origin/release/5.x
 
     // The new alloca might not be valid in a llvm.dbg.declare for this
     // variable, so undef out the use to make the verifier happy.
@@ -1021,7 +1031,13 @@ void StackColoring::remapInstructions(DenseMap<int, int> &SlotRemap) {
       }
 
       // We adjust AliasAnalysis information for merged stack slots.
+<<<<<<< HEAD
       SmallVector<MachineMemOperand *, 2> NewMMOs;
+=======
+      MachineSDNode::mmo_iterator NewMemOps =
+          MF->allocateMemRefsArray(I.getNumMemOperands());
+      unsigned MemOpIdx = 0;
+>>>>>>> origin/release/5.x
       bool ReplaceMemOps = false;
       for (MachineMemOperand *MMO : I.memoperands()) {
         // If this memory location can be a slot remapped here,
@@ -1048,17 +1064,29 @@ void StackColoring::remapInstructions(DenseMap<int, int> &SlotRemap) {
           }
         }
         if (MayHaveConflictingAAMD) {
+<<<<<<< HEAD
           NewMMOs.push_back(MF->getMachineMemOperand(MMO, AAMDNodes()));
           ReplaceMemOps = true;
         } else {
           NewMMOs.push_back(MMO);
         }
+=======
+          NewMemOps[MemOpIdx++] = MF->getMachineMemOperand(MMO, AAMDNodes());
+          ReplaceMemOps = true;
+        }
+        else
+          NewMemOps[MemOpIdx++] = MMO;
+>>>>>>> origin/release/5.x
       }
 
       // If any memory operand is updated, set memory references of
       // this instruction.
       if (ReplaceMemOps)
+<<<<<<< HEAD
         I.setMemRefs(*MF, NewMMOs);
+=======
+        I.setMemRefs(std::make_pair(NewMemOps, I.getNumMemOperands()));
+>>>>>>> origin/release/5.x
     }
 
   // Update the location of C++ catch objects for the MSVC personality routine.

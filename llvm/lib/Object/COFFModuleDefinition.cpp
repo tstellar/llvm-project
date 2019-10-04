@@ -251,6 +251,7 @@ private:
     for (;;) {
       read();
       if (Tok.K == Identifier && Tok.Value[0] == '@') {
+<<<<<<< HEAD
         if (Tok.Value == "@") {
           // "foo @ 10"
           read();
@@ -258,11 +259,19 @@ private:
         } else if (Tok.Value.drop_front().getAsInteger(10, E.Ordinal)) {
           // "foo \n @bar" - Not an ordinal modifier at all, but the next
           // export (fastcall decorated) - complete the current one.
+=======
+        if (Tok.Value.drop_front().getAsInteger(10, E.Ordinal)) {
+          // Not an ordinal modifier at all, but the next export (fastcall
+          // decorated) - complete the current one.
+>>>>>>> origin/release/5.x
           unget();
           Info.Exports.push_back(E);
           return Error::success();
         }
+<<<<<<< HEAD
         // "foo @10"
+=======
+>>>>>>> origin/release/5.x
         read();
         if (Tok.K == KwNoname) {
           E.Noname = true;

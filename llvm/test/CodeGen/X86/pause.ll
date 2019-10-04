@@ -6,7 +6,11 @@
 
 define void @test_x86_sse2_pause() {
 ; CHECK-LABEL: test_x86_sse2_pause:
+<<<<<<< HEAD
 ; CHECK:       ## %bb.0:
+=======
+; CHECK:       ## BB#0:
+>>>>>>> origin/release/5.x
 ; CHECK-NEXT:    pause ## encoding: [0xf3,0x90]
 ; CHECK-NEXT:    retl ## encoding: [0xc3]
   tail call void @llvm.x86.sse2.pause()

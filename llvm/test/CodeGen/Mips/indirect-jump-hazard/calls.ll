@@ -27,10 +27,18 @@
 
 define void @fooNonTail(void (i32)* nocapture %f1) nounwind {
 ; MIPS32R2-LABEL: fooNonTail:
+<<<<<<< HEAD
 ; MIPS32R2:       # %bb.0: # %entry
 ; MIPS32R2-NEXT:    addiu $sp, $sp, -24
 ; MIPS32R2-NEXT:    sw $ra, 20($sp) # 4-byte Folded Spill
 ; MIPS32R2-NEXT:    move $25, $4
+=======
+; MIPS32R2:       # BB#0: # %entry
+; MIPS32R2-NEXT:    addiu $sp, $sp, -24
+; MIPS32R2-NEXT:    sw $ra, 20($sp) # 4-byte Folded Spill
+; MIPS32R2-NEXT:    move $1, $4
+; MIPS32R2-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; MIPS32R2-NEXT:    jalr.hb $25
 ; MIPS32R2-NEXT:    addiu $4, $zero, 13
 ; MIPS32R2-NEXT:    lw $ra, 20($sp) # 4-byte Folded Reload
@@ -38,10 +46,18 @@ define void @fooNonTail(void (i32)* nocapture %f1) nounwind {
 ; MIPS32R2-NEXT:    addiu $sp, $sp, 24
 ;
 ; MIPS32R6-LABEL: fooNonTail:
+<<<<<<< HEAD
 ; MIPS32R6:       # %bb.0: # %entry
 ; MIPS32R6-NEXT:    addiu $sp, $sp, -24
 ; MIPS32R6-NEXT:    sw $ra, 20($sp) # 4-byte Folded Spill
 ; MIPS32R6-NEXT:    move $25, $4
+=======
+; MIPS32R6:       # BB#0: # %entry
+; MIPS32R6-NEXT:    addiu $sp, $sp, -24
+; MIPS32R6-NEXT:    sw $ra, 20($sp) # 4-byte Folded Spill
+; MIPS32R6-NEXT:    move $1, $4
+; MIPS32R6-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; MIPS32R6-NEXT:    jalr.hb $25
 ; MIPS32R6-NEXT:    addiu $4, $zero, 13
 ; MIPS32R6-NEXT:    lw $ra, 20($sp) # 4-byte Folded Reload
@@ -49,10 +65,18 @@ define void @fooNonTail(void (i32)* nocapture %f1) nounwind {
 ; MIPS32R6-NEXT:    addiu $sp, $sp, 24
 ;
 ; MIPS64R2-LABEL: fooNonTail:
+<<<<<<< HEAD
 ; MIPS64R2:       # %bb.0: # %entry
 ; MIPS64R2-NEXT:    daddiu $sp, $sp, -16
 ; MIPS64R2-NEXT:    sd $ra, 8($sp) # 8-byte Folded Spill
 ; MIPS64R2-NEXT:    move $25, $4
+=======
+; MIPS64R2:       # BB#0: # %entry
+; MIPS64R2-NEXT:    daddiu $sp, $sp, -16
+; MIPS64R2-NEXT:    sd $ra, 8($sp) # 8-byte Folded Spill
+; MIPS64R2-NEXT:    move $1, $4
+; MIPS64R2-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; MIPS64R2-NEXT:    jalr.hb $25
 ; MIPS64R2-NEXT:    daddiu $4, $zero, 13
 ; MIPS64R2-NEXT:    ld $ra, 8($sp) # 8-byte Folded Reload
@@ -60,10 +84,18 @@ define void @fooNonTail(void (i32)* nocapture %f1) nounwind {
 ; MIPS64R2-NEXT:    daddiu $sp, $sp, 16
 ;
 ; MIPS64R6-LABEL: fooNonTail:
+<<<<<<< HEAD
 ; MIPS64R6:       # %bb.0: # %entry
 ; MIPS64R6-NEXT:    daddiu $sp, $sp, -16
 ; MIPS64R6-NEXT:    sd $ra, 8($sp) # 8-byte Folded Spill
 ; MIPS64R6-NEXT:    move $25, $4
+=======
+; MIPS64R6:       # BB#0: # %entry
+; MIPS64R6-NEXT:    daddiu $sp, $sp, -16
+; MIPS64R6-NEXT:    sd $ra, 8($sp) # 8-byte Folded Spill
+; MIPS64R6-NEXT:    move $1, $4
+; MIPS64R6-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; MIPS64R6-NEXT:    jalr.hb $25
 ; MIPS64R6-NEXT:    daddiu $4, $zero, 13
 ; MIPS64R6-NEXT:    ld $ra, 8($sp) # 8-byte Folded Reload
@@ -71,10 +103,18 @@ define void @fooNonTail(void (i32)* nocapture %f1) nounwind {
 ; MIPS64R6-NEXT:    daddiu $sp, $sp, 16
 ;
 ; PIC-MIPS32R2-LABEL: fooNonTail:
+<<<<<<< HEAD
 ; PIC-MIPS32R2:       # %bb.0: # %entry
 ; PIC-MIPS32R2-NEXT:    addiu $sp, $sp, -24
 ; PIC-MIPS32R2-NEXT:    sw $ra, 20($sp) # 4-byte Folded Spill
 ; PIC-MIPS32R2-NEXT:    move $25, $4
+=======
+; PIC-MIPS32R2:       # BB#0: # %entry
+; PIC-MIPS32R2-NEXT:    addiu $sp, $sp, -24
+; PIC-MIPS32R2-NEXT:    sw $ra, 20($sp) # 4-byte Folded Spill
+; PIC-MIPS32R2-NEXT:    move $1, $4
+; PIC-MIPS32R2-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; PIC-MIPS32R2-NEXT:    jalr.hb $25
 ; PIC-MIPS32R2-NEXT:    addiu $4, $zero, 13
 ; PIC-MIPS32R2-NEXT:    lw $ra, 20($sp) # 4-byte Folded Reload
@@ -82,10 +122,18 @@ define void @fooNonTail(void (i32)* nocapture %f1) nounwind {
 ; PIC-MIPS32R2-NEXT:    addiu $sp, $sp, 24
 ;
 ; PIC-MIPS32R6-LABEL: fooNonTail:
+<<<<<<< HEAD
 ; PIC-MIPS32R6:       # %bb.0: # %entry
 ; PIC-MIPS32R6-NEXT:    addiu $sp, $sp, -24
 ; PIC-MIPS32R6-NEXT:    sw $ra, 20($sp) # 4-byte Folded Spill
 ; PIC-MIPS32R6-NEXT:    move $25, $4
+=======
+; PIC-MIPS32R6:       # BB#0: # %entry
+; PIC-MIPS32R6-NEXT:    addiu $sp, $sp, -24
+; PIC-MIPS32R6-NEXT:    sw $ra, 20($sp) # 4-byte Folded Spill
+; PIC-MIPS32R6-NEXT:    move $1, $4
+; PIC-MIPS32R6-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; PIC-MIPS32R6-NEXT:    jalr.hb $25
 ; PIC-MIPS32R6-NEXT:    addiu $4, $zero, 13
 ; PIC-MIPS32R6-NEXT:    lw $ra, 20($sp) # 4-byte Folded Reload
@@ -93,10 +141,18 @@ define void @fooNonTail(void (i32)* nocapture %f1) nounwind {
 ; PIC-MIPS32R6-NEXT:    addiu $sp, $sp, 24
 ;
 ; PIC-MIPS64R2-LABEL: fooNonTail:
+<<<<<<< HEAD
 ; PIC-MIPS64R2:       # %bb.0: # %entry
 ; PIC-MIPS64R2-NEXT:    daddiu $sp, $sp, -16
 ; PIC-MIPS64R2-NEXT:    sd $ra, 8($sp) # 8-byte Folded Spill
 ; PIC-MIPS64R2-NEXT:    move $25, $4
+=======
+; PIC-MIPS64R2:       # BB#0: # %entry
+; PIC-MIPS64R2-NEXT:    daddiu $sp, $sp, -16
+; PIC-MIPS64R2-NEXT:    sd $ra, 8($sp) # 8-byte Folded Spill
+; PIC-MIPS64R2-NEXT:    move $1, $4
+; PIC-MIPS64R2-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; PIC-MIPS64R2-NEXT:    jalr.hb $25
 ; PIC-MIPS64R2-NEXT:    daddiu $4, $zero, 13
 ; PIC-MIPS64R2-NEXT:    ld $ra, 8($sp) # 8-byte Folded Reload
@@ -104,10 +160,18 @@ define void @fooNonTail(void (i32)* nocapture %f1) nounwind {
 ; PIC-MIPS64R2-NEXT:    daddiu $sp, $sp, 16
 ;
 ; PIC-MIPS64R6-LABEL: fooNonTail:
+<<<<<<< HEAD
 ; PIC-MIPS64R6:       # %bb.0: # %entry
 ; PIC-MIPS64R6-NEXT:    daddiu $sp, $sp, -16
 ; PIC-MIPS64R6-NEXT:    sd $ra, 8($sp) # 8-byte Folded Spill
 ; PIC-MIPS64R6-NEXT:    move $25, $4
+=======
+; PIC-MIPS64R6:       # BB#0: # %entry
+; PIC-MIPS64R6-NEXT:    daddiu $sp, $sp, -16
+; PIC-MIPS64R6-NEXT:    sd $ra, 8($sp) # 8-byte Folded Spill
+; PIC-MIPS64R6-NEXT:    move $1, $4
+; PIC-MIPS64R6-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; PIC-MIPS64R6-NEXT:    jalr.hb $25
 ; PIC-MIPS64R6-NEXT:    daddiu $4, $zero, 13
 ; PIC-MIPS64R6-NEXT:    ld $ra, 8($sp) # 8-byte Folded Reload
@@ -120,50 +184,98 @@ entry:
 
 define i32 @fooTail(i32 (i32)* nocapture %f1) nounwind {
 ; MIPS32R2-LABEL: fooTail:
+<<<<<<< HEAD
 ; MIPS32R2:       # %bb.0: # %entry
 ; MIPS32R2-NEXT:    move $25, $4
+=======
+; MIPS32R2:       # BB#0: # %entry
+; MIPS32R2-NEXT:    move $1, $4
+; MIPS32R2-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; MIPS32R2-NEXT:    jr.hb $25
 ; MIPS32R2-NEXT:    addiu $4, $zero, 14
 ;
 ; MIPS32R6-LABEL: fooTail:
+<<<<<<< HEAD
 ; MIPS32R6:       # %bb.0: # %entry
 ; MIPS32R6-NEXT:    move $25, $4
+=======
+; MIPS32R6:       # BB#0: # %entry
+; MIPS32R6-NEXT:    move $1, $4
+; MIPS32R6-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; MIPS32R6-NEXT:    jr.hb $25
 ; MIPS32R6-NEXT:    addiu $4, $zero, 14
 ;
 ; MIPS64R2-LABEL: fooTail:
+<<<<<<< HEAD
 ; MIPS64R2:       # %bb.0: # %entry
 ; MIPS64R2-NEXT:    move $25, $4
+=======
+; MIPS64R2:       # BB#0: # %entry
+; MIPS64R2-NEXT:    move $1, $4
+; MIPS64R2-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; MIPS64R2-NEXT:    jr.hb $25
 ; MIPS64R2-NEXT:    daddiu $4, $zero, 14
 ;
 ; MIPS64R6-LABEL: fooTail:
+<<<<<<< HEAD
 ; MIPS64R6:       # %bb.0: # %entry
 ; MIPS64R6-NEXT:    move $25, $4
+=======
+; MIPS64R6:       # BB#0: # %entry
+; MIPS64R6-NEXT:    move $1, $4
+; MIPS64R6-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; MIPS64R6-NEXT:    jr.hb $25
 ; MIPS64R6-NEXT:    daddiu $4, $zero, 14
 ;
 ; PIC-MIPS32R2-LABEL: fooTail:
+<<<<<<< HEAD
 ; PIC-MIPS32R2:       # %bb.0: # %entry
 ; PIC-MIPS32R2-NEXT:    move $25, $4
+=======
+; PIC-MIPS32R2:       # BB#0: # %entry
+; PIC-MIPS32R2-NEXT:    move $1, $4
+; PIC-MIPS32R2-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; PIC-MIPS32R2-NEXT:    jr.hb $25
 ; PIC-MIPS32R2-NEXT:    addiu $4, $zero, 14
 ;
 ; PIC-MIPS32R6-LABEL: fooTail:
+<<<<<<< HEAD
 ; PIC-MIPS32R6:       # %bb.0: # %entry
 ; PIC-MIPS32R6-NEXT:    move $25, $4
+=======
+; PIC-MIPS32R6:       # BB#0: # %entry
+; PIC-MIPS32R6-NEXT:    move $1, $4
+; PIC-MIPS32R6-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; PIC-MIPS32R6-NEXT:    jr.hb $25
 ; PIC-MIPS32R6-NEXT:    addiu $4, $zero, 14
 ;
 ; PIC-MIPS64R2-LABEL: fooTail:
+<<<<<<< HEAD
 ; PIC-MIPS64R2:       # %bb.0: # %entry
 ; PIC-MIPS64R2-NEXT:    move $25, $4
+=======
+; PIC-MIPS64R2:       # BB#0: # %entry
+; PIC-MIPS64R2-NEXT:    move $1, $4
+; PIC-MIPS64R2-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; PIC-MIPS64R2-NEXT:    jr.hb $25
 ; PIC-MIPS64R2-NEXT:    daddiu $4, $zero, 14
 ;
 ; PIC-MIPS64R6-LABEL: fooTail:
+<<<<<<< HEAD
 ; PIC-MIPS64R6:       # %bb.0: # %entry
 ; PIC-MIPS64R6-NEXT:    move $25, $4
+=======
+; PIC-MIPS64R6:       # BB#0: # %entry
+; PIC-MIPS64R6-NEXT:    move $1, $4
+; PIC-MIPS64R6-NEXT:    move $25, $1
+>>>>>>> origin/release/5.x
 ; PIC-MIPS64R6-NEXT:    jr.hb $25
 ; PIC-MIPS64R6-NEXT:    daddiu $4, $zero, 14
 entry:

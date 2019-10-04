@@ -236,6 +236,7 @@ let isCall = 1 in
                         OpSize16, Requires<[Not64BitMode,FavorMemIndirectCall]>,
                         Sched<[WriteJumpLd]>;
     def CALL32r     : I<0xFF, MRM2r, (outs), (ins GR32:$dst),
+<<<<<<< HEAD
                         "call{l}\t{*}$dst", [(X86call GR32:$dst)]>, OpSize32,
                         Requires<[Not64BitMode,NotUseRetpolineIndirectCalls]>,
                         Sched<[WriteJump]>;
@@ -263,6 +264,16 @@ let isCall = 1 in
                         OpSize32, Requires<[Not64BitMode,FavorMemIndirectCall]>,
                         Sched<[WriteJumpLd]>, NOTRACK;
     }
+=======
+                        "call{l}\t{*}$dst", [(X86call GR32:$dst)], IIC_CALL_RI>,
+                      OpSize32, Requires<[Not64BitMode,NotUseRetpoline]>,
+                      Sched<[WriteJump]>;
+    def CALL32m     : I<0xFF, MRM2m, (outs), (ins i32mem:$dst),
+                        "call{l}\t{*}$dst", [(X86call (loadi32 addr:$dst))],
+                        IIC_CALL_MEM>, OpSize32,
+                      Requires<[Not64BitMode,FavorMemIndirectCall,NotUseRetpoline]>,
+                      Sched<[WriteJumpLd]>;
+>>>>>>> origin/release/5.x
 
     let Predicates = [Not64BitMode], AsmVariantName = "att" in {
       def FARCALL16i  : Iseg16<0x9A, RawFrmImm16, (outs),
@@ -332,6 +343,7 @@ let isCall = 1, Uses = [RSP, SSP], SchedRW = [WriteJump] in {
                         "call{q}\t$dst", []>, OpSize32,
                       Requires<[In64BitMode]>;
   def CALL64r       : I<0xFF, MRM2r, (outs), (ins GR64:$dst),
+<<<<<<< HEAD
                         "call{q}\t{*}$dst", [(X86call GR64:$dst)]>,
                       Requires<[In64BitMode,NotUseRetpolineIndirectCalls]>;
   def CALL64m       : I<0xFF, MRM2m, (outs), (ins i64mem:$dst),
@@ -349,6 +361,16 @@ let isCall = 1, Uses = [RSP, SSP], SchedRW = [WriteJump] in {
                        [(X86NoTrackCall(loadi64 addr : $dst))]>,
                        Requires<[In64BitMode,FavorMemIndirectCall]>, NOTRACK;
   }
+=======
+                        "call{q}\t{*}$dst", [(X86call GR64:$dst)],
+                        IIC_CALL_RI>,
+                      Requires<[In64BitMode,NotUseRetpoline]>;
+  def CALL64m       : I<0xFF, MRM2m, (outs), (ins i64mem:$dst),
+                        "call{q}\t{*}$dst", [(X86call (loadi64 addr:$dst))],
+                        IIC_CALL_MEM>,
+                      Requires<[In64BitMode,FavorMemIndirectCall,
+                                NotUseRetpoline]>;
+>>>>>>> origin/release/5.x
 
   def FARCALL64   : RI<0xFF, MRM3m, (outs), (ins opaquemem:$dst),
                        "lcall{q}\t{*}$dst", []>;
@@ -399,6 +421,27 @@ let isPseudo = 1, isCall = 1, isCodeGenOnly = 1,
   def RETPOLINE_CALL64 :
     PseudoI<(outs), (ins GR64:$dst), [(X86call GR64:$dst)]>,
             Requires<[In64BitMode,UseRetpolineIndirectCalls]>;
+
+  // Retpoline variant of indirect tail calls.
+  let isTerminator = 1, isReturn = 1, isBarrier = 1 in {
+    def RETPOLINE_TCRETURN64 :
+      PseudoI<(outs), (ins GR64:$dst, i32imm:$offset), []>;
+    def RETPOLINE_TCRETURN32 :
+      PseudoI<(outs), (ins GR32:$dst, i32imm:$offset), []>;
+  }
+}
+
+let isPseudo = 1, isCall = 1, isCodeGenOnly = 1,
+    Uses = [RSP],
+    usesCustomInserter = 1,
+    SchedRW = [WriteJump] in {
+  def RETPOLINE_CALL32 :
+    PseudoI<(outs), (ins GR32:$dst), [(X86call GR32:$dst)]>,
+            Requires<[Not64BitMode,UseRetpoline]>;
+
+  def RETPOLINE_CALL64 :
+    PseudoI<(outs), (ins GR64:$dst), [(X86call GR64:$dst)]>,
+            Requires<[In64BitMode,UseRetpoline]>;
 
   // Retpoline variant of indirect tail calls.
   let isTerminator = 1, isReturn = 1, isBarrier = 1 in {

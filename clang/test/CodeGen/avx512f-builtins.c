@@ -10363,6 +10363,7 @@ __m512i test_mm512_mask_set1_epi64 (__m512i __O, __mmask8 __M, long long __A)
 
 __m512i test_mm512_maskz_set1_epi64 (__mmask8 __M, long long __A)
 {
+<<<<<<< HEAD
   // CHECK-LABEL: @test_mm512_maskz_set1_epi64
   // CHECK: insertelement <8 x i64> undef, i64 %{{.*}}, i32 0
   // CHECK: insertelement <8 x i64> %{{.*}}, i64 %{{.*}}, i32 1
@@ -10376,6 +10377,13 @@ __m512i test_mm512_maskz_set1_epi64 (__mmask8 __M, long long __A)
   return _mm512_maskz_set1_epi64 (__M, __A);
 }
 
+=======
+    //CHECK-LABEL: @test_mm512_maskz_set1_epi64
+    //CHECK: @llvm.x86.avx512.mask.pbroadcast.q.gpr.512
+  return _mm512_maskz_set1_epi64 (__M, __A);
+}
+#endif
+>>>>>>> origin/release/5.x
 
 __m512i test_mm512_set_epi64 (long long __A, long long __B, long long __C,
                               long long __D, long long __E, long long __F,

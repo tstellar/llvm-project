@@ -2168,8 +2168,13 @@ class X86_64ABIInfo : public SwiftABIInfo {
   /// classify it as INTEGER (for compatibility with older clang compilers).
   bool classifyIntegerMMXAsSSE() const {
     // Clang <= 3.8 did not do this.
+<<<<<<< HEAD
     if (getContext().getLangOpts().getClangABICompat() <=
         LangOptions::ClangABI::Ver3_8)
+=======
+    if (getCodeGenOpts().getClangABICompat() <=
+        CodeGenOptions::ClangABI::Ver3_8)
+>>>>>>> origin/release/5.x
       return false;
 
     const llvm::Triple &Triple = getTarget().getTriple();
@@ -5823,6 +5828,7 @@ void ARMABIInfo::setCCs() {
     RuntimeCC = abiCC;
 }
 
+<<<<<<< HEAD
 ABIArgInfo ARMABIInfo::coerceIllegalVector(QualType Ty) const {
   uint64_t Size = getContext().getTypeSize(Ty);
   if (Size <= 32) {
@@ -5854,6 +5860,19 @@ ABIArgInfo ARMABIInfo::classifyHomogeneousAggregate(QualType Ty,
     }
   }
   return ABIArgInfo::getDirect(nullptr, 0, nullptr, false);
+=======
+  // AAPCS apparently requires runtime support functions to be soft-float, but
+  // that's almost certainly for historic reasons (Thumb1 not supporting VFP
+  // most likely). It's more convenient for AAPCS16_VFP to be hard-float.
+
+  // The Run-time ABI for the ARM Architecture section 4.1.2 requires
+  // AEABI-complying FP helper functions to use the base AAPCS.
+  // These AEABI functions are expanded in the ARM llvm backend, all the builtin
+  // support functions emitted by clang such as the _Complex helpers follow the
+  // abiCC.
+  if (abiCC != getLLVMDefaultCC())
+      BuiltinCC = abiCC;
+>>>>>>> origin/release/5.x
 }
 
 ABIArgInfo ARMABIInfo::classifyArgumentType(QualType Ty, bool isVariadic,

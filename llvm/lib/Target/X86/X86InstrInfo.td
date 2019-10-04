@@ -999,8 +999,13 @@ def HasFastLZCNT : Predicate<"Subtarget->hasFastLZCNT()">;
 def HasFastSHLDRotate : Predicate<"Subtarget->hasFastSHLDRotate()">;
 def HasERMSB : Predicate<"Subtarget->hasERMSB()">;
 def HasMFence    : Predicate<"Subtarget->hasMFence()">;
+<<<<<<< HEAD
 def UseRetpolineIndirectCalls : Predicate<"Subtarget->useRetpolineIndirectCalls()">;
 def NotUseRetpolineIndirectCalls : Predicate<"!Subtarget->useRetpolineIndirectCalls()">;
+=======
+def UseRetpoline : Predicate<"Subtarget->useRetpoline()">;
+def NotUseRetpoline : Predicate<"!Subtarget->useRetpoline()">;
+>>>>>>> origin/release/5.x
 
 //===----------------------------------------------------------------------===//
 // X86 Instruction Format Definitions.

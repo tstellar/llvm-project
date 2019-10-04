@@ -1,11 +1,14 @@
 // RUN: %clang_cc1 -verify -triple x86_64-apple-darwin10 -fopenmp -x c -emit-llvm %s -o - | FileCheck %s
 // RUN: %clang_cc1 -fopenmp -x c -triple x86_64-apple-darwin10 -emit-pch -o %t %s
 // RUN: %clang_cc1 -fopenmp -x c -triple x86_64-apple-darwin10 -include-pch %t -verify %s -emit-llvm -o - | FileCheck %s
+<<<<<<< HEAD
 
 // RUN: %clang_cc1 -verify -triple x86_64-apple-darwin10 -fopenmp-simd -x c -emit-llvm %s -o - | FileCheck --check-prefix SIMD-ONLY0 %s
 // RUN: %clang_cc1 -fopenmp-simd -x c -triple x86_64-apple-darwin10 -emit-pch -o %t %s
 // RUN: %clang_cc1 -fopenmp-simd -x c -triple x86_64-apple-darwin10 -include-pch %t -verify %s -emit-llvm -o - | FileCheck --check-prefix SIMD-ONLY0 %s
 // SIMD-ONLY0-NOT: {{__kmpc|__tgt}}
+=======
+>>>>>>> origin/release/5.x
 // expected-no-diagnostics
 #ifndef HEADER
 #define HEADER
@@ -32,6 +35,7 @@ int main() {
 // CHECK: call i8* @__kmpc_omp_task_alloc(
 // CHECK: call i32 @__kmpc_omp_task(
 // CHECK: call void @__kmpc_end_taskgroup(
+<<<<<<< HEAD
 
 // CHECK-LINE: @bar
 void bar() {
@@ -47,4 +51,6 @@ for (int i = 0; i < 10; ++i)
 #pragma omp task
 ++i;
 }
+=======
+>>>>>>> origin/release/5.x
 #endif

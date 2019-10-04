@@ -12,6 +12,13 @@
 //       instruction mappings.
 //
 //===----------------------------------------------------------------------===//
+//
+// This file describes the MIPS MT ASE as defined by MD00378 1.12.
+//
+// TODO: Add support for the microMIPS encodings for the MT ASE and add the
+//       instruction mappings.
+//
+//===----------------------------------------------------------------------===//
 
 //===----------------------------------------------------------------------===//
 // MIPS MT Instruction Encodings

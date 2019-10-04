@@ -19,11 +19,55 @@ define float @f32_no_step_2(float %x) #3 {
 ; SSE-NEXT:    mulss {{.*}}(%rip), %xmm0
 ; SSE-NEXT:    retq
 ;
+<<<<<<< HEAD
 ; AVX-LABEL: f32_no_step_2:
 ; AVX:       # %bb.0:
 ; AVX-NEXT:    vrcpss %xmm0, %xmm0, %xmm0
 ; AVX-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm0
 ; AVX-NEXT:    retq
+=======
+; AVX-RECIP-LABEL: f32_no_step_2:
+; AVX-RECIP:       # BB#0:
+; AVX-RECIP-NEXT:    vrcpss %xmm0, %xmm0, %xmm0
+; AVX-RECIP-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm0
+; AVX-RECIP-NEXT:    retq
+;
+; FMA-RECIP-LABEL: f32_no_step_2:
+; FMA-RECIP:       # BB#0:
+; FMA-RECIP-NEXT:    vrcpss %xmm0, %xmm0, %xmm0
+; FMA-RECIP-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm0
+; FMA-RECIP-NEXT:    retq
+;
+; BTVER2-LABEL: f32_no_step_2:
+; BTVER2:       # BB#0:
+; BTVER2-NEXT:    vrcpss %xmm0, %xmm0, %xmm0 # sched: [2:1.00]
+; BTVER2-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm0 # sched: [7:1.00]
+; BTVER2-NEXT:    retq # sched: [4:1.00]
+;
+; SANDY-LABEL: f32_no_step_2:
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpss %xmm0, %xmm0, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm0 # sched: [9:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+;
+; HASWELL-LABEL: f32_no_step_2:
+; HASWELL:       # BB#0:
+; HASWELL-NEXT:    vrcpss %xmm0, %xmm0, %xmm0 # sched: [5:1.00]
+; HASWELL-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm0 # sched: [9:0.50]
+; HASWELL-NEXT:    retq # sched: [1:1.00]
+;
+; HASWELL-NO-FMA-LABEL: f32_no_step_2:
+; HASWELL-NO-FMA:       # BB#0:
+; HASWELL-NO-FMA-NEXT:    vrcpss %xmm0, %xmm0, %xmm0 # sched: [5:1.00]
+; HASWELL-NO-FMA-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm0 # sched: [9:0.50]
+; HASWELL-NO-FMA-NEXT:    retq # sched: [1:1.00]
+;
+; AVX512-LABEL: f32_no_step_2:
+; AVX512:       # BB#0:
+; AVX512-NEXT:    vrcp14ss %xmm0, %xmm0, %xmm0
+; AVX512-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm0 # sched: [9:0.50]
+; AVX512-NEXT:    retq # sched: [1:1.00]
+>>>>>>> origin/release/5.x
   %div = fdiv fast float 1234.0, %x
   ret float %div
 }
@@ -83,6 +127,7 @@ define float @f32_one_step_2(float %x) #1 {
 ; BTVER2-NEXT:    retq
 ;
 ; SANDY-LABEL: f32_one_step_2:
+<<<<<<< HEAD
 ; SANDY:       # %bb.0:
 ; SANDY-NEXT:    vrcpss %xmm0, %xmm0, %xmm1
 ; SANDY-NEXT:    vmovss {{.*#+}} xmm2 = mem[0],zero,zero,zero
@@ -92,6 +137,17 @@ define float @f32_one_step_2(float %x) #1 {
 ; SANDY-NEXT:    vmulss %xmm0, %xmm1, %xmm0
 ; SANDY-NEXT:    vaddss %xmm0, %xmm3, %xmm0
 ; SANDY-NEXT:    retq
+=======
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpss %xmm0, %xmm0, %xmm1 # sched: [5:1.00]
+; SANDY-NEXT:    vmulss %xmm1, %xmm0, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vmovss {{.*#+}} xmm2 = mem[0],zero,zero,zero sched: [4:0.50]
+; SANDY-NEXT:    vsubss %xmm0, %xmm2, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulss %xmm0, %xmm1, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vaddss %xmm0, %xmm1, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm0 # sched: [9:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+>>>>>>> origin/release/5.x
 ;
 ; HASWELL-LABEL: f32_one_step_2:
 ; HASWELL:       # %bb.0:
@@ -182,6 +238,7 @@ define float @f32_one_step_2_divs(float %x) #1 {
 ; BTVER2-NEXT:    retq
 ;
 ; SANDY-LABEL: f32_one_step_2_divs:
+<<<<<<< HEAD
 ; SANDY:       # %bb.0:
 ; SANDY-NEXT:    vrcpss %xmm0, %xmm0, %xmm1
 ; SANDY-NEXT:    vmulss %xmm1, %xmm0, %xmm0
@@ -192,6 +249,18 @@ define float @f32_one_step_2_divs(float %x) #1 {
 ; SANDY-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm1
 ; SANDY-NEXT:    vmulss %xmm0, %xmm1, %xmm0
 ; SANDY-NEXT:    retq
+=======
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpss %xmm0, %xmm0, %xmm1 # sched: [5:1.00]
+; SANDY-NEXT:    vmulss %xmm1, %xmm0, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vmovss {{.*#+}} xmm2 = mem[0],zero,zero,zero sched: [4:0.50]
+; SANDY-NEXT:    vsubss %xmm0, %xmm2, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulss %xmm0, %xmm1, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vaddss %xmm0, %xmm1, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm1 # sched: [9:1.00]
+; SANDY-NEXT:    vmulss %xmm0, %xmm1, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+>>>>>>> origin/release/5.x
 ;
 ; HASWELL-LABEL: f32_one_step_2_divs:
 ; HASWELL:       # %bb.0:
@@ -303,6 +372,7 @@ define float @f32_two_step_2(float %x) #2 {
 ; BTVER2-NEXT:    retq
 ;
 ; SANDY-LABEL: f32_two_step_2:
+<<<<<<< HEAD
 ; SANDY:       # %bb.0:
 ; SANDY-NEXT:    vrcpss %xmm0, %xmm0, %xmm1
 ; SANDY-NEXT:    vmulss %xmm1, %xmm0, %xmm2
@@ -317,6 +387,21 @@ define float @f32_two_step_2(float %x) #2 {
 ; SANDY-NEXT:    vmulss %xmm0, %xmm1, %xmm0
 ; SANDY-NEXT:    vaddss %xmm0, %xmm3, %xmm0
 ; SANDY-NEXT:    retq
+=======
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpss %xmm0, %xmm0, %xmm1 # sched: [5:1.00]
+; SANDY-NEXT:    vmulss %xmm1, %xmm0, %xmm2 # sched: [5:1.00]
+; SANDY-NEXT:    vmovss {{.*#+}} xmm3 = mem[0],zero,zero,zero sched: [4:0.50]
+; SANDY-NEXT:    vsubss %xmm2, %xmm3, %xmm2 # sched: [3:1.00]
+; SANDY-NEXT:    vmulss %xmm2, %xmm1, %xmm2 # sched: [5:1.00]
+; SANDY-NEXT:    vaddss %xmm2, %xmm1, %xmm1 # sched: [3:1.00]
+; SANDY-NEXT:    vmulss %xmm1, %xmm0, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vsubss %xmm0, %xmm3, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulss %xmm0, %xmm1, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vaddss %xmm0, %xmm1, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulss {{.*}}(%rip), %xmm0, %xmm0 # sched: [9:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+>>>>>>> origin/release/5.x
 ;
 ; HASWELL-LABEL: f32_two_step_2:
 ; HASWELL:       # %bb.0:
@@ -416,6 +501,7 @@ define <4 x float> @v4f32_one_step2(<4 x float> %x) #1 {
 ; BTVER2-NEXT:    retq
 ;
 ; SANDY-LABEL: v4f32_one_step2:
+<<<<<<< HEAD
 ; SANDY:       # %bb.0:
 ; SANDY-NEXT:    vrcpps %xmm0, %xmm1
 ; SANDY-NEXT:    vmovaps {{.*#+}} xmm2 = [1.0E+0,2.0E+0,3.0E+0,4.0E+0]
@@ -425,6 +511,17 @@ define <4 x float> @v4f32_one_step2(<4 x float> %x) #1 {
 ; SANDY-NEXT:    vmulps %xmm0, %xmm1, %xmm0
 ; SANDY-NEXT:    vaddps %xmm0, %xmm3, %xmm0
 ; SANDY-NEXT:    retq
+=======
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpps %xmm0, %xmm1 # sched: [5:1.00]
+; SANDY-NEXT:    vmulps %xmm1, %xmm0, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vmovaps {{.*#+}} xmm2 = [1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00] sched: [4:0.50]
+; SANDY-NEXT:    vsubps %xmm0, %xmm2, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps %xmm0, %xmm1, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vaddps %xmm0, %xmm1, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps {{.*}}(%rip), %xmm0, %xmm0 # sched: [9:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+>>>>>>> origin/release/5.x
 ;
 ; HASWELL-LABEL: v4f32_one_step2:
 ; HASWELL:       # %bb.0:
@@ -515,6 +612,7 @@ define <4 x float> @v4f32_one_step_2_divs(<4 x float> %x) #1 {
 ; BTVER2-NEXT:    retq
 ;
 ; SANDY-LABEL: v4f32_one_step_2_divs:
+<<<<<<< HEAD
 ; SANDY:       # %bb.0:
 ; SANDY-NEXT:    vrcpps %xmm0, %xmm1
 ; SANDY-NEXT:    vmulps %xmm1, %xmm0, %xmm0
@@ -525,6 +623,18 @@ define <4 x float> @v4f32_one_step_2_divs(<4 x float> %x) #1 {
 ; SANDY-NEXT:    vmulps {{.*}}(%rip), %xmm0, %xmm1
 ; SANDY-NEXT:    vmulps %xmm0, %xmm1, %xmm0
 ; SANDY-NEXT:    retq
+=======
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpps %xmm0, %xmm1 # sched: [5:1.00]
+; SANDY-NEXT:    vmulps %xmm1, %xmm0, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vmovaps {{.*#+}} xmm2 = [1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00] sched: [4:0.50]
+; SANDY-NEXT:    vsubps %xmm0, %xmm2, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps %xmm0, %xmm1, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vaddps %xmm0, %xmm1, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps {{.*}}(%rip), %xmm0, %xmm1 # sched: [9:1.00]
+; SANDY-NEXT:    vmulps %xmm0, %xmm1, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+>>>>>>> origin/release/5.x
 ;
 ; HASWELL-LABEL: v4f32_one_step_2_divs:
 ; HASWELL:       # %bb.0:
@@ -647,6 +757,7 @@ define <4 x float> @v4f32_two_step2(<4 x float> %x) #2 {
 ; BTVER2-NEXT:    retq
 ;
 ; SANDY-LABEL: v4f32_two_step2:
+<<<<<<< HEAD
 ; SANDY:       # %bb.0:
 ; SANDY-NEXT:    vrcpps %xmm0, %xmm1
 ; SANDY-NEXT:    vmulps %xmm1, %xmm0, %xmm2
@@ -661,6 +772,21 @@ define <4 x float> @v4f32_two_step2(<4 x float> %x) #2 {
 ; SANDY-NEXT:    vmulps %xmm0, %xmm1, %xmm0
 ; SANDY-NEXT:    vaddps %xmm0, %xmm3, %xmm0
 ; SANDY-NEXT:    retq
+=======
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpps %xmm0, %xmm1 # sched: [5:1.00]
+; SANDY-NEXT:    vmulps %xmm1, %xmm0, %xmm2 # sched: [5:1.00]
+; SANDY-NEXT:    vmovaps {{.*#+}} xmm3 = [1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00] sched: [4:0.50]
+; SANDY-NEXT:    vsubps %xmm2, %xmm3, %xmm2 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps %xmm2, %xmm1, %xmm2 # sched: [5:1.00]
+; SANDY-NEXT:    vaddps %xmm2, %xmm1, %xmm1 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps %xmm1, %xmm0, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vsubps %xmm0, %xmm3, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps %xmm0, %xmm1, %xmm0 # sched: [5:1.00]
+; SANDY-NEXT:    vaddps %xmm0, %xmm1, %xmm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps {{.*}}(%rip), %xmm0, %xmm0 # sched: [9:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+>>>>>>> origin/release/5.x
 ;
 ; HASWELL-LABEL: v4f32_two_step2:
 ; HASWELL:       # %bb.0:
@@ -769,6 +895,7 @@ define <8 x float> @v8f32_one_step2(<8 x float> %x) #1 {
 ; BTVER2-NEXT:    retq
 ;
 ; SANDY-LABEL: v8f32_one_step2:
+<<<<<<< HEAD
 ; SANDY:       # %bb.0:
 ; SANDY-NEXT:    vrcpps %ymm0, %ymm1
 ; SANDY-NEXT:    vmovaps {{.*#+}} ymm2 = [1.0E+0,2.0E+0,3.0E+0,4.0E+0,5.0E+0,6.0E+0,7.0E+0,8.0E+0]
@@ -778,6 +905,17 @@ define <8 x float> @v8f32_one_step2(<8 x float> %x) #1 {
 ; SANDY-NEXT:    vmulps %ymm0, %ymm1, %ymm0
 ; SANDY-NEXT:    vaddps %ymm0, %ymm3, %ymm0
 ; SANDY-NEXT:    retq
+=======
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpps %ymm0, %ymm1 # sched: [5:1.00]
+; SANDY-NEXT:    vmulps %ymm1, %ymm0, %ymm0 # sched: [5:1.00]
+; SANDY-NEXT:    vmovaps {{.*#+}} ymm2 = [1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00] sched: [4:0.50]
+; SANDY-NEXT:    vsubps %ymm0, %ymm2, %ymm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps %ymm0, %ymm1, %ymm0 # sched: [5:1.00]
+; SANDY-NEXT:    vaddps %ymm0, %ymm1, %ymm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps {{.*}}(%rip), %ymm0, %ymm0 # sched: [9:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+>>>>>>> origin/release/5.x
 ;
 ; HASWELL-LABEL: v8f32_one_step2:
 ; HASWELL:       # %bb.0:
@@ -877,6 +1015,7 @@ define <8 x float> @v8f32_one_step_2_divs(<8 x float> %x) #1 {
 ; BTVER2-NEXT:    retq
 ;
 ; SANDY-LABEL: v8f32_one_step_2_divs:
+<<<<<<< HEAD
 ; SANDY:       # %bb.0:
 ; SANDY-NEXT:    vrcpps %ymm0, %ymm1
 ; SANDY-NEXT:    vmulps %ymm1, %ymm0, %ymm0
@@ -887,6 +1026,18 @@ define <8 x float> @v8f32_one_step_2_divs(<8 x float> %x) #1 {
 ; SANDY-NEXT:    vmulps {{.*}}(%rip), %ymm0, %ymm1
 ; SANDY-NEXT:    vmulps %ymm0, %ymm1, %ymm0
 ; SANDY-NEXT:    retq
+=======
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpps %ymm0, %ymm1 # sched: [5:1.00]
+; SANDY-NEXT:    vmulps %ymm1, %ymm0, %ymm0 # sched: [5:1.00]
+; SANDY-NEXT:    vmovaps {{.*#+}} ymm2 = [1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00] sched: [4:0.50]
+; SANDY-NEXT:    vsubps %ymm0, %ymm2, %ymm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps %ymm0, %ymm1, %ymm0 # sched: [5:1.00]
+; SANDY-NEXT:    vaddps %ymm0, %ymm1, %ymm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps {{.*}}(%rip), %ymm0, %ymm1 # sched: [9:1.00]
+; SANDY-NEXT:    vmulps %ymm0, %ymm1, %ymm0 # sched: [5:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+>>>>>>> origin/release/5.x
 ;
 ; HASWELL-LABEL: v8f32_one_step_2_divs:
 ; HASWELL:       # %bb.0:
@@ -1024,6 +1175,7 @@ define <8 x float> @v8f32_two_step2(<8 x float> %x) #2 {
 ; BTVER2-NEXT:    retq
 ;
 ; SANDY-LABEL: v8f32_two_step2:
+<<<<<<< HEAD
 ; SANDY:       # %bb.0:
 ; SANDY-NEXT:    vrcpps %ymm0, %ymm1
 ; SANDY-NEXT:    vmulps %ymm1, %ymm0, %ymm2
@@ -1038,6 +1190,21 @@ define <8 x float> @v8f32_two_step2(<8 x float> %x) #2 {
 ; SANDY-NEXT:    vmulps %ymm0, %ymm1, %ymm0
 ; SANDY-NEXT:    vaddps %ymm0, %ymm3, %ymm0
 ; SANDY-NEXT:    retq
+=======
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpps %ymm0, %ymm1 # sched: [5:1.00]
+; SANDY-NEXT:    vmulps %ymm1, %ymm0, %ymm2 # sched: [5:1.00]
+; SANDY-NEXT:    vmovaps {{.*#+}} ymm3 = [1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00,1.000000e+00] sched: [4:0.50]
+; SANDY-NEXT:    vsubps %ymm2, %ymm3, %ymm2 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps %ymm2, %ymm1, %ymm2 # sched: [5:1.00]
+; SANDY-NEXT:    vaddps %ymm2, %ymm1, %ymm1 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps %ymm1, %ymm0, %ymm0 # sched: [5:1.00]
+; SANDY-NEXT:    vsubps %ymm0, %ymm3, %ymm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps %ymm0, %ymm1, %ymm0 # sched: [5:1.00]
+; SANDY-NEXT:    vaddps %ymm0, %ymm1, %ymm0 # sched: [3:1.00]
+; SANDY-NEXT:    vmulps {{.*}}(%rip), %ymm0, %ymm0 # sched: [9:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+>>>>>>> origin/release/5.x
 ;
 ; HASWELL-LABEL: v8f32_two_step2:
 ; HASWELL:       # %bb.0:
@@ -1725,6 +1892,7 @@ define <16 x float> @v16f32_no_step(<16 x float> %x) #3 {
 ; FMA-RECIP-NEXT:    vrcpps %ymm1, %ymm1
 ; FMA-RECIP-NEXT:    retq
 ;
+<<<<<<< HEAD
 ; BDVER2-LABEL: v16f32_no_step:
 ; BDVER2:       # %bb.0:
 ; BDVER2-NEXT:    vrcpps %ymm0, %ymm0
@@ -1761,6 +1929,39 @@ define <16 x float> @v16f32_no_step(<16 x float> %x) #3 {
 ; AVX512-NEXT:    retq
   %div = fdiv fast <16 x float> <float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0>, %x
   ret <16 x float> %div
+=======
+; BTVER2-LABEL: v8f32_no_step:
+; BTVER2:       # BB#0:
+; BTVER2-NEXT:    vrcpps %ymm0, %ymm0 # sched: [2:2.00]
+; BTVER2-NEXT:    retq # sched: [4:1.00]
+;
+; SANDY-LABEL: v8f32_no_step:
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpps %ymm0, %ymm0 # sched: [5:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+;
+; HASWELL-LABEL: v8f32_no_step:
+; HASWELL:       # BB#0:
+; HASWELL-NEXT:    vrcpps %ymm0, %ymm0 # sched: [7:2.00]
+; HASWELL-NEXT:    retq # sched: [1:1.00]
+;
+; HASWELL-NO-FMA-LABEL: v8f32_no_step:
+; HASWELL-NO-FMA:       # BB#0:
+; HASWELL-NO-FMA-NEXT:    vrcpps %ymm0, %ymm0 # sched: [7:2.00]
+; HASWELL-NO-FMA-NEXT:    retq # sched: [1:1.00]
+;
+; KNL-LABEL: v8f32_no_step:
+; KNL:       # BB#0:
+; KNL-NEXT:    vrcpps %ymm0, %ymm0 # sched: [7:2.00]
+; KNL-NEXT:    retq # sched: [1:1.00]
+;
+; SKX-LABEL: v8f32_no_step:
+; SKX:       # BB#0:
+; SKX-NEXT:    vrcp14ps %ymm0, %ymm0
+; SKX-NEXT:    retq # sched: [1:1.00]
+  %div = fdiv fast <8 x float> <float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0, float 1.0>, %x
+  ret <8 x float> %div
+>>>>>>> origin/release/5.x
 }
 
 define <16 x float> @v16f32_no_step2(<16 x float> %x) #3 {
@@ -1792,6 +1993,7 @@ define <16 x float> @v16f32_no_step2(<16 x float> %x) #3 {
 ; FMA-RECIP-NEXT:    vmulps {{.*}}(%rip), %ymm1, %ymm1
 ; FMA-RECIP-NEXT:    retq
 ;
+<<<<<<< HEAD
 ; BDVER2-LABEL: v16f32_no_step2:
 ; BDVER2:       # %bb.0:
 ; BDVER2-NEXT:    vrcpps %ymm0, %ymm0
@@ -1839,6 +2041,45 @@ define <16 x float> @v16f32_no_step2(<16 x float> %x) #3 {
 ; AVX512-NEXT:    retq
   %div = fdiv fast <16 x float> <float 1.0, float 2.0, float 3.0, float 4.0, float 5.0, float 6.0, float 7.0, float 8.0, float 9.0, float 10.0, float 11.0, float 12.0, float 13.0, float 14.0, float 15.0, float 16.0>, %x
   ret <16 x float> %div
+=======
+; BTVER2-LABEL: v8f32_no_step2:
+; BTVER2:       # BB#0:
+; BTVER2-NEXT:    vrcpps %ymm0, %ymm0 # sched: [2:2.00]
+; BTVER2-NEXT:    vmulps {{.*}}(%rip), %ymm0, %ymm0 # sched: [7:2.00]
+; BTVER2-NEXT:    retq # sched: [4:1.00]
+;
+; SANDY-LABEL: v8f32_no_step2:
+; SANDY:       # BB#0:
+; SANDY-NEXT:    vrcpps %ymm0, %ymm0 # sched: [5:1.00]
+; SANDY-NEXT:    vmulps {{.*}}(%rip), %ymm0, %ymm0 # sched: [9:1.00]
+; SANDY-NEXT:    retq # sched: [5:1.00]
+;
+; HASWELL-LABEL: v8f32_no_step2:
+; HASWELL:       # BB#0:
+; HASWELL-NEXT:    vrcpps %ymm0, %ymm0 # sched: [7:2.00]
+; HASWELL-NEXT:    vmulps {{.*}}(%rip), %ymm0, %ymm0 # sched: [9:1.00]
+; HASWELL-NEXT:    retq # sched: [1:1.00]
+;
+; HASWELL-NO-FMA-LABEL: v8f32_no_step2:
+; HASWELL-NO-FMA:       # BB#0:
+; HASWELL-NO-FMA-NEXT:    vrcpps %ymm0, %ymm0 # sched: [7:2.00]
+; HASWELL-NO-FMA-NEXT:    vmulps {{.*}}(%rip), %ymm0, %ymm0 # sched: [9:1.00]
+; HASWELL-NO-FMA-NEXT:    retq # sched: [1:1.00]
+;
+; KNL-LABEL: v8f32_no_step2:
+; KNL:       # BB#0:
+; KNL-NEXT:    vrcpps %ymm0, %ymm0 # sched: [7:2.00]
+; KNL-NEXT:    vmulps {{.*}}(%rip), %ymm0, %ymm0 # sched: [9:1.00]
+; KNL-NEXT:    retq # sched: [1:1.00]
+;
+; SKX-LABEL: v8f32_no_step2:
+; SKX:       # BB#0:
+; SKX-NEXT:    vrcp14ps %ymm0, %ymm0
+; SKX-NEXT:    vmulps {{.*}}(%rip), %ymm0, %ymm0 # sched: [9:1.00]
+; SKX-NEXT:    retq # sched: [1:1.00]
+  %div = fdiv fast <8 x float> <float 1.0, float 2.0, float 3.0, float 4.0, float 5.0, float 6.0, float 7.0, float 8.0>, %x
+  ret <8 x float> %div
+>>>>>>> origin/release/5.x
 }
 
 attributes #0 = { "unsafe-fp-math"="true" "reciprocal-estimates"="!divf,!vec-divf" }

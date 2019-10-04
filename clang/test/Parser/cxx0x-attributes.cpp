@@ -134,7 +134,11 @@ extern "C++" [[]] { } // expected-error {{an attribute list cannot appear here}}
 [[]] using ns::i; // expected-error {{an attribute list cannot appear here}}
 [[unknown]] using namespace ns; // expected-warning {{unknown attribute 'unknown' ignored}}
 [[noreturn]] using namespace ns; // expected-error {{'noreturn' attribute only applies to functions}}
+<<<<<<< HEAD
 namespace [[]] ns2 {} // expected-warning {{attributes on a namespace declaration are a C++17 extension}}
+=======
+namespace [[]] ns2 {} // expected-warning {{attributes on a namespace declaration are incompatible with C++ standards before C++17}}
+>>>>>>> origin/release/5.x
 
 using [[]] alignas(4) [[]] ns::i; // expected-error {{an attribute list cannot appear here}}
 using [[]] alignas(4) [[]] foobar = int; // expected-error {{an attribute list cannot appear here}} expected-error {{'alignas' attribute only applies to}}
@@ -186,7 +190,11 @@ enum [[]] E2; // expected-error {{forbids forward references}}
 enum [[]] E1;
 enum [[]] E3 : int;
 enum [[]] {
+<<<<<<< HEAD
   k_123 [[]] = 123 // expected-warning {{attributes on an enumerator declaration are a C++17 extension}}
+=======
+  k_123 [[]] = 123 // expected-warning {{attributes on an enumerator declaration are incompatible with C++ standards before C++17}}
+>>>>>>> origin/release/5.x
 };
 enum [[]] E1 e; // expected-error {{an attribute list cannot appear here}}
 enum [[]] class E4 { }; // expected-error {{an attribute list cannot appear here}}

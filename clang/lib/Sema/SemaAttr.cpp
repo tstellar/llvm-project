@@ -329,6 +329,7 @@ void Sema::ActOnPragmaPack(SourceLocation PragmaLoc, PragmaMsStackAction Action,
   PackStack.Act(PragmaLoc, Action, SlotLabel, AlignmentVal);
 }
 
+<<<<<<< HEAD
 void Sema::DiagnoseNonDefaultPragmaPack(PragmaPackDiagnoseKind Kind,
                                         SourceLocation IncludeLoc) {
   if (Kind == PragmaPackDiagnoseKind::NonDefaultStateAtInclude) {
@@ -385,6 +386,9 @@ void Sema::DiagnoseUnterminatedPragmaPack() {
 }
 
 void Sema::ActOnPragmaMSStruct(PragmaMSStructKind Kind) {
+=======
+void Sema::ActOnPragmaMSStruct(PragmaMSStructKind Kind) { 
+>>>>>>> origin/release/5.x
   MSStructPragmaOn = (Kind == PMSST_ON);
 }
 
@@ -431,8 +435,7 @@ void Sema::PragmaStack<ValueType>::Act(SourceLocation PragmaLocation,
     return;
   }
   if (Action & PSK_Push)
-    Stack.emplace_back(StackSlotLabel, CurrentValue, CurrentPragmaLocation,
-                       PragmaLocation);
+    Stack.push_back(Slot(StackSlotLabel, CurrentValue, CurrentPragmaLocation));
   else if (Action & PSK_Pop) {
     if (!StackSlotLabel.empty()) {
       // If we've got a label, try to find it and jump there.

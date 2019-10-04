@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 lldb_tablegen(CoreProperties.inc -gen-lldb-property-defs
   SOURCE CoreProperties.td
   TARGET LLDBCorePropertiesGen)
@@ -8,15 +9,21 @@ lldb_tablegen(CorePropertiesEnum.inc -gen-lldb-property-enum-defs
 
 set(LLDB_CURSES_LIBS)
 set(LLDB_LIBEDIT_LIBS)
+=======
+set(LLDB_CURSES_LIBS)
+>>>>>>> origin/release/5.x
 
 if (NOT LLDB_DISABLE_CURSES)
   list(APPEND LLDB_CURSES_LIBS ${CURSES_LIBRARIES})
   if(LLVM_ENABLE_TERMINFO AND HAVE_TERMINFO)
     list(APPEND LLDB_CURSES_LIBS ${TERMINFO_LIBS})
   endif()
+<<<<<<< HEAD
   if (LLVM_BUILD_STATIC)
     list(APPEND LLDB_CURSES_LIBS gpm)
   endif()
+=======
+>>>>>>> origin/release/5.x
 endif()
 
 add_lldb_library(lldbCore
@@ -79,10 +86,15 @@ add_lldb_library(lldbCore
     lldbUtility
     lldbPluginCPlusPlusLanguage
     lldbPluginObjCLanguage
+<<<<<<< HEAD
     ${LLDB_CURSES_LIBS}
 
   CLANG_LIBS
     clangDriver
+=======
+    lldbPluginObjectFileJIT
+    ${LLDB_CURSES_LIBS}
+>>>>>>> origin/release/5.x
 
   LINK_COMPONENTS
     Support

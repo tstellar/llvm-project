@@ -474,6 +474,7 @@ bool Preprocessor::HandleEndOfFile(Token &Result, bool isEndOfMacro) {
     if (ExitedFromPredefinesFile)
       replayPreambleConditionalStack();
 
+<<<<<<< HEAD
     if (!isEndOfMacro && CurPPLexer && FoundPCHThroughHeader &&
         (isInPrimaryFile() ||
          CurPPLexer->getFileID() == getPredefinesFileID())) {
@@ -484,6 +485,10 @@ bool Preprocessor::HandleEndOfFile(Token &Result, bool isEndOfMacro) {
       // Client should lex another token unless we generated an EOM.
       return LeavingSubmodule;
     }
+=======
+    // Client should lex another token unless we generated an EOM.
+    return LeavingSubmodule;
+>>>>>>> origin/release/5.x
   }
 
   // If this is the end of the main file, form an EOF token.

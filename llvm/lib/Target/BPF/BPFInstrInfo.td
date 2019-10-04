@@ -545,6 +545,7 @@ let usesCustomInserter = 1, isCodeGenOnly = 1 in {
                       (ins GPR:$lhs, i64imm:$rhs, i64imm:$imm, GPR:$src, GPR:$src2),
                       "# Select PSEUDO $dst = $lhs $imm $rhs ? $src : $src2",
                       [(set i64:$dst,
+<<<<<<< HEAD
                        (BPFselectcc i64:$lhs, (i64immSExt32:$rhs), (i64 imm:$imm), i64:$src, i64:$src2))]>;
   def Select_64_32 : Pseudo<(outs GPR32:$dst),
                       (ins GPR:$lhs, GPR:$rhs, i64imm:$imm, GPR32:$src, GPR32:$src2),
@@ -576,6 +577,9 @@ let usesCustomInserter = 1, isCodeGenOnly = 1 in {
                       "# Select PSEUDO $dst = $lhs $imm $rhs ? $src : $src2",
                       [(set i64:$dst,
                        (BPFselectcc i32:$lhs, (i32immSExt32:$rhs), (i32 imm:$imm), i64:$src, i64:$src2))]>;
+=======
+                       (BPFselectcc i64:$lhs, (i64 i64immSExt32:$rhs), (i64 imm:$imm), i64:$src, i64:$src2))]>;
+>>>>>>> origin/release/5.x
 }
 
 // load 64-bit global addr into register

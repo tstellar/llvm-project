@@ -209,9 +209,12 @@ def FeatureMT : SubtargetFeature<"mt", "HasMT", "true", "Mips MT ASE">;
 def FeatureLongCalls : SubtargetFeature<"long-calls", "UseLongCalls", "true",
                                         "Disable use of the jal instruction">;
 
+<<<<<<< HEAD
 def FeatureXGOT
     : SubtargetFeature<"xgot", "UseXGOT", "true", "Assume 32-bit GOT">;
 
+=======
+>>>>>>> origin/release/5.x
 def FeatureUseIndirectJumpsHazard : SubtargetFeature<"use-indirect-jump-hazard",
                                                     "UseIndirectJumpsHazard",
                                                     "true", "Use indirect jump"

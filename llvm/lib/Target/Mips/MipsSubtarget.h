@@ -173,6 +173,7 @@ class MipsSubtarget : public MipsGenSubtargetInfo {
   // HasMT -- support MT ASE.
   bool HasMT;
 
+<<<<<<< HEAD
   // HasCRC -- supports R6 CRC ASE
   bool HasCRC;
 
@@ -182,6 +183,8 @@ class MipsSubtarget : public MipsGenSubtargetInfo {
   // HasGINV -- supports R6 Global INValidate ASE
   bool HasGINV;
 
+=======
+>>>>>>> origin/release/5.x
   // Use hazard variants of the jump register instructions for indirect
   // function calls and jump tables.
   bool UseIndirectJumpsHazard;
@@ -312,9 +315,12 @@ public:
   bool disableMadd4() const { return DisableMadd4; }
   bool hasEVA() const { return HasEVA; }
   bool hasMT() const { return HasMT; }
+<<<<<<< HEAD
   bool hasCRC() const { return HasCRC; }
   bool hasVirt() const { return HasVirt; }
   bool hasGINV() const { return HasGINV; }
+=======
+>>>>>>> origin/release/5.x
   bool useIndirectJumpsHazard() const {
     return UseIndirectJumpsHazard && hasMips32r2();
   }

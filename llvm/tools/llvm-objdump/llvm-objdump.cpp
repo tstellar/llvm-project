@@ -858,6 +858,476 @@ PrettyPrinter &selectPrettyPrinter(Triple const &Triple) {
 }
 }
 
+<<<<<<< HEAD
+=======
+template <class ELFT>
+static std::error_code getRelocationValueString(const ELFObjectFile<ELFT> *Obj,
+                                                const RelocationRef &RelRef,
+                                                SmallVectorImpl<char> &Result) {
+  DataRefImpl Rel = RelRef.getRawDataRefImpl();
+
+  typedef typename ELFObjectFile<ELFT>::Elf_Sym Elf_Sym;
+  typedef typename ELFObjectFile<ELFT>::Elf_Shdr Elf_Shdr;
+  typedef typename ELFObjectFile<ELFT>::Elf_Rela Elf_Rela;
+
+  const ELFFile<ELFT> &EF = *Obj->getELFFile();
+
+  auto SecOrErr = EF.getSection(Rel.d.a);
+  if (!SecOrErr)
+    return errorToErrorCode(SecOrErr.takeError());
+  const Elf_Shdr *Sec = *SecOrErr;
+  auto SymTabOrErr = EF.getSection(Sec->sh_link);
+  if (!SymTabOrErr)
+    return errorToErrorCode(SymTabOrErr.takeError());
+  const Elf_Shdr *SymTab = *SymTabOrErr;
+  assert(SymTab->sh_type == ELF::SHT_SYMTAB ||
+         SymTab->sh_type == ELF::SHT_DYNSYM);
+  auto StrTabSec = EF.getSection(SymTab->sh_link);
+  if (!StrTabSec)
+    return errorToErrorCode(StrTabSec.takeError());
+  auto StrTabOrErr = EF.getStringTable(*StrTabSec);
+  if (!StrTabOrErr)
+    return errorToErrorCode(StrTabOrErr.takeError());
+  StringRef StrTab = *StrTabOrErr;
+  uint8_t type = RelRef.getType();
+  StringRef res;
+  int64_t addend = 0;
+  switch (Sec->sh_type) {
+  default:
+    return object_error::parse_failed;
+  case ELF::SHT_REL: {
+    // TODO: Read implicit addend from section data.
+    break;
+  }
+  case ELF::SHT_RELA: {
+    const Elf_Rela *ERela = Obj->getRela(Rel);
+    addend = ERela->r_addend;
+    break;
+  }
+  }
+  symbol_iterator SI = RelRef.getSymbol();
+  const Elf_Sym *symb = Obj->getSymbol(SI->getRawDataRefImpl());
+  StringRef Target;
+  if (symb->getType() == ELF::STT_SECTION) {
+    Expected<section_iterator> SymSI = SI->getSection();
+    if (!SymSI)
+      return errorToErrorCode(SymSI.takeError());
+    const Elf_Shdr *SymSec = Obj->getSection((*SymSI)->getRawDataRefImpl());
+    auto SecName = EF.getSectionName(SymSec);
+    if (!SecName)
+      return errorToErrorCode(SecName.takeError());
+    Target = *SecName;
+  } else {
+    Expected<StringRef> SymName = symb->getName(StrTab);
+    if (!SymName)
+      return errorToErrorCode(SymName.takeError());
+    Target = *SymName;
+  }
+  switch (EF.getHeader()->e_machine) {
+  case ELF::EM_X86_64:
+    switch (type) {
+    case ELF::R_X86_64_PC8:
+    case ELF::R_X86_64_PC16:
+    case ELF::R_X86_64_PC32: {
+      std::string fmtbuf;
+      raw_string_ostream fmt(fmtbuf);
+      fmt << Target << (addend < 0 ? "" : "+") << addend << "-P";
+      fmt.flush();
+      Result.append(fmtbuf.begin(), fmtbuf.end());
+    } break;
+    case ELF::R_X86_64_8:
+    case ELF::R_X86_64_16:
+    case ELF::R_X86_64_32:
+    case ELF::R_X86_64_32S:
+    case ELF::R_X86_64_64: {
+      std::string fmtbuf;
+      raw_string_ostream fmt(fmtbuf);
+      fmt << Target << (addend < 0 ? "" : "+") << addend;
+      fmt.flush();
+      Result.append(fmtbuf.begin(), fmtbuf.end());
+    } break;
+    default:
+      res = "Unknown";
+    }
+    break;
+  case ELF::EM_LANAI:
+  case ELF::EM_AVR:
+  case ELF::EM_AARCH64: {
+    std::string fmtbuf;
+    raw_string_ostream fmt(fmtbuf);
+    fmt << Target;
+    if (addend != 0)
+      fmt << (addend < 0 ? "" : "+") << addend;
+    fmt.flush();
+    Result.append(fmtbuf.begin(), fmtbuf.end());
+    break;
+  }
+  case ELF::EM_386:
+  case ELF::EM_IAMCU:
+  case ELF::EM_ARM:
+  case ELF::EM_HEXAGON:
+  case ELF::EM_MIPS:
+  case ELF::EM_BPF:
+  case ELF::EM_RISCV:
+    res = Target;
+    break;
+  case ELF::EM_WEBASSEMBLY:
+    switch (type) {
+    case ELF::R_WEBASSEMBLY_DATA: {
+      std::string fmtbuf;
+      raw_string_ostream fmt(fmtbuf);
+      fmt << Target << (addend < 0 ? "" : "+") << addend;
+      fmt.flush();
+      Result.append(fmtbuf.begin(), fmtbuf.end());
+      break;
+    }
+    case ELF::R_WEBASSEMBLY_FUNCTION:
+      res = Target;
+      break;
+    default:
+      res = "Unknown";
+    }
+    break;
+  default:
+    res = "Unknown";
+  }
+  if (Result.empty())
+    Result.append(res.begin(), res.end());
+  return std::error_code();
+}
+
+static std::error_code getRelocationValueString(const ELFObjectFileBase *Obj,
+                                                const RelocationRef &Rel,
+                                                SmallVectorImpl<char> &Result) {
+  if (auto *ELF32LE = dyn_cast<ELF32LEObjectFile>(Obj))
+    return getRelocationValueString(ELF32LE, Rel, Result);
+  if (auto *ELF64LE = dyn_cast<ELF64LEObjectFile>(Obj))
+    return getRelocationValueString(ELF64LE, Rel, Result);
+  if (auto *ELF32BE = dyn_cast<ELF32BEObjectFile>(Obj))
+    return getRelocationValueString(ELF32BE, Rel, Result);
+  auto *ELF64BE = cast<ELF64BEObjectFile>(Obj);
+  return getRelocationValueString(ELF64BE, Rel, Result);
+}
+
+static std::error_code getRelocationValueString(const COFFObjectFile *Obj,
+                                                const RelocationRef &Rel,
+                                                SmallVectorImpl<char> &Result) {
+  symbol_iterator SymI = Rel.getSymbol();
+  Expected<StringRef> SymNameOrErr = SymI->getName();
+  if (!SymNameOrErr)
+    return errorToErrorCode(SymNameOrErr.takeError());
+  StringRef SymName = *SymNameOrErr;
+  Result.append(SymName.begin(), SymName.end());
+  return std::error_code();
+}
+
+static void printRelocationTargetName(const MachOObjectFile *O,
+                                      const MachO::any_relocation_info &RE,
+                                      raw_string_ostream &fmt) {
+  bool IsScattered = O->isRelocationScattered(RE);
+
+  // Target of a scattered relocation is an address.  In the interest of
+  // generating pretty output, scan through the symbol table looking for a
+  // symbol that aligns with that address.  If we find one, print it.
+  // Otherwise, we just print the hex address of the target.
+  if (IsScattered) {
+    uint32_t Val = O->getPlainRelocationSymbolNum(RE);
+
+    for (const SymbolRef &Symbol : O->symbols()) {
+      std::error_code ec;
+      Expected<uint64_t> Addr = Symbol.getAddress();
+      if (!Addr)
+        report_error(O->getFileName(), Addr.takeError());
+      if (*Addr != Val)
+        continue;
+      Expected<StringRef> Name = Symbol.getName();
+      if (!Name)
+        report_error(O->getFileName(), Name.takeError());
+      fmt << *Name;
+      return;
+    }
+
+    // If we couldn't find a symbol that this relocation refers to, try
+    // to find a section beginning instead.
+    for (const SectionRef &Section : ToolSectionFilter(*O)) {
+      std::error_code ec;
+
+      StringRef Name;
+      uint64_t Addr = Section.getAddress();
+      if (Addr != Val)
+        continue;
+      if ((ec = Section.getName(Name)))
+        report_error(O->getFileName(), ec);
+      fmt << Name;
+      return;
+    }
+
+    fmt << format("0x%x", Val);
+    return;
+  }
+
+  StringRef S;
+  bool isExtern = O->getPlainRelocationExternal(RE);
+  uint64_t Val = O->getPlainRelocationSymbolNum(RE);
+
+  if (O->getAnyRelocationType(RE) == MachO::ARM64_RELOC_ADDEND) {
+    fmt << format("0x%0" PRIx64, Val);
+    return;
+  } else if (isExtern) {
+    symbol_iterator SI = O->symbol_begin();
+    advance(SI, Val);
+    Expected<StringRef> SOrErr = SI->getName();
+    if (!SOrErr)
+      report_error(O->getFileName(), SOrErr.takeError());
+    S = *SOrErr;
+  } else {
+    section_iterator SI = O->section_begin();
+    // Adjust for the fact that sections are 1-indexed.
+    advance(SI, Val - 1);
+    SI->getName(S);
+  }
+
+  fmt << S;
+}
+
+static std::error_code getRelocationValueString(const WasmObjectFile *Obj,
+                                                const RelocationRef &RelRef,
+                                                SmallVectorImpl<char> &Result) {
+  const wasm::WasmRelocation& Rel = Obj->getWasmRelocation(RelRef);
+  std::string fmtbuf;
+  raw_string_ostream fmt(fmtbuf);
+  fmt << Rel.Index << (Rel.Addend < 0 ? "" : "+") << Rel.Addend;
+  fmt.flush();
+  Result.append(fmtbuf.begin(), fmtbuf.end());
+  return std::error_code();
+}
+
+static std::error_code getRelocationValueString(const MachOObjectFile *Obj,
+                                                const RelocationRef &RelRef,
+                                                SmallVectorImpl<char> &Result) {
+  DataRefImpl Rel = RelRef.getRawDataRefImpl();
+  MachO::any_relocation_info RE = Obj->getRelocation(Rel);
+
+  unsigned Arch = Obj->getArch();
+
+  std::string fmtbuf;
+  raw_string_ostream fmt(fmtbuf);
+  unsigned Type = Obj->getAnyRelocationType(RE);
+  bool IsPCRel = Obj->getAnyRelocationPCRel(RE);
+
+  // Determine any addends that should be displayed with the relocation.
+  // These require decoding the relocation type, which is triple-specific.
+
+  // X86_64 has entirely custom relocation types.
+  if (Arch == Triple::x86_64) {
+    bool isPCRel = Obj->getAnyRelocationPCRel(RE);
+
+    switch (Type) {
+    case MachO::X86_64_RELOC_GOT_LOAD:
+    case MachO::X86_64_RELOC_GOT: {
+      printRelocationTargetName(Obj, RE, fmt);
+      fmt << "@GOT";
+      if (isPCRel)
+        fmt << "PCREL";
+      break;
+    }
+    case MachO::X86_64_RELOC_SUBTRACTOR: {
+      DataRefImpl RelNext = Rel;
+      Obj->moveRelocationNext(RelNext);
+      MachO::any_relocation_info RENext = Obj->getRelocation(RelNext);
+
+      // X86_64_RELOC_SUBTRACTOR must be followed by a relocation of type
+      // X86_64_RELOC_UNSIGNED.
+      // NOTE: Scattered relocations don't exist on x86_64.
+      unsigned RType = Obj->getAnyRelocationType(RENext);
+      if (RType != MachO::X86_64_RELOC_UNSIGNED)
+        report_error(Obj->getFileName(), "Expected X86_64_RELOC_UNSIGNED after "
+                     "X86_64_RELOC_SUBTRACTOR.");
+
+      // The X86_64_RELOC_UNSIGNED contains the minuend symbol;
+      // X86_64_RELOC_SUBTRACTOR contains the subtrahend.
+      printRelocationTargetName(Obj, RENext, fmt);
+      fmt << "-";
+      printRelocationTargetName(Obj, RE, fmt);
+      break;
+    }
+    case MachO::X86_64_RELOC_TLV:
+      printRelocationTargetName(Obj, RE, fmt);
+      fmt << "@TLV";
+      if (isPCRel)
+        fmt << "P";
+      break;
+    case MachO::X86_64_RELOC_SIGNED_1:
+      printRelocationTargetName(Obj, RE, fmt);
+      fmt << "-1";
+      break;
+    case MachO::X86_64_RELOC_SIGNED_2:
+      printRelocationTargetName(Obj, RE, fmt);
+      fmt << "-2";
+      break;
+    case MachO::X86_64_RELOC_SIGNED_4:
+      printRelocationTargetName(Obj, RE, fmt);
+      fmt << "-4";
+      break;
+    default:
+      printRelocationTargetName(Obj, RE, fmt);
+      break;
+    }
+    // X86 and ARM share some relocation types in common.
+  } else if (Arch == Triple::x86 || Arch == Triple::arm ||
+             Arch == Triple::ppc) {
+    // Generic relocation types...
+    switch (Type) {
+    case MachO::GENERIC_RELOC_PAIR: // prints no info
+      return std::error_code();
+    case MachO::GENERIC_RELOC_SECTDIFF: {
+      DataRefImpl RelNext = Rel;
+      Obj->moveRelocationNext(RelNext);
+      MachO::any_relocation_info RENext = Obj->getRelocation(RelNext);
+
+      // X86 sect diff's must be followed by a relocation of type
+      // GENERIC_RELOC_PAIR.
+      unsigned RType = Obj->getAnyRelocationType(RENext);
+
+      if (RType != MachO::GENERIC_RELOC_PAIR)
+        report_error(Obj->getFileName(), "Expected GENERIC_RELOC_PAIR after "
+                     "GENERIC_RELOC_SECTDIFF.");
+
+      printRelocationTargetName(Obj, RE, fmt);
+      fmt << "-";
+      printRelocationTargetName(Obj, RENext, fmt);
+      break;
+    }
+    }
+
+    if (Arch == Triple::x86 || Arch == Triple::ppc) {
+      switch (Type) {
+      case MachO::GENERIC_RELOC_LOCAL_SECTDIFF: {
+        DataRefImpl RelNext = Rel;
+        Obj->moveRelocationNext(RelNext);
+        MachO::any_relocation_info RENext = Obj->getRelocation(RelNext);
+
+        // X86 sect diff's must be followed by a relocation of type
+        // GENERIC_RELOC_PAIR.
+        unsigned RType = Obj->getAnyRelocationType(RENext);
+        if (RType != MachO::GENERIC_RELOC_PAIR)
+          report_error(Obj->getFileName(), "Expected GENERIC_RELOC_PAIR after "
+                       "GENERIC_RELOC_LOCAL_SECTDIFF.");
+
+        printRelocationTargetName(Obj, RE, fmt);
+        fmt << "-";
+        printRelocationTargetName(Obj, RENext, fmt);
+        break;
+      }
+      case MachO::GENERIC_RELOC_TLV: {
+        printRelocationTargetName(Obj, RE, fmt);
+        fmt << "@TLV";
+        if (IsPCRel)
+          fmt << "P";
+        break;
+      }
+      default:
+        printRelocationTargetName(Obj, RE, fmt);
+      }
+    } else { // ARM-specific relocations
+      switch (Type) {
+      case MachO::ARM_RELOC_HALF:
+      case MachO::ARM_RELOC_HALF_SECTDIFF: {
+        // Half relocations steal a bit from the length field to encode
+        // whether this is an upper16 or a lower16 relocation.
+        bool isUpper = (Obj->getAnyRelocationLength(RE) & 0x1) == 1;
+
+        if (isUpper)
+          fmt << ":upper16:(";
+        else
+          fmt << ":lower16:(";
+        printRelocationTargetName(Obj, RE, fmt);
+
+        DataRefImpl RelNext = Rel;
+        Obj->moveRelocationNext(RelNext);
+        MachO::any_relocation_info RENext = Obj->getRelocation(RelNext);
+
+        // ARM half relocs must be followed by a relocation of type
+        // ARM_RELOC_PAIR.
+        unsigned RType = Obj->getAnyRelocationType(RENext);
+        if (RType != MachO::ARM_RELOC_PAIR)
+          report_error(Obj->getFileName(), "Expected ARM_RELOC_PAIR after "
+                       "ARM_RELOC_HALF");
+
+        // NOTE: The half of the target virtual address is stashed in the
+        // address field of the secondary relocation, but we can't reverse
+        // engineer the constant offset from it without decoding the movw/movt
+        // instruction to find the other half in its immediate field.
+
+        // ARM_RELOC_HALF_SECTDIFF encodes the second section in the
+        // symbol/section pointer of the follow-on relocation.
+        if (Type == MachO::ARM_RELOC_HALF_SECTDIFF) {
+          fmt << "-";
+          printRelocationTargetName(Obj, RENext, fmt);
+        }
+
+        fmt << ")";
+        break;
+      }
+      default: { printRelocationTargetName(Obj, RE, fmt); }
+      }
+    }
+  } else
+    printRelocationTargetName(Obj, RE, fmt);
+
+  fmt.flush();
+  Result.append(fmtbuf.begin(), fmtbuf.end());
+  return std::error_code();
+}
+
+static std::error_code getRelocationValueString(const RelocationRef &Rel,
+                                                SmallVectorImpl<char> &Result) {
+  const ObjectFile *Obj = Rel.getObject();
+  if (auto *ELF = dyn_cast<ELFObjectFileBase>(Obj))
+    return getRelocationValueString(ELF, Rel, Result);
+  if (auto *COFF = dyn_cast<COFFObjectFile>(Obj))
+    return getRelocationValueString(COFF, Rel, Result);
+  if (auto *Wasm = dyn_cast<WasmObjectFile>(Obj))
+    return getRelocationValueString(Wasm, Rel, Result);
+  if (auto *MachO = dyn_cast<MachOObjectFile>(Obj))
+    return getRelocationValueString(MachO, Rel, Result);
+  llvm_unreachable("unknown object file format");
+}
+
+/// @brief Indicates whether this relocation should hidden when listing
+/// relocations, usually because it is the trailing part of a multipart
+/// relocation that will be printed as part of the leading relocation.
+static bool getHidden(RelocationRef RelRef) {
+  const ObjectFile *Obj = RelRef.getObject();
+  auto *MachO = dyn_cast<MachOObjectFile>(Obj);
+  if (!MachO)
+    return false;
+
+  unsigned Arch = MachO->getArch();
+  DataRefImpl Rel = RelRef.getRawDataRefImpl();
+  uint64_t Type = MachO->getRelocationType(Rel);
+
+  // On arches that use the generic relocations, GENERIC_RELOC_PAIR
+  // is always hidden.
+  if (Arch == Triple::x86 || Arch == Triple::arm || Arch == Triple::ppc) {
+    if (Type == MachO::GENERIC_RELOC_PAIR)
+      return true;
+  } else if (Arch == Triple::x86_64) {
+    // On x86_64, X86_64_RELOC_UNSIGNED is hidden only when it follows
+    // an X86_64_RELOC_SUBTRACTOR.
+    if (Type == MachO::X86_64_RELOC_UNSIGNED && Rel.d.a > 0) {
+      DataRefImpl RelPrev = Rel;
+      RelPrev.d.a--;
+      uint64_t PrevType = MachO->getRelocationType(RelPrev);
+      if (PrevType == MachO::X86_64_RELOC_SUBTRACTOR)
+        return true;
+    }
+  }
+
+  return false;
+}
+
+>>>>>>> origin/release/5.x
 static uint8_t getElfSymbolType(const ObjectFile *Obj, const SymbolRef &Sym) {
   assert(Obj->isELF());
   if (auto *Elf32LEObj = dyn_cast<ELF32LEObjectFile>(Obj))

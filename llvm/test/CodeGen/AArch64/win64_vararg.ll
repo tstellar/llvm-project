@@ -5,10 +5,17 @@ entry:
 ; CHECK: str     x30, [sp, #-80]!
 ; CHECK: add     x8, sp, #24
 ; CHECK: add     x0, sp, #24
+<<<<<<< HEAD
 ; CHECK: stp     x1, x2, [sp, #24]
 ; CHECK: stp     x3, x4, [sp, #40]
 ; CHECK: stp     x5, x6, [sp, #56]
 ; CHECK: str     x7, [sp, #72]
+=======
+; CHECK: stp     x6, x7, [sp, #64]
+; CHECK: stp     x4, x5, [sp, #48]
+; CHECK: stp     x2, x3, [sp, #32]
+; CHECK: str     x1, [sp, #24]
+>>>>>>> origin/release/5.x
 ; CHECK: str     x8, [sp, #8]
 ; CHECK: bl      other_func
 ; CHECK: ldr     x30, [sp], #80
@@ -78,10 +85,17 @@ entry:
 ; CHECK-LABEL: copy1:
 ; CHECK: sub     sp, sp, #80
 ; CHECK: add     x8, sp, #24
+<<<<<<< HEAD
 ; CHECK: stp     x1, x2, [sp, #24]
 ; CHECK: stp     x3, x4, [sp, #40]
 ; CHECK: stp     x5, x6, [sp, #56]
 ; CHECK: str     x7, [sp, #72]
+=======
+; CHECK: stp     x6, x7, [sp, #64]
+; CHECK: stp     x4, x5, [sp, #48]
+; CHECK: stp     x2, x3, [sp, #32]
+; CHECK: str     x1, [sp, #24]
+>>>>>>> origin/release/5.x
 ; CHECK: stp     x8, x8, [sp], #80
 ; CHECK: ret
 define void @copy1(i64 %a0, ...) nounwind {
@@ -103,6 +117,7 @@ declare i32 @__stdio_common_vsprintf(i64, i8*, i64, i8*, i8*, i8*) local_unnamed
 declare i64* @__local_stdio_printf_options() local_unnamed_addr #4
 
 ; CHECK-LABEL: fp
+<<<<<<< HEAD
 ; CHECK: stp     x29, x30, [sp, #-96]
 ; CHECK: str     x21,      [sp, #16]
 ; CHECK: stp     x19, x20, [sp, #32]
@@ -118,17 +133,42 @@ declare i64* @__local_stdio_printf_options() local_unnamed_addr #4
 ; CHECK: bl      __local_stdio_printf_options
 ; CHECK: ldr     x8, [x0]
 ; CHECK: add     x5, x29, #56
+=======
+; CHECK: str     x21, [sp, #-96]!
+; CHECK: stp     x20, x19, [sp, #16]
+; CHECK: stp     x29, x30, [sp, #32]
+; CHECK: add     x29, sp, #32
+; CHECK: add     x8, x29, #24
+; CHECK: mov     x19, x2
+; CHECK: mov     x20, x1
+; CHECK: mov     x21, x0
+; CHECK: stp     x6, x7, [x29, #48]
+; CHECK: stp     x4, x5, [x29, #32]
+; CHECK: str     x3, [x29, #24]
+; CHECK: str     x8, [sp, #8]
+; CHECK: bl      __local_stdio_printf_options
+; CHECK: ldr     x8, [x0]
+; CHECK: add     x5, x29, #24
+>>>>>>> origin/release/5.x
 ; CHECK: mov     x1, x21
 ; CHECK: mov     x2, x20
 ; CHECK: orr     x0, x8, #0x2
 ; CHECK: mov     x3, x19
 ; CHECK: mov     x4, xzr
 ; CHECK: bl      __stdio_common_vsprintf
+<<<<<<< HEAD
 ; CHECK: cmp     w0, #0
 ; CHECK: csinv   w0, w0, wzr, ge
 ; CHECK: ldp     x19, x20, [sp, #32]
 ; CHECK: ldr     x21,      [sp, #16]
 ; CHECK: ldp     x29, x30, [sp], #96
+=======
+; CHECK: ldp     x29, x30, [sp, #32]
+; CHECK: ldp     x20, x19, [sp, #16]
+; CHECK: cmp     w0, #0
+; CHECK: csinv   w0, w0, wzr, ge
+; CHECK: ldr     x21, [sp], #96
+>>>>>>> origin/release/5.x
 ; CHECK: ret
 define i32 @fp(i8*, i64, i8*, ...) local_unnamed_addr #6 {
   %4 = alloca i8*, align 8
@@ -150,6 +190,7 @@ define i32 @fp(i8*, i64, i8*, ...) local_unnamed_addr #6 {
 attributes #6 = { "no-frame-pointer-elim"="true" }
 
 ; CHECK-LABEL: vla
+<<<<<<< HEAD
 ; CHECK: stp     x29, x30, [sp, #-112]!
 ; CHECK: str     x23, [sp, #16]
 ; CHECK: stp     x21, x22, [sp, #32]
@@ -186,6 +227,43 @@ attributes #6 = { "no-frame-pointer-elim"="true" }
 ; CHECK: ldp     x21, x22, [sp, #32]
 ; CHECK: ldr     x23, [sp, #16]
 ; CHECK: ldp     x29, x30, [sp], #112
+=======
+; CHECK: str     x23, [sp, #-112]!
+; CHECK: stp     x22, x21, [sp, #16]
+; CHECK: stp     x20, x19, [sp, #32]
+; CHECK: stp     x29, x30, [sp, #48]
+; CHECK: add     x29, sp, #48
+; CHECK: add     x8, x29, #16
+; CHECK: stur    x8, [x29, #-40]
+; CHECK: mov     w8, w0
+; CHECK: add     x8, x8, #15
+; CHECK: mov     x9, sp
+; CHECK: and     x8, x8, #0x1fffffff0
+; CHECK: sub     x20, x9, x8
+; CHECK: mov     x19, x1
+; CHECK: mov     x23, sp
+; CHECK: stp     x6, x7, [x29, #48]
+; CHECK: stp     x4, x5, [x29, #32]
+; CHECK: stp     x2, x3, [x29, #16]
+; CHECK: mov     sp, x20
+; CHECK: ldur    x21, [x29, #-40]
+; CHECK: sxtw    x22, w0
+; CHECK: bl      __local_stdio_printf_options
+; CHECK: ldr     x8, [x0]
+; CHECK: mov     x1, x20
+; CHECK: mov     x2, x22
+; CHECK: mov     x3, x19
+; CHECK: orr     x0, x8, #0x2
+; CHECK: mov     x4, xzr
+; CHECK: mov     x5, x21
+; CHECK: bl      __stdio_common_vsprintf
+; CHECK: mov     sp, x23
+; CHECK: sub     sp, x29, #48
+; CHECK: ldp     x29, x30, [sp, #48]
+; CHECK: ldp     x20, x19, [sp, #32]
+; CHECK: ldp     x22, x21, [sp, #16]
+; CHECK: ldr     x23, [sp], #112
+>>>>>>> origin/release/5.x
 ; CHECK: ret
 define void @vla(i32, i8*, ...) local_unnamed_addr {
   %3 = alloca i8*, align 8
@@ -211,6 +289,7 @@ declare i8* @llvm.stacksave()
 declare void @llvm.stackrestore(i8*)
 
 ; CHECK-LABEL: snprintf
+<<<<<<< HEAD
 ; CHECK-DAG: sub     sp,  sp, #96
 ; CHECK-DAG: str     x30, [sp, #16]
 ; CHECK-DAG: str     x21, [sp, #24]
@@ -239,6 +318,34 @@ declare void @llvm.stackrestore(i8*)
 ; CHECK-DAG: csinv   w0, w0, wzr, ge
 ; CHECK-DAG: add     sp, sp, #96
 ; CHECK-DAG: ret
+=======
+; CHECK: sub     sp,  sp, #96
+; CHECK: stp     x21, x20, [sp, #16]
+; CHECK: stp     x19, x30, [sp, #32]
+; CHECK: add     x8, sp, #56
+; CHECK: mov     x19, x2
+; CHECK: mov     x20, x1
+; CHECK: mov     x21, x0
+; CHECK: stp     x6, x7, [sp, #80]
+; CHECK: stp     x4, x5, [sp, #64]
+; CHECK: str     x3, [sp, #56]
+; CHECK: str     x8, [sp, #8]
+; CHECK: bl      __local_stdio_printf_options
+; CHECK: ldr     x8, [x0]
+; CHECK: add     x5, sp, #56
+; CHECK: mov     x1, x21
+; CHECK: mov     x2, x20
+; CHECK: orr     x0, x8, #0x2
+; CHECK: mov     x3, x19
+; CHECK: mov     x4, xzr
+; CHECK: bl      __stdio_common_vsprintf
+; CHECK: ldp     x19, x30, [sp, #32]
+; CHECK: ldp     x21, x20, [sp, #16]
+; CHECK: cmp     w0, #0
+; CHECK: csinv   w0, w0, wzr, ge
+; CHECK: add     sp, sp, #96
+; CHECK: ret
+>>>>>>> origin/release/5.x
 define i32 @snprintf(i8*, i64, i8*, ...) local_unnamed_addr #5 {
   %4 = alloca i8*, align 8
   %5 = bitcast i8** %4 to i8*
@@ -255,6 +362,7 @@ define i32 @snprintf(i8*, i64, i8*, ...) local_unnamed_addr #5 {
   call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %5) #2
   ret i32 %12
 }
+<<<<<<< HEAD
 
 ; CHECK-LABEL: fixed_params
 ; CHECK: sub     sp,  sp, #32
@@ -279,3 +387,5 @@ define void @fixed_params(i32, double, i32, double, i32, double, i32, double, i3
 }
 
 declare void @varargs(i32, ...) local_unnamed_addr
+=======
+>>>>>>> origin/release/5.x

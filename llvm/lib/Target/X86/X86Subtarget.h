@@ -424,6 +424,14 @@ protected:
   /// than emitting one inside the compiler.
   bool UseRetpolineExternalThunk = false;
 
+  /// Use a retpoline thunk rather than indirect calls to block speculative
+  /// execution.
+  bool UseRetpoline;
+
+  /// When using a retpoline thunk, call an externally provided thunk rather
+  /// than emitting one inside the compiler.
+  bool UseRetpolineExternalThunk;
+
   /// Use software floating point for code generation.
   bool UseSoftFloat = false;
 
@@ -692,6 +700,7 @@ public:
   bool hasBITALG() const { return HasBITALG; }
   bool hasSHSTK() const { return HasSHSTK; }
   bool hasCLFLUSHOPT() const { return HasCLFLUSHOPT; }
+<<<<<<< HEAD
   bool hasCLWB() const { return HasCLWB; }
   bool hasWBNOINVD() const { return HasWBNOINVD; }
   bool hasRDPID() const { return HasRDPID; }
@@ -730,6 +739,10 @@ public:
   bool useBWIRegs() const {
     return hasBWI() && useAVX512Regs();
   }
+=======
+  bool useRetpoline() const { return UseRetpoline; }
+  bool useRetpolineExternalThunk() const { return UseRetpolineExternalThunk; }
+>>>>>>> origin/release/5.x
 
   bool isXRaySupported() const override { return is64Bit(); }
 
@@ -859,6 +872,10 @@ public:
   bool enableIndirectBrExpand() const override {
     return useRetpolineIndirectBranches();
   }
+
+  /// If we are using retpolines, we need to expand indirectbr to avoid it
+  /// lowering to an actual indirect jump.
+  bool enableIndirectBrExpand() const override { return useRetpoline(); }
 
   /// Enable the MachineScheduler pass for all X86 subtargets.
   bool enableMachineScheduler() const override { return true; }

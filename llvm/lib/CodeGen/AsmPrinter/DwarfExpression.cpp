@@ -156,7 +156,11 @@ bool DwarfExpression::addMachineReg(const TargetRegisterInfo &TRI,
 
     // If this sub-register has a DWARF number and we haven't covered
     // its range, emit a DWARF piece for it.
+<<<<<<< HEAD
     if (CurSubReg.test(Coverage)) {
+=======
+    if (Reg >= 0 && CurSubReg.test(Coverage)) {
+>>>>>>> origin/release/5.x
       // Emit a piece for any gap in the coverage.
       if (Offset > CurPos)
         DwarfRegs.push_back({-1, Offset - CurPos, "no DWARF register encoding"});

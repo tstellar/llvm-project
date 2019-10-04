@@ -499,7 +499,11 @@ static void InitializeCPlusPlusFeatureTestMacros(const LangOptions &LangOpts,
     Builder.defineMacro("__cpp_alias_templates", "200704L");
   }
   if (LangOpts.ThreadsafeStatics)
+<<<<<<< HEAD
     Builder.defineMacro("__cpp_threadsafe_static_init", "200806L");
+=======
+    Builder.defineMacro("__cpp_threadsafe_static_init", "200806");
+>>>>>>> origin/release/5.x
 
   // C++14 features.
   if (LangOpts.CPlusPlus14) {
@@ -516,6 +520,7 @@ static void InitializeCPlusPlusFeatureTestMacros(const LangOptions &LangOpts,
     Builder.defineMacro("__cpp_sized_deallocation", "201309L");
 
   // C++17 features.
+<<<<<<< HEAD
   if (LangOpts.CPlusPlus17) {
     Builder.defineMacro("__cpp_hex_float", "201603L");
     Builder.defineMacro("__cpp_inline_variables", "201606L");
@@ -545,6 +550,24 @@ static void InitializeCPlusPlusFeatureTestMacros(const LangOptions &LangOpts,
     Builder.defineMacro("__cpp_conditional_explicit", "201806L");
     Builder.defineMacro("__cpp_constexpr_dynamic_alloc", "201907L");
     Builder.defineMacro("__cpp_constinit", "201907L");
+=======
+  if (LangOpts.CPlusPlus1z) {
+    Builder.defineMacro("__cpp_hex_float", "201603");
+    Builder.defineMacro("__cpp_inline_variables", "201606");
+    Builder.defineMacro("__cpp_noexcept_function_type", "201510");
+    Builder.defineMacro("__cpp_capture_star_this", "201603");
+    Builder.defineMacro("__cpp_if_constexpr", "201606");
+    Builder.defineMacro("__cpp_deduction_guides", "201611");
+    Builder.defineMacro("__cpp_template_auto", "201606");
+    Builder.defineMacro("__cpp_namespace_attributes", "201411");
+    Builder.defineMacro("__cpp_enumerator_attributes", "201411");
+    Builder.defineMacro("__cpp_nested_namespace_definitions", "201411");
+    Builder.defineMacro("__cpp_variadic_using", "201611");
+    Builder.defineMacro("__cpp_aggregate_bases", "201603");
+    Builder.defineMacro("__cpp_structured_bindings", "201606");
+    Builder.defineMacro("__cpp_nontype_template_args", "201411");
+    Builder.defineMacro("__cpp_fold_expressions", "201603");
+>>>>>>> origin/release/5.x
   }
   if (LangOpts.Char8)
     Builder.defineMacro("__cpp_char8_t", "201811L");

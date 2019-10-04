@@ -3842,8 +3842,12 @@ static const Value *getUnderlyingObjectFromInt(const Value *V) {
 
 /// This is a wrapper around GetUnderlyingObjects and adds support for basic
 /// ptrtoint+arithmetic+inttoptr sequences.
+<<<<<<< HEAD
 /// It returns false if unidentified object is found in GetUnderlyingObjects.
 bool llvm::getUnderlyingObjectsForCodeGen(const Value *V,
+=======
+void llvm::getUnderlyingObjectsForCodeGen(const Value *V,
+>>>>>>> origin/release/5.x
                           SmallVectorImpl<Value *> &Objects,
                           const DataLayout &DL) {
   SmallPtrSet<const Value *, 16> Visited;
@@ -3851,10 +3855,17 @@ bool llvm::getUnderlyingObjectsForCodeGen(const Value *V,
   do {
     V = Working.pop_back_val();
 
+<<<<<<< HEAD
     SmallVector<const Value *, 4> Objs;
     GetUnderlyingObjects(V, Objs, DL);
 
     for (const Value *V : Objs) {
+=======
+    SmallVector<Value *, 4> Objs;
+    GetUnderlyingObjects(const_cast<Value *>(V), Objs, DL);
+
+    for (Value *V : Objs) {
+>>>>>>> origin/release/5.x
       if (!Visited.insert(V).second)
         continue;
       if (Operator::getOpcode(V) == Instruction::IntToPtr) {
@@ -3869,12 +3880,19 @@ bool llvm::getUnderlyingObjectsForCodeGen(const Value *V,
       // getUnderlyingObjectsForCodeGen also fails for safety.
       if (!isIdentifiedObject(V)) {
         Objects.clear();
+<<<<<<< HEAD
         return false;
+=======
+        return;
+>>>>>>> origin/release/5.x
       }
       Objects.push_back(const_cast<Value *>(V));
     }
   } while (!Working.empty());
+<<<<<<< HEAD
   return true;
+=======
+>>>>>>> origin/release/5.x
 }
 
 /// Return true if the only users of this pointer are lifetime markers.
@@ -5352,14 +5370,25 @@ static Optional<bool> isImpliedCondAndOr(const BinaryOperator *LHS,
 }
 
 Optional<bool> llvm::isImpliedCondition(const Value *LHS, const Value *RHS,
+<<<<<<< HEAD
                                         const DataLayout &DL, bool LHSIsTrue,
                                         unsigned Depth) {
+=======
+                                        const DataLayout &DL, bool LHSIsFalse,
+                                        unsigned Depth, AssumptionCache *AC,
+                                        const Instruction *CxtI,
+                                        const DominatorTree *DT) {
+>>>>>>> origin/release/5.x
   // Bail out when we hit the limit.
   if (Depth == MaxDepth)
     return None;
 
+<<<<<<< HEAD
   // A mismatch occurs when we compare a scalar cmp to a vector cmp, for
   // example.
+=======
+  // A mismatch occurs when we compare a scalar cmp to a vector cmp, for example.
+>>>>>>> origin/release/5.x
   if (LHS->getType() != RHS->getType())
     return None;
 

@@ -1655,6 +1655,15 @@ void DFSanVisitor::visitCallSite(CallSite CS) {
             CustomCI->addParamAttr(ArgNo, Attribute::ZExt);
         }
 
+        // Update the parameter attributes of the custom call instruction to
+        // zero extend the shadow parameters. This is required for targets
+        // which consider ShadowTy an illegal type.
+        for (unsigned n = 0; n < FT->getNumParams(); n++) {
+          const unsigned ArgNo = ShadowArgStart + n;
+          if (CustomCI->getArgOperand(ArgNo)->getType() == DFSF.DFS.ShadowTy)
+            CustomCI->addParamAttr(ArgNo, Attribute::ZExt);
+        }
+
         if (!FT->getReturnType()->isVoidTy()) {
           LoadInst *LabelLoad =
               IRB.CreateLoad(DFSF.DFS.ShadowTy, DFSF.LabelReturnAlloca);

@@ -293,6 +293,7 @@ void X86Subtarget::initSubtargetFeatures(StringRef CPU, StringRef FS) {
            isTargetKFreeBSD() || In64BitMode)
     stackAlignment = 16;
 
+<<<<<<< HEAD
   // Some CPUs have more overhead for gather. The specified overhead is relative
   // to the Load operation. "2" is the number provided by Intel architects. This
   // parameter is used for cost estimation of Gather Op and comparison with
@@ -311,6 +312,85 @@ void X86Subtarget::initSubtargetFeatures(StringRef CPU, StringRef FS) {
     PreferVectorWidth = 128;
   else if (Prefer256Bit)
     PreferVectorWidth = 256;
+=======
+void X86Subtarget::initializeEnvironment() {
+  X86SSELevel = NoSSE;
+  X863DNowLevel = NoThreeDNow;
+  HasX87 = false;
+  HasCMov = false;
+  HasX86_64 = false;
+  HasPOPCNT = false;
+  HasSSE4A = false;
+  HasAES = false;
+  HasFXSR = false;
+  HasXSAVE = false;
+  HasXSAVEOPT = false;
+  HasXSAVEC = false;
+  HasXSAVES = false;
+  HasPCLMUL = false;
+  HasFMA = false;
+  HasFMA4 = false;
+  HasXOP = false;
+  HasTBM = false;
+  HasLWP = false;
+  HasMOVBE = false;
+  HasRDRAND = false;
+  HasF16C = false;
+  HasFSGSBase = false;
+  HasLZCNT = false;
+  HasBMI = false;
+  HasBMI2 = false;
+  HasVBMI = false;
+  HasIFMA = false;
+  HasRTM = false;
+  HasERI = false;
+  HasCDI = false;
+  HasPFI = false;
+  HasDQI = false;
+  HasVPOPCNTDQ = false;
+  HasBWI = false;
+  HasVLX = false;
+  HasADX = false;
+  HasPKU = false;
+  HasSHA = false;
+  HasPRFCHW = false;
+  HasRDSEED = false;
+  HasLAHFSAHF = false;
+  HasMWAITX = false;
+  HasCLZERO = false;
+  HasMPX = false;
+  HasSGX = false;
+  HasCLFLUSHOPT = false;
+  HasCLWB = false;
+  IsBTMemSlow = false;
+  UseRetpoline = false;
+  UseRetpolineExternalThunk = false;
+  IsPMULLDSlow = false;
+  IsSHLDSlow = false;
+  IsUAMem16Slow = false;
+  IsUAMem32Slow = false;
+  HasSSEUnalignedMem = false;
+  HasCmpxchg16b = false;
+  UseLeaForSP = false;
+  HasFastPartialYMMorZMMWrite = false;
+  HasFastScalarFSQRT = false;
+  HasFastVectorFSQRT = false;
+  HasFastLZCNT = false;
+  HasFastSHLDRotate = false;
+  HasERMSB = false;
+  HasSlowDivide32 = false;
+  HasSlowDivide64 = false;
+  PadShortFunctions = false;
+  CallRegIndirect = false;
+  LEAUsesAG = false;
+  SlowLEA = false;
+  Slow3OpsLEA = false;
+  SlowIncDec = false;
+  stackAlignment = 4;
+  // FIXME: this is a known good value for Yonah. How about others?
+  MaxInlineSizeThreshold = 128;
+  UseSoftFloat = false;
+>>>>>>> origin/release/5.x
 }
 
 X86Subtarget &X86Subtarget::initializeSubtargetDependencies(StringRef CPU,

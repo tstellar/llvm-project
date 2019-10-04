@@ -30,7 +30,10 @@ class LLVM_LIBRARY_VISIBILITY X86AsmPrinter : public AsmPrinter {
   StackMaps SM;
   FaultMaps FM;
   std::unique_ptr<MCCodeEmitter> CodeEmitter;
+<<<<<<< HEAD
   bool EmitFPOData = false;
+=======
+>>>>>>> origin/release/5.x
   bool NeedsRetpoline = false;
 
   // This utility class tracks the length of a stackmap instruction's 'shadow'.

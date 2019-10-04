@@ -8,6 +8,7 @@
 #define static_assert(...) _Static_assert(__VA_ARGS__)
 #endif
 
+<<<<<<< HEAD
 namespace dr2083 { // dr2083: partial
 #if __cplusplus >= 201103L
   void non_const_mem_ptr() {
@@ -203,6 +204,8 @@ namespace dr2083 { // dr2083: partial
 #endif
 }
 
+=======
+>>>>>>> origin/release/5.x
 namespace dr2094 { // dr2094: 5
   struct A { int n; };
   struct B { volatile int n; };

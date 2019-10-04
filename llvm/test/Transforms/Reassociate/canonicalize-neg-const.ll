@@ -167,6 +167,7 @@ define i4 @test13(i4 %x) {
 ; Check to make sure we don't canonicalize
 ;   (%pow2*-5.0 + %sub) -> (%sub - %pow2*5.0)
 ; as we would later break up this subtract causing a cycle.
+<<<<<<< HEAD
 
 define double @pr34078(double %A) {
 ; CHECK-LABEL: @pr34078(
@@ -177,6 +178,13 @@ define double @pr34078(double %A) {
 ; CHECK-NEXT:    [[FACTOR:%.*]] = fmul fast double [[SUB1]], 2.000000e+00
 ; CHECK-NEXT:    ret double [[FACTOR]]
 ;
+=======
+;
+; CHECK-LABEL: @pr34078
+; CHECK: %mul5.neg = fmul fast double %pow2, -5.000000e-01
+; CHECK: %sub1 = fadd fast double %mul5.neg, %sub
+define double @pr34078(double %A) {
+>>>>>>> origin/release/5.x
   %sub = fsub fast double 1.000000e+00, %A
   %pow2 = fmul double %A, %A
   %mul5 = fmul fast double %pow2, 5.000000e-01
@@ -184,6 +192,7 @@ define double @pr34078(double %A) {
   %add = fadd fast double %sub1, %sub1
   ret double %add
 }
+<<<<<<< HEAD
 
 define double @fadd_fmul_neg_const1(double %a, double %b, double %c) {
 ; CHECK-LABEL: @fadd_fmul_neg_const1(
@@ -516,3 +525,5 @@ define double @fadd_both_opsmix_neg_const3(double %a, double %b, double %c) {
   %add = fadd double %div3, %mul7
   ret double %add
 }
+=======
+>>>>>>> origin/release/5.x

@@ -353,6 +353,7 @@ void GCNHazardRecognizer::RecedeCycle() {
 // Helper Functions
 //===----------------------------------------------------------------------===//
 
+<<<<<<< HEAD
 typedef function_ref<bool(MachineInstr *, int WaitStates)> IsExpiredFn;
 
 // Returns a minimum wait states since \p I walking all predecessors.
@@ -423,12 +424,17 @@ int GCNHazardRecognizer::getWaitStatesSince(IsHazardFn IsHazard, int Limit) {
     return ::getWaitStatesSince(IsHazard, CurrCycleInstr, IsExpiredFn);
   }
 
+=======
+int GCNHazardRecognizer::getWaitStatesSince(
+    function_ref<bool(MachineInstr *)> IsHazard) {
+>>>>>>> origin/release/5.x
   int WaitStates = 0;
   for (MachineInstr *MI : EmittedInstrs) {
     if (MI) {
       if (IsHazard(MI))
         return WaitStates;
 
+<<<<<<< HEAD
       if (MI->isInlineAsm())
         continue;
     }
@@ -436,6 +442,13 @@ int GCNHazardRecognizer::getWaitStatesSince(IsHazardFn IsHazard, int Limit) {
 
     if (WaitStates >= Limit)
       break;
+=======
+      unsigned Opcode = MI->getOpcode();
+      if (Opcode == AMDGPU::DBG_VALUE || Opcode == AMDGPU::IMPLICIT_DEF)
+        continue;
+    }
+    ++WaitStates;
+>>>>>>> origin/release/5.x
   }
   return std::numeric_limits<int>::max();
 }

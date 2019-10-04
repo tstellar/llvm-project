@@ -2403,6 +2403,7 @@ def mno_ldc1_sdc1 : Flag<["-"], "mno-ldc1-sdc1">, Group<m_mips_Features_Group>;
 def mcheck_zero_division : Flag<["-"], "mcheck-zero-division">,
                            Group<m_mips_Features_Group>;
 def mno_check_zero_division : Flag<["-"], "mno-check-zero-division">,
+<<<<<<< HEAD
                               Group<m_mips_Features_Group>;
 def mcompact_branches_EQ : Joined<["-"], "mcompact-branches=">,
                            Group<m_mips_Features_Group>;
@@ -2420,6 +2421,20 @@ def mno_dspr2 : Flag<["-"], "mno-dspr2">, Group<m_mips_Features_Group>;
 def msingle_float : Flag<["-"], "msingle-float">, Group<m_mips_Features_Group>;
 def mdouble_float : Flag<["-"], "mdouble-float">, Group<m_mips_Features_Group>;
 def mmadd4 : Flag<["-"], "mmadd4">, Group<m_mips_Features_Group>,
+=======
+                              Group<m_Group>;
+def mcompact_branches_EQ : Joined<["-"], "mcompact-branches=">, Group<m_Group>;
+def mindirect_jump_EQ : Joined<["-"], "mindirect-jump=">,
+  Group<m_Group>,
+  HelpText<"Change indirect jump instructions to inhibit speculation">;
+def mdsp : Flag<["-"], "mdsp">, Group<m_Group>;
+def mno_dsp : Flag<["-"], "mno-dsp">, Group<m_Group>;
+def mdspr2 : Flag<["-"], "mdspr2">, Group<m_Group>;
+def mno_dspr2 : Flag<["-"], "mno-dspr2">, Group<m_Group>;
+def msingle_float : Flag<["-"], "msingle-float">, Group<m_Group>;
+def mdouble_float : Flag<["-"], "mdouble-float">, Group<m_Group>;
+def mmadd4 : Flag<["-"], "mmadd4">, Group<m_Group>,
+>>>>>>> origin/release/5.x
   HelpText<"Enable the generation of 4-operand madd.s, madd.d and related instructions.">;
 def mno_madd4 : Flag<["-"], "mno-madd4">, Group<m_mips_Features_Group>,
   HelpText<"Disable the generation of 4-operand madd.s, madd.d and related instructions.">;
@@ -3086,6 +3101,11 @@ def mxsaves : Flag<["-"], "mxsaves">, Group<m_x86_Features_Group>;
 def mno_xsaves : Flag<["-"], "mno-xsaves">, Group<m_x86_Features_Group>;
 def mshstk : Flag<["-"], "mshstk">, Group<m_x86_Features_Group>;
 def mno_shstk : Flag<["-"], "mno-shstk">, Group<m_x86_Features_Group>;
+def mretpoline_external_thunk : Flag<["-"], "mretpoline-external-thunk">, Group<m_x86_Features_Group>;
+def mno_retpoline_external_thunk : Flag<["-"], "mno-retpoline-external-thunk">, Group<m_x86_Features_Group>;
+
+def mretpoline : Flag<["-"], "mretpoline">, Group<m_x86_Features_Group>;
+def mno_retpoline : Flag<["-"], "mno-retpoline">, Group<m_x86_Features_Group>;
 def mretpoline_external_thunk : Flag<["-"], "mretpoline-external-thunk">, Group<m_x86_Features_Group>;
 def mno_retpoline_external_thunk : Flag<["-"], "mno-retpoline-external-thunk">, Group<m_x86_Features_Group>;
 

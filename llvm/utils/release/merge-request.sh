@@ -94,6 +94,7 @@ case $stable_version in
   5.0)
     release_metabug="34492"
     ;;
+<<<<<<< HEAD
   6.0)
     release_metabug="36649"
     ;;
@@ -109,6 +110,8 @@ case $stable_version in
     ;;
 =======
 >>>>>>> release/8.x
+=======
+>>>>>>> origin/release/5.x
   *)
     echo "error: invalid stable version"
     exit 1
@@ -188,10 +191,17 @@ fi
 bug_summary="Merge${rev_string} into the $stable_version branch${commit_summary}"
 
 set -x
+<<<<<<< HEAD
 
 # Login to bugzilla
 $BUGZILLA_CMD login $bugzilla_user
 
+=======
+
+# Login to bugzilla
+$BUGZILLA_CMD login $bugzilla_user
+
+>>>>>>> origin/release/5.x
 bug_id=`${dryrun} $BUGZILLA_CMD --ensure-logged-in new \
   -p "$bugzilla_product" \
   -c "$bugzilla_component" --blocked=$release_metabug \

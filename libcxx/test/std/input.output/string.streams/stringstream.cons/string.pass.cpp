@@ -17,8 +17,11 @@
 #include <sstream>
 #include <cassert>
 
+<<<<<<< HEAD
 #include "test_macros.h"
 
+=======
+>>>>>>> origin/release/5.x
 template<typename T>
 struct NoDefaultAllocator : std::allocator<T>
 {
@@ -29,7 +32,11 @@ struct NoDefaultAllocator : std::allocator<T>
 };
 
 
+<<<<<<< HEAD
 int main(int, char**)
+=======
+int main()
+>>>>>>> origin/release/5.x
 {
     {
         std::stringstream ss(" 123 456 ");
@@ -58,6 +65,7 @@ int main(int, char**)
         assert(ss.str() == L"456 1236 ");
     }
     { // This is https://bugs.llvm.org/show_bug.cgi?id=33727
+<<<<<<< HEAD
         typedef std::basic_string   <char, std::char_traits<char>, NoDefaultAllocator<char> > S;
         typedef std::basic_stringbuf<char, std::char_traits<char>, NoDefaultAllocator<char> > SB;
 
@@ -68,4 +76,14 @@ int main(int, char**)
     }
 
   return 0;
+=======
+		typedef std::basic_string   <char, std::char_traits<char>, NoDefaultAllocator<char> > S;
+		typedef std::basic_stringbuf<char, std::char_traits<char>, NoDefaultAllocator<char> > SB;
+
+		S s(NoDefaultAllocator<char>(1));
+		SB sb(s);
+	//	This test is not required by the standard, but *where else* could it get the allocator?
+		assert(sb.str().get_allocator() == s.get_allocator());
+    }
+>>>>>>> origin/release/5.x
 }

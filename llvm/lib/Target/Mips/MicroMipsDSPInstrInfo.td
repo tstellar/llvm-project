@@ -416,11 +416,19 @@ class BPOSGE32_MM_DESC : BPOSGE32_DESC_BASE<"bposge32", brtarget_mm,
                                             NoItinerary>;
 
 let DecoderNamespace = "MicroMipsDSP", Arch = "mmdsp",
+<<<<<<< HEAD
     EncodingPredicates = [InMicroMips], ASEPredicate = [HasDSP] in {
   def LWDSP_MM : Load<"lw", DSPROpnd, null_frag, II_LW>, DspMMRel,
                  LW_FM_MM<0x3f>;
   def SWDSP_MM : Store<"sw", DSPROpnd, null_frag, II_SW>, DspMMRel,
                  LW_FM_MM<0x3e>;
+=======
+    AdditionalPredicates = [HasDSP, InMicroMips] in {
+    def LWDSP_MM : Load<"lw", DSPROpnd, null_frag, II_LW>, DspMMRel,
+                   LW_FM_MM<0x3f>;
+    def SWDSP_MM : Store<"sw", DSPROpnd, null_frag, II_SW>, DspMMRel,
+                   LW_FM_MM<0x3e>;
+>>>>>>> origin/release/5.x
 }
 // Instruction defs.
 // microMIPS DSP Rev 1

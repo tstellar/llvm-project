@@ -20,12 +20,15 @@ using namespace llvm;
 
 #define DEBUG_TYPE "postdomtree"
 
+<<<<<<< HEAD
 #ifdef EXPENSIVE_CHECKS
 static constexpr bool ExpensiveChecksEnabled = true;
 #else
 static constexpr bool ExpensiveChecksEnabled = false;
 #endif
 
+=======
+>>>>>>> origin/release/5.x
 //===----------------------------------------------------------------------===//
 //  PostDominatorTree Implementation
 //===----------------------------------------------------------------------===//

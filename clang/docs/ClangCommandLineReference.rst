@@ -825,10 +825,13 @@ Level of field padding for AddressSanitizer
 
 Enable linker dead stripping of globals in AddressSanitizer
 
+<<<<<<< HEAD
 .. option:: -fsanitize-address-poison-custom-array-cookie, -fno-sanitize-address-poison-custom-array-cookie
 
 Enable poisoning array cookies when using custom operator new\[\] in AddressSanitizer
 
+=======
+>>>>>>> origin/release/5.x
 .. option:: -fsanitize-address-use-after-scope, -fno-sanitize-address-use-after-scope
 
 Enable use-after-scope detection in AddressSanitizer
@@ -2228,7 +2231,13 @@ Link stack frames through backchain on System Z
 .. option:: -mcpu=<arg>, -mv5 (equivalent to -mcpu=hexagonv5), -mv55 (equivalent to -mcpu=hexagonv55), -mv60 (equivalent to -mcpu=hexagonv60), -mv62 (equivalent to -mcpu=hexagonv62), -mv65 (equivalent to -mcpu=hexagonv65), -mv66 (equivalent to -mcpu=hexagonv66)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Use -mcpu=? to see a list of supported cpu models.
+=======
+.. option:: -mdefault-build-attributes<arg>, -mno-default-build-attributes<arg>
+
+.. option:: -mdll<arg>
+>>>>>>> origin/release/5.x
 
 =======
 >>>>>>> release/7.x
@@ -2294,12 +2303,37 @@ Set macOS deployment target
 Set Mac OS X deployment target
 >>>>>>> release/7.x
 
+<<<<<<< HEAD
 .. option:: -mmcu=<arg>
+=======
+.. option:: -mmadd4, -mno-madd4
+
+Enable the generation of 4-operand madd.s, madd.d and related instructions.
+
+.. option:: -mmcu=<arg>
+
+.. option:: -mmicromips, -mno-micromips
+>>>>>>> origin/release/5.x
 
 .. option:: -mms-bitfields, -mno-ms-bitfields
 
 Set the default structure layout to be compatible with the Microsoft compiler standard
 
+<<<<<<< HEAD
+=======
+.. option:: -mmsa, -mno-msa
+
+Enable MSA ASE (MIPS only)
+
+.. option:: -mmt, -mno-mt
+
+Enable MT ASE (MIPS only)
+
+.. option:: -mnan=<arg>
+
+.. option:: -mno-mips16
+
+>>>>>>> origin/release/5.x
 .. option:: -momit-leaf-frame-pointer, -mno-omit-leaf-frame-pointer
 
 Omit frame pointer setup for leaf functions
@@ -2738,10 +2772,13 @@ X86
 
 .. option:: -mavx512vl, -mno-avx512vl
 
+<<<<<<< HEAD
 .. option:: -mavx512vnni, -mno-avx512vnni
 
 .. option:: -mavx512vp2intersect, -mno-avx512vp2intersect
 
+=======
+>>>>>>> origin/release/5.x
 .. option:: -mavx512vpopcntdq, -mno-avx512vpopcntdq
 
 .. option:: -mbmi, -mno-bmi
@@ -2770,10 +2807,13 @@ X86
 
 .. option:: -mfxsr, -mno-fxsr
 
+<<<<<<< HEAD
 .. option:: -mgfni, -mno-gfni
 
 .. option:: -minvpcid, -mno-invpcid
 
+=======
+>>>>>>> origin/release/5.x
 .. option:: -mlwp, -mno-lwp
 
 .. option:: -mlzcnt, -mno-lzcnt

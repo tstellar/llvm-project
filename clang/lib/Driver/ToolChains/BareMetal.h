@@ -36,6 +36,10 @@ public:
   bool isPIEDefault() const override { return false; }
   bool isPICDefaultForced() const override { return false; }
   bool SupportsProfiling() const override { return false; }
+<<<<<<< HEAD
+=======
+  bool SupportsObjCGC() const override { return false; }
+>>>>>>> origin/release/5.x
 
   RuntimeLibType GetDefaultRuntimeLibType() const override {
     return ToolChain::RLT_CompilerRT;

@@ -622,7 +622,11 @@ define i1 @length16_eq_const(i8* %X) nounwind optsize {
 
 define i32 @length24(i8* %X, i8* %Y) nounwind optsize {
 ; X86-LABEL: length24:
+<<<<<<< HEAD
 ; X86:       # %bb.0:
+=======
+; X86:       # BB#0:
+>>>>>>> origin/release/5.x
 ; X86-NEXT:    pushl $0
 ; X86-NEXT:    pushl $24
 ; X86-NEXT:    pushl {{[0-9]+}}(%esp)
@@ -632,7 +636,11 @@ define i32 @length24(i8* %X, i8* %Y) nounwind optsize {
 ; X86-NEXT:    retl
 ;
 ; X64-LABEL: length24:
+<<<<<<< HEAD
 ; X64:       # %bb.0:
+=======
+; X64:       # BB#0:
+>>>>>>> origin/release/5.x
 ; X64-NEXT:    movl $24, %edx
 ; X64-NEXT:    jmp memcmp # TAILCALL
   %m = tail call i32 @memcmp(i8* %X, i8* %Y, i64 24) nounwind
@@ -640,6 +648,7 @@ define i32 @length24(i8* %X, i8* %Y) nounwind optsize {
 }
 
 define i1 @length24_eq(i8* %x, i8* %y) nounwind optsize {
+<<<<<<< HEAD
 ; X86-NOSSE-LABEL: length24_eq:
 ; X86-NOSSE:       # %bb.0:
 ; X86-NOSSE-NEXT:    pushl $0
@@ -694,12 +703,36 @@ define i1 @length24_eq(i8* %x, i8* %y) nounwind optsize {
 ; X64-AVX2-NEXT:    cmpl $65535, %eax # imm = 0xFFFF
 ; X64-AVX2-NEXT:    sete %al
 ; X64-AVX2-NEXT:    retq
+=======
+; X86-LABEL: length24_eq:
+; X86:       # BB#0:
+; X86-NEXT:    pushl $0
+; X86-NEXT:    pushl $24
+; X86-NEXT:    pushl {{[0-9]+}}(%esp)
+; X86-NEXT:    pushl {{[0-9]+}}(%esp)
+; X86-NEXT:    calll memcmp
+; X86-NEXT:    addl $16, %esp
+; X86-NEXT:    testl %eax, %eax
+; X86-NEXT:    sete %al
+; X86-NEXT:    retl
+;
+; X64-LABEL: length24_eq:
+; X64:       # BB#0:
+; X64-NEXT:    pushq %rax
+; X64-NEXT:    movl $24, %edx
+; X64-NEXT:    callq memcmp
+; X64-NEXT:    testl %eax, %eax
+; X64-NEXT:    sete %al
+; X64-NEXT:    popq %rcx
+; X64-NEXT:    retq
+>>>>>>> origin/release/5.x
   %call = tail call i32 @memcmp(i8* %x, i8* %y, i64 24) nounwind
   %cmp = icmp eq i32 %call, 0
   ret i1 %cmp
 }
 
 define i1 @length24_eq_const(i8* %X) nounwind optsize {
+<<<<<<< HEAD
 ; X86-NOSSE-LABEL: length24_eq_const:
 ; X86-NOSSE:       # %bb.0:
 ; X86-NOSSE-NEXT:    pushl $0
@@ -748,6 +781,30 @@ define i1 @length24_eq_const(i8* %X) nounwind optsize {
 ; X64-AVX2-NEXT:    cmpl $65535, %eax # imm = 0xFFFF
 ; X64-AVX2-NEXT:    setne %al
 ; X64-AVX2-NEXT:    retq
+=======
+; X86-LABEL: length24_eq_const:
+; X86:       # BB#0:
+; X86-NEXT:    pushl $0
+; X86-NEXT:    pushl $24
+; X86-NEXT:    pushl $.L.str
+; X86-NEXT:    pushl {{[0-9]+}}(%esp)
+; X86-NEXT:    calll memcmp
+; X86-NEXT:    addl $16, %esp
+; X86-NEXT:    testl %eax, %eax
+; X86-NEXT:    setne %al
+; X86-NEXT:    retl
+;
+; X64-LABEL: length24_eq_const:
+; X64:       # BB#0:
+; X64-NEXT:    pushq %rax
+; X64-NEXT:    movl $.L.str, %esi
+; X64-NEXT:    movl $24, %edx
+; X64-NEXT:    callq memcmp
+; X64-NEXT:    testl %eax, %eax
+; X64-NEXT:    setne %al
+; X64-NEXT:    popq %rcx
+; X64-NEXT:    retq
+>>>>>>> origin/release/5.x
   %m = tail call i32 @memcmp(i8* %X, i8* getelementptr inbounds ([65 x i8], [65 x i8]* @.str, i32 0, i32 0), i64 24) nounwind
   %c = icmp ne i32 %m, 0
   ret i1 %c

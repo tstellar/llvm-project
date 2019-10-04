@@ -1,8 +1,15 @@
 //===----------------------------------------------------------------------===//
 //
+<<<<<<< HEAD
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+=======
+//                     The LLVM Compiler Infrastructure
+//
+// This file is dual licensed under the MIT and the University of Illinois Open
+// Source Licenses. See LICENSE.TXT for details.
+>>>>>>> origin/release/5.x
 //
 //===----------------------------------------------------------------------===//
 
@@ -13,7 +20,10 @@
 #include <string>
 #include <cassert>
 
+<<<<<<< HEAD
 #include "test_macros.h"
+=======
+>>>>>>> origin/release/5.x
 #include "min_allocator.h"
 
 template <class S, class SV>
@@ -140,7 +150,11 @@ void test1()
     test(S("pniotcfrhqsmgdkjbael"), SV("htaobedqikfplcgjsmrn"), S::npos);
 }
 
+<<<<<<< HEAD
 int main(int, char**)
+=======
+int main()
+>>>>>>> origin/release/5.x
 {
     {
     typedef std::string S;
@@ -150,12 +164,20 @@ int main(int, char**)
     }
 #if TEST_STD_VER >= 11
     {
+<<<<<<< HEAD
 //     typedef std::basic_string<char, std::char_traits<char>, min_allocator<char>> S;
 //     typedef std::string_view SV;
+=======
+    typedef std::basic_string<char, std::char_traits<char>, min_allocator<char>> S;
+    typedef std::string_view SV;
+>>>>>>> origin/release/5.x
 //     test0<S, SV>();
 //     test1<S, SV>();
     }
 #endif
+<<<<<<< HEAD
 
   return 0;
+=======
+>>>>>>> origin/release/5.x
 }

@@ -27,8 +27,8 @@ def SandyBridgeModel : SchedMachineModel {
   // Based on the LSD (loop-stream detector) queue size.
   let LoopMicroOpBufferSize = 28;
 
-  // This flag is set to allow the scheduler to assign
-  // a default model to unrecognized opcodes.
+  // FIXME: SSE4 and AVX are unimplemented. This flag is set to allow
+  // the scheduler to assign a default model to unrecognized opcodes.
   let CompleteModel = 0;
 }
 
@@ -51,7 +51,6 @@ def SBPort23 : ProcResource<2>;
 def SBPort4 : ProcResource<1>;
 
 // Many micro-ops are capable of issuing on multiple ports.
-def SBPort01  : ProcResGroup<[SBPort0, SBPort1]>;
 def SBPort05  : ProcResGroup<[SBPort0, SBPort5]>;
 def SBPort15  : ProcResGroup<[SBPort1, SBPort5]>;
 def SBPort015 : ProcResGroup<[SBPort0, SBPort1, SBPort5]>;
@@ -194,6 +193,7 @@ defm : SBWriteResPair<WriteBLS,   [SBPort015], 1>;
 defm : SBWriteResPair<WriteBZHI,  [SBPort1], 1>;
 
 // Scalar and vector floating point.
+<<<<<<< HEAD
 defm : X86WriteRes<WriteFLD0,          [SBPort5], 1, [1], 1>;
 defm : X86WriteRes<WriteFLD1,          [SBPort0,SBPort5], 1, [1,1], 2>;
 defm : X86WriteRes<WriteFLDC,          [SBPort0,SBPort1], 1, [1,1], 2>;
@@ -430,6 +430,36 @@ defm : SBWriteResPair<WriteVarVecShiftZ, [SBPort0], 1, [1], 1, 7>; // Unsupporte
 
 // Vector insert/extract operations.
 def : WriteRes<WriteVecInsert, [SBPort5,SBPort15]> {
+=======
+defm : SBWriteResPair<WriteFAdd,   SBPort1, 3>;
+defm : SBWriteResPair<WriteFMul,   SBPort0, 5>;
+defm : SBWriteResPair<WriteFDiv,   SBPort0, 12>; // 10-14 cycles.
+defm : SBWriteResPair<WriteFRcp,   SBPort0, 5>;
+defm : SBWriteResPair<WriteFRsqrt, SBPort0, 5>;
+defm : SBWriteResPair<WriteFSqrt,  SBPort0, 15>;
+defm : SBWriteResPair<WriteCvtF2I, SBPort1, 3>;
+defm : SBWriteResPair<WriteCvtI2F, SBPort1, 4>;
+defm : SBWriteResPair<WriteCvtF2F, SBPort1, 3>;
+defm : SBWriteResPair<WriteFShuffle,  SBPort5,  1>;
+defm : SBWriteResPair<WriteFBlend,  SBPort05,  1>;
+def : WriteRes<WriteFVarBlend, [SBPort0, SBPort5]> {
+  let Latency = 2;
+  let ResourceCycles = [1, 1];
+}
+def : WriteRes<WriteFVarBlendLd, [SBPort0, SBPort5, SBPort23]> {
+  let Latency = 6;
+  let ResourceCycles = [1, 1, 1];
+}
+
+// Vector integer operations.
+defm : SBWriteResPair<WriteVecShift, SBPort05,  1>;
+defm : SBWriteResPair<WriteVecLogic, SBPort015, 1>;
+defm : SBWriteResPair<WriteVecALU,   SBPort15,  1>;
+defm : SBWriteResPair<WriteVecIMul,  SBPort0,   5>;
+defm : SBWriteResPair<WriteShuffle,  SBPort15,  1>;
+defm : SBWriteResPair<WriteBlend,  SBPort15,  1>;
+def : WriteRes<WriteVarBlend, [SBPort1, SBPort5]> {
+>>>>>>> origin/release/5.x
   let Latency = 2;
   let NumMicroOps = 2;
 }
@@ -442,9 +472,19 @@ def : WriteRes<WriteVecExtract, [SBPort0,SBPort15]> {
   let Latency = 3;
   let NumMicroOps = 2;
 }
+<<<<<<< HEAD
 def : WriteRes<WriteVecExtractSt, [SBPort4,SBPort23,SBPort15]> {
   let Latency = 5;
   let NumMicroOps = 3;
+=======
+def : WriteRes<WriteMPSAD, [SBPort0, SBPort1, SBPort5]> {
+  let Latency = 6;
+  let ResourceCycles = [1, 1, 1];
+}
+def : WriteRes<WriteMPSADLd, [SBPort0, SBPort1, SBPort5, SBPort23]> {
+  let Latency = 6;
+  let ResourceCycles = [1, 1, 1, 1];
+>>>>>>> origin/release/5.x
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -486,15 +526,13 @@ def : WriteRes<WritePCmpEStrMLd, [SBPort015, SBPort23]> {
 }
 
 // Packed Compare Implicit Length Strings, Return Index
-def : WriteRes<WritePCmpIStrI, [SBPort0]> {
-  let Latency = 11;
-  let NumMicroOps = 3;
+def : WriteRes<WritePCmpIStrI, [SBPort015]> {
+  let Latency = 3;
   let ResourceCycles = [3];
 }
-def : WriteRes<WritePCmpIStrILd, [SBPort0,SBPort23]> {
-  let Latency = 17;
-  let NumMicroOps = 4;
-  let ResourceCycles = [3,1];
+def : WriteRes<WritePCmpIStrILd, [SBPort015, SBPort23]> {
+  let Latency = 3;
+  let ResourceCycles = [3, 1];
 }
 
 // Packed Compare Explicit Length Strings, Return Index
@@ -514,26 +552,22 @@ def : WriteRes<WriteVecMOVMSKY, [SBPort0]> { let Latency = 2; }
 def : WriteRes<WriteMMXMOVMSK,  [SBPort0]> { let Latency = 1; }
 
 // AES Instructions.
-def : WriteRes<WriteAESDecEnc, [SBPort5,SBPort015]> {
-  let Latency = 7;
-  let NumMicroOps = 2;
-  let ResourceCycles = [1,1];
-}
-def : WriteRes<WriteAESDecEncLd, [SBPort5,SBPort23,SBPort015]> {
-  let Latency = 13;
-  let NumMicroOps = 3;
-  let ResourceCycles = [1,1,1];
-}
-
-def : WriteRes<WriteAESIMC, [SBPort5]> {
-  let Latency = 12;
-  let NumMicroOps = 2;
+def : WriteRes<WriteAESDecEnc, [SBPort015]> {
+  let Latency = 8;
   let ResourceCycles = [2];
 }
-def : WriteRes<WriteAESIMCLd, [SBPort5,SBPort23]> {
-  let Latency = 18;
-  let NumMicroOps = 3;
-  let ResourceCycles = [2,1];
+def : WriteRes<WriteAESDecEncLd, [SBPort015, SBPort23]> {
+  let Latency = 8;
+  let ResourceCycles = [2, 1];
+}
+
+def : WriteRes<WriteAESIMC, [SBPort015]> {
+  let Latency = 8;
+  let ResourceCycles = [2];
+}
+def : WriteRes<WriteAESIMCLd, [SBPort015, SBPort23]> {
+  let Latency = 8;
+  let ResourceCycles = [2, 1];
 }
 
 def : WriteRes<WriteAESKeyGen, [SBPort015]> {
@@ -567,6 +601,7 @@ def : WriteRes<WriteNop, []>;
 
 // AVX2/FMA is not supported on that architecture, but we should define the basic
 // scheduling resources anyway.
+<<<<<<< HEAD
 defm : SBWriteResPair<WriteFShuffle256, [SBPort5], 1, [1], 1, 7>;
 defm : SBWriteResPair<WriteFVarShuffle256, [SBPort5], 1, [1], 1, 7>;
 defm : SBWriteResPair<WriteShuffle256, [SBPort5], 1, [1], 1, 7>;
@@ -1220,4 +1255,9 @@ def SBSETA_SETBErm :  SchedWriteVariant<[
 def : InstRW<[SBSETA_SETBErr], (instrs SETCCr)>;
 def : InstRW<[SBSETA_SETBErm], (instrs SETCCm)>;
 
+=======
+defm : SBWriteResPair<WriteFShuffle256, SBPort0,  1>;
+defm : SBWriteResPair<WriteShuffle256, SBPort0,  1>;
+defm : SBWriteResPair<WriteVarVecShift, SBPort0,  1>;
+>>>>>>> origin/release/5.x
 } // SchedModel

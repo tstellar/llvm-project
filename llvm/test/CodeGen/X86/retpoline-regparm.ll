@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ; RUN: llc -verify-machineinstrs -mtriple=i686-linux < %s | FileCheck --implicit-check-not="jmp.*\*" --implicit-check-not="call.*\*" %s
+=======
+; RUN: llc -mtriple=i686-linux < %s | FileCheck --implicit-check-not="jmp.*\*" --implicit-check-not="call.*\*" %s
+>>>>>>> origin/release/5.x
 
 ; Test 32-bit retpoline when -mregparm=3 is used. This case is interesting
 ; because there are no available scratch registers.  The Linux kernel builds
@@ -38,5 +42,10 @@ entry:
 ; CHECK: popl %edi
 ; CHECK: retl
 
+<<<<<<< HEAD
 attributes #0 = { "target-features"="+retpoline-indirect-calls" }
 attributes #1 = { "target-features"="+retpoline-indirect-calls,+retpoline-external-thunk" }
+=======
+attributes #0 = { "target-features"="+retpoline" }
+attributes #1 = { "target-features"="+retpoline-external-thunk" }
+>>>>>>> origin/release/5.x

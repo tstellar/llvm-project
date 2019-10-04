@@ -266,6 +266,7 @@ static bool isCCSelectPair(const MachineInstr *FirstMI,
       }
   }
 
+<<<<<<< HEAD
   return false;
 }
 
@@ -334,6 +335,21 @@ static bool isArithmeticLogicPair(const MachineInstr *FirstMI,
     case AArch64::SUBSWrs:
     case AArch64::SUBSXrs:
       return !AArch64InstrInfo::hasShiftedReg(*FirstMI);
+=======
+  if (ST.hasFuseAES())
+    // Fuse AES crypto operations.
+    switch(SecondOpcode) {
+    // AES encode.
+    case AArch64::AESMCrr:
+    case AArch64::AESMCrrTied:
+      return FirstOpcode == AArch64::AESErr ||
+             FirstOpcode == AArch64::INSTRUCTION_LIST_END;
+    // AES decode.
+    case AArch64::AESIMCrr:
+    case AArch64::AESIMCrrTied:
+      return FirstOpcode == AArch64::AESDrr ||
+             FirstOpcode == AArch64::INSTRUCTION_LIST_END;
+>>>>>>> origin/release/5.x
     }
     break;
 

@@ -380,7 +380,11 @@ private:
   QualType SavedKmpTaskTQTy;
   /// Saved kmp_task_t for taskloop-based directive.
   QualType SavedKmpTaskloopTQTy;
+<<<<<<< HEAD
   /// Type typedef struct kmp_depend_info {
+=======
+  /// \brief Type typedef struct kmp_depend_info {
+>>>>>>> origin/release/5.x
   ///    kmp_intptr_t               base_addr;
   ///    size_t                     len;
   ///    struct {

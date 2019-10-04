@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 // RUN: %clang_cc1 -std=c++1z -verify %s -DERRORS -Wundefined-func-template
 // RUN: %clang_cc1 -std=c++1z -verify %s -UERRORS -Wundefined-func-template
+=======
+// RUN: %clang_cc1 -std=c++1z -verify %s -DERRORS
+// RUN: %clang_cc1 -std=c++1z -verify %s -UERRORS
+>>>>>>> origin/release/5.x
 
 // This test is split into two because we only produce "undefined internal"
 // warnings if we didn't produce any errors.
@@ -310,6 +315,7 @@ namespace dependent {
   template int Var(int);
   template int Cast(int);
   template int New(int);
+<<<<<<< HEAD
 
   template<template<typename> typename Y> void test() {
     Y(0);
@@ -505,6 +511,8 @@ template <class H, class P> struct umm;
 
 umm m(1);
 
+=======
+>>>>>>> origin/release/5.x
 }
 
 #else

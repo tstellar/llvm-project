@@ -526,7 +526,10 @@ int main(int argc, char **argv) {
   initializePreISelIntrinsicLoweringLegacyPassPass(Registry);
   initializeGlobalMergePass(Registry);
   initializeIndirectBrExpandPassPass(Registry);
+<<<<<<< HEAD
   initializeInterleavedLoadCombinePass(Registry);
+=======
+>>>>>>> origin/release/5.x
   initializeInterleavedAccessPass(Registry);
   initializeEntryExitInstrumenterPass(Registry);
   initializePostInlineEntryExitInstrumenterPass(Registry);

@@ -1,8 +1,15 @@
 //===- IndirectBrExpandPass.cpp - Expand indirectbr to switch -------------===//
 //
+<<<<<<< HEAD
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+=======
+//                     The LLVM Compiler Infrastructure
+//
+// This file is distributed under the University of Illinois Open Source
+// License. See LICENSE.TXT for details.
+>>>>>>> origin/release/5.x
 //
 //===----------------------------------------------------------------------===//
 /// \file
@@ -29,7 +36,11 @@
 #include "llvm/ADT/Sequence.h"
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/CodeGen/TargetPassConfig.h"
+<<<<<<< HEAD
 #include "llvm/CodeGen/TargetSubtargetInfo.h"
+=======
+#include "llvm/Target/TargetSubtargetInfo.h"
+>>>>>>> origin/release/5.x
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/IRBuilder.h"
@@ -148,9 +159,17 @@ bool IndirectBrExpandPass::runOnFunction(Function &F) {
     ConstantInt *BBIndexC = ConstantInt::get(ITy, BBIndex);
 
     // Now rewrite the blockaddress to an integer constant based on the index.
+<<<<<<< HEAD
     // FIXME: This part doesn't properly recognize other uses of blockaddress
     // expressions, for instance, where they are used to pass labels to
     // asm-goto. This part of the pass needs a rework.
+=======
+    // FIXME: We could potentially preserve the uses as arguments to inline asm.
+    // This would allow some uses such as diagnostic information in crashes to
+    // have higher quality even when this transform is enabled, but would break
+    // users that round-trip blockaddresses through inline assembly and then
+    // back into an indirectbr.
+>>>>>>> origin/release/5.x
     BA->replaceAllUsesWith(ConstantExpr::getIntToPtr(BBIndexC, BA->getType()));
   }
 

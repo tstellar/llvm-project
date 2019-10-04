@@ -6104,6 +6104,7 @@ static void DefineImplicitSpecialMember(Sema &S, CXXMethodDecl *MD,
 
 /// Determine whether a type is permitted to be passed or returned in
 /// registers, per C++ [class.temporary]p3.
+<<<<<<< HEAD
 static bool canPassInRegisters(Sema &S, CXXRecordDecl *D,
                                TargetInfo::CallingConvKind CCK) {
   if (D->isDependentType() || D->isInvalidDecl())
@@ -6175,6 +6176,12 @@ static bool canPassInRegisters(Sema &S, CXXRecordDecl *D,
     return false;
   }
 
+=======
+static bool computeCanPassInRegisters(Sema &S, CXXRecordDecl *D) {
+  if (D->isDependentType() || D->isInvalidDecl())
+    return false;
+
+>>>>>>> origin/release/5.x
   // Per C++ [class.temporary]p3, the relevant condition is:
   //   each copy constructor, move constructor, and destructor of X is
   //   either trivial or deleted, and X has at least one non-deleted copy
@@ -6183,20 +6190,34 @@ static bool canPassInRegisters(Sema &S, CXXRecordDecl *D,
 
   if (D->needsImplicitCopyConstructor() &&
       !D->defaultedCopyConstructorIsDeleted()) {
+<<<<<<< HEAD
     if (!D->hasTrivialCopyConstructorForCall())
       return false;
     HasNonDeletedCopyOrMove = true;
+=======
+    if (!D->hasTrivialCopyConstructor())
+      return false;
+    HasNonDeletedCopyOrMove = true; 
+>>>>>>> origin/release/5.x
   }
 
   if (S.getLangOpts().CPlusPlus11 && D->needsImplicitMoveConstructor() &&
       !D->defaultedMoveConstructorIsDeleted()) {
+<<<<<<< HEAD
     if (!D->hasTrivialMoveConstructorForCall())
+=======
+    if (!D->hasTrivialMoveConstructor())
+>>>>>>> origin/release/5.x
       return false;
     HasNonDeletedCopyOrMove = true;
   }
 
   if (D->needsImplicitDestructor() && !D->defaultedDestructorIsDeleted() &&
+<<<<<<< HEAD
       !D->hasTrivialDestructorForCall())
+=======
+      !D->hasTrivialDestructor())
+>>>>>>> origin/release/5.x
     return false;
 
   for (const CXXMethodDecl *MD : D->methods()) {
@@ -6209,14 +6230,22 @@ static bool canPassInRegisters(Sema &S, CXXRecordDecl *D,
     else if (!isa<CXXDestructorDecl>(MD))
       continue;
 
+<<<<<<< HEAD
     if (!MD->isTrivialForCall())
+=======
+    if (!MD->isTrivial())
+>>>>>>> origin/release/5.x
       return false;
   }
 
   return HasNonDeletedCopyOrMove;
 }
 
+<<<<<<< HEAD
 /// Perform semantic checks on a class definition that has been
+=======
+/// \brief Perform semantic checks on a class definition that has been
+>>>>>>> origin/release/5.x
 /// completing, introducing implicitly-declared members, checking for
 /// abstract types, etc.
 void Sema::CheckCompletedCXXClass(CXXRecordDecl *Record) {
@@ -6419,6 +6448,7 @@ void Sema::CheckCompletedCXXClass(CXXRecordDecl *Record) {
   }
 
   checkClassLevelDLLAttribute(Record);
+<<<<<<< HEAD
   checkClassLevelCodeSegAttribute(Record);
 
   bool ClangABICompat4 =
@@ -6448,6 +6478,10 @@ void Sema::CheckCompletedCXXClass(CXXRecordDecl *Record) {
     // is especially required for cases like vtable assumption loads.
     MarkVTableUsed(Record->getInnerLocStart(), Record);
   }
+=======
+
+  Record->setCanPassInRegisters(computeCanPassInRegisters(*this, Record));
+>>>>>>> origin/release/5.x
 }
 
 /// Look up the special member function that would be called by a special
@@ -8178,7 +8212,11 @@ void Sema::ActOnFinishCXXMemberSpecification(
               reinterpret_cast<Decl**>(FieldCollector->getCurFields()),
               FieldCollector->getCurNumFields()), LBrac, RBrac, AttrList);
 
+<<<<<<< HEAD
   CheckCompletedCXXClass(cast<CXXRecordDecl>(TagDecl));
+=======
+  CheckCompletedCXXClass(dyn_cast_or_null<CXXRecordDecl>(TagDecl));
+>>>>>>> origin/release/5.x
 }
 
 /// AddImplicitlyDeclaredMembersToClass - Adds any implicitly-declared

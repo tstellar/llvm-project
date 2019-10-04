@@ -287,7 +287,11 @@ entry:
 ; as a vtrn.
 define <8 x i16> @vzip_lower_shufflemask_undef_rev(<4 x i16>* %A, <4 x i16>* %B) {
 ; CHECK-LABEL: vzip_lower_shufflemask_undef_rev:
+<<<<<<< HEAD
 ; CHECK:       @ %bb.0: @ %entry
+=======
+; CHECK:       @ BB#0: @ %entry
+>>>>>>> origin/release/5.x
 ; CHECK-NEXT:    vldr d16, [r1]
 ; CHECK-NEXT:    vldr d19, [r0]
 ; CHECK-NEXT:    vtrn.16 d19, d16

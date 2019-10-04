@@ -4357,6 +4357,10 @@ Stmt *ASTReader::ReadStmtFromStream(ModuleFile &F) {
     case EXPR_DEPENDENT_COAWAIT:
       S = new (Context) DependentCoawaitExpr(Empty);
       break;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/release/5.x
     }
 
     // We hit a STMT_STOP, so we're done with this expression.

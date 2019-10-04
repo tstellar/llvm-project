@@ -22,10 +22,24 @@ if(NOT DEFINED LLVM_VERSION_MINOR)
   set(LLVM_VERSION_MINOR 1)
 endif()
 if(NOT DEFINED LLVM_VERSION_PATCH)
+<<<<<<< HEAD
   set(LLVM_VERSION_PATCH 1)
 endif()
 if(NOT DEFINED LLVM_VERSION_SUFFIX)
   set(LLVM_VERSION_SUFFIX "")
+=======
+  set(LLVM_VERSION_PATCH 2)
+endif()
+if(NOT DEFINED LLVM_VERSION_SUFFIX)
+  set(LLVM_VERSION_SUFFIX "")
+endif()
+
+if (POLICY CMP0048)
+  cmake_policy(SET CMP0048 NEW)
+  set(cmake_3_0_PROJ_VERSION
+    VERSION ${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH})
+  set(cmake_3_0_LANGUAGES LANGUAGES)
+>>>>>>> origin/release/5.x
 endif()
 
 if (NOT PACKAGE_VERSION)
@@ -198,7 +212,11 @@ endif()
 include(VersionFromVCS)
 
 option(LLVM_APPEND_VC_REV
+<<<<<<< HEAD
   "Embed the version control system revision in LLVM" ON)
+=======
+  "Embed the version control system revision id in LLVM" ON)
+>>>>>>> origin/release/5.x
 
 set(PACKAGE_NAME LLVM)
 set(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
@@ -292,7 +310,6 @@ set(LLVM_ALL_TARGETS
   MSP430
   NVPTX
   PowerPC
-  RISCV
   Sparc
   SystemZ
   WebAssembly

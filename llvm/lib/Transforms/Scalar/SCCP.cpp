@@ -2035,12 +2035,21 @@ bool llvm::runIPSCCP(
       Solver.markOverdefined(&AI);
   }
 
+<<<<<<< HEAD
   // Determine if we can track any of the module's global variables. If so, add
   // the global variables we can track to the solver's set of tracked global
   // variables.
   for (GlobalVariable &G : M.globals()) {
     G.removeDeadConstantUsers();
     if (canTrackGlobalVariableInterprocedurally(&G))
+=======
+  // Loop over global variables.  We inform the solver about any internal global
+  // variables that do not have their 'addresses taken'.  If they don't have
+  // their addresses taken, we can propagate constants through them.
+  for (GlobalVariable &G : M.globals())
+    if (!G.isConstant() && G.hasLocalLinkage() &&
+        G.hasDefinitiveInitializer() && !AddressIsTaken(&G))
+>>>>>>> origin/release/5.x
       Solver.TrackValueOfGlobalVariable(&G);
   }
 

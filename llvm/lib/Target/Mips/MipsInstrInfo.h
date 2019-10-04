@@ -155,12 +155,15 @@ public:
   bool verifyInstruction(const MachineInstr &MI,
                          StringRef &ErrInfo) const override;
 
+<<<<<<< HEAD
   std::pair<unsigned, unsigned>
   decomposeMachineOperandsTargetFlags(unsigned TF) const override;
 
   ArrayRef<std::pair<unsigned, const char *>>
   getSerializableDirectMachineOperandTargetFlags() const override;
 
+=======
+>>>>>>> origin/release/5.x
 protected:
   bool isZeroImm(const MachineOperand &op) const;
 

@@ -122,6 +122,7 @@ void emplaceable_concept_tests() {
       assert(v[1].value == 101);
       assert(v[2].copied == 0);
       assert(v[2].value == 42);
+<<<<<<< HEAD
     }
   }
 #endif
@@ -157,15 +158,61 @@ void test_ctor_under_alloc() {
     {
       //ExpectConstructGuard<int&> G(3);
       //C v(It(arr2), It(std::end(arr2)), a);
+=======
+>>>>>>> origin/release/5.x
     }
   }
 #endif
 }
 
+<<<<<<< HEAD
 int main(int, char**) {
   basic_tests();
   emplaceable_concept_tests(); // See PR34898
   test_ctor_under_alloc();
 
   return 0;
+=======
+void test_ctor_under_alloc() {
+#if TEST_STD_VER >= 11
+  int arr1[] = {42};
+  int arr2[] = {1, 101, 42};
+  {
+    using C = TCT::vector<>;
+    using T = typename C::value_type;
+    using It = forward_iterator<int*>;
+    using Alloc = typename C::allocator_type;
+    Alloc a;
+    {
+      ExpectConstructGuard<int&> G(1);
+      C v(It(arr1), It(std::end(arr1)), a);
+    }
+    {
+      ExpectConstructGuard<int&> G(3);
+      C v(It(arr2), It(std::end(arr2)), a);
+    }
+  }
+  {
+    using C = TCT::vector<>;
+    using T = typename C::value_type;
+    using It = input_iterator<int*>;
+    using Alloc = typename C::allocator_type;
+    Alloc a;
+    {
+      ExpectConstructGuard<int&> G(1);
+      C v(It(arr1), It(std::end(arr1)), a);
+    }
+    {
+      //ExpectConstructGuard<int&> G(3);
+      //C v(It(arr2), It(std::end(arr2)), a);
+    }
+  }
+#endif
+}
+
+int main() {
+  basic_tests();
+  emplaceable_concept_tests(); // See PR34898
+  test_ctor_under_alloc();
+>>>>>>> origin/release/5.x
 }

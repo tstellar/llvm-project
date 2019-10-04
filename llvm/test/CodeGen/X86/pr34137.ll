@@ -7,6 +7,7 @@
 
 define void @pr34127() {
 ; CHECK-LABEL: pr34127:
+<<<<<<< HEAD
 ; CHECK:       # %bb.0: # %entry
 ; CHECK-NEXT:    movzwl {{.*}}(%rip), %eax
 ; CHECK-NEXT:    movzwl {{.*}}(%rip), %ecx
@@ -17,6 +18,16 @@ define void @pr34127() {
 ; CHECK-NEXT:    movl %edx, -{{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    xorl %edx, %edx
 ; CHECK-NEXT:    testw %cx, %ax
+=======
+; CHECK:       # BB#0: # %entry
+; CHECK-NEXT:    movzwl {{.*}}(%rip), %eax
+; CHECK-NEXT:    movw {{.*}}(%rip), %cx
+; CHECK-NEXT:    andw %ax, %cx
+; CHECK-NEXT:    andl %eax, %ecx
+; CHECK-NEXT:    movl %ecx, -{{[0-9]+}}(%rsp)
+; CHECK-NEXT:    xorl %edx, %edx
+; CHECK-NEXT:    testw %cx, %cx
+>>>>>>> origin/release/5.x
 ; CHECK-NEXT:    sete %dl
 ; CHECK-NEXT:    andl %eax, %edx
 ; CHECK-NEXT:    movq %rdx, {{.*}}(%rip)

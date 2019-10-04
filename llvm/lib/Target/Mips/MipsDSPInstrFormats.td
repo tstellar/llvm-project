@@ -53,7 +53,11 @@ class DSPInst<string opstr = "">
 class PseudoDSP<dag outs, dag ins, list<dag> pattern,
                 InstrItinClass itin = IIPseudo>
     : MipsPseudo<outs, ins, pattern, itin> {
+<<<<<<< HEAD
   let ASEPredicate = [HasDSP];
+=======
+  let InsnPredicates = [HasDSP];
+>>>>>>> origin/release/5.x
 }
 
 class DSPInstAlias<string Asm, dag Result, bit Emit = 0b1>

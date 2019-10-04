@@ -176,6 +176,10 @@ void initializeIfConverterPass(PassRegistry&);
 void initializeImplicitNullChecksPass(PassRegistry&);
 void initializeIndVarSimplifyLegacyPassPass(PassRegistry&);
 void initializeIndirectBrExpandPassPass(PassRegistry&);
+<<<<<<< HEAD
+=======
+void initializeInductiveRangeCheckEliminationPass(PassRegistry&);
+>>>>>>> origin/release/5.x
 void initializeInferAddressSpacesPass(PassRegistry&);
 void initializeInferFunctionAttrsLegacyPassPass(PassRegistry&);
 void initializeInlineCostAnalysisPass(PassRegistry&);

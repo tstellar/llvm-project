@@ -585,10 +585,19 @@ def : InstRW<[GenericWriteCache], (instrs CACHE)>;
 // sync
 def : InstRW<[GenericWriteSync], (instrs SYNC, SYNCI)>;
 
+<<<<<<< HEAD
 // MIPSR6
 // ======
 
 def : InstRW<[GenericWriteLoad], (instrs LDC2_R6, LL_R6, LWC2_R6, LWPC)>;
+=======
+def : ItinRW<[GenericWriteMove], [II_DMT, II_DVPE, II_EMT, II_EVPE, II_MFTR,
+                                  II_MTTR]>;
+
+def : ItinRW<[GenericReadWriteCOP0Long], [II_YIELD]>;
+
+def : ItinRW<[GenericWriteCOP0Short], [II_FORK]>;
+>>>>>>> origin/release/5.x
 
 def : InstRW<[GenericWriteStore], (instrs SWC2_R6,  SDC2_R6)>;
 

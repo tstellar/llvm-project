@@ -2548,8 +2548,13 @@ bool Type::isAlignValT() const {
 }
 
 bool Type::isStdByteType() const {
+<<<<<<< HEAD
   if (const auto *ET = getAs<EnumType>()) {
     IdentifierInfo *II = ET->getDecl()->getIdentifier();
+=======
+  if (auto *ET = getAs<EnumType>()) {
+    auto *II = ET->getDecl()->getIdentifier();
+>>>>>>> origin/release/5.x
     if (II && II->isStr("byte") && ET->getDecl()->isInStdNamespace())
       return true;
   }

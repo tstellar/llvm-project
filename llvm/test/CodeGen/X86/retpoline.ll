@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 ; RUN: llc -verify-machineinstrs -mtriple=x86_64-unknown < %s | FileCheck %s --implicit-check-not="jmp.*\*" --implicit-check-not="call.*\*" --check-prefix=X64
 ; RUN: llc -verify-machineinstrs -mtriple=x86_64-unknown -O0 < %s | FileCheck %s --implicit-check-not="jmp.*\*" --implicit-check-not="call.*\*" --check-prefix=X64FAST
 
 ; RUN: llc -verify-machineinstrs -mtriple=i686-unknown < %s | FileCheck %s --implicit-check-not="jmp.*\*" --implicit-check-not="call.*\*" --check-prefix=X86
 ; RUN: llc -verify-machineinstrs -mtriple=i686-unknown -O0 < %s | FileCheck %s --implicit-check-not="jmp.*\*" --implicit-check-not="call.*\*" --check-prefix=X86FAST
+=======
+; RUN: llc -mtriple=x86_64-unknown < %s | FileCheck %s --implicit-check-not="jmp.*\*" --implicit-check-not="call.*\*" --check-prefix=X64
+; RUN: llc -mtriple=x86_64-unknown -O0 < %s | FileCheck %s --implicit-check-not="jmp.*\*" --implicit-check-not="call.*\*" --check-prefix=X64FAST
+
+; RUN: llc -mtriple=i686-unknown < %s | FileCheck %s --implicit-check-not="jmp.*\*" --implicit-check-not="call.*\*" --check-prefix=X86
+; RUN: llc -mtriple=i686-unknown -O0 < %s | FileCheck %s --implicit-check-not="jmp.*\*" --implicit-check-not="call.*\*" --check-prefix=X86FAST
+>>>>>>> origin/release/5.x
 
 declare void @bar(i32)
 
@@ -19,7 +27,11 @@ entry:
 ; X64-LABEL: icall_reg:
 ; X64-DAG:   movq %rdi, %[[fp:[^ ]*]]
 ; X64-DAG:   movl %esi, %[[x:[^ ]*]]
+<<<<<<< HEAD
 ; X64:       movl %esi, %edi
+=======
+; X64:       movl %[[x]], %edi
+>>>>>>> origin/release/5.x
 ; X64:       callq bar
 ; X64-DAG:   movl %[[x]], %edi
 ; X64-DAG:   movq %[[fp]], %r11
@@ -111,7 +123,11 @@ define void @vcall(%struct.Foo* %obj) #0 {
 
 ; X64-LABEL: vcall:
 ; X64:       movq %rdi, %[[obj:[^ ]*]]
+<<<<<<< HEAD
 ; X64:       movq (%rdi), %[[vptr:[^ ]*]]
+=======
+; X64:       movq (%[[obj]]), %[[vptr:[^ ]*]]
+>>>>>>> origin/release/5.x
 ; X64:       movq 8(%[[vptr]]), %[[fp:[^ ]*]]
 ; X64:       movq %[[fp]], %r11
 ; X64:       callq __llvm_retpoline_r11
@@ -156,7 +172,11 @@ define void @direct_tail() #0 {
 ; X86FAST:   jmp direct_callee # TAILCALL
 
 
+<<<<<<< HEAD
 declare void @nonlazybind_callee() #2
+=======
+declare void @nonlazybind_callee() #1
+>>>>>>> origin/release/5.x
 
 define void @nonlazybind_caller() #0 {
   call void @nonlazybind_callee()
@@ -164,6 +184,7 @@ define void @nonlazybind_caller() #0 {
   ret void
 }
 
+<<<<<<< HEAD
 ; X64-LABEL: nonlazybind_caller:
 ; X64:       movq nonlazybind_callee@GOTPCREL(%rip), %[[REG:.*]]
 ; X64:       movq %[[REG]], %r11
@@ -329,6 +350,22 @@ latch:
                                 label %bb8,
                                 label %bb9]
 }
+=======
+; nonlazybind wasn't implemented in LLVM 5.0, so this looks the same as direct.
+; X64-LABEL: nonlazybind_caller:
+; X64:       callq nonlazybind_callee
+; X64:       jmp nonlazybind_callee # TAILCALL
+; X64FAST-LABEL: nonlazybind_caller:
+; X64FAST:   callq nonlazybind_callee
+; X64FAST:   jmp nonlazybind_callee # TAILCALL
+; X86-LABEL: nonlazybind_caller:
+; X86:       calll nonlazybind_callee
+; X86:       jmp nonlazybind_callee # TAILCALL
+; X86FAST-LABEL: nonlazybind_caller:
+; X86FAST:   calll nonlazybind_callee
+; X86FAST:   jmp nonlazybind_callee # TAILCALL
+
+>>>>>>> origin/release/5.x
 
 @indirectbr_rewrite.targets = constant [10 x i8*] [i8* blockaddress(@indirectbr_rewrite, %bb0),
                                                    i8* blockaddress(@indirectbr_rewrite, %bb1),
@@ -341,10 +378,17 @@ latch:
                                                    i8* blockaddress(@indirectbr_rewrite, %bb8),
                                                    i8* blockaddress(@indirectbr_rewrite, %bb9)]
 
+<<<<<<< HEAD
 ; Check that when retpolines are enabled for indirect branches the indirectbr
 ; instruction gets rewritten to use switch, and that in turn doesn't get lowered
 ; as a jump table.
 define void @indirectbr_rewrite(i64* readonly %p, i64* %sink) #1 {
+=======
+; Check that when retpolines are enabled a function with indirectbr gets
+; rewritten to use switch, and that in turn doesn't get lowered as a jump
+; table.
+define void @indirectbr_rewrite(i64* readonly %p, i64* %sink) #0 {
+>>>>>>> origin/release/5.x
 ; X64-LABEL: indirectbr_rewrite:
 ; X64-NOT:     jmpq
 ; X86-LABEL: indirectbr_rewrite:
@@ -428,9 +472,14 @@ latch:
 ; X64-NEXT:          lfence
 ; X64-NEXT:          jmp     [[CAPTURE_SPEC]]
 ; X64-NEXT:          .p2align        4, 0x90
+<<<<<<< HEAD
 ; X64-NEXT:  {{.*}}                                  # Block address taken
 ; X64-NEXT:                                          # %entry
 ; X64-NEXT:  [[CALL_TARGET]]:
+=======
+; X64-NEXT:  [[CALL_TARGET]]:                        # Block address taken
+; X64-NEXT:                                          # %entry
+>>>>>>> origin/release/5.x
 ; X64-NEXT:          movq    %r11, (%rsp)
 ; X64-NEXT:          retq
 ;
@@ -447,9 +496,14 @@ latch:
 ; X86-NEXT:          lfence
 ; X86-NEXT:          jmp     [[CAPTURE_SPEC]]
 ; X86-NEXT:          .p2align        4, 0x90
+<<<<<<< HEAD
 ; X86-NEXT:  {{.*}}                                  # Block address taken
 ; X86-NEXT:                                          # %entry
 ; X86-NEXT:  [[CALL_TARGET]]:
+=======
+; X86-NEXT:  [[CALL_TARGET]]:                        # Block address taken
+; X86-NEXT:                                          # %entry
+>>>>>>> origin/release/5.x
 ; X86-NEXT:          movl    %eax, (%esp)
 ; X86-NEXT:          retl
 ;
@@ -466,9 +520,14 @@ latch:
 ; X86-NEXT:          lfence
 ; X86-NEXT:          jmp     [[CAPTURE_SPEC]]
 ; X86-NEXT:          .p2align        4, 0x90
+<<<<<<< HEAD
 ; X86-NEXT:  {{.*}}                                  # Block address taken
 ; X86-NEXT:                                          # %entry
 ; X86-NEXT:  [[CALL_TARGET]]:
+=======
+; X86-NEXT:  [[CALL_TARGET]]:                        # Block address taken
+; X86-NEXT:                                          # %entry
+>>>>>>> origin/release/5.x
 ; X86-NEXT:          movl    %ecx, (%esp)
 ; X86-NEXT:          retl
 ;
@@ -485,9 +544,14 @@ latch:
 ; X86-NEXT:          lfence
 ; X86-NEXT:          jmp     [[CAPTURE_SPEC]]
 ; X86-NEXT:          .p2align        4, 0x90
+<<<<<<< HEAD
 ; X86-NEXT:  {{.*}}                                  # Block address taken
 ; X86-NEXT:                                          # %entry
 ; X86-NEXT:  [[CALL_TARGET]]:
+=======
+; X86-NEXT:  [[CALL_TARGET]]:                        # Block address taken
+; X86-NEXT:                                          # %entry
+>>>>>>> origin/release/5.x
 ; X86-NEXT:          movl    %edx, (%esp)
 ; X86-NEXT:          retl
 ;
@@ -504,13 +568,23 @@ latch:
 ; X86-NEXT:          lfence
 ; X86-NEXT:          jmp     [[CAPTURE_SPEC]]
 ; X86-NEXT:          .p2align        4, 0x90
+<<<<<<< HEAD
 ; X86-NEXT:  {{.*}}                                  # Block address taken
 ; X86-NEXT:                                          # %entry
 ; X86-NEXT:  [[CALL_TARGET]]:
+=======
+; X86-NEXT:  [[CALL_TARGET]]:                        # Block address taken
+; X86-NEXT:                                          # %entry
+>>>>>>> origin/release/5.x
 ; X86-NEXT:          movl    %edi, (%esp)
 ; X86-NEXT:          retl
 
 
+<<<<<<< HEAD
 attributes #0 = { "target-features"="+retpoline-indirect-calls" }
 attributes #1 = { "target-features"="+retpoline-indirect-calls,+retpoline-indirect-branches" }
 attributes #2 = { nonlazybind }
+=======
+attributes #0 = { "target-features"="+retpoline" }
+attributes #1 = { nonlazybind }
+>>>>>>> origin/release/5.x

@@ -72,6 +72,7 @@ static ToolChain::RTTIMode CalculateRTTIMode(const ArgList &Args,
 ToolChain::ToolChain(const Driver &D, const llvm::Triple &T,
                      const ArgList &Args)
     : D(D), Triple(T), Args(Args), CachedRTTIArg(GetRTTIArgument(Args)),
+<<<<<<< HEAD
       CachedRTTIMode(CalculateRTTIMode(Args, Triple, CachedRTTIArg)) {
   if (D.CCCIsCXX()) {
     if (auto CXXStdlibPath = getCXXStdlibPath())
@@ -81,6 +82,10 @@ ToolChain::ToolChain(const Driver &D, const llvm::Triple &T,
   if (auto RuntimePath = getRuntimePath())
     getLibraryPaths().push_back(*RuntimePath);
 
+=======
+      CachedRTTIMode(CalculateRTTIMode(Args, Triple, CachedRTTIArg)),
+      EffectiveTriple() {
+>>>>>>> origin/release/5.x
   std::string CandidateLibPath = getArchSpecificLibPath();
   if (getVFS().exists(CandidateLibPath))
     getFilePaths().push_back(CandidateLibPath);
@@ -239,10 +244,13 @@ StringRef ToolChain::getDefaultUniversalArchName() const {
   }
 }
 
+<<<<<<< HEAD
 std::string ToolChain::getInputFilename(const InputInfo &Input) const {
   return Input.getFilename();
 }
 
+=======
+>>>>>>> origin/release/5.x
 bool ToolChain::IsUnwindTablesDefault(const ArgList &Args) const {
   return false;
 }

@@ -373,6 +373,7 @@ void ASTStmtWriter::VisitCoawaitExpr(CoawaitExpr *E) {
   VisitCoroutineSuspendExpr(E);
   Record.push_back(E->isImplicit());
   Code = serialization::EXPR_COAWAIT;
+<<<<<<< HEAD
 }
 
 void ASTStmtWriter::VisitCoyieldExpr(CoyieldExpr *E) {
@@ -380,6 +381,15 @@ void ASTStmtWriter::VisitCoyieldExpr(CoyieldExpr *E) {
   Code = serialization::EXPR_COYIELD;
 }
 
+=======
+}
+
+void ASTStmtWriter::VisitCoyieldExpr(CoyieldExpr *E) {
+  VisitCoroutineSuspendExpr(E);
+  Code = serialization::EXPR_COYIELD;
+}
+
+>>>>>>> origin/release/5.x
 void ASTStmtWriter::VisitDependentCoawaitExpr(DependentCoawaitExpr *E) {
   VisitExpr(E);
   Record.AddSourceLocation(E->getKeywordLoc());

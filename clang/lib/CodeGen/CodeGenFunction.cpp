@@ -990,13 +990,22 @@ void CodeGenFunction::StartFunction(GlobalDecl GD,
     if (CXXABIThisValue) {
       SanitizerSet SkippedChecks;
       SkippedChecks.set(SanitizerKind::ObjectSize, true);
+<<<<<<< HEAD
       QualType ThisTy = MD->getThisType();
+=======
+      QualType ThisTy = MD->getThisType(getContext());
+>>>>>>> origin/release/5.x
 
       // If this is the call operator of a lambda with no capture-default, it
       // may have a static invoker function, which may call this operator with
       // a null 'this' pointer.
       if (isLambdaCallOperator(MD) &&
+<<<<<<< HEAD
           MD->getParent()->getLambdaCaptureDefault() == LCD_None)
+=======
+          cast<CXXRecordDecl>(MD->getParent())->getLambdaCaptureDefault() ==
+              LCD_None)
+>>>>>>> origin/release/5.x
         SkippedChecks.set(SanitizerKind::Null, true);
 
       EmitTypeCheck(isa<CXXConstructorDecl>(MD) ? TCK_ConstructorCall

@@ -11287,6 +11287,7 @@ TEST_F(FormatTest, AlignConsecutiveDeclarations) {
       "});\n",
       Alignment);
   Alignment.PointerAlignment = FormatStyle::PAS_Right;
+<<<<<<< HEAD
 
   // See llvm.org/PR35641
   Alignment.AlignConsecutiveDeclarations = true;
@@ -11302,6 +11303,8 @@ TEST_F(FormatTest, AlignConsecutiveDeclarations) {
   EXPECT_EQ("DECOR1 /**/ int8_t /**/ DECOR2 /**/\n"
             "foo(int a);",
             format("DECOR1 /**/ int8_t /**/ DECOR2 /**/ foo (int a);", Style));
+=======
+>>>>>>> origin/release/5.x
 }
 
 TEST_F(FormatTest, LinuxBraceBreaking) {

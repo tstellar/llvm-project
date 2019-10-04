@@ -148,13 +148,22 @@ void RegAllocBase::allocatePhysRegs() {
       assert(!VRM->hasPhys(SplitVirtReg->reg) && "Register already assigned");
       if (MRI->reg_nodbg_empty(SplitVirtReg->reg)) {
         assert(SplitVirtReg->empty() && "Non-empty but used interval");
+<<<<<<< HEAD
         LLVM_DEBUG(dbgs() << "not queueing unused  " << *SplitVirtReg << '\n');
+=======
+        DEBUG(dbgs() << "not queueing unused  " << *SplitVirtReg << '\n');
+>>>>>>> origin/release/5.x
         aboutToRemoveInterval(*SplitVirtReg);
         LIS->removeInterval(SplitVirtReg->reg);
         continue;
       }
+<<<<<<< HEAD
       LLVM_DEBUG(dbgs() << "queuing new interval: " << *SplitVirtReg << "\n");
       assert(Register::isVirtualRegister(SplitVirtReg->reg) &&
+=======
+      DEBUG(dbgs() << "queuing new interval: " << *SplitVirtReg << "\n");
+      assert(TargetRegisterInfo::isVirtualRegister(SplitVirtReg->reg) &&
+>>>>>>> origin/release/5.x
              "expect split value in virtual register");
       enqueue(SplitVirtReg);
       ++NumNewQueued;

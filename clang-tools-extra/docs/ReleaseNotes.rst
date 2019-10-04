@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ====================================================
 Extra Clang Tools 10.0.0 (In-Progress) Release Notes
 ====================================================
@@ -13,6 +14,11 @@ Extra Clang Tools 8.0.0 Release Notes
 Extra Clang Tools 7.0.0 Release Notes
 =====================================
 >>>>>>> release/7.x
+=======
+=====================================
+Extra Clang Tools 5.0.0 Release Notes
+=====================================
+>>>>>>> origin/release/5.x
 
 .. contents::
    :local:
@@ -20,6 +26,7 @@ Extra Clang Tools 7.0.0 Release Notes
 
 Written by the `LLVM Team <https://llvm.org/>`_
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 .. warning::
@@ -32,6 +39,8 @@ Written by the `LLVM Team <https://llvm.org/>`_
 
 =======
 >>>>>>> release/8.x
+=======
+>>>>>>> origin/release/5.x
 Introduction
 ============
 
@@ -52,6 +61,7 @@ the `LLVM Web Site <https://llvm.org>`_.
 <<<<<<< HEAD
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Note that if you are reading this file from a Subversion checkout or the
 main Clang web page, this document applies to the *next* release, not
 the current one. To see the release notes for a specific release, please
@@ -63,9 +73,13 @@ What's New in Extra Clang Tools 10.0.0?
 =======================================
 =======
 What's New in Extra Clang Tools 8.0.0?
+=======
+What's New in Extra Clang Tools 5.0.0?
+>>>>>>> origin/release/5.x
 ======================================
 >>>>>>> release/8.x
 
+<<<<<<< HEAD
 Some of the major new features and improvements to Extra Clang Tools are listed
 here. Generic improvements to Extra Clang Tools as a whole or to its underlying
 infrastructure are described first, followed by tool-specific sections.
@@ -86,6 +100,8 @@ Improvements to clangd
   imported in the current file and automatically inserts the missing
   ``#include`` directives.
 =======
+=======
+>>>>>>> origin/release/5.x
 Improvements to clang-tidy
 --------------------------
 >>>>>>> release/7.x
@@ -251,6 +267,7 @@ Improvements to include-fixer
   Detects local variable declarations declaring more than one variable and
   tries to refactor the code to one statement per declaration.
 
+<<<<<<< HEAD
 - New :doc:`readability-magic-numbers
   <clang-tidy/checks/readability-magic-numbers>` check.
 
@@ -325,3 +342,7 @@ instead.
 =======
 - The 'google-runtime-member-string-references' check was removed.
 >>>>>>> release/7.x
+=======
+  Adds checks that implement the `High Integrity C++ Coding Standard <http://www.codingstandard.com/section/index/>`_ and other safety
+  standards. Many checks are aliased to other modules.
+>>>>>>> origin/release/5.x

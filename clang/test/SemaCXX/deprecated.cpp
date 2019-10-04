@@ -2,7 +2,10 @@
 // RUN: %clang_cc1 -std=c++11 %s -Wdeprecated -verify -triple x86_64-linux-gnu
 // RUN: %clang_cc1 -std=c++14 %s -Wdeprecated -verify -triple x86_64-linux-gnu
 // RUN: %clang_cc1 -std=c++17 %s -Wdeprecated -verify -triple x86_64-linux-gnu
+<<<<<<< HEAD
 // RUN: %clang_cc1 -std=c++2a %s -Wdeprecated -verify -triple x86_64-linux-gnu
+=======
+>>>>>>> origin/release/5.x
 
 // RUN: %clang_cc1 -std=c++14 %s -Wdeprecated -verify -triple x86_64-linux-gnu -Wno-deprecated-register -DNO_DEPRECATED_FLAGS
 

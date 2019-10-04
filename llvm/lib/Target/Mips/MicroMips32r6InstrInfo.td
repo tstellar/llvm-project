@@ -1774,6 +1774,7 @@ let AddedComplexity = 41 in {
   def : StoreRegImmPat<SDC1_D64_MMR6, f64>, FGR_64, ISA_MICROMIPS32R6;
 }
 
+<<<<<<< HEAD
 let isCall=1, hasDelaySlot=0, isCTI=1, Defs = [RA] in {
   class JumpLinkMMR6<Instruction JumpInst, DAGOperand Opnd> :
     PseudoSE<(outs), (ins calltarget:$target), [], II_JAL>,
@@ -1790,6 +1791,11 @@ def : MipsPat<(MipsJmpLink (iPTR tglobaladdr:$dst)),
 def TAILCALL_MMR6 : TailCall<BC_MMR6, brtarget26_mm>, ISA_MICROMIPS32R6;
 
 def TAILCALLREG_MMR6  : TailCallReg<JRC16_MM, GPR32Opnd>, ISA_MICROMIPS32R6;
+=======
+def TAILCALL_MMR6 : TailCall<BC_MMR6, brtarget26_mm>, ISA_MICROMIPS64R6;
+
+def TAILCALLREG_MMR6 : TailCallReg<JRC16_MM, GPR32Opnd>, ISA_MICROMIPS32R6;
+>>>>>>> origin/release/5.x
 
 def PseudoIndirectBranch_MMR6 : PseudoIndirectBranchBase<JRC16_MMR6,
                                                          GPR32Opnd>,
@@ -1800,6 +1806,7 @@ def : MipsPat<(MipsTailCall (iPTR tglobaladdr:$dst)),
 
 def : MipsPat<(MipsTailCall (iPTR texternalsym:$dst)),
               (TAILCALL_MMR6 texternalsym:$dst)>, ISA_MICROMIPS32R6;
+<<<<<<< HEAD
 
 
 def : MipsPat<(brcond (i32 (setne GPR32:$lhs, 0)), bb:$dst),
@@ -1835,3 +1842,5 @@ def : MipsPat<(brcond (i32 (setule GPR32:$lhs, GPR32:$rhs)), bb:$dst),
 
 def : MipsPat<(brcond GPR32:$cond, bb:$dst),
               (BNEZC_MMR6 GPR32:$cond, bb:$dst)>, ISA_MICROMIPS32R6;
+=======
+>>>>>>> origin/release/5.x

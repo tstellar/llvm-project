@@ -37,16 +37,23 @@ STATISTIC(NumSimplified, "Number of instructions trivialized (dead bits)");
 /// instruction may need to be cleared of assumptions that can no longer be
 /// guaranteed correct.
 static void clearAssumptionsOfUsers(Instruction *I, DemandedBits &DB) {
+<<<<<<< HEAD
   assert(I->getType()->isIntOrIntVectorTy() &&
          "Trivializing a non-integer value?");
 
   // Initialize the worklist with eligible direct users.
   SmallPtrSet<Instruction *, 16> Visited;
+=======
+  assert(I->getType()->isIntegerTy() && "Trivializing a non-integer value?");
+
+  // Initialize the worklist with eligible direct users.
+>>>>>>> origin/release/5.x
   SmallVector<Instruction *, 16> WorkList;
   for (User *JU : I->users()) {
     // If all bits of a user are demanded, then we know that nothing below that
     // in the def-use chain needs to be changed.
     auto *J = dyn_cast<Instruction>(JU);
+<<<<<<< HEAD
     if (J && J->getType()->isIntOrIntVectorTy() &&
         !DB.getDemandedBits(J).isAllOnesValue()) {
       Visited.insert(J);
@@ -64,6 +71,14 @@ static void clearAssumptionsOfUsers(Instruction *I, DemandedBits &DB) {
   }
 
   // DFS through subsequent users while tracking visits to avoid cycles.
+=======
+    if (J && !DB.getDemandedBits(J).isAllOnesValue())
+      WorkList.push_back(J);
+  }
+
+  // DFS through subsequent users while tracking visits to avoid cycles.
+  SmallPtrSet<Instruction *, 16> Visited;
+>>>>>>> origin/release/5.x
   while (!WorkList.empty()) {
     Instruction *J = WorkList.pop_back_val();
 
@@ -74,12 +89,21 @@ static void clearAssumptionsOfUsers(Instruction *I, DemandedBits &DB) {
     // 1. llvm.assume demands its operand, so trivializing can't change it.
     // 2. range metadata only applies to memory accesses which demand all bits.
 
+<<<<<<< HEAD
+=======
+    Visited.insert(J);
+
+>>>>>>> origin/release/5.x
     for (User *KU : J->users()) {
       // If all bits of a user are demanded, then we know that nothing below
       // that in the def-use chain needs to be changed.
       auto *K = dyn_cast<Instruction>(KU);
+<<<<<<< HEAD
       if (K && Visited.insert(K).second && K->getType()->isIntOrIntVectorTy() &&
           !DB.getDemandedBits(K).isAllOnesValue())
+=======
+      if (K && !Visited.count(K) && !DB.getDemandedBits(K).isAllOnesValue())
+>>>>>>> origin/release/5.x
         WorkList.push_back(K);
     }
   }
@@ -95,6 +119,7 @@ static bool bitTrackingDCE(Function &F, DemandedBits &DB) {
     if (I.mayHaveSideEffects() && I.use_empty())
       continue;
 
+<<<<<<< HEAD
     // Remove instructions that are dead, either because they were not reached
     // during analysis or have no demanded bits.
     if (DB.isInstructionDead(&I) ||
@@ -120,6 +145,14 @@ static bool bitTrackingDCE(Function &F, DemandedBits &DB) {
         continue;
 
       LLVM_DEBUG(dbgs() << "BDCE: Trivializing: " << U << " (all bits dead)\n");
+=======
+    if (I.getType()->isIntegerTy() &&
+        !DB.getDemandedBits(&I).getBoolValue()) {
+      // For live instructions that have all dead bits, first make them dead by
+      // replacing all uses with something else. Then, if they don't need to
+      // remain live (because they have side effects, etc.) we can remove them.
+      DEBUG(dbgs() << "BDCE: Trivializing: " << I << " (all bits dead)\n");
+>>>>>>> origin/release/5.x
 
       clearAssumptionsOfUsers(&I, DB);
 

@@ -737,6 +737,7 @@ public:
   /// going to be null.
   bool isLexicalScopeDIENull(LexicalScope *Scope);
 
+<<<<<<< HEAD
   /// Find the matching DwarfCompileUnit for the given CU DIE.
   DwarfCompileUnit *lookupCU(const DIE *Die) { return CUDieMap.lookup(Die); }
   const DwarfCompileUnit *lookupCU(const DIE *Die) const {
@@ -758,6 +759,12 @@ public:
   static void emitDebugLocValue(const AsmPrinter &AP, const DIBasicType *BT,
                                 const DbgValueLoc &Value,
                                 DwarfExpression &DwarfExpr);
+=======
+  bool hasDwarfPubSections(bool includeMinimalInlineScopes) const;
+
+  /// Find the matching DwarfCompileUnit for the given CU DIE.
+  DwarfCompileUnit *lookupCU(const DIE *Die) { return CUDieMap.lookup(Die); }
+>>>>>>> origin/release/5.x
 };
 
 } // end namespace llvm

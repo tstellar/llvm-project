@@ -637,6 +637,10 @@ CastsAwayConstness(Sema &Self, QualType SrcType, QualType DestType,
         UnwrappedDestType->isObjCObjectType())
       SrcQuals.removeConst();
 
+<<<<<<< HEAD
+=======
+    Qualifiers RetainedSrcQuals, RetainedDestQuals;
+>>>>>>> origin/release/5.x
     if (CheckCVR) {
       Qualifiers SrcCvrQuals =
           Qualifiers::fromCVRMask(SrcQuals.getCVRQualifiers());

@@ -258,7 +258,11 @@ int main(int, char**) {
   test_copy_ctor_basic();
   test_copy_ctor_valueless_by_exception();
   test_copy_ctor_sfinae();
+<<<<<<< HEAD
   test_constexpr_copy_ctor();
+=======
+  test_constexpr_copy_ctor_extension();
+>>>>>>> origin/release/5.x
 #if 0
 // disable this for the moment; it fails on older compilers.
 //  Need to figure out which compilers will support it.
@@ -268,6 +272,9 @@ int main(int, char**) {
   (void) v2;
 }
 #endif
+<<<<<<< HEAD
 
   return 0;
+=======
+>>>>>>> origin/release/5.x
 }

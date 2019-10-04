@@ -540,3 +540,7 @@ void X86PassConfig::addPreEmitPass2() {
 std::unique_ptr<CSEConfigBase> X86PassConfig::getCSEConfig() const {
   return getStandardCSEConfigForOpt(TM->getOptLevel());
 }
+
+void X86PassConfig::addPreEmitPass2() {
+  addPass(createX86RetpolineThunksPass());
+}

@@ -33,8 +33,13 @@ void f() {
 
 #ifdef EXT
 // expected-warning@6 {{use of the 'maybe_unused' attribute is a C++17 extension}}
+<<<<<<< HEAD
 // expected-warning@9 {{use of the 'maybe_unused' attribute is a C++17 extension}}
 // expected-warning@9 {{attributes on an enumerator declaration are a C++17 extension}}
 // expected-warning@21 {{use of the 'maybe_unused' attribute is a C++17 extension}}
 // expected-warning@22 {{use of the 'maybe_unused' attribute is a C++17 extension}}
+=======
+// expected-warning@13 {{use of the 'maybe_unused' attribute is a C++17 extension}}
+// expected-warning@14 {{use of the 'maybe_unused' attribute is a C++17 extension}}
+>>>>>>> origin/release/5.x
 #endif

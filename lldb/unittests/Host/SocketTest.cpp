@@ -152,6 +152,7 @@ TEST_F(SocketTest, TCPListen0GetPort) {
   EXPECT_TRUE(socket_up->IsValid());
   EXPECT_NE(socket_up->GetLocalPortNumber(), 0);
 }
+<<<<<<< HEAD
 
 TEST_F(SocketTest, TCPGetConnectURI) {
   std::unique_ptr<TCPSocket> socket_a_up;
@@ -217,3 +218,5 @@ TEST_F(SocketTest, DomainGetConnectURI) {
   EXPECT_EQ(path, domain_path);
 }
 #endif
+=======
+>>>>>>> origin/release/5.x

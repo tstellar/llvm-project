@@ -217,6 +217,7 @@ static std::string createFileLineMsg(StringRef path, unsigned line) {
 }
 
 template <class ELFT>
+<<<<<<< HEAD
 static std::string getSrcMsgAux(ObjFile<ELFT> &file, const Symbol &sym,
                                 InputSectionBase &sec, uint64_t offset) {
   // In DWARF, functions and variables are stored to different places.
@@ -315,6 +316,15 @@ ObjFile<ELFT>::getVariableLoc(StringRef name) {
   // Return if we have no debug information about data object.
   auto it = variableLoc.find(name);
   if (it == variableLoc.end())
+=======
+Optional<DILineInfo> elf::ObjectFile<ELFT>::getDILineInfo(InputSectionBase *S,
+                                                          uint64_t Offset) {
+  llvm::call_once(InitDwarfLine, [this]() { initializeDwarfLine(); });
+
+  // The offset to CU is 0.
+  const DWARFDebugLine::LineTable *Tbl = DwarfLine->getLineTable(0);
+  if (!Tbl)
+>>>>>>> origin/release/5.x
     return None;
 
   // Take file name string from line table.

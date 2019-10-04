@@ -425,6 +425,7 @@ Tool *toolchains::MinGW::buildLinker() const {
   return new tools::MinGW::Linker(*this);
 }
 
+<<<<<<< HEAD
 bool toolchains::MinGW::HasNativeLLVMSupport() const {
   return NativeLLVMSupport;
 }
@@ -438,6 +439,10 @@ bool toolchains::MinGW::IsUnwindTablesDefault(const ArgList &Args) const {
     return true;
   return getArch() == llvm::Triple::x86_64 ||
          getArch() == llvm::Triple::aarch64;
+=======
+bool toolchains::MinGW::IsUnwindTablesDefault(const ArgList &Args) const {
+  return getArch() == llvm::Triple::x86_64;
+>>>>>>> origin/release/5.x
 }
 
 bool toolchains::MinGW::isPICDefault() const {

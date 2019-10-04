@@ -492,7 +492,11 @@ entry:
 
 define void @extract_subvector512_v8f32_store_lo_align_16(float* nocapture %addr, <16 x float> %a) nounwind uwtable ssp {
 ; SKX-LABEL: extract_subvector512_v8f32_store_lo_align_16:
+<<<<<<< HEAD
 ; SKX:       ## %bb.0: ## %entry
+=======
+; SKX:       ## BB#0: ## %entry
+>>>>>>> origin/release/5.x
 ; SKX-NEXT:    vmovups %ymm0, (%rdi)
 ; SKX-NEXT:    vzeroupper
 ; SKX-NEXT:    retq

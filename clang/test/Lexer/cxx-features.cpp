@@ -1,6 +1,7 @@
 // RUN: %clang_cc1 -std=c++98 -fcxx-exceptions -verify %s
 // RUN: %clang_cc1 -std=c++11 -fcxx-exceptions -verify %s
 // RUN: %clang_cc1 -std=c++14 -fcxx-exceptions -fsized-deallocation -verify %s
+<<<<<<< HEAD
 // RUN: %clang_cc1 -std=c++17 -fcxx-exceptions -fsized-deallocation -verify %s
 // RUN: %clang_cc1 -std=c++2a -fcxx-exceptions -fsized-deallocation -verify %s
 //
@@ -10,6 +11,12 @@
 // RUN: %clang_cc1 -std=c++14 -fcoroutines-ts -DNO_EXCEPTIONS -DCOROUTINES -verify -fsized-deallocation %s
 // RUN: %clang_cc1 -std=c++14 -fchar8_t -DNO_EXCEPTIONS -DCHAR8_T -verify -fsized-deallocation %s
 // RUN: %clang_cc1 -std=c++2a -fno-char8_t -DNO_EXCEPTIONS -DNO_CHAR8_T -verify -fsized-deallocation %s
+=======
+// RUN: %clang_cc1 -std=c++1z -fcxx-exceptions -fsized-deallocation -verify %s
+// RUN: %clang_cc1 -std=c++1z -fcxx-exceptions -fsized-deallocation -fconcepts-ts -DCONCEPTS_TS=1 -verify %s
+// RUN: %clang_cc1 -fno-rtti -fno-threadsafe-statics -verify %s -DNO_EXCEPTIONS -DNO_RTTI -DNO_THREADSAFE_STATICS
+// RUN: %clang_cc1 -fcoroutines-ts -DNO_EXCEPTIONS -DCOROUTINES -verify %s
+>>>>>>> origin/release/5.x
 
 // expected-no-diagnostics
 
@@ -28,6 +35,7 @@
 
 // --- C++20 features ---
 
+<<<<<<< HEAD
 #if defined(CHAR8_T) ? check(char8_t, 201811, 201811, 201811, 201811, 201811) : \
     defined(NO_CHAR8_T) ? check(char8_t, 0, 0, 0, 0, 0) : \
     check(char8_t, 0, 0, 0, 0, 201811)
@@ -57,6 +65,17 @@
 #endif
 
 #if check(aligned_new, 0, 0, 0, 201606, 201606)
+=======
+#if check(hex_float, 0, 0, 0, 201603)
+#error "wrong value for __cpp_hex_float"
+#endif
+
+#if check(inline_variables, 0, 0, 0, 201606)
+#error "wrong value for __cpp_inline_variables"
+#endif
+
+#if check(aligned_new, 0, 0, 0, 201606)
+>>>>>>> origin/release/5.x
 #error "wrong value for __cpp_aligned_new"
 #endif
 
@@ -78,7 +97,11 @@
 
 // constexpr checked below
 
+<<<<<<< HEAD
 #if check(if_constexpr, 0, 0, 0, 201606, 201606)
+=======
+#if check(if_constexpr, 0, 0, 0, 201606)
+>>>>>>> origin/release/5.x
 #error "wrong value for __cpp_if_constexpr"
 #endif
 
@@ -86,6 +109,7 @@
 
 // static_assert checked below
 
+<<<<<<< HEAD
 #if check(deduction_guides, 0, 0, 0, 201703, 201703)
 #error "wrong value for __cpp_deduction_guides"
 #endif
@@ -97,6 +121,13 @@
 // This is the old name (from P0096R4) for
 // __cpp_nontype_template_parameter_auto
 #if check(template_auto, 0, 0, 0, 201606, 201606)
+=======
+#if check(deduction_guides, 0, 0, 0, 201611)
+#error "wrong value for __cpp_deduction_guides"
+#endif
+
+#if check(template_auto, 0, 0, 0, 201606)
+>>>>>>> origin/release/5.x
 #error "wrong value for __cpp_template_auto"
 #endif
 
@@ -117,11 +148,19 @@
 
 // inheriting_constructors checked below
 
+<<<<<<< HEAD
 #if check(variadic_using, 0, 0, 0, 201611, 201611)
 #error "wrong value for __cpp_variadic_using"
 #endif
 
 #if check(aggregate_bases, 0, 0, 0, 201603, 201603)
+=======
+#if check(variadic_using, 0, 0, 0, 201611)
+#error "wrong value for __cpp_variadic_using"
+#endif
+
+#if check(aggregate_bases, 0, 0, 0, 201603)
+>>>>>>> origin/release/5.x
 #error "wrong value for __cpp_aggregate_bases"
 #endif
 
@@ -202,12 +241,20 @@
 #error "wrong value for __cpp_user_defined_literals"
 #endif
 
+<<<<<<< HEAD
 #if defined(NO_THREADSAFE_STATICS) ? check(threadsafe_static_init, 0, 0, 0, 0, 0) : \
                                      check(threadsafe_static_init, 200806, 200806, 200806, 200806, 200806)
 #error "wrong value for __cpp_threadsafe_static_init"
 #endif
 
 #if check(lambdas, 0, 200907, 200907, 200907, 200907)
+=======
+#if defined(NO_THREADSAFE_STATICS) ? check(threadsafe_static_init, 0, 0, 0, 0) : check(threadsafe_static_init, 200806, 200806, 200806, 200806)
+#error "wrong value for __cpp_threadsafe_static_init"
+#endif
+
+#if check(lambdas, 0, 200907, 200907, 200907)
+>>>>>>> origin/release/5.x
 #error "wrong value for __cpp_lambdas"
 #endif
 

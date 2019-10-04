@@ -1412,11 +1412,18 @@ bool CodeGenFunction::EmitOMPLinearClauseInit(const OMPLoopDirective &D) {
   // Emit inits for the linear variables.
   bool HasLinears = false;
   for (const auto *C : D.getClausesOfKind<OMPLinearClause>()) {
+<<<<<<< HEAD
     for (const Expr *Init : C->inits()) {
       HasLinears = true;
       const auto *VD = cast<VarDecl>(cast<DeclRefExpr>(Init)->getDecl());
       if (const auto *Ref =
               dyn_cast<DeclRefExpr>(VD->getInit()->IgnoreImpCasts())) {
+=======
+    for (auto *Init : C->inits()) {
+      HasLinears = true;
+      auto *VD = cast<VarDecl>(cast<DeclRefExpr>(Init)->getDecl());
+      if (auto *Ref = dyn_cast<DeclRefExpr>(VD->getInit()->IgnoreImpCasts())) {
+>>>>>>> origin/release/5.x
         AutoVarEmission Emission = EmitAutoVarAlloca(*VD);
         const auto *OrigVD = cast<VarDecl>(Ref->getDecl());
         DeclRefExpr DRE(getContext(), const_cast<VarDecl *>(OrigVD),
@@ -1790,6 +1797,7 @@ static void emitOMPSimdRegion(CodeGenFunction &CGF, const OMPLoopDirective &S,
     CGF.EmitIgnoredExpr(S.getCalcLastIteration());
   }
 
+<<<<<<< HEAD
   CGF.EmitOMPSimdInit(S);
 
   emitAlignedClause(CGF, S);
@@ -1830,6 +1838,42 @@ static void emitOMPSimdRegion(CodeGenFunction &CGF, const OMPLoopDirective &S,
 void CodeGenFunction::EmitOMPSimdDirective(const OMPSimdDirective &S) {
   auto &&CodeGen = [&S](CodeGenFunction &CGF, PrePostActionTy &Action) {
     emitOMPSimdRegion(CGF, S, Action);
+=======
+    emitAlignedClause(CGF, S);
+    (void)CGF.EmitOMPLinearClauseInit(S);
+    {
+      OMPPrivateScope LoopScope(CGF);
+      CGF.EmitOMPPrivateLoopCounters(S, LoopScope);
+      CGF.EmitOMPLinearClause(S, LoopScope);
+      CGF.EmitOMPPrivateClause(S, LoopScope);
+      CGF.EmitOMPReductionClauseInit(S, LoopScope);
+      bool HasLastprivateClause =
+          CGF.EmitOMPLastprivateClauseInit(S, LoopScope);
+      (void)LoopScope.Privatize();
+      CGF.EmitOMPInnerLoop(S, LoopScope.requiresCleanups(), S.getCond(),
+                           S.getInc(),
+                           [&S](CodeGenFunction &CGF) {
+                             CGF.EmitOMPLoopBody(S, JumpDest());
+                             CGF.EmitStopPoint(&S);
+                           },
+                           [](CodeGenFunction &) {});
+      CGF.EmitOMPSimdFinal(
+          S, [](CodeGenFunction &) -> llvm::Value * { return nullptr; });
+      // Emit final copy of the lastprivate variables at the end of loops.
+      if (HasLastprivateClause)
+        CGF.EmitOMPLastprivateClauseFinal(S, /*NoFinals=*/true);
+      CGF.EmitOMPReductionClauseFinal(S, /*ReductionKind=*/OMPD_simd);
+      emitPostUpdateForReductionClause(
+          CGF, S, [](CodeGenFunction &) -> llvm::Value * { return nullptr; });
+    }
+    CGF.EmitOMPLinearClauseFinal(
+        S, [](CodeGenFunction &) -> llvm::Value * { return nullptr; });
+    // Emit: if (PreCond) - end.
+    if (ContBlock) {
+      CGF.EmitBranch(ContBlock);
+      CGF.EmitBlock(ContBlock, true);
+    }
+>>>>>>> origin/release/5.x
   };
   OMPLexicalScope Scope(*this, S, OMPD_unknown);
   CGM.getOpenMPRuntime().emitInlinedDirective(*this, OMPD_simd, CodeGen);

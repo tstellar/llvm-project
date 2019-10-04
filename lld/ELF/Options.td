@@ -184,9 +184,15 @@ def force_bti: F<"force-bti">,
 defm format: Eq<"format", "Change the input format of the inputs following this option">,
   MetaVarName<"[default,elf,binary]">;
 
+<<<<<<< HEAD
 defm gc_sections: B<"gc-sections",
     "Enable garbage collection of unused sections",
     "Disable garbage collection of unused sections (default)">;
+=======
+def icf_all: F<"icf=all">, HelpText<"Enable identical code folding">;
+
+def icf_none: F<"icf=none">, HelpText<"Disable identical code folding">;
+>>>>>>> origin/release/5.x
 
 defm gdb_index: B<"gdb-index",
     "Generate .gdb_index section",

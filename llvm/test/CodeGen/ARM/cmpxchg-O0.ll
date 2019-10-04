@@ -10,7 +10,11 @@ define { i8, i1 } @test_cmpxchg_8(i8* %addr, i8 %desired, i8 %new) nounwind {
 ; CHECK:     dmb ish
 ; CHECK:     uxtb [[DESIRED:r[0-9]+]], [[DESIRED]]
 ; CHECK: [[RETRY:.LBB[0-9]+_[0-9]+]]:
+<<<<<<< HEAD
 ; CHECK:     ldrexb [[OLD:[lr0-9]+]], [r0]
+=======
+; CHECK:     ldrexb [[OLD:r[0-9]+]], [r0]
+>>>>>>> origin/release/5.x
 ; CHECK:     cmp [[OLD]], [[DESIRED]]
 ; CHECK:     bne [[DONE:.LBB[0-9]+_[0-9]+]]
 ; CHECK:     strexb [[STATUS:r[0-9]+]], r2, [r0]
@@ -32,7 +36,11 @@ define { i16, i1 } @test_cmpxchg_16(i16* %addr, i16 %desired, i16 %new) nounwind
 ; CHECK:     dmb ish
 ; CHECK:     uxth [[DESIRED:r[0-9]+]], [[DESIRED]]
 ; CHECK: [[RETRY:.LBB[0-9]+_[0-9]+]]:
+<<<<<<< HEAD
 ; CHECK:     ldrexh [[OLD:[lr0-9]+]], [r0]
+=======
+; CHECK:     ldrexh [[OLD:r[0-9]+]], [r0]
+>>>>>>> origin/release/5.x
 ; CHECK:     cmp [[OLD]], [[DESIRED]]
 ; CHECK:     bne [[DONE:.LBB[0-9]+_[0-9]+]]
 ; CHECK:     strexh [[STATUS:r[0-9]+]], r2, [r0]

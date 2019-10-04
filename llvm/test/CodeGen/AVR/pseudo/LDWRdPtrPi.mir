@@ -17,8 +17,13 @@ body: |
 
     ; CHECK-LABEL: test_ldwrdptrpi
 
+<<<<<<< HEAD
     ; CHECK:      early-clobber $r0, $r31r30 = LDRdPtrPi killed $r31r30
     ; CHECK-NEXT: early-clobber $r1, $r31r30 = LDRdPtrPi killed $r31r30
+=======
+    ; CHECK:      early-clobber %r0, %r31r30 = LDRdPtrPi killed %r31r30
+    ; CHECK-NEXT: early-clobber %r1, %r31r30 = LDRdPtrPi killed %r31r30
+>>>>>>> origin/release/5.x
 
     $r1r0, $r31r30 = LDWRdPtrPi $r31r30
 ...

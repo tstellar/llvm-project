@@ -16,8 +16,11 @@
 
 #include <functional>
 #include <cassert>
+<<<<<<< HEAD
 
 #include "test_macros.h"
+=======
+>>>>>>> origin/release/5.x
 
 struct X{
     typedef std::function<void(X&)> callback_type;
@@ -60,8 +63,13 @@ void test_pr34298()
   }
 }
 
+<<<<<<< HEAD
 int main(int, char**) {
   test_pr34298();
 
   return 0;
+=======
+int main() {
+  test_pr34298();
+>>>>>>> origin/release/5.x
 }

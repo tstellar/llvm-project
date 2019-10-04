@@ -77,6 +77,7 @@ struct COFFShortExport {
   /// The external, exported name. Only non-empty when export renaming is in
   /// effect, i.e. "foo" in "/EXPORT:foo=bar".
   std::string ExtName;
+  std::string SymbolName;
 
   /// The real, mangled symbol name from the object file. Given
   /// "/export:foo=bar", this could be "_bar@8" if bar is stdcall.
@@ -103,9 +104,17 @@ struct COFFShortExport {
   }
 };
 
+<<<<<<< HEAD
 Error writeImportLibrary(StringRef ImportName, StringRef Path,
                          ArrayRef<COFFShortExport> Exports,
                          COFF::MachineTypes Machine, bool MinGW);
+=======
+std::error_code writeImportLibrary(StringRef ImportName,
+                                   StringRef Path,
+                                   ArrayRef<COFFShortExport> Exports,
+                                   COFF::MachineTypes Machine,
+                                   bool MakeWeakAliases);
+>>>>>>> origin/release/5.x
 
 } // namespace object
 } // namespace llvm

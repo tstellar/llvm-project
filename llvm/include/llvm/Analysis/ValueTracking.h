@@ -377,7 +377,11 @@ class Value;
 
   /// This is a wrapper around GetUnderlyingObjects and adds support for basic
   /// ptrtoint+arithmetic+inttoptr sequences.
+<<<<<<< HEAD
   bool getUnderlyingObjectsForCodeGen(const Value *V,
+=======
+  void getUnderlyingObjectsForCodeGen(const Value *V,
+>>>>>>> origin/release/5.x
                             SmallVectorImpl<Value *> &Objects,
                             const DataLayout &DL);
 

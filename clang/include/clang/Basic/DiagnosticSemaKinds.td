@@ -444,12 +444,18 @@ def err_decomp_decl_context : Error<
   "decomposition declaration not permitted in this context">;
 def warn_cxx14_compat_decomp_decl : Warning<
   "decomposition declarations are incompatible with "
+<<<<<<< HEAD
   "C++ standards before C++17">, DefaultIgnore, InGroup<CXXPre17Compat>;
 def ext_decomp_decl : ExtWarn<
   "decomposition declarations are a C++17 extension">, InGroup<CXX17>;
 def ext_decomp_decl_cond : ExtWarn<
   "ISO C++17 does not permit structured binding declaration in a condition">,
   InGroup<DiagGroup<"binding-in-condition">>;
+=======
+  "C++ standards before C++17">, DefaultIgnore, InGroup<CXXPre1zCompat>;
+def ext_decomp_decl : ExtWarn<
+  "decomposition declarations are a C++17 extension">, InGroup<CXX17>;
+>>>>>>> origin/release/5.x
 def err_decomp_decl_spec : Error<
   "decomposition declaration cannot be declared "
   "%plural{1:'%1'|:with '%1' specifiers}0">;
@@ -560,6 +566,16 @@ def warn_access_decl_deprecated : Warning<
 def err_access_decl : Error<
   "ISO C++11 does not allow access declarations; "
   "use using declarations instead">;
+<<<<<<< HEAD
+=======
+def ext_dynamic_exception_spec : ExtWarn<
+  "ISO C++17 does not allow dynamic exception specifications">,
+  InGroup<DynamicExceptionSpec>, DefaultError;
+def warn_exception_spec_deprecated : Warning<
+  "dynamic exception specifications are deprecated">,
+  InGroup<DeprecatedDynamicExceptionSpec>, DefaultIgnore;
+def note_exception_spec_deprecated : Note<"use '%0' instead">;
+>>>>>>> origin/release/5.x
 def warn_deprecated_copy_operation : Warning<
   "definition of implicit copy %select{constructor|assignment operator}1 "
   "for %0 is deprecated because it has a user-declared "
@@ -818,6 +834,7 @@ def err_pragma_options_align_mac68k_target_unsupported : Error<
 def warn_pragma_pack_invalid_alignment : Warning<
   "expected #pragma pack parameter to be '1', '2', '4', '8', or '16'">,
   InGroup<IgnoredPragmas>;
+<<<<<<< HEAD
 def warn_pragma_pack_non_default_at_include : Warning<
   "non-default #pragma pack value changes the alignment of struct or union "
   "members in the included file">, InGroup<PragmaPackSuspiciousInclude>,
@@ -831,6 +848,8 @@ def note_pragma_pack_here : Note<
   "previous '#pragma pack' directive that modifies alignment is here">;
 def note_pragma_pack_pop_instead_reset : Note<
   "did you intend to use '#pragma pack (pop)' instead of '#pragma pack()'?">;
+=======
+>>>>>>> origin/release/5.x
 // Follow the Microsoft implementation.
 def warn_pragma_pack_show : Warning<"value of #pragma pack(show) == %0">;
 def warn_pragma_pack_pop_identifier_and_alignment : Warning<
@@ -1336,14 +1355,26 @@ def warn_messaging_unqualified_id : Warning<
 def err_static_assert_expression_is_not_constant : Error<
   "static_assert expression is not an integral constant expression">;
 def err_static_assert_failed : Error<"static_assert failed%select{ %1|}0">;
+<<<<<<< HEAD
 def err_static_assert_requirement_failed : Error<
   "static_assert failed due to requirement '%0'%select{ %2|}1">;
+=======
+def ext_static_assert_no_message : ExtWarn<
+  "static_assert with no message is a C++17 extension">, InGroup<CXX17>;
+def warn_cxx14_compat_static_assert_no_message : Warning<
+  "static_assert with no message is incompatible with C++ standards before C++17">,
+  DefaultIgnore, InGroup<CXXPre1zCompat>;
+>>>>>>> origin/release/5.x
 
 def ext_inline_variable : ExtWarn<
   "inline variables are a C++17 extension">, InGroup<CXX17>;
 def warn_cxx14_compat_inline_variable : Warning<
   "inline variables are incompatible with C++ standards before C++17">,
+<<<<<<< HEAD
   DefaultIgnore, InGroup<CXXPre17Compat>;
+=======
+  DefaultIgnore, InGroup<CXXPre1zCompat>;
+>>>>>>> origin/release/5.x
 
 def warn_inline_namespace_reopened_noninline : Warning<
   "inline namespace reopened as a non-inline namespace">;
@@ -2320,7 +2351,11 @@ def ext_for_range_begin_end_types_differ : ExtWarn<
   InGroup<CXX17>;
 def warn_for_range_begin_end_types_differ : Warning<
   "'begin' and 'end' returning different types (%0 and %1) is incompatible "
+<<<<<<< HEAD
   "with C++ standards before C++17">, InGroup<CXXPre17Compat>, DefaultIgnore;
+=======
+  "with C++ standards before C++17">, InGroup<CXXPre1zCompat>, DefaultIgnore;
+>>>>>>> origin/release/5.x
 def note_in_for_range: Note<
   "when looking up '%select{begin|end}0' function for range expression "
   "of type %1">;
@@ -4103,7 +4138,11 @@ def err_template_nontype_parm_bad_type : Error<
 def warn_cxx14_compat_template_nontype_parm_auto_type : Warning<
   "non-type template parameters declared with %0 are incompatible with C++ "
   "standards before C++17">,
+<<<<<<< HEAD
   DefaultIgnore, InGroup<CXXPre17Compat>;
+=======
+  DefaultIgnore, InGroup<CXXPre1zCompat>;
+>>>>>>> origin/release/5.x
 def err_template_param_default_arg_redefinition : Error<
   "template parameter redefines default argument">;
 def note_template_param_prev_default_arg : Note<
@@ -6881,6 +6920,7 @@ let CategoryName = "Lambda Issue" in {
   // C++17 '*this' captures.
   def warn_cxx14_compat_star_this_lambda_capture : Warning<
     "by value capture of '*this' is incompatible with C++ standards before C++17">,
+<<<<<<< HEAD
      InGroup<CXXPre17Compat>, DefaultIgnore;
   def ext_star_this_lambda_capture_cxx17 : ExtWarn<
     "capture of '*this' by copy is a C++17 extension">, InGroup<CXX17>;
@@ -6906,6 +6946,11 @@ let CategoryName = "Lambda Issue" in {
   def warn_cxx17_compat_lambda_def_ctor_assign : Warning<
     "%select{default construction|assignment}0 of lambda is incompatible with "
     "C++ standards before C++2a">, InGroup<CXXPre2aCompat>, DefaultIgnore;
+=======
+     InGroup<CXXPre1zCompat>, DefaultIgnore;
+  def ext_star_this_lambda_capture_cxx1z : ExtWarn<
+    "capture of '*this' by copy is a C++17 extension">, InGroup<CXX17>;
+>>>>>>> origin/release/5.x
 }
 
 def err_return_in_captured_stmt : Error<
@@ -7605,10 +7650,15 @@ def warn_unused_volatile : Warning<
 
 def ext_cxx14_attr : Extension<
   "use of the %0 attribute is a C++14 extension">, InGroup<CXX14>;
+<<<<<<< HEAD
 def ext_cxx17_attr : Extension<
   "use of the %0 attribute is a C++17 extension">, InGroup<CXX17>;
 def ext_cxx2a_attr : Extension<
   "use of the %0 attribute is a C++2a extension">, InGroup<CXX2a>;
+=======
+def ext_cxx1z_attr : Extension<
+  "use of the %0 attribute is a C++17 extension">, InGroup<CXX17>;
+>>>>>>> origin/release/5.x
 
 def warn_unused_comparison : Warning<
   "%select{equality|inequality|relational|three-way}0 comparison result unused">,

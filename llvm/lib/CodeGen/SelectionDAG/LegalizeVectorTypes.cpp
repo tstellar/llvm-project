@@ -448,7 +448,11 @@ SDValue DAGTypeLegalizer::ScalarizeVecRes_VSELECT(SDNode *N) {
   SDLoc DL(N);
   // The vselect result and true/value operands needs scalarizing, but it's
   // not a given that the Cond does. For instance, in AVX512 v1i1 is legal.
+<<<<<<< HEAD
   // See the similar logic in ScalarizeVecRes_SETCC
+=======
+  // See the similar logic in ScalarizeVecRes_VSETCC
+>>>>>>> origin/release/5.x
   if (getTypeAction(OpVT) == TargetLowering::TypeScalarizeVector) {
     Cond = GetScalarizedVector(Cond);
   } else {

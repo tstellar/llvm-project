@@ -460,10 +460,26 @@ unsigned DWARFVerifier::verifyDebugInfoAttribute(const DWARFDie &Die,
   case DW_AT_stmt_list:
     // Make sure the offset in the DW_AT_stmt_list attribute is valid.
     if (auto SectionOffset = AttrValue.Value.getAsSectionOffset()) {
+<<<<<<< HEAD
       if (*SectionOffset >= DObj.getLineSection().Data.size())
         ReportError("DW_AT_stmt_list offset is beyond .debug_line bounds: " +
                     llvm::formatv("{0:x8}", *SectionOffset));
       break;
+=======
+      if (*SectionOffset >= DCtx.getLineSection().Data.size()) {
+        ++NumErrors;
+        OS << "error: DW_AT_stmt_list offset is beyond .debug_line "
+              "bounds: "
+           << format("0x%08" PRIx64, *SectionOffset) << "\n";
+        Die.dump(OS, 0);
+        OS << "\n";
+      }
+    } else {
+      ++NumErrors;
+      OS << "error: DIE has invalid DW_AT_stmt_list encoding:\n";
+      Die.dump(OS, 0);
+      OS << "\n";
+>>>>>>> origin/release/5.x
     }
     ReportError("DIE has invalid DW_AT_stmt_list encoding:");
     break;
@@ -547,12 +563,21 @@ unsigned DWARFVerifier::verifyDebugInfoForm(const DWARFDie &Die,
       auto CUOffset = AttrValue.Value.getRawUValue();
       if (CUOffset >= CUSize) {
         ++NumErrors;
+<<<<<<< HEAD
         error() << FormEncodingString(Form) << " CU offset "
                 << format("0x%08" PRIx64, CUOffset)
                 << " is invalid (must be less than CU size of "
                 << format("0x%08" PRIx64, CUSize) << "):\n";
         Die.dump(OS, 0, DumpOpts);
         dump(Die) << '\n';
+=======
+        OS << "error: " << FormEncodingString(Form) << " CU offset "
+           << format("0x%08" PRIx64, CUOffset)
+           << " is invalid (must be less than CU size of "
+           << format("0x%08" PRIx32, CUSize) << "):\n";
+        Die.dump(OS, 0);
+        OS << "\n";
+>>>>>>> origin/release/5.x
       } else {
         // Valid reference, but we will verify it points to an actual
         // DIE later.
@@ -750,11 +775,19 @@ void DWARFVerifier::verifyDebugLineRows() {
       // Verify row address.
       if (Row.Address.Address < PrevAddress) {
         ++NumDebugLineErrors;
+<<<<<<< HEAD
         error() << ".debug_line["
                 << format("0x%08" PRIx64,
                           *toSectionOffset(Die.find(DW_AT_stmt_list)))
                 << "] row[" << RowIndex
                 << "] decreases in address from previous row:\n";
+=======
+        OS << "error: .debug_line["
+           << format("0x%08" PRIx64,
+                     *toSectionOffset(Die.find(DW_AT_stmt_list)))
+           << "] row[" << RowIndex
+           << "] decreases in address from previous row:\n";
+>>>>>>> origin/release/5.x
 
         DWARFDebugLine::Row::dumpTableHeader(OS);
         if (RowIndex > 0)
@@ -766,6 +799,7 @@ void DWARFVerifier::verifyDebugLineRows() {
       // Verify file index.
       if (!LineTable->hasFileAtIndex(Row.File)) {
         ++NumDebugLineErrors;
+<<<<<<< HEAD
         bool isDWARF5 = LineTable->Prologue.getVersion() >= 5;
         error() << ".debug_line["
                 << format("0x%08" PRIx64,
@@ -774,6 +808,13 @@ void DWARFVerifier::verifyDebugLineRows() {
                 << " (valid values are [" << (isDWARF5 ? "0," : "1,")
                 << LineTable->Prologue.FileNames.size()
                 << (isDWARF5 ? ")" : "]") << "):\n";
+=======
+        OS << "error: .debug_line["
+           << format("0x%08" PRIx64,
+                     *toSectionOffset(Die.find(DW_AT_stmt_list)))
+           << "][" << RowIndex << "] has invalid file index " << Row.File
+           << " (valid values are [1," << MaxFileIndex << "]):\n";
+>>>>>>> origin/release/5.x
         DWARFDebugLine::Row::dumpTableHeader(OS);
         Row.dump(OS);
         OS << '\n';

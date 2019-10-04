@@ -23,9 +23,18 @@ entry:
 
 ; ASM: SWDSP
 ; ASM: SWDSP
+<<<<<<< HEAD
 
 ; MM-OBJ:   sw  ${{[0-9]+}}, {{[0-9]+}}($sp)
 ; MM-OBJ:   sw  ${{[0-9]+}}, {{[0-9]+}}($sp)
+=======
+; ASM: SWDSP
+
+; MM-OBJ:   sw  ${{[0-9]+}}, {{[0-9]+}}($sp)
+; MM-OBJ:   sw  ${{[0-9]+}}, {{[0-9]+}}($sp)
+; MM-OBJ:   sw  ${{[0-9]+}}, {{[0-9]+}}($sp)
+; MM-OBJ:   sw  ${{[0-9]+}}, {{[0-9]+}}($sp)
+>>>>>>> origin/release/5.x
 
 true:
   ret <4 x i8> %c

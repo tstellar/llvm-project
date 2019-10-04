@@ -274,7 +274,10 @@ void MipsMCExpr::fixELFSymbolsInTLSFixups(MCAssembler &Asm) const {
     if (const MipsMCExpr *E = dyn_cast<const MipsMCExpr>(getSubExpr()))
       E->fixELFSymbolsInTLSFixups(Asm);
     break;
+<<<<<<< HEAD
   case MEK_DTPREL:
+=======
+>>>>>>> origin/release/5.x
   case MEK_DTPREL_HI:
   case MEK_DTPREL_LO:
   case MEK_TLSLDM:

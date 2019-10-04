@@ -381,6 +381,7 @@ def warn_target_unsupported_abs2008 : Warning<
 def warn_target_unsupported_compact_branches : Warning<
   "ignoring '-mcompact-branches=' option because the '%0' architecture does not"
   " support it">, InGroup<UnsupportedCB>;
+<<<<<<< HEAD
 def warn_target_unsupported_extension : Warning<
   "ignoring extension '%0' because the '%1' architecture does not support it">,
    InGroup<InvalidCommandLineArgument>;
@@ -398,6 +399,8 @@ def warn_drv_unsupported_pic_with_mabicalls : Warning<
   InGroup<OptionIgnored>;
 def err_drv_unsupported_noabicalls_pic : Error<
   "position-independent code requires '-mabicalls'">;
+=======
+>>>>>>> origin/release/5.x
 def err_drv_unsupported_indirect_jump_opt : Error<
   "'-mindirect-jump=%0' is unsupported with the '%1' architecture">;
 def err_drv_unknown_indirect_jump_opt : Error<

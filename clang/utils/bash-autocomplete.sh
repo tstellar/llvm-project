@@ -38,8 +38,12 @@ _clang()
 
   # expand ~ to $HOME
   eval local path=${COMP_WORDS[0]}
+<<<<<<< HEAD
   # Use $'\t' so that bash expands the \t for older versions of sed.
   flags=$( "$path" --autocomplete="$arg" 2>/dev/null | sed -e $'s/\t.*//' )
+=======
+  flags=$( "$path" --autocomplete="$arg" 2>/dev/null | sed -e 's/\t.*//' )
+>>>>>>> origin/release/5.x
   # If clang is old that it does not support --autocomplete,
   # fall back to the filename completion.
   if [[ "$?" != 0 ]]; then
@@ -49,7 +53,11 @@ _clang()
 
   # When clang does not emit any possible autocompletion, or user pushed tab after " ",
   # just autocomplete files.
+<<<<<<< HEAD
   if [[ "$flags" == "$(echo -e '\n')" ]]; then
+=======
+  if [[ "$flags" == "$(echo -e '\n')" || "$arg" == "" ]]; then
+>>>>>>> origin/release/5.x
     # If -foo=<tab> and there was no possible values, autocomplete files.
     [[ "$cur" == '=' || "$cur" == -*= ]] && cur=""
     _clang_filedir

@@ -520,6 +520,7 @@ void upcast_to_vbase() {
 }
 }
 
+<<<<<<< HEAD
 struct nothrow {};
 void *operator new[](__SIZE_TYPE__, nothrow) noexcept;
 
@@ -606,12 +607,18 @@ namespace NothrowNew {
   }
 }
 
+=======
+>>>>>>> origin/release/5.x
 struct ThisAlign {
   void this_align_lambda();
   void this_align_lambda_2();
 };
 void ThisAlign::this_align_lambda() {
+<<<<<<< HEAD
   // CHECK-LABEL: define internal %struct.ThisAlign* @"_ZZN9ThisAlign17this_align_lambdaEvENK3$_0clEv"
+=======
+  // CHECK-LABEL: define {{.*}}@"_ZZN9ThisAlign17this_align_lambdaEvENK3$_0clEv"
+>>>>>>> origin/release/5.x
   // CHECK-SAME: (%{{.*}}* %[[this:[^)]*]])
   // CHECK: %[[this_addr:.*]] = alloca
   // CHECK: store %{{.*}}* %[[this]], %{{.*}}** %[[this_addr]],
@@ -712,7 +719,11 @@ namespace CopyValueRepresentation {
 }
 
 void ThisAlign::this_align_lambda_2() {
+<<<<<<< HEAD
   // CHECK-LABEL: define internal void @"_ZZN9ThisAlign19this_align_lambda_2EvENK3$_1clEv"
+=======
+  // CHECK-LABEL: define {{.*}}@"_ZZN9ThisAlign19this_align_lambda_2EvENK3$_1clEv"
+>>>>>>> origin/release/5.x
   // CHECK-SAME: (%{{.*}}* %[[this:[^)]*]])
   // CHECK: %[[this_addr:.*]] = alloca
   // CHECK: store %{{.*}}* %[[this]], %{{.*}}** %[[this_addr]],

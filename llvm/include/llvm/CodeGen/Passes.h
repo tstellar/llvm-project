@@ -439,6 +439,7 @@ namespace llvm {
   /// shuffles.
   FunctionPass *createExpandReductionsPass();
 
+<<<<<<< HEAD
   // This pass expands memcmp() to load/stores.
   FunctionPass *createExpandMemCmpPass();
 
@@ -454,6 +455,11 @@ namespace llvm {
   /// Create Hardware Loop pass. \see HardwareLoops.cpp
   FunctionPass *createHardwareLoopsPass();
 
+=======
+  // This pass expands indirectbr instructions.
+  FunctionPass *createIndirectBrExpandPass();
+
+>>>>>>> origin/release/5.x
 } // End llvm namespace
 
 #endif

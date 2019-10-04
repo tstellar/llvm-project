@@ -187,7 +187,11 @@ class VirtRegRewriter : public MachineFunctionPass {
   void addLiveInsForSubRanges(const LiveInterval &LI, Register PhysReg) const;
   void handleIdentityCopy(MachineInstr &MI) const;
   void expandCopyBundle(MachineInstr &MI) const;
+<<<<<<< HEAD
   bool subRegLiveThrough(const MachineInstr &MI, Register SuperPhysReg) const;
+=======
+  bool subRegLiveThrough(const MachineInstr &MI, unsigned SuperPhysReg) const;
+>>>>>>> origin/release/5.x
 
 public:
   static char ID;
@@ -468,7 +472,11 @@ void VirtRegRewriter::expandCopyBundle(MachineInstr &MI) const {
 /// \pre \p MI defines a subregister of a virtual register that
 /// has been assigned to \p SuperPhysReg.
 bool VirtRegRewriter::subRegLiveThrough(const MachineInstr &MI,
+<<<<<<< HEAD
                                         Register SuperPhysReg) const {
+=======
+                                        unsigned SuperPhysReg) const {
+>>>>>>> origin/release/5.x
   SlotIndex MIIndex = LIS->getInstructionIndex(MI);
   SlotIndex BeforeMIUses = MIIndex.getBaseIndex();
   SlotIndex AfterMIDefs = MIIndex.getBoundaryIndex();

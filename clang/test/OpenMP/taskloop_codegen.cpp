@@ -12,6 +12,7 @@
 
 // CHECK-LABEL: @main
 int main(int argc, char **argv) {
+<<<<<<< HEAD
 // CHECK: [[GTID:%.+]] = call i32 @__kmpc_global_thread_num(%struct.ident_t* [[DEFLOC:@.+]])
 // CHECK: call i8* @__kmpc_omp_task_alloc(%struct.ident_t* [[DEFLOC]], i32 [[GTID]],
 // CHECK: call i32 @__kmpc_omp_task(%struct.ident_t* [[DEFLOC]], i32 [[GTID]],
@@ -19,6 +20,15 @@ int main(int argc, char **argv) {
   ;
 // CHECK: call void @__kmpc_taskgroup(%struct.ident_t* [[DEFLOC]], i32 [[GTID]])
 // CHECK: [[TASKV:%.+]] = call i8* @__kmpc_omp_task_alloc(%struct.ident_t* [[DEFLOC]], i32 [[GTID]], i32 33, i64 80, i64 1, i32 (i32, i8*)* bitcast (i32 (i32, [[TDP_TY:%.+]]*)* [[TASK1:@.+]] to i32 (i32, i8*)*))
+=======
+// CHECK: [[GTID:%.+]] = call i32 @__kmpc_global_thread_num(%ident_t* [[DEFLOC:@.+]])
+// CHECK: call i8* @__kmpc_omp_task_alloc(%ident_t* [[DEFLOC]], i32 [[GTID]],
+// CHECK: call i32 @__kmpc_omp_task(%ident_t* [[DEFLOC]], i32 [[GTID]],
+#pragma omp task
+  ;
+// CHECK: call void @__kmpc_taskgroup(%ident_t* [[DEFLOC]], i32 [[GTID]])
+// CHECK: [[TASKV:%.+]] = call i8* @__kmpc_omp_task_alloc(%ident_t* [[DEFLOC]], i32 [[GTID]], i32 33, i64 80, i64 1, i32 (i32, i8*)* bitcast (i32 (i32, [[TDP_TY:%.+]]*)* [[TASK1:@.+]] to i32 (i32, i8*)*))
+>>>>>>> origin/release/5.x
 // CHECK: [[TASK:%.+]] = bitcast i8* [[TASKV]] to [[TDP_TY]]*
 // CHECK: [[TASK_DATA:%.+]] = getelementptr inbounds [[TDP_TY]], [[TDP_TY]]* [[TASK]], i32 0, i32 0
 // CHECK: [[DOWN:%.+]] = getelementptr inbounds [[TD_TY:%.+]], [[TD_TY]]* [[TASK_DATA]], i32 0, i32 5

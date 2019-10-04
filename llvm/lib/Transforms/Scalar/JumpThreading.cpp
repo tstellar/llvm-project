@@ -102,12 +102,15 @@ static cl::opt<bool> PrintLVIAfterJumpThreading(
     cl::desc("Print the LazyValueInfo cache after JumpThreading"), cl::init(false),
     cl::Hidden);
 
+<<<<<<< HEAD
 static cl::opt<bool> ThreadAcrossLoopHeaders(
     "jump-threading-across-loop-headers",
     cl::desc("Allow JumpThreading to thread across loop headers, for testing"),
     cl::init(false), cl::Hidden);
 
 
+=======
+>>>>>>> origin/release/5.x
 namespace {
 
   /// This pass performs 'jump threading', which looks at blocks that have
@@ -138,11 +141,15 @@ namespace {
     bool runOnFunction(Function &F) override;
 
     void getAnalysisUsage(AnalysisUsage &AU) const override {
+<<<<<<< HEAD
       AU.addRequired<DominatorTreeWrapperPass>();
       AU.addPreserved<DominatorTreeWrapperPass>();
+=======
+      if (PrintLVIAfterJumpThreading)
+        AU.addRequired<DominatorTreeWrapperPass>();
+>>>>>>> origin/release/5.x
       AU.addRequired<AAResultsWrapperPass>();
       AU.addRequired<LazyValueInfoWrapperPass>();
-      AU.addPreserved<LazyValueInfoWrapperPass>();
       AU.addPreserved<GlobalsAAWrapperPass>();
       AU.addRequired<TargetLibraryInfoWrapperPass>();
     }
@@ -312,11 +319,20 @@ bool JumpThreading::runOnFunction(Function &F) {
     BFI.reset(new BlockFrequencyInfo(F, *BPI, LI));
   }
 
+<<<<<<< HEAD
   bool Changed = Impl.runImpl(F, TLI, LVI, AA, &DTU, HasProfileData,
                               std::move(BFI), std::move(BPI));
   if (PrintLVIAfterJumpThreading) {
     dbgs() << "LVI for function '" << F.getName() << "':\n";
     LVI->printLVI(F, *DT, dbgs());
+=======
+  bool Changed = Impl.runImpl(F, TLI, LVI, AA, HasProfileData, std::move(BFI),
+                              std::move(BPI));
+  if (PrintLVIAfterJumpThreading) {
+    dbgs() << "LVI for function '" << F.getName() << "':\n";
+    LVI->printLVI(F, getAnalysis<DominatorTreeWrapperPass>().getDomTree(),
+                  dbgs());
+>>>>>>> origin/release/5.x
   }
   return Changed;
 }

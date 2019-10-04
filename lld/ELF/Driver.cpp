@@ -812,6 +812,7 @@ static void parseClangOption(StringRef opt, const Twine &msg) {
 }
 
 // Initializes Config members by the command line options.
+<<<<<<< HEAD
 static void readConfigs(opt::InputArgList &args) {
   errorHandler().verbose = args.hasArg(OPT_verbose);
   errorHandler().fatalWarnings =
@@ -984,6 +985,93 @@ static void readConfigs(opt::InputArgList &args) {
   if (config->ltoo > 3)
     error("invalid optimization level for LTO: " + Twine(config->ltoo));
   if (config->ltoPartitions == 0)
+=======
+void LinkerDriver::readConfigs(opt::InputArgList &Args) {
+  Config->AllowMultipleDefinition = Args.hasArg(OPT_allow_multiple_definition);
+  Config->AuxiliaryList = getArgs(Args, OPT_auxiliary);
+  Config->Bsymbolic = Args.hasArg(OPT_Bsymbolic);
+  Config->BsymbolicFunctions = Args.hasArg(OPT_Bsymbolic_functions);
+  Config->CompressDebugSections = getCompressDebugSections(Args);
+  Config->DefineCommon = getArg(Args, OPT_define_common, OPT_no_define_common,
+                                !Args.hasArg(OPT_relocatable));
+  Config->Demangle = getArg(Args, OPT_demangle, OPT_no_demangle, true);
+  Config->DisableVerify = Args.hasArg(OPT_disable_verify);
+  Config->Discard = getDiscard(Args);
+  Config->DynamicLinker = getDynamicLinker(Args);
+  Config->EhFrameHdr = Args.hasArg(OPT_eh_frame_hdr);
+  Config->EmitRelocs = Args.hasArg(OPT_emit_relocs);
+  Config->EnableNewDtags = !Args.hasArg(OPT_disable_new_dtags);
+  Config->Entry = Args.getLastArgValue(OPT_entry);
+  Config->ExportDynamic =
+      getArg(Args, OPT_export_dynamic, OPT_no_export_dynamic, false);
+  Config->FatalWarnings =
+      getArg(Args, OPT_fatal_warnings, OPT_no_fatal_warnings, false);
+  Config->FilterList = getArgs(Args, OPT_filter);
+  Config->Fini = Args.getLastArgValue(OPT_fini, "_fini");
+  Config->GcSections = getArg(Args, OPT_gc_sections, OPT_no_gc_sections, false);
+  Config->GdbIndex = Args.hasArg(OPT_gdb_index);
+  Config->ICF = getArg(Args, OPT_icf_all, OPT_icf_none, false);
+  Config->Init = Args.getLastArgValue(OPT_init, "_init");
+  Config->LTOAAPipeline = Args.getLastArgValue(OPT_lto_aa_pipeline);
+  Config->LTONewPmPasses = Args.getLastArgValue(OPT_lto_newpm_passes);
+  Config->LTOO = getInteger(Args, OPT_lto_O, 2);
+  Config->LTOPartitions = getInteger(Args, OPT_lto_partitions, 1);
+  Config->MapFile = Args.getLastArgValue(OPT_Map);
+  Config->NoGnuUnique = Args.hasArg(OPT_no_gnu_unique);
+  Config->NoUndefinedVersion = Args.hasArg(OPT_no_undefined_version);
+  Config->Nostdlib = Args.hasArg(OPT_nostdlib);
+  Config->OFormatBinary = isOutputFormatBinary(Args);
+  Config->Omagic = Args.hasArg(OPT_omagic);
+  Config->OptRemarksFilename = Args.getLastArgValue(OPT_opt_remarks_filename);
+  Config->OptRemarksWithHotness = Args.hasArg(OPT_opt_remarks_with_hotness);
+  Config->Optimize = getInteger(Args, OPT_O, 1);
+  Config->OutputFile = Args.getLastArgValue(OPT_o);
+  Config->Pie = getArg(Args, OPT_pie, OPT_nopie, false);
+  Config->PrintGcSections = Args.hasArg(OPT_print_gc_sections);
+  Config->Rpath = getRpath(Args);
+  Config->Relocatable = Args.hasArg(OPT_relocatable);
+  Config->SaveTemps = Args.hasArg(OPT_save_temps);
+  Config->SearchPaths = getArgs(Args, OPT_L);
+  Config->SectionStartMap = getSectionStartMap(Args);
+  Config->Shared = Args.hasArg(OPT_shared);
+  Config->SingleRoRx = Args.hasArg(OPT_no_rosegment);
+  Config->SoName = Args.getLastArgValue(OPT_soname);
+  Config->SortSection = getSortSection(Args);
+  Config->Strip = getStrip(Args);
+  Config->Sysroot = Args.getLastArgValue(OPT_sysroot);
+  Config->Target1Rel = getArg(Args, OPT_target1_rel, OPT_target1_abs, false);
+  Config->Target2 = getTarget2(Args);
+  Config->ThinLTOCacheDir = Args.getLastArgValue(OPT_thinlto_cache_dir);
+  Config->ThinLTOCachePolicy = check(
+      parseCachePruningPolicy(Args.getLastArgValue(OPT_thinlto_cache_policy)),
+      "--thinlto-cache-policy: invalid cache policy");
+  Config->ThinLTOJobs = getInteger(Args, OPT_thinlto_jobs, -1u);
+  Config->Threads = getArg(Args, OPT_threads, OPT_no_threads, true);
+  Config->Trace = Args.hasArg(OPT_trace);
+  Config->Undefined = getArgs(Args, OPT_undefined);
+  Config->UnresolvedSymbols = getUnresolvedSymbolPolicy(Args);
+  Config->Verbose = Args.hasArg(OPT_verbose);
+  Config->WarnCommon = Args.hasArg(OPT_warn_common);
+  Config->ZCombreloc = !hasZOption(Args, "nocombreloc");
+  Config->ZExecstack = hasZOption(Args, "execstack");
+  Config->ZHazardplt = hasZOption(Args, "hazardplt");
+  Config->ZNocopyreloc = hasZOption(Args, "nocopyreloc");
+  Config->ZNodelete = hasZOption(Args, "nodelete");
+  Config->ZNodlopen = hasZOption(Args, "nodlopen");
+  Config->ZNow = hasZOption(Args, "now");
+  Config->ZOrigin = hasZOption(Args, "origin");
+  Config->ZRelro = !hasZOption(Args, "norelro");
+  Config->ZRetpolineplt = hasZOption(Args, "retpolineplt");
+  Config->ZRodynamic = hasZOption(Args, "rodynamic");
+  Config->ZStackSize = getZOptionValue(Args, "stack-size", 0);
+  Config->ZText = !hasZOption(Args, "notext");
+  Config->ZWxneeded = hasZOption(Args, "wxneeded");
+
+  if (Config->LTOO > 3)
+    error("invalid optimization level for LTO: " +
+          Args.getLastArgValue(OPT_lto_O));
+  if (Config->LTOPartitions == 0)
+>>>>>>> origin/release/5.x
     error("--lto-partitions: number of threads must be > 0");
   if (config->thinLTOJobs == 0)
     error("--thinlto-jobs: number of threads must be > 0");

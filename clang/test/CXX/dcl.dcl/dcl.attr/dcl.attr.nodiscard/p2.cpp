@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 // RUN: %clang_cc1 -fsyntax-only -std=c++2a -verify -Wc++2a-extensions %s
 // RUN: %clang_cc1 -fsyntax-only -std=c++17 -verify -Wc++17-extensions %s
 // RUN: %clang_cc1 -fsyntax-only -std=c++11 -verify -DEXT -Wc++17-extensions -Wc++2a-extensions %s
+=======
+// RUN: %clang_cc1 -fsyntax-only -std=c++17 -verify -Wc++17-extensions %s
+// RUN: %clang_cc1 -fsyntax-only -std=c++11 -verify -DEXT -Wc++17-extensions %s
+>>>>>>> origin/release/5.x
 
 struct [[nodiscard]] S {};
 S get_s();
@@ -125,6 +130,7 @@ void usage() {
 }; // namespace p1771
 
 #ifdef EXT
+<<<<<<< HEAD
 // expected-warning@5 {{use of the 'nodiscard' attribute is a C++17 extension}}
 // expected-warning@9 {{use of the 'nodiscard' attribute is a C++17 extension}}
 // expected-warning@12 {{use of the 'nodiscard' attribute is a C++17 extension}}
@@ -141,4 +147,9 @@ void usage() {
 // expected-warning@91 {{use of the 'nodiscard' attribute is a C++17 extension}}
 // expected-warning@92 {{use of the 'nodiscard' attribute is a C++2a extension}}
 // expected-warning@95 {{use of the 'nodiscard' attribute is a C++2a extension}}
+=======
+// expected-warning@4 {{use of the 'nodiscard' attribute is a C++17 extension}}
+// expected-warning@8 {{use of the 'nodiscard' attribute is a C++17 extension}}
+// expected-warning@11 {{use of the 'nodiscard' attribute is a C++17 extension}}
+>>>>>>> origin/release/5.x
 #endif

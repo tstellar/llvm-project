@@ -1296,7 +1296,11 @@ let isPseudo = 1, isCodeGenOnly = 1, hasNoSchedulingInfo = 1 in {
 }
 
 let DecoderNamespace = "MipsDSP", Arch = "dsp",
+<<<<<<< HEAD
     ASEPredicate = [HasDSP] in {
+=======
+    AdditionalPredicates = [HasDSP] in {
+>>>>>>> origin/release/5.x
   def LWDSP : Load<"lw", DSPROpnd, null_frag, II_LW>, DspMMRel, LW_FM<0x23>;
   def SWDSP : Store<"sw", DSPROpnd, null_frag, II_SW>, DspMMRel, LW_FM<0x2b>;
 }

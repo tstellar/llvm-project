@@ -8,6 +8,7 @@ define void @bzero_4_heap(i8* nocapture %c) {
   ret void
 }
 
+<<<<<<< HEAD
 define void @bzero_8_heap(i8* nocapture %c) {
 ; CHECK-LABEL: bzero_8_heap:
 ; CHECK:       str xzr, [x0]
@@ -117,6 +118,14 @@ define void @bzero_26_stack() {
 ; CHECK-NEXT:  str xzr, [sp]
 ; CHECK-NEXT:  strh wzr, [sp, #24]
 ; CHECK-NEXT:  bl something
+=======
+define void @t2() nounwind ssp {
+entry:
+; CHECK-LABEL: t2:
+; CHECK: stp xzr, xzr, [sp, #16]
+; CHECK: strh wzr, [sp, #32]
+; CHECK: str xzr, [sp, #8]
+>>>>>>> origin/release/5.x
   %buf = alloca [26 x i8], align 1
   %cast = bitcast [26 x i8]* %buf to i8*
   call void @llvm.memset.p0i8.i32(i8* %cast, i8 0, i32 26, i1 false)

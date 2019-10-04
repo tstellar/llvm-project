@@ -1021,6 +1021,7 @@ constexpr void Void(int n) {
   void();
 }
 constexpr int void_test = (Void(0), 1);
+<<<<<<< HEAD
 
 namespace PR19741 {
 constexpr void addone(int &m) { m++; }
@@ -1245,3 +1246,5 @@ namespace TemporaryWithBadPointer {
 }
 =======
 >>>>>>> release/8.x
+=======
+>>>>>>> origin/release/5.x

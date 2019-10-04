@@ -252,6 +252,7 @@ __attribute__((objc_root_class))
 @synthesize prop = _prop;
 
 @end
+<<<<<<< HEAD
 
 // rdar://39024725
 // Allow strong readwrite property and a readonly one.
@@ -291,3 +292,5 @@ __attribute__((objc_root_class))
 // This used to crash because we'd temporarly store the weak attribute on the
 // declaration specifier, then deallocate it when clearing the declarator.
 id i1, __weak i2, i3;
+=======
+>>>>>>> origin/release/5.x

@@ -163,6 +163,7 @@ struct Configuration {
   std::map<StringRef, uint32_t> section;
 
   // Options for manifest files.
+<<<<<<< HEAD
   ManifestKind manifest = No;
   int manifestID = 1;
   StringRef manifestDependency;
@@ -174,6 +175,16 @@ struct Configuration {
 
   // Used for /aligncomm.
   std::map<std::string, int> alignComm;
+=======
+  ManifestKind Manifest = No;
+  int ManifestID = 1;
+  StringRef ManifestDependency;
+  bool ManifestUAC = true;
+  std::vector<std::string> ManifestInput;
+  StringRef ManifestLevel = "'asInvoker'";
+  StringRef ManifestUIAccess = "'false'";
+  StringRef ManifestFile;
+>>>>>>> origin/release/5.x
 
   // Used for /failifmismatch.
   std::map<StringRef, std::pair<StringRef, InputFile *>> mustMatch;

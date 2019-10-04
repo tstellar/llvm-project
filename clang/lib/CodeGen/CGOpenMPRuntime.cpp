@@ -265,14 +265,22 @@ public:
     return nullptr;
   }
 
+<<<<<<< HEAD
   /// Get an LValue for the current ThreadID variable.
+=======
+  /// \brief Get an LValue for the current ThreadID variable.
+>>>>>>> origin/release/5.x
   LValue getThreadIDVariableLValue(CodeGenFunction &CGF) override {
     if (OuterRegionInfo)
       return OuterRegionInfo->getThreadIDVariableLValue(CGF);
     llvm_unreachable("No LValue for inlined OpenMP construct");
   }
 
+<<<<<<< HEAD
   /// Get the name of the capture helper.
+=======
+  /// \brief Get the name of the capture helper.
+>>>>>>> origin/release/5.x
   StringRef getHelperName() const override {
     if (auto *OuterRegionInfo = getOldCSI())
       return OuterRegionInfo->getHelperName();
@@ -5161,11 +5169,17 @@ CGOpenMPRuntime::emitTaskInit(CodeGenFunction &CGF, SourceLocation Loc,
           CGM, D.getDirectiveKind(), KmpInt32Ty, KmpRoutineEntryPtrQTy));
     }
     KmpTaskTQTy = SavedKmpTaskloopTQTy;
+<<<<<<< HEAD
   } else {
     assert((D.getDirectiveKind() == OMPD_task ||
             isOpenMPTargetExecutionDirective(D.getDirectiveKind()) ||
             isOpenMPTargetDataManagementDirective(D.getDirectiveKind())) &&
            "Expected taskloop, task or target directive");
+=======
+  } else if (D.getDirectiveKind() == OMPD_task) {
+    assert(D.getDirectiveKind() == OMPD_task &&
+           "Expected taskloop or task directive");
+>>>>>>> origin/release/5.x
     if (SavedKmpTaskTQTy.isNull()) {
       SavedKmpTaskTQTy = C.getRecordType(createKmpTaskTRecordDecl(
           CGM, D.getDirectiveKind(), KmpInt32Ty, KmpRoutineEntryPtrQTy));

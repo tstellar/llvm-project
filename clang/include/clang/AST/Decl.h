@@ -1821,9 +1821,47 @@ private:
 
   LazyDeclStmtPtr Body;
 
+<<<<<<< HEAD
   unsigned ODRHash;
 
   /// End part of this FunctionDecl's source range.
+=======
+  // FIXME: This can be packed into the bitfields in DeclContext.
+  // NOTE: VC++ packs bitfields poorly if the types differ.
+  unsigned SClass : 3;
+  unsigned IsInline : 1;
+  unsigned IsInlineSpecified : 1;
+protected:
+  // This is shared by CXXConstructorDecl, CXXConversionDecl, and
+  // CXXDeductionGuideDecl.
+  unsigned IsExplicitSpecified : 1;
+private:
+  unsigned IsVirtualAsWritten : 1;
+  unsigned IsPure : 1;
+  unsigned HasInheritedPrototype : 1;
+  unsigned HasWrittenPrototype : 1;
+  unsigned IsDeleted : 1;
+  unsigned IsTrivial : 1; // sunk from CXXMethodDecl
+  unsigned IsDefaulted : 1; // sunk from CXXMethoDecl
+  unsigned IsExplicitlyDefaulted : 1; //sunk from CXXMethodDecl
+  unsigned HasImplicitReturnZero : 1;
+  unsigned IsLateTemplateParsed : 1;
+  unsigned IsConstexpr : 1;
+  unsigned InstantiationIsPending:1;
+
+  /// \brief Indicates if the function uses __try.
+  unsigned UsesSEHTry : 1;
+
+  /// \brief Indicates if the function was a definition but its body was
+  /// skipped.
+  unsigned HasSkippedBody : 1;
+
+  /// Indicates if the function declaration will have a body, once we're done
+  /// parsing it.
+  unsigned WillHaveBody : 1;
+
+  /// \brief End part of this FunctionDecl's source range.
+>>>>>>> origin/release/5.x
   ///
   /// We could compute the full range in getSourceRange(). However, when we're
   /// dealing with a function definition deserialized from a PCH/AST file,

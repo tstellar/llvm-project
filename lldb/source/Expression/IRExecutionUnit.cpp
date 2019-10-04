@@ -270,6 +270,10 @@ void IRExecutionUnit::GetRunnableInfo(Status &error, lldb::addr_t &func_addr,
                               : llvm::Reloc::Static)
       .setMCJITMemoryManager(
           std::unique_ptr<MemoryManager>(new MemoryManager(*this)))
+<<<<<<< HEAD
+=======
+      .setCodeModel(codeModel)
+>>>>>>> origin/release/5.x
       .setOptLevel(llvm::CodeGenOpt::Less);
 
   llvm::StringRef mArch;

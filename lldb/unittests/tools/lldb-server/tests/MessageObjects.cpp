@@ -66,7 +66,20 @@ const RegisterValue *ThreadInfo::ReadRegister(unsigned int Id) const {
   return Iter == m_registers.end() ? nullptr : &Iter->getSecond();
 }
 
+<<<<<<< HEAD
 //====== JThreadsInfo ==========================================================
+=======
+bool ThreadInfo::ReadRegisterAsUint64(unsigned int register_id,
+                                      uint64_t &value) const {
+  std::string value_str(m_registers.lookup(register_id));
+  if (!llvm::to_integer(value_str, value, 16)) {
+    GTEST_LOG_(ERROR)
+        << formatv("ThreadInfo: Unable to parse register value at {0}.",
+                   register_id)
+               .str();
+    return false;
+  }
+>>>>>>> origin/release/5.x
 
 Expected<RegisterMap>
 JThreadsInfo::parseRegisters(const StructuredData::Dictionary &Dict,

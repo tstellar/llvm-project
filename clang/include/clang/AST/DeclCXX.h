@@ -442,7 +442,17 @@ class CXXRecordDecl : public RecordDecl {
     /// constructor.
     unsigned HasDefaultedDefaultConstructor : 1;
 
+<<<<<<< HEAD
     /// True if a defaulted default constructor for this class would
+=======
+    /// \brief True if this class can be passed in a non-address-preserving
+    /// fashion (such as in registers) according to the C++ language rules.
+    /// This does not imply anything about how the ABI in use will actually
+    /// pass an object of this class.
+    unsigned CanPassInRegisters : 1;
+
+    /// \brief True if a defaulted default constructor for this class would
+>>>>>>> origin/release/5.x
     /// be constexpr.
     unsigned DefaultedDefaultConstructorIsConstexpr : 1;
 
@@ -873,7 +883,11 @@ public:
     return data().FirstFriend.isValid();
   }
 
+<<<<<<< HEAD
   /// \c true if a defaulted copy constructor for this class would be
+=======
+  /// \brief \c true if a defaulted copy constructor for this class would be
+>>>>>>> origin/release/5.x
   /// deleted.
   bool defaultedCopyConstructorIsDeleted() const {
     assert((!needsOverloadResolutionForCopyConstructor() ||
@@ -882,7 +896,11 @@ public:
     return data().DefaultedCopyConstructorIsDeleted;
   }
 
+<<<<<<< HEAD
   /// \c true if a defaulted move constructor for this class would be
+=======
+  /// \brief \c true if a defaulted move constructor for this class would be
+>>>>>>> origin/release/5.x
   /// deleted.
   bool defaultedMoveConstructorIsDeleted() const {
     assert((!needsOverloadResolutionForMoveConstructor() ||
@@ -891,6 +909,7 @@ public:
     return data().DefaultedMoveConstructorIsDeleted;
   }
 
+<<<<<<< HEAD
   /// \c true if a defaulted destructor for this class would be deleted.
   bool defaultedDestructorIsDeleted() const {
     assert((!needsOverloadResolutionForDestructor() ||
@@ -900,27 +919,47 @@ public:
   }
 
   /// \c true if we know for sure that this class has a single,
+=======
+  /// \brief \c true if a defaulted destructor for this class would be deleted.
+  bool defaultedDestructorIsDeleted() const {
+    return !data().DefaultedDestructorIsDeleted;
+  }
+
+  /// \brief \c true if we know for sure that this class has a single,
+>>>>>>> origin/release/5.x
   /// accessible, unambiguous copy constructor that is not deleted.
   bool hasSimpleCopyConstructor() const {
     return !hasUserDeclaredCopyConstructor() &&
            !data().DefaultedCopyConstructorIsDeleted;
   }
 
+<<<<<<< HEAD
   /// \c true if we know for sure that this class has a single,
+=======
+  /// \brief \c true if we know for sure that this class has a single,
+>>>>>>> origin/release/5.x
   /// accessible, unambiguous move constructor that is not deleted.
   bool hasSimpleMoveConstructor() const {
     return !hasUserDeclaredMoveConstructor() && hasMoveConstructor() &&
            !data().DefaultedMoveConstructorIsDeleted;
   }
 
+<<<<<<< HEAD
   /// \c true if we know for sure that this class has a single,
+=======
+  /// \brief \c true if we know for sure that this class has a single,
+>>>>>>> origin/release/5.x
   /// accessible, unambiguous move assignment operator that is not deleted.
   bool hasSimpleMoveAssignment() const {
     return !hasUserDeclaredMoveAssignment() && hasMoveAssignment() &&
            !data().DefaultedMoveAssignmentIsDeleted;
   }
 
+<<<<<<< HEAD
   /// \c true if we know for sure that this class has an accessible
+=======
+  /// \brief \c true if we know for sure that this class has an accessible
+>>>>>>> origin/release/5.x
   /// destructor that is not deleted.
   bool hasSimpleDestructor() const {
     return !hasUserDeclaredDestructor() &&
@@ -1022,7 +1061,11 @@ public:
            needsImplicitMoveConstructor();
   }
 
+<<<<<<< HEAD
   /// Set that we attempted to declare an implicit copy
+=======
+  /// \brief Set that we attempted to declare an implicit copy
+>>>>>>> origin/release/5.x
   /// constructor, but overload resolution failed so we deleted it.
   void setImplicitCopyConstructorIsDeleted() {
     assert((data().DefaultedCopyConstructorIsDeleted ||
@@ -1031,7 +1074,11 @@ public:
     data().DefaultedCopyConstructorIsDeleted = true;
   }
 
+<<<<<<< HEAD
   /// Set that we attempted to declare an implicit move
+=======
+  /// \brief Set that we attempted to declare an implicit move
+>>>>>>> origin/release/5.x
   /// constructor, but overload resolution failed so we deleted it.
   void setImplicitMoveConstructorIsDeleted() {
     assert((data().DefaultedMoveConstructorIsDeleted ||
@@ -1507,7 +1554,23 @@ public:
     return data().HasIrrelevantDestructor;
   }
 
+<<<<<<< HEAD
   /// Determine whether this class has a non-literal or/ volatile type
+=======
+  /// \brief Determine whether this class has at least one trivial, non-deleted
+  /// copy or move constructor.
+  bool canPassInRegisters() const {
+    return data().CanPassInRegisters;
+  }
+
+  /// \brief Set that we can pass this RecordDecl in registers.
+  // FIXME: This should be set as part of completeDefinition.
+  void setCanPassInRegisters(bool CanPass) {
+    data().CanPassInRegisters = CanPass;
+  }
+
+  /// \brief Determine whether this class has a non-literal or/ volatile type
+>>>>>>> origin/release/5.x
   /// non-static data member or base class.
   bool hasNonLiteralTypeFieldsOrBases() const {
     return data().HasNonLiteralTypeFieldsOrBases;
@@ -2236,8 +2299,16 @@ public:
 
   /// Return the type of the object pointed by \c this.
   ///
+<<<<<<< HEAD
   /// See getThisType() for usage restriction.
   QualType getThisObjectType() const;
+=======
+  /// Should only be called for instance (i.e., non-static) methods. Note
+  /// that for the call operator of a lambda closure type, this returns the
+  /// desugared 'this' type (a pointer to the closure type), not the captured
+  /// 'this' type.
+  QualType getThisType(ASTContext &C) const;
+>>>>>>> origin/release/5.x
 
   static QualType getThisType(const FunctionProtoType *FPT,
                               const CXXRecordDecl *Decl);

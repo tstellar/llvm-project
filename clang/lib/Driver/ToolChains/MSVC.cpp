@@ -128,6 +128,7 @@ static bool findVCToolChainViaEnvironment(std::string &Path,
         llvm::StringRef ParentPath = llvm::sys::path::parent_path(TestPath);
         llvm::StringRef ParentFilename = llvm::sys::path::filename(ParentPath);
         if (ParentFilename == "VC") {
+<<<<<<< HEAD
           Path = ParentPath;
           VSLayout = MSVCToolChain::ToolsetLayout::OlderVS;
           return true;
@@ -135,6 +136,15 @@ static bool findVCToolChainViaEnvironment(std::string &Path,
         if (ParentFilename == "x86ret" || ParentFilename == "x86chk"
           || ParentFilename == "amd64ret" || ParentFilename == "amd64chk") {
           Path = ParentPath;
+=======
+          Path = ParentPath;
+          VSLayout = MSVCToolChain::ToolsetLayout::OlderVS;
+          return true;
+        }
+        if (ParentFilename == "x86ret" || ParentFilename == "x86chk"
+          || ParentFilename == "amd64ret" || ParentFilename == "amd64chk") {
+          Path = ParentPath;
+>>>>>>> origin/release/5.x
           VSLayout = MSVCToolChain::ToolsetLayout::DevDivInternal;
           return true;
         }
@@ -506,7 +516,11 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     // its containing bin directory at the top of PATH, followed by the
     // native target bin directory.
     // e.g. when compiling for x86 on an x64 host, PATH should start with:
+<<<<<<< HEAD
     // /bin/Hostx64/x86;/bin/Hostx64/x64
+=======
+    // /bin/HostX64/x86;/bin/HostX64/x64
+>>>>>>> origin/release/5.x
     // This doesn't attempt to handle ToolsetLayout::DevDivInternal.
     if (TC.getIsVS2017OrNewer() &&
         llvm::Triple(llvm::sys::getProcessTriple()).getArch() != TC.getArch()) {
@@ -731,6 +745,13 @@ bool MSVCToolChain::IsIntegratedAssemblerDefault() const {
 }
 
 bool MSVCToolChain::IsUnwindTablesDefault(const ArgList &Args) const {
+<<<<<<< HEAD
+=======
+  // Emit unwind tables by default on Win64. All non-x86_32 Windows platforms
+  // such as ARM and PPC actually require unwind tables, but LLVM doesn't know
+  // how to generate them yet.
+
+>>>>>>> origin/release/5.x
   // Don't emit unwind tables by default for MachO targets.
   if (getTriple().isOSBinFormatMachO())
     return false;
@@ -818,6 +839,21 @@ static const char *llvmArchToDevDivInternalArch(llvm::Triple::ArchType Arch) {
   }
 }
 
+// Similar to the above function, but for DevDiv internal builds.
+static const char *llvmArchToDevDivInternalArch(llvm::Triple::ArchType Arch) {
+  using ArchType = llvm::Triple::ArchType;
+  switch (Arch) {
+  case ArchType::x86:
+    return "i386";
+  case ArchType::x86_64:
+    return "amd64";
+  case ArchType::arm:
+    return "arm";
+  default:
+    return "";
+  }
+}
+
 // Get the path to a specific subdirectory in the current toolchain for
 // a given target architecture.
 // VS2017 changed the VC toolchain layout, so this should be used instead
@@ -848,7 +884,11 @@ MSVCToolChain::getSubDirectoryPath(SubDirectoryType Type,
     if (VSLayout == ToolsetLayout::VS2017OrNewer) {
       const bool HostIsX64 =
           llvm::Triple(llvm::sys::getProcessTriple()).isArch64Bit();
+<<<<<<< HEAD
       const char *const HostName = HostIsX64 ? "Hostx64" : "Hostx86";
+=======
+      const char *const HostName = HostIsX64 ? "HostX64" : "HostX86";
+>>>>>>> origin/release/5.x
       llvm::sys::path::append(Path, "bin", HostName, SubdirName);
     } else { // OlderVS or DevDivInternal
       llvm::sys::path::append(Path, "bin", SubdirName);

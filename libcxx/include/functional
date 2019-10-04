@@ -2253,8 +2253,13 @@ class _LIBCPP_TEMPLATE_VIS function<_Rp(_ArgTypes...)>
 
     __func __f_;
 
+<<<<<<< HEAD
     template <class _Fp, bool = _And<
         _IsNotSame<__uncvref_t<_Fp>, function>,
+=======
+    template <class _Fp, bool = __lazy_and<
+        integral_constant<bool, !is_same<__uncvref_t<_Fp>, function>::value>,
+>>>>>>> origin/release/5.x
         __invokable<_Fp&, _ArgTypes...>
     >::value>
     struct __callable;

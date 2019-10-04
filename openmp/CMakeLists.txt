@@ -58,17 +58,29 @@ set(OPENMP_TEST_OPENMP_FLAGS ${OPENMP_TEST_COMPILER_OPENMP_FLAGS} CACHE STRING
 add_subdirectory(runtime)
 
 
+<<<<<<< HEAD
 set(ENABLE_LIBOMPTARGET ON)
 # Currently libomptarget cannot be compiled on Windows or MacOS X.
 # Since the device plugins are only supported on Linux anyway,
 # there is no point in trying to compile libomptarget on other OSes.
 if (APPLE OR WIN32 OR NOT OPENMP_HAVE_STD_CPP11_FLAG)
+=======
+# The tests currently don't pass if the generic ELF plugin is built.
+# TODO: Fix the tests and enable libomptarget by default on supported
+#       architectures and platforms.
+set(ENABLE_LIBOMPTARGET OFF)
+# Currently libomptarget cannot be compiled on Windows or MacOS X.
+# Since the device plugins are only supported on Linux anyway,
+# there is no point in trying to compile libomptarget on other OSes.
+if (WIN32 OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+>>>>>>> origin/release/5.x
   set(ENABLE_LIBOMPTARGET OFF)
 endif()
 
 option(OPENMP_ENABLE_LIBOMPTARGET "Enable building libomptarget for offloading."
        ${ENABLE_LIBOMPTARGET})
 if (OPENMP_ENABLE_LIBOMPTARGET)
+<<<<<<< HEAD
   # Check that the library can acutally be built.
   if (APPLE OR WIN32)
     message(FATAL_ERROR "libomptarget cannot be built on Windows and MacOS X!")
@@ -76,6 +88,8 @@ if (OPENMP_ENABLE_LIBOMPTARGET)
     message(FATAL_ERROR "Host compiler must support C++11 to build libomptarget!")
   endif()
 
+=======
+>>>>>>> origin/release/5.x
   add_subdirectory(libomptarget)
 endif()
 

@@ -2008,6 +2008,7 @@ Instruction *ReassociatePass::canonicalizeNegFPConstantsForOp(Instruction *I,
   if (NeedsSubtract && ShouldBreakUpSubtract(I))
     return nullptr;
 
+<<<<<<< HEAD
   for (Instruction *Negatible : Candidates) {
     const APFloat *C;
     if (match(Negatible->getOperand(0), m_APFloat(C))) {
@@ -2024,6 +2025,38 @@ Instruction *ReassociatePass::canonicalizeNegFPConstantsForOp(Instruction *I,
       Negatible->setOperand(1, ConstantFP::get(Negatible->getType(), abs(*C)));
       MadeChange = true;
     }
+=======
+  // Don't canonicalize x + (-Constant * y) -> x - (Constant * y), if the
+  // resulting subtract will be broken up later.  This can get us into an
+  // infinite loop during reassociation.
+  if (UserOpcode == Instruction::FAdd && ShouldBreakUpSubtract(User))
+    return nullptr;
+
+  // Change the sign of the constant.
+  APFloat Val = CF->getValueAPF();
+  Val.changeSign();
+  I->setOperand(C0 ? 0 : 1, ConstantFP::get(CF->getContext(), Val));
+
+  // Canonicalize I to RHS to simplify the next bit of logic. E.g.,
+  // ((-Const*y) + x) -> (x + (-Const*y)).
+  if (User->getOperand(0) == I && User->isCommutative())
+    cast<BinaryOperator>(User)->swapOperands();
+
+  Value *Op0 = User->getOperand(0);
+  Value *Op1 = User->getOperand(1);
+  BinaryOperator *NI;
+  switch (UserOpcode) {
+  default:
+    llvm_unreachable("Unexpected Opcode!");
+  case Instruction::FAdd:
+    NI = BinaryOperator::CreateFSub(Op0, Op1);
+    NI->setFastMathFlags(cast<FPMathOperator>(User)->getFastMathFlags());
+    break;
+  case Instruction::FSub:
+    NI = BinaryOperator::CreateFAdd(Op0, Op1);
+    NI->setFastMathFlags(cast<FPMathOperator>(User)->getFastMathFlags());
+    break;
+>>>>>>> origin/release/5.x
   }
   assert(MadeChange == true && "Negative constant candidate was not changed");
 

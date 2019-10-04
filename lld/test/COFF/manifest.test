@@ -57,8 +57,12 @@ DEPENDENCY:     </dependentAssembly>
 DEPENDENCY:   </dependency>
 DEPENDENCY: </assembly>
 
+<<<<<<< HEAD
 # RUN: lld-link /manifest /out:%t.exe /entry:main /manifestuac:no \
 # RUN:   /manifestdependency:"foo='bar'" %t.obj
+=======
+# RUN: lld-link /manifest /out:%t.exe /entry:main /manifestuac:no %t.obj
+>>>>>>> origin/release/5.x
 # RUN: FileCheck -check-prefix=NOUAC %s < %t.exe.manifest
 
 NOUAC: <?xml version="1.0" standalone="yes"?>

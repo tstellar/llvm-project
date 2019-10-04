@@ -933,7 +933,11 @@ bool ARMExpandPseudo::ExpandCMP_SWAP(MachineBasicBlock &MBB,
   MachineInstr &MI = *MBBI;
   DebugLoc DL = MI.getDebugLoc();
   const MachineOperand &Dest = MI.getOperand(0);
+<<<<<<< HEAD
   Register TempReg = MI.getOperand(1).getReg();
+=======
+  unsigned TempReg = MI.getOperand(1).getReg();
+>>>>>>> origin/release/5.x
   // Duplicating undef operands into 2 instructions does not guarantee the same
   // value on both; However undef should be replaced by xzr anyway.
   assert(!MI.getOperand(2).isUndef() && "cannot handle undef");
@@ -1052,7 +1056,11 @@ bool ARMExpandPseudo::ExpandCMP_SWAP_64(MachineBasicBlock &MBB,
   MachineInstr &MI = *MBBI;
   DebugLoc DL = MI.getDebugLoc();
   MachineOperand &Dest = MI.getOperand(0);
+<<<<<<< HEAD
   Register TempReg = MI.getOperand(1).getReg();
+=======
+  unsigned TempReg = MI.getOperand(1).getReg();
+>>>>>>> origin/release/5.x
   // Duplicating undef operands into 2 instructions does not guarantee the same
   // value on both; However undef should be replaced by xzr anyway.
   assert(!MI.getOperand(2).isUndef() && "cannot handle undef");
@@ -1078,7 +1086,11 @@ bool ARMExpandPseudo::ExpandCMP_SWAP_64(MachineBasicBlock &MBB,
   // .Lloadcmp:
   //     ldrexd rDestLo, rDestHi, [rAddr]
   //     cmp rDestLo, rDesiredLo
+<<<<<<< HEAD
   //     sbcs dead rTempReg, rDestHi, rDesiredHi
+=======
+  //     sbcs rTempReg<dead>, rDestHi, rDesiredHi
+>>>>>>> origin/release/5.x
   //     bne .Ldone
   unsigned LDREXD = IsThumb ? ARM::t2LDREXD : ARM::LDREXD;
   MachineInstrBuilder MIB;
@@ -1111,8 +1123,12 @@ bool ARMExpandPseudo::ExpandCMP_SWAP_64(MachineBasicBlock &MBB,
   //     bne .Lloadcmp
   unsigned STREXD = IsThumb ? ARM::t2STREXD : ARM::STREXD;
   MIB = BuildMI(StoreBB, DL, TII->get(STREXD), TempReg);
+<<<<<<< HEAD
   unsigned Flags = getKillRegState(New.isDead());
   addExclusiveRegPair(MIB, New, Flags, IsThumb, TRI);
+=======
+  addExclusiveRegPair(MIB, New, 0, IsThumb, TRI);
+>>>>>>> origin/release/5.x
   MIB.addReg(AddrReg).add(predOps(ARMCC::AL));
 
   unsigned CMPri = IsThumb ? ARM::t2CMPri : ARM::CMPri;

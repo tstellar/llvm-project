@@ -733,7 +733,11 @@ public:
     int64_t Scale = 0;
 
     auto GTI = gep_type_begin(PointeeType, Operands);
+<<<<<<< HEAD
     Type *TargetType = nullptr;
+=======
+    Type *TargetType;
+>>>>>>> origin/release/5.x
 
     // Handle the case where the GEP instruction has a single operand,
     // the basis, therefore TargetType is a nullptr.

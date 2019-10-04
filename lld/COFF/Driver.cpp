@@ -791,6 +791,7 @@ static std::string getImportName(bool asLib) {
   return out.str();
 }
 
+<<<<<<< HEAD
 static void createImportLibrary(bool asLib) {
   std::vector<COFFShortExport> exports;
   for (Export &e1 : config->exports) {
@@ -812,6 +813,26 @@ static void createImportLibrary(bool asLib) {
   };
   std::string libName = getImportName(asLib);
   std::string path = getImplibPath();
+=======
+static void createImportLibrary(bool AsLib) {
+  std::vector<COFFShortExport> Exports;
+  for (Export &E1 : Config->Exports) {
+    COFFShortExport E2;
+    E2.Name = E1.Name;
+    E2.SymbolName = E1.SymbolName;
+    E2.ExtName = E1.ExtName;
+    E2.Ordinal = E1.Ordinal;
+    E2.Noname = E1.Noname;
+    E2.Data = E1.Data;
+    E2.Private = E1.Private;
+    E2.Constant = E1.Constant;
+    Exports.push_back(E2);
+  }
+
+  writeImportLibrary(getImportName(AsLib), getImplibPath(), Exports,
+                     Config->Machine, false);
+}
+>>>>>>> origin/release/5.x
 
   if (!config->incremental) {
     handleError(writeImportLibrary(libName, path, exports, config->machine,
@@ -1514,9 +1535,26 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
       error("/align: not a power of two: " + StringRef(arg->getValue()));
   }
 
+<<<<<<< HEAD
   // Handle /aligncomm
   for (auto *arg : args.filtered(OPT_aligncomm))
     parseAligncomm(arg->getValue());
+=======
+  // Handle /manifestdependency. This enables /manifest unless /manifest:no is
+  // also passed.
+  if (auto *Arg = Args.getLastArg(OPT_manifestdependency)) {
+    Config->ManifestDependency = Arg->getValue();
+    Config->Manifest = Configuration::SideBySide;
+  }
+
+  // Handle /manifest and /manifest:
+  if (auto *Arg = Args.getLastArg(OPT_manifest, OPT_manifest_colon)) {
+    if (Arg->getOption().getID() == OPT_manifest)
+      Config->Manifest = Configuration::SideBySide;
+    else
+      parseManifest(Arg->getValue());
+  }
+>>>>>>> origin/release/5.x
 
   // Handle /manifestdependency. This enables /manifest unless /manifest:no is
   // also passed.
@@ -1525,6 +1563,7 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
     config->manifest = Configuration::SideBySide;
   }
 
+<<<<<<< HEAD
   // Handle /manifest and /manifest:
   if (auto *arg = args.getLastArg(OPT_manifest, OPT_manifest_colon)) {
     if (arg->getOption().getID() == OPT_manifest)
@@ -1537,6 +1576,8 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
   if (auto *arg = args.getLastArg(OPT_manifestuac))
     parseManifestUAC(arg->getValue());
 
+=======
+>>>>>>> origin/release/5.x
   // Handle /manifestfile
   if (auto *arg = args.getLastArg(OPT_manifestfile))
     config->manifestFile = arg->getValue();
@@ -1550,6 +1591,7 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
     fatal("/manifestinput: requires /manifest:embed");
   }
 
+<<<<<<< HEAD
   config->thinLTOEmitImportsFiles = args.hasArg(OPT_thinlto_emit_imports_files);
   config->thinLTOIndexOnly = args.hasArg(OPT_thinlto_index_only) ||
                              args.hasArg(OPT_thinlto_index_only_arg);
@@ -1560,6 +1602,13 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
   config->thinLTOObjectSuffixReplace =
       getOldNewOptions(args, OPT_thinlto_object_suffix_replace);
   config->ltoObjPath = args.getLastArgValue(OPT_lto_obj_path);
+=======
+  if (!Config->ManifestInput.empty() &&
+      Config->Manifest != Configuration::Embed) {
+    fatal("/MANIFESTINPUT: requires /MANIFEST:EMBED");
+  }
+
+>>>>>>> origin/release/5.x
   // Handle miscellaneous boolean flags.
   config->allowBind = args.hasFlag(OPT_allowbind, OPT_allowbind_no, true);
   config->allowIsolation =

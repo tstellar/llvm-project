@@ -6,6 +6,7 @@
 
 define void @PR33960() {
 ; X86-LABEL: PR33960:
+<<<<<<< HEAD
 ; X86:       # %bb.0: # %entry
 ; X86-NEXT:    movl $-1, b
 ; X86-NEXT:    retl
@@ -13,6 +14,15 @@ define void @PR33960() {
 ; X64-LABEL: PR33960:
 ; X64:       # %bb.0: # %entry
 ; X64-NEXT:    movl $-1, {{.*}}(%rip)
+=======
+; X86:       # BB#0: # %entry
+; X86-NEXT:    movl $0, b
+; X86-NEXT:    retl
+;
+; X64-LABEL: PR33960:
+; X64:       # BB#0: # %entry
+; X64-NEXT:    movl $0, {{.*}}(%rip)
+>>>>>>> origin/release/5.x
 ; X64-NEXT:    retq
 entry:
   %tmp = insertelement <4 x i32> <i32 undef, i32 -7, i32 -3, i32 undef>, i32 -2, i32 3

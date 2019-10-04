@@ -79,10 +79,15 @@ MipsSubtarget::MipsSubtarget(const Triple &TT, StringRef CPU, StringRef FS,
       InMips16HardFloat(Mips16HardFloat), InMicroMipsMode(false), HasDSP(false),
       HasDSPR2(false), HasDSPR3(false), AllowMixed16_32(Mixed16_32 | Mips_Os16),
       Os16(Mips_Os16), HasMSA(false), UseTCCInDIV(false), HasSym32(false),
+<<<<<<< HEAD
       HasEVA(false), DisableMadd4(false), HasMT(false), HasCRC(false),
       HasVirt(false), HasGINV(false), UseIndirectJumpsHazard(false),
       StackAlignOverride(StackAlignOverride),
       TM(TM), TargetTriple(TT), TSInfo(),
+=======
+      HasEVA(false), DisableMadd4(false), HasMT(false),
+      UseIndirectJumpsHazard(false), TM(TM), TargetTriple(TT), TSInfo(),
+>>>>>>> origin/release/5.x
       InstrInfo(
           MipsInstrInfo::create(initializeSubtargetDependencies(CPU, FS, TM))),
       FrameLowering(MipsFrameLowering::create(*this)),
@@ -119,12 +124,15 @@ MipsSubtarget::MipsSubtarget(const Triple &TT, StringRef CPU, StringRef FS,
   if (IsFPXX && (isABI_N32() || isABI_N64()))
     report_fatal_error("FPXX is not permitted for the N32/N64 ABI's.", false);
 
+<<<<<<< HEAD
   if (hasMips64r6() && InMicroMipsMode)
     report_fatal_error("microMIPS64R6 is not supported", false);
 
   if (!isABI_O32() && InMicroMipsMode)
     report_fatal_error("microMIPS64 is not supported.", false);
 
+=======
+>>>>>>> origin/release/5.x
   if (UseIndirectJumpsHazard) {
     if (InMicroMipsMode)
       report_fatal_error(
@@ -133,11 +141,14 @@ MipsSubtarget::MipsSubtarget(const Triple &TT, StringRef CPU, StringRef FS,
       report_fatal_error(
           "indirect jumps with hazard barriers requires MIPS32R2 or later");
   }
+<<<<<<< HEAD
   if (inAbs2008Mode() && hasMips32() && !hasMips32r2()) {
     report_fatal_error("IEEE 754-2008 abs.fmt is not supported for the given "
                        "architecture.",
                        false);
   }
+=======
+>>>>>>> origin/release/5.x
 
   if (hasMips32r6()) {
     StringRef ISA = hasMips64r6() ? "MIPS64r6" : "MIPS32r6";

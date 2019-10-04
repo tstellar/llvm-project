@@ -195,10 +195,17 @@ def ext_hex_constant_invalid : Extension<
   "hexadecimal floating constants are a C99 feature">, InGroup<C99>;
 def ext_hex_literal_invalid : Extension<
   "hexadecimal floating literals are a C++17 feature">, InGroup<CXX17>;
+<<<<<<< HEAD
 def warn_cxx17_hex_literal : Warning<
   "hexadecimal floating literals are incompatible with "
   "C++ standards before C++17">,
   InGroup<CXXPre17CompatPedantic>, DefaultIgnore;
+=======
+def warn_cxx1z_hex_literal : Warning<
+  "hexadecimal floating literals are incompatible with "
+  "C++ standards before C++17">,
+  InGroup<CXXPre1zCompatPedantic>, DefaultIgnore;
+>>>>>>> origin/release/5.x
 def ext_binary_literal : Extension<
   "binary integer literals are a GNU extension">, InGroup<GNUBinaryLiteral>;
 def ext_binary_literal_cxx14 : Extension<
@@ -222,7 +229,11 @@ def warn_cxx98_compat_unicode_literal : Warning<
   InGroup<CXX98Compat>, DefaultIgnore;
 def warn_cxx14_compat_u8_character_literal : Warning<
   "unicode literals are incompatible with C++ standards before C++17">,
+<<<<<<< HEAD
   InGroup<CXXPre17Compat>, DefaultIgnore;
+=======
+  InGroup<CXXPre1zCompat>, DefaultIgnore;
+>>>>>>> origin/release/5.x
 def warn_cxx11_compat_user_defined_literal : Warning<
   "identifier after literal will be treated as a user-defined literal suffix "
   "in C++11">, InGroup<CXX11Compat>, DefaultIgnore;

@@ -830,8 +830,50 @@ MicrosoftCXXABI::getRecordArgABI(const CXXRecordDecl *RD) const {
     return RAA_Default;
 
   case llvm::Triple::x86_64:
+<<<<<<< HEAD
   case llvm::Triple::aarch64:
     return !RD->canPassInRegisters() ? RAA_Indirect : RAA_Default;
+=======
+    // If a class has a destructor, we'd really like to pass it indirectly
+    // because it allows us to elide copies.  Unfortunately, MSVC makes that
+    // impossible for small types, which it will pass in a single register or
+    // stack slot. Most objects with dtors are large-ish, so handle that early.
+    // We can't call out all large objects as being indirect because there are
+    // multiple x64 calling conventions and the C++ ABI code shouldn't dictate
+    // how we pass large POD types.
+    //
+    // Note: This permits small classes with nontrivial destructors to be
+    // passed in registers, which is non-conforming.
+    if (RD->hasNonTrivialDestructor() &&
+        getContext().getTypeSize(RD->getTypeForDecl()) > 64)
+      return RAA_Indirect;
+
+    // If a class has at least one non-deleted, trivial copy constructor, it
+    // is passed according to the C ABI. Otherwise, it is passed indirectly.
+    //
+    // Note: This permits classes with non-trivial copy or move ctors to be
+    // passed in registers, so long as they *also* have a trivial copy ctor,
+    // which is non-conforming.
+    if (RD->needsImplicitCopyConstructor()) {
+      // If the copy ctor has not yet been declared, we can read its triviality
+      // off the AST.
+      if (!RD->defaultedCopyConstructorIsDeleted() &&
+          RD->hasTrivialCopyConstructor())
+        return RAA_Default;
+    } else {
+      // Otherwise, we need to find the copy constructor(s) and ask.
+      for (const CXXConstructorDecl *CD : RD->ctors()) {
+        if (CD->isCopyConstructor()) {
+          // We had at least one nondeleted trivial copy ctor.  Return directly.
+          if (!CD->isDeleted() && CD->isTrivial())
+            return RAA_Default;
+        }
+      }
+    }
+
+    // We have no trivial, non-deleted copy constructor.
+    return RAA_Indirect;
+>>>>>>> origin/release/5.x
   }
 
   llvm_unreachable("invalid enum");

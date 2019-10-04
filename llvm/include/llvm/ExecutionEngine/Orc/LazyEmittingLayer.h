@@ -84,7 +84,11 @@ private:
     }
 
     Error removeModuleFromBaseLayer(BaseLayerT& BaseLayer) {
+<<<<<<< HEAD
       return EmitState != NotEmitted ? BaseLayer.removeModule(K)
+=======
+      return EmitState != NotEmitted ? BaseLayer.removeModule(Handle)
+>>>>>>> origin/release/5.x
                                      : Error::success();
     }
 
@@ -213,12 +217,19 @@ public:
   ///
   ///   This method will free the memory associated with the given module, both
   /// in this layer, and the base layer.
+<<<<<<< HEAD
   Error removeModule(VModuleKey K) {
     auto I = ModuleMap.find(K);
     assert(I != ModuleMap.end() && "VModuleKey K not valid here");
     auto EDM = std::move(I.second);
     ModuleMap.erase(I);
     return EDM->removeModuleFromBaseLayer(BaseLayer);
+=======
+  Error removeModule(ModuleHandleT H) {
+    Error Err = (*H)->removeModuleFromBaseLayer(BaseLayer);
+    ModuleList.erase(H);
+    return Err;
+>>>>>>> origin/release/5.x
   }
 
   /// Search for the given named symbol.

@@ -122,6 +122,7 @@ FunctionPass *createX86EvexToVexInsts();
 /// This pass creates the thunks for the retpoline feature.
 FunctionPass *createX86RetpolineThunksPass();
 
+<<<<<<< HEAD
 /// This pass ensures instructions featuring a memory operand
 /// have distinctive <LineNumber, Discriminator> (with respect to eachother)
 FunctionPass *createX86DiscriminateMemOpsPass();
@@ -129,6 +130,8 @@ FunctionPass *createX86DiscriminateMemOpsPass();
 /// This pass applies profiling information to insert cache prefetches.
 FunctionPass *createX86InsertPrefetchPass();
 
+=======
+>>>>>>> origin/release/5.x
 InstructionSelector *createX86InstructionSelector(const X86TargetMachine &TM,
                                                   X86Subtarget &,
                                                   X86RegisterBankInfo &);

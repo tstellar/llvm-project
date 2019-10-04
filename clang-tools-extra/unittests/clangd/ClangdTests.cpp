@@ -301,12 +301,21 @@ TEST_F(ClangdVFSTest, SearchLibDir) {
   // Checks that searches for GCC installation is done through vfs.
   MockFSProvider FS;
   ErrorCheckingDiagConsumer DiagConsumer;
+<<<<<<< HEAD
   MockCompilationDatabase CDB;
   CDB.ExtraClangFlags.insert(CDB.ExtraClangFlags.end(),
                              {"-xc++", "-target", "x86_64-linux-unknown",
                               "-m64", "--gcc-toolchain=/randomusr",
                               "-stdlib=libstdc++"});
   ClangdServer Server(CDB, FS, DiagConsumer, ClangdServer::optsForTest());
+=======
+  MockCompilationDatabase CDB(/*AddFreestandingFlag=*/true);
+  CDB.ExtraClangFlags.insert(CDB.ExtraClangFlags.end(),
+                             {"-xc++", "-target", "x86_64-linux-unknown",
+                              "-m64", "-stdlib=libstdc++"});
+  ClangdServer Server(CDB, DiagConsumer, FS,
+                      /*RunSynchronously=*/true);
+>>>>>>> origin/release/5.x
 
   // Just a random gcc version string
   SmallString<8> Version("4.9.3");

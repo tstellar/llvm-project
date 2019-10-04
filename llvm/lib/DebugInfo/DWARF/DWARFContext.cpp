@@ -184,10 +184,21 @@ static void dumpDWARFv5StringOffsetsSection(
       OS << format("0x%8.8" PRIx64 ": ", Offset);
       uint64_t StringOffset =
           StrOffsetExt.getRelocatedValue(EntrySize, &Offset);
+<<<<<<< HEAD
       OS << format("%8.8" PRIx64 " ", StringOffset);
       const char *S = StrData.getCStr(&StringOffset);
       if (S)
         OS << format("\"%s\"", S);
+=======
+      if (Format == DWARF32) {
+        uint32_t StringOffset32 = (uint32_t)StringOffset;
+        OS << format("%8.8x ", StringOffset32);
+        const char *S = StrData.getCStr(&StringOffset32);
+        if (S)
+          OS << format("\"%s\"", S);
+      } else
+        OS << format("%16.16" PRIx64 " ", StringOffset);
+>>>>>>> origin/release/5.x
       OS << "\n";
     }
   }

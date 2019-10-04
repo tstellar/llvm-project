@@ -7,7 +7,11 @@
 template <class T>
 struct EmplaceConstructible {
   T value;
+<<<<<<< HEAD
   explicit EmplaceConstructible(T xvalue) : value(xvalue) {}
+=======
+  explicit EmplaceConstructible(T value) : value(value) {}
+>>>>>>> origin/release/5.x
   EmplaceConstructible(EmplaceConstructible const&) = delete;
 };
 
@@ -15,7 +19,11 @@ template <class T>
 struct EmplaceConstructibleAndMoveInsertable {
   int copied = 0;
   T value;
+<<<<<<< HEAD
   explicit EmplaceConstructibleAndMoveInsertable(T xvalue) : value(xvalue) {}
+=======
+  explicit EmplaceConstructibleAndMoveInsertable(T value) : value(value) {}
+>>>>>>> origin/release/5.x
 
   EmplaceConstructibleAndMoveInsertable(
       EmplaceConstructibleAndMoveInsertable&& Other)
@@ -27,7 +35,11 @@ struct EmplaceConstructibleAndMoveable {
   int copied = 0;
   int assigned = 0;
   T value;
+<<<<<<< HEAD
   explicit EmplaceConstructibleAndMoveable(T xvalue) noexcept : value(xvalue) {}
+=======
+  explicit EmplaceConstructibleAndMoveable(T value) noexcept : value(value) {}
+>>>>>>> origin/release/5.x
 
   EmplaceConstructibleAndMoveable(EmplaceConstructibleAndMoveable&& Other)
       noexcept : copied(Other.copied + 1),
@@ -47,8 +59,13 @@ struct EmplaceConstructibleMoveableAndAssignable {
   int copied = 0;
   int assigned = 0;
   T value;
+<<<<<<< HEAD
   explicit EmplaceConstructibleMoveableAndAssignable(T xvalue) noexcept
       : value(xvalue) {}
+=======
+  explicit EmplaceConstructibleMoveableAndAssignable(T value) noexcept
+      : value(value) {}
+>>>>>>> origin/release/5.x
 
   EmplaceConstructibleMoveableAndAssignable(
       EmplaceConstructibleMoveableAndAssignable&& Other) noexcept

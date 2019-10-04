@@ -9,5 +9,9 @@ void test() {
   unique_ptr<int> x;
   x.
   // RUN: %clang_cc1 -fsyntax-only -code-completion-at=%s:10:5 %s -o - | FileCheck -check-prefix=CHECK-CC1 %s
+<<<<<<< HEAD
   // CHECK-CC1: [#void#]reset({#<#pointer ptr = pointer()#>#})
+=======
+  // CHECK-CC1: [#void#]reset({#<#unique_ptr<int>::pointer ptr = pointer()#>#})
+>>>>>>> origin/release/5.x
 }

@@ -766,7 +766,11 @@ void X86FrameLowering::emitStackProbeCall(MachineFunction &MF,
   bool IsLargeCodeModel = MF.getTarget().getCodeModel() == CodeModel::Large;
 
   // FIXME: Add retpoline support and remove this.
+<<<<<<< HEAD
   if (Is64Bit && IsLargeCodeModel && STI.useRetpolineIndirectCalls())
+=======
+  if (Is64Bit && IsLargeCodeModel && STI.useRetpoline())
+>>>>>>> origin/release/5.x
     report_fatal_error("Emitting stack probe calls on 64-bit with the large "
                        "code model and retpoline not yet implemented.");
 
@@ -2494,7 +2498,11 @@ void X86FrameLowering::adjustForSegmentedStacks(
     // is laid out within 2^31 bytes of each function body, but this seems
     // to be sufficient for JIT.
     // FIXME: Add retpoline support and remove the error here..
+<<<<<<< HEAD
     if (STI.useRetpolineIndirectCalls())
+=======
+    if (STI.useRetpoline())
+>>>>>>> origin/release/5.x
       report_fatal_error("Emitting morestack calls on 64-bit with the large "
                          "code model and retpoline not yet implemented.");
     BuildMI(allocMBB, DL, TII.get(X86::CALL64m))

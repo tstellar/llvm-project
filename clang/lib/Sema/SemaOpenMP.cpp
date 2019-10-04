@@ -5473,7 +5473,11 @@ bool OpenMPIterationSpaceChecker::setStep(Expr *NewStep, bool Subtract) {
     return true;
   if (!NewStep->isValueDependent()) {
     // Check that the step is integer expression.
+<<<<<<< HEAD
     SourceLocation StepLoc = NewStep->getBeginLoc();
+=======
+    SourceLocation StepLoc = NewStep->getLocStart();
+>>>>>>> origin/release/5.x
     ExprResult Val = SemaRef.PerformOpenMPImplicitIntegerConversion(
         StepLoc, getExprAsWritten(NewStep));
     if (Val.isInvalid())
@@ -14295,6 +14299,7 @@ Sema::ActOnOpenMPDependClause(OpenMPDependClauseKind DepKind,
             RHS, OMPC_depend, /*StrictlyPositive=*/false);
         if (RHSRes.isInvalid())
           continue;
+<<<<<<< HEAD
       }
       if (!CurContext->isDependentContext() &&
           DSAStack->getParentOrderedRegionParam().first &&
@@ -14318,8 +14323,52 @@ Sema::ActOnOpenMPDependClause(OpenMPDependClauseKind DepKind,
         Diag(ELoc, diag::err_omp_expected_addressable_lvalue_or_array_item)
             << RefExpr->getSourceRange();
         continue;
+=======
+        }
+        if (RHS) {
+          ExprResult RHSRes = VerifyPositiveIntegerConstantInClause(
+              RHS, OMPC_depend, /*StrictlyPositive=*/false);
+          if (RHSRes.isInvalid())
+            continue;
+        }
+        if (!CurContext->isDependentContext() &&
+            DSAStack->getParentOrderedRegionParam() &&
+            DepCounter != DSAStack->isParentLoopControlVariable(D).first) {
+          ValueDecl* VD = DSAStack->getParentLoopControlVariable(
+              DepCounter.getZExtValue());
+          if (VD) {
+            Diag(ELoc, diag::err_omp_depend_sink_expected_loop_iteration)
+                << 1 << VD;
+          } else {
+             Diag(ELoc, diag::err_omp_depend_sink_expected_loop_iteration) << 0;
+          }
+          continue;
+        }
+        OpsOffs.push_back({RHS, OOK});
+      } else {
+        // OpenMP  [2.11.1.1, Restrictions, p.3]
+        //  A variable that is part of another variable (such as a field of a
+        //  structure) but is not an array element or an array section cannot
+        //  appear  in a depend clause.
+        auto *DE = dyn_cast<DeclRefExpr>(SimpleExpr);
+        auto *ASE = dyn_cast<ArraySubscriptExpr>(SimpleExpr);
+        auto *OASE = dyn_cast<OMPArraySectionExpr>(SimpleExpr);
+        if (!RefExpr->IgnoreParenImpCasts()->isLValue() ||
+            (!ASE && !DE && !OASE) || (DE && !isa<VarDecl>(DE->getDecl())) ||
+            (ASE &&
+             !ASE->getBase()
+                  ->getType()
+                  .getNonReferenceType()
+                  ->isPointerType() &&
+             !ASE->getBase()->getType().getNonReferenceType()->isArrayType())) {
+          Diag(ELoc, diag::err_omp_expected_var_name_member_expr_or_array_item)
+              << 0 << RefExpr->getSourceRange();
+          continue;
+        }
+>>>>>>> origin/release/5.x
       }
 
+<<<<<<< HEAD
       ExprResult Res;
       {
         Sema::TentativeAnalysisScope Trap(*this);
@@ -14331,6 +14380,14 @@ Sema::ActOnOpenMPDependClause(OpenMPDependClauseKind DepKind,
             << RefExpr->getSourceRange();
         continue;
       }
+=======
+    if (!CurContext->isDependentContext() && DepKind == OMPC_DEPEND_sink &&
+        TotalDepCount > VarList.size() &&
+        DSAStack->getParentOrderedRegionParam() &&
+        DSAStack->getParentLoopControlVariable(VarList.size() + 1)) {
+      Diag(EndLoc, diag::err_omp_depend_sink_expected_loop_iteration) << 1
+          << DSAStack->getParentLoopControlVariable(VarList.size() + 1);
+>>>>>>> origin/release/5.x
     }
     Vars.push_back(RefExpr->IgnoreParenImpCasts());
   }

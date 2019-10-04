@@ -689,6 +689,21 @@ void loop_with_It(It<char> begin, It<char> end) {
 // CHECK: call void @__kmpc_for_static_fini(
 
 void loop_with_It_plus(It<char> begin, It<char> end) {
+<<<<<<< HEAD
+=======
+#pragma omp for
+  for (It<char> it = begin; it < end; it+=1u) {
+    *it = 0;
+  }
+}
+
+// CHECK-LABEL: loop_with_It_plus
+// CHECK: call i32 @__kmpc_global_thread_num(
+// CHECK: call void @__kmpc_for_static_init_8(
+// CHECK: call void @__kmpc_for_static_fini(
+
+void loop_with_stmt_expr() {
+>>>>>>> origin/release/5.x
 #pragma omp for
   for (It<char> it = begin; it < end; it+=1u) {
     *it = 0;

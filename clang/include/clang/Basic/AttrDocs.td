@@ -3881,6 +3881,7 @@ ensure that this class cannot be subclassed.
   }];
 }
 
+<<<<<<< HEAD
 def ObjCNonLazyClassDocs : Documentation {
   let Category = DocCatDecl;
   let Content = [{
@@ -3897,6 +3898,11 @@ overheads associated with defining and calling such a method.
 
 def SelectAnyDocs : Documentation {
   let Category = DocCatDecl;
+=======
+
+def SelectAnyDocs : Documentation {
+  let Category = DocCatType;
+>>>>>>> origin/release/5.x
   let Content = [{
 This attribute appertains to a global symbol, causing it to have a weak
 definition (
@@ -3906,6 +3912,7 @@ definition (
 For more information see
 `gcc documentation <https://gcc.gnu.org/onlinedocs/gcc-7.2.0/gcc/Microsoft-Windows-Variable-Attributes.html>`_
 or `msvc documentation <https://docs.microsoft.com/pl-pl/cpp/cpp/selectany>`_.
+<<<<<<< HEAD
 }]; }
 
 def WebAssemblyImportModuleDocs : Documentation {
@@ -4389,5 +4396,7 @@ When the Owner's lifetime ends, it will consider the Pointer to be dangling.
     return P.get(); // error: Using a dangling Pointer.
   }
 
+=======
+>>>>>>> origin/release/5.x
 }];
 }

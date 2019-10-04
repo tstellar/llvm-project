@@ -120,6 +120,10 @@ void test_ctor_under_alloc() {
   int arr2[] = {1, 101, 42};
   {
     using C = TCT::vector<>;
+<<<<<<< HEAD
+=======
+    using T = typename C::value_type;
+>>>>>>> origin/release/5.x
     using It = forward_iterator<int*>;
     {
       ExpectConstructGuard<int&> G(1);
@@ -132,6 +136,10 @@ void test_ctor_under_alloc() {
   }
   {
     using C = TCT::vector<>;
+<<<<<<< HEAD
+=======
+    using T = typename C::value_type;
+>>>>>>> origin/release/5.x
     using It = input_iterator<int*>;
     {
       ExpectConstructGuard<int&> G(1);
@@ -145,6 +153,7 @@ void test_ctor_under_alloc() {
 #endif
 }
 
+<<<<<<< HEAD
 // In C++03, you can't instantiate a template with a local type.
 struct B1 { int x; };
 struct B2 { int y; };
@@ -185,4 +194,11 @@ int main(int, char**) {
   test_ctor_with_different_value_type();
 
   return 0;
+=======
+
+int main() {
+  basic_test_cases();
+  emplaceable_concept_tests(); // See PR34898
+  test_ctor_under_alloc();
+>>>>>>> origin/release/5.x
 }

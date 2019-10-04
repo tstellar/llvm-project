@@ -357,6 +357,7 @@ def FeatureERMSB
           "ermsb", "HasERMSB", "true",
           "REP MOVS/STOS are fast">;
 
+<<<<<<< HEAD
 // Bulldozer and newer processors can merge CMP/TEST (but not other
 // instructions) with conditional branches.
 def FeatureBranchFusion
@@ -410,6 +411,19 @@ def FeatureRetpoline
                        "lowering them with a speculation blocking construct",
                        [FeatureRetpolineIndirectCalls,
                         FeatureRetpolineIndirectBranches]>;
+=======
+// Enable mitigation of some aspects of speculative execution related
+// vulnerabilities by removing speculatable indirect branches. This disables
+// jump-table formation, rewrites explicit `indirectbr` instructions into
+// `switch` instructions, and uses a special construct called a "retpoline" to
+// prevent speculation of the remaining indirect branches (indirect calls and
+// tail calls).
+def FeatureRetpoline
+    : SubtargetFeature<"retpoline", "UseRetpoline", "true",
+                       "Remove speculation of indirect branches from the "
+                       "generated code, either by avoiding them entirely or "
+                       "lowering them with a speculation blocking construct.">;
+>>>>>>> origin/release/5.x
 
 // Rely on external thunks for the emitted retpoline calls. This allows users
 // to provide their own custom thunk definitions in highly specialized
@@ -417,6 +431,7 @@ def FeatureRetpoline
 def FeatureRetpolineExternalThunk
     : SubtargetFeature<
           "retpoline-external-thunk", "UseRetpolineExternalThunk", "true",
+<<<<<<< HEAD
           "When lowering an indirect call or branch using a `retpoline`, rely "
           "on the specified user provided thunk rather than emitting one "
           "ourselves. Only has effect when combined with some other retpoline "
@@ -471,6 +486,10 @@ def ProcIntelGLM  : SubtargetFeature<"", "X86ProcFamily", "IntelGLM", "">;
 def ProcIntelGLP  : SubtargetFeature<"", "X86ProcFamily", "IntelGLP", "">;
 // Tremont
 def ProcIntelTRM  : SubtargetFeature<"", "X86ProcFamily", "IntelTRM", "">;
+=======
+          "Enable retpoline, but with an externally provided thunk.",
+          [FeatureRetpoline]>;
+>>>>>>> origin/release/5.x
 
 //===----------------------------------------------------------------------===//
 // Register File Description

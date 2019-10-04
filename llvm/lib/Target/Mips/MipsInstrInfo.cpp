@@ -456,6 +456,10 @@ unsigned MipsInstrInfo::getEquivalentCompactForm(
     case Mips::JR:
     case Mips::PseudoReturn:
     case Mips::PseudoIndirectBranch:
+<<<<<<< HEAD
+=======
+    case Mips::PseudoIndirectBranch_MM:
+>>>>>>> origin/release/5.x
       canUseShortMicroMipsCTI = true;
       break;
     }
@@ -535,6 +539,10 @@ unsigned MipsInstrInfo::getEquivalentCompactForm(
     // tools will accept 'jrc reg' as an alias for 'jic 0, $reg'.
     case Mips::JR:
     case Mips::PseudoIndirectBranchR6:
+<<<<<<< HEAD
+=======
+    case Mips::PseudoIndirectBranch_MM:
+>>>>>>> origin/release/5.x
     case Mips::PseudoReturn:
     case Mips::TAILCALLR6REG:
       if (canUseShortMicroMipsCTI)
@@ -705,6 +713,7 @@ bool MipsInstrInfo::findCommutedOpIndices(const MachineInstr &MI,
   return TargetInstrInfo::findCommutedOpIndices(MI, SrcOpIdx1, SrcOpIdx2);
 }
 
+<<<<<<< HEAD
 // ins, ext, dext*, dins have the following constraints:
 // X <= pos      <  Y
 // X <  size     <= Y
@@ -785,6 +794,12 @@ bool MipsInstrInfo::verifyInstruction(const MachineInstr &MI,
       return verifyInsExtInstruction(MI, ErrInfo, 0, 32, 32, 64, 32, 64);
     case Mips::DEXTU:
       return verifyInsExtInstruction(MI, ErrInfo, 32, 64, 0, 32, 32, 64);
+=======
+//  Perform target specific instruction verification.
+bool MipsInstrInfo::verifyInstruction(const MachineInstr &MI,
+                                      StringRef &ErrInfo) const {
+  switch (MI.getOpcode()) {
+>>>>>>> origin/release/5.x
     case Mips::TAILCALLREG:
     case Mips::PseudoIndirectBranch:
     case Mips::JR:
@@ -803,6 +818,7 @@ bool MipsInstrInfo::verifyInstruction(const MachineInstr &MI,
 
   return true;
 }
+<<<<<<< HEAD
 
 std::pair<unsigned, unsigned>
 MipsInstrInfo::decomposeMachineOperandsTargetFlags(unsigned TF) const {
@@ -841,3 +857,5 @@ MipsInstrInfo::getSerializableDirectMachineOperandTargetFlags() const {
   };
   return makeArrayRef(Flags);
 }
+=======
+>>>>>>> origin/release/5.x

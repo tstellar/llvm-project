@@ -2891,6 +2891,7 @@ public:
   }];
 }
 
+<<<<<<< HEAD
 def DLLImportStaticLocal : InheritableAttr, TargetSpecificAttr<TargetWindows> {
   // This attribute is used internally only when -fno-dllexport-inlines is
   // passed. This attribute is added to inline function of class having
@@ -2899,6 +2900,11 @@ def DLLImportStaticLocal : InheritableAttr, TargetSpecificAttr<TargetWindows> {
   let Spellings = [];
   let Subjects = SubjectList<[Function]>;
   let Documentation = [Undocumented];
+=======
+def SelectAny : InheritableAttr {
+  let Spellings = [Declspec<"selectany">, GCC<"selectany">];
+  let Documentation = [SelectAnyDocs];
+>>>>>>> origin/release/5.x
 }
 
 def SelectAny : InheritableAttr {

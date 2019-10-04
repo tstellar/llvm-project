@@ -1881,6 +1881,7 @@ Error ASTNodeImporter::ImportDefinition(
       = FromData.HasConstexprNonCopyMoveConstructor;
     ToData.HasDefaultedDefaultConstructor
       = FromData.HasDefaultedDefaultConstructor;
+    ToData.CanPassInRegisters = FromData.CanPassInRegisters;
     ToData.DefaultedDefaultConstructorIsConstexpr
       = FromData.DefaultedDefaultConstructorIsConstexpr;
     ToData.HasConstexprDefaultConstructor

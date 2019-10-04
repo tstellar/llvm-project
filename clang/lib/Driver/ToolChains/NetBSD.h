@@ -70,9 +70,12 @@ public:
     return true;
   }
 
+<<<<<<< HEAD
   llvm::ExceptionHandling GetExceptionModel(
       const llvm::opt::ArgList &Args) const override;
 
+=======
+>>>>>>> origin/release/5.x
   SanitizerMask getSupportedSanitizers() const override;
 
   void addClangTargetOptions(const llvm::opt::ArgList &DriverArgs,

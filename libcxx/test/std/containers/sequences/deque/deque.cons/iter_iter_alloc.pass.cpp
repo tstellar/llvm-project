@@ -96,9 +96,15 @@ void test_emplacable_concept() {
 #endif
 }
 
+<<<<<<< HEAD
 int main(int, char**) {
   basic_test();
   test_emplacable_concept();
 
   return 0;
+=======
+int main() {
+  basic_test();
+  test_emplacable_concept();
+>>>>>>> origin/release/5.x
 }

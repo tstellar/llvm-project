@@ -161,6 +161,7 @@ static cl::opt<unsigned> SwitchPeelThreshold(
 // store [4096 x i8] %data, [4096 x i8]* %buffer
 static const unsigned MaxParallelChains = 64;
 
+<<<<<<< HEAD
 // Return the calling convention if the Value passed requires ABI mangling as it
 // is a parameter to a function or a return value from a function which is not
 // an intrinsic.
@@ -185,6 +186,27 @@ static Optional<CallingConv::ID> getABIRegCopyCC(const Value *V) {
   }
 
   return None;
+=======
+// True if the Value passed requires ABI mangling as it is a parameter to a
+// function or a return value from a function which is not an intrinsic.
+static bool isABIRegCopy(const Value * V) {
+  const bool IsRetInst = V && isa<ReturnInst>(V);
+  const bool IsCallInst = V && isa<CallInst>(V);
+  const bool IsInLineAsm =
+      IsCallInst && static_cast<const CallInst *>(V)->isInlineAsm();
+  const bool IsIndirectFunctionCall =
+      IsCallInst && !IsInLineAsm &&
+      !static_cast<const CallInst *>(V)->getCalledFunction();
+  // It is possible that the call instruction is an inline asm statement or an
+  // indirect function call in which case the return value of
+  // getCalledFunction() would be nullptr.
+  const bool IsInstrinsicCall =
+      IsCallInst && !IsInLineAsm && !IsIndirectFunctionCall &&
+      static_cast<const CallInst *>(V)->getCalledFunction()->getIntrinsicID() !=
+          Intrinsic::not_intrinsic;
+
+  return IsRetInst || (IsCallInst && (!IsInLineAsm && !IsInstrinsicCall));
+>>>>>>> origin/release/5.x
 }
 
 static SDValue getCopyFromPartsVector(SelectionDAG &DAG, const SDLoc &DL,
@@ -1375,8 +1397,12 @@ SDValue SelectionDAGBuilder::getCopyFromRegs(const Value *V, Type *Ty) {
     unsigned InReg = It->second;
 
     RegsForValue RFV(*DAG.getContext(), DAG.getTargetLoweringInfo(),
+<<<<<<< HEAD
                      DAG.getDataLayout(), InReg, Ty,
                      None); // This is not an ABI copy.
+=======
+                     DAG.getDataLayout(), InReg, Ty, isABIRegCopy(V));
+>>>>>>> origin/release/5.x
     SDValue Chain = DAG.getEntryNode();
     Result = RFV.getCopyFromRegs(DAG, FuncInfo, getCurSDLoc(), Chain, nullptr,
                                  V);
@@ -1567,7 +1593,11 @@ SDValue SelectionDAGBuilder::getValueImpl(const Value *V) {
     unsigned InReg = FuncInfo.InitializeRegForValue(Inst);
 
     RegsForValue RFV(*DAG.getContext(), TLI, DAG.getDataLayout(), InReg,
+<<<<<<< HEAD
                      Inst->getType(), getABIRegCopyCC(V));
+=======
+                     Inst->getType(), isABIRegCopy(V));
+>>>>>>> origin/release/5.x
     SDValue Chain = DAG.getEntryNode();
     return RFV.getCopyFromRegs(DAG, FuncInfo, getCurSDLoc(), Chain, nullptr, V);
   }
@@ -9410,8 +9440,13 @@ SelectionDAGBuilder::CopyValueToVirtualRegister(const Value *V, unsigned Reg) {
   // If this is an InlineAsm we have to match the registers required, not the
   // notional registers required by the type.
 
+<<<<<<< HEAD
   RegsForValue RFV(V->getContext(), TLI, DAG.getDataLayout(), Reg, V->getType(),
                    None); // This is not an ABI copy.
+=======
+  RegsForValue RFV(V->getContext(), TLI, DAG.getDataLayout(), Reg,
+                   V->getType(), isABIRegCopy(V));
+>>>>>>> origin/release/5.x
   SDValue Chain = DAG.getEntryNode();
 
   ISD::NodeType ExtendType = (FuncInfo.PreferredExtendType.find(V) ==

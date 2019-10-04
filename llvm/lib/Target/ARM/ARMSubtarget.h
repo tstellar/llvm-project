@@ -849,6 +849,7 @@ public:
       return ARM::BX_RET;
     return ARM::MOVPCLR;
   }
+<<<<<<< HEAD
 
   /// Allow movt+movw for PIC global address calculation.
   /// ELF does not have GOT relocations for movt+movw.
@@ -864,6 +865,8 @@ public:
   bool ignoreCSRForAllocationOrder(const MachineFunction &MF,
                                    unsigned PhysReg) const override;
   unsigned getGPRAllocationOrder(const MachineFunction &MF) const;
+=======
+>>>>>>> origin/release/5.x
 };
 
 } // end namespace llvm

@@ -1673,6 +1673,7 @@ void Darwin::AddDeploymentTarget(DerivedArgList &Args) const {
     }
   }
 
+<<<<<<< HEAD
   // Read the SDKSettings.json file for more information, like the SDK version
   // that we can pass down to the compiler.
   SDKInfo = parseSDKSettings(getVFS(), Args, getDriver());
@@ -1728,6 +1729,73 @@ void Darwin::AddDeploymentTarget(DerivedArgList &Args) const {
           OSTarget->setEnvironment(SDKTarget->getEnvironment());
       }
     }
+=======
+  Arg *OSXVersion = Args.getLastArg(options::OPT_mmacosx_version_min_EQ);
+  Arg *iOSVersion = Args.getLastArg(options::OPT_miphoneos_version_min_EQ,
+                                    options::OPT_mios_simulator_version_min_EQ);
+  Arg *TvOSVersion =
+      Args.getLastArg(options::OPT_mtvos_version_min_EQ,
+                      options::OPT_mtvos_simulator_version_min_EQ);
+  Arg *WatchOSVersion =
+      Args.getLastArg(options::OPT_mwatchos_version_min_EQ,
+                      options::OPT_mwatchos_simulator_version_min_EQ);
+
+  unsigned Major, Minor, Micro;
+  bool HadExtra;
+
+  // The iOS deployment target that is explicitly specified via a command line
+  // option or an environment variable.
+  std::string ExplicitIOSDeploymentTargetStr;
+
+  if (iOSVersion)
+    ExplicitIOSDeploymentTargetStr = iOSVersion->getAsString(Args);
+
+  // Add a macro to differentiate between m(iphone|tv|watch)os-version-min=X.Y and
+  // -m(iphone|tv|watch)simulator-version-min=X.Y.
+  if (Args.hasArg(options::OPT_mios_simulator_version_min_EQ) ||
+      Args.hasArg(options::OPT_mtvos_simulator_version_min_EQ) ||
+      Args.hasArg(options::OPT_mwatchos_simulator_version_min_EQ))
+    Args.append(Args.MakeSeparateArg(nullptr, Opts.getOption(options::OPT_D),
+                                     " __APPLE_EMBEDDED_SIMULATOR__=1"));
+
+  if (OSXVersion && (iOSVersion || TvOSVersion || WatchOSVersion)) {
+    getDriver().Diag(diag::err_drv_argument_not_allowed_with)
+        << OSXVersion->getAsString(Args)
+        << (iOSVersion ? iOSVersion :
+            TvOSVersion ? TvOSVersion : WatchOSVersion)->getAsString(Args);
+    iOSVersion = TvOSVersion = WatchOSVersion = nullptr;
+  } else if (iOSVersion && (TvOSVersion || WatchOSVersion)) {
+    getDriver().Diag(diag::err_drv_argument_not_allowed_with)
+        << iOSVersion->getAsString(Args)
+        << (TvOSVersion ? TvOSVersion : WatchOSVersion)->getAsString(Args);
+    TvOSVersion = WatchOSVersion = nullptr;
+  } else if (TvOSVersion && WatchOSVersion) {
+     getDriver().Diag(diag::err_drv_argument_not_allowed_with)
+        << TvOSVersion->getAsString(Args)
+        << WatchOSVersion->getAsString(Args);
+    WatchOSVersion = nullptr;
+  } else if (!OSXVersion && !iOSVersion && !TvOSVersion && !WatchOSVersion) {
+    // If no deployment target was specified on the command line, check for
+    // environment defines.
+    std::string OSXTarget;
+    std::string iOSTarget;
+    std::string TvOSTarget;
+    std::string WatchOSTarget;
+
+    if (char *env = ::getenv("MACOSX_DEPLOYMENT_TARGET"))
+      OSXTarget = env;
+    if (char *env = ::getenv("IPHONEOS_DEPLOYMENT_TARGET"))
+      iOSTarget = env;
+    if (char *env = ::getenv("TVOS_DEPLOYMENT_TARGET"))
+      TvOSTarget = env;
+    if (char *env = ::getenv("WATCHOS_DEPLOYMENT_TARGET"))
+      WatchOSTarget = env;
+
+    if (!iOSTarget.empty())
+      ExplicitIOSDeploymentTargetStr =
+          std::string("IPHONEOS_DEPLOYMENT_TARGET=") + iOSTarget;
+
+>>>>>>> origin/release/5.x
     // If there is no command-line argument to specify the Target version and
     // no environment variable defined, see if we can set the default based
     // on -isysroot using SDKSettings.json if it exists.
@@ -1763,16 +1831,27 @@ void Darwin::AddDeploymentTarget(DerivedArgList &Args) const {
                                    Micro, HadExtra) ||
         HadExtra || Major >= 100 || Minor >= 100 || Micro >= 100)
       getDriver().Diag(diag::err_drv_invalid_version_number)
+<<<<<<< HEAD
           << OSTarget->getAsString(Args, Opts);
     ;
+=======
+          << iOSVersion->getAsString(Args);
+>>>>>>> origin/release/5.x
     // For 32-bit targets, the deployment target for iOS has to be earlier than
     // iOS 11.
     if (getTriple().isArch32Bit() && Major >= 11) {
       // If the deployment target is explicitly specified, print a diagnostic.
+<<<<<<< HEAD
       if (OSTarget->isExplicitlySpecified()) {
         getDriver().Diag(diag::warn_invalid_ios_deployment_target)
             << OSTarget->getAsString(Args, Opts);
         // Otherwise, set it to 10.99.99.
+=======
+      if (!ExplicitIOSDeploymentTargetStr.empty()) {
+        getDriver().Diag(diag::warn_invalid_ios_deployment_target)
+            << ExplicitIOSDeploymentTargetStr;
+      // Otherwise, set it to 10.99.99.
+>>>>>>> origin/release/5.x
       } else {
         Major = 10;
         Minor = 99;
@@ -2409,7 +2488,11 @@ bool MachO::IsUnwindTablesDefault(const ArgList &Args) const {
   // Unwind tables are not emitted if -fno-exceptions is supplied (except when
   // targeting x86_64).
   return getArch() == llvm::Triple::x86_64 ||
+<<<<<<< HEAD
          (GetExceptionModel(Args) != llvm::ExceptionHandling::SjLj &&
+=======
+         (!UseSjLjExceptions(Args) &&
+>>>>>>> origin/release/5.x
           Args.hasFlag(options::OPT_fexceptions, options::OPT_fno_exceptions,
                        true));
 }

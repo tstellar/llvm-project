@@ -1,5 +1,6 @@
 # REQUIRES: x86
 # RUN: llvm-mc -filetype=obj -triple=i686-windows-msvc %s -o %t.obj
+<<<<<<< HEAD
 # RUN: echo -e "LIBRARY foo\nEXPORTS\n  stdcall\n  fastcall\n  vectorcall\n  _underscored" > %t.def
 # RUN: lld-link -safeseh:no -entry:dllmain -dll -def:%t.def %t.obj -out:%t.dll -implib:%t.lib
 # RUN: llvm-readobj %t.lib | FileCheck -check-prefix UNDECORATED-IMPLIB %s
@@ -90,6 +91,14 @@
 # MINGW-KILL-AT-EXPORTS: Name: stdcall
 # MINGW-KILL-AT-EXPORTS: Name: vectorcall
 
+=======
+# RUN: echo -e "LIBRARY foo\nEXPORTS\n  stdcall" > %t.def
+# RUN: lld-link -entry:dllmain -dll -def:%t.def %t.obj -out:%t.dll -implib:%t.lib
+# RUN: llvm-readobj %t.lib | FileCheck %s
+# CHECK: Name type: undecorate
+# CHECK: __imp__stdcall@8
+# CHECK: _stdcall@8
+>>>>>>> origin/release/5.x
 
         .def     _stdcall@8;
         .scl    2;

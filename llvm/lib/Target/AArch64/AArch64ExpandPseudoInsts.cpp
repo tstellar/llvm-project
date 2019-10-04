@@ -662,6 +662,7 @@ bool AArch64ExpandPseudo::expandMI(MachineBasicBlock &MBB,
     MI.eraseFromParent();
     return true;
    }
+<<<<<<< HEAD
    case AArch64::IRGstack: {
      MachineFunction &MF = *MBB.getParent();
      const AArch64FunctionInfo *AFI = MF.getInfo<AArch64FunctionInfo>();
@@ -703,6 +704,8 @@ bool AArch64ExpandPseudo::expandMI(MachineBasicBlock &MBB,
    case AArch64::STGloop:
    case AArch64::STZGloop:
      return expandSetTagLoop(MBB, MBBI, NextMBBI);
+=======
+>>>>>>> origin/release/5.x
   }
   return false;
 }

@@ -920,7 +920,11 @@ struct FunctionStackPoisoner : public InstVisitor<FunctionStackPoisoner> {
   bool runOnFunction() {
     if (!ClStack) return false;
 
+<<<<<<< HEAD
     if (ClRedzoneByvalArgs)
+=======
+    if (ClRedzoneByvalArgs && Mapping.Offset != kDynamicShadowSentinel)
+>>>>>>> origin/release/5.x
       copyArgsPassedByValToAllocas();
 
     // Collect alloca, ret, lifetime instructions etc.

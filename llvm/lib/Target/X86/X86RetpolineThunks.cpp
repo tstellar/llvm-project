@@ -1,8 +1,15 @@
 //======- X86RetpolineThunks.cpp - Construct retpoline thunks for x86  --=====//
 //
+<<<<<<< HEAD
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+=======
+//                     The LLVM Compiler Infrastructure
+//
+// This file is distributed under the University of Illinois Open Source
+// License. See LICENSE.TXT for details.
+>>>>>>> origin/release/5.x
 //
 //===----------------------------------------------------------------------===//
 /// \file
@@ -58,8 +65,13 @@ public:
 
   void getAnalysisUsage(AnalysisUsage &AU) const override {
     MachineFunctionPass::getAnalysisUsage(AU);
+<<<<<<< HEAD
     AU.addRequired<MachineModuleInfoWrapperPass>();
     AU.addPreserved<MachineModuleInfoWrapperPass>();
+=======
+    AU.addRequired<MachineModuleInfo>();
+    AU.addPreserved<MachineModuleInfo>();
+>>>>>>> origin/release/5.x
   }
 
 private:
@@ -73,7 +85,11 @@ private:
 
   void createThunkFunction(Module &M, StringRef Name);
   void insertRegReturnAddrClobber(MachineBasicBlock &MBB, unsigned Reg);
+<<<<<<< HEAD
   void populateThunk(MachineFunction &MF, unsigned Reg);
+=======
+  void populateThunk(MachineFunction &MF, Optional<unsigned> Reg = None);
+>>>>>>> origin/release/5.x
 };
 
 } // end anonymous namespace
@@ -90,14 +106,22 @@ bool X86RetpolineThunks::doInitialization(Module &M) {
 }
 
 bool X86RetpolineThunks::runOnMachineFunction(MachineFunction &MF) {
+<<<<<<< HEAD
   LLVM_DEBUG(dbgs() << getPassName() << '\n');
+=======
+  DEBUG(dbgs() << getPassName() << '\n');
+>>>>>>> origin/release/5.x
 
   TM = &MF.getTarget();;
   STI = &MF.getSubtarget<X86Subtarget>();
   TII = STI->getInstrInfo();
   Is64Bit = TM->getTargetTriple().getArch() == Triple::x86_64;
 
+<<<<<<< HEAD
   MMI = &getAnalysis<MachineModuleInfoWrapperPass>().getMMI();
+=======
+  MMI = &getAnalysis<MachineModuleInfo>();
+>>>>>>> origin/release/5.x
   Module &M = const_cast<Module &>(*MMI->getModule());
 
   // If this function is not a thunk, check to see if we need to insert
@@ -114,9 +138,13 @@ bool X86RetpolineThunks::runOnMachineFunction(MachineFunction &MF) {
     // FIXME: It's a little silly to look at every function just to enumerate
     // the subtargets, but eventually we'll want to look at them for indirect
     // calls, so maybe this is OK.
+<<<<<<< HEAD
     if ((!STI->useRetpolineIndirectCalls() &&
          !STI->useRetpolineIndirectBranches()) ||
         STI->useRetpolineExternalThunk())
+=======
+    if (!STI->useRetpoline() || STI->useRetpolineExternalThunk())
+>>>>>>> origin/release/5.x
       return false;
 
     // Otherwise, we need to insert the thunk.
@@ -215,6 +243,7 @@ void X86RetpolineThunks::createThunkFunction(Module &M, StringRef Name) {
   IRBuilder<> Builder(Entry);
 
   Builder.CreateRetVoid();
+<<<<<<< HEAD
 
   // MachineFunctions/MachineBasicBlocks aren't created automatically for the
   // IR-level constructs we already made. Create them and insert them into the
@@ -224,6 +253,8 @@ void X86RetpolineThunks::createThunkFunction(Module &M, StringRef Name) {
 
   // Insert EntryMBB into MF. It's not in the module until we do this.
   MF.insert(MF.end(), EntryMBB);
+=======
+>>>>>>> origin/release/5.x
 }
 
 void X86RetpolineThunks::insertRegReturnAddrClobber(MachineBasicBlock &MBB,
@@ -235,6 +266,7 @@ void X86RetpolineThunks::insertRegReturnAddrClobber(MachineBasicBlock &MBB,
 }
 
 void X86RetpolineThunks::populateThunk(MachineFunction &MF,
+<<<<<<< HEAD
                                        unsigned Reg) {
   // Set MF properties. We never use vregs...
   MF.getProperties().set(MachineFunctionProperties::Property::NoVRegs);
@@ -249,12 +281,24 @@ void X86RetpolineThunks::populateThunk(MachineFunction &MF,
   MachineBasicBlock *CaptureSpec = MF.CreateMachineBasicBlock(Entry->getBasicBlock());
   MachineBasicBlock *CallTarget = MF.CreateMachineBasicBlock(Entry->getBasicBlock());
   MCSymbol *TargetSym = MF.getContext().createTempSymbol();
+=======
+                                       Optional<unsigned> Reg) {
+  // Set MF properties. We never use vregs...
+  MF.getProperties().set(MachineFunctionProperties::Property::NoVRegs);
+
+  MachineBasicBlock *Entry = &MF.front();
+  Entry->clear();
+
+  MachineBasicBlock *CaptureSpec = MF.CreateMachineBasicBlock(Entry->getBasicBlock());
+  MachineBasicBlock *CallTarget = MF.CreateMachineBasicBlock(Entry->getBasicBlock());
+>>>>>>> origin/release/5.x
   MF.push_back(CaptureSpec);
   MF.push_back(CallTarget);
 
   const unsigned CallOpc = Is64Bit ? X86::CALL64pcrel32 : X86::CALLpcrel32;
   const unsigned RetOpc = Is64Bit ? X86::RETQ : X86::RETL;
 
+<<<<<<< HEAD
   Entry->addLiveIn(Reg);
   BuildMI(Entry, DebugLoc(), TII->get(CallOpc)).addSym(TargetSym);
 
@@ -262,6 +306,12 @@ void X86RetpolineThunks::populateThunk(MachineFunction &MF,
   // to CaptureSpec, so mark it as the successor. Technically, CaptureTarget is
   // the successor, but the MIR verifier doesn't know how to cope with that.
   Entry->addSuccessor(CaptureSpec);
+=======
+  BuildMI(Entry, DebugLoc(), TII->get(CallOpc)).addMBB(CallTarget);
+  Entry->addSuccessor(CallTarget);
+  Entry->addSuccessor(CaptureSpec);
+  CallTarget->setHasAddressTaken();
+>>>>>>> origin/release/5.x
 
   // In the capture loop for speculation, we want to stop the processor from
   // speculating as fast as possible. On Intel processors, the PAUSE instruction
@@ -277,10 +327,15 @@ void X86RetpolineThunks::populateThunk(MachineFunction &MF,
   CaptureSpec->setHasAddressTaken();
   CaptureSpec->addSuccessor(CaptureSpec);
 
+<<<<<<< HEAD
   CallTarget->addLiveIn(Reg);
   CallTarget->setHasAddressTaken();
   CallTarget->setAlignment(Align(16));
   insertRegReturnAddrClobber(*CallTarget, Reg);
   CallTarget->back().setPreInstrSymbol(MF, TargetSym);
+=======
+  CallTarget->setAlignment(4);
+  insertRegReturnAddrClobber(*CallTarget, *Reg);
+>>>>>>> origin/release/5.x
   BuildMI(CallTarget, DebugLoc(), TII->get(RetOpc));
 }

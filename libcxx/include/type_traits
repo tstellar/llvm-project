@@ -3542,9 +3542,24 @@ struct __invokable_r
   template <class _XFp, class ..._XArgs>
   static __nat __try_call(...);
 
+<<<<<<< HEAD
   // FIXME: Check that _Ret, _Fp, and _Args... are all complete types, cv void,
   // or incomplete array types as required by the standard.
   using _Result = decltype(__try_call<_Fp, _Args...>(0));
+=======
+    using type =
+        typename conditional<
+            !is_same<_Result, __nat>::value,
+            typename conditional<
+                is_void<_Ret>::value,
+                true_type,
+                is_convertible<_Result, _Ret>
+            >::type,
+            false_type
+        >::type;
+    static const bool value = type::value;
+};
+>>>>>>> origin/release/5.x
 
   using type =
   typename conditional<

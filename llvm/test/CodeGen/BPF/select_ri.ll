@@ -53,13 +53,18 @@ define i32 @foo(i8*) local_unnamed_addr #0 {
   %3 = tail call i64 @llvm.bpf.load.word(i8* %0, i64 104)
   %4 = add i64 %3, %2
   %5 = icmp ne i64 %4, 8589934591
+<<<<<<< HEAD
 ; CHECK:  r{{[0-9]+}} = 8589934591 ll
+=======
+; CHECK:  r{{[0-9]+}} = 8589934591ll
+>>>>>>> origin/release/5.x
   %6 = sext i1 %5 to i32
   ret i32 %6
 }
 
 ; Function Attrs: nounwind readonly
 declare i64 @llvm.bpf.load.word(i8*, i64) #1
+<<<<<<< HEAD
 
 ; Source file:
 ; int m, n;
@@ -85,3 +90,5 @@ entry:
 }
 
 attributes #0 = { norecurse nounwind readonly }
+=======
+>>>>>>> origin/release/5.x

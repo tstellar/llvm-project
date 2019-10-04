@@ -1273,7 +1273,11 @@ public:
   /// which implicitly adds the builtin defines etc.
   void EnterMainSourceFile();
 
+<<<<<<< HEAD
   /// Inform the preprocessor callbacks that processing is complete.
+=======
+  /// \brief Inform the preprocessor callbacks that processing is complete.
+>>>>>>> origin/release/5.x
   void EndSourceFile();
 
   /// Add a source file to the top of the include stack and
@@ -2283,7 +2287,11 @@ public:
   }
 
 private:
+<<<<<<< HEAD
   /// After processing predefined file, initialize the conditional stack from
+=======
+  /// \brief After processing predefined file, initialize the conditional stack from
+>>>>>>> origin/release/5.x
   /// the preamble.
   void replayPreambleConditionalStack();
 

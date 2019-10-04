@@ -28,6 +28,15 @@ void CGCXXABI::ErrorUnsupportedABI(CodeGenFunction &CGF, StringRef S) {
     << S;
 }
 
+<<<<<<< HEAD
+=======
+bool CGCXXABI::canCopyArgument(const CXXRecordDecl *RD) const {
+  // We can only copy the argument if there exists at least one trivial,
+  // non-deleted copy or move constructor.
+  return RD->canPassInRegisters();
+}
+
+>>>>>>> origin/release/5.x
 llvm::Constant *CGCXXABI::GetBogusMemberPointer(QualType T) {
   return llvm::Constant::getNullValue(CGM.getTypes().ConvertType(T));
 }

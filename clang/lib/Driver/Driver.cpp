@@ -74,9 +74,12 @@
 #include "llvm/Support/PrettyStackTrace.h"
 #include "llvm/Support/Process.h"
 #include "llvm/Support/Program.h"
+<<<<<<< HEAD
 #include "llvm/Support/StringSaver.h"
 #include "llvm/Support/TargetRegistry.h"
 #include "llvm/Support/VirtualFileSystem.h"
+=======
+>>>>>>> origin/release/5.x
 #include "llvm/Support/raw_ostream.h"
 #include <map>
 #include <memory>
@@ -1743,7 +1746,51 @@ bool Driver::HandleImmediateArgs(const Compilation &C) {
 
   if (Arg *A = C.getArgs().getLastArg(options::OPT_autocomplete)) {
     StringRef PassedFlags = A->getValue();
+<<<<<<< HEAD
     HandleAutocompletions(PassedFlags);
+=======
+    std::vector<std::string> SuggestedCompletions;
+
+    unsigned short DisableFlags = options::NoDriverOption | options::Unsupported | options::Ignored;
+    // We want to show cc1-only options only when clang is invoked as "clang -cc1".
+    // When clang is invoked as "clang -cc1", we add "#" to the beginning of an --autocomplete
+    // option so that the clang driver can distinguish whether it is requested to show cc1-only options or not.
+    if (PassedFlags[0] == '#') {
+      DisableFlags &= ~options::NoDriverOption;
+      PassedFlags = PassedFlags.substr(1);
+    }
+
+    if (PassedFlags.find(',') == StringRef::npos) {
+      // If the flag is in the form of "--autocomplete=-foo",
+      // we were requested to print out all option names that start with "-foo".
+      // For example, "--autocomplete=-fsyn" is expanded to "-fsyntax-only".
+      SuggestedCompletions = Opts->findByPrefix(PassedFlags, DisableFlags);
+
+      // We have to query the -W flags manually as they're not in the OptTable.
+      // TODO: Find a good way to add them to OptTable instead and them remove
+      // this code.
+      for (StringRef S : DiagnosticIDs::getDiagnosticFlags())
+        if (S.startswith(PassedFlags))
+          SuggestedCompletions.push_back(S);
+    } else {
+      // If the flag is in the form of "--autocomplete=foo,bar", we were
+      // requested to print out all option values for "-foo" that start with
+      // "bar". For example,
+      // "--autocomplete=-stdlib=,l" is expanded to "libc++" and "libstdc++".
+      StringRef Option, Arg;
+      std::tie(Option, Arg) = PassedFlags.split(',');
+      SuggestedCompletions = Opts->suggestValueCompletions(Option, Arg);
+    }
+
+    // Sort the autocomplete candidates so that shells print them out in a
+    // deterministic order. We could sort in any way, but we chose
+    // case-insensitive sorting for consistency with the -help option
+    // which prints out options in the case-insensitive alphabetical order.
+    std::sort(SuggestedCompletions.begin(), SuggestedCompletions.end(),
+              [](StringRef A, StringRef B) { return A.compare_lower(B) < 0; });
+
+    llvm::outs() << llvm::join(SuggestedCompletions, "\n") << '\n';
+>>>>>>> origin/release/5.x
     return false;
   }
 

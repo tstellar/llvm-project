@@ -54,10 +54,13 @@ namespace llvm {
   /// module is modified.
   bool UpgradeModuleFlags(Module &M);
 
+<<<<<<< HEAD
   /// Convert calls to ARC runtime functions to intrinsic calls and upgrade the
   /// old retain release marker to new module flag format.
   void UpgradeARCRuntime(Module &M);
 
+=======
+>>>>>>> origin/release/5.x
   void UpgradeSectionAttributes(Module &M);
 
   /// If the given TBAA tag uses the scalar TBAA format, create a new node

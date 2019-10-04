@@ -22,10 +22,14 @@ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR OR LIBCXXABI_STANDALONE_B
 
   set(PACKAGE_NAME libcxxabi)
 <<<<<<< HEAD
+<<<<<<< HEAD
   set(PACKAGE_VERSION 9.0.0svn)
 =======
   set(PACKAGE_VERSION 8.0.0)
 >>>>>>> release/8.x
+=======
+  set(PACKAGE_VERSION 5.0.0)
+>>>>>>> origin/release/5.x
   set(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
   set(PACKAGE_BUGREPORT "llvm-bugs@lists.llvm.org")
 

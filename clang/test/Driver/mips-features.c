@@ -392,6 +392,7 @@
 // LONG-CALLS-ON: "-target-feature" "+long-calls"
 // LONG-CALLS-OFF: "-target-feature" "-long-calls"
 // LONG-CALLS-DEF-NOT: "long-calls"
+<<<<<<< HEAD
 //
 // -mbranch-likely
 // RUN: %clang -target -mips-mti-linux-gnu -### -c %s -mbranch-likely 2>&1 \
@@ -402,12 +403,15 @@
 // RUN: %clang -target -mips-mti-linux-gnu -### -c %s -mno-branch-likely 2>&1 \
 // RUN:   | FileCheck --check-prefix=NO-BRANCH-LIKELY %s
 // NO-BRANCH-LIKELY: argument unused during compilation: '-mno-branch-likely'
+=======
+>>>>>>> origin/release/5.x
 
 // -mindirect-jump=hazard
 // RUN: %clang -target mips-unknown-linux-gnu -### -c %s \
 // RUN:        -mindirect-jump=hazard 2>&1 \
 // RUN:   | FileCheck --check-prefix=INDIRECT-BH %s
 // INDIRECT-BH: "-target-feature" "+use-indirect-jump-hazard"
+<<<<<<< HEAD
 //
 // -mcrc
 // RUN: %clang -target mips-unknown-linux-gnu -### -c %s \
@@ -456,3 +460,5 @@
 // RUN:     -mrelax-pic-calls -mno-relax-pic-calls 2>&1 \
 // RUN:   | FileCheck --check-prefix=CHECK-NO-RELAX-PIC-CALLS %s
 // CHECK-NO-RELAX-PIC-CALLS: "-mllvm" "-mips-jalr-reloc=0"
+=======
+>>>>>>> origin/release/5.x

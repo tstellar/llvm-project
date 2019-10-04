@@ -219,6 +219,7 @@ void f(int a) {
   struct A {
     void g(int a) {}
     A() { int a; }
+<<<<<<< HEAD
   };
 }
 }
@@ -265,3 +266,8 @@ struct PR24718_2 {
     PR24718_1 // Does not shadow a type.
   };
 };
+=======
+  };
+}
+}
+>>>>>>> origin/release/5.x

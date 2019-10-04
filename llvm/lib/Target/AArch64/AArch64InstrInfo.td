@@ -6123,7 +6123,10 @@ def : Pat<(v16i8 (int_aarch64_crypto_aesimc
                                               (v16i8 V128:$src2)))))>,
           Requires<[HasFuseAES]>;
 
+<<<<<<< HEAD
 let Predicates = [HasSHA2] in {
+=======
+>>>>>>> origin/release/5.x
 def SHA1Crrr     : SHATiedInstQSV<0b000, "sha1c",   int_aarch64_crypto_sha1c>;
 def SHA1Prrr     : SHATiedInstQSV<0b001, "sha1p",   int_aarch64_crypto_sha1p>;
 def SHA1Mrrr     : SHATiedInstQSV<0b010, "sha1m",   int_aarch64_crypto_sha1m>;

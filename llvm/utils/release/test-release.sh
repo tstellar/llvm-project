@@ -597,9 +597,14 @@ for Flavor in $Flavors ; do
             # case there are build paths in the debug info. Do the same sub-
             # stitution on both files in case the string occurrs naturally.
             if ! cmp -s \
+<<<<<<< HEAD
                 <(env LC_CTYPE=C sed -e 's,Phase1,Phase2,g' -e 's,Phase2,Phase3,g' $p2) \
                 <(env LC_CTYPE=C sed -e 's,Phase1,Phase2,g' -e 's,Phase2,Phase3,g' $p3) \
                 16 16; then
+=======
+                <(env LC_CTYPE=C sed -e 's,Phase2,Phase3,g' -e 's,Phase1,Phase2,g' $p2) \
+                <(env LC_CTYPE=C sed -e '' $p3) 16 16; then
+>>>>>>> origin/release/5.x
                 echo "file `basename $p2` differs between phase 2 and phase 3"
             fi
         done

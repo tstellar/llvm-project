@@ -9,8 +9,13 @@ define i8 @load8(i8* %x) {
 
 define i16 @load16(i16* %x) {
 ; CHECK-LABEL: load16:
+<<<<<<< HEAD
 ; CHECK: ld r24,  [[PTR:[YZ]]]
 ; CHECK: ldd r25, [[PTR]]+1
+=======
+; CHECK: ld r24, {{[XYZ]}}+
+; CHECK: ld r25, {{[XYZ]}}
+>>>>>>> origin/release/5.x
   %1 = load i16, i16* %x
   ret i16 %1
 }
@@ -45,11 +50,19 @@ define i16 @load16disp(i16* %x) {
 
 define i16 @load16nodisp(i16* %x) {
 ; CHECK-LABEL: load16nodisp:
+<<<<<<< HEAD
 ; CHECK: subi r24, 192
 ; CHECK: sbci r25, 255
 ; CHECK: movw r30, r24
 ; CHECK: ld r24,  [[PTR:[YZ]]]
 ; CHECK: ldd r25, [[PTR]]+1
+=======
+; CHECK: movw r26, r24
+; CHECK: subi r26, 192
+; CHECK: sbci r27, 255
+; CHECK: ld r24, {{[XYZ]}}+
+; CHECK: ld r25, {{[XYZ]}}
+>>>>>>> origin/release/5.x
   %1 = getelementptr inbounds i16, i16* %x, i64 32
   %2 = load i16, i16* %1
   ret i16 %2

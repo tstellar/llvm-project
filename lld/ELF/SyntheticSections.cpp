@@ -358,6 +358,7 @@ CieRecord *EhFrameSection::addCie(EhSectionPiece &cie, ArrayRef<RelTy> rels) {
         &cie.sec->template getFile<ELFT>()->getRelocTargetSym(rels[firstRelI]);
 
   // Search for an existing CIE by CIE contents/relocation target pair.
+<<<<<<< HEAD
   CieRecord *&rec = cieMap[{cie.data(), personality}];
 
   // If not found, create a new one.
@@ -365,6 +366,15 @@ CieRecord *EhFrameSection::addCie(EhSectionPiece &cie, ArrayRef<RelTy> rels) {
     rec = make<CieRecord>();
     rec->cie = &cie;
     cieRecords.push_back(rec);
+=======
+  CieRecord *&Cie = CieMap[{Piece.data(), Personality}];
+
+  // If not found, create a new one.
+  if (!Cie) {
+    Cie = make<CieRecord>();
+    Cie->Piece = &Piece;
+    Cies.push_back(Cie);
+>>>>>>> origin/release/5.x
   }
   return rec;
 }
@@ -454,8 +464,18 @@ static void writeCieFde(uint8_t *buf, ArrayRef<uint8_t> d) {
   // Zero-clear trailing padding if it exists.
   memset(buf + d.size(), 0, aligned - d.size());
 
+  size_t Aligned = alignTo(D.size(), sizeof(typename ELFT::uint));
+
+  // Zero-clear trailing padding if it exists.
+  memset(Buf + D.size(), 0, Aligned - D.size());
+
   // Fix the size field. -4 since size does not include the size field itself.
+<<<<<<< HEAD
   write32(buf, aligned - 4);
+=======
+  const endianness E = ELFT::TargetEndianness;
+  write32<E>(Buf, Aligned - 4);
+>>>>>>> origin/release/5.x
 }
 
 void EhFrameSection::finalizeContents() {

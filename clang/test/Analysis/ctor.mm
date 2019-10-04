@@ -778,6 +778,7 @@ namespace NoCrashOnEmptyBaseOptimization {
     S s;
   }
 }
+<<<<<<< HEAD
 
 namespace EmptyBaseAssign {
 struct B1 {};
@@ -862,3 +863,5 @@ B::B() : x(1) {
   static_cast<D *>(this)->w = 4;
 }
 }
+=======
+>>>>>>> origin/release/5.x

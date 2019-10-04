@@ -307,12 +307,17 @@ struct Configuration {
   bool ZCombreloc;
   bool ZCopyreloc;
   bool ZExecstack;
+<<<<<<< HEAD
   bool ZGlobal;
   bool ZHazardplt;
   bool ZInitfirst;
   bool ZInterpose;
   bool ZKeepTextSectionPrefix;
   bool ZNodefaultlib;
+=======
+  bool ZHazardplt;
+  bool ZNocopyreloc;
+>>>>>>> origin/release/5.x
   bool ZNodelete;
   bool ZNodlopen;
   bool ZNow;
@@ -321,6 +326,10 @@ struct Configuration {
   bool ZRodynamic;
   bool ZText;
   bool ZRetpolineplt;
+<<<<<<< HEAD
+=======
+  bool ExitEarly;
+>>>>>>> origin/release/5.x
   bool ZWxneeded;
   DiscardPolicy Discard;
   ICFLevel ICF;

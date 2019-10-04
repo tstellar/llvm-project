@@ -388,6 +388,7 @@ void X86AsmPrinter::PrintIntelMemReference(const MachineInstr *MI,
 
 static bool printAsmMRegister(X86AsmPrinter &P, const MachineOperand &MO,
                               char Mode, raw_ostream &O) {
+<<<<<<< HEAD
   Register Reg = MO.getReg();
   bool EmitPercent = true;
 
@@ -397,6 +398,11 @@ static bool printAsmMRegister(X86AsmPrinter &P, const MachineOperand &MO,
       !X86::GR64RegClass.contains(Reg))
     return true;
 
+=======
+  unsigned Reg = MO.getReg();
+  bool EmitPercent = true;
+
+>>>>>>> origin/release/5.x
   switch (Mode) {
   default: return true;  // Unknown mode.
   case 'b': // Print QImode register

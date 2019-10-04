@@ -152,9 +152,15 @@ llvm::MDNode *CodeGenTBAA::getTypeInfoHelper(const Type *Ty) {
   // an object through a glvalue of other than one of the following types the
   // behavior is undefined: [...] a char, unsigned char, or std::byte type."
   if (Ty->isStdByteType())
+<<<<<<< HEAD
     return getChar();
 
   // Handle pointers and references.
+=======
+    return MetadataCache[Ty] = getChar();
+
+  // Handle pointers.
+>>>>>>> origin/release/5.x
   // TODO: Implement C++'s type "similarity" and consider dis-"similar"
   // pointers distinct.
   if (Ty->isPointerType() || Ty->isReferenceType())

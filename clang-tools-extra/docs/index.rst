@@ -20,9 +20,13 @@ Contents
    modularize
    pp-trace
    clang-rename
+<<<<<<< HEAD
    clangd/index
    clangd/DeveloperDocumentation
    clang-doc
+=======
+   clangd
+>>>>>>> origin/release/5.x
 
 
 Indices and tables

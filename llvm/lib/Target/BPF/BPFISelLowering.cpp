@@ -697,6 +697,7 @@ BPFTargetLowering::EmitInstrWithCustomInserter(MachineInstr &MI,
   default:
     report_fatal_error("unimplemented select CondCode " + Twine(CC));
   }
+<<<<<<< HEAD
 
   Register LHS = MI.getOperand(1).getReg();
   bool isSignedCmp = (CC == ISD::SETGT ||
@@ -722,11 +723,25 @@ BPFTargetLowering::EmitInstrWithCustomInserter(MachineInstr &MI,
 
     BuildMI(BB, DL, TII.get(NewCC)).addReg(LHS).addReg(RHS).addMBB(Copy1MBB);
   } else {
+=======
+  if (isSelectOp)
+    BuildMI(BB, DL, TII.get(NewCC))
+        .addReg(LHS)
+        .addReg(MI.getOperand(2).getReg())
+        .addMBB(Copy1MBB);
+  else {
+>>>>>>> origin/release/5.x
     int64_t imm32 = MI.getOperand(2).getImm();
     // sanity check before we build J*_ri instruction.
     assert (isInt<32>(imm32));
     BuildMI(BB, DL, TII.get(NewCC))
+<<<<<<< HEAD
         .addReg(LHS).addImm(imm32).addMBB(Copy1MBB);
+=======
+        .addReg(LHS)
+        .addImm(imm32)
+        .addMBB(Copy1MBB);
+>>>>>>> origin/release/5.x
   }
 
   // Copy0MBB:

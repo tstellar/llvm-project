@@ -7,9 +7,14 @@ config.abi_library_path         = "@LIBUNWIND_LIBRARY_DIR@"
 config.libcxx_src_root          = "@LIBUNWIND_LIBCXX_PATH@"
 config.libunwind_headers        = "@LIBUNWIND_SOURCE_DIR@/include"
 config.cxx_library_root         = "@LIBUNWIND_LIBCXX_LIBRARY_PATH@"
+<<<<<<< HEAD
 config.llvm_unwinder            = True
 config.builtins_library         = "@LIBUNWIND_BUILTINS_LIBRARY@"
 config.enable_threads           = @LIBUNWIND_ENABLE_THREADS@
+=======
+config.llvm_unwinder            = "1"
+config.enable_threads           = "@LIBUNWIND_ENABLE_THREADS@"
+>>>>>>> origin/release/5.x
 config.use_sanitizer            = "@LLVM_USE_SANITIZER@"
 config.enable_32bit             = @LIBUNWIND_BUILD_32_BITS@
 config.target_info              = "@LIBUNWIND_TARGET_INFO@"

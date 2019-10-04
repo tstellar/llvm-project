@@ -661,7 +661,10 @@ static FormatStyle expandPresets(const FormatStyle &Style) {
     Expanded.BraceWrapping.AfterFunction = true;
     Expanded.BraceWrapping.AfterStruct = true;
     Expanded.BraceWrapping.AfterUnion = true;
+<<<<<<< HEAD
     Expanded.BraceWrapping.AfterExternBlock = true;
+=======
+>>>>>>> origin/release/5.x
     Expanded.BraceWrapping.SplitEmptyFunction = true;
     Expanded.BraceWrapping.SplitEmptyRecord = false;
     break;

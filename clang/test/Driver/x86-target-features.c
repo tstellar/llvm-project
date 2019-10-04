@@ -95,6 +95,7 @@
 // CLZERO: "-target-feature" "+clzero"
 // NO-CLZERO: "-target-feature" "-clzero"
 
+<<<<<<< HEAD
 // RUN: %clang -target i386-unknown-linux-gnu -march=i386 -mvaes %s -### -o %t.o 2>&1 | FileCheck -check-prefix=VAES %s
 // RUN: %clang -target i386-unknown-linux-gnu -march=i386 -mno-vaes %s -### -o %t.o 2>&1 | FileCheck -check-prefix=NO-VAES %s
 // VAES: "-target-feature" "+vaes"
@@ -139,11 +140,18 @@
 // RUN: %clang -target i386-linux-gnu -mno-retpoline %s -### -o %t.o 2>&1 | FileCheck -check-prefix=NO-RETPOLINE %s
 // RETPOLINE: "-target-feature" "+retpoline-indirect-calls" "-target-feature" "+retpoline-indirect-branches"
 // NO-RETPOLINE-NOT: retpoline
+=======
+// RUN: %clang -target i386-linux-gnu -mretpoline %s -### -o %t.o 2>&1 | FileCheck -check-prefix=RETPOLINE %s
+// RUN: %clang -target i386-linux-gnu -mno-retpoline %s -### -o %t.o 2>&1 | FileCheck -check-prefix=NO-RETPOLINE %s
+// RETPOLINE: "-target-feature" "+retpoline"
+// NO-RETPOLINE: "-target-feature" "-retpoline"
+>>>>>>> origin/release/5.x
 
 // RUN: %clang -target i386-linux-gnu -mretpoline -mretpoline-external-thunk %s -### -o %t.o 2>&1 | FileCheck -check-prefix=RETPOLINE-EXTERNAL-THUNK %s
 // RUN: %clang -target i386-linux-gnu -mretpoline -mno-retpoline-external-thunk %s -### -o %t.o 2>&1 | FileCheck -check-prefix=NO-RETPOLINE-EXTERNAL-THUNK %s
 // RETPOLINE-EXTERNAL-THUNK: "-target-feature" "+retpoline-external-thunk"
 // NO-RETPOLINE-EXTERNAL-THUNK: "-target-feature" "-retpoline-external-thunk"
+<<<<<<< HEAD
 
 // RUN: %clang -target i386-linux-gnu -mspeculative-load-hardening %s -### -o %t.o 2>&1 | FileCheck -check-prefix=SLH %s
 // RUN: %clang -target i386-linux-gnu -mretpoline -mspeculative-load-hardening %s -### -o %t.o 2>&1 | FileCheck -check-prefix=RETPOLINE %s
@@ -193,3 +201,5 @@
 // RUN: %clang -target i386-unknown-linux-gnu -march=i386 -mno-enqcmd %s -### -o %t.o 2>&1 | FileCheck --check-prefix=NO-ENQCMD %s
 // ENQCMD: "-target-feature" "+enqcmd"
 // NO-ENQCMD: "-target-feature" "-enqcmd"
+=======
+>>>>>>> origin/release/5.x

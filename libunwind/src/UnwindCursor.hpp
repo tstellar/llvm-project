@@ -1318,7 +1318,11 @@ bool UnwindCursor<A, R>::getInfoFromEHABISection(
   if (begin == end)
     return false;
 
+<<<<<<< HEAD
   EHABISectionIterator<A> itNextPC = EHABISectionUpperBound(begin, end, pc);
+=======
+  EHABISectionIterator<A> itNextPC = std::upper_bound(begin, end, pc);
+>>>>>>> origin/release/5.x
   if (itNextPC == begin)
     return false;
   EHABISectionIterator<A> itThisPC = itNextPC - 1;
@@ -1328,7 +1332,12 @@ bool UnwindCursor<A, R>::getInfoFromEHABISection(
   // in the table, we don't really know the function extent and have to choose a
   // value for nextPC. Choosing max() will allow the range check during trace to
   // succeed.
+<<<<<<< HEAD
   pint_t nextPC = (itNextPC == end) ? UINTPTR_MAX : itNextPC.functionAddress();
+=======
+  pint_t nextPC = (itNextPC == end) ? std::numeric_limits<pint_t>::max()
+                                    : itNextPC.functionAddress();
+>>>>>>> origin/release/5.x
   pint_t indexDataAddr = itThisPC.dataAddress();
 
   if (indexDataAddr == 0)
