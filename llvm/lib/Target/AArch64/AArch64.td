@@ -179,9 +179,12 @@ def FeatureSlowMisaligned128Store : SubtargetFeature<"slow-misaligned-128store",
 
 def FeatureSlowPaired128 : SubtargetFeature<"slow-paired-128",
     "Paired128IsSlow", "true", "Paired 128 bit loads and stores are slow">;
+<<<<<<< HEAD
 
 def FeatureSlowSTRQro : SubtargetFeature<"slow-strqro-store", "STRQroIsSlow",
     "true", "STR of Q register with register offset is slow">;
+=======
+>>>>>>> origin/release/4.x
 
 def FeatureAlternateSExtLoadCVTF32Pattern : SubtargetFeature<
     "alternate-sextload-cvt-f32-pattern", "UseAlternateSExtLoadCVTF32Pattern",
@@ -593,7 +596,11 @@ def ProcExynosM1 : SubtargetFeature<"exynosm1", "ARMProcFamily", "ExynosM1",
                                      FeatureZCZeroingFP]>;
 
 def ProcExynosM2 : SubtargetFeature<"exynosm2", "ARMProcFamily", "ExynosM1",
+<<<<<<< HEAD
                                     "Samsung Exynos-M2 processors",
+=======
+                                    "Samsung Exynos-M2/M3 processors",
+>>>>>>> origin/release/4.x
                                     [FeatureSlowPaired128,
                                      FeatureCRC,
                                      FeatureCrypto,

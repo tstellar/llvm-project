@@ -8,8 +8,13 @@
 	.set noat
         bc1fl     $fcc7,27          # CHECK: :[[@LINE]]:{{[0-9]+}}: error: instruction requires a CPU feature not currently enabled
         bc1tl     $fcc7,27          # CHECK: :[[@LINE]]:{{[0-9]+}}: error: instruction requires a CPU feature not currently enabled
+<<<<<<< HEAD
         ldc2      $8,-21181($at)    # CHECK: :[[@LINE]]:{{[0-9]+}}: error: invalid operand for instruction
         ldc2      $20,-1024($s2)    # CHECK: :[[@LINE]]:{{[0-9]+}}: error: invalid operand for instruction
+=======
+        ldc2      $8,-21181($at)    # CHECK: :[[@LINE]]:{{[0-9]+}}: error: expected memory with 16-bit signed offset
+        ldc2      $20,-1024($s2)    # CHECK: :[[@LINE]]:{{[0-9]+}}: error: expected memory with 16-bit signed offset
+>>>>>>> origin/release/4.x
         ldl       $24,-4167($24)    # CHECK: :[[@LINE]]:{{[0-9]+}}: error: invalid operand for instruction
         ldr       $14,-30358($s4)   # CHECK: :[[@LINE]]:{{[0-9]+}}: error: invalid operand for instruction
         ll        $v0,-7321($s2)    # CHECK: :[[@LINE]]:{{[0-9]+}}: error: invalid operand for instruction

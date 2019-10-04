@@ -815,7 +815,64 @@ static OutputSection *findFirstSection(PhdrEntry *Load) {
   for (OutputSection *Sec : OutputSections)
     if (Sec->PtLoad == Load)
       return Sec;
+<<<<<<< HEAD
   return nullptr;
+=======
+
+  error(Loc + ": undefined section " + Name);
+  return &FakeSec;
+}
+
+// This function is essentially the same as getOutputSection(Name)->Size,
+// but it won't print out an error message if a given section is not found.
+//
+// Linker script does not create an output section if its content is empty.
+// We want to allow SIZEOF(.foo) where .foo is a section which happened to
+// be empty. That is why this function is different from getOutputSection().
+template <class ELFT>
+uint64_t LinkerScript<ELFT>::getOutputSectionSize(StringRef Name) {
+  for (OutputSectionBase *Sec : *OutputSections)
+    if (Sec->getName() == Name)
+      return Sec->Size;
+  return 0;
+}
+
+template <class ELFT> uint64_t LinkerScript<ELFT>::getHeaderSize() {
+  return elf::getHeaderSize<ELFT>();
+}
+
+template <class ELFT>
+uint64_t LinkerScript<ELFT>::getSymbolValue(const Twine &Loc, StringRef S) {
+  if (SymbolBody *B = Symtab<ELFT>::X->find(S))
+    return B->getVA<ELFT>();
+  error(Loc + ": symbol not found: " + S);
+  return 0;
+}
+
+template <class ELFT> bool LinkerScript<ELFT>::isDefined(StringRef S) {
+  return Symtab<ELFT>::X->find(S) != nullptr;
+}
+
+template <class ELFT> bool LinkerScript<ELFT>::isAbsolute(StringRef S) {
+  SymbolBody *Sym = Symtab<ELFT>::X->find(S);
+  auto *DR = dyn_cast_or_null<DefinedRegular<ELFT>>(Sym);
+  return DR && !DR->Section;
+}
+
+// Gets section symbol belongs to. Symbol "." doesn't belong to any
+// specific section but isn't absolute at the same time, so we try
+// to find suitable section for it as well.
+template <class ELFT>
+const OutputSectionBase *LinkerScript<ELFT>::getSymbolSection(StringRef S) {
+  SymbolBody *Sym = Symtab<ELFT>::X->find(S);
+  if (!Sym) {
+    if (OutputSections->empty())
+      return nullptr;
+    return CurOutSec ? CurOutSec : (*OutputSections)[0];
+  }
+
+  return SymbolTableSection<ELFT>::getOutputSection(Sym);
+>>>>>>> origin/release/4.x
 }
 
 // This function assigns offsets to input sections and an output section

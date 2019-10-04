@@ -39,6 +39,7 @@ struct Test1 {
   }
 };
 
+<<<<<<< HEAD
 struct Foo {
   void foo() const;
   static void foo(bool);
@@ -56,6 +57,14 @@ struct Bar {
   // CHECK-CC1: member1 (InBase) : [#int#][#Base2::#]member1
   // CHECK-CC1: member2 (InBase) : [#float#][#Base1::#]member2
   // CHECK-CC1: member3 (InBase)
+=======
+  // RUN: %clang_cc1 -fsyntax-only -code-completion-at=%s:29:6 %s -o - | FileCheck -check-prefix=CHECK-CC1 %s
+  // CHECK-CC1: Base1 : Base1::
+  // CHECK-CC1: member1 : [#int#][#Base1::#]member1
+  // CHECK-CC1: member1 : [#int#][#Base2::#]member1
+  // CHECK-CC1: member2 : [#float#][#Base1::#]member2
+  // CHECK-CC1: member3
+>>>>>>> origin/release/4.x
   // CHECK-CC1: member4
   // CHECK-CC1: memfun1 (InBase) : [#void#][#Base3::#]memfun1(<#float#>)
   // CHECK-CC1: memfun1 (InBase) : [#void#][#Base3::#]memfun1(<#double#>)[# const#]
@@ -64,6 +73,7 @@ struct Bar {
   // CHECK-CC1: memfun3 : [#int#]memfun3(<#int#>)
 
 // Make sure this doesn't crash
+<<<<<<< HEAD
 // RUN: %clang_cc1 -fsyntax-only -code-completion-at=%s:38:7 %s -verify
 
 // Make sure this also doesn't crash
@@ -273,3 +283,6 @@ void testOverloadOperator() {
 // RUN: --implicit-check-not="[#char#]operator=("
 // CHECK-OPER: [#int#]operator=(
 
+=======
+// RUN: %clang_cc1 -fsyntax-only -code-completion-at=%s:36:7 %s -verify
+>>>>>>> origin/release/4.x

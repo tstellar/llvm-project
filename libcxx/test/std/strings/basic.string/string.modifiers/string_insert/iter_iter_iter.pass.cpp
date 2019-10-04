@@ -189,12 +189,21 @@ int main(int, char**)
     { // test assigning a different type
     typedef std::string S;
     const uint8_t p[] = "ABCD";
+<<<<<<< HEAD
 
     S s;
     s.insert(s.begin(), p, p + 4);
     assert(s == "ABCD");
     }
 
+=======
+
+    S s;
+    s.insert(s.begin(), p, p + 4);
+    assert(s == "ABCD");
+	}
+
+>>>>>>> origin/release/4.x
   { // test with a move iterator that returns char&&
     typedef input_iterator<const char*> It;
     typedef std::move_iterator<It> MoveIt;
@@ -219,6 +228,9 @@ int main(int, char**)
     s.insert(s.begin(), MoveIt(It(std::begin(p))), MoveIt(It(std::end(p) - 1)));
     assert(s == "ABCD");
   }
+<<<<<<< HEAD
 
   return 0;
+=======
+>>>>>>> origin/release/4.x
 }

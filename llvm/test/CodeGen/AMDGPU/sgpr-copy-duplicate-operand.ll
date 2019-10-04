@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -verify-machineinstrs< %s | FileCheck -check-prefix=SI %s
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -mcpu=tonga -verify-machineinstrs< %s | FileCheck -check-prefix=SI %s
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs< %s | FileCheck -check-prefix=SI %s
+; RUN: llc -march=amdgcn -mcpu=tonga -verify-machineinstrs< %s | FileCheck -check-prefix=SI %s
+>>>>>>> origin/release/4.x
 
 ; Copy VGPR -> SGPR used twice as an instruction operand, which is then
 ; used in an REG_SEQUENCE that also needs to be handled.

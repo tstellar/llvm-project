@@ -1061,8 +1061,13 @@ namespace dr91 { // dr91: yes
 }
 
 namespace dr92 { // dr92: 4 c++17
+<<<<<<< HEAD
   void f() throw(int, float); // expected-error 0-1{{ISO C++17 does not allow}} expected-note 0-1{{use 'noexcept}}
   void (*p)() throw(int) = &f; // expected-error 0-1{{ISO C++17 does not allow}} expected-note 0-1{{use 'noexcept}}
+=======
+  void f() throw(int, float); // expected-error 0-1{{ISO C++1z does not allow}} expected-note 0-1{{use 'noexcept}}
+  void (*p)() throw(int) = &f; // expected-error 0-1{{ISO C++1z does not allow}} expected-note 0-1{{use 'noexcept}}
+>>>>>>> origin/release/4.x
 #if __cplusplus <= 201402L
   // expected-error@-2 {{target exception specification is not superset of source}}
 #else

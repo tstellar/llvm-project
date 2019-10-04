@@ -743,6 +743,7 @@ void X86MCInstLower::Lower(const MachineInstr *MI, MCInst &OutMI) const {
     break;
   }
 
+<<<<<<< HEAD
   // TAILJMPd, TAILJMPd64, TailJMPd_cc - Lower to the correct jump
   // instruction.
   case X86::TAILJMPr:
@@ -759,6 +760,13 @@ void X86MCInstLower::Lower(const MachineInstr *MI, MCInst &OutMI) const {
     assert(OutMI.getNumOperands() == 2 && "Unexpected number of operands!");
     OutMI.setOpcode(convertTailJumpOpcode(OutMI.getOpcode()));
     break;
+=======
+  // TAILJMPd, TAILJMPd64 - Lower to the correct jump instruction.
+  { unsigned Opcode;
+  case X86::TAILJMPr:   Opcode = X86::JMP32r; goto SetTailJmpOpcode;
+  case X86::TAILJMPd:
+  case X86::TAILJMPd64: Opcode = X86::JMP_1;  goto SetTailJmpOpcode;
+>>>>>>> origin/release/4.x
 
   case X86::TAILJMPm:
   case X86::TAILJMPm64:
@@ -1873,11 +1881,9 @@ void X86AsmPrinter::EmitInstruction(const MachineInstr *MI) {
   case X86::TAILJMPr:
   case X86::TAILJMPm:
   case X86::TAILJMPd:
-  case X86::TAILJMPd_CC:
   case X86::TAILJMPr64:
   case X86::TAILJMPm64:
   case X86::TAILJMPd64:
-  case X86::TAILJMPd64_CC:
   case X86::TAILJMPr64_REX:
   case X86::TAILJMPm64_REX:
     // Lower these as normal, but add some comments.

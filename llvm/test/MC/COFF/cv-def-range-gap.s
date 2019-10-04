@@ -41,9 +41,14 @@
 # CHECK-NEXT:        Range: 0x1
 # CHECK-NEXT:      }
 # CHECK-NEXT:    }
+<<<<<<< HEAD
 # CHECK-NEXT:    DefRangeRegisterSym {
 # CHECK-NEXT:      Kind: S_DEFRANGE_REGISTER (0x1141)
 # CHECK-NEXT:      Register: ESI (0x17)
+=======
+# CHECK-NEXT:    DefRangeRegister {
+# CHECK-NEXT:      Register: 23
+>>>>>>> origin/release/4.x
 # CHECK-NEXT:      MayHaveNoName: 0
 # CHECK-NEXT:      LocalVariableAddrRange {
 # CHECK-NEXT:        OffsetStart: .text+0x2001C
@@ -120,8 +125,13 @@ f:                                      # @f
 	.short	0                       # Flags
 	.asciz	"p"
 .Ltmp19:
+<<<<<<< HEAD
 	.cv_def_range	 .Lbegin0 .Lend0 .Lbegin1 .Lend1 .Lbegin2 .Lend2 .Lbegin3 .Lend3, reg, 23
 	.cv_def_range	 .Lbegin4 .Lend4 .Lbegin5 .Lend5, reg, 23
+=======
+	.cv_def_range	 .Lbegin0 .Lend0 .Lbegin1 .Lend1 .Lbegin2 .Lend2 .Lbegin3 .Lend3, "A\021\027\000\000\000"
+	.cv_def_range	 .Lbegin4 .Lend4 .Lbegin5 .Lend5, "A\021\027\000\000\000"
+>>>>>>> origin/release/4.x
 	.short	2                       # Record length
 	.short	4431                    # Record kind: S_PROC_ID_END
 .Ltmp15:

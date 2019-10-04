@@ -149,6 +149,7 @@ TargetLowering::makeLibCall(SelectionDAG &DAG, RTLIB::Libcall LC, EVT RetVT,
 
   Type *RetTy = RetVT.getTypeForEVT(*DAG.getContext());
   TargetLowering::CallLoweringInfo CLI(DAG);
+<<<<<<< HEAD
   bool signExtend = shouldSignExtendTypeInLibCall(RetVT, CallOptions.IsSExt);
   bool zeroExtend = !signExtend;
 
@@ -165,6 +166,16 @@ TargetLowering::makeLibCall(SelectionDAG &DAG, RTLIB::Libcall LC, EVT RetVT,
       .setIsPostTypeLegalization(CallOptions.IsPostTypeLegalization)
       .setSExtResult(signExtend)
       .setZExtResult(zeroExtend);
+=======
+  bool signExtend = shouldSignExtendTypeInLibCall(RetVT, isSigned);
+  CLI.setDebugLoc(dl)
+      .setChain(DAG.getEntryNode())
+      .setLibCallee(getLibcallCallingConv(LC), RetTy, Callee, std::move(Args))
+      .setNoReturn(doesNotReturn)
+      .setDiscardResult(!isReturnValueUsed)
+      .setSExtResult(signExtend)
+      .setZExtResult(!signExtend);
+>>>>>>> origin/release/4.x
   return LowerCallTo(CLI);
 }
 

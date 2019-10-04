@@ -17,6 +17,7 @@
 ; Make sure that the slow-pmulld feature can be used without SSE4.1.
 ; RUN: llc < %s -mtriple=i386-unknown-unknown -mcpu=silvermont -mattr=-sse4.1
 
+<<<<<<< HEAD
 define <4 x i32> @test_mul_v4i32_v4i8(<4 x i8> %A) {
 ; CHECK32-LABEL: test_mul_v4i32_v4i8:
 ; CHECK32:       # %bb.0:
@@ -397,6 +398,12 @@ define <16 x i32> @test_mul_v16i32_v16i8(<16 x i8> %A) {
 define <4 x i32> @test_mul_v4i32_v4i16(<4 x i16> %A) {
 ; CHECK32-LABEL: test_mul_v4i32_v4i16:
 ; CHECK32:       # %bb.0:
+=======
+define <4 x i32> @foo(<4 x i8> %A) {
+; CHECK32-LABEL: foo:
+; CHECK32:       # BB#0:
+; CHECK32-NEXT:    pshufb {{.*#+}} xmm0 = xmm0[0],zero,xmm0[4],zero,xmm0[8],zero,xmm0[12],zero,xmm0[u,u,u,u,u,u,u,u]
+>>>>>>> origin/release/4.x
 ; CHECK32-NEXT:    movdqa {{.*#+}} xmm1 = <18778,18778,18778,18778,u,u,u,u>
 ; CHECK32-NEXT:    movdqa %xmm0, %xmm2
 ; CHECK32-NEXT:    pmulhuw %xmm1, %xmm2

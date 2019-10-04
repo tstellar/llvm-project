@@ -77,10 +77,26 @@ protected:
   const char *nameData;
   mutable uint32_t nameSize;
 
+<<<<<<< HEAD
 public:
   uint32_t dynsymIndex = 0;
   uint32_t gotIndex = -1;
   uint32_t pltIndex = -1;
+=======
+  bool isUndefined() const { return SymbolKind == UndefinedKind; }
+  bool isDefined() const { return SymbolKind <= DefinedLast; }
+  bool isCommon() const { return SymbolKind == DefinedCommonKind; }
+  bool isLazy() const {
+    return SymbolKind == LazyArchiveKind || SymbolKind == LazyObjectKind;
+  }
+  bool isShared() const { return SymbolKind == SharedKind; }
+  bool isInCurrentDSO() const { return !isUndefined() && !isShared(); }
+  bool isLocal() const { return IsLocal; }
+  bool isPreemptible() const;
+  StringRef getName() const { return Name; }
+  uint8_t getVisibility() const { return StOther & 0x3; }
+  void parseSymbolVersion();
+>>>>>>> origin/release/4.x
 
   uint32_t globalDynIndex = -1;
 

@@ -171,10 +171,17 @@
 #endif
 
 #if defined(__clang__)
+<<<<<<< HEAD
 #  define _LIBCPP_COMPILER_CLANG
 #  ifndef __apple_build_version__
 #    define _LIBCPP_CLANG_VER (__clang_major__ * 100 + __clang_minor__)
 #  endif
+=======
+#define _LIBCPP_COMPILER_CLANG
+# ifndef __apple_build_version__
+#   define _LIBCPP_CLANG_VER (__clang_major__ * 100 + __clang_minor__)
+# endif
+>>>>>>> origin/release/4.x
 #elif defined(__GNUC__)
 #  define _LIBCPP_COMPILER_GCC
 #elif defined(_MSC_VER)
@@ -185,6 +192,10 @@
 
 #if defined(_LIBCPP_COMPILER_GCC) && __cplusplus < 201103L
 #error "libc++ does not support using GCC with C++03. Please enable C++11"
+#endif
+
+#ifndef _LIBCPP_CLANG_VER
+# define _LIBCPP_CLANG_VER 0
 #endif
 
 // FIXME: ABI detection should be done via compiler builtin macros. This
@@ -480,6 +491,7 @@ typedef __char32_t char32_t;
 #define _LIBCPP_COMPILER_HAS_BUILTIN_LAUNDER
 #endif
 
+<<<<<<< HEAD
 #if !__is_identifier(__has_unique_object_representations)
 #define _LIBCPP_HAS_UNIQUE_OBJECT_REPRESENTATIONS
 #endif
@@ -494,6 +506,8 @@ typedef __char32_t char32_t;
 
 #define _LIBCPP_DISABLE_EXTENSION_WARNING __extension__
 
+=======
+>>>>>>> origin/release/4.x
 #elif defined(_LIBCPP_COMPILER_GCC)
 
 #define _ALIGNAS(x) __attribute__((__aligned__(x)))
@@ -828,8 +842,22 @@ typedef unsigned int   char32_t;
 # define decltype(...) __decltype(__VA_ARGS__)
 #endif  // _LIBCPP_CXX03_LANG
 
+<<<<<<< HEAD
 #ifdef _LIBCPP_CXX03_LANG
 #  define _LIBCPP_CONSTEXPR
+=======
+#ifdef _LIBCPP_HAS_NO_DECLTYPE
+// GCC 4.6 provides __decltype in all standard modes.
+#if !__is_identifier(__decltype) || _LIBCPP_CLANG_VER >= 304 || _GNUC_VER >= 406
+#  define decltype(__x) __decltype(__x)
+#else
+#  define decltype(__x) __typeof__(__x)
+#endif
+#endif
+
+#ifdef _LIBCPP_HAS_NO_CONSTEXPR
+#define _LIBCPP_CONSTEXPR
+>>>>>>> origin/release/4.x
 #else
 #  define _LIBCPP_CONSTEXPR constexpr
 #endif
@@ -918,6 +946,7 @@ typedef unsigned int   char32_t;
 #define _DECLARE_C99_LDBL_MATH 1
 #endif
 
+<<<<<<< HEAD
 // If we are getting operator new from the MSVC CRT, then allocation overloads
 // for align_val_t were added in 19.12, aka VS 2017 version 15.3.
 #if defined(_LIBCPP_MSVCRT) && defined(_MSC_VER) && _MSC_VER < 1912
@@ -946,6 +975,20 @@ typedef unsigned int   char32_t;
 #  define _LIBCPP_HAS_NO_ALIGNED_ALLOCATION
 #endif
 
+=======
+#if defined(__APPLE__)
+# if !defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && \
+     defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__)
+#   define __MAC_OS_X_VERSION_MIN_REQUIRED __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__
+# endif
+# if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
+#   if __MAC_OS_X_VERSION_MIN_REQUIRED < 1060
+#     define _LIBCPP_HAS_NO_ALIGNED_ALLOCATION
+#   endif
+# endif
+#endif // defined(__APPLE__)
+
+>>>>>>> origin/release/4.x
 #if defined(__APPLE__) || defined(__FreeBSD__)
 #define _LIBCPP_HAS_DEFAULTRUNELOCALE
 #endif

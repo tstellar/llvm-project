@@ -1657,7 +1657,67 @@ bool SIRegisterInfo::shouldRewriteCopySrc(
   return getCommonSubClass(DefRC, SrcRC) != nullptr;
 }
 
+<<<<<<< HEAD
 /// Returns a register that is not used at any point in the function.
+=======
+// FIXME: Most of these are flexible with HSA and we don't need to reserve them
+// as input registers if unused. Whether the dispatch ptr is necessary should be
+// easy to detect from used intrinsics. Scratch setup is harder to know.
+unsigned SIRegisterInfo::getPreloadedValue(const MachineFunction &MF,
+                                           enum PreloadedValue Value) const {
+
+  const SIMachineFunctionInfo *MFI = MF.getInfo<SIMachineFunctionInfo>();
+  const SISubtarget &ST = MF.getSubtarget<SISubtarget>();
+  (void)ST;
+  switch (Value) {
+  case SIRegisterInfo::WORKGROUP_ID_X:
+    assert(MFI->hasWorkGroupIDX());
+    return MFI->WorkGroupIDXSystemSGPR;
+  case SIRegisterInfo::WORKGROUP_ID_Y:
+    assert(MFI->hasWorkGroupIDY());
+    return MFI->WorkGroupIDYSystemSGPR;
+  case SIRegisterInfo::WORKGROUP_ID_Z:
+    assert(MFI->hasWorkGroupIDZ());
+    return MFI->WorkGroupIDZSystemSGPR;
+  case SIRegisterInfo::PRIVATE_SEGMENT_WAVE_BYTE_OFFSET:
+    return MFI->PrivateSegmentWaveByteOffsetSystemSGPR;
+  case SIRegisterInfo::PRIVATE_SEGMENT_BUFFER:
+    if (ST.isAmdCodeObjectV2(MF)) {
+      assert(MFI->hasPrivateSegmentBuffer());
+      return MFI->PrivateSegmentBufferUserSGPR;
+    }
+    assert(MFI->hasPrivateMemoryInputPtr());
+    return MFI->PrivateMemoryPtrUserSGPR;
+  case SIRegisterInfo::KERNARG_SEGMENT_PTR:
+    assert(MFI->hasKernargSegmentPtr());
+    return MFI->KernargSegmentPtrUserSGPR;
+  case SIRegisterInfo::DISPATCH_ID:
+    assert(MFI->hasDispatchID());
+    return MFI->DispatchIDUserSGPR;
+  case SIRegisterInfo::FLAT_SCRATCH_INIT:
+    assert(MFI->hasFlatScratchInit());
+    return MFI->FlatScratchInitUserSGPR;
+  case SIRegisterInfo::DISPATCH_PTR:
+    assert(MFI->hasDispatchPtr());
+    return MFI->DispatchPtrUserSGPR;
+  case SIRegisterInfo::QUEUE_PTR:
+    assert(MFI->hasQueuePtr());
+    return MFI->QueuePtrUserSGPR;
+  case SIRegisterInfo::WORKITEM_ID_X:
+    assert(MFI->hasWorkItemIDX());
+    return AMDGPU::VGPR0;
+  case SIRegisterInfo::WORKITEM_ID_Y:
+    assert(MFI->hasWorkItemIDY());
+    return AMDGPU::VGPR1;
+  case SIRegisterInfo::WORKITEM_ID_Z:
+    assert(MFI->hasWorkItemIDZ());
+    return AMDGPU::VGPR2;
+  }
+  llvm_unreachable("unexpected preloaded value type");
+}
+
+/// \brief Returns a register that is not used at any point in the function.
+>>>>>>> origin/release/4.x
 ///        If all registers are used, then this function will return
 //         AMDGPU::NoRegister.
 unsigned

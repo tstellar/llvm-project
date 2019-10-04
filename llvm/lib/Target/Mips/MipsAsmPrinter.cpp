@@ -1249,6 +1249,7 @@ void MipsAsmPrinter::PrintDebugValueComment(const MachineInstr *MI,
 
 // Emit .dtprelword or .dtpreldword directive
 // and value for debug thread local expression.
+<<<<<<< HEAD
 void MipsAsmPrinter::EmitDebugValue(const MCExpr *Value, unsigned Size) const {
   if (auto *MipsExpr = dyn_cast<MipsMCExpr>(Value)) {
     if (MipsExpr && MipsExpr->getKind() == MipsMCExpr::MEK_DTPREL) {
@@ -1266,6 +1267,20 @@ void MipsAsmPrinter::EmitDebugValue(const MCExpr *Value, unsigned Size) const {
     }
   }
   AsmPrinter::EmitDebugValue(Value, Size);
+=======
+void MipsAsmPrinter::EmitDebugValue(const MCExpr *Value,
+                                          unsigned Size) const {
+  switch (Size) {
+  case 4:
+    OutStreamer->EmitDTPRel32Value(Value);
+    break;
+  case 8:
+    OutStreamer->EmitDTPRel64Value(Value);
+    break;
+  default:
+    llvm_unreachable("Unexpected size of expression value.");
+  }
+>>>>>>> origin/release/4.x
 }
 
 // Align all targets of indirect branches on bundle size.  Used only if target

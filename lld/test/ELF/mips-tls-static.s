@@ -13,8 +13,17 @@
 # CHECK:      Contents of section .data:
 # CHECK-NEXT:  {{.*}} [[TGA]] ffff8004 ffff9004
 # CHECK:      Contents of section .got:
+<<<<<<< HEAD
 # CHECK-NEXT:  {{.*}} 00000000 80000000 ffff9000 00000001
 # CHECK-NEXT:  {{.*}} ffff8000 00000001 00000000
+=======
+# CHECK-NEXT:  30010 00000000 80000000 00000001 ffff8000
+# CHECK-NEXT:  30020 00000001 00000000 ffff9000
+#
+# CHECK: SYMBOL TABLE:
+# CHECK: 0002000c         .text           00000000 __tls_get_addr
+# CHECK: 00000000 g       .tdata          00000000 tls1
+>>>>>>> origin/release/4.x
 
   .text
   .global __start

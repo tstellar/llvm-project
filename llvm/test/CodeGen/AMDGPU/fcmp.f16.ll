@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -verify-machineinstrs < %s | FileCheck -allow-deprecated-dag-overlap -enable-var-scope -check-prefix=GCN -check-prefix=SI %s
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -mcpu=fiji -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -allow-deprecated-dag-overlap -enable-var-scope -check-prefix=GCN -check-prefix=VI %s
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=SI %s
+; RUN: llc -march=amdgcn -mcpu=fiji -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=VI %s
+>>>>>>> origin/release/4.x
 
 ; GCN-LABEL: {{^}}fcmp_f16_lt
 ; GCN: buffer_load_ushort v[[A_F16:[0-9]+]]

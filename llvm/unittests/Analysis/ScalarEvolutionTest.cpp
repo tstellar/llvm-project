@@ -404,7 +404,11 @@ TEST_F(ScalarEvolutionsTest, CompareValueComplexity) {
 
   FunctionType *FTy =
       FunctionType::get(Type::getVoidTy(Context), {IntPtrTy, IntPtrTy}, false);
+<<<<<<< HEAD
   Function *F = Function::Create(FTy, Function::ExternalLinkage, "f", M);
+=======
+  Function *F = cast<Function>(M.getOrInsertFunction("f", FTy));
+>>>>>>> origin/release/4.x
   BasicBlock *EntryBB = BasicBlock::Create(Context, "entry", F);
 
   Value *X = &*F->arg_begin();
@@ -412,11 +416,17 @@ TEST_F(ScalarEvolutionsTest, CompareValueComplexity) {
 
   const int ValueDepth = 10;
   for (int i = 0; i < ValueDepth; i++) {
+<<<<<<< HEAD
     X = new LoadInst(IntPtrTy, new IntToPtrInst(X, IntPtrPtrTy, "", EntryBB),
                      "",
                      /*isVolatile*/ false, EntryBB);
     Y = new LoadInst(IntPtrTy, new IntToPtrInst(Y, IntPtrPtrTy, "", EntryBB),
                      "",
+=======
+    X = new LoadInst(new IntToPtrInst(X, IntPtrPtrTy, "", EntryBB), "",
+                     /*isVolatile*/ false, EntryBB);
+    Y = new LoadInst(new IntToPtrInst(Y, IntPtrPtrTy, "", EntryBB), "",
+>>>>>>> origin/release/4.x
                      /*isVolatile*/ false, EntryBB);
   }
 
@@ -436,6 +446,7 @@ TEST_F(ScalarEvolutionsTest, CompareValueComplexity) {
   EXPECT_NE(A, B);
 }
 
+<<<<<<< HEAD
 TEST_F(ScalarEvolutionsTest, SCEVAddExpr) {
   Type *Ty32 = Type::getInt32Ty(Context);
   Type *ArgTys[] = {Type::getInt64Ty(Context), Ty32};
@@ -1927,4 +1938,7 @@ TEST_F(ScalarEvolutionsTest, SCEVExpandNonAffineAddRec) {
   TestMatchingCanonicalIV(GetAR5, ARBitWidth);
 }
 
+=======
+}  // end anonymous namespace
+>>>>>>> origin/release/4.x
 }  // end namespace llvm

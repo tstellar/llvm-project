@@ -129,7 +129,11 @@
 // RUN: %clang -no-canonical-prefixes -target powerpc64-unknown-netbsd -static \
 // RUN: --sysroot=%S/Inputs/basic_netbsd_tree %s -### 2>&1 \
 // RUN: | FileCheck -check-prefix=S-POWERPC64 %s
+<<<<<<< HEAD
 // RUN: %clang -target x86_64-unknown-netbsd -pthread -dM -E %s \
+=======
+// RUN: %clang -target x86_64--netbsd -pthread -dM -E %s \
+>>>>>>> origin/release/4.x
 // RUN: | FileCheck -check-prefix=PTHREAD %s
 
 // STATIC: ld{{.*}}" "--eh-frame-hdr"
@@ -446,8 +450,11 @@
 // PTHREAD-NOT: _POSIX_THREADS
 // PTHREAD:     _REENTRANT
 // PTHREAD-NOT: _POSIX_THREADS
+<<<<<<< HEAD
 
 // Check PowerPC for Secure PLT
 // RUN: %clang -target powerpc-unknown-netbsd -### -c %s 2>&1 \
 // RUN:   | FileCheck -check-prefix=POWERPC-SECUREPLT %s
 // POWERPC-SECUREPLT: "-target-feature" "+secure-plt"
+=======
+>>>>>>> origin/release/4.x

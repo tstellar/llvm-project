@@ -253,6 +253,7 @@ define i32 @test15(i32 %X1, i32 %X2, i32 %X3) {
 }
 
 ; PR30256 - previously this asserted.
+<<<<<<< HEAD
 
 define i64 @test16(i1 %cmp, i64 %a, i64 %b) {
 ; CHECK-LABEL: @test16(
@@ -265,16 +266,28 @@ define i64 @test16(i1 %cmp, i64 %a, i64 %b) {
 ; CHECK:       if.end:
 ; CHECK-NEXT:    ret i64 0
 ;
+=======
+; CHECK-LABEL: @test16
+; CHECK: %[[FACTOR:.*]] = mul i64 %a, -4
+; CHECK-NEXT: %[[RES:.*]] = add i64 %[[FACTOR]], %b
+; CHECK-NEXT: ret i64 %[[RES]]
+define i64 @test16(i1 %cmp, i64 %a, i64 %b) {
+>>>>>>> origin/release/4.x
 entry:
   %shl = shl i64 %a, 1
   %shl.neg = sub i64 0, %shl
   br i1 %cmp, label %if.then, label %if.end
 
+<<<<<<< HEAD
 if.then:
+=======
+if.then:                                          ; preds = %entry
+>>>>>>> origin/release/4.x
   %add1 = add i64 %shl.neg, %shl.neg
   %add2 = add i64 %add1, %b
   ret i64 %add2
 
+<<<<<<< HEAD
 if.end:
   ret i64 0
 }
@@ -295,3 +308,8 @@ define i32 @test17(i32 %X1, i32 %X2, i32 %X3, i32 %X4) {
   ret i32 %E
 }
 
+=======
+if.end:                                           ; preds = %entry
+  ret i64 0
+}
+>>>>>>> origin/release/4.x

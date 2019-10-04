@@ -16,9 +16,31 @@
 
 #if defined(_WIN32)
 #include <windows.h>
+<<<<<<< HEAD
 #else
 #include <unistd.h>
 #include <sys/mman.h>
+=======
+void __clear_cache(void* start, void* end)
+{
+    if (!FlushInstructionCache(GetCurrentProcess(), start, end-start))
+        exit(1);
+}
+
+static uintptr_t get_page_size() {
+    SYSTEM_INFO si;
+    GetSystemInfo(&si);
+    return si.dwPageSize;
+}
+#else
+#include <unistd.h>
+#include <sys/mman.h>
+extern void __clear_cache(void* start, void* end);
+
+static uintptr_t get_page_size() {
+    return sysconf(_SC_PAGE_SIZE);
+}
+>>>>>>> origin/release/4.x
 #endif
 
 extern void __clear_cache(void* start, void* end);
@@ -44,6 +66,7 @@ memcpy_f(void *dst, const void *src, size_t n) {
 
 int main()
 {
+<<<<<<< HEAD
     const int kSize = 128;
 #if !defined(_WIN32)
     uint8_t *execution_buffer = mmap(0, kSize,
@@ -51,6 +74,18 @@ int main()
                                      MAP_ANON | MAP_PRIVATE, 0, 0);
     if (execution_buffer == MAP_FAILED)
       return 1;
+=======
+    // make executable the page containing execution_buffer 
+    uintptr_t page_size = get_page_size();
+    char* start = (char*)((uintptr_t)execution_buffer & (-page_size));
+    char* end = (char*)((uintptr_t)(&execution_buffer[128+page_size]) & (-page_size));
+#if defined(_WIN32)
+    DWORD dummy_oldProt;
+    MEMORY_BASIC_INFORMATION b;
+    if (!VirtualQuery(start, &b, sizeof(b)))
+        return 1;
+    if (!VirtualProtect(b.BaseAddress, b.RegionSize, PAGE_EXECUTE_READWRITE, &b.Protect))
+>>>>>>> origin/release/4.x
 #else
     HANDLE mapping = CreateFileMapping(INVALID_HANDLE_VALUE, NULL,
                                        PAGE_EXECUTE_READWRITE, 0, kSize, NULL);

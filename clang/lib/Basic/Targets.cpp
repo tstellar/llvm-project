@@ -9488,6 +9488,7 @@ TargetInfo *AllocateTarget(const llvm::Triple &Triple,
       return new NetBSDTargetInfo<AArch64leTargetInfo>(Triple, Opts);
     case llvm::Triple::OpenBSD:
       return new OpenBSDTargetInfo<AArch64leTargetInfo>(Triple, Opts);
+<<<<<<< HEAD
     case llvm::Triple::Win32:
       switch (Triple.getEnvironment()) {
       case llvm::Triple::GNU:
@@ -9496,6 +9497,8 @@ TargetInfo *AllocateTarget(const llvm::Triple &Triple,
       default: // Assume MSVC for unknown environments
         return new MicrosoftARM64TargetInfo(Triple, Opts);
       }
+=======
+>>>>>>> origin/release/4.x
     default:
       return new AArch64leTargetInfo(Triple, Opts);
     }

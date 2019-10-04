@@ -190,6 +190,7 @@ bool AMDGPUAsmPrinter::isBlockOnlyReachableByFallthrough(
 }
 
 void AMDGPUAsmPrinter::EmitFunctionBodyStart() {
+<<<<<<< HEAD
   const SIMachineFunctionInfo &MFI = *MF->getInfo<SIMachineFunctionInfo>();
   if (!MFI.isEntryFunction())
     return;
@@ -202,6 +203,13 @@ void AMDGPUAsmPrinter::EmitFunctionBodyStart() {
     amd_kernel_code_t KernelCode;
     getAmdKernelCode(KernelCode, CurrentProgramInfo, *MF);
     getTargetStreamer()->EmitAMDKernelCodeT(KernelCode);
+=======
+  const AMDGPUSubtarget &STM = MF->getSubtarget<AMDGPUSubtarget>();
+  SIProgramInfo KernelInfo;
+  if (STM.isAmdCodeObjectV2(*MF)) {
+    getSIProgramInfo(KernelInfo, *MF);
+    EmitAmdKernelCodeT(*MF, KernelInfo);
+>>>>>>> origin/release/4.x
   }
 
   if (STM.isAmdHsaOS())
@@ -256,8 +264,15 @@ void AMDGPUAsmPrinter::EmitFunctionEntryLabel() {
   }
 
   const SIMachineFunctionInfo *MFI = MF->getInfo<SIMachineFunctionInfo>();
+<<<<<<< HEAD
   const GCNSubtarget &STM = MF->getSubtarget<GCNSubtarget>();
   if (MFI->isEntryFunction() && STM.isAmdHsaOrMesa(MF->getFunction())) {
+=======
+  const AMDGPUSubtarget &STM = MF->getSubtarget<AMDGPUSubtarget>();
+  if (MFI->isKernel() && STM.isAmdCodeObjectV2(*MF)) {
+    AMDGPUTargetStreamer *TS =
+        static_cast<AMDGPUTargetStreamer *>(OutStreamer->getTargetStreamer());
+>>>>>>> origin/release/4.x
     SmallString<128> SymbolName;
     getNameWithPrefix(SymbolName, &MF->getFunction()),
     getTargetStreamer()->EmitAMDGPUSymbolType(
@@ -1259,6 +1274,7 @@ void AMDGPUAsmPrinter::getAmdKernelCode(amd_kernel_code_t &Out,
     Out.code_properties |= AMD_CODE_PROPERTY_ENABLE_SGPR_DISPATCH_PTR;
 
   if (STM.isXNACKEnabled())
+<<<<<<< HEAD
     Out.code_properties |= AMD_CODE_PROPERTY_IS_XNACK_SUPPORTED;
 
   unsigned MaxKernArgAlign;
@@ -1267,6 +1283,19 @@ void AMDGPUAsmPrinter::getAmdKernelCode(amd_kernel_code_t &Out,
   Out.workitem_vgpr_count = CurrentProgramInfo.NumVGPR;
   Out.workitem_private_segment_byte_size = CurrentProgramInfo.ScratchSize;
   Out.workgroup_group_segment_byte_size = CurrentProgramInfo.LDSSize;
+=======
+    header.code_properties |= AMD_CODE_PROPERTY_IS_XNACK_SUPPORTED;
+
+  // FIXME: Should use getKernArgSize
+  header.kernarg_segment_byte_size =
+    STM.getKernArgSegmentSize(MF, MFI->getABIArgOffset());
+  header.wavefront_sgpr_count = KernelInfo.NumSGPR;
+  header.workitem_vgpr_count = KernelInfo.NumVGPR;
+  header.workitem_private_segment_byte_size = KernelInfo.ScratchSize;
+  header.workgroup_group_segment_byte_size = KernelInfo.LDSSize;
+  header.reserved_vgpr_first = KernelInfo.ReservedVGPRFirst;
+  header.reserved_vgpr_count = KernelInfo.ReservedVGPRCount;
+>>>>>>> origin/release/4.x
 
   // These alignment values are specified in powers of two, so alignment =
   // 2^n.  The minimum alignment is 2^4 = 16.

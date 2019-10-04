@@ -44,13 +44,21 @@ void __cdecl static_baz() {}
 // MSABI: define dso_local void @"?static_baz@@YAXXZ"
 void static_qux() {}
 // GCABI-LABEL: define void @_Z10static_quxv
+<<<<<<< HEAD
 // MSABI: define dso_local void @"?static_qux@@YAXXZ"
+=======
+// MSABI: define void @"\01?static_qux@@YAXXZ"
+>>>>>>> origin/release/4.x
 
 namespace PR31656 {
 template <int I>
 void __cdecl callee(int args[I]);
 // GCABI-LABEL: declare void @_ZN7PR316566calleeILi1EEEvPi(
+<<<<<<< HEAD
 // MSABI: declare dso_local void @"??$callee@$00@PR31656@@YAXQAH@Z"(
+=======
+// MSABI: declare void @"\01??$callee@$00@PR31656@@YAXQAH@Z"(
+>>>>>>> origin/release/4.x
 
 void caller() { callee<1>(0); }
 }

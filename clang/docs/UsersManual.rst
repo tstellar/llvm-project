@@ -1432,7 +1432,19 @@ are listed below.
    the behavior of sanitizers in the ``cfi`` group to allow checking
    of cross-DSO virtual and indirect calls.
 
+<<<<<<< HEAD
 .. option:: -fsanitize-cfi-icall-generalize-pointers
+=======
+
+.. option:: -fstrict-vtable-pointers
+
+   Enable optimizations based on the strict rules for overwriting polymorphic
+   C++ objects, i.e. the vptr is invariant during an object's lifetime.
+   This enables better devirtualization. Turned off by default, because it is
+   still experimental.
+
+.. option:: -ffast-math
+>>>>>>> origin/release/4.x
 
    Generalize pointers in return and argument types in function type signatures
    checked by Control Flow Integrity indirect call checking. See

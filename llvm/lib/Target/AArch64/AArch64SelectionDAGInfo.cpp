@@ -44,7 +44,11 @@ SDValue AArch64SelectionDAGInfo::EmitTargetCodeForMemset(
     CLI.setDebugLoc(dl)
         .setChain(Chain)
         .setLibCallee(CallingConv::C, Type::getVoidTy(*DAG.getContext()),
+<<<<<<< HEAD
                       DAG.getExternalSymbol(bzeroName, IntPtr),
+=======
+                      DAG.getExternalSymbol(bzeroEntry, IntPtr),
+>>>>>>> origin/release/4.x
                       std::move(Args))
         .setDiscardResult();
     std::pair<SDValue, SDValue> CallResult = TLI.LowerCallTo(CLI);

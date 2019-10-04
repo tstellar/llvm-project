@@ -125,6 +125,217 @@ namespace {
 
 } // end anonymous namespace
 
+<<<<<<< HEAD
+=======
+// Implement calling convention for Hexagon.
+
+static bool isHvxVectorType(MVT ty);
+
+static bool
+CC_Hexagon(unsigned ValNo, MVT ValVT,
+           MVT LocVT, CCValAssign::LocInfo LocInfo,
+           ISD::ArgFlagsTy ArgFlags, CCState &State);
+
+static bool
+CC_Hexagon32(unsigned ValNo, MVT ValVT,
+             MVT LocVT, CCValAssign::LocInfo LocInfo,
+             ISD::ArgFlagsTy ArgFlags, CCState &State);
+
+static bool
+CC_Hexagon64(unsigned ValNo, MVT ValVT,
+             MVT LocVT, CCValAssign::LocInfo LocInfo,
+             ISD::ArgFlagsTy ArgFlags, CCState &State);
+
+static bool
+CC_HexagonVector(unsigned ValNo, MVT ValVT,
+                 MVT LocVT, CCValAssign::LocInfo LocInfo,
+                 ISD::ArgFlagsTy ArgFlags, CCState &State);
+
+static bool
+RetCC_Hexagon(unsigned ValNo, MVT ValVT,
+              MVT LocVT, CCValAssign::LocInfo LocInfo,
+              ISD::ArgFlagsTy ArgFlags, CCState &State);
+
+static bool
+RetCC_Hexagon32(unsigned ValNo, MVT ValVT,
+                MVT LocVT, CCValAssign::LocInfo LocInfo,
+                ISD::ArgFlagsTy ArgFlags, CCState &State);
+
+static bool
+RetCC_Hexagon64(unsigned ValNo, MVT ValVT,
+                MVT LocVT, CCValAssign::LocInfo LocInfo,
+                ISD::ArgFlagsTy ArgFlags, CCState &State);
+
+static bool
+RetCC_HexagonVector(unsigned ValNo, MVT ValVT,
+                    MVT LocVT, CCValAssign::LocInfo LocInfo,
+                    ISD::ArgFlagsTy ArgFlags, CCState &State);
+
+static bool
+CC_Hexagon_VarArg (unsigned ValNo, MVT ValVT,
+            MVT LocVT, CCValAssign::LocInfo LocInfo,
+            ISD::ArgFlagsTy ArgFlags, CCState &State) {
+  HexagonCCState &HState = static_cast<HexagonCCState &>(State);
+
+  if (ValNo < HState.getNumNamedVarArgParams()) {
+    // Deal with named arguments.
+    return CC_Hexagon(ValNo, ValVT, LocVT, LocInfo, ArgFlags, State);
+  }
+
+  // Deal with un-named arguments.
+  unsigned Offset;
+  if (ArgFlags.isByVal()) {
+    // If pass-by-value, the size allocated on stack is decided
+    // by ArgFlags.getByValSize(), not by the size of LocVT.
+    Offset = State.AllocateStack(ArgFlags.getByValSize(),
+                                 ArgFlags.getByValAlign());
+    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+    return false;
+  }
+  if (LocVT == MVT::i1 || LocVT == MVT::i8 || LocVT == MVT::i16) {
+    LocVT = MVT::i32;
+    ValVT = MVT::i32;
+    if (ArgFlags.isSExt())
+      LocInfo = CCValAssign::SExt;
+    else if (ArgFlags.isZExt())
+      LocInfo = CCValAssign::ZExt;
+    else
+      LocInfo = CCValAssign::AExt;
+  }
+  if (LocVT == MVT::i32 || LocVT == MVT::f32) {
+    Offset = State.AllocateStack(4, 4);
+    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+    return false;
+  }
+  if (LocVT == MVT::i64 || LocVT == MVT::f64) {
+    Offset = State.AllocateStack(8, 8);
+    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+    return false;
+  }
+  if (LocVT == MVT::v2i64 || LocVT == MVT::v4i32 || LocVT == MVT::v8i16 ||
+      LocVT == MVT::v16i8) {
+    Offset = State.AllocateStack(16, 16);
+    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+    return false;
+  }
+  if (LocVT == MVT::v4i64 || LocVT == MVT::v8i32 || LocVT == MVT::v16i16 ||
+      LocVT == MVT::v32i8) {
+    Offset = State.AllocateStack(32, 32);
+    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+    return false;
+  }
+  if (LocVT == MVT::v8i64 || LocVT == MVT::v16i32 || LocVT == MVT::v32i16 ||
+      LocVT == MVT::v64i8 || LocVT == MVT::v512i1) {
+    Offset = State.AllocateStack(64, 64);
+    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+    return false;
+  }
+  if (LocVT == MVT::v16i64 || LocVT == MVT::v32i32 || LocVT == MVT::v64i16 ||
+      LocVT == MVT::v128i8 || LocVT == MVT::v1024i1) {
+    Offset = State.AllocateStack(128, 128);
+    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+    return false;
+  }
+  if (LocVT == MVT::v32i64 || LocVT == MVT::v64i32 || LocVT == MVT::v128i16 ||
+      LocVT == MVT::v256i8) {
+    Offset = State.AllocateStack(256, 256);
+    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+    return false;
+  }
+
+  llvm_unreachable(nullptr);
+}
+
+static bool CC_Hexagon (unsigned ValNo, MVT ValVT, MVT LocVT,
+      CCValAssign::LocInfo LocInfo, ISD::ArgFlagsTy ArgFlags, CCState &State) {
+  if (ArgFlags.isByVal()) {
+    // Passed on stack.
+    unsigned Offset = State.AllocateStack(ArgFlags.getByValSize(),
+                                          ArgFlags.getByValAlign());
+    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+    return false;
+  }
+
+  if (LocVT == MVT::i1) {
+    LocVT = MVT::i32;
+  } else if (LocVT == MVT::i8 || LocVT == MVT::i16) {
+    LocVT = MVT::i32;
+    ValVT = MVT::i32;
+    if (ArgFlags.isSExt())
+      LocInfo = CCValAssign::SExt;
+    else if (ArgFlags.isZExt())
+      LocInfo = CCValAssign::ZExt;
+    else
+      LocInfo = CCValAssign::AExt;
+  } else if (LocVT == MVT::v4i8 || LocVT == MVT::v2i16) {
+    LocVT = MVT::i32;
+    LocInfo = CCValAssign::BCvt;
+  } else if (LocVT == MVT::v8i8 || LocVT == MVT::v4i16 || LocVT == MVT::v2i32) {
+    LocVT = MVT::i64;
+    LocInfo = CCValAssign::BCvt;
+  }
+
+  if (LocVT == MVT::i32 || LocVT == MVT::f32) {
+    if (!CC_Hexagon32(ValNo, ValVT, LocVT, LocInfo, ArgFlags, State))
+      return false;
+  }
+
+  if (LocVT == MVT::i64 || LocVT == MVT::f64) {
+    if (!CC_Hexagon64(ValNo, ValVT, LocVT, LocInfo, ArgFlags, State))
+      return false;
+  }
+
+  if (LocVT == MVT::v8i32 || LocVT == MVT::v16i16 || LocVT == MVT::v32i8) {
+    unsigned Offset = State.AllocateStack(ArgFlags.getByValSize(), 32);
+    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+    return false;
+  }
+
+  if (isHvxVectorType(LocVT)) {
+    if (!CC_HexagonVector(ValNo, ValVT, LocVT, LocInfo, ArgFlags, State))
+      return false;
+  }
+
+  return true;  // CC didn't match.
+}
+
+
+static bool CC_Hexagon32(unsigned ValNo, MVT ValVT,
+                         MVT LocVT, CCValAssign::LocInfo LocInfo,
+                         ISD::ArgFlagsTy ArgFlags, CCState &State) {
+  static const MCPhysReg RegList[] = {
+    Hexagon::R0, Hexagon::R1, Hexagon::R2, Hexagon::R3, Hexagon::R4,
+    Hexagon::R5
+  };
+  if (unsigned Reg = State.AllocateReg(RegList)) {
+    State.addLoc(CCValAssign::getReg(ValNo, ValVT, Reg, LocVT, LocInfo));
+    return false;
+  }
+
+  unsigned Offset = State.AllocateStack(4, 4);
+  State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
+  return false;
+}
+
+static bool CC_Hexagon64(unsigned ValNo, MVT ValVT,
+                         MVT LocVT, CCValAssign::LocInfo LocInfo,
+                         ISD::ArgFlagsTy ArgFlags, CCState &State) {
+  if (unsigned Reg = State.AllocateReg(Hexagon::D0)) {
+    State.addLoc(CCValAssign::getReg(ValNo, ValVT, Reg, LocVT, LocInfo));
+    return false;
+  }
+
+  static const MCPhysReg RegList1[] = {
+    Hexagon::D1, Hexagon::D2
+  };
+  static const MCPhysReg RegList2[] = {
+    Hexagon::R1, Hexagon::R3
+  };
+  if (unsigned Reg = State.AllocateReg(RegList1, RegList2)) {
+    State.addLoc(CCValAssign::getReg(ValNo, ValVT, Reg, LocVT, LocInfo));
+    return false;
+  }
+>>>>>>> origin/release/4.x
 
 // Implement calling convention for Hexagon.
 
@@ -718,6 +929,7 @@ SDValue HexagonTargetLowering::LowerFormalArguments(
   for (unsigned i = 0, e = ArgLocs.size(); i != e; ++i) {
     CCValAssign &VA = ArgLocs[i];
     ISD::ArgFlagsTy Flags = Ins[i].Flags;
+<<<<<<< HEAD
     bool ByVal = Flags.isByVal();
 
     // Arguments passed in registers:
@@ -748,6 +960,80 @@ SDValue HexagonTargetLowering::LowerFormalArguments(
                                 Copy, DAG.getConstant(1, dl, RegVT));
         Copy = DAG.getSetCC(dl, MVT::i1, T, DAG.getConstant(0, dl, RegVT),
                             ISD::SETNE);
+=======
+    unsigned ObjSize;
+    unsigned StackLocation;
+    int FI;
+
+    if (   (VA.isRegLoc() && !Flags.isByVal())
+        || (VA.isRegLoc() && Flags.isByVal() && Flags.getByValSize() > 8)) {
+      // Arguments passed in registers
+      // 1. int, long long, ptr args that get allocated in register.
+      // 2. Large struct that gets an register to put its address in.
+      EVT RegVT = VA.getLocVT();
+      if (RegVT == MVT::i8 || RegVT == MVT::i16 ||
+          RegVT == MVT::i32 || RegVT == MVT::f32) {
+        unsigned VReg = 
+          RegInfo.createVirtualRegister(&Hexagon::IntRegsRegClass);
+        RegInfo.addLiveIn(VA.getLocReg(), VReg);
+        SDValue Copy = DAG.getCopyFromReg(Chain, dl, VReg, RegVT);
+        // Treat values of type MVT::i1 specially: they are passed in
+        // registers of type i32, but they need to remain as values of
+        // type i1 for consistency of the argument lowering.
+        if (VA.getValVT() == MVT::i1) {
+          // Generate a copy into a predicate register and use the value
+          // of the register as the "InVal".
+          unsigned PReg =
+            RegInfo.createVirtualRegister(&Hexagon::PredRegsRegClass);
+          SDNode *T = DAG.getMachineNode(Hexagon::C2_tfrrp, dl, MVT::i1,
+                                         Copy.getValue(0));
+          Copy = DAG.getCopyToReg(Copy.getValue(1), dl, PReg, SDValue(T, 0));
+          Copy = DAG.getCopyFromReg(Copy, dl, PReg, MVT::i1);
+        }
+        InVals.push_back(Copy);
+        Chain = Copy.getValue(1);
+      } else if (RegVT == MVT::i64 || RegVT == MVT::f64) {
+        unsigned VReg =
+          RegInfo.createVirtualRegister(&Hexagon::DoubleRegsRegClass);
+        RegInfo.addLiveIn(VA.getLocReg(), VReg);
+        InVals.push_back(DAG.getCopyFromReg(Chain, dl, VReg, RegVT));
+
+      // Single Vector
+      } else if ((RegVT == MVT::v8i64 || RegVT == MVT::v16i32 ||
+                  RegVT == MVT::v32i16 || RegVT == MVT::v64i8)) {
+        unsigned VReg =
+          RegInfo.createVirtualRegister(&Hexagon::VectorRegsRegClass);
+        RegInfo.addLiveIn(VA.getLocReg(), VReg);
+        InVals.push_back(DAG.getCopyFromReg(Chain, dl, VReg, RegVT));
+    } else if (UseHVX && UseHVXDbl &&
+               ((RegVT == MVT::v16i64 || RegVT == MVT::v32i32 ||
+                 RegVT == MVT::v64i16 || RegVT == MVT::v128i8))) {
+        unsigned VReg =
+          RegInfo.createVirtualRegister(&Hexagon::VectorRegs128BRegClass);
+        RegInfo.addLiveIn(VA.getLocReg(), VReg);
+        InVals.push_back(DAG.getCopyFromReg(Chain, dl, VReg, RegVT));
+
+      // Double Vector
+      } else if ((RegVT == MVT::v16i64 || RegVT == MVT::v32i32 ||
+                  RegVT == MVT::v64i16 || RegVT == MVT::v128i8)) {
+        unsigned VReg =
+          RegInfo.createVirtualRegister(&Hexagon::VecDblRegsRegClass);
+        RegInfo.addLiveIn(VA.getLocReg(), VReg);
+        InVals.push_back(DAG.getCopyFromReg(Chain, dl, VReg, RegVT));
+      } else if (UseHVX && UseHVXDbl &&
+                ((RegVT == MVT::v32i64 || RegVT == MVT::v64i32 ||
+                  RegVT == MVT::v128i16 || RegVT == MVT::v256i8))) {
+        unsigned VReg =
+          RegInfo.createVirtualRegister(&Hexagon::VecDblRegs128BRegClass);
+        RegInfo.addLiveIn(VA.getLocReg(), VReg);
+        InVals.push_back(DAG.getCopyFromReg(Chain, dl, VReg, RegVT));
+      } else if (RegVT == MVT::v512i1 || RegVT == MVT::v1024i1) {
+        assert(0 && "need to support VecPred regs");
+        unsigned VReg =
+          RegInfo.createVirtualRegister(&Hexagon::VecPredRegsRegClass);
+        RegInfo.addLiveIn(VA.getLocReg(), VReg);
+        InVals.push_back(DAG.getCopyFromReg(Chain, dl, VReg, RegVT));
+>>>>>>> origin/release/4.x
       } else {
 #ifndef NDEBUG
         unsigned RegSize = RegVT.getSizeInBits();

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ; RUN: opt < %s -correlated-propagation -cvp-dont-add-nowrap-flags=false -S | FileCheck %s
+=======
+; RUN: opt < %s -correlated-propagation -cvp-dont-process-adds=false -S | FileCheck %s
+>>>>>>> origin/release/4.x
 
 ; CHECK-LABEL: @test0(
 define void @test0(i32 %a) {

@@ -89,6 +89,7 @@ int pr31843() {
 
   struct { int f; } a;
   int b;
+<<<<<<< HEAD
   n += OBJECT_SIZE_BUILTIN(({&(b ? &a : &a)->f; pr31843;}), 0); // expected-warning{{expression result unused}}
 
   struct statfs { char f_mntonname[1024];};
@@ -117,3 +118,14 @@ void rd36094951_IAS_builtin_object_size_assertion(IncompleteArrayStruct *p) {
   rd36094951_CHECK(2);
   rd36094951_CHECK(3);
 }
+=======
+  n += __builtin_object_size(({&(b ? &a : &a)->f; pr31843;}), 0); // expected-warning{{expression result unused}}
+
+  struct statfs { char f_mntonname[1024];};
+  struct statfs *outStatFSBuf;
+  n += __builtin_object_size(outStatFSBuf->f_mntonname ? "" : "", 1); // expected-warning{{address of array}}
+  n += __builtin_object_size(outStatFSBuf->f_mntonname ?: "", 1);
+
+  return n;
+}
+>>>>>>> origin/release/4.x

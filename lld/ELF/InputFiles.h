@@ -249,8 +249,11 @@ public:
   // R_MIPS_GPREL16 / R_MIPS_GPREL32 relocations.
   uint32_t mipsGp0 = 0;
 
+<<<<<<< HEAD
   uint32_t andFeatures = 0;
 
+=======
+>>>>>>> origin/release/4.x
   // Name of source file obtained from STT_FILE symbol value,
   // or empty string if there is no such symbol in object file
   // symbol table.

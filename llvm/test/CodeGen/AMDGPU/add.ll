@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -mcpu=verde -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefixes=GCN,SIVI,FUNC %s
 ; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefixes=GCN,SIVI,FUNC %s
 ; RUN: llc -march=amdgcn -mcpu=gfx900 -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefixes=GCN,GFX9,FUNC %s
@@ -7,6 +8,19 @@
 ; GCN: v_mov_b32_e32 v[[V_REG:[0-9]+]], s[[REG]]
 ; GCN: buffer_store_dword v[[V_REG]],
 define amdgpu_kernel void @s_add_i32(i32 addrspace(1)* %out, i32 addrspace(1)* %in) #0 {
+=======
+; RUN: llc -march=amdgcn -mcpu=verde -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=FUNC %s
+; RUN: llc -march=r600 -mcpu=redwood < %s | FileCheck -check-prefix=EG -check-prefix=FUNC %s
+
+;FUNC-LABEL: {{^}}test1:
+;EG: ADD_INT {{[* ]*}}T{{[0-9]+\.[XYZW], T[0-9]+\.[XYZW], T[0-9]+\.[XYZW]}}
+
+;SI: v_add_i32_e32 [[REG:v[0-9]+]], vcc, {{v[0-9]+, v[0-9]+}}
+;SI-NOT: [[REG]]
+;SI: buffer_store_dword [[REG]],
+define void @test1(i32 addrspace(1)* %out, i32 addrspace(1)* %in) {
+>>>>>>> origin/release/4.x
   %b_ptr = getelementptr i32, i32 addrspace(1)* %in, i32 1
   %a = load i32, i32 addrspace(1)* %in
   %b = load i32, i32 addrspace(1)* %b_ptr

@@ -10568,8 +10568,11 @@ static SDValue splitStoreSplat(SelectionDAG &DAG, StoreSDNode &St,
   // instructions (stp).
   SDLoc DL(&St);
   SDValue BasePtr = St.getBasePtr();
+<<<<<<< HEAD
   uint64_t BaseOffset = 0;
 
+=======
+>>>>>>> origin/release/4.x
   const MachinePointerInfo &PtrInfo = St.getPointerInfo();
   SDValue NewST1 =
       DAG.getStore(St.getChain(), DL, SplatVal, BasePtr, PtrInfo,

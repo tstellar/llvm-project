@@ -789,7 +789,11 @@ def MOV : R600_1OP <0x19, "MOV", []>;
 // Most DUMMY_CHAINs should be eliminated during legalization, but undef
 // values can sneak in some to selection.
 let isPseudo = 1, isCodeGenOnly = 1 in {
+<<<<<<< HEAD
 def DUMMY_CHAIN : R600WrapperInst <
+=======
+def DUMMY_CHAIN : AMDGPUInst <
+>>>>>>> origin/release/4.x
   (outs),
   (ins),
   "DUMMY_CHAIN",

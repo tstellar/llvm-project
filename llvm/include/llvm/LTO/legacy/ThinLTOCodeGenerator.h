@@ -32,6 +32,23 @@ class StringRef;
 class LLVMContext;
 class TargetMachine;
 
+/// Wrapper around MemoryBufferRef, owning the identifier
+class ThinLTOBuffer {
+  std::string OwnedIdentifier;
+  StringRef Buffer;
+
+public:
+  ThinLTOBuffer(StringRef Buffer, StringRef Identifier)
+      : OwnedIdentifier(Identifier), Buffer(Buffer) {}
+
+  MemoryBufferRef getMemBuffer() const {
+    return MemoryBufferRef(Buffer,
+                           {OwnedIdentifier.c_str(), OwnedIdentifier.size()});
+  }
+  StringRef getBuffer() const { return Buffer; }
+  StringRef getBufferIdentifier() const { return OwnedIdentifier; }
+};
+
 /// Helper to gather options relevant to the target machine creation
 struct TargetMachineBuilder {
   Triple TheTriple;
@@ -309,7 +326,11 @@ private:
 
   /// Vector holding the input buffers containing the bitcode modules to
   /// process.
+<<<<<<< HEAD
   std::vector<std::unique_ptr<lto::InputFile>> Modules;
+=======
+  std::vector<ThinLTOBuffer> Modules;
+>>>>>>> origin/release/4.x
 
   /// Set of symbols that need to be preserved outside of the set of bitcode
   /// files.

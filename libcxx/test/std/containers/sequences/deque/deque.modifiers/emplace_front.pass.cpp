@@ -102,6 +102,9 @@ int main(int, char**)
         c.emplace_front(1, 2, 3);
         assert(c.size() == 4);
     }
+<<<<<<< HEAD
 
   return 0;
+=======
+>>>>>>> origin/release/4.x
 }

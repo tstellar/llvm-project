@@ -138,6 +138,7 @@ static void computePrevailingCopies(
   }
 }
 
+<<<<<<< HEAD
 static StringMap<lto::InputFile *>
 generateModuleMap(std::vector<std::unique_ptr<lto::InputFile>> &Modules) {
   StringMap<lto::InputFile *> ModuleMap;
@@ -145,6 +146,16 @@ generateModuleMap(std::vector<std::unique_ptr<lto::InputFile>> &Modules) {
     assert(ModuleMap.find(M->getName()) == ModuleMap.end() &&
            "Expect unique Buffer Identifier");
     ModuleMap[M->getName()] = M.get();
+=======
+static StringMap<MemoryBufferRef>
+generateModuleMap(const std::vector<ThinLTOBuffer> &Modules) {
+  StringMap<MemoryBufferRef> ModuleMap;
+  for (auto &ModuleBuffer : Modules) {
+    assert(ModuleMap.find(ModuleBuffer.getBufferIdentifier()) ==
+               ModuleMap.end() &&
+           "Expect unique Buffer Identifier");
+    ModuleMap[ModuleBuffer.getBufferIdentifier()] = ModuleBuffer.getMemBuffer();
+>>>>>>> origin/release/4.x
   }
   return ModuleMap;
 }
@@ -503,6 +514,7 @@ static void initTMBuilder(TargetMachineBuilder &TMBuilder,
 } // end anonymous namespace
 
 void ThinLTOCodeGenerator::addModule(StringRef Identifier, StringRef Data) {
+<<<<<<< HEAD
   MemoryBufferRef Buffer(Data, Identifier);
 
   auto InputOrError = lto::InputFile::create(Buffer);
@@ -514,6 +526,18 @@ void ThinLTOCodeGenerator::addModule(StringRef Identifier, StringRef Data) {
   Triple TheTriple(TripleStr);
 
   if (Modules.empty())
+=======
+  ThinLTOBuffer Buffer(Data, Identifier);
+  if (Modules.empty()) {
+    // First module added, so initialize the triple and some options
+    LLVMContext Context;
+    StringRef TripleStr;
+    ErrorOr<std::string> TripleOrErr = expectedToErrorOrAndEmitErrors(
+        Context, getBitcodeTargetTriple(Buffer.getMemBuffer()));
+    if (TripleOrErr)
+      TripleStr = *TripleOrErr;
+    Triple TheTriple(TripleStr);
+>>>>>>> origin/release/4.x
     initTMBuilder(TMBuilder, Triple(TheTriple));
   else if (TMBuilder.TheTriple != TheTriple) {
     if (!TMBuilder.TheTriple.isCompatibleWith(TheTriple))
@@ -521,8 +545,24 @@ void ThinLTOCodeGenerator::addModule(StringRef Identifier, StringRef Data) {
                          "supported");
     initTMBuilder(TMBuilder, Triple(TMBuilder.TheTriple.merge(TheTriple)));
   }
+<<<<<<< HEAD
 
   Modules.emplace_back(std::move(*InputOrError));
+=======
+#ifndef NDEBUG
+  else {
+    LLVMContext Context;
+    StringRef TripleStr;
+    ErrorOr<std::string> TripleOrErr = expectedToErrorOrAndEmitErrors(
+        Context, getBitcodeTargetTriple(Buffer.getMemBuffer()));
+    if (TripleOrErr)
+      TripleStr = *TripleOrErr;
+    assert(TMBuilder.TheTriple.str() == TripleStr &&
+           "ThinLTO modules with different triple not supported");
+  }
+#endif
+  Modules.push_back(Buffer);
+>>>>>>> origin/release/4.x
 }
 
 void ThinLTOCodeGenerator::preserveSymbol(StringRef Name) {
@@ -563,10 +603,18 @@ std::unique_ptr<ModuleSummaryIndex> ThinLTOCodeGenerator::linkCombinedIndex() {
   std::unique_ptr<ModuleSummaryIndex> CombinedIndex =
       std::make_unique<ModuleSummaryIndex>(/*HaveGVs=*/false);
   uint64_t NextModuleId = 0;
+<<<<<<< HEAD
   for (auto &Mod : Modules) {
     auto &M = Mod->getSingleBitcodeModule();
     if (Error Err =
             M.readSummary(*CombinedIndex, Mod->getName(), NextModuleId++)) {
+=======
+  for (auto &ModuleBuffer : Modules) {
+    Expected<std::unique_ptr<object::ModuleSummaryIndexObjectFile>> ObjOrErr =
+        object::ModuleSummaryIndexObjectFile::create(
+            ModuleBuffer.getMemBuffer());
+    if (!ObjOrErr) {
+>>>>>>> origin/release/4.x
       // FIXME diagnose
       logAllUnhandledErrors(
           std::move(Err), errs(),
@@ -901,6 +949,7 @@ void ThinLTOCodeGenerator::run() {
         Context.setDiscardValueNames(LTODiscardValueNames);
 
         // Parse module now
+<<<<<<< HEAD
         auto TheModule = loadModuleFromInput(Mod.get(), Context, false,
                                              /*IsImporting*/ false);
 
@@ -911,6 +960,19 @@ void ThinLTOCodeGenerator::run() {
         else
           ProducedBinaryFiles[count] =
               writeGeneratedObject(count, "", *OutputBuffer);
+=======
+        auto TheModule =
+            loadModuleFromBuffer(ModuleBuffer.getMemBuffer(), Context, false,
+                                 /*IsImporting*/ false);
+
+        // CodeGen
+        auto OutputBuffer = codegen(*TheModule);
+        if (SavedObjectsDirectoryPath.empty())
+          ProducedBinaries[count] = std::move(OutputBuffer);
+        else
+          ProducedBinaryFiles[count] = writeGeneratedObject(
+              count, "", SavedObjectsDirectoryPath, *OutputBuffer);
+>>>>>>> origin/release/4.x
       }, count++);
     }
 
@@ -999,6 +1061,7 @@ void ThinLTOCodeGenerator::run() {
   std::vector<int> ModulesOrdering;
   ModulesOrdering.resize(Modules.size());
   std::iota(ModulesOrdering.begin(), ModulesOrdering.end(), 0);
+<<<<<<< HEAD
   llvm::sort(ModulesOrdering, [&](int LeftIndex, int RightIndex) {
     auto LSize =
         Modules[LeftIndex]->getSingleBitcodeModule().getBuffer().size();
@@ -1006,6 +1069,14 @@ void ThinLTOCodeGenerator::run() {
         Modules[RightIndex]->getSingleBitcodeModule().getBuffer().size();
     return LSize > RSize;
   });
+=======
+  std::sort(ModulesOrdering.begin(), ModulesOrdering.end(),
+            [&](int LeftIndex, int RightIndex) {
+              auto LSize = Modules[LeftIndex].getBuffer().size();
+              auto RSize = Modules[RightIndex].getBuffer().size();
+              return LSize > RSize;
+            });
+>>>>>>> origin/release/4.x
 
   // Parallel optimizer + codegen
   {
@@ -1056,8 +1127,14 @@ void ThinLTOCodeGenerator::run() {
         }
 
         // Parse module now
+<<<<<<< HEAD
         auto TheModule = loadModuleFromInput(Mod.get(), Context, false,
                                              /*IsImporting*/ false);
+=======
+        auto TheModule =
+            loadModuleFromBuffer(ModuleBuffer.getMemBuffer(), Context, false,
+                                 /*IsImporting*/ false);
+>>>>>>> origin/release/4.x
 
         // Save temps: original file.
         saveTempBitcode(*TheModule, SaveTempsDir, count, ".0.original.bc");

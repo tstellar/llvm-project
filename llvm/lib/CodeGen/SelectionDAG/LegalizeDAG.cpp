@@ -2035,15 +2035,23 @@ SDValue SelectionDAGLegalize::ExpandLibCall(RTLIB::Libcall LC, SDNode *Node,
     InChain = TCChain;
 
   TargetLowering::CallLoweringInfo CLI(DAG);
+<<<<<<< HEAD
   bool signExtend = TLI.shouldSignExtendTypeInLibCall(RetVT, isSigned);
+=======
+>>>>>>> origin/release/4.x
   CLI.setDebugLoc(SDLoc(Node))
       .setChain(InChain)
       .setLibCallee(TLI.getLibcallCallingConv(LC), RetTy, Callee,
                     std::move(Args))
       .setTailCall(isTailCall)
+<<<<<<< HEAD
       .setSExtResult(signExtend)
       .setZExtResult(!signExtend)
       .setIsPostTypeLegalization(true);
+=======
+      .setSExtResult(isSigned)
+      .setZExtResult(!isSigned);
+>>>>>>> origin/release/4.x
 
   std::pair<SDValue, SDValue> CallInfo = TLI.LowerCallTo(CLI);
 
@@ -2052,6 +2060,23 @@ SDValue SelectionDAGLegalize::ExpandLibCall(RTLIB::Libcall LC, SDNode *Node,
     // It's a tailcall, return the chain (which is the DAG root).
     return DAG.getRoot();
   }
+<<<<<<< HEAD
+=======
+  SDValue Callee = DAG.getExternalSymbol(TLI.getLibcallName(LC),
+                                         TLI.getPointerTy(DAG.getDataLayout()));
+
+  Type *RetTy = RetVT.getTypeForEVT(*DAG.getContext());
+
+  TargetLowering::CallLoweringInfo CLI(DAG);
+  CLI.setDebugLoc(dl)
+      .setChain(DAG.getEntryNode())
+      .setLibCallee(TLI.getLibcallCallingConv(LC), RetTy, Callee,
+                    std::move(Args))
+      .setSExtResult(isSigned)
+      .setZExtResult(!isSigned);
+
+  std::pair<SDValue,SDValue> CallInfo = TLI.LowerCallTo(CLI);
+>>>>>>> origin/release/4.x
 
   LLVM_DEBUG(dbgs() << "Created libcall: "; CallInfo.first.dump(&DAG));
   return CallInfo.first;

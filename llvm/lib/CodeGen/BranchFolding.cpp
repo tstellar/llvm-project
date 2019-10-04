@@ -70,7 +70,6 @@ STATISTIC(NumDeadBlocks, "Number of dead blocks removed");
 STATISTIC(NumBranchOpts, "Number of branches optimized");
 STATISTIC(NumTailMerge , "Number of block tails merged");
 STATISTIC(NumHoist     , "Number of times common instructions are hoisted");
-STATISTIC(NumTailCalls,  "Number of tail calls optimized");
 
 static cl::opt<cl::boolOrDefault> FlagEnableTailMerge("enable-tail-merge",
                               cl::init(cl::BOU_UNSET), cl::Hidden);
@@ -1572,6 +1571,7 @@ ReoptimizeBlock:
     }
   }
 
+<<<<<<< HEAD
   if (!IsEmptyBlock(MBB) && MBB->pred_size() == 1 &&
       MF.getFunction().hasOptSize()) {
     // Changing "Jcc foo; foo: jmp bar;" into "Jcc bar;" might change the branch
@@ -1609,6 +1609,8 @@ ReoptimizeBlock:
     }
   }
 
+=======
+>>>>>>> origin/release/4.x
   // Analyze the branch in the current block.
   MachineBasicBlock *CurTBB = nullptr, *CurFBB = nullptr;
   SmallVector<MachineOperand, 4> CurCond;

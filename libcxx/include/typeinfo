@@ -88,7 +88,19 @@ class _LIBCPP_EXCEPTION_ABI type_info
       const char __decorated_name[1];
     } __data;
 
+<<<<<<< HEAD
     int __compare(const type_info &__rhs) const _NOEXCEPT;
+=======
+    _LIBCPP_INLINE_VISIBILITY
+    explicit type_info(const char* __n)
+      : __type_name(reinterpret_cast<uintptr_t>(__n)) {}
+#else
+    const char *__type_name;
+
+    _LIBCPP_INLINE_VISIBILITY
+    explicit type_info(const char* __n) : __type_name(__n) {}
+#endif
+>>>>>>> origin/release/4.x
 
 public:
     _LIBCPP_AVAILABILITY_TYPEINFO_VTABLE

@@ -3025,7 +3025,11 @@ bool Sema::isCopyElisionCandidate(QualType ReturnType, const VarDecl *VD,
   // variable will no longer be used.
   if (VD->hasAttr<BlocksAttr>()) return false;
 
+<<<<<<< HEAD
   if (CESK & CES_AllowDifferentTypes)
+=======
+  if (AllowParamOrMoveConstructible)
+>>>>>>> origin/release/4.x
     return true;
 
   // ...non-volatile...

@@ -197,6 +197,7 @@ Instruction *ConstantHoistingPass::findMatInsertPt(Instruction *Inst,
   }
 
   return IDom->getBlock()->getTerminator();
+<<<<<<< HEAD
 }
 
 /// Given \p BBs as input, find another set of BBs which collectively
@@ -302,6 +303,8 @@ static void findBestInsertionSet(DominatorTree &DT, BlockFrequencyInfo &BFI,
       ParentPtsFreq += InsertPtsFreq;
     }
   }
+=======
+>>>>>>> origin/release/4.x
 }
 
 /// Find an insertion point that dominates all uses.

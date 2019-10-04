@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ; RUN: llc -amdgpu-scalarize-global-loads=false -march=amdgcn -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefixes=GCN,SI %s
 ; RUN: llc -amdgpu-scalarize-global-loads=false -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefixes=GCN,VI %s
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck --check-prefix=SI %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck --check-prefix=VI %s
+>>>>>>> origin/release/4.x
 
 ; GCN-LABEL: {{^}}trunc_i64_bitcast_v2i32:
 ; GCN: buffer_load_dword v

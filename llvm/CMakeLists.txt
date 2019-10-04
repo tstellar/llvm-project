@@ -23,15 +23,21 @@ if(NOT DEFINED LLVM_VERSION_MINOR)
 endif()
 if(NOT DEFINED LLVM_VERSION_PATCH)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/release/4.x
   set(LLVM_VERSION_PATCH 1)
 endif()
 if(NOT DEFINED LLVM_VERSION_SUFFIX)
   set(LLVM_VERSION_SUFFIX "")
+<<<<<<< HEAD
 =======
   set(LLVM_VERSION_PATCH 2)
 endif()
 if(NOT DEFINED LLVM_VERSION_SUFFIX)
   set(LLVM_VERSION_SUFFIX "")
+=======
+>>>>>>> origin/release/4.x
 endif()
 
 if (POLICY CMP0048)

@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefixes=SI,SICI,SICIVI,GCN %s
 ; RUN: llc -march=amdgcn -mcpu=bonaire -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefixes=SICI,CIVI,SICIVI,GCN %s
 ; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefixes=VI,CIVI,SICIVI,GFX89,GCN %s
 ; RUN: llc -march=amdgcn -mcpu=gfx900 -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefixes=GFX9,GFX89,GCN %s
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=SICI -check-prefix=GCN -check-prefix=FUNC  %s
+; RUN: llc -march=amdgcn -mcpu=bonaire -verify-machineinstrs < %s | FileCheck -check-prefix=SICI -check-prefix=CIVI -check-prefix=GCN -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=VI -check-prefix=CIVI -check-prefix=GCN -check-prefix=FUNC %s
+>>>>>>> origin/release/4.x
 
 ; GCN-LABEL: {{^}}lds_atomic_cmpxchg_ret_i32_offset:
 ; GFX9-NOT: m0

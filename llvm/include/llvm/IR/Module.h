@@ -821,11 +821,19 @@ public:
 /// @name Utility functions for querying Debug information.
 /// @{
 
+<<<<<<< HEAD
   /// Returns the Number of Register ParametersDwarf Version by checking
   /// module flags.
   unsigned getNumberRegisterParameters() const;
 
   /// Returns the Dwarf Version by checking module flags.
+=======
+  /// \brief Returns the Number of Register ParametersDwarf Version by checking
+  /// module flags.
+  unsigned getNumberRegisterParameters() const;
+
+  /// \brief Returns the Dwarf Version by checking module flags.
+>>>>>>> origin/release/4.x
   unsigned getDwarfVersion() const;
 
   /// Returns the CodeView Version by checking module flags.

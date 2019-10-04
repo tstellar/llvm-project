@@ -553,7 +553,11 @@ certain user-defined criteria. For example:
 
 .. code-block:: c
 
+<<<<<<< HEAD
   int abs(int a)
+=======
+  void abs(int a)
+>>>>>>> origin/release/4.x
     __attribute__((diagnose_if(a >= 0, "Redundant abs call", "warning")));
   int must_abs(int a)
     __attribute__((diagnose_if(a >= 0, "Redundant abs call", "error")));

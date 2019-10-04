@@ -108,6 +108,10 @@ if(MSVC)
 endif()
 
 # ManagedStatic.cpp uses <pthread>.
+<<<<<<< HEAD
 target_link_libraries(SupportTests PRIVATE LLVMTestingSupport ${LLVM_PTHREAD_LIB})
 
 add_subdirectory(DynamicLibrary)
+=======
+target_link_libraries(SupportTests ${LLVM_PTHREAD_LIB})
+>>>>>>> origin/release/4.x

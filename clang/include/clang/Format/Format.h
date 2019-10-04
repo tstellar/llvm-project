@@ -1974,7 +1974,12 @@ struct FormatStyle {
   enum LanguageStandard {
     /// c++03: Parse and format as C++03.
     LS_Cpp03,
+<<<<<<< HEAD
     /// c++11: Parse and format as C++11.
+=======
+    /// Use features of C++11, C++14 and C++1z (e.g. ``A<A<int>>`` instead of
+    /// ``A<A<int> >``).
+>>>>>>> origin/release/4.x
     LS_Cpp11,
     /// c++14: Parse and format as C++14.
     LS_Cpp14,

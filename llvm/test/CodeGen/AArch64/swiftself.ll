@@ -73,6 +73,7 @@ define i8* @swiftself_notail(i8* swiftself %addr0, i8* %addr1) nounwind {
 ; we normally would. We marked the first parameter with swiftself which means it
 ; will no longer be passed in x0.
 declare swiftcc i8* @thisreturn_attribute(i8* returned swiftself)
+<<<<<<< HEAD
 ; OPTAARCH64-LABEL: swiftself_nothisreturn:
 ; OPTAARCH64-DAG: ldr  x20, [x20]
 ; OPTAARCH64-DAG: mov [[CSREG:x[1-9].*]], x8
@@ -86,6 +87,14 @@ declare swiftcc i8* @thisreturn_attribute(i8* returned swiftself)
 ; OPTARM64_32: bl {{_?}}thisreturn_attribute
 ; OPTARM64_32: str w0, {{\[}}[[CSREG]]
 ; OPTARM64_32: ret
+=======
+; OPT-LABEL: swiftself_nothisreturn:
+; OPT-DAG: ldr  x20, [x20]
+; OPT-DAG: mov [[CSREG:x[1-9].*]], x8
+; OPT: bl {{_?}}thisreturn_attribute
+; OPT: str x0, {{\[}}[[CSREG]]
+; OPT: ret
+>>>>>>> origin/release/4.x
 define hidden swiftcc void @swiftself_nothisreturn(i8** noalias nocapture sret, i8** noalias nocapture readonly swiftself) {
 entry:
   %2 = load i8*, i8** %1, align 8

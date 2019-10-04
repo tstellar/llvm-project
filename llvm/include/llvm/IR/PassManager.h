@@ -1239,7 +1239,10 @@ public:
 private:
   friend AnalysisInfoMixin<
       OuterAnalysisManagerProxy<AnalysisManagerT, IRUnitT, ExtraArgTs...>>;
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/release/4.x
   static AnalysisKey Key;
 
   const AnalysisManagerT *AM;

@@ -2,7 +2,11 @@
 # RUN: llvm-mc -filetype=obj -triple=x86_64-unknown-linux %s -o %t
 # RUN: echo "SECTIONS { . = SIZEOF_HEADERS; pfoo = foo; pbar = bar; }" > %t.script
 # RUN: ld.lld -o %t1 --script %t.script %t
+<<<<<<< HEAD
 # RUN: llvm-readobj --symbols %t1 | FileCheck %s
+=======
+# RUN: llvm-readobj -symbols %t1 | FileCheck %s
+>>>>>>> origin/release/4.x
 
 # CHECK:       Symbol {
 # CHECK:         Name: bar

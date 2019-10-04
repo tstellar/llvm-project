@@ -71,7 +71,14 @@ class AssumptionCache {
   AffectedValuesMap AffectedValues;
 
   /// Get the vector of assumptions which affect a value from the cache.
+<<<<<<< HEAD
   SmallVector<WeakTrackingVH, 1> &getOrInsertAffectedValues(Value *V);
+=======
+  SmallVector<WeakVH, 1> &getOrInsertAffectedValues(Value *V);
+
+  /// Copy affected values in the cache for OV to be affected values for NV.
+  void copyAffectedValuesInCache(Value *OV, Value *NV);
+>>>>>>> origin/release/4.x
 
   /// Move affected values in the cache for OV to be affected values for NV.
   void transferAffectedValuesInCache(Value *OV, Value *NV);

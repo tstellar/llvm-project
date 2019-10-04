@@ -41,7 +41,11 @@ add_lld_library(lldCOFF
   WindowsManifest
 
   LINK_LIBS
+<<<<<<< HEAD
   lldCommon
+=======
+  lldCore
+>>>>>>> origin/release/4.x
   ${LLVM_PTHREAD_LIB}
 
   DEPENDS

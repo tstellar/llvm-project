@@ -679,6 +679,7 @@ entry:
   tail call void @acallee(i8* null)
   ret void
 }
+<<<<<<< HEAD
 
 ; Make sure we don't crash on this function during -O0.
 ; We used to crash because we would insert an IMPLICIT_DEF for the swifterror at
@@ -813,3 +814,5 @@ a:
   %error = load %swift_error*, %swift_error** %err
   ret %swift_error* %error
 }
+=======
+>>>>>>> origin/release/4.x

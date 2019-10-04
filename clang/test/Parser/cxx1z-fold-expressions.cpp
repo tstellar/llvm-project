@@ -43,6 +43,7 @@ template<typename ...T> void as_operand_of_cast(int a, T ...t) {
     (int)(undeclared_junk + ...) + // expected-error {{undeclared}}
     (int)(a + ...); // expected-error {{does not contain any unexpanded}}
 }
+<<<<<<< HEAD
 
 // fold-operator can be '>' or '>>'.
 template <int... N> constexpr bool greaterThan() { return (N > ...); }
@@ -86,3 +87,5 @@ void prim() {
   static_assert(castSum<long>(Number{1}, Number{2}) == 3);
   static_assert(simpleSum(Number{1}, Number{2}) == 3);
 }
+=======
+>>>>>>> origin/release/4.x

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ; RUN: llc -mtriple=amdgcn--amdhsa -mcpu=kaveri -mattr=-code-object-v3,+flat-for-global < %s | FileCheck -check-prefix=HSA -check-prefix=HSA-DEFAULT -check-prefix=ALL %s
 ; RUN: llc -mtriple=amdgcn--amdhsa -mcpu=kaveri -mattr=-code-object-v3,-flat-for-global < %s | FileCheck -check-prefix=HSA -check-prefix=HSA-NODEFAULT -check-prefix=ALL %s
+=======
+; RUN: llc -mtriple=amdgcn--amdhsa -mcpu=kaveri -mattr=+flat-for-global < %s | FileCheck -check-prefix=HSA -check-prefix=HSA-DEFAULT -check-prefix=ALL %s
+; RUN: llc -mtriple=amdgcn--amdhsa -mcpu=kaveri -mattr=-flat-for-global < %s | FileCheck -check-prefix=HSA -check-prefix=HSA-NODEFAULT -check-prefix=ALL %s
+>>>>>>> origin/release/4.x
 ; RUN: llc -mtriple=amdgcn-- -mcpu=tonga < %s | FileCheck -check-prefix=HSA-NOADDR64 -check-prefix=ALL %s
 ; RUN: llc -mtriple=amdgcn-- -mcpu=kaveri -mattr=-flat-for-global < %s | FileCheck -check-prefix=NOHSA-DEFAULT -check-prefix=ALL %s
 ; RUN: llc -mtriple=amdgcn-- -mcpu=kaveri -mattr=+flat-for-global < %s | FileCheck -check-prefix=NOHSA-NODEFAULT -check-prefix=ALL %s
@@ -23,7 +28,11 @@
 ; NOHSA-DEFAULT: buffer_store_dword
 ; NOHSA-NODEFAULT: flat_store_dword
 ; NOHSA-NOADDR64: flat_store_dword
+<<<<<<< HEAD
 define amdgpu_kernel void @test(i32 addrspace(1)* %out) {
+=======
+define void @test(i32 addrspace(1)* %out) {
+>>>>>>> origin/release/4.x
 entry:
   store i32 0, i32 addrspace(1)* %out
   ret void
@@ -36,17 +45,30 @@ entry:
 ; NOHSA-DEFAULT: buffer_store_dword
 ; NOHSA-NODEFAULT: flat_store_dword
 ; NOHSA-NOADDR64: flat_store_dword
+<<<<<<< HEAD
 define amdgpu_kernel void @test_addr64(i32 addrspace(1)* %out) {
 entry:
   %out.addr = alloca i32 addrspace(1)*, align 4, addrspace(5)
 
   store i32 addrspace(1)* %out, i32 addrspace(1)* addrspace(5)* %out.addr, align 4
   %ld0 = load i32 addrspace(1)*, i32 addrspace(1)* addrspace(5)* %out.addr, align 4
+=======
+define void @test_addr64(i32 addrspace(1)* %out) {
+entry:
+  %out.addr = alloca i32 addrspace(1)*, align 4
+
+  store i32 addrspace(1)* %out, i32 addrspace(1)** %out.addr, align 4
+  %ld0 = load i32 addrspace(1)*, i32 addrspace(1)** %out.addr, align 4
+>>>>>>> origin/release/4.x
 
   %arrayidx = getelementptr inbounds i32, i32 addrspace(1)* %ld0, i32 0
   store i32 1, i32 addrspace(1)* %arrayidx, align 4
 
+<<<<<<< HEAD
   %ld1 = load i32 addrspace(1)*, i32 addrspace(1)* addrspace(5)* %out.addr, align 4
+=======
+  %ld1 = load i32 addrspace(1)*, i32 addrspace(1)** %out.addr, align 4
+>>>>>>> origin/release/4.x
   %arrayidx1 = getelementptr inbounds i32, i32 addrspace(1)* %ld1, i32 1
   store i32 2, i32 addrspace(1)* %arrayidx1, align 4
 

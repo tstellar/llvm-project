@@ -720,8 +720,13 @@ public:
 #else
         void      emplace_back(_Args&&... __args);
 #endif
+<<<<<<< HEAD
 #endif // !_LIBCPP_CXX03_LANG
 
+=======
+#endif  // _LIBCPP_HAS_NO_VARIADICS
+#endif  // _LIBCPP_HAS_NO_RVALUE_REFERENCES
+>>>>>>> origin/release/4.x
     _LIBCPP_INLINE_VISIBILITY
     void pop_back();
 

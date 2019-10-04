@@ -22,6 +22,7 @@
 # GOT: {{.*}}: [[LOC1:[0-9a-f]+]]  {{.*}}  loc1
 # GOT: {{.*}}: [[LOC2:[0-9a-f]+]]  {{.*}}  loc2
 
+<<<<<<< HEAD
 # GOT:      Primary GOT:
 # GOT:       Local entries:
 # GOT-NEXT:    Address     Access  Initial
@@ -31,6 +32,35 @@
 # GOT-NEXT:  Global entries:
 # GOT-NEXT:    Address     Access  Initial Sym.Val. Type    Ndx Name
 # GOT-NEXT:     {{.*}} -32736(gp) 00000000 00000000 NOTYPE  UND bar
+=======
+# GOT:      Primary GOT {
+# GOT-NEXT:   Canonical gp value:
+# GOT:        Local entries [
+# GOT-NEXT:     Entry {
+# GOT-NEXT:       Address:
+# GOT-NEXT:       Access: -32744
+# GOT-NEXT:       Initial: 0x20000
+# GOT-NEXT:     }
+# GOT-NEXT:     Entry {
+# GOT-NEXT:       Address:
+# GOT-NEXT:       Access: -32740
+# GOT-NEXT:       Initial: 0x20004
+# GOT-NEXT:     }
+# GOT-NEXT:   ]
+# GOT-NEXT:   Global entries [
+# GOT-NEXT:     Entry {
+# GOT-NEXT:       Address:
+# GOT-NEXT:       Access: -32736
+# GOT-NEXT:       Initial: 0x0
+# GOT-NEXT:       Value: 0x0
+# GOT-NEXT:       Type: None
+# GOT-NEXT:       Section: Undefined
+# GOT-NEXT:       Name: bar
+# GOT-NEXT:     }
+# GOT-NEXT:   ]
+# GOT-NEXT:   Number of TLS and multi-GOT entries: 0
+# GOT-NEXT: }
+>>>>>>> origin/release/4.x
 
   .text
   .global foo

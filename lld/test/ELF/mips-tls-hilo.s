@@ -13,6 +13,7 @@
 # DIS: 00000000 l    O .tdata          00000000 loc0
 
 # DIS:      __start:
+<<<<<<< HEAD
 # DIS-NEXT:    addiu   $2, $3, 0
 #                              ^-- %hi(loc0 - .tdata - 0x8000)
 # DIS-NEXT:    addiu   $2, $3, -32768
@@ -21,6 +22,19 @@
 #                              ^-- %hi(loc0 - .tdata - 0x7000)
 # DIS-NEXT:    addiu   $2, $3, -28672
 #                              ^-- %lo(loc0 - .tdata - 0x7000)
+=======
+# DIS-NEXT:    20000:   24 62 00 00   addiu   $2, $3, 0
+#                       %hi(loc0 - .tdata - 0x8000) --^
+# DIS-NEXT:    20004:   24 62 80 00   addiu   $2, $3, -32768
+#                       %lo(loc0 - .tdata - 0x8000) --^
+# DIS-NEXT:    20008:   24 62 00 00   addiu   $2, $3, 0
+#                       %hi(loc0 - .tdata - 0x7000) --^
+# DIS-NEXT:    2000c:   24 62 90 00   addiu   $2, $3, -28672
+#                       %lo(loc0 - .tdata - 0x7000) --^
+
+# DIS: 00040000 l       .tdata          00000000 .tdata
+# DIS: 00040000 l       .tdata          00000000 loc0
+>>>>>>> origin/release/4.x
 
 # CHECK:      Relocations [
 # CHECK-NEXT: ]

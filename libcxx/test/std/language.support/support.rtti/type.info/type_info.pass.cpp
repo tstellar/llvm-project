@@ -13,12 +13,19 @@
 #include <cstring>
 #include <cassert>
 
+<<<<<<< HEAD
 #include "test_macros.h"
 
 bool test_constructor_explicit(std::type_info const&) { return false; }
 bool test_constructor_explicit(std::string const&) { return true; }
 
 int main(int, char**)
+=======
+bool test_constructor_explicit(std::type_info const&) { return false; }
+bool test_constructor_explicit(std::string const&) { return true; }
+
+int main()
+>>>>>>> origin/release/4.x
 {
   {
     const std::type_info& t1 = typeid(int);
@@ -27,8 +34,13 @@ int main(int, char**)
     const std::type_info& t3 = typeid(short);
     assert(t1 != t3);
     assert(!t1.before(t2));
+<<<<<<< HEAD
     assert(std::strcmp(t1.name(), t2.name()) == 0);
     assert(std::strcmp(t1.name(), t3.name()) != 0);
+=======
+    assert(strcmp(t1.name(), t2.name()) == 0);
+    assert(strcmp(t1.name(), t3.name()) != 0);
+>>>>>>> origin/release/4.x
   }
   {
     // type_info has a protected constructor taking a string literal. This
@@ -38,6 +50,9 @@ int main(int, char**)
     // See: https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=216201
     assert(test_constructor_explicit("abc"));
   }
+<<<<<<< HEAD
 
   return 0;
+=======
+>>>>>>> origin/release/4.x
 }

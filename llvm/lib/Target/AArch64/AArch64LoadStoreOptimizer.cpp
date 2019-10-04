@@ -872,15 +872,25 @@ AArch64LoadStoreOpt::mergePairedInsns(MachineBasicBlock::iterator I,
       //   STRWui %w1, ...
       //   USE kill %w1   ; need to clear kill flag when moving STRWui downwards
       //   STRW %w0
+<<<<<<< HEAD
       Register Reg = getLdStRegOp(*I).getReg();
+=======
+      unsigned Reg = getLdStRegOp(*I).getReg();
+>>>>>>> origin/release/4.x
       for (MachineInstr &MI : make_range(std::next(I), Paired))
         MI.clearRegisterKills(Reg, TRI);
     }
   }
   MIB = BuildMI(*MBB, InsertionPoint, DL, TII->get(getMatchingPairOpcode(Opc)))
+<<<<<<< HEAD
             .add(RegOp0)
             .add(RegOp1)
             .add(BaseRegOp)
+=======
+            .addOperand(RegOp0)
+            .addOperand(RegOp1)
+            .addOperand(BaseRegOp)
+>>>>>>> origin/release/4.x
             .addImm(OffsetImm)
             .cloneMergedMemRefs({&*I, &*Paired})
             .setMIFlags(I->mergeFlagsWith(*Paired));
@@ -1036,10 +1046,14 @@ AArch64LoadStoreOpt::promoteLoadFromStore(MachineBasicBlock::iterator LoadI,
   // Clear kill flags between store and load.
   for (MachineInstr &MI : make_range(StoreI->getIterator(),
                                      BitExtMI->getIterator()))
+<<<<<<< HEAD
     if (MI.killsRegister(StRt, TRI)) {
       MI.clearRegisterKills(StRt, TRI);
       break;
     }
+=======
+    MI.clearRegisterKills(StRt, TRI);
+>>>>>>> origin/release/4.x
 
   LLVM_DEBUG(dbgs() << "Promoting load by replacing :\n    ");
   LLVM_DEBUG(StoreI->print(dbgs()));

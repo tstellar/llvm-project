@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 ; RUN: opt -S -consthoist -consthoist-with-block-frequency=false < %s | FileCheck %s
 ; RUN: opt -S -consthoist -consthoist-with-block-frequency=true < %s | FileCheck --check-prefix=BFIHOIST %s
+=======
+; RUN: opt -S -consthoist < %s | FileCheck %s
+
+; FIXME: The catchpad doesn't even use the constant, so a better fix would be to
+; insert the bitcast in the catchpad block.
+>>>>>>> origin/release/4.x
 
 target datalayout = "e-m:w-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-pc-windows-msvc"
@@ -9,6 +16,7 @@ target triple = "x86_64-pc-windows-msvc"
 ; CHECK-NEXT: bitcast i64 9209618997431186100 to i64
 ; CHECK-NEXT: br i1 %tobool
 
+<<<<<<< HEAD
 ; BFIHOIST-LABEL: define i32 @main
 ; BFIHOIST: then:
 ; BFIHOIST: %[[CONST1:.*]] = bitcast i64 9209618997431186100 to i64
@@ -19,6 +27,8 @@ target triple = "x86_64-pc-windows-msvc"
 ; BFIHOIST: %add6 = add i64 %call5, %[[CONST2]]
 ; BFIHOIST: br label %endif
 
+=======
+>>>>>>> origin/release/4.x
 ; Function Attrs: norecurse
 define i32 @main(i32 %argc, i8** nocapture readnone %argv) local_unnamed_addr #0 personality i8* bitcast (i32 (...)* @__CxxFrameHandler3 to i8*) {
   %call = tail call i64 @fn(i64 0)

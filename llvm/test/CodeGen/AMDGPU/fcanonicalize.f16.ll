@@ -739,6 +739,12 @@ define <4 x half> @v_test_canonicalize_reg_undef_reg_reg_v4f16(half %val0, half 
 }
 
 attributes #0 = { nounwind readnone }
+<<<<<<< HEAD
 attributes #1 = { nounwind }
 attributes #2 = { nounwind "target-features"="-fp64-fp16-denormals" }
 attributes #3 = { nounwind "target-features"="+fp64-fp16-denormals" }
+=======
+attributes #1 = { nounwind "target-features"="-flat-for-global" }
+attributes #2 = { nounwind "target-features"="-flat-for-global,-fp16-denormals,-fp16-denormals" }
+attributes #3 = { nounwind "target-features"="-flat-for-global,+fp16-denormals,+fp64-denormals" }
+>>>>>>> origin/release/4.x

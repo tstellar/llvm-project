@@ -1421,7 +1421,12 @@ public:
     // 23.2.2.3 modifiers:
     void push_front(const value_type& __v);
     void push_back(const value_type& __v);
+<<<<<<< HEAD
 #ifndef _LIBCPP_CXX03_LANG
+=======
+#ifndef _LIBCPP_HAS_NO_RVALUE_REFERENCES
+#ifndef _LIBCPP_HAS_NO_VARIADICS
+>>>>>>> origin/release/4.x
 #if _LIBCPP_STD_VER > 14
     template <class... _Args> reference emplace_front(_Args&&... __args);
     template <class... _Args> reference emplace_back (_Args&&... __args);

@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 ; RUN: llc -O0 -march=amdgcn -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefix=GCNNOOPT -check-prefix=GCN %s
 ; RUN: llc -O0 -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -amdgpu-spill-sgpr-to-smem=0 -verify-machineinstrs < %s | FileCheck -enable-var-scope  -check-prefix=GCNNOOPT -check-prefix=GCN %s
 ; RUN: llc -O0 -march=amdgcn -mcpu=gfx1010 -mattr=-flat-for-global,-WavefrontSize32,+WavefrontSize64 -amdgpu-spill-sgpr-to-smem=0 -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefix=GCNNOOPT -check-prefix=GCN %s
 ; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefix=GCNOPT -check-prefix=GCN %s
 ; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefix=GCNOPT -check-prefix=GCN %s
+=======
+; RUN: llc -O0 -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=GCNNOOPT -check-prefix=GCN %s
+; RUN: llc -O0 -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -amdgpu-spill-sgpr-to-smem=0 -verify-machineinstrs < %s | FileCheck -check-prefix=GCNNOOPT -check-prefix=GCN %s
+; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=GCNOPT -check-prefix=GCN %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=GCNOPT -check-prefix=GCN %s
+>>>>>>> origin/release/4.x
 
 ; GCN-LABEL: {{^}}test_branch:
 ; GCNNOOPT: v_writelane_b32

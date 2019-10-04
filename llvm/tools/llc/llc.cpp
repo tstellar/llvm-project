@@ -276,11 +276,22 @@ static void InlineAsmDiagHandler(const SMDiagnostic &SMD, void *Context,
   if (SMD.getKind() == SourceMgr::DK_Error)
     *HasError = true;
 
+<<<<<<< HEAD
   SMD.print(nullptr, errs());
 
   // For testing purposes, we print the LocCookie here.
   if (LocCookie)
     WithColor::note() << "!srcloc = " << LocCookie << "\n";
+=======
+  if (auto *Remark = dyn_cast<DiagnosticInfoOptimizationBase>(&DI))
+    if (!Remark->isEnabled())
+      return;
+
+  DiagnosticPrinterRawOStream DP(errs());
+  errs() << LLVMContext::getDiagnosticMessagePrefix(DI.getSeverity()) << ": ";
+  DI.print(DP);
+  errs() << "\n";
+>>>>>>> origin/release/4.x
 }
 
 // main - Entry point for the llc compiler.

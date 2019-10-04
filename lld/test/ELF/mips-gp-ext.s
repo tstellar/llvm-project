@@ -35,10 +35,17 @@
 #                          ^-- _gp
 
 # REL:      Contents of section .text:
+<<<<<<< HEAD
 # REL-NEXT:  00e0 3c080000 2108010c 8f82ff1c
 #                 ^-- %hi(_gp_disp)
 #                          ^-- %lo(_gp_disp)
 #                                   ^-- 8 - (0x1ec - 0x100)
+=======
+# REL-NEXT:  0000 3c080000 2108010c 8f82fffc
+#                 ^-- %hi(_gp_disp)
+#                          ^-- %lo(_gp_disp)
+#                                   ^-- 8 - (0x10c - 0x100)
+>>>>>>> origin/release/4.x
 #                                       G - (GP - .got)
 
 # REL:      Contents of section .data:
@@ -56,7 +63,11 @@
 #                          ^-- _gp
 
 # ABS:      Contents of section .text:
+<<<<<<< HEAD
 # ABS-NEXT:  00e0 3c080000 21080120 8f82ff08
+=======
+# ABS-NEXT:  0000 3c080000 21080200 8f82ff08
+>>>>>>> origin/release/4.x
 #                 ^-- %hi(_gp_disp)
 #                          ^-- %lo(_gp_disp)
 #                                   ^-- 8 - (0x200 - 0x100)

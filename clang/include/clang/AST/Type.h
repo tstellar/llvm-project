@@ -4506,7 +4506,13 @@ private:
   QualType ModifiedType;
   QualType EquivalentType;
 
+<<<<<<< HEAD
   AttributedType(QualType canon, attr::Kind attrKind, QualType modified,
+=======
+  friend class ASTContext; // creates these
+
+  AttributedType(QualType canon, Kind attrKind, QualType modified,
+>>>>>>> origin/release/4.x
                  QualType equivalent)
       : Type(Attributed, canon, equivalent->isDependentType(),
              equivalent->isInstantiationDependentType(),

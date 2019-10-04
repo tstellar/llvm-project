@@ -13,6 +13,7 @@ target triple = "x86_64-unknown-linux-gnu"
 ; scatter operation. %tmp3 (and the induction variable) should not be marked
 ; uniform-after-vectorization.
 ;
+<<<<<<< HEAD
 ; CHECK:       LV: Found uniform instruction: %tmp0 = getelementptr inbounds %data, %data* %d, i64 0, i32 3, i64 %i
 ; CHECK-NOT:   LV: Found uniform instruction: %tmp3 = getelementptr inbounds %data, %data* %d, i64 0, i32 0, i64 %i
 ; CHECK-NOT:   LV: Found uniform instruction: %i = phi i64 [ %i.next, %for.body ], [ 0, %entry ]
@@ -40,6 +41,24 @@ target triple = "x86_64-unknown-linux-gnu"
 ; CHECK-NEXT:    [[INDEX_NEXT]] = add i64 [[INDEX]], 16
 ; CHECK-NEXT:    [[VEC_IND_NEXT]] = add <16 x i64> [[VEC_IND]], <i64 80, i64 80, i64 80, i64 80, i64 80, i64 80, i64 80, i64 80, i64 80, i64 80, i64 80, i64 80, i64 80, i64 80, i64 80, i64 80>
 ; CHECK:         br i1 {{.*}}, label %middle.block, label %vector.body
+=======
+; CHECK:     LV: Found uniform instruction: %tmp0 = getelementptr inbounds %data, %data* %d, i64 0, i32 3, i64 %i
+; CHECK-NOT: LV: Found uniform instruction: %tmp3 = getelementptr inbounds %data, %data* %d, i64 0, i32 0, i64 %i
+; CHECK-NOT: LV: Found uniform instruction: %i = phi i64 [ %i.next, %for.body ], [ 0, %entry ]
+; CHECK-NOT: LV: Found uniform instruction: %i.next = add nuw nsw i64 %i, 5
+; CHECK:     vector.body:
+; CHECK:       %vec.ind = phi <16 x i64>
+; CHECK:       %[[T0:.+]] = extractelement <16 x i64> %vec.ind, i32 0
+; CHECK:       %[[T1:.+]] = getelementptr inbounds %data, %data* %d, i64 0, i32 3, i64 %[[T0]]
+; CHECK:       %[[T2:.+]] = bitcast float* %[[T1]] to <80 x float>*
+; CHECK:       load <80 x float>, <80 x float>* %[[T2]], align 4
+; CHECK:       %[[T3:.+]] = getelementptr inbounds %data, %data* %d, i64 0, i32 0, i64 %[[T0]]
+; CHECK:       %[[T4:.+]] = bitcast float* %[[T3]] to <80 x float>*
+; CHECK:       load <80 x float>, <80 x float>* %[[T4]], align 4
+; CHECK:       %VectorGep = getelementptr inbounds %data, %data* %d, i64 0, i32 0, <16 x i64> %vec.ind
+; CHECK:       call void @llvm.masked.scatter.v16f32({{.*}}, <16 x float*> %VectorGep, {{.*}})
+; CHECK:       br i1 {{.*}}, label %middle.block, label %vector.body
+>>>>>>> origin/release/4.x
 
 %data = type { [32000 x float], [3 x i32], [4 x i8], [32000 x float] }
 

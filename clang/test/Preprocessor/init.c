@@ -960,7 +960,11 @@
 // AARCH64-OPENBSD:#define __INT_LEAST32_FMTd__ "d"
 // AARCH64-OPENBSD:#define __INT_LEAST32_FMTi__ "i"
 // AARCH64-OPENBSD:#define __INT_LEAST32_MAX__ 2147483647
+<<<<<<< HEAD
 // AARCH64-OPENBSD:#define __INT_LEAST32_TYPE__ int
+=======
+// AARCH64-OPENSD:#define __INT_LEAST32_TYPE__ int
+>>>>>>> origin/release/4.x
 // AARCH64-OPENBSD:#define __INT_LEAST64_FMTd__ "ld"
 // AARCH64-OPENBSD:#define __INT_LEAST64_FMTi__ "li"
 // AARCH64-OPENBSD:#define __INT_LEAST64_MAX__ 9223372036854775807L
@@ -9669,7 +9673,10 @@
 // RUN: %clang_cc1 -E -dM -ffreestanding -triple=aarch64-unknown-openbsd6.1 < /dev/null | FileCheck -match-full-lines -check-prefix OPENBSD %s
 // RUN: %clang_cc1 -E -dM -ffreestanding -triple=arm-unknown-openbsd6.1-gnueabi < /dev/null | FileCheck -match-full-lines -check-prefix OPENBSD %s
 // RUN: %clang_cc1 -E -dM -ffreestanding -triple=i386-unknown-openbsd6.1 < /dev/null | FileCheck -match-full-lines -check-prefix OPENBSD %s
+<<<<<<< HEAD
 // RUN: %clang_cc1 -E -dM -ffreestanding -triple=powerpc-unknown-openbsd6.1 < /dev/null | FileCheck -match-full-lines -check-prefix OPENBSD %s
+=======
+>>>>>>> origin/release/4.x
 // RUN: %clang_cc1 -E -dM -ffreestanding -triple=mips64-unknown-openbsd6.1 < /dev/null | FileCheck -match-full-lines -check-prefix OPENBSD %s
 // RUN: %clang_cc1 -E -dM -ffreestanding -triple=mips64el-unknown-openbsd6.1 < /dev/null | FileCheck -match-full-lines -check-prefix OPENBSD %s
 // RUN: %clang_cc1 -E -dM -ffreestanding -triple=sparc64-unknown-openbsd6.1 < /dev/null | FileCheck -match-full-lines -check-prefix OPENBSD %s

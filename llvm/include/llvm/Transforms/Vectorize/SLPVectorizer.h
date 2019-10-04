@@ -111,6 +111,7 @@ private:
   /// collected in GEPs.
   bool vectorizeGEPIndices(BasicBlock *BB, slpvectorizer::BoUpSLP &R);
 
+<<<<<<< HEAD
   /// Try to find horizontal reduction or otherwise vectorize a chain of binary
   /// operators.
   bool vectorizeRootInstruction(PHINode *P, Value *V, BasicBlock *BB,
@@ -134,6 +135,9 @@ private:
                                    BasicBlock *BB, slpvectorizer::BoUpSLP &R);
 
   /// Scan the basic block and look for patterns that are likely to start
+=======
+  /// \brief Scan the basic block and look for patterns that are likely to start
+>>>>>>> origin/release/4.x
   /// a vectorization chain.
   bool vectorizeChainsInBlock(BasicBlock *BB, slpvectorizer::BoUpSLP &R);
 

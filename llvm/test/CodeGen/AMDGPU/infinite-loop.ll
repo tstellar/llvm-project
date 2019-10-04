@@ -1,5 +1,9 @@
 ; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=SI %s
+<<<<<<< HEAD
 ; RUN: opt -mtriple=amdgcn-- -S -amdgpu-unify-divergent-exit-nodes -verify %s | FileCheck -check-prefix=IR %s
+=======
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=SI %s
+>>>>>>> origin/release/4.x
 
 ; SI-LABEL: {{^}}infinite_loop:
 ; SI: v_mov_b32_e32 [[REG:v[0-9]+]], 0x3e7

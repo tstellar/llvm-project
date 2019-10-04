@@ -9664,11 +9664,44 @@ SDValue DAGCombiner::visitZERO_EXTEND(SDNode *N) {
                        X, DAG.getConstant(Mask, DL, VT));
   }
 
+<<<<<<< HEAD
   // Try to simplify (zext (load x)).
   if (SDValue foldedExt =
           tryToFoldExtOfLoad(DAG, *this, TLI, VT, LegalOperations, N, N0,
                              ISD::ZEXTLOAD, ISD::ZERO_EXTEND))
     return foldedExt;
+=======
+  // fold (zext (load x)) -> (zext (truncate (zextload x)))
+  // Only generate vector extloads when 1) they're legal, and 2) they are
+  // deemed desirable by the target.
+  if (ISD::isNON_EXTLoad(N0.getNode()) && ISD::isUNINDEXEDLoad(N0.getNode()) &&
+      ((!LegalOperations && !VT.isVector() &&
+        !cast<LoadSDNode>(N0)->isVolatile()) ||
+       TLI.isLoadExtLegal(ISD::ZEXTLOAD, VT, N0.getValueType()))) {
+    bool DoXform = true;
+    SmallVector<SDNode*, 4> SetCCs;
+    if (!N0.hasOneUse())
+      DoXform = ExtendUsesToFormExtLoad(N, N0, ISD::ZERO_EXTEND, SetCCs, TLI);
+    if (VT.isVector())
+      DoXform &= TLI.isVectorLoadExtDesirable(SDValue(N, 0));
+    if (DoXform) {
+      LoadSDNode *LN0 = cast<LoadSDNode>(N0);
+      SDValue ExtLoad = DAG.getExtLoad(ISD::ZEXTLOAD, SDLoc(N), VT,
+                                       LN0->getChain(),
+                                       LN0->getBasePtr(), N0.getValueType(),
+                                       LN0->getMemOperand());
+
+      SDValue Trunc = DAG.getNode(ISD::TRUNCATE, SDLoc(N0),
+                                  N0.getValueType(), ExtLoad);
+      CombineTo(N0.getNode(), Trunc, ExtLoad.getValue(1));
+
+      ExtendSetCCUses(SetCCs, Trunc, ExtLoad, SDLoc(N),
+                      ISD::ZERO_EXTEND);
+      CombineTo(N, ExtLoad);
+      return SDValue(N, 0);   // Return N so it doesn't get rechecked!
+    }
+  }
+>>>>>>> origin/release/4.x
 
   // fold (zext (load x)) to multiple smaller zextloads.
   // Only on illegal but splittable vectors.
@@ -11280,7 +11313,13 @@ SDValue DAGCombiner::visitFADDForFMACombine(SDNode *N) {
   // More folding opportunities when target permits.
   if (Aggressive) {
     // fold (fadd (fma x, y, (fmul u, v)), z) -> (fma x, y (fma u, v, z))
+<<<<<<< HEAD
     if (CanFuse &&
+=======
+    // FIXME: The UnsafeAlgebra flag should be propagated to FMA/FMAD, but FMF
+    // are currently only supported on binary nodes.
+    if (Options.UnsafeFPMath &&
+>>>>>>> origin/release/4.x
         N0.getOpcode() == PreferredFusedOpcode &&
         N0.getOperand(2).getOpcode() == ISD::FMUL &&
         N0->hasOneUse() && N0.getOperand(2)->hasOneUse()) {
@@ -11293,7 +11332,13 @@ SDValue DAGCombiner::visitFADDForFMACombine(SDNode *N) {
     }
 
     // fold (fadd x, (fma y, z, (fmul u, v)) -> (fma y, z (fma u, v, x))
+<<<<<<< HEAD
     if (CanFuse &&
+=======
+    // FIXME: The UnsafeAlgebra flag should be propagated to FMA/FMAD, but FMF
+    // are currently only supported on binary nodes.
+    if (Options.UnsafeFPMath &&
+>>>>>>> origin/release/4.x
         N1->getOpcode() == PreferredFusedOpcode &&
         N1.getOperand(2).getOpcode() == ISD::FMUL &&
         N1->hasOneUse() && N1.getOperand(2)->hasOneUse()) {
@@ -11551,9 +11596,18 @@ SDValue DAGCombiner::visitFSUBForFMACombine(SDNode *N) {
   if (Aggressive) {
     // fold (fsub (fma x, y, (fmul u, v)), z)
     //   -> (fma x, y (fma u, v, (fneg z)))
+<<<<<<< HEAD
     if (CanFuse && N0.getOpcode() == PreferredFusedOpcode &&
         isContractableFMUL(N0.getOperand(2)) && N0->hasOneUse() &&
         N0.getOperand(2)->hasOneUse()) {
+=======
+    // FIXME: The UnsafeAlgebra flag should be propagated to FMA/FMAD, but FMF
+    // are currently only supported on binary nodes.
+    if (Options.UnsafeFPMath &&
+        N0.getOpcode() == PreferredFusedOpcode &&
+        N0.getOperand(2).getOpcode() == ISD::FMUL &&
+        N0->hasOneUse() && N0.getOperand(2)->hasOneUse()) {
+>>>>>>> origin/release/4.x
       return DAG.getNode(PreferredFusedOpcode, SL, VT,
                          N0.getOperand(0), N0.getOperand(1),
                          DAG.getNode(PreferredFusedOpcode, SL, VT,
@@ -11565,8 +11619,16 @@ SDValue DAGCombiner::visitFSUBForFMACombine(SDNode *N) {
 
     // fold (fsub x, (fma y, z, (fmul u, v)))
     //   -> (fma (fneg y), z, (fma (fneg u), v, x))
+<<<<<<< HEAD
     if (CanFuse && N1.getOpcode() == PreferredFusedOpcode &&
         isContractableFMUL(N1.getOperand(2))) {
+=======
+    // FIXME: The UnsafeAlgebra flag should be propagated to FMA/FMAD, but FMF
+    // are currently only supported on binary nodes.
+    if (Options.UnsafeFPMath &&
+        N1.getOpcode() == PreferredFusedOpcode &&
+        N1.getOperand(2).getOpcode() == ISD::FMUL) {
+>>>>>>> origin/release/4.x
       SDValue N20 = N1.getOperand(2).getOperand(0);
       SDValue N21 = N1.getOperand(2).getOperand(1);
       return DAG.getNode(PreferredFusedOpcode, SL, VT,

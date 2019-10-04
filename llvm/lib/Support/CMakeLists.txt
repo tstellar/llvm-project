@@ -30,6 +30,12 @@ elseif( CMAKE_HOST_UNIX )
     set(system_libs ${system_libs} atomic)
   endif()
   set(system_libs ${system_libs} ${LLVM_PTHREAD_LIB})
+<<<<<<< HEAD
+=======
+  if ( LLVM_ENABLE_ZLIB AND HAVE_LIBZ )
+    set(system_libs ${system_libs} z)
+  endif()
+>>>>>>> origin/release/4.x
   if( UNIX AND NOT (BEOS OR HAIKU) )
     set(system_libs ${system_libs} m)
   endif()

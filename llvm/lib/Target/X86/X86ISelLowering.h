@@ -705,7 +705,11 @@ namespace llvm {
     void markLibCallAttributes(MachineFunction *MF, unsigned CC,
                                ArgListTy &Args) const override;
 
+<<<<<<< HEAD
     MVT getScalarShiftAmountTy(const DataLayout &, EVT VT) const override {
+=======
+    MVT getScalarShiftAmountTy(const DataLayout &, EVT) const override {
+>>>>>>> origin/release/4.x
       return MVT::i8;
     }
 

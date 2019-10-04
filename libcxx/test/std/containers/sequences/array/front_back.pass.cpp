@@ -24,6 +24,7 @@
 
 #if TEST_STD_VER > 14
 constexpr bool check_front( double val )
+<<<<<<< HEAD
 {
     std::array<double, 3> arr = {1, 2, 3.5};
     return arr.front() == val;
@@ -37,6 +38,21 @@ constexpr bool check_back( double val )
 #endif
 
 int main(int, char**)
+=======
+{ 
+    std::array<double, 3> arr = {1, 2, 3.5};
+	return arr.front() == val;
+}
+
+constexpr bool check_back( double val )
+{ 
+    std::array<double, 3> arr = {1, 2, 3.5};
+	return arr.back() == val;
+}
+#endif
+
+int main()
+>>>>>>> origin/release/4.x
 {
     {
         typedef double T;
@@ -123,6 +139,9 @@ int main(int, char**)
         static_assert (check_back (3.5), "");
     }
 #endif
+<<<<<<< HEAD
 
   return 0;
+=======
+>>>>>>> origin/release/4.x
 }

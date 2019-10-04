@@ -21,6 +21,7 @@ Contents
    pp-trace
    clang-rename
 <<<<<<< HEAD
+<<<<<<< HEAD
    clangd/index
    clangd/DeveloperDocumentation
    clang-doc
@@ -28,6 +29,8 @@ Contents
    clangd
 >>>>>>> origin/release/5.x
 
+=======
+>>>>>>> origin/release/4.x
 
 Indices and tables
 ==================

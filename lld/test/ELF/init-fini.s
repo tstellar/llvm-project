@@ -21,7 +21,11 @@
 // check if the value is null. If it is, it will just call the
 // load address.
 // RUN: ld.lld -shared %t -o %t2 -init=_undef -fini=_undef
+<<<<<<< HEAD
 // RUN: llvm-readobj --dynamic-table %t2 | FileCheck --check-prefix=UNDEF %s
+=======
+// RUN: llvm-readobj -dynamic-table %t2 | FileCheck --check-prefix=UNDEF %s
+>>>>>>> origin/release/4.x
 // UNDEF-NOT: INIT
 // UNDEF-NOT: FINI
 
@@ -30,7 +34,11 @@
 // RUN: echo > %t.s
 // RUN: llvm-mc -filetype=obj -triple=x86_64-unknown-linux %t.s -o %t2.o
 // RUN: ld.lld -shared %t2.o %t.so -o %t2
+<<<<<<< HEAD
 // RUN: llvm-readobj --dynamic-table %t2 | FileCheck --check-prefix=SHARED %s
+=======
+// RUN: llvm-readobj -dynamic-table %t2 | FileCheck --check-prefix=SHARED %s
+>>>>>>> origin/release/4.x
 // SHARED-NOT: INIT
 // SHARED-NOT: FINI
 

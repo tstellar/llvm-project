@@ -3,7 +3,11 @@
 // Note: [class.inhctor] was removed by P0136R1. This tests the new behavior
 // for the wording that used to be there.
 
+<<<<<<< HEAD
 struct A { // expected-note 4{{candidate constructor (the implicit}}
+=======
+struct A { // expected-note 4{{candidate is the implicit}}
+>>>>>>> origin/release/4.x
   A(...); // expected-note 4{{candidate constructor}} expected-note 4{{candidate inherited constructor}}
   A(int = 0, int = 0, int = 0, int = 0, ...); // expected-note 3{{candidate constructor}} expected-note 3{{candidate inherited constructor}}
   A(int = 0, int = 0, ...); // expected-note 3{{candidate constructor}} expected-note 3{{candidate inherited constructor}}
@@ -14,7 +18,11 @@ struct A { // expected-note 4{{candidate constructor (the implicit}}
   template<typename T, int N> A(const T (&)[N], int = 0); // expected-note {{candidate constructor}} expected-note {{candidate inherited constructor}}
 };
 
+<<<<<<< HEAD
 struct B : A { // expected-note 4{{candidate constructor (the implicit}}
+=======
+struct B : A { // expected-note 4{{candidate is the implicit}}
+>>>>>>> origin/release/4.x
   using A::A; // expected-note 15{{inherited here}}
   B(void*);
 };

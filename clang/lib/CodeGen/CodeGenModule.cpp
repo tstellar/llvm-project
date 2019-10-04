@@ -171,6 +171,12 @@ CodeGenModule::CodeGenModule(ASTContext &C, const HeaderSearchOptions &HSO,
   // CoverageMappingModuleGen object.
   if (CodeGenOpts.CoverageMapping)
     CoverageMapping.reset(new CoverageMappingModuleGen(*this, *CoverageInfo));
+
+  // Record mregparm value now so it is visible through rest of codegen.
+  if (Context.getTargetInfo().getTriple().getArch() == llvm::Triple::x86)
+    getModule().addModuleFlag(llvm::Module::Error, "NumRegisterParameters",
+                              CodeGenOpts.NumRegisterParameters);
+
 }
 
 CodeGenModule::~CodeGenModule() {}
@@ -450,6 +456,7 @@ void CodeGenModule::Release() {
     EmitModuleLinkOptions();
   }
 
+<<<<<<< HEAD
   // On ELF we pass the dependent library specifiers directly to the linker
   // without manipulating them. This is in contrast to other platforms where
   // they are mapped to a specific linker option by the compiler. This
@@ -473,6 +480,8 @@ void CodeGenModule::Release() {
     getModule().addModuleFlag(llvm::Module::Error, "NumRegisterParameters",
                               CodeGenOpts.NumRegisterParameters);
 
+=======
+>>>>>>> origin/release/4.x
   if (CodeGenOpts.DwarfVersion) {
     // We actually want the latest version when there are conflicts.
     // We can change from Warning to Latest if such mode is supported.

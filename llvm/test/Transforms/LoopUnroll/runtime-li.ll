@@ -17,6 +17,7 @@ header.outer:                                     ; preds = %latch.outer, %entry
   br label %header.inner
 
 header.inner:                                     ; preds = %latch.inner, %header.outer
+<<<<<<< HEAD
   %tmp5 = load i64, i64* %q1, align 8
   %tmp6 = icmp eq double* %p, %arg
   br i1 undef, label %exiting.inner, label %latch.outer
@@ -26,6 +27,14 @@ exiting.inner:                                     ; preds = %latch.inner, %head
 
 latch.inner:                                      ; preds = %header.inner
   store i64 %tmp5, i64* %q2, align 8
+=======
+  br i1 undef, label %latch.inner, label %latch.outer
+
+latch.inner:                                      ; preds = %header.inner
+  %tmp5 = load i64, i64* %q1, align 8
+  store i64 %tmp5, i64* %q2, align 8
+  %tmp6 = icmp eq double* %p, %arg
+>>>>>>> origin/release/4.x
   br label %header.inner
 
 latch.outer:                                      ; preds = %header.inner

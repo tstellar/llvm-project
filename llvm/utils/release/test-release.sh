@@ -39,7 +39,11 @@ do_test_suite="yes"
 do_openmp="yes"
 do_lld="yes"
 do_lldb="no"
+<<<<<<< HEAD
 do_polly="yes"
+=======
+do_polly="no"
+>>>>>>> origin/release/4.x
 BuildDir="`pwd`"
 ExtraConfigureFlags=""
 ExportBranch=""
@@ -71,7 +75,12 @@ function usage() {
     echo " -no-lld              Disable check-out & build lld"
     echo " -lldb                Enable check-out & build lldb"
     echo " -no-lldb             Disable check-out & build lldb (default)"
+<<<<<<< HEAD
     echo " -no-polly            Disable check-out & build Polly"
+=======
+    echo " -polly               Enable check-out & build Polly"
+    echo " -no-polly            Disable check-out & build Polly (default)"
+>>>>>>> origin/release/4.x
 }
 
 while [ $# -gt 0 ]; do
@@ -163,6 +172,12 @@ while [ $# -gt 0 ]; do
         -no-lldb )
             do_lldb="no"
             ;;
+<<<<<<< HEAD
+=======
+        -polly )
+            do_polly="yes"
+            ;;
+>>>>>>> origin/release/4.x
         -no-polly )
             do_polly="no"
             ;;

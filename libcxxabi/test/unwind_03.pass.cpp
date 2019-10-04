@@ -7,7 +7,11 @@
 //===----------------------------------------------------------------------===//
 
 // UNSUPPORTED: libcxxabi-no-exceptions
+<<<<<<< HEAD
 // REQUIRES: c++98 || c++03 || c++11 || c++14
+=======
+// REQUIRES-ANY: c++98, c++03, c++11, c++14
+>>>>>>> origin/release/4.x
 
 #include <exception>
 #include <stdlib.h>

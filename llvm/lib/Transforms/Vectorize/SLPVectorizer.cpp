@@ -5595,6 +5595,7 @@ bool SLPVectorizerPass::tryToVectorize(Instruction *I, BoUpSLP &R) {
   if (!I)
     return false;
 
+<<<<<<< HEAD
   if (!isa<BinaryOperator>(I) && !isa<CmpInst>(I))
     return false;
 
@@ -5606,32 +5607,38 @@ bool SLPVectorizerPass::tryToVectorize(Instruction *I, BoUpSLP &R) {
   if (!Op0 || !Op1 || Op0->getParent() != P || Op1->getParent() != P)
     return false;
 
+=======
+>>>>>>> origin/release/4.x
   // Try to vectorize V.
-  if (tryToVectorizePair(Op0, Op1, R))
+  if (tryToVectorizePair(V->getOperand(0), V->getOperand(1), R))
     return true;
 
-  auto *A = dyn_cast<BinaryOperator>(Op0);
-  auto *B = dyn_cast<BinaryOperator>(Op1);
+  BinaryOperator *A = dyn_cast<BinaryOperator>(V->getOperand(0));
+  BinaryOperator *B = dyn_cast<BinaryOperator>(V->getOperand(1));
   // Try to skip B.
   if (B && B->hasOneUse()) {
-    auto *B0 = dyn_cast<BinaryOperator>(B->getOperand(0));
-    auto *B1 = dyn_cast<BinaryOperator>(B->getOperand(1));
-    if (B0 && B0->getParent() == P && tryToVectorizePair(A, B0, R))
+    BinaryOperator *B0 = dyn_cast<BinaryOperator>(B->getOperand(0));
+    BinaryOperator *B1 = dyn_cast<BinaryOperator>(B->getOperand(1));
+    if (tryToVectorizePair(A, B0, R)) {
       return true;
-    if (B1 && B1->getParent() == P && tryToVectorizePair(A, B1, R))
+    }
+    if (tryToVectorizePair(A, B1, R)) {
       return true;
+    }
   }
 
   // Try to skip A.
   if (A && A->hasOneUse()) {
-    auto *A0 = dyn_cast<BinaryOperator>(A->getOperand(0));
-    auto *A1 = dyn_cast<BinaryOperator>(A->getOperand(1));
-    if (A0 && A0->getParent() == P && tryToVectorizePair(A0, B, R))
+    BinaryOperator *A0 = dyn_cast<BinaryOperator>(A->getOperand(0));
+    BinaryOperator *A1 = dyn_cast<BinaryOperator>(A->getOperand(1));
+    if (tryToVectorizePair(A0, B, R)) {
       return true;
-    if (A1 && A1->getParent() == P && tryToVectorizePair(A1, B, R))
+    }
+    if (tryToVectorizePair(A1, B, R)) {
       return true;
+    }
   }
-  return false;
+  return 0;
 }
 
 /// Generate a shuffle mask to be used in a reduction tree.
@@ -6676,6 +6683,7 @@ static Value *getReductionValue(const DominatorTree *DT, PHINode *P,
   return nullptr;
 }
 
+<<<<<<< HEAD
 /// Attempt to reduce a horizontal reduction.
 /// If it is legal to match a horizontal reduction feeding the phi node \a P
 /// with reduction operators \a Root (or one of its operands) in a basic block
@@ -6839,6 +6847,31 @@ bool SLPVectorizerPass::vectorizeSimpleInstructions(
   }
   Instructions.clear();
   return OpsChanged;
+=======
+/// \brief Attempt to reduce a horizontal reduction.
+/// If it is legal to match a horizontal reduction feeding
+/// the phi node P with reduction operators BI, then check if it
+/// can be done.
+/// \returns true if a horizontal reduction was matched and reduced.
+/// \returns false if a horizontal reduction was not matched.
+static bool canMatchHorizontalReduction(PHINode *P, BinaryOperator *BI,
+                                        BoUpSLP &R, TargetTransformInfo *TTI,
+                                        unsigned MinRegSize) {
+  if (!ShouldVectorizeHor)
+    return false;
+
+  HorizontalReduction HorRdx(MinRegSize);
+  if (!HorRdx.matchAssociativeReduction(P, BI))
+    return false;
+
+  // If there is a sufficient number of reduction values, reduce
+  // to a nearby power-of-2. Can safely generate oversized
+  // vectors and rely on the backend to split them to legal sizes.
+  HorRdx.ReduxWidth =
+    std::max((uint64_t)4, PowerOf2Floor(HorRdx.numReductionValues()));
+
+  return HorRdx.tryToReduce(R, TTI);
+>>>>>>> origin/release/4.x
 }
 
 bool SLPVectorizerPass::vectorizeChainsInBlock(BasicBlock *BB, BoUpSLP &R) {
@@ -6929,17 +6962,38 @@ bool SLPVectorizerPass::vectorizeChainsInBlock(BasicBlock *BB, BoUpSLP &R) {
       if (P->getNumIncomingValues() != 2)
         return Changed;
 
+      Value *Rdx = getReductionValue(DT, P, BB, LI);
+
+      // Check if this is a Binary Operator.
+      BinaryOperator *BI = dyn_cast_or_null<BinaryOperator>(Rdx);
+      if (!BI)
+        continue;
+
       // Try to match and vectorize a horizontal reduction.
-      if (vectorizeRootInstruction(P, getReductionValue(DT, P, BB, LI), BB, R,
-                                   TTI)) {
+      if (canMatchHorizontalReduction(P, BI, R, TTI, R.getMinVecRegSize())) {
         Changed = true;
         it = BB->begin();
         e = BB->end();
         continue;
       }
+
+     Value *Inst = BI->getOperand(0);
+      if (Inst == P)
+        Inst = BI->getOperand(1);
+
+      if (tryToVectorize(dyn_cast<BinaryOperator>(Inst), R)) {
+        // We would like to start over since some instructions are deleted
+        // and the iterator may become invalid value.
+        Changed = true;
+        it = BB->begin();
+        e = BB->end();
+        continue;
+      }
+
       continue;
     }
 
+<<<<<<< HEAD
     // Ran into an instruction without users, like terminator, or function call
     // with ignored return value, store. Ignore unused instructions (basing on
     // instruction type, except for CallInst and InvokeInst).
@@ -6958,6 +7012,43 @@ bool SLPVectorizerPass::vectorizeChainsInBlock(BasicBlock *BB, BoUpSLP &R) {
       // possible.
       OpsChanged |= vectorizeSimpleInstructions(PostProcessInstructions, BB, R);
       if (OpsChanged) {
+=======
+    if (ShouldStartVectorizeHorAtStore)
+      if (StoreInst *SI = dyn_cast<StoreInst>(it))
+        if (BinaryOperator *BinOp =
+                dyn_cast<BinaryOperator>(SI->getValueOperand())) {
+          if (canMatchHorizontalReduction(nullptr, BinOp, R, TTI,
+                                          R.getMinVecRegSize()) ||
+              tryToVectorize(BinOp, R)) {
+            Changed = true;
+            it = BB->begin();
+            e = BB->end();
+            continue;
+          }
+        }
+
+    // Try to vectorize horizontal reductions feeding into a return.
+    if (ReturnInst *RI = dyn_cast<ReturnInst>(it))
+      if (RI->getNumOperands() != 0)
+        if (BinaryOperator *BinOp =
+                dyn_cast<BinaryOperator>(RI->getOperand(0))) {
+          DEBUG(dbgs() << "SLP: Found a return to vectorize.\n");
+          if (canMatchHorizontalReduction(nullptr, BinOp, R, TTI,
+                                          R.getMinVecRegSize()) ||
+              tryToVectorizePair(BinOp->getOperand(0), BinOp->getOperand(1),
+                                 R)) {
+            Changed = true;
+            it = BB->begin();
+            e = BB->end();
+            continue;
+          }
+        }
+
+    // Try to vectorize trees that start at compare instructions.
+    if (CmpInst *CI = dyn_cast<CmpInst>(it)) {
+      if (tryToVectorizePair(CI->getOperand(0), CI->getOperand(1), R)) {
+        Changed = true;
+>>>>>>> origin/release/4.x
         // We would like to start over since some instructions are deleted
         // and the iterator may become invalid value.
         Changed = true;
@@ -6965,6 +7056,23 @@ bool SLPVectorizerPass::vectorizeChainsInBlock(BasicBlock *BB, BoUpSLP &R) {
         e = BB->end();
         continue;
       }
+<<<<<<< HEAD
+=======
+
+      for (int i = 0; i < 2; ++i) {
+        if (BinaryOperator *BI = dyn_cast<BinaryOperator>(CI->getOperand(i))) {
+          if (tryToVectorizePair(BI->getOperand(0), BI->getOperand(1), R)) {
+            Changed = true;
+            // We would like to start over since some instructions are deleted
+            // and the iterator may become invalid value.
+            it = BB->begin();
+            e = BB->end();
+            break;
+          }
+        }
+      }
+      continue;
+>>>>>>> origin/release/4.x
     }
 
     if (isa<InsertElementInst>(it) || isa<CmpInst>(it) ||

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ; RUN: opt -S -codegenprepare -mtriple=amdgcn-unknown-unknown -mcpu=tahiti < %s | FileCheck -check-prefix=OPT -check-prefix=OPT-SI -check-prefix=OPT-SICIVI %s
 ; RUN: opt -S -codegenprepare -mtriple=amdgcn-unknown-unknown -mcpu=bonaire < %s | FileCheck -check-prefix=OPT -check-prefix=OPT-CI -check-prefix=OPT-SICIVI %s
 ; RUN: opt -S -codegenprepare -mtriple=amdgcn-unknown-unknown -mcpu=tonga -mattr=-flat-for-global < %s | FileCheck -check-prefix=OPT -check-prefix=OPT-VI -check-prefix=OPT-SICIVI %s
@@ -8,6 +9,14 @@
 ; RUN: llc -march=amdgcn -mcpu=gfx900 -mattr=-promote-alloca -amdgpu-scalarize-global-loads=false -amdgpu-sroa=0 < %s | FileCheck -check-prefix=GCN -check-prefix=GFX9 %s
 
 target datalayout = "e-p:64:64-p1:64:64-p2:32:32-p3:32:32-p4:64:64-p5:32:32-p6:32:32-i64:64-v16:16-v24:32-v32:32-v48:64-v96:128-v192:256-v256:256-v512:512-v1024:1024-v2048:2048-n32:64-S32-A5"
+=======
+; RUN: opt -S -codegenprepare -mtriple=amdgcn-unknown-unknown -mcpu=tahiti < %s | FileCheck -check-prefix=OPT -check-prefix=OPT-SI %s
+; RUN: opt -S -codegenprepare -mtriple=amdgcn-unknown-unknown -mcpu=bonaire < %s | FileCheck -check-prefix=OPT -check-prefix=OPT-CI %s
+; RUN: opt -S -codegenprepare -mtriple=amdgcn-unknown-unknown -mcpu=tonga -mattr=-flat-for-global < %s | FileCheck -check-prefix=OPT -check-prefix=OPT-VI %s
+; RUN: llc -march=amdgcn -mcpu=tahiti -mattr=-promote-alloca -amdgpu-sroa=0 < %s | FileCheck -check-prefix=GCN -check-prefix=SI %s
+; RUN: llc -march=amdgcn -mcpu=bonaire -mattr=-promote-alloca -amdgpu-sroa=0 < %s | FileCheck -check-prefix=GCN -check-prefix=CI %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -mattr=-promote-alloca -amdgpu-sroa=0 < %s | FileCheck -check-prefix=GCN -check-prefix=VI %s
+>>>>>>> origin/release/4.x
 
 ; OPT-LABEL: @test_sink_global_small_offset_i32(
 ; OPT-CI-NOT: getelementptr i32, i32 addrspace(1)* %in

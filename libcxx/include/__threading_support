@@ -42,12 +42,15 @@
 #define _LIBCPP_NO_THREAD_SAFETY_ANALYSIS
 #endif
 
+<<<<<<< HEAD
 typedef ::timespec __libcpp_timespec_t;
 #endif // !defined(_LIBCPP_HAS_NO_THREADS)
 
 _LIBCPP_PUSH_MACROS
 #include <__undef_macros>
 
+=======
+>>>>>>> origin/release/4.x
 _LIBCPP_BEGIN_NAMESPACE_STD
 
 #if !defined(_LIBCPP_HAS_NO_THREADS)
@@ -123,7 +126,11 @@ _LIBCPP_THREAD_ABI_VISIBILITY _LIBCPP_NO_THREAD_SAFETY_ANALYSIS
 int __libcpp_recursive_mutex_lock(__libcpp_recursive_mutex_t *__m);
 
 _LIBCPP_THREAD_ABI_VISIBILITY _LIBCPP_NO_THREAD_SAFETY_ANALYSIS
+<<<<<<< HEAD
 bool __libcpp_recursive_mutex_trylock(__libcpp_recursive_mutex_t *__m);
+=======
+int __libcpp_recursive_mutex_trylock(__libcpp_recursive_mutex_t *__m);
+>>>>>>> origin/release/4.x
 
 _LIBCPP_THREAD_ABI_VISIBILITY _LIBCPP_NO_THREAD_SAFETY_ANALYSIS
 int __libcpp_recursive_mutex_unlock(__libcpp_recursive_mutex_t *__m);
@@ -135,7 +142,11 @@ _LIBCPP_THREAD_ABI_VISIBILITY _LIBCPP_NO_THREAD_SAFETY_ANALYSIS
 int __libcpp_mutex_lock(__libcpp_mutex_t *__m);
 
 _LIBCPP_THREAD_ABI_VISIBILITY _LIBCPP_NO_THREAD_SAFETY_ANALYSIS
+<<<<<<< HEAD
 bool __libcpp_mutex_trylock(__libcpp_mutex_t *__m);
+=======
+int __libcpp_mutex_trylock(__libcpp_mutex_t *__m);
+>>>>>>> origin/release/4.x
 
 _LIBCPP_THREAD_ABI_VISIBILITY _LIBCPP_NO_THREAD_SAFETY_ANALYSIS
 int __libcpp_mutex_unlock(__libcpp_mutex_t *__m);

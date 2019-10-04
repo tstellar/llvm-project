@@ -9,6 +9,7 @@
 #define static_assert(...) __extension__ _Static_assert(__VA_ARGS__)
 #endif
 
+<<<<<<< HEAD
 namespace dr1813 { // dr1813: 7
   struct B { int i; };
   struct C : B {};
@@ -81,6 +82,8 @@ namespace dr1881 { // dr1881: 7
   static_assert(!__is_standard_layout(D), "");
 }
 
+=======
+>>>>>>> origin/release/4.x
 void dr1891() { // dr1891: 4
 #if __cplusplus >= 201103L
   int n;

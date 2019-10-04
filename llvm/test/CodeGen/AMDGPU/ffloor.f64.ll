@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=FUNC %s
 ; RUN: llc -march=amdgcn -mcpu=bonaire -verify-machineinstrs < %s | FileCheck -check-prefix=CI -check-prefix=FUNC %s
 ; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=CI -check-prefix=FUNC %s
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs -enable-unsafe-fp-math < %s | FileCheck -check-prefix=SI -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=bonaire -verify-machineinstrs -enable-unsafe-fp-math < %s | FileCheck -check-prefix=CI -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs -enable-unsafe-fp-math < %s | FileCheck -check-prefix=CI -check-prefix=FUNC %s
+>>>>>>> origin/release/4.x
 
 declare double @llvm.fabs.f64(double %Val)
 declare double @llvm.floor.f64(double) nounwind readnone

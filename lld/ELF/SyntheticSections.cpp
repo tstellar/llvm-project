@@ -52,7 +52,19 @@ using llvm::support::endian::read32le;
 using llvm::support::endian::write32le;
 using llvm::support::endian::write64le;
 
+<<<<<<< HEAD
 constexpr size_t MergeNoTailSection::numShards;
+=======
+  if (!Config->DefineCommon)
+    return Ret;
+
+  // Sort the common symbols by alignment as an heuristic to pack them better.
+  std::vector<DefinedCommon *> Syms = getCommonSymbols<ELFT>();
+  std::stable_sort(Syms.begin(), Syms.end(),
+                   [](const DefinedCommon *A, const DefinedCommon *B) {
+                     return A->Alignment > B->Alignment;
+                   });
+>>>>>>> origin/release/4.x
 
 static uint64_t readUint(uint8_t *buf) {
   return config->is64 ? read64(buf) : read32(buf);
@@ -677,9 +689,16 @@ void GotSection::writeTo(uint8_t *buf) {
   relocateAlloc(buf - outSecOff, buf - outSecOff + size);
 }
 
+<<<<<<< HEAD
 static uint64_t getMipsPageAddr(uint64_t addr) {
   return (addr + 0x8000) & ~0xffff;
 }
+=======
+template <class ELFT>
+MipsGotSection<ELFT>::MipsGotSection()
+    : SyntheticSection<ELFT>(SHF_ALLOC | SHF_WRITE | SHF_MIPS_GPREL,
+                             SHT_PROGBITS, 16, ".got") {}
+>>>>>>> origin/release/4.x
 
 static uint64_t getMipsPageCount(uint64_t size) {
   return (size + 0xfffe) / 0xffff + 1;
@@ -1220,6 +1239,7 @@ DynamicSection<ELFT>::DynamicSection()
   // which passes -z rodynamic.
   // See "Special Section" in Chapter 4 in the following document:
   // ftp://www.linux-mips.org/pub/linux/mips/doc/ABI/mipsabi.pdf
+<<<<<<< HEAD
   if (config->emachine == EM_MIPS || config->zRodynamic)
     this->flags = SHF_ALLOC;
 }
@@ -1227,6 +1247,146 @@ DynamicSection<ELFT>::DynamicSection()
 template <class ELFT>
 void DynamicSection<ELFT>::add(int32_t tag, std::function<uint64_t()> fn) {
   entries.push_back({tag, fn});
+=======
+  if (Config->EMachine == EM_MIPS)
+    this->Flags = SHF_ALLOC;
+
+  addEntries();
+}
+
+// There are some dynamic entries that don't depend on other sections.
+// Such entries can be set early.
+template <class ELFT> void DynamicSection<ELFT>::addEntries() {
+  // Add strings to .dynstr early so that .dynstr's size will be
+  // fixed early.
+  for (StringRef S : Config->AuxiliaryList)
+    add({DT_AUXILIARY, In<ELFT>::DynStrTab->addString(S)});
+  if (!Config->RPath.empty())
+    add({Config->EnableNewDtags ? DT_RUNPATH : DT_RPATH,
+         In<ELFT>::DynStrTab->addString(Config->RPath)});
+  for (SharedFile<ELFT> *F : Symtab<ELFT>::X->getSharedFiles())
+    if (F->isNeeded())
+      add({DT_NEEDED, In<ELFT>::DynStrTab->addString(F->getSoName())});
+  if (!Config->SoName.empty())
+    add({DT_SONAME, In<ELFT>::DynStrTab->addString(Config->SoName)});
+
+  // Set DT_FLAGS and DT_FLAGS_1.
+  uint32_t DtFlags = 0;
+  uint32_t DtFlags1 = 0;
+  if (Config->Bsymbolic)
+    DtFlags |= DF_SYMBOLIC;
+  if (Config->ZNodelete)
+    DtFlags1 |= DF_1_NODELETE;
+  if (Config->ZNodlopen)
+    DtFlags1 |= DF_1_NOOPEN;
+  if (Config->ZNow) {
+    DtFlags |= DF_BIND_NOW;
+    DtFlags1 |= DF_1_NOW;
+  }
+  if (Config->ZOrigin) {
+    DtFlags |= DF_ORIGIN;
+    DtFlags1 |= DF_1_ORIGIN;
+  }
+
+  if (DtFlags)
+    add({DT_FLAGS, DtFlags});
+  if (DtFlags1)
+    add({DT_FLAGS_1, DtFlags1});
+
+  if (!Config->Shared && !Config->Relocatable)
+    add({DT_DEBUG, (uint64_t)0});
+}
+
+// Add remaining entries to complete .dynamic contents.
+template <class ELFT> void DynamicSection<ELFT>::finalize() {
+  if (this->Size)
+    return; // Already finalized.
+
+  this->Link = In<ELFT>::DynStrTab->OutSec->SectionIndex;
+  if (In<ELFT>::RelaDyn->OutSec->Size > 0) {
+    bool IsRela = Config->Rela;
+    add({IsRela ? DT_RELA : DT_REL, In<ELFT>::RelaDyn});
+    add({IsRela ? DT_RELASZ : DT_RELSZ, In<ELFT>::RelaDyn->OutSec->Size});
+    add({IsRela ? DT_RELAENT : DT_RELENT,
+         uintX_t(IsRela ? sizeof(Elf_Rela) : sizeof(Elf_Rel))});
+
+    // MIPS dynamic loader does not support RELCOUNT tag.
+    // The problem is in the tight relation between dynamic
+    // relocations and GOT. So do not emit this tag on MIPS.
+    if (Config->EMachine != EM_MIPS) {
+      size_t NumRelativeRels = In<ELFT>::RelaDyn->getRelativeRelocCount();
+      if (Config->ZCombreloc && NumRelativeRels)
+        add({IsRela ? DT_RELACOUNT : DT_RELCOUNT, NumRelativeRels});
+    }
+  }
+  if (In<ELFT>::RelaPlt->OutSec->Size > 0) {
+    add({DT_JMPREL, In<ELFT>::RelaPlt});
+    add({DT_PLTRELSZ, In<ELFT>::RelaPlt->OutSec->Size});
+    add({Config->EMachine == EM_MIPS ? DT_MIPS_PLTGOT : DT_PLTGOT,
+         In<ELFT>::GotPlt});
+    add({DT_PLTREL, uint64_t(Config->Rela ? DT_RELA : DT_REL)});
+  }
+
+  add({DT_SYMTAB, In<ELFT>::DynSymTab});
+  add({DT_SYMENT, sizeof(Elf_Sym)});
+  add({DT_STRTAB, In<ELFT>::DynStrTab});
+  add({DT_STRSZ, In<ELFT>::DynStrTab->getSize()});
+  if (In<ELFT>::GnuHashTab)
+    add({DT_GNU_HASH, In<ELFT>::GnuHashTab});
+  if (In<ELFT>::HashTab)
+    add({DT_HASH, In<ELFT>::HashTab});
+
+  if (Out<ELFT>::PreinitArray) {
+    add({DT_PREINIT_ARRAY, Out<ELFT>::PreinitArray});
+    add({DT_PREINIT_ARRAYSZ, Out<ELFT>::PreinitArray, Entry::SecSize});
+  }
+  if (Out<ELFT>::InitArray) {
+    add({DT_INIT_ARRAY, Out<ELFT>::InitArray});
+    add({DT_INIT_ARRAYSZ, Out<ELFT>::InitArray, Entry::SecSize});
+  }
+  if (Out<ELFT>::FiniArray) {
+    add({DT_FINI_ARRAY, Out<ELFT>::FiniArray});
+    add({DT_FINI_ARRAYSZ, Out<ELFT>::FiniArray, Entry::SecSize});
+  }
+
+  if (SymbolBody *B = Symtab<ELFT>::X->findInCurrentDSO(Config->Init))
+    add({DT_INIT, B});
+  if (SymbolBody *B = Symtab<ELFT>::X->findInCurrentDSO(Config->Fini))
+    add({DT_FINI, B});
+
+  bool HasVerNeed = In<ELFT>::VerNeed->getNeedNum() != 0;
+  if (HasVerNeed || In<ELFT>::VerDef)
+    add({DT_VERSYM, In<ELFT>::VerSym});
+  if (In<ELFT>::VerDef) {
+    add({DT_VERDEF, In<ELFT>::VerDef});
+    add({DT_VERDEFNUM, getVerDefNum()});
+  }
+  if (HasVerNeed) {
+    add({DT_VERNEED, In<ELFT>::VerNeed});
+    add({DT_VERNEEDNUM, In<ELFT>::VerNeed->getNeedNum()});
+  }
+
+  if (Config->EMachine == EM_MIPS) {
+    add({DT_MIPS_RLD_VERSION, 1});
+    add({DT_MIPS_FLAGS, RHF_NOTPOT});
+    add({DT_MIPS_BASE_ADDRESS, Config->ImageBase});
+    add({DT_MIPS_SYMTABNO, In<ELFT>::DynSymTab->getNumSymbols()});
+    add({DT_MIPS_LOCAL_GOTNO, In<ELFT>::MipsGot->getLocalEntriesNum()});
+    if (const SymbolBody *B = In<ELFT>::MipsGot->getFirstGlobalEntry())
+      add({DT_MIPS_GOTSYM, B->DynsymIndex});
+    else
+      add({DT_MIPS_GOTSYM, In<ELFT>::DynSymTab->getNumSymbols()});
+    add({DT_PLTGOT, In<ELFT>::MipsGot});
+    if (In<ELFT>::MipsRldMap)
+      add({DT_MIPS_RLD_MAP, In<ELFT>::MipsRldMap});
+  }
+
+  this->OutSec->Entsize = this->Entsize;
+  this->OutSec->Link = this->Link;
+
+  // +1 for DT_NULL
+  this->Size = (Entries.size() + 1) * this->Entsize;
+>>>>>>> origin/release/4.x
 }
 
 template <class ELFT>
@@ -1378,6 +1538,7 @@ template <class ELFT> void DynamicSection<ELFT>::finalizeContents() {
     addInt(isRela ? DT_RELAENT : DT_RELENT,
            isRela ? sizeof(Elf_Rela) : sizeof(Elf_Rel));
 
+<<<<<<< HEAD
     // MIPS dynamic loader does not support RELCOUNT tag.
     // The problem is in the tight relation between dynamic
     // relocations and GOT. So do not emit this tag on MIPS.
@@ -1530,6 +1691,77 @@ template <class ELFT> void DynamicSection<ELFT>::writeTo(uint8_t *buf) {
 uint64_t DynamicReloc::getOffset() const {
   return inputSec->getVA(offsetInSec);
 }
+=======
+// Orders symbols according to their positions in the GOT,
+// in compliance with MIPS ABI rules.
+// See "Global Offset Table" in Chapter 5 in the following document
+// for detailed description:
+// ftp://www.linux-mips.org/pub/linux/mips/doc/ABI/mipsabi.pdf
+static bool sortMipsSymbols(const SymbolBody *L, const SymbolBody *R) {
+  // Sort entries related to non-local preemptible symbols by GOT indexes.
+  // All other entries go to the first part of GOT in arbitrary order.
+  bool LIsInLocalGot = !L->IsInGlobalMipsGot;
+  bool RIsInLocalGot = !R->IsInGlobalMipsGot;
+  if (LIsInLocalGot || RIsInLocalGot)
+    return !RIsInLocalGot;
+  return L->GotIndex < R->GotIndex;
+}
+
+template <class ELFT> void SymbolTableSection<ELFT>::finalize() {
+  this->OutSec->Link = this->Link = StrTabSec.OutSec->SectionIndex;
+  this->OutSec->Info = this->Info = NumLocals + 1;
+  this->OutSec->Entsize = this->Entsize;
+
+  if (Config->Relocatable)
+    return;
+
+  if (!StrTabSec.isDynamic()) {
+    auto GlobBegin = Symbols.begin() + NumLocals;
+    auto It = std::stable_partition(
+        GlobBegin, Symbols.end(), [](const SymbolTableEntry &S) {
+          return S.Symbol->symbol()->computeBinding() == STB_LOCAL;
+        });
+    // update sh_info with number of Global symbols output with computed
+    // binding of STB_LOCAL
+    this->OutSec->Info = this->Info = 1 + It - Symbols.begin();
+    return;
+  }
+
+  if (In<ELFT>::GnuHashTab)
+    // NB: It also sorts Symbols to meet the GNU hash table requirements.
+    In<ELFT>::GnuHashTab->addSymbols(Symbols);
+  else if (Config->EMachine == EM_MIPS)
+    std::stable_sort(Symbols.begin(), Symbols.end(),
+                     [](const SymbolTableEntry &L, const SymbolTableEntry &R) {
+                       return sortMipsSymbols(L.Symbol, R.Symbol);
+                     });
+  size_t I = 0;
+  for (const SymbolTableEntry &S : Symbols)
+    S.Symbol->DynsymIndex = ++I;
+}
+
+template <class ELFT> void SymbolTableSection<ELFT>::addGlobal(SymbolBody *B) {
+  Symbols.push_back({B, StrTabSec.addString(B->getName(), false)});
+}
+
+template <class ELFT> void SymbolTableSection<ELFT>::addLocal(SymbolBody *B) {
+  assert(!StrTabSec.isDynamic());
+  ++NumLocals;
+  Symbols.push_back({B, StrTabSec.addString(B->getName())});
+}
+
+template <class ELFT>
+size_t SymbolTableSection<ELFT>::getSymbolIndex(SymbolBody *Body) {
+  auto I = llvm::find_if(
+      Symbols, [&](const SymbolTableEntry &E) { return E.Symbol == Body; });
+  if (I == Symbols.end())
+    return 0;
+  return I - Symbols.begin() + 1;
+}
+
+template <class ELFT> void SymbolTableSection<ELFT>::writeTo(uint8_t *Buf) {
+  Buf += sizeof(Elf_Sym);
+>>>>>>> origin/release/4.x
 
 int64_t DynamicReloc::computeAddend() const {
   if (useSymVA)
@@ -1605,6 +1837,7 @@ RelrBaseSection::RelrBaseSection()
                        config->wordsize, ".relr.dyn") {}
 
 template <class ELFT>
+<<<<<<< HEAD
 static void encodeDynamicReloc(SymbolTableBaseSection *symTab,
                                typename ELFT::Rela *p,
                                const DynamicReloc &rel) {
@@ -1864,6 +2097,29 @@ bool AndroidPackedRelocationSection<ELFT>::updateAllocSize() {
       offset = r.r_offset;
     }
     addend = 0;
+=======
+void SymbolTableSection<ELFT>::writeLocalSymbols(uint8_t *&Buf) {
+  // Iterate over all input object files to copy their local symbols
+  // to the output symbol table pointed by Buf.
+
+  for (auto I = Symbols.begin(); I != Symbols.begin() + NumLocals; ++I) {
+    const DefinedRegular<ELFT> &Body = *cast<DefinedRegular<ELFT>>(I->Symbol);
+    InputSectionBase<ELFT> *Section = Body.Section;
+    auto *ESym = reinterpret_cast<Elf_Sym *>(Buf);
+
+    if (!Section) {
+      ESym->st_shndx = SHN_ABS;
+      ESym->st_value = Body.Value;
+    } else {
+      const OutputSectionBase *OutSec = Section->OutSec;
+      ESym->st_shndx = OutSec->SectionIndex;
+      ESym->st_value = OutSec->Addr + Section->getOffset(Body);
+    }
+    ESym->st_name = I->StrTabOffset;
+    ESym->st_size = Body.template getSize<ELFT>();
+    ESym->setBindingAndType(STB_LOCAL, Body.Type);
+    Buf += sizeof(*ESym);
+>>>>>>> origin/release/4.x
   }
 
   // Finally the ungrouped non-relative relocations.
@@ -1894,6 +2150,7 @@ bool AndroidPackedRelocationSection<ELFT>::updateAllocSize() {
   return relocData.size() != oldSize;
 }
 
+<<<<<<< HEAD
 template <class ELFT> RelrSection<ELFT>::RelrSection() {
   this->entsize = config->wordsize;
 }
@@ -1972,6 +2229,48 @@ template <class ELFT> bool RelrSection<ELFT>::updateAllocSize() {
         // Fold it.
         bitmap |= 1ULL << (delta / wordsize);
         ++i;
+=======
+template <class ELFT>
+void SymbolTableSection<ELFT>::writeGlobalSymbols(uint8_t *Buf) {
+  // Write the internal symbol table contents to the output symbol table
+  // pointed by Buf.
+  auto *ESym = reinterpret_cast<Elf_Sym *>(Buf);
+
+  for (auto I = Symbols.begin() + NumLocals; I != Symbols.end(); ++I) {
+    const SymbolTableEntry &S = *I;
+    SymbolBody *Body = S.Symbol;
+    size_t StrOff = S.StrTabOffset;
+
+    uint8_t Type = Body->Type;
+    uintX_t Size = Body->getSize<ELFT>();
+
+    ESym->setBindingAndType(Body->symbol()->computeBinding(), Type);
+    ESym->st_size = Size;
+    ESym->st_name = StrOff;
+    ESym->setVisibility(Body->symbol()->Visibility);
+    ESym->st_value = Body->getVA<ELFT>();
+
+    if (const OutputSectionBase *OutSec = getOutputSection(Body)) {
+      ESym->st_shndx = OutSec->SectionIndex;
+    } else if (isa<DefinedRegular<ELFT>>(Body)) {
+      ESym->st_shndx = SHN_ABS;
+    } else if (isa<DefinedCommon>(Body)) {
+      ESym->st_shndx = SHN_COMMON;
+      ESym->st_value = cast<DefinedCommon>(Body)->Alignment;
+    }
+
+    if (Config->EMachine == EM_MIPS) {
+      // On MIPS we need to mark symbol which has a PLT entry and requires
+      // pointer equality by STO_MIPS_PLT flag. That is necessary to help
+      // dynamic linker distinguish such symbols and MIPS lazy-binding stubs.
+      // https://sourceware.org/ml/binutils/2008-07/txt00000.txt
+      if (Body->isInPlt() && Body->NeedsCopyOrPltAddr)
+        ESym->st_other |= STO_MIPS_PLT;
+      if (Config->Relocatable) {
+        auto *D = dyn_cast<DefinedRegular<ELFT>>(Body);
+        if (D && D->isMipsPIC())
+          ESym->st_other |= STO_MIPS_PIC;
+>>>>>>> origin/release/4.x
       }
 
       if (!bitmap)
@@ -2024,6 +2323,7 @@ void SymbolTableBaseSection::finalizeContents() {
     sortSymTabSymbols();
     return;
   }
+<<<<<<< HEAD
 
   // If it is a .dynsym, there should be no local symbols, but we need
   // to do a few things for the dynamic linker.
@@ -2037,6 +2337,17 @@ void SymbolTableBaseSection::finalizeContents() {
     getPartition().gnuHashTab->addSymbols(symbols);
   } else if (config->emachine == EM_MIPS) {
     llvm::stable_sort(symbols, sortMipsSymbols);
+=======
+  case SymbolBody::DefinedCommonKind:
+    if (!Config->DefineCommon)
+      return nullptr;
+    return In<ELFT>::Common->OutSec;
+  case SymbolBody::SharedKind: {
+    auto &SS = cast<SharedSymbol<ELFT>>(*Sym);
+    if (SS.needsCopy())
+      return SS.getBssSectionForCopy();
+    break;
+>>>>>>> origin/release/4.x
   }
 
   // Only the main partition's dynsym indexes are stored in the symbols

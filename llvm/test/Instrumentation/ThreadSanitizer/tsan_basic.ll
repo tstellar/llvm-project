@@ -78,5 +78,9 @@ define void @SwiftErrorCall(i8** swifterror) sanitize_thread {
   call void @SwiftError(i8** %0)
   ret void
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/release/4.x
 ; CHECK: define internal void @tsan.module_ctor()
 ; CHECK: call void @__tsan_init()

@@ -2837,6 +2837,36 @@ public:
     llvm_unreachable("Not Implemented");
   }
 
+<<<<<<< HEAD
+=======
+  struct ArgListEntry {
+    SDValue Node;
+    Type* Ty;
+    bool isSExt     : 1;
+    bool isZExt     : 1;
+    bool isInReg    : 1;
+    bool isSRet     : 1;
+    bool isNest     : 1;
+    bool isByVal    : 1;
+    bool isInAlloca : 1;
+    bool isReturned : 1;
+    bool isSwiftSelf : 1;
+    bool isSwiftError : 1;
+    uint16_t Alignment;
+
+    ArgListEntry() : isSExt(false), isZExt(false), isInReg(false),
+      isSRet(false), isNest(false), isByVal(false), isInAlloca(false),
+      isReturned(false), isSwiftSelf(false), isSwiftError(false),
+      Alignment(0) {}
+
+    void setAttributes(ImmutableCallSite *CS, unsigned AttrIdx);
+  };
+  typedef std::vector<ArgListEntry> ArgListTy;
+
+  virtual void markLibCallAttributes(MachineFunction *MF, unsigned CC,
+                                     ArgListTy &Args) const {};
+
+>>>>>>> origin/release/4.x
   /// This structure contains all information that is necessary for lowering
   /// calls. It is passed to TLI::LowerCallTo when the SelectionDAG builder
   /// needs to lower a call, and targets will see this struct in their LowerCall

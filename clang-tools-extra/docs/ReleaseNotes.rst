@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ====================================================
 Extra Clang Tools 10.0.0 (In-Progress) Release Notes
 ====================================================
@@ -19,6 +20,11 @@ Extra Clang Tools 7.0.0 Release Notes
 Extra Clang Tools 5.0.0 Release Notes
 =====================================
 >>>>>>> origin/release/5.x
+=======
+=====================================
+Extra Clang Tools 4.0.0 Release Notes
+=====================================
+>>>>>>> origin/release/4.x
 
 .. contents::
    :local:
@@ -26,6 +32,7 @@ Extra Clang Tools 5.0.0 Release Notes
 
 Written by the `LLVM Team <https://llvm.org/>`_
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -41,6 +48,8 @@ Written by the `LLVM Team <https://llvm.org/>`_
 >>>>>>> release/8.x
 =======
 >>>>>>> origin/release/5.x
+=======
+>>>>>>> origin/release/4.x
 Introduction
 ============
 
@@ -62,6 +71,7 @@ the `LLVM Web Site <https://llvm.org>`_.
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Note that if you are reading this file from a Subversion checkout or the
 main Clang web page, this document applies to the *next* release, not
 the current one. To see the release notes for a specific release, please
@@ -76,11 +86,15 @@ What's New in Extra Clang Tools 8.0.0?
 =======
 What's New in Extra Clang Tools 5.0.0?
 >>>>>>> origin/release/5.x
+=======
+What's New in Extra Clang Tools 4.0.0?
+>>>>>>> origin/release/4.x
 ======================================
 >>>>>>> release/8.x
 
 <<<<<<< HEAD
 Some of the major new features and improvements to Extra Clang Tools are listed
+<<<<<<< HEAD
 here. Generic improvements to Extra Clang Tools as a whole or to its underlying
 infrastructure are described first, followed by tool-specific sections.
 
@@ -93,6 +107,9 @@ Improvements to clangd
   type "``vec``", the list of completions will include "``std::vector``".
 
   See also: `r343248 <https://reviews.llvm.org/rL343248>`__.
+=======
+here.
+>>>>>>> origin/release/4.x
 
 - When a :ref:`global index <project-wide-index>` is available, clangd will use it to augment the
   results of "go to definition" and "find references" queries. Global index
@@ -163,8 +180,16 @@ Improvements to clang-tidy
 - New :doc:`bugprone-dynamic-static-initializers
   <clang-tidy/checks/bugprone-dynamic-static-initializers>` check.
 
+<<<<<<< HEAD
   Finds instances where variables with static storage are initialized
   dynamically in header files.
+=======
+- The modernize-use-default check has been renamed to `modernize-use-equals-default
+  <http://clang.llvm.org/extra/clang-tidy/checks/modernize-use-equals-default.html>`_.
+
+- New `modernize-use-default-member-init
+  <http://clang.llvm.org/extra/clang-tidy/checks/modernize-use-default-member-init.html>`_ check
+>>>>>>> origin/release/4.x
 
 - New :doc:`bugprone-infinite-loop
   <clang-tidy/checks/bugprone-infinite-loop>` check.
@@ -277,6 +302,7 @@ Improvements to include-fixer
 - New :doc:`readability-redundant-preprocessor
   <clang-tidy/checks/readability-redundant-preprocessor>` check.
 
+<<<<<<< HEAD
   Finds potentially redundant preprocessor directives.
 
 - New :doc:`readability-uppercase-literal-suffix
@@ -346,3 +372,6 @@ instead.
   Adds checks that implement the `High Integrity C++ Coding Standard <http://www.codingstandard.com/section/index/>`_ and other safety
   standards. Many checks are aliased to other modules.
 >>>>>>> origin/release/5.x
+=======
+- Emacs integration was added.
+>>>>>>> origin/release/4.x

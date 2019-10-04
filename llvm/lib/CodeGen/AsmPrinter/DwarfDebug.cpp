@@ -257,6 +257,7 @@ ArrayRef<DbgVariable::FrameIndexExpr> DbgVariable::getFrameIndexExprs() const {
   return FrameIndexExprs;
 }
 
+<<<<<<< HEAD
 void DbgVariable::addMMIEntry(const DbgVariable &V) {
   assert(DebugLocListIndex == ~0U && !ValueLoc.get() && "not an MMI entry");
   assert(V.DebugLocListIndex == ~0U && !V.ValueLoc.get() && "not an MMI entry");
@@ -313,6 +314,21 @@ static AccelTableKind computeAccelTableKind(unsigned DwarfVersion,
                                    : AccelTableKind::Dwarf;
   return AccelTableKind::None;
 }
+=======
+ArrayRef<DbgVariable::FrameIndexExpr> DbgVariable::getFrameIndexExprs() const {
+  std::sort(FrameIndexExprs.begin(), FrameIndexExprs.end(),
+            [](const FrameIndexExpr &A, const FrameIndexExpr &B) -> bool {
+              return A.Expr->getFragmentInfo()->OffsetInBits <
+                     B.Expr->getFragmentInfo()->OffsetInBits;
+            });
+  return FrameIndexExprs;
+}
+
+static const DwarfAccelTable::Atom TypeAtoms[] = {
+    DwarfAccelTable::Atom(dwarf::DW_ATOM_die_offset, dwarf::DW_FORM_data4),
+    DwarfAccelTable::Atom(dwarf::DW_ATOM_die_tag, dwarf::DW_FORM_data2),
+    DwarfAccelTable::Atom(dwarf::DW_ATOM_type_flags, dwarf::DW_FORM_data1)};
+>>>>>>> origin/release/4.x
 
 DwarfDebug::DwarfDebug(AsmPrinter *A, Module *M)
     : DebugHandlerBase(A), DebugLocs(A->OutStreamer->isVerboseAsm()),

@@ -1,5 +1,6 @@
 ; Make sure we still form mad even when unsafe math or fp-contract is allowed instead of fma.
 
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -mcpu=tahiti -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefix=SI -check-prefix=SI-STD  -check-prefix=SI-STD-SAFE -check-prefix=FUNC %s
 ; RUN: llc -march=amdgcn -mcpu=tahiti -verify-machineinstrs -fp-contract=fast < %s | FileCheck -enable-var-scope -check-prefix=SI -check-prefix=SI-STD -check-prefix=SI-STD-SAFE -check-prefix=FUNC %s
 ; RUN: llc -march=amdgcn -mcpu=tahiti -verify-machineinstrs -enable-unsafe-fp-math < %s | FileCheck -enable-var-scope -check-prefix=SI -check-prefix=SI-STD -check-prefix=SI-STD-UNSAFE -check-prefix=FUNC %s
@@ -7,6 +8,15 @@
 ; Make sure we don't form mad with denormals
 ; RUN: llc -march=amdgcn -mcpu=tahiti -mattr=+fp32-denormals -fp-contract=fast -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefix=SI -check-prefix=SI-DENORM -check-prefix=SI-DENORM-FASTFMAF -check-prefix=FUNC %s
 ; RUN: llc -march=amdgcn -mcpu=verde -mattr=+fp32-denormals -fp-contract=fast -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefix=SI -check-prefix=SI-DENORM -check-prefix=SI-DENORM-SLOWFMAF -check-prefix=FUNC %s
+=======
+; RUN: llc -march=amdgcn -mcpu=tahiti -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=SI-STD  -check-prefix=SI-STD-SAFE -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tahiti -verify-machineinstrs -fp-contract=fast < %s | FileCheck -check-prefix=SI -check-prefix=SI-STD -check-prefix=SI-STD-SAFE -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tahiti -verify-machineinstrs -enable-unsafe-fp-math < %s | FileCheck -check-prefix=SI -check-prefix=SI-STD -check-prefix=SI-STD-UNSAFE -check-prefix=FUNC %s
+
+; Make sure we don't form mad with denormals
+; RUN: llc -march=amdgcn -mcpu=tahiti -mattr=+fp32-denormals -fp-contract=fast -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=SI-DENORM -check-prefix=SI-DENORM-FASTFMAF -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=verde -mattr=+fp32-denormals -fp-contract=fast -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=SI-DENORM -check-prefix=SI-DENORM-SLOWFMAF -check-prefix=FUNC %s
+>>>>>>> origin/release/4.x
 
 declare i32 @llvm.amdgcn.workitem.id.x() #0
 declare float @llvm.fabs.f32(float) #0
@@ -99,7 +109,11 @@ define amdgpu_kernel void @combine_to_mad_f32_0_2use(float addrspace(1)* noalias
 ; SI-DAG: buffer_load_dword [[B:v[0-9]+]], v{{\[[0-9]+:[0-9]+\]}}, s{{\[[0-9]+:[0-9]+\]}}, 0 addr64 offset:4{{$}}
 ; SI-DAG: buffer_load_dword [[C:v[0-9]+]], v{{\[[0-9]+:[0-9]+\]}}, s{{\[[0-9]+:[0-9]+\]}}, 0 addr64 offset:8{{$}}
 
+<<<<<<< HEAD
 ; SI-STD: v_mac_f32_e32 [[C]], [[A]], [[B]]
+=======
+; SI-STD: v_mac_f32_e32 [[C]], [[B]], [[A]]
+>>>>>>> origin/release/4.x
 ; SI-DENORM-FASTFMAF: v_fma_f32 [[RESULT:v[0-9]+]], [[A]], [[B]], [[C]]
 
 ; SI-DENORM-SLOWFMAF: v_mul_f32_e32 [[TMP:v[0-9]+]], [[A]], [[B]]
@@ -402,9 +416,15 @@ define amdgpu_kernel void @combine_to_mad_fsub_2_f32_2uses_mul(float addrspace(1
 ; SI-STD: v_fma_f32 [[TMP1:v[0-9]+]], [[A]], [[B]], [[TMP0]]
 ; SI-STD: v_sub_f32_e32 [[RESULT:v[0-9]+]], [[TMP1]], [[C]]
 
+<<<<<<< HEAD
 ; SI-DENORM: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[D]], [[E]]
 ; SI-DENORM: v_fma_f32 [[TMP1:v[0-9]+]], [[A]], [[B]], [[TMP0]]
 ; SI-DENORM: v_sub_f32_e32 [[RESULT:v[0-9]+]], [[TMP1]], [[C]]
+=======
+; SI-DENORM: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[E]], [[D]]
+; SI-DENORM: v_fma_f32 [[TMP1:v[0-9]+]], [[A]], [[B]], [[TMP0]]
+; SI-DENORM: v_subrev_f32_e32 [[RESULT1:v[0-9]+]], [[C]], [[TMP1]]
+>>>>>>> origin/release/4.x
 
 ; SI: buffer_store_dword [[RESULT]], v{{\[[0-9]+:[0-9]+\]}}, s{{\[[0-9]+:[0-9]+\]}}, 0 addr64{{$}}
 define amdgpu_kernel void @aggressive_combine_to_mad_fsub_0_f32(float addrspace(1)* noalias %out, float addrspace(1)* noalias %in) #1 {
@@ -442,11 +462,19 @@ define amdgpu_kernel void @aggressive_combine_to_mad_fsub_0_f32(float addrspace(
 
 ; SI-STD: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[D]], [[E]]
 ; SI-STD: v_fma_f32 [[TMP1:v[0-9]+]], [[B]], [[C]], [[TMP0]]
+<<<<<<< HEAD
 ; SI-STD: v_sub_f32_e32 [[RESULT:v[0-9]+]], [[A]], [[TMP1]]
 
 ; SI-DENORM: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[D]], [[E]]
 ; SI-DENORM: v_fma_f32 [[TMP1:v[0-9]+]], [[B]], [[C]], [[TMP0]]
 ; SI-DENORM: v_sub_f32_e32 [[RESULT:v[0-9]+]], [[A]], [[TMP1]]
+=======
+; SI-STD: v_subrev_f32_e32 [[RESULT:v[0-9]+]], [[TMP1]], [[A]]
+
+; SI-DENORM: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[E]], [[D]]
+; SI-DENORM: v_fma_f32 [[TMP1:v[0-9]+]], [[B]], [[C]], [[TMP0]]
+; SI-DENORM: v_subrev_f32_e32 [[RESULT:v[0-9]+]], [[TMP1]], [[A]]
+>>>>>>> origin/release/4.x
 
 ; SI: buffer_store_dword [[RESULT]], v{{\[[0-9]+:[0-9]+\]}}, s{{\[[0-9]+:[0-9]+\]}}, 0 addr64{{$}}
 ; SI: s_endpgm
@@ -482,6 +510,7 @@ define amdgpu_kernel void @aggressive_combine_to_mad_fsub_1_f32(float addrspace(
 ; SI-DAG: buffer_load_dword [[D:v[0-9]+]], v{{\[[0-9]+:[0-9]+\]}}, s{{\[[0-9]+:[0-9]+\]}}, 0 addr64 offset:12{{$}}
 ; SI-DAG: buffer_load_dword [[E:v[0-9]+]], v{{\[[0-9]+:[0-9]+\]}}, s{{\[[0-9]+:[0-9]+\]}}, 0 addr64 offset:16{{$}}
 
+<<<<<<< HEAD
 ; SI-STD-SAFE: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[D]], [[E]]
 ; SI-STD-SAFE: v_mac_f32_e32 [[TMP0]], [[A]], [[B]]
 ; SI-STD-SAFE: v_sub_f32_e32 [[RESULT:v[0-9]+]], [[TMP0]], [[C]]
@@ -492,6 +521,18 @@ define amdgpu_kernel void @aggressive_combine_to_mad_fsub_1_f32(float addrspace(
 ; SI-DENORM-FASTFMAF: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[D]], [[E]]
 ; SI-DENORM-FASTFMAF: v_fma_f32 [[TMP1:v[0-9]+]], [[A]], [[B]], [[TMP0]]
 ; SI-DENORM-FASTFMAF: v_sub_f32_e32 [[RESULT:v[0-9]+]],  [[TMP1]], [[C]]
+=======
+; SI-STD-SAFE: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[E]], [[D]]
+; SI-STD-SAFE: v_mac_f32_e32 [[TMP0]], [[B]], [[A]]
+; SI-STD-SAFE: v_subrev_f32_e32 [[RESULT:v[0-9]+]], [[C]], [[TMP0]]
+
+; SI-STD-UNSAFE: v_mad_f32 [[RESULT:v[0-9]+]], [[D]], [[E]], -[[C]]
+; SI-STD-UNSAFE: v_mac_f32_e32 [[RESULT]], [[B]], [[A]]
+
+; SI-DENORM-FASTFMAF: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[E]], [[D]]
+; SI-DENORM-FASTFMAF: v_fma_f32 [[TMP1:v[0-9]+]], [[A]], [[B]], [[TMP0]]
+; SI-DENORM-FASTFMAF: v_subrev_f32_e32 [[RESULT:v[0-9]+]], [[C]], [[TMP1]]
+>>>>>>> origin/release/4.x
 
 ; SI-DENORM-SLOWFMAF-DAG: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[D]], [[E]]
 ; SI-DENORM-SLOWFMAF-DAG: v_mul_f32_e32 [[TMP1:v[0-9]+]], [[A]], [[B]]
@@ -533,16 +574,28 @@ define amdgpu_kernel void @aggressive_combine_to_mad_fsub_2_f32(float addrspace(
 ; SI-DAG: buffer_load_dword [[D:v[0-9]+]], v{{\[[0-9]+:[0-9]+\]}}, s{{\[[0-9]+:[0-9]+\]}}, 0 addr64 offset:12{{$}}
 ; SI-DAG: buffer_load_dword [[E:v[0-9]+]], v{{\[[0-9]+:[0-9]+\]}}, s{{\[[0-9]+:[0-9]+\]}}, 0 addr64 offset:16{{$}}
 
+<<<<<<< HEAD
 ; SI-STD-SAFE: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[D]], [[E]]
 ; SI-STD-SAFE: v_mac_f32_e32 [[TMP0]], [[B]], [[C]]
 ; SI-STD-SAFE: v_sub_f32_e32 [[RESULT:v[0-9]+]], [[A]], [[TMP0]]
+=======
+; SI-STD-SAFE: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[E]], [[D]]
+; SI-STD-SAFE: v_mac_f32_e32 [[TMP0]], [[C]], [[B]]
+; SI-STD-SAFE: v_subrev_f32_e32 [[RESULT:v[0-9]+]], [[TMP0]], [[A]]
+>>>>>>> origin/release/4.x
 
 ; SI-STD-UNSAFE: v_mad_f32 [[TMP:v[0-9]+]], -[[D]], [[E]], [[A]]
 ; SI-STD-UNSAFE: v_mad_f32 [[RESULT:v[0-9]+]], -[[B]], [[C]], [[TMP]]
 
+<<<<<<< HEAD
 ; SI-DENORM-FASTFMAF: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[D]], [[E]]
 ; SI-DENORM-FASTFMAF: v_fma_f32 [[TMP1:v[0-9]+]], [[B]], [[C]], [[TMP0]]
 ; SI-DENORM-FASTFMAF: v_sub_f32_e32 [[RESULT:v[0-9]+]], [[A]], [[TMP1]]
+=======
+; SI-DENORM-FASTFMAF: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[E]], [[D]]
+; SI-DENORM-FASTFMAF: v_fma_f32 [[TMP1:v[0-9]+]], [[B]], [[C]], [[TMP0]]
+; SI-DENORM-FASTFMAF: v_subrev_f32_e32 [[RESULT:v[0-9]+]], [[TMP1]], [[A]]
+>>>>>>> origin/release/4.x
 
 ; SI-DENORM-SLOWFMAF-DAG: v_mul_f32_e32 [[TMP0:v[0-9]+]], [[D]], [[E]]
 ; SI-DENORM-SLOWFMAF-DAG: v_mul_f32_e32 [[TMP1:v[0-9]+]], [[B]], [[C]]

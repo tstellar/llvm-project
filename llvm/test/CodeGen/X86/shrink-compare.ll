@@ -121,6 +121,14 @@ if.end:
   ret void
 }
 
+<<<<<<< HEAD
+=======
+; CHECK-LABEL: test2_1:
+; CHECK: movzbl
+; CHECK: cmpl $256
+; CHECK: jne .LBB
+; CHECK: jmp bar
+>>>>>>> origin/release/4.x
 define void @test2_1(i32 %X) nounwind minsize {
 ; CHECK-LABEL: test2_1:
 ; CHECK:       # %bb.0: # %entry
@@ -282,6 +290,14 @@ if.end:
   ret void
 }
 
+<<<<<<< HEAD
+=======
+; CHECK-LABEL: test_sext_i8_icmp_255:
+; CHECK: movb $1,
+; CHECK: testb
+; CHECK: jne .LBB
+; CHECK: jmp bar
+>>>>>>> origin/release/4.x
 define void @test_sext_i8_icmp_255(i8 %x) nounwind minsize {
 ; CHECK-LABEL: test_sext_i8_icmp_255:
 ; CHECK:       # %bb.0: # %entry

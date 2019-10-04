@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=TOVGPR %s
 ; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=GCN %s
+=======
+; RUN: llc -march=amdgcn -mattr=+vgpr-spilling -verify-machineinstrs < %s | FileCheck %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -mattr=+vgpr-spilling -verify-machineinstrs < %s | FileCheck %s
+>>>>>>> origin/release/4.x
 
 ; These tests check that the compiler won't crash when it needs to spill
 ; SGPRs.

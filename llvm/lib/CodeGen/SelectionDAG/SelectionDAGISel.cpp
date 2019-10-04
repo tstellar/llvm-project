@@ -2314,8 +2314,12 @@ void SelectionDAGISel::UpdateChains(
             std::replace(ChainNodesMatched.begin(), ChainNodesMatched.end(), N,
                          static_cast<SDNode *>(nullptr));
           });
+<<<<<<< HEAD
       if (ChainNode->getOpcode() != ISD::TokenFactor)
         ReplaceUses(ChainVal, InputChain);
+=======
+      CurDAG->ReplaceAllUsesOfValueWith(ChainVal, InputChain);
+>>>>>>> origin/release/4.x
 
       // If the node became dead and we haven't already seen it, delete it.
       if (ChainNode != NodeToMatch && ChainNode->use_empty() &&
@@ -2709,7 +2713,10 @@ class MatchStateUpdater : public SelectionDAG::DAGUpdateListener
   SDNode **NodeToMatch;
   SmallVectorImpl<std::pair<SDValue, SDNode *>> &RecordedNodes;
   SmallVectorImpl<MatchScope> &MatchScopes;
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/release/4.x
 public:
   MatchStateUpdater(SelectionDAG &DAG, SDNode **NodeToMatch,
                     SmallVectorImpl<std::pair<SDValue, SDNode *>> &RN,

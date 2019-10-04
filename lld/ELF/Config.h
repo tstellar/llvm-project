@@ -248,10 +248,14 @@ struct Configuration {
   bool AsNeeded = false;
   bool Bsymbolic;
   bool BsymbolicFunctions;
+<<<<<<< HEAD
   bool CallGraphProfileSort;
   bool CheckSections;
   bool CompressDebugSections;
   bool Cref;
+=======
+  bool ColorDiagnostics = false;
+>>>>>>> origin/release/4.x
   bool DefineCommon;
   bool Demangle = true;
   bool DisableVerify;

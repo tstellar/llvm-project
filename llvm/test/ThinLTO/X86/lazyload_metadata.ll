@@ -10,13 +10,21 @@
 ; RUN: llvm-lto -thinlto-action=import %t2.bc -thinlto-index=%t3.bc \
 ; RUN:          -o /dev/null -stats \
 ; RUN:  2>&1 | FileCheck %s -check-prefix=LAZY
+<<<<<<< HEAD
 ; LAZY: 63 bitcode-reader  - Number of Metadata records loaded
+=======
+; LAZY: 49 bitcode-reader  - Number of Metadata records loaded
+>>>>>>> origin/release/4.x
 ; LAZY: 2 bitcode-reader  - Number of MDStrings loaded
 
 ; RUN: llvm-lto -thinlto-action=import %t2.bc -thinlto-index=%t3.bc \
 ; RUN:          -o /dev/null -disable-ondemand-mds-loading -stats \
 ; RUN:  2>&1 | FileCheck %s -check-prefix=NOTLAZY
+<<<<<<< HEAD
 ; NOTLAZY: 72 bitcode-reader  - Number of Metadata records loaded
+=======
+; NOTLAZY: 58 bitcode-reader  - Number of Metadata records loaded
+>>>>>>> origin/release/4.x
 ; NOTLAZY: 7 bitcode-reader  - Number of MDStrings loaded
 
 
@@ -55,4 +63,8 @@ declare i1 @llvm.type.test(i8* %ptr, metadata %bitset) nounwind readnone
 !6 = !{!9}
 !7 = !{!"7"}
 !8 = !{!"8"}
+<<<<<<< HEAD
 !9 = !{!6}
+=======
+!9 = !{!6}
+>>>>>>> origin/release/4.x

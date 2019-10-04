@@ -2322,6 +2322,7 @@ the configuration (without a prefix: ``Auto``).
   * ``LS_Cpp03`` (in configuration: ``c++03``)
     Use C++03-compatible syntax.
 
+<<<<<<< HEAD
   * ``LS_Cpp11`` (in configuration: ``c++11``)
     Use C++11-compatible syntax.
 
@@ -2336,6 +2337,11 @@ the configuration (without a prefix: ``Auto``).
 
   * ``LS_Latest`` (in configuration: ``Latest``)
     Parse and format using the latest supported language version.
+=======
+  * ``LS_Cpp11`` (in configuration: ``Cpp11``)
+    Use features of C++11, C++14 and C++1z (e.g. ``A<A<int>>`` instead of 
+    ``A<A<int> >``).
+>>>>>>> origin/release/4.x
 
   * ``LS_Auto`` (in configuration: ``Auto``)
     Automatic detection based on the input.

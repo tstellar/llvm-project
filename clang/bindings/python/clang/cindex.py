@@ -63,6 +63,7 @@ from __future__ import absolute_import, division, print_function
 # o implement additional SourceLocation, SourceRange, and File methods.
 
 from ctypes import *
+<<<<<<< HEAD
 
 import clang.enumerations
 
@@ -138,6 +139,12 @@ except AttributeError:
     def fspath(x):
         return x
 
+=======
+import collections
+
+import clang.enumerations
+
+>>>>>>> origin/release/4.x
 # ctypes doesn't implicitly convert c_void_p to the appropriate wrapper
 # object. This is a problem, because it means that from_parameter will see an
 # integer and pass the wrong value on platforms where int != void*. Work around
@@ -476,7 +483,12 @@ class Diagnostic(object):
         """The command-line option that disables this diagnostic."""
         disable = _CXString()
         conf.lib.clang_getDiagnosticOption(self, byref(disable))
+<<<<<<< HEAD
         return _CXString.from_result(disable)
+=======
+
+        return conf.lib.clang_getCString(disable)
+>>>>>>> origin/release/4.x
 
     def format(self, options=None):
         """
@@ -666,7 +678,11 @@ class CursorKind(BaseEnumeration):
     @staticmethod
     def get_all_kinds():
         """Return all CursorKind enumeration instances."""
+<<<<<<< HEAD
         return [x for x in CursorKind._kinds if not x is None]
+=======
+        return filter(None, CursorKind._kinds)
+>>>>>>> origin/release/4.x
 
     def is_declaration(self):
         """Test if this is a declaration kind."""
@@ -2390,7 +2406,7 @@ class Type(Structure):
         """
         Retrieve the offset of a field in the record.
         """
-        return conf.lib.clang_Type_getOffsetOf(self, fieldname)
+        return conf.lib.clang_Type_getOffsetOf(self, c_char_p(fieldname))
 
     def get_ref_qualifier(self):
         """
@@ -2812,7 +2828,11 @@ class TranslationUnit(ClangObject):
 
         args_array = None
         if len(args) > 0:
+<<<<<<< HEAD
             args_array = (c_char_p * len(args))(*[b(x) for x in args])
+=======
+            args_array = (c_char_p * len(args))(* args)
+>>>>>>> origin/release/4.x
 
         unsaved_array = None
         if len(unsaved_files) > 0:
@@ -2820,8 +2840,13 @@ class TranslationUnit(ClangObject):
             for i, (name, contents) in enumerate(unsaved_files):
                 if hasattr(contents, "read"):
                     contents = contents.read()
+<<<<<<< HEAD
                 contents = b(contents)
                 unsaved_array[i].name = b(fspath(name))
+=======
+
+                unsaved_array[i].name = name
+>>>>>>> origin/release/4.x
                 unsaved_array[i].contents = contents
                 unsaved_array[i].length = len(contents)
 
@@ -3059,6 +3084,7 @@ class TranslationUnit(ClangObject):
         unsaved_files_array = 0
         if len(unsaved_files):
             unsaved_files_array = (_CXUnsavedFile * len(unsaved_files))()
+<<<<<<< HEAD
             for i,(name,contents) in enumerate(unsaved_files):
                 if hasattr(contents, "read"):
                     contents = contents.read()
@@ -3067,6 +3093,20 @@ class TranslationUnit(ClangObject):
                 unsaved_files_array[i].contents = contents
                 unsaved_files_array[i].length = len(contents)
         ptr = conf.lib.clang_codeCompleteAt(self, fspath(path), line, column,
+=======
+            for i,(name,value) in enumerate(unsaved_files):
+                if not isinstance(value, str):
+                    # FIXME: It would be great to support an efficient version
+                    # of this, one day.
+                    value = value.read()
+                    print(value)
+                if not isinstance(value, str):
+                    raise TypeError('Unexpected unsaved file contents.')
+                unsaved_files_array[i].name = name
+                unsaved_files_array[i].contents = value
+                unsaved_files_array[i].length = len(value)
+        ptr = conf.lib.clang_codeCompleteAt(self, path, line, column,
+>>>>>>> origin/release/4.x
                 unsaved_files_array, len(unsaved_files), options)
         if ptr:
             return CodeCompletionResults(ptr)
@@ -3099,7 +3139,11 @@ class File(ClangObject):
     @property
     def name(self):
         """Return the complete file and path name of the file."""
+<<<<<<< HEAD
         return conf.lib.clang_getFileName(self)
+=======
+        return conf.lib.clang_getCString(conf.lib.clang_getFileName(self))
+>>>>>>> origin/release/4.x
 
     @property
     def time(self):
@@ -3193,7 +3237,11 @@ class CompileCommand(object):
         Invariant : the first argument is the compiler executable
         """
         length = conf.lib.clang_CompileCommand_getNumArgs(self.cmd)
+<<<<<<< HEAD
         for i in range(length):
+=======
+        for i in xrange(length):
+>>>>>>> origin/release/4.x
             yield conf.lib.clang_CompileCommand_getArg(self.cmd, i)
 
 class CompileCommands(object):
@@ -3332,7 +3380,11 @@ functionList = [
    [c_object_p]),
 
   ("clang_CompilationDatabase_fromDirectory",
+<<<<<<< HEAD
    [c_interop_string, POINTER(c_uint)],
+=======
+   [c_char_p, POINTER(c_uint)],
+>>>>>>> origin/release/4.x
    c_object_p,
    CompilationDatabase.from_result),
 
@@ -3342,7 +3394,11 @@ functionList = [
    CompileCommands.from_result),
 
   ("clang_CompilationDatabase_getCompileCommands",
+<<<<<<< HEAD
    [c_object_p, c_interop_string],
+=======
+   [c_object_p, c_char_p],
+>>>>>>> origin/release/4.x
    c_object_p,
    CompileCommands.from_result),
 
@@ -3377,7 +3433,11 @@ functionList = [
    c_uint),
 
   ("clang_codeCompleteAt",
+<<<<<<< HEAD
    [TranslationUnit, c_interop_string, c_int, c_int, c_void_p, c_int, c_int],
+=======
+   [TranslationUnit, c_char_p, c_int, c_int, c_void_p, c_int, c_int],
+>>>>>>> origin/release/4.x
    POINTER(CCRStructure)),
 
   ("clang_codeCompleteGetDiagnostic",
@@ -3393,7 +3453,11 @@ functionList = [
    c_object_p),
 
   ("clang_createTranslationUnit",
+<<<<<<< HEAD
    [Index, c_interop_string],
+=======
+   [Index, c_char_p],
+>>>>>>> origin/release/4.x
    c_object_p),
 
   ("clang_CXXConstructor_isConvertingConstructor",
@@ -3554,8 +3618,12 @@ functionList = [
 
   ("clang_getCString",
    [_CXString],
+<<<<<<< HEAD
    c_interop_string,
    c_interop_string.to_python_string),
+=======
+   c_char_p),
+>>>>>>> origin/release/4.x
 
   ("clang_getCursor",
    [TranslationUnit, SourceLocation],
@@ -3711,7 +3779,11 @@ functionList = [
    Type.from_result),
 
   ("clang_getFile",
+<<<<<<< HEAD
    [TranslationUnit, c_interop_string],
+=======
+   [TranslationUnit, c_char_p],
+>>>>>>> origin/release/4.x
    c_object_p),
 
   ("clang_getFileName",
@@ -3841,8 +3913,12 @@ functionList = [
 
   ("clang_getTUResourceUsageName",
    [c_uint],
+<<<<<<< HEAD
    c_interop_string,
    c_interop_string.to_python_string),
+=======
+   c_char_p),
+>>>>>>> origin/release/4.x
 
   ("clang_getTypeDeclaration",
    [Type],
@@ -3942,7 +4018,11 @@ functionList = [
    bool),
 
   ("clang_parseTranslationUnit",
+<<<<<<< HEAD
    [Index, c_interop_string, c_void_p, c_int, c_void_p, c_int, c_int],
+=======
+   [Index, c_char_p, c_void_p, c_int, c_void_p, c_int, c_int],
+>>>>>>> origin/release/4.x
    c_object_p),
 
   ("clang_reparseTranslationUnit",
@@ -3950,7 +4030,11 @@ functionList = [
    c_int),
 
   ("clang_saveTranslationUnit",
+<<<<<<< HEAD
    [TranslationUnit, c_interop_string, c_uint],
+=======
+   [TranslationUnit, c_char_p, c_uint],
+>>>>>>> origin/release/4.x
    c_int),
 
   ("clang_tokenize",
@@ -4031,7 +4115,11 @@ functionList = [
    Type.from_result),
 
   ("clang_Type_getOffsetOf",
+<<<<<<< HEAD
    [Type, c_interop_string],
+=======
+   [Type, c_char_p],
+>>>>>>> origin/release/4.x
    c_longlong),
 
   ("clang_Type_getSizeOf",
@@ -4090,8 +4178,7 @@ def register_functions(lib, ignore_errors):
     def register(item):
         return register_function(lib, item, ignore_errors)
 
-    for f in functionList:
-        register(f)
+    map(register, functionList)
 
 class Config(object):
     library_path = None

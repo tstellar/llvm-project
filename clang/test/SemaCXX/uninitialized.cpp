@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // RUN: %clang_cc1 -fsyntax-only -Wall -Wuninitialized -Wno-unused-value -Wno-unused-lambda-capture -std=c++1z -verify %s
+=======
+// RUN: %clang_cc1 -fsyntax-only -Wall -Wuninitialized -Wno-unused-value -std=c++1z -verify %s
+>>>>>>> origin/release/4.x
 
 // definitions for std::move
 namespace std {

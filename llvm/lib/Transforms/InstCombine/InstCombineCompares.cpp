@@ -5011,6 +5011,7 @@ Instruction *InstCombiner::foldICmpUsingKnownBits(ICmpInst &I) {
     const APInt *CmpC;
     if (match(Op1, m_APInt(CmpC))) {
       // A <u C -> A == C-1 if min(A)+1 == C
+<<<<<<< HEAD
       if (*CmpC == Op0Min + 1)
         return new ICmpInst(ICmpInst::ICMP_EQ, Op0,
                             ConstantInt::get(Op1->getType(), *CmpC - 1));
@@ -5019,6 +5020,12 @@ Instruction *InstCombiner::foldICmpUsingKnownBits(ICmpInst &I) {
       if (Op0Known.countMinTrailingZeros() >= CmpC->ceilLogBase2())
         return new ICmpInst(ICmpInst::ICMP_EQ, Op0,
                             Constant::getNullValue(Op1->getType()));
+=======
+      if (Op1Max == Op0Min + 1) {
+        Constant *CMinus1 = ConstantInt::get(Op0->getType(), *CmpC - 1);
+        return new ICmpInst(ICmpInst::ICMP_EQ, Op0, CMinus1);
+      }
+>>>>>>> origin/release/4.x
     }
     break;
   }
@@ -5036,11 +5043,14 @@ Instruction *InstCombiner::foldICmpUsingKnownBits(ICmpInst &I) {
       if (*CmpC == Op0Max - 1)
         return new ICmpInst(ICmpInst::ICMP_EQ, Op0,
                             ConstantInt::get(Op1->getType(), *CmpC + 1));
+<<<<<<< HEAD
       // X >u C --> X != 0, if the number of zero bits in the bottom of X
       // exceeds the log2 of C.
       if (Op0Known.countMinTrailingZeros() >= CmpC->getActiveBits())
         return new ICmpInst(ICmpInst::ICMP_NE, Op0,
                             Constant::getNullValue(Op1->getType()));
+=======
+>>>>>>> origin/release/4.x
     }
     break;
   }
@@ -5424,6 +5434,27 @@ Instruction *InstCombiner::visitICmpInst(ICmpInst &I) {
   // Do this after checking for min/max to prevent infinite looping.
   if (Instruction *Res = foldICmpWithZero(I))
     return Res;
+
+  // FIXME: We only do this after checking for min/max to prevent infinite
+  // looping caused by a reverse canonicalization of these patterns for min/max.
+  // FIXME: The organization of folds is a mess. These would naturally go into
+  // canonicalizeCmpWithConstant(), but we can't move all of the above folds
+  // down here after the min/max restriction.
+  ICmpInst::Predicate Pred = I.getPredicate();
+  const APInt *C;
+  if (match(Op1, m_APInt(C))) {
+    // For i32: x >u 2147483647 -> x <s 0  -> true if sign bit set
+    if (Pred == ICmpInst::ICMP_UGT && C->isMaxSignedValue()) {
+      Constant *Zero = Constant::getNullValue(Op0->getType());
+      return new ICmpInst(ICmpInst::ICMP_SLT, Op0, Zero);
+    }
+
+    // For i32: x <u 2147483648 -> x >s -1  -> true if sign bit clear
+    if (Pred == ICmpInst::ICMP_ULT && C->isMinSignedValue()) {
+      Constant *AllOnes = Constant::getAllOnesValue(Op0->getType());
+      return new ICmpInst(ICmpInst::ICMP_SGT, Op0, AllOnes);
+    }
+  }
 
   // FIXME: We only do this after checking for min/max to prevent infinite
   // looping caused by a reverse canonicalization of these patterns for min/max.

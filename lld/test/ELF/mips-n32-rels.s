@@ -31,8 +31,13 @@ loc:
 # CHECK: 00020100 g  F .text   00000000 __start
 
 # CHECK:      Contents of section .rodata:
+<<<<<<< HEAD
 # CHECK-NEXT:  {{[0-9a-f]+}} ffff8004
 #                            ^-- loc - _gp
+=======
+# CHECK-NEXT:  100d4 00020004
+#                    ^-- loc
+>>>>>>> origin/release/4.x
 
 # CHECK:      Disassembly of section .text:
 # CHECK-EMPTY:

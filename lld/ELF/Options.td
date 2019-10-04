@@ -108,6 +108,9 @@ defm demangle: B<"demangle",
     "Demangle symbol names (default)",
     "Do not demangle symbol names">;
 
+def define_common: F<"define-common">,
+  HelpText<"Assign space to common symbols">;
+
 def disable_new_dtags: F<"disable-new-dtags">,
   HelpText<"Disable new dynamic tags">;
 
@@ -227,8 +230,16 @@ defm just_symbols: Eq<"just-symbols", "Just link symbols">;
 
 defm keep_unique: Eq<"keep-unique", "Do not fold this symbol during ICF">;
 
+<<<<<<< HEAD
 defm library: Eq<"library", "Root name of library to use">,
   MetaVarName<"<libName>">;
+=======
+def no_define_common: F<"no-define-common">,
+  HelpText<"Do not assign space to common symbols">;
+
+def no_demangle: F<"no-demangle">,
+  HelpText<"Do not demangle symbol names">;
+>>>>>>> origin/release/4.x
 
 def m: JoinedOrSeparate<["-"], "m">, HelpText<"Set target emulation">;
 
@@ -425,6 +436,7 @@ defm wrap: Eq<"wrap", "Use wrapper functions for symbol">,
 def z: JoinedOrSeparate<["-"], "z">, MetaVarName<"<option>">,
   HelpText<"Linker option extensions">;
 
+<<<<<<< HEAD
 def visual_studio_diagnostics_format : F<"vs-diagnostics">,
 HelpText<"Format diagnostics for Visual Studio compatiblity">;
 
@@ -469,6 +481,113 @@ def: Separate<["-", "--"], "Ttext-segment">, Alias<Ttext>, HelpText<"Alias for -
 def: Joined<["-", "--"], "Ttext-segment=">, Alias<Ttext>, HelpText<"Alias for --Ttext">;
 def: JoinedOrSeparate<["-"], "u">, Alias<undefined>, HelpText<"Alias for --undefined">;
 def: Flag<["-"], "V">, Alias<version>, HelpText<"Alias for --version">;
+=======
+// Aliases
+def alias_auxiliary: Separate<["-"], "f">, Alias<auxiliary>;
+def alias_Bdynamic_call_shared: F<"call_shared">, Alias<Bdynamic>;
+def alias_Bdynamic_dy: F<"dy">, Alias<Bdynamic>;
+def alias_Bstatic_dn: F<"dn">, Alias<Bstatic>;
+def alias_Bstatic_non_shared: F<"non_shared">, Alias<Bstatic>;
+def alias_Bstatic_static: F<"static">, Alias<Bstatic>;
+def alias_L__library_path: J<"library-path=">, Alias<L>;
+def alias_define_common_d: Flag<["-"], "d">, Alias<define_common>;
+def alias_define_common_dc: F<"dc">, Alias<define_common>;
+def alias_define_common_dp: F<"dp">, Alias<define_common>;
+def alias_discard_all_x: Flag<["-"], "x">, Alias<discard_all>;
+def alias_discard_locals_X: Flag<["-"], "X">, Alias<discard_locals>;
+def alias_dynamic_list: J<"dynamic-list=">, Alias<dynamic_list>;
+def alias_entry_e: JoinedOrSeparate<["-"], "e">, Alias<entry>;
+def alias_entry_entry: J<"entry=">, Alias<entry>;
+def alias_error_limit: J<"error-limit=">, Alias<error_limit>;
+def alias_export_dynamic_E: Flag<["-"], "E">, Alias<export_dynamic>;
+def alias_export_dynamic_symbol: J<"export-dynamic-symbol=">,
+  Alias<export_dynamic_symbol>;
+def alias_fini_fini: J<"fini=">, Alias<fini>;
+def alias_format_b: S<"b">, Alias<format>;
+def alias_hash_style_hash_style: J<"hash-style=">, Alias<hash_style>;
+def alias_init_init: J<"init=">, Alias<init>;
+def alias_l__library: J<"library=">, Alias<l>;
+def alias_omagic: Flag<["-"], "N">, Alias<omagic>;
+def alias_o_output: Joined<["--"], "output=">, Alias<o>;
+def alias_o_output2 : Separate<["--"], "output">, Alias<o>;
+def alias_pie_pic_executable: F<"pic-executable">, Alias<pie>;
+def alias_relocatable_r: Flag<["-"], "r">, Alias<relocatable>;
+def alias_retain_symbols_file: S<"retain-symbols-file">, Alias<retain_symbols_file>;
+def alias_rpath_R: JoinedOrSeparate<["-"], "R">, Alias<rpath>;
+def alias_rpath_rpath: J<"rpath=">, Alias<rpath>;
+def alias_script_T: JoinedOrSeparate<["-"], "T">, Alias<script>;
+def alias_shared_Bshareable: F<"Bshareable">, Alias<shared>;
+def alias_soname_h: JoinedOrSeparate<["-"], "h">, Alias<soname>;
+def alias_soname_soname: S<"soname">, Alias<soname>;
+def alias_sort_section: J<"sort-section=">, Alias<sort_section>;
+def alias_script: J<"script=">, Alias<script>;
+def alias_strip_all: Flag<["-"], "s">, Alias<strip_all>;
+def alias_strip_debug_S: Flag<["-"], "S">, Alias<strip_debug>;
+def alias_Tbss: J<"Tbss=">, Alias<Tbss>;
+def alias_Tdata: J<"Tdata=">, Alias<Tdata>;
+def alias_trace: Flag<["-"], "t">, Alias<trace>;
+def alias_trace_symbol_y : JoinedOrSeparate<["-"], "y">, Alias<trace_symbol>;
+def alias_Ttext: J<"Ttext=">, Alias<Ttext>;
+def alias_Ttext_segment: S<"Ttext-segment">, Alias<Ttext>;
+def alias_Ttext_segment_eq: J<"Ttext-segment=">, Alias<Ttext>;
+def alias_undefined_eq: J<"undefined=">, Alias<undefined>;
+def alias_undefined_u: JoinedOrSeparate<["-"], "u">, Alias<undefined>;
+def alias_version_V: Flag<["-"], "V">, Alias<version>;
+def alias_wrap_wrap: J<"wrap=">, Alias<wrap>;
+
+// Our symbol resolution algorithm handles symbols in archive files differently
+// than traditional linkers, so we don't need --start-group and --end-group.
+// These options are recongized for compatibility but ignored.
+def end_group: F<"end-group">;
+def end_group_paren: Flag<["-"], ")">;
+def start_group: F<"start-group">;
+def start_group_paren: Flag<["-"], "(">;
+
+// Ignore LTO plugin-related options.
+// clang -flto passes -plugin and -plugin-opt to the linker. This is required
+// for ld.gold and ld.bfd to get LTO working. But it's not for lld which doesn't
+// rely on a plugin. Instead of detecting which linker is used on clang side we
+// just ignore the option on lld side as it's easier. In fact, the linker could
+// be called 'ld' and understanding which linker is used would require parsing of
+// --version output.
+def plugin: S<"plugin">;
+def plugin_eq: J<"plugin=">;
+def plugin_opt: S<"plugin-opt">;
+def plugin_opt_eq: J<"plugin-opt=">;
+
+// Options listed below are silently ignored for now for compatibility.
+def allow_shlib_undefined: F<"allow-shlib-undefined">;
+def cref: Flag<["--"], "cref">;
+def demangle: F<"demangle">;
+def detect_odr_violations: F<"detect-odr-violations">;
+def g: Flag<["-"], "g">;
+def M: Flag<["-"], "M">;
+def Map: JS<"Map">;
+def no_add_needed: F<"no-add-needed">;
+def no_allow_shlib_undefined: F<"no-allow-shlib-undefined">;
+def no_copy_dt_needed_entries: F<"no-copy-dt-needed-entries">,
+  Alias<no_add_needed>;
+def no_dynamic_linker: F<"no-dynamic-linker">;
+def no_fatal_warnings: F<"no-fatal-warnings">;
+def no_mmap_output_file: F<"no-mmap-output-file">;
+def no_warn_common: F<"no-warn-common">;
+def no_warn_mismatch: F<"no-warn-mismatch">;
+def rpath_link: S<"rpath-link">;
+def rpath_link_eq: J<"rpath-link=">;
+def sort_common: F<"sort-common">;
+def stats: F<"stats">;
+def warn_execstack: F<"warn-execstack">;
+def warn_shared_textrel: F<"warn-shared-textrel">;
+def EB : F<"EB">;
+def EL : F<"EL">;
+def G: JoinedOrSeparate<["-"], "G">;
+def Qy : F<"Qy">;
+
+// Aliases for ignored options
+def alias_Map_eq: J<"Map=">, Alias<Map>;
+def alias_version_script_version_script: J<"version-script=">,
+  Alias<version_script>;
+>>>>>>> origin/release/4.x
 
 // LTO-related options.
 def lto_aa_pipeline: J<"lto-aa-pipeline=">,

@@ -20,11 +20,22 @@
 # CHECK-NEXT:    lw      $2, -32744($2)
 # CHECK-NEXT:    addi    $2, $2, {{.*}}
 
+<<<<<<< HEAD
 # GOT: Symbol table '.symtab'
 # GOT:    Num:               Value  Size Type    Bind   Vis       Ndx Name
 # GOT:           [[LOC:[0-9a-f]+]]     0 NOTYPE  LOCAL  DEFAULT     4 loc
 # GOT:         [[START:[0-9a-f]+]]     0 NOTYPE  GLOBAL DEFAULT     3 __start
 # GOT:           [[BAR:[0-9a-f]+]]     0 NOTYPE  GLOBAL DEFAULT     3 bar
+=======
+# CHECK:      Contents of section .got:
+# CHECK-NEXT:  30010 00000000 80000000 00030000 00040000
+#                                      ^ %hi(loc)
+#                                               ^ redundant entry
+# CHECK-NEXT:  30020 00020010 00020000 00030000
+#                    ^ %got(bar)
+#                             ^ %got_hi/lo(start)
+#                                      ^ %got_hi/lo(loc)
+>>>>>>> origin/release/4.x
 
 # GOT:      Static GOT:
 # GOT:       Local entries:

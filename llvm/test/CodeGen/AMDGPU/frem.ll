@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -verify-machineinstrs  < %s | FileCheck -check-prefix=SI -check-prefix=GCN -check-prefix=FUNC %s
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -mcpu=bonaire -verify-machineinstrs < %s | FileCheck -check-prefix=CI -check-prefix=GCN -check-prefix=FUNC %s
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=CI -check-prefix=GCN -check-prefix=FUNC %s
+=======
+; RUN: llc -march=amdgcn -enable-misched < %s | FileCheck -check-prefix=SI -check-prefix=GCN -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=bonaire -enable-misched < %s | FileCheck -check-prefix=CI -check-prefix=GCN -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -enable-misched < %s | FileCheck -check-prefix=CI -check-prefix=GCN -check-prefix=FUNC %s
+>>>>>>> origin/release/4.x
 
 ; FUNC-LABEL: {{^}}frem_f32:
 ; GCN-DAG: buffer_load_dword [[X:v[0-9]+]], {{.*$}}

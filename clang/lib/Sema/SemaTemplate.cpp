@@ -9135,7 +9135,12 @@ DeclResult Sema::ActOnExplicitInstantiation(
   Specialization->setBraceRange(SourceRange());
 
   bool PreviouslyDLLExported = Specialization->hasAttr<DLLExportAttr>();
+<<<<<<< HEAD
   ProcessDeclAttributeList(S, Specialization, Attr);
+=======
+  if (Attr)
+    ProcessDeclAttributeList(S, Specialization, Attr);
+>>>>>>> origin/release/4.x
 
   // Add the explicit instantiation into its lexical context. However,
   // since explicit instantiations are never found by name lookup, we

@@ -3,18 +3,30 @@
 ; Test for assert resulting from inconsistent isLegalAddressingMode
 ; answers when the address space was dropped from the query.
 
+<<<<<<< HEAD
 target datalayout = "e-p:64:64-p1:64:64-p2:32:32-p3:32:32-p4:64:64-p5:32:32-p6:32:32-i64:64-v16:16-v24:32-v32:32-v48:64-v96:128-v192:256-v256:256-v512:512-v1024:1024-v2048:2048-n32:64-S32-A5"
+=======
+target datalayout = "e-p:32:32-p1:64:64-p2:64:64-p3:32:32-p4:64:64-p5:32:32-p24:64:64-i64:64-v16:16-v24:32-v32:32-v48:64-v96:128-v192:256-v256:256-v512:512-v1024:1024-v2048:2048-n32:64"
+>>>>>>> origin/release/4.x
 
 %0 = type { i32, double, i32, float }
 
 ; CHECK-LABEL: @lsr_crash_preserve_addrspace_unknown_type(
 ; CHECK: %tmp4 = bitcast %0 addrspace(3)* %tmp to double addrspace(3)*
 ; CHECK: %scevgep5 = getelementptr double, double addrspace(3)* %tmp4, i32 1
+<<<<<<< HEAD
 ; CHECK: load double, double addrspace(3)* %scevgep5
 
 ; CHECK: %scevgep = getelementptr i32, i32 addrspace(3)* %tmp1, i32 4
 ; CHECK:%tmp14 = load i32, i32 addrspace(3)* %scevgep
 define amdgpu_kernel void @lsr_crash_preserve_addrspace_unknown_type() #0 {
+=======
+; CHEC: load double, double addrspace(3)* %scevgep5
+
+; CHECK: %scevgep = getelementptr i32, i32 addrspace(3)* %tmp1, i32 4
+; CHECK:%tmp14 = load i32, i32 addrspace(3)* %scevgep
+define void @lsr_crash_preserve_addrspace_unknown_type() #0 {
+>>>>>>> origin/release/4.x
 bb:
   br label %bb1
 
@@ -50,6 +62,7 @@ bb17:                                             ; preds = %bb12, %bb8
   br label %bb1
 }
 
+<<<<<<< HEAD
 ; CHECK-LABEL: @lsr_crash_preserve_addrspace_unknown_type2(
 ; CHECK: %scevgep3 = getelementptr i8, i8 addrspace(5)* %array, i32 %j
 ; CHECK: %scevgep2 = getelementptr i8, i8 addrspace(5)* %array, i32 %j
@@ -91,5 +104,7 @@ declare void @llvm.memcpy.p5i8.p5i8.i64(i8 addrspace(5)*, i8 addrspace(3)*, i64,
 declare void @llvm.memmove.p5i8.p5i8.i64(i8 addrspace(5)*, i8 addrspace(3)*, i64, i1)
 declare void @llvm.memset.p5i8.i64(i8 addrspace(5)*, i8, i64, i1)
 
+=======
+>>>>>>> origin/release/4.x
 attributes #0 = { nounwind }
 attributes #1 = { nounwind readnone }

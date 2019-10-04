@@ -14,6 +14,16 @@
 
 # REL: GP: 0x0
 
+<<<<<<< HEAD
+=======
+# DSO: GP: 0x27FF0
+
+# DUMP: Contents of section .rodata:
+# DUMP:  00f4 ffff0004 ffff0008
+#             ^ 0x10004 + 0x7ff0 - 0x27ff0
+#                      ^ 0x10008 + 0x7ff0 - 0x27ff0
+
+>>>>>>> origin/release/4.x
 # DUMP: SYMBOL TABLE:
 # DUMP: 00020008         .text          00000000 bar
 # DUMP: 00020004         .text          00000000 foo

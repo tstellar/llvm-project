@@ -913,6 +913,37 @@ namespace {
       /// Evaluate in any way we know how. Don't worry about side-effects that
       /// can't be modeled.
       EM_IgnoreSideEffects,
+<<<<<<< HEAD
+=======
+
+      /// Evaluate as a constant expression. Stop if we find that the expression
+      /// is not a constant expression. Some expressions can be retried in the
+      /// optimizer if we don't constant fold them here, but in an unevaluated
+      /// context we try to fold them immediately since the optimizer never
+      /// gets a chance to look at it.
+      EM_ConstantExpressionUnevaluated,
+
+      /// Evaluate as a potential constant expression. Keep going if we hit a
+      /// construct that we can't evaluate yet (because we don't yet know the
+      /// value of something) but stop if we hit something that could never be
+      /// a constant expression. Some expressions can be retried in the
+      /// optimizer if we don't constant fold them here, but in an unevaluated
+      /// context we try to fold them immediately since the optimizer never
+      /// gets a chance to look at it.
+      EM_PotentialConstantExpressionUnevaluated,
+
+      /// Evaluate as a constant expression. In certain scenarios, if:
+      /// - we find a MemberExpr with a base that can't be evaluated, or
+      /// - we find a variable initialized with a call to a function that has
+      ///   the alloc_size attribute on it
+      /// then we may consider evaluation to have succeeded.
+      ///
+      /// In either case, the LValue returned shall have an invalid base; in the
+      /// former, the base will be the invalid MemberExpr, in the latter, the
+      /// base will be either the alloc_size CallExpr or a CastExpr wrapping
+      /// said CallExpr.
+      EM_OffsetFold,
+>>>>>>> origin/release/4.x
     } EvalMode;
 
     /// Are we checking whether the expression is a potential constant
@@ -2933,9 +2964,12 @@ static unsigned getBaseIndex(const CXXRecordDecl *Derived,
 /// Extract the value of a character from a string literal.
 static APSInt extractStringLiteralCharacter(EvalInfo &Info, const Expr *Lit,
                                             uint64_t Index) {
+<<<<<<< HEAD
   assert(!isa<SourceLocExpr>(Lit) &&
          "SourceLocExpr should have already been converted to a StringLiteral");
 
+=======
+>>>>>>> origin/release/4.x
   // FIXME: Support MakeStringConstant
   if (const auto *ObjCEnc = dyn_cast<ObjCEncodeExpr>(Lit)) {
     std::string Str;
@@ -7579,12 +7613,17 @@ bool LValueExprEvaluator::VisitArraySubscriptExpr(const ArraySubscriptExpr *E) {
   if (E->getBase()->getType()->isVectorType())
     return Error(E);
 
+<<<<<<< HEAD
   bool Success = true;
   if (!evaluatePointer(E->getBase(), Result)) {
     if (!Info.noteFailure())
       return false;
     Success = false;
   }
+=======
+  if (!evaluatePointer(E->getBase(), Result))
+    return false;
+>>>>>>> origin/release/4.x
 
   APSInt Index;
   if (!EvaluateInteger(E->getIdx(), Index, Info))

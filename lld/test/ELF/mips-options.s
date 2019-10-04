@@ -17,6 +17,7 @@ __start:
 
 # CHECK:      Name: _gp
 # CHECK-NEXT: Value: 0x[[GP:[0-9A-F]+]]
+<<<<<<< HEAD
 
 # CHECK:      ProgramHeader {
 # CHECK:        Type: PT_MIPS_OPTIONS
@@ -30,6 +31,8 @@ __start:
 # CHECK-NEXT:   ]
 # CHECK-NEXT:   Alignment: 8
 # CHECK-NEXT: }
+=======
+>>>>>>> origin/release/4.x
 
 # CHECK:      MIPS Options {
 # CHECK-NEXT:   ODK_REGINFO {

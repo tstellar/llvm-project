@@ -27,7 +27,11 @@ define amdgpu_kernel void @s_fadd_f64(double addrspace(1)* %out, double %r0, dou
 ; CHECK: v_add_f64
 ; CHECK: v_add_f64
 ; CHECK: _store_dwordx4
+<<<<<<< HEAD
 define amdgpu_kernel void @v_fadd_v2f64(<2 x double> addrspace(1)* %out, <2 x double> addrspace(1)* %in1,
+=======
+define void @v_fadd_v2f64(<2 x double> addrspace(1)* %out, <2 x double> addrspace(1)* %in1,
+>>>>>>> origin/release/4.x
                           <2 x double> addrspace(1)* %in2) {
   %r0 = load <2 x double>, <2 x double> addrspace(1)* %in1
   %r1 = load <2 x double>, <2 x double> addrspace(1)* %in2
@@ -40,7 +44,11 @@ define amdgpu_kernel void @v_fadd_v2f64(<2 x double> addrspace(1)* %out, <2 x do
 ; CHECK: v_add_f64 {{v\[[0-9]+:[0-9]+\]}}, {{s\[[0-9]+:[0-9]+\]}}, {{v\[[0-9]+:[0-9]+\]}}
 ; CHECK: v_add_f64 {{v\[[0-9]+:[0-9]+\]}}, {{s\[[0-9]+:[0-9]+\]}}, {{v\[[0-9]+:[0-9]+\]}}
 ; CHECK: _store_dwordx4
+<<<<<<< HEAD
 define amdgpu_kernel void @s_fadd_v2f64(<2 x double> addrspace(1)* %out, <2 x double> %r0, <2 x double> %r1) {
+=======
+define void @s_fadd_v2f64(<2 x double> addrspace(1)* %out, <2 x double> %r0, <2 x double> %r1) {
+>>>>>>> origin/release/4.x
   %r2 = fadd <2 x double> %r0, %r1
   store <2 x double> %r2, <2 x double> addrspace(1)* %out
   ret void

@@ -116,7 +116,11 @@ static cl::opt<int> PreInlineThreshold(
 
 static cl::opt<bool> EnableGVNHoist(
     "enable-gvn-hoist", cl::init(false), cl::Hidden,
+<<<<<<< HEAD
     cl::desc("Enable the GVN hoisting pass (default = off)"));
+=======
+    cl::desc("Enable the GVN hoisting pass"));
+>>>>>>> origin/release/4.x
 
 static cl::opt<bool>
     DisableLibCallsShrinkWrap("disable-libcalls-shrinkwrap", cl::init(false),

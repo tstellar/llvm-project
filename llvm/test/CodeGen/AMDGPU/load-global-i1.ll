@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -mtriple=amdgcn-- -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=FUNC %s
 ; RUN: llc -march=amdgcn -mtriple=amdgcn-- -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=FUNC %s
 ; RUN: llc -march=r600 -mtriple=r600-- -mcpu=cypress < %s | FileCheck -check-prefix=EG -check-prefix=FUNC %s
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=FUNC %s
+; RUN: llc -march=r600 -mcpu=cypress < %s | FileCheck -check-prefix=EG -check-prefix=FUNC %s
+>>>>>>> origin/release/4.x
 
 ; FUNC-LABEL: {{^}}global_load_i1:
 ; GCN: buffer_load_ubyte

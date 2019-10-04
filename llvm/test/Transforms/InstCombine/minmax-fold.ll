@@ -360,6 +360,7 @@ define i32 @test75(i32 %x) {
   ret i32 %retval
 }
 
+<<<<<<< HEAD
 ; The next 10 tests are value clamping with constants:
 ; https://llvm.org/bugs/show_bug.cgi?id=31693
 
@@ -564,14 +565,23 @@ falselabel:
   ret i32 0
 }
 
+=======
+>>>>>>> origin/release/4.x
 ; The next 3 min tests should canonicalize to the same form...and not infinite loop.
 
 define double @PR31751_umin1(i32 %x) {
 ; CHECK-LABEL: @PR31751_umin1(
+<<<<<<< HEAD
 ; CHECK-NEXT:    [[TMP1:%.*]] = icmp ult i32 [[X:%.*]], 2147483647
 ; CHECK-NEXT:    [[SEL:%.*]] = select i1 [[TMP1]], i32 [[X]], i32 2147483647
 ; CHECK-NEXT:    [[CONV:%.*]] = sitofp i32 [[SEL]] to double
 ; CHECK-NEXT:    ret double [[CONV]]
+=======
+; CHECK-NEXT:    [[TMP1:%.*]] = icmp ult i32 %x, 2147483647
+; CHECK-NEXT:    [[CONV1:%.*]] = select i1 [[TMP1]], i32 %x, i32 2147483647
+; CHECK-NEXT:    [[TMP2:%.*]] = sitofp i32 [[CONV1]] to double
+; CHECK-NEXT:    ret double [[TMP2]]
+>>>>>>> origin/release/4.x
 ;
   %cmp = icmp slt i32 %x, 0
   %sel = select i1 %cmp, i32 2147483647, i32 %x
@@ -581,8 +591,13 @@ define double @PR31751_umin1(i32 %x) {
 
 define double @PR31751_umin2(i32 %x) {
 ; CHECK-LABEL: @PR31751_umin2(
+<<<<<<< HEAD
 ; CHECK-NEXT:    [[CMP:%.*]] = icmp ult i32 [[X:%.*]], 2147483647
 ; CHECK-NEXT:    [[SEL:%.*]] = select i1 [[CMP]], i32 [[X]], i32 2147483647
+=======
+; CHECK-NEXT:    [[CMP:%.*]] = icmp ult i32 %x, 2147483647
+; CHECK-NEXT:    [[SEL:%.*]] = select i1 [[CMP]], i32 %x, i32 2147483647
+>>>>>>> origin/release/4.x
 ; CHECK-NEXT:    [[CONV:%.*]] = sitofp i32 [[SEL]] to double
 ; CHECK-NEXT:    ret double [[CONV]]
 ;
@@ -594,8 +609,13 @@ define double @PR31751_umin2(i32 %x) {
 
 define double @PR31751_umin3(i32 %x) {
 ; CHECK-LABEL: @PR31751_umin3(
+<<<<<<< HEAD
 ; CHECK-NEXT:    [[TMP1:%.*]] = icmp ult i32 [[X:%.*]], 2147483647
 ; CHECK-NEXT:    [[SEL:%.*]] = select i1 [[TMP1]], i32 [[X]], i32 2147483647
+=======
+; CHECK-NEXT:    [[TMP1:%.*]] = icmp ult i32 %x, 2147483647
+; CHECK-NEXT:    [[SEL:%.*]] = select i1 [[TMP1]], i32 %x, i32 2147483647
+>>>>>>> origin/release/4.x
 ; CHECK-NEXT:    [[CONV:%.*]] = sitofp i32 [[SEL]] to double
 ; CHECK-NEXT:    ret double [[CONV]]
 ;
@@ -609,10 +629,17 @@ define double @PR31751_umin3(i32 %x) {
 
 define double @PR31751_umax1(i32 %x) {
 ; CHECK-LABEL: @PR31751_umax1(
+<<<<<<< HEAD
 ; CHECK-NEXT:    [[TMP1:%.*]] = icmp ugt i32 [[X:%.*]], -2147483648
 ; CHECK-NEXT:    [[SEL:%.*]] = select i1 [[TMP1]], i32 [[X]], i32 -2147483648
 ; CHECK-NEXT:    [[CONV:%.*]] = sitofp i32 [[SEL]] to double
 ; CHECK-NEXT:    ret double [[CONV]]
+=======
+; CHECK-NEXT:    [[TMP1:%.*]] = icmp ugt i32 %x, -2147483648
+; CHECK-NEXT:    [[CONV1:%.*]] = select i1 [[TMP1]], i32 %x, i32 -2147483648
+; CHECK-NEXT:    [[TMP2:%.*]] = sitofp i32 [[CONV1]] to double
+; CHECK-NEXT:    ret double [[TMP2]]
+>>>>>>> origin/release/4.x
 ;
   %cmp = icmp sgt i32 %x, -1
   %sel = select i1 %cmp, i32 2147483648, i32 %x
@@ -622,8 +649,13 @@ define double @PR31751_umax1(i32 %x) {
 
 define double @PR31751_umax2(i32 %x) {
 ; CHECK-LABEL: @PR31751_umax2(
+<<<<<<< HEAD
 ; CHECK-NEXT:    [[CMP:%.*]] = icmp ugt i32 [[X:%.*]], -2147483648
 ; CHECK-NEXT:    [[SEL:%.*]] = select i1 [[CMP]], i32 [[X]], i32 -2147483648
+=======
+; CHECK-NEXT:    [[CMP:%.*]] = icmp ugt i32 %x, -2147483648
+; CHECK-NEXT:    [[SEL:%.*]] = select i1 [[CMP]], i32 %x, i32 -2147483648
+>>>>>>> origin/release/4.x
 ; CHECK-NEXT:    [[CONV:%.*]] = sitofp i32 [[SEL]] to double
 ; CHECK-NEXT:    ret double [[CONV]]
 ;
@@ -635,8 +667,13 @@ define double @PR31751_umax2(i32 %x) {
 
 define double @PR31751_umax3(i32 %x) {
 ; CHECK-LABEL: @PR31751_umax3(
+<<<<<<< HEAD
 ; CHECK-NEXT:    [[TMP1:%.*]] = icmp ugt i32 [[X:%.*]], -2147483648
 ; CHECK-NEXT:    [[SEL:%.*]] = select i1 [[TMP1]], i32 [[X]], i32 -2147483648
+=======
+; CHECK-NEXT:    [[TMP1:%.*]] = icmp ugt i32 %x, -2147483648
+; CHECK-NEXT:    [[SEL:%.*]] = select i1 [[TMP1]], i32 %x, i32 -2147483648
+>>>>>>> origin/release/4.x
 ; CHECK-NEXT:    [[CONV:%.*]] = sitofp i32 [[SEL]] to double
 ; CHECK-NEXT:    ret double [[CONV]]
 ;
@@ -645,6 +682,7 @@ define double @PR31751_umax3(i32 %x) {
   %conv = sitofp i32 %sel to double
   ret double %conv
 }
+<<<<<<< HEAD
 
 ; The icmp/select form a canonical smax, so don't hide that by folding the final bitcast into the select.
 
@@ -1448,3 +1486,5 @@ define i8 @PR14613_smax(i8 %x) {
   %r = trunc i32 %u7 to i8
   ret i8 %r
 }
+=======
+>>>>>>> origin/release/4.x

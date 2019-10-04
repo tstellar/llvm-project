@@ -3217,6 +3217,7 @@ kmp_int32 __kmp_get_user_lock_owner(kmp_user_lock_p lck, kmp_uint32 seq) {
 }
 
 // Initializes data for dynamic user locks.
+<<<<<<< HEAD
 void __kmp_init_dynamic_user_locks() {
   // Initialize jump table for the lock functions
   if (__kmp_env_consistency_check) {
@@ -3255,6 +3256,45 @@ void __kmp_init_dynamic_user_locks() {
   // Indirect lock size
   __kmp_indirect_lock_size[locktag_ticket] = sizeof(kmp_ticket_lock_t);
   __kmp_indirect_lock_size[locktag_queuing] = sizeof(kmp_queuing_lock_t);
+=======
+void
+__kmp_init_dynamic_user_locks()
+{
+    // Initialize jump table for the lock functions
+    if (__kmp_env_consistency_check) {
+        __kmp_direct_set     = direct_set_check;
+        __kmp_direct_unset   = direct_unset_check;
+        __kmp_direct_test    = direct_test_check;
+        __kmp_indirect_set   = indirect_set_check;
+        __kmp_indirect_unset = indirect_unset_check;
+        __kmp_indirect_test  = indirect_test_check;
+    }
+    else {
+        __kmp_direct_set     = direct_set;
+        __kmp_direct_unset   = direct_unset;
+        __kmp_direct_test    = direct_test;
+        __kmp_indirect_set   = indirect_set;
+        __kmp_indirect_unset = indirect_unset;
+        __kmp_indirect_test  = indirect_test;
+    }
+    // If the user locks have already been initialized, then return.
+    // Allow the switch between different KMP_CONSISTENCY_CHECK values,
+    // but do not allocate new lock tables if they have already been
+    // allocated.
+    if (__kmp_init_user_locks)
+        return;
+
+    // Initialize lock index table
+    __kmp_i_lock_table.size = KMP_I_LOCK_CHUNK;
+    __kmp_i_lock_table.table = (kmp_indirect_lock_t **)__kmp_allocate(sizeof(kmp_indirect_lock_t *));
+    *(__kmp_i_lock_table.table) = (kmp_indirect_lock_t *)
+                                  __kmp_allocate(KMP_I_LOCK_CHUNK*sizeof(kmp_indirect_lock_t));
+    __kmp_i_lock_table.next = 0;
+
+    // Indirect lock size
+    __kmp_indirect_lock_size[locktag_ticket]         = sizeof(kmp_ticket_lock_t);
+    __kmp_indirect_lock_size[locktag_queuing]        = sizeof(kmp_queuing_lock_t);
+>>>>>>> origin/release/4.x
 #if KMP_USE_ADAPTIVE_LOCKS
   __kmp_indirect_lock_size[locktag_adaptive] = sizeof(kmp_adaptive_lock_t);
 #endif

@@ -142,6 +142,7 @@ public:
     if (MethodLoc.isInvalid())
       MethodLoc = D->getLocation();
 
+<<<<<<< HEAD
     SourceLocation AttrLoc;
 
     // check for (getter=/setter=)
@@ -165,6 +166,10 @@ public:
     }
 
     TRY_DECL(D, IndexCtx.handleDecl(D, MethodLoc, Roles, Relations));
+=======
+    if (!IndexCtx.handleDecl(D, MethodLoc, (unsigned)SymbolRole::Dynamic, Relations))
+      return false;
+>>>>>>> origin/release/4.x
     IndexCtx.indexTypeSourceInfo(D->getReturnTypeSourceInfo(), D);
     bool hasIBActionAndFirst = D->hasAttr<IBActionAttr>();
     for (const auto *I : D->parameters()) {

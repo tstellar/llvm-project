@@ -2510,7 +2510,11 @@ String builtins
 ---------------
 
 Clang provides constant expression evaluation support for builtins forms of
+<<<<<<< HEAD
 the following functions from the C standard library ``<string.h>`` header:
+=======
+the following functions from the C standard library ``<strings.h>`` header:
+>>>>>>> origin/release/4.x
 
 * ``memchr``
 * ``memcmp``
@@ -2546,6 +2550,7 @@ is disallowed in general).
 Support for constant expression evaluation for the above builtins be detected
 with ``__has_feature(cxx_constexpr_string_builtins)``.
 
+<<<<<<< HEAD
 Atomic Min/Max builtins with memory ordering
 --------------------------------------------
 
@@ -2572,6 +2577,8 @@ In terms or aquire-release ordering barriers these two operations are always
 considered as operations with *load-store* semantics, even when the original value
 is not actually modified after comparison.
 
+=======
+>>>>>>> origin/release/4.x
 .. _langext-__c11_atomic:
 
 __c11_atomic builtins

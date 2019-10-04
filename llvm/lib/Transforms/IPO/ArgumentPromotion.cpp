@@ -962,6 +962,7 @@ promoteArguments(Function *F, function_ref<AAResults &(Function &F)> AARGetter,
                             << " arguments to the function.\n");
           continue;
         }
+<<<<<<< HEAD
 
         // If all the elements are single-value types, we can promote it.
         bool AllSimple = true;
@@ -969,6 +970,38 @@ promoteArguments(Function *F, function_ref<AAResults &(Function &F)> AARGetter,
           if (!EltTy->isSingleValueType()) {
             AllSimple = false;
             break;
+=======
+      } else if (!I->use_empty()) {
+        // Non-dead argument: insert GEPs and loads as appropriate.
+        ScalarizeTable &ArgIndices = ScalarizedElements[&*I];
+        // Store the Value* version of the indices in here, but declare it now
+        // for reuse.
+        std::vector<Value*> Ops;
+        for (const auto &ArgIndex : ArgIndices) {
+          Value *V = *AI;
+          LoadInst *OrigLoad =
+              OriginalLoads[std::make_pair(&*I, ArgIndex.second)];
+          if (!ArgIndex.second.empty()) {
+            Ops.reserve(ArgIndex.second.size());
+            Type *ElTy = V->getType();
+            for (auto II : ArgIndex.second) {
+              // Use i32 to index structs, and i64 for others (pointers/arrays).
+              // This satisfies GEP constraints.
+              Type *IdxTy = (ElTy->isStructTy() ?
+                    Type::getInt32Ty(F->getContext()) : 
+                    Type::getInt64Ty(F->getContext()));
+              Ops.push_back(ConstantInt::get(IdxTy, II));
+              // Keep track of the type we're currently indexing.
+              if (auto *ElPTy = dyn_cast<PointerType>(ElTy))
+                ElTy = ElPTy->getElementType();
+              else
+                ElTy = cast<CompositeType>(ElTy)->getTypeAtIndex(II);
+            }
+            // And create a GEP to extract those indices.
+            V = GetElementPtrInst::Create(ArgIndex.first, V, Ops,
+                                          V->getName() + ".idx", Call);
+            Ops.clear();
+>>>>>>> origin/release/4.x
           }
         }
 

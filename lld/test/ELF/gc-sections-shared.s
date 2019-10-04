@@ -25,6 +25,7 @@
 # CHECK-NEXT:     Section: Undefined (0x0)
 # CHECK-NEXT:   }
 # CHECK-NEXT:   Symbol {
+<<<<<<< HEAD
 # CHECK-NEXT:     Name: qux
 # CHECK-NEXT:     Value:
 # CHECK-NEXT:     Size:
@@ -44,6 +45,9 @@
 # CHECK-NEXT:   }
 # CHECK-NEXT:   Symbol {
 # CHECK-NEXT:     Name: baz
+=======
+# CHECK-NEXT:     Name: bar2
+>>>>>>> origin/release/4.x
 # CHECK-NEXT:     Value:
 # CHECK-NEXT:     Size:
 # CHECK-NEXT:     Binding: Global

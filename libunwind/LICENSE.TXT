@@ -1,4 +1,5 @@
 ==============================================================================
+<<<<<<< HEAD:libclc/LICENSE.TXT
 The LLVM Project is under the Apache License v2.0 with LLVM Exceptions:
 ==============================================================================
 
@@ -235,6 +236,9 @@ mechanisms:
 
 ==============================================================================
 Legacy LLVM License (https://llvm.org/docs/DeveloperPolicy.html#legacy):
+=======
+libunwind License
+>>>>>>> origin/release/4.x:libunwind/LICENSE.TXT
 ==============================================================================
 
 The libunwind library is dual licensed under both the University of Illinois
@@ -246,10 +250,14 @@ Full text of the relevant licenses is included below.
 
 ==============================================================================
 
+<<<<<<< HEAD:libclc/LICENSE.TXT
+Copyright (c) 2011-2019 by the contributors listed in CREDITS.TXT
+=======
 University of Illinois/NCSA
 Open Source License
 
-Copyright (c) 2009-2019 by the contributors listed in CREDITS.TXT
+Copyright (c) 2009-2017 by the contributors listed in CREDITS.TXT
+>>>>>>> origin/release/4.x:libunwind/LICENSE.TXT
 
 All rights reserved.
 

@@ -1786,10 +1786,17 @@ Parser::ParsePostfixExpressionSuffix(ExprResult LHS) {
           CorrectedBase = Base;
 
         // Code completion for a member access expression.
+<<<<<<< HEAD
         Actions.CodeCompleteMemberReferenceExpr(
             getCurScope(), Base, CorrectedBase, OpLoc, OpKind == tok::arrow,
             Base && ExprStatementTokLoc == Base->getBeginLoc(),
             PreferredType.get(Tok.getLocation()));
+=======
+        if (Expr *Base = LHS.get())
+          Actions.CodeCompleteMemberReferenceExpr(
+              getCurScope(), Base, OpLoc, OpKind == tok::arrow,
+              ExprStatementTokLoc == Base->getLocStart());
+>>>>>>> origin/release/4.x
 
         cutOffParsing();
         return ExprError();
@@ -2627,11 +2634,17 @@ Parser::ParseParenExpression(ParenParseOption &ExprType, bool stopIfCastExpr,
     if (!ParseSimpleExpressionList(ArgExprs, CommaLocs)) {
       // FIXME: If we ever support comma expressions as operands to
       // fold-expressions, we'll need to allow multiple ArgExprs here.
+<<<<<<< HEAD
       if (ExprType >= FoldExpr && ArgExprs.size() == 1 &&
           isFoldOperator(Tok.getKind()) && NextToken().is(tok::ellipsis)) {
         ExprType = FoldExpr;
         return ParseFoldExpression(ArgExprs[0], T);
       }
+=======
+      if (ArgExprs.size() == 1 && isFoldOperator(Tok.getKind()) &&
+          NextToken().is(tok::ellipsis))
+        return ParseFoldExpression(ArgExprs[0], T);
+>>>>>>> origin/release/4.x
 
       ExprType = SimpleExpr;
       Result = Actions.ActOnParenListExpr(OpenLoc, Tok.getLocation(),

@@ -136,9 +136,31 @@ public:
     }
   }
 
+<<<<<<< HEAD
   bool hasAnyCopies() {
     return !Copies.empty();
   }
+=======
+  private:
+    void ClobberRegister(unsigned Reg);
+    void ReadRegister(unsigned Reg);
+    void CopyPropagateBlock(MachineBasicBlock &MBB);
+    bool eraseIfRedundant(MachineInstr &Copy, unsigned Src, unsigned Def);
+
+    /// Candidates for deletion.
+    SmallSetVector<MachineInstr*, 8> MaybeDeadCopies;
+    /// Def -> available copies map.
+    Reg2MIMap AvailCopyMap;
+    /// Def -> copies map.
+    Reg2MIMap CopyMap;
+    /// Src -> Def map
+    SourceMap SrcMap;
+    bool Changed;
+  };
+}
+char MachineCopyPropagation::ID = 0;
+char &llvm::MachineCopyPropagationID = MachineCopyPropagation::ID;
+>>>>>>> origin/release/4.x
 
   MachineInstr *findCopyForUnit(unsigned RegUnit, const TargetRegisterInfo &TRI,
                          bool MustBeAvailable = false) {
@@ -250,6 +272,18 @@ void MachineCopyPropagation::ReadRegister(unsigned Reg, MachineInstr &Reader,
       } else {
         CopyDbgUsers[Copy].push_back(&Reader);
       }
+    }
+  }
+}
+
+void MachineCopyPropagation::ReadRegister(unsigned Reg) {
+  // If 'Reg' is defined by a copy, the copy is no longer a candidate
+  // for elimination.
+  for (MCRegAliasIterator AI(Reg, TRI, true); AI.isValid(); ++AI) {
+    Reg2MIMap::iterator CI = CopyMap.find(*AI);
+    if (CI != CopyMap.end()) {
+      DEBUG(dbgs() << "MCP: Copy is used - not dead: "; CI->second->dump());
+      MaybeDeadCopies.remove(CI->second);
     }
   }
 }
@@ -500,6 +534,7 @@ void MachineCopyPropagation::CopyPropagateBlock(MachineBasicBlock &MBB) {
 
       // If Src is defined by a previous copy, the previous copy cannot be
       // eliminated.
+<<<<<<< HEAD
       ReadRegister(Src, *MI, RegularUse);
       for (const MachineOperand &MO : MI->implicit_operands()) {
         if (!MO.isReg() || !MO.readsReg())
@@ -508,6 +543,16 @@ void MachineCopyPropagation::CopyPropagateBlock(MachineBasicBlock &MBB) {
         if (!Reg)
           continue;
         ReadRegister(Reg, *MI, RegularUse);
+=======
+      ReadRegister(Src);
+      for (const MachineOperand &MO : MI->implicit_operands()) {
+        if (!MO.isReg() || !MO.readsReg())
+          continue;
+        unsigned Reg = MO.getReg();
+        if (!Reg)
+          continue;
+        ReadRegister(Reg);
+>>>>>>> origin/release/4.x
       }
 
       LLVM_DEBUG(dbgs() << "MCP: Copy is a deletion candidate: "; MI->dump());
@@ -522,6 +567,7 @@ void MachineCopyPropagation::CopyPropagateBlock(MachineBasicBlock &MBB) {
       // ...
       // %xmm2 = copy %xmm0
       // ...
+<<<<<<< HEAD
       // %xmm2 = copy %xmm9
       Tracker.clobberRegister(Def, *TRI);
       for (const MachineOperand &MO : MI->implicit_operands()) {
@@ -531,6 +577,24 @@ void MachineCopyPropagation::CopyPropagateBlock(MachineBasicBlock &MBB) {
         if (!Reg)
           continue;
         Tracker.clobberRegister(Reg, *TRI);
+=======
+      // %xmm2<def> = copy %xmm9
+      ClobberRegister(Def);
+      for (const MachineOperand &MO : MI->implicit_operands()) {
+        if (!MO.isReg() || !MO.isDef())
+          continue;
+        unsigned Reg = MO.getReg();
+        if (!Reg)
+          continue;
+        ClobberRegister(Reg);
+      }
+
+      // Remember Def is defined by the copy.
+      for (MCSubRegIterator SR(Def, TRI, /*IncludeSelf=*/true); SR.isValid();
+           ++SR) {
+        CopyMap[*SR] = MI;
+        AvailCopyMap[*SR] = MI;
+>>>>>>> origin/release/4.x
       }
 
       Tracker.trackCopy(MI, *TRI);
@@ -569,9 +633,23 @@ void MachineCopyPropagation::CopyPropagateBlock(MachineBasicBlock &MBB) {
 
       if (MO.isDef() && !MO.isEarlyClobber()) {
         Defs.push_back(Reg);
+<<<<<<< HEAD
         continue;
       } else if (MO.readsReg())
         ReadRegister(Reg, *MI, MO.isDebug() ? DebugUse : RegularUse);
+=======
+      } else {
+        ReadRegister(Reg);
+      }
+      // Treat undef use like defs for copy propagation but not for
+      // dead copy. We would need to do a liveness check to be sure the copy
+      // is dead for undef uses.
+      // The backends are allowed to do whatever they want with undef value
+      // and we cannot be sure this register will not be rewritten to break
+      // some false dependencies for the hardware for instance.
+      if (MO.isUndef())
+        Defs.push_back(Reg);
+>>>>>>> origin/release/4.x
     }
 
     // The instruction has a register mask operand which means that it clobbers

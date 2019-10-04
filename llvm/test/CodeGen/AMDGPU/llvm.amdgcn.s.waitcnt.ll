@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -mcpu=tahiti -verify-machineinstrs < %s | FileCheck %s
 ; RUN: llc -march=amdgcn -mcpu=tonga -verify-machineinstrs < %s | FileCheck %s
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=CHECK %s
+; RUN: llc -march=amdgcn -mcpu=tonga -verify-machineinstrs < %s | FileCheck -check-prefix=CHECK %s
+>>>>>>> origin/release/4.x
 
 ; CHECK-LABEL: {{^}}test1:
 ; CHECK-NOT: s_waitcnt

@@ -565,6 +565,7 @@ define void @no_interleave(<4 x float> %a0) {
   store <4 x float> %v0, <4 x float>* @g, align 16
   ret void
 }
+<<<<<<< HEAD
 
 define void @load_factor2_wide2(<16 x i32>* %ptr) {
 ; NEON-LABEL:    @load_factor2_wide2(
@@ -799,3 +800,5 @@ define <4 x i1> @load_large_vector(<12 x i64 *>* %p) {
   %ret = icmp ne <4 x i64 *> %s1, %s2
   ret <4 x i1> %ret
 }
+=======
+>>>>>>> origin/release/4.x

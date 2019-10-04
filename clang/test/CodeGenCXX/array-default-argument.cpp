@@ -12,7 +12,11 @@ struct B {
 };
 
 void f();
+<<<<<<< HEAD
 // CHECK-LABEL: define {{(dso_local )?}}void @_Z1gv()
+=======
+// CHECK-LABEL: define void @_Z1gv()
+>>>>>>> origin/release/4.x
 void g() {
   // CHECK: br label %[[LOOP:.*]]
 

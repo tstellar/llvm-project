@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 ; RUN: llc < %s -march=amdgcn -verify-machineinstrs | FileCheck -allow-deprecated-dag-overlap -enable-var-scope --check-prefixes=SI,GCN,MESA-GCN,FUNC %s
 ; RUN: llc < %s -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs | FileCheck -allow-deprecated-dag-overlap -enable-var-scope -check-prefixes=VI,GCN,MESA-VI,MESA-GCN,FUNC %s
 ; RUN: llc < %s -mtriple=amdgcn--amdhsa -mcpu=gfx900 -mattr=-code-object-v3 -verify-machineinstrs | FileCheck -allow-deprecated-dag-overlap -enable-var-scope -check-prefixes=VI,GCN,HSA-GFX9,FUNC %s
 ; RUN: llc < %s -march=r600 -mcpu=redwood -verify-machineinstrs | FileCheck -allow-deprecated-dag-overlap -enable-var-scope -check-prefixes=EG,EGCM,FUNC %s
 ; RUN: llc < %s -march=r600 -mcpu=cayman -verify-machineinstrs | FileCheck -allow-deprecated-dag-overlap -enable-var-scope --check-prefixes=CM,EGCM,FUNC %s
+=======
+; RUN: llc < %s -march=amdgcn -verify-machineinstrs | FileCheck %s --check-prefixes=SI,GCN,MESA-GCN,FUNC
+; RUN: llc < %s -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs | FileCheck %s --check-prefixes=VI,GCN,MESA-VI,MESA-GCN,FUNC
+; RUN: llc < %s -mtriple=amdgcn--amdhsa -mcpu=fiji -verify-machineinstrs | FileCheck %s --check-prefixes=VI,GCN,HSA-VI,FUNC
+; RUN: llc < %s -march=r600 -mcpu=redwood | FileCheck %s --check-prefix=EG --check-prefix=FUNC
+; RUN: llc < %s -march=r600 -mcpu=cayman | FileCheck %s --check-prefix=EG --check-prefix=FUNC
+>>>>>>> origin/release/4.x
 
 ; FUNC-LABEL: {{^}}i8_arg:
 ; HSA-GFX9: kernarg_segment_byte_size = 12

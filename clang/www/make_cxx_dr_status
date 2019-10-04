@@ -110,6 +110,7 @@ def availability(issue):
     avail_style = ' class="none"'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   elif status == '10':
 =======
   elif status == '8':
@@ -125,6 +126,13 @@ def availability(issue):
   elif status == '5':
     avail = 'Clang 5'
 >>>>>>> origin/release/5.x
+=======
+  elif status == '5':
+    avail = 'SVN'
+    avail_style = ' class="svn"'
+  elif status == '4':
+    avail = 'Clang 4'
+>>>>>>> origin/release/4.x
     avail_style = ' class="svn"'
   elif re.match('^[0-9]+\.?[0-9]*', status):
     avail = 'Clang %s' % status

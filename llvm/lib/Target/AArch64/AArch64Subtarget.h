@@ -175,7 +175,10 @@ protected:
   bool UsePostRAScheduler = false;
   bool Misaligned128StoreIsSlow = false;
   bool Paired128IsSlow = false;
+<<<<<<< HEAD
   bool STRQroIsSlow = false;
+=======
+>>>>>>> origin/release/4.x
   bool UseAlternateSExtLoadCVTF32Pattern = false;
   bool HasArithmeticBccFusion = false;
   bool HasArithmeticCbzFusion = false;
@@ -323,7 +326,10 @@ public:
   bool hasExynosCheapAsMoveHandling() const { return ExynosAsCheapAsMove; }
   bool isMisaligned128StoreSlow() const { return Misaligned128StoreIsSlow; }
   bool isPaired128Slow() const { return Paired128IsSlow; }
+<<<<<<< HEAD
   bool isSTRQroSlow() const { return STRQroIsSlow; }
+=======
+>>>>>>> origin/release/4.x
   bool useAlternateSExtLoadCVTF32Pattern() const {
     return UseAlternateSExtLoadCVTF32Pattern;
   }

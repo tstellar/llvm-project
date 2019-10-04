@@ -115,11 +115,20 @@ public:
 /// single location use \a ValueLoc and (optionally) a single entry of \a Expr.
 ///
 /// Variables that have been optimized out use none of these fields.
+<<<<<<< HEAD
 class DbgVariable : public DbgEntity {
   /// Offset in DebugLocs.
   unsigned DebugLocListIndex = ~0u;
   /// Single value location description.
   std::unique_ptr<DbgValueLoc> ValueLoc = nullptr;
+=======
+class DbgVariable {
+  const DILocalVariable *Var;                /// Variable Descriptor.
+  const DILocation *IA;                      /// Inlined at location.
+  DIE *TheDIE = nullptr;                     /// Variable DIE.
+  unsigned DebugLocListIndex = ~0u;          /// Offset in DebugLocs.
+  const MachineInstr *MInsn = nullptr;       /// DBG_VALUE instruction.
+>>>>>>> origin/release/4.x
 
   struct FrameIndexExpr {
     int FI;
@@ -139,7 +148,11 @@ public:
   /// Initialize from the MMI table.
   void initializeMMI(const DIExpression *E, int FI) {
     assert(FrameIndexExprs.empty() && "Already initialized?");
+<<<<<<< HEAD
     assert(!ValueLoc.get() && "Already initialized?");
+=======
+    assert(!MInsn && "Already initialized?");
+>>>>>>> origin/release/4.x
 
     assert((!E || E->isValid()) && "Expected valid expression");
     assert(FI != std::numeric_limits<int>::max() && "Expected valid index");
@@ -147,11 +160,21 @@ public:
     FrameIndexExprs.push_back({FI, E});
   }
 
+<<<<<<< HEAD
   // Initialize variable's location.
   void initializeDbgValue(DbgValueLoc Value) {
     assert(FrameIndexExprs.empty() && "Already initialized?");
     assert(!ValueLoc && "Already initialized?");
     assert(!Value.getExpression()->isFragment() && "Fragments not supported.");
+=======
+  /// Initialize from a DBG_VALUE instruction.
+  void initializeDbgValue(const MachineInstr *DbgValue) {
+    assert(FrameIndexExprs.empty() && "Already initialized?");
+    assert(!MInsn && "Already initialized?");
+
+    assert(Var == DbgValue->getDebugVariable() && "Wrong variable");
+    assert(IA == DbgValue->getDebugLoc()->getInlinedAt() && "Wrong inlined-at");
+>>>>>>> origin/release/4.x
 
     ValueLoc = std::make_unique<DbgValueLoc>(Value);
     if (auto *E = ValueLoc->getExpression())
@@ -163,23 +186,55 @@ public:
   void initializeDbgValue(const MachineInstr *DbgValue);
 
   // Accessors.
+<<<<<<< HEAD
   const DILocalVariable *getVariable() const {
     return cast<DILocalVariable>(getEntity());
   }
 
   const DIExpression *getSingleExpression() const {
     assert(ValueLoc.get() && FrameIndexExprs.size() <= 1);
+=======
+  const DILocalVariable *getVariable() const { return Var; }
+  const DILocation *getInlinedAt() const { return IA; }
+  const DIExpression *getSingleExpression() const {
+    assert(MInsn && FrameIndexExprs.size() <= 1);
+>>>>>>> origin/release/4.x
     return FrameIndexExprs.size() ? FrameIndexExprs[0].Expr : nullptr;
   }
 
   void setDebugLocListIndex(unsigned O) { DebugLocListIndex = O; }
   unsigned getDebugLocListIndex() const { return DebugLocListIndex; }
+<<<<<<< HEAD
   StringRef getName() const { return getVariable()->getName(); }
   const DbgValueLoc *getValueLoc() const { return ValueLoc.get(); }
   /// Get the FI entries, sorted by fragment offset.
   ArrayRef<FrameIndexExpr> getFrameIndexExprs() const;
   bool hasFrameIndexExprs() const { return !FrameIndexExprs.empty(); }
   void addMMIEntry(const DbgVariable &V);
+=======
+  StringRef getName() const { return Var->getName(); }
+  const MachineInstr *getMInsn() const { return MInsn; }
+  /// Get the FI entries, sorted by fragment offset.
+  ArrayRef<FrameIndexExpr> getFrameIndexExprs() const;
+  bool hasFrameIndexExprs() const { return !FrameIndexExprs.empty(); }
+
+  void addMMIEntry(const DbgVariable &V) {
+    assert(DebugLocListIndex == ~0U && !MInsn && "not an MMI entry");
+    assert(V.DebugLocListIndex == ~0U && !V.MInsn && "not an MMI entry");
+    assert(V.Var == Var && "conflicting variable");
+    assert(V.IA == IA && "conflicting inlined-at location");
+
+    assert(!FrameIndexExprs.empty() && "Expected an MMI entry");
+    assert(!V.FrameIndexExprs.empty() && "Expected an MMI entry");
+
+    FrameIndexExprs.append(V.FrameIndexExprs.begin(), V.FrameIndexExprs.end());
+    assert(all_of(FrameIndexExprs,
+                  [](FrameIndexExpr &FIE) {
+                    return FIE.Expr && FIE.Expr->isFragment();
+                  }) &&
+           "conflicting locations for variable");
+  }
+>>>>>>> origin/release/4.x
 
   // Translate tag to proper Dwarf tag.
   dwarf::Tag getTag() const {
@@ -208,7 +263,11 @@ public:
   }
 
   bool hasComplexAddress() const {
+<<<<<<< HEAD
     assert(ValueLoc.get() && "Expected DBG_VALUE, not MMI variable");
+=======
+    assert(MInsn && "Expected DBG_VALUE, not MMI variable");
+>>>>>>> origin/release/4.x
     assert((FrameIndexExprs.empty() ||
             (FrameIndexExprs.size() == 1 &&
              FrameIndexExprs[0].Expr->getNumElements())) &&

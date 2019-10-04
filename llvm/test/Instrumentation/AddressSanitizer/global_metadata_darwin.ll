@@ -26,7 +26,11 @@ target triple = "x86_64-apple-macosx10.11.0"
 ; CHECK: @llvm.compiler.used {{.*}} @__asan_binder_global {{.*}} section "llvm.metadata"
 
 ; Test that there is the flag global variable:
+<<<<<<< HEAD
 ; CHECK: @___asan_globals_registered = common hidden global i64 0
+=======
+; CHECK: @__asan_globals_registered = common hidden global i64 0
+>>>>>>> origin/release/4.x
 
 ; Test that __asan_register_image_globals is invoked from the constructor:
 ; CHECK-LABEL: define internal void @asan.module_ctor

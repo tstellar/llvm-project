@@ -273,6 +273,7 @@ bool Sema::DiagnoseUseOfDecl(NamedDecl *D, ArrayRef<SourceLocation> Locs,
       return true;
   }
 
+<<<<<<< HEAD
   if (auto *MD = dyn_cast<CXXMethodDecl>(D)) {
     // Lambdas are only default-constructible or assignable in C++2a onwards.
     if (MD->getParent()->isLambda() &&
@@ -282,6 +283,10 @@ bool Sema::DiagnoseUseOfDecl(NamedDecl *D, ArrayRef<SourceLocation> Locs,
       Diag(Loc, diag::warn_cxx17_compat_lambda_def_ctor_assign)
         << !isa<CXXConstructorDecl>(MD);
     }
+=======
+    if (diagnoseArgIndependentDiagnoseIfAttrs(FD, Loc))
+      return true;
+>>>>>>> origin/release/4.x
   }
 
   auto getReferencedObjCProp = [](const NamedDecl *D) ->
@@ -310,6 +315,7 @@ bool Sema::DiagnoseUseOfDecl(NamedDecl *D, ArrayRef<SourceLocation> Locs,
     return true;
   }
 
+<<<<<<< HEAD
   // [OpenMP 5.0], 2.19.7.3. declare mapper Directive, Restrictions
   //  List-items in map clauses on this construct may only refer to the declared
   //  variable var and entities that could be referenced by a procedure defined
@@ -325,6 +331,10 @@ bool Sema::DiagnoseUseOfDecl(NamedDecl *D, ArrayRef<SourceLocation> Locs,
 
   DiagnoseAvailabilityOfDecl(D, Locs, UnknownObjCClass, ObjCPropertyAccess,
                              AvoidPartialAvailabilityChecks, ClassReceiver);
+=======
+  DiagnoseAvailabilityOfDecl(*this, D, Loc, UnknownObjCClass,
+                             ObjCPropertyAccess);
+>>>>>>> origin/release/4.x
 
   DiagnoseUnusedOfDecl(*this, D, Loc);
 
@@ -5465,6 +5475,7 @@ static void checkDirectCallValidity(Sema &S, const Expr *Fn,
         << Attr->getCond()->getSourceRange() << Attr->getMessage();
     return;
   }
+<<<<<<< HEAD
 }
 
 static bool enclosingClassIsRelatedToClassInWhichMembersWereFound(
@@ -5569,6 +5580,8 @@ ExprResult Sema::ActOnCallExpr(Scope *Scope, Expr *Fn, SourceLocation LParenLoc,
   }
 
   return Call;
+=======
+>>>>>>> origin/release/4.x
 }
 
 /// BuildCallExpr - Handle a call to Fn with the specified array of arguments.

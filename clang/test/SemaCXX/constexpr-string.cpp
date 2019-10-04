@@ -385,6 +385,7 @@ namespace StrchrEtc {
   static_assert(__builtin_memchr(nullptr, 'x', 3) == nullptr); // expected-error {{not an integral constant}} expected-note {{dereferenced null}}
   static_assert(__builtin_memchr(nullptr, 'x', 0) == nullptr); // FIXME: Should we reject this?
 
+<<<<<<< HEAD
   extern struct Incomplete incomplete;
   static_assert(__builtin_memchr(&incomplete, 0, 0u) == nullptr);
   static_assert(__builtin_memchr(&incomplete, 0, 1u) == nullptr); // expected-error {{not an integral constant}} expected-note {{read of incomplete type 'struct Incomplete'}}
@@ -406,6 +407,8 @@ namespace StrchrEtc {
   static_assert(sizeof(bool) != 1u || __builtin_memchr(kBoolPastTheEndPtr - 3, -1, 3) == nullptr);
   static_assert(sizeof(bool) != 1u || __builtin_memchr(kBoolPastTheEndPtr, 0, 1) == nullptr); // expected-error {{not an integral constant}} expected-note {{dereferenced one-past-the-end}}
 
+=======
+>>>>>>> origin/release/4.x
   static_assert(__builtin_char_memchr(kStr, 'a', 0) == nullptr);
   static_assert(__builtin_char_memchr(kStr, 'a', 1) == kStr);
   static_assert(__builtin_char_memchr(kStr, '\0', 5) == nullptr);

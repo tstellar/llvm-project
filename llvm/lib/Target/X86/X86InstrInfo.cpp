@@ -2389,6 +2389,7 @@ bool X86InstrInfo::isUnpredicatedTerminator(const MachineInstr &MI) const {
   return !isPredicated(MI);
 }
 
+<<<<<<< HEAD
 bool X86InstrInfo::isUnconditionalTailCall(const MachineInstr &MI) const {
   switch (MI.getOpcode()) {
   case X86::TCRETURNdi:
@@ -2478,6 +2479,8 @@ void X86InstrInfo::replaceBranchWithTailCall(
   I->eraseFromParent();
 }
 
+=======
+>>>>>>> origin/release/4.x
 // Given a MBB and its TBB, find the FBB which was a fallthrough MBB (it may
 // not be a fallthrough MBB now due to layout changes). Return nullptr if the
 // fallthrough MBB cannot be identified.

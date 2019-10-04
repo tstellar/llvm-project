@@ -1107,6 +1107,7 @@ public:
     return AMDGPU::IsaInfo::getMinNumSGPRs(this, WavesPerEU);
   }
 
+<<<<<<< HEAD
   /// \returns Maximum number of SGPRs that meets the given number of waves per
   /// execution unit requirement supported by the subtarget.
   unsigned getMaxNumSGPRs(unsigned WavesPerEU, bool Addressable) const {
@@ -1115,6 +1116,26 @@ public:
 
   /// \returns Reserved number of SGPRs for given function \p MF.
   unsigned getReservedNumSGPRs(const MachineFunction &MF) const;
+=======
+  bool isMesaKernel(const MachineFunction &MF) const {
+    return isMesa3DOS() && !AMDGPU::isShader(MF.getFunction()->getCallingConv());
+  }
+
+  // Covers VS/PS/CS graphics shaders
+  bool isMesaGfxShader(const MachineFunction &MF) const {
+    return isMesa3DOS() && AMDGPU::isShader(MF.getFunction()->getCallingConv());
+  }
+
+  bool isAmdCodeObjectV2(const MachineFunction &MF) const {
+    return isAmdHsaOS() || isMesaKernel(MF);
+  }
+
+  /// \brief Returns the offset in bytes from the start of the input buffer
+  ///        of the first explicit kernel argument.
+  unsigned getExplicitKernelArgOffset(const MachineFunction &MF) const {
+    return isAmdCodeObjectV2(MF) ? 0 : 36;
+  }
+>>>>>>> origin/release/4.x
 
   /// \returns Maximum number of SGPRs that meets number of waves per execution
   /// unit requirement for function \p MF, or number of SGPRs explicitly
@@ -1126,9 +1147,18 @@ public:
   /// unit requirement.
   unsigned getMaxNumSGPRs(const MachineFunction &MF) const;
 
+<<<<<<< HEAD
   /// \returns VGPR allocation granularity supported by the subtarget.
   unsigned getVGPRAllocGranule() const {
     return AMDGPU::IsaInfo::getVGPRAllocGranule(this);
+=======
+  unsigned getImplicitArgNumBytes(const MachineFunction &MF) const {
+    if (isMesaKernel(MF))
+      return 16;
+    if (isAmdHsaOS() && isOpenCLEnv())
+      return 32;
+    return 0;
+>>>>>>> origin/release/4.x
   }
 
   /// \returns VGPR encoding granularity supported by the subtarget.
@@ -1339,10 +1369,25 @@ public:
     return AMDGPU::IsaInfo::getMaxWavesPerEU(this, FlatWorkGroupSize);
   }
 
+<<<<<<< HEAD
   /// \returns Minimum number of waves per execution unit supported by the
   /// subtarget.
   unsigned getMinWavesPerEU() const override {
     return AMDGPU::IsaInfo::getMinWavesPerEU(this);
+=======
+  unsigned getKernArgSegmentSize(const MachineFunction &MF, unsigned ExplictArgBytes) const;
+
+  /// Return the maximum number of waves per SIMD for kernels using \p SGPRs SGPRs
+  unsigned getOccupancyWithNumSGPRs(unsigned SGPRs) const;
+
+  /// Return the maximum number of waves per SIMD for kernels using \p VGPRs VGPRs
+  unsigned getOccupancyWithNumVGPRs(unsigned VGPRs) const;
+
+  /// \returns True if waitcnt instruction is needed before barrier instruction,
+  /// false otherwise.
+  bool needWaitcntBeforeBarrier() const {
+    return true;
+>>>>>>> origin/release/4.x
   }
 };
 

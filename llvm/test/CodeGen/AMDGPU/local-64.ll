@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -verify-machineinstrs< %s | FileCheck -enable-var-scope -check-prefixes=GCN,SI,SICIVI %s
 ; RUN: llc -march=amdgcn -mcpu=bonaire -verify-machineinstrs< %s | FileCheck -enable-var-scope -check-prefixes=GCN,CI,SICIVI %s
 ; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs< %s | FileCheck -enable-var-scope -check-prefixes=GCN,VI,SICIVI %s
@@ -10,6 +11,16 @@
 ; GCN: ds_read_b32 [[REG:v[0-9]+]], v{{[0-9]+}} offset:28
 ; GCN: buffer_store_dword [[REG]],
 define amdgpu_kernel void @local_i32_load(i32 addrspace(1)* %out, i32 addrspace(3)* %in) nounwind {
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs< %s | FileCheck --check-prefix=SI --check-prefix=BOTH %s
+; RUN: llc -march=amdgcn -mcpu=bonaire -verify-machineinstrs< %s | FileCheck --check-prefix=CI --check-prefix=BOTH %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs< %s | FileCheck --check-prefix=CI --check-prefix=BOTH %s
+
+; BOTH-LABEL: {{^}}local_i32_load
+; BOTH: ds_read_b32 [[REG:v[0-9]+]], v{{[0-9]+}} offset:28
+; BOTH: buffer_store_dword [[REG]],
+define void @local_i32_load(i32 addrspace(1)* %out, i32 addrspace(3)* %in) nounwind {
+>>>>>>> origin/release/4.x
   %gep = getelementptr i32, i32 addrspace(3)* %in, i32 7
   %val = load i32, i32 addrspace(3)* %gep, align 4
   store i32 %val, i32 addrspace(1)* %out, align 4

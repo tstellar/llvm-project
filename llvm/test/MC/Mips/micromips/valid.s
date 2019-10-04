@@ -353,6 +353,7 @@ c.ult.d  $fcc6, $f6, $f16   # CHECK: c.ult.d  $fcc6, $f6, $f16  # encoding: [0x5
 c.ult.s  $fcc7, $f24, $f10  # CHECK: c.ult.s  $fcc7, $f24, $f10 # encoding: [0x55,0x58,0xe1,0x7c]
 c.un.d   $fcc6, $f22, $f24  # CHECK: c.un.d   $fcc6, $f22, $f24 # encoding: [0x57,0x16,0xc4,0x7c]
 c.un.s   $fcc1, $f30, $f4   # CHECK: c.un.s   $fcc1, $f30, $f4  # encoding: [0x54,0x9e,0x20,0x7c]
+<<<<<<< HEAD
 cvt.w.d $f0, $f2            # CHECK: cvt.w.d    $f0, $f2        # encoding: [0x54,0x02,0x49,0x3b]
                             # CHECK-NEXT:                       # <MCInst #{{[0-9]+}} CVT_W_D32_MM
 cvt.d.s $f0, $f2            # CHECK: cvt.d.s    $f0, $f2        # encoding: [0x54,0x02,0x13,0x7b]
@@ -393,3 +394,13 @@ mul.d  $f4, $f6, $f8        # CHECK:       mul.d $f4, $f6, $f8  # encoding: [0x5
                             # CHECK-NEXT:                       # <MCInst {{.*}} FMUL_D32_MM
 div.d  $f4, $f6, $f8        # CHECK:       div.d $f4, $f6, $f8  # encoding: [0x55,0x06,0x21,0xf0]
                             # CHECK-NEXT:                       # <MCInst {{.*}} FDIV_D32_MM
+=======
+bc1t 8                      # CHECK: bc1t 8                     # encoding: [0x43,0xa0,0x00,0x04]
+bc1f 16                     # CHECK: bc1f 16                    # encoding: [0x43,0x80,0x00,0x08]
+bc1t $fcc1, 4               # CHECK: bc1t $fcc1, 4              # encoding: [0x43,0xa0,0x00,0x02]
+bc1f $fcc2, -20             # CHECK: bc1f $fcc2, -20            # encoding: [0x43,0x80,0xff,0xf6]
+sync                        # CHECK: sync                   # encoding: [0x00,0x00,0x6b,0x7c]
+sync 0                      # CHECK: sync 0                 # encoding: [0x00,0x00,0x6b,0x7c]
+sync 1                      # CHECK: sync 1                 # encoding: [0x00,0x01,0x6b,0x7c]
+synci 64($5)                # CHECK: synci 64($5)           # encoding: [0x42,0x00,0x00,0x40]
+>>>>>>> origin/release/4.x

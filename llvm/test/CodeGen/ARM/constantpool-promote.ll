@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ; RUN: llc -mtriple armv7--linux-gnueabihf -relocation-model=static -arm-promote-constant < %s | FileCheck %s --check-prefixes=CHECK,CHECK-V7,CHECK-V7ARM,CHECK-STATIC
 ; RUN: llc -mtriple armv7--linux-gnueabihf -relocation-model=pic -arm-promote-constant < %s | FileCheck %s --check-prefixes=CHECK,CHECK-V7,CHECK-V7ARM,CHECK-PIC
 ; RUN: llc -mtriple armv7--linux-gnueabihf -relocation-model=ropi -arm-promote-constant < %s | FileCheck %s --check-prefixes=CHECK,CHECK-V7,CHECK-V7ARM
@@ -10,6 +11,15 @@
 ; RUN: llc -mtriple thumbv6m--linux-gnueabihf -relocation-model=pic -arm-promote-constant < %s | FileCheck %s --check-prefixes=CHECK,CHECK-V6M
 ; RUN: llc -mtriple thumbv6m--linux-gnueabihf -relocation-model=ropi -arm-promote-constant < %s | FileCheck %s --check-prefixes=CHECK,CHECK-V6M
 ; RUN: llc -mtriple thumbv6m--linux-gnueabihf -relocation-model=rwpi -arm-promote-constant < %s | FileCheck %s --check-prefixes=CHECK,CHECK-V6M
+=======
+; RUN: llc -relocation-model=static -arm-promote-constant < %s | FileCheck %s
+; RUN: llc -relocation-model=pic -arm-promote-constant < %s | FileCheck %s
+; RUN: llc -relocation-model=ropi -arm-promote-constant < %s | FileCheck %s
+; RUN: llc -relocation-model=rwpi -arm-promote-constant < %s | FileCheck %s
+
+target datalayout = "e-m:e-p:32:32-i64:64-v128:64:128-n32-S64"
+target triple = "armv7--linux-gnueabihf"
+>>>>>>> origin/release/4.x
 
 @.str = private unnamed_addr constant [2 x i8] c"s\00", align 1
 @.str1 = private unnamed_addr constant [69 x i8] c"this string is far too long to fit in a literal pool by far and away\00", align 1

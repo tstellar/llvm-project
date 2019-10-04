@@ -492,4 +492,7 @@ void foo1() {
   x.foo1();
 }
 }
+<<<<<<< HEAD
 #endif // BE_THE_HEADER
+=======
+>>>>>>> origin/release/4.x

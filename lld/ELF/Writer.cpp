@@ -698,7 +698,11 @@ template <class ELFT> void Writer<ELFT>::copyLocalSymbols() {
         continue;
       if (!shouldKeepInSymtab(*dr))
         continue;
+<<<<<<< HEAD
       in.symTab->addSymbol(b);
+=======
+      In<ELFT>::SymTab->addLocal(B);
+>>>>>>> origin/release/4.x
     }
   }
 }
@@ -738,6 +742,7 @@ template <class ELFT> void Writer<ELFT>::addSectionSymbols() {
   }
 }
 
+<<<<<<< HEAD
 // Today's loaders have a feature to make segments read-only after
 // processing dynamic relocations to enhance security. PT_GNU_RELRO
 // is defined for that.
@@ -746,6 +751,20 @@ template <class ELFT> void Writer<ELFT>::addSectionSymbols() {
 // PT_GNU_RELRO segment.
 static bool isRelroSection(const OutputSection *sec) {
   if (!config->zRelro)
+=======
+// All sections with SHF_MIPS_GPREL flag should be grouped together
+// because data in these sections is addressable with a gp relative address.
+static int getMipsSectionRank(const OutputSectionBase *S) {
+  if ((S->Flags & SHF_MIPS_GPREL) == 0)
+    return 0;
+  if (S->getName() == ".got")
+    return 1;
+  return 2;
+}
+
+template <class ELFT> bool elf::isRelroSection(const OutputSectionBase *Sec) {
+  if (!Config->ZRelro)
+>>>>>>> origin/release/4.x
     return false;
 
   uint64_t flags = sec->flags;
@@ -781,6 +800,7 @@ static bool isRelroSection(const OutputSection *sec) {
   // that they are not expected to change. So, it can be in RELRO.
   if (in.got && sec == in.got->getParent())
     return true;
+<<<<<<< HEAD
 
   // .toc is a GOT-ish section for PowerPC64. Their contents are accessed
   // through r2 register, which is reserved for that purpose. Since r2 is used
@@ -801,6 +821,9 @@ static bool isRelroSection(const OutputSection *sec) {
   // there's no need to write to it at runtime, so it's better to put
   // it into RELRO.
   if (sec->name == ".dynamic")
+=======
+  if (Sec == Out<ELFT>::BssRelRo)
+>>>>>>> origin/release/4.x
     return true;
 
   // Sections with some special names are put into RELRO. This is a
@@ -933,6 +956,7 @@ static unsigned getSectionRank(const OutputSection *sec) {
 
   // Some architectures have additional ordering restrictions for sections
   // within the same PT_LOAD.
+<<<<<<< HEAD
   if (config->emachine == EM_PPC64) {
     // PPC64 has a number of special SHT_PROGBITS+SHF_ALLOC+SHF_WRITE sections
     // that we would like to make sure appear is a specific order to maximize
@@ -956,6 +980,13 @@ static unsigned getSectionRank(const OutputSection *sec) {
     if (name == ".branch_lt")
       rank |= RF_PPC_BRANCH_LT;
   }
+=======
+  if (Config->EMachine == EM_PPC64)
+    return getPPC64SectionRank(A->getName()) <
+           getPPC64SectionRank(B->getName());
+  if (Config->EMachine == EM_MIPS)
+    return getMipsSectionRank(A) < getMipsSectionRank(B);
+>>>>>>> origin/release/4.x
 
   if (config->emachine == EM_MIPS) {
     // All sections with SHF_MIPS_GPREL flag should be grouped together
@@ -967,7 +998,17 @@ static unsigned getSectionRank(const OutputSection *sec) {
       rank |= RF_MIPS_NOT_GOT;
   }
 
+<<<<<<< HEAD
   return rank;
+=======
+template <class ELFT>
+static void addOptionalSynthetic(StringRef Name, OutputSectionBase *Sec,
+                                 typename ELFT::uint Val,
+                                 uint8_t StOther = STV_HIDDEN) {
+  if (SymbolBody *S = Symtab<ELFT>::X->find(Name))
+    if (!S->isInCurrentDSO())
+      Symtab<ELFT>::X->addSynthetic(Name, Sec, Val, StOther);
+>>>>>>> origin/release/4.x
 }
 
 static bool compareSections(const BaseCommand *aCmd, const BaseCommand *bCmd) {
@@ -983,6 +1024,7 @@ static bool compareSections(const BaseCommand *aCmd, const BaseCommand *bCmd) {
   return false;
 }
 
+<<<<<<< HEAD
 void PhdrEntry::add(OutputSection *sec) {
   lastSec = sec;
   if (!firstSec)
@@ -990,6 +1032,17 @@ void PhdrEntry::add(OutputSection *sec) {
   p_align = std::max(p_align, sec->alignment);
   if (p_type == PT_LOAD)
     sec->ptLoad = this;
+=======
+template <class ELFT>
+static Symbol *addOptionalRegular(StringRef Name, InputSectionBase<ELFT> *IS,
+                                  typename ELFT::uint Value) {
+  SymbolBody *S = Symtab<ELFT>::X->find(Name);
+  if (!S)
+    return nullptr;
+  if (S->isInCurrentDSO())
+    return S->symbol();
+  return addRegular(Name, IS, Value);
+>>>>>>> origin/release/4.x
 }
 
 // The beginning and the ending of .rel[a].plt section are marked
@@ -1787,6 +1840,7 @@ template <class ELFT> void Writer<ELFT>::finalizeSections() {
     });
   }
 
+<<<<<<< HEAD
   // Now that we have defined all possible global symbols including linker-
   // synthesized ones. Visit all symbols to give the finishing touches.
   symtab->forEachSymbol([](Symbol *sym) {
@@ -1800,6 +1854,18 @@ template <class ELFT> void Writer<ELFT>::finalizeSections() {
       if (auto *file = dyn_cast_or_null<SharedFile>(sym->file))
         if (file->isNeeded && !sym->isUndefined())
           addVerneed(sym);
+=======
+    if (!includeInSymtab<ELFT>(*Body))
+      continue;
+    if (In<ELFT>::SymTab)
+      In<ELFT>::SymTab->addGlobal(Body);
+
+    if (In<ELFT>::DynSymTab && S->includeInDynsym()) {
+      In<ELFT>::DynSymTab->addGlobal(Body);
+      if (auto *SS = dyn_cast<SharedSymbol<ELFT>>(Body))
+        if (SS->file()->isNeeded())
+          In<ELFT>::VerNeed->addSymbol(SS);
+>>>>>>> origin/release/4.x
     }
   });
 
@@ -2430,10 +2496,14 @@ template <class ELFT> void Writer<ELFT>::setPhdrs(Partition &part) {
       // to protect the last page. This is a no-op on FreeBSD which always
       // rounds up.
 <<<<<<< HEAD
+<<<<<<< HEAD
       p->p_memsz = alignTo(p->p_offset + p->p_memsz, config->commonPageSize) -
                    p->p_offset;
 =======
       P->p_memsz = alignTo(P->p_memsz, Target->PageSize);
+=======
+      P.p_memsz = alignTo(P.p_memsz, Target->PageSize);
+>>>>>>> origin/release/4.x
     }
 
     if (P->p_type == PT_TLS && P->p_memsz) {

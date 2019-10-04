@@ -115,7 +115,11 @@ for (int i = 0; i < argc; ++i) {
 // CHECK: br label %[[RETURN:.+]]
 // CHECK: [[ELSE]]
 // The barrier directive should now call __kmpc_cancel_barrier
+<<<<<<< HEAD
 // CHECK: call i32 @__kmpc_cancel_barrier(%struct.ident_t*
+=======
+// CHECK: call i32 @__kmpc_cancel_barrier(%ident_t*
+>>>>>>> origin/release/4.x
 // CHECK: br label
 // CHECK: [[RETURN]]
 // CHECK: ret void

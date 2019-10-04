@@ -636,7 +636,10 @@ DIE *DwarfCompileUnit::constructVariableDIEImpl(const DbgVariable &DV,
   if (!DV.hasFrameIndexExprs())
     return VariableDie;
 
+<<<<<<< HEAD
   Optional<unsigned> NVPTXAddressSpace;
+=======
+>>>>>>> origin/release/4.x
   DIELoc *Loc = new (DIEValueAllocator) DIELoc;
   DIEDwarfExpression DwarfExpr(*Asm, *this, *Loc);
   for (auto &Fragment : DV.getFrameIndexExprs()) {
@@ -644,6 +647,7 @@ DIE *DwarfCompileUnit::constructVariableDIEImpl(const DbgVariable &DV,
     const DIExpression *Expr = Fragment.Expr;
     const TargetFrameLowering *TFI = Asm->MF->getSubtarget().getFrameLowering();
     int Offset = TFI->getFrameIndexReference(*Asm->MF, Fragment.FI, FrameReg);
+<<<<<<< HEAD
     DwarfExpr.addFragmentOffset(Expr);
     SmallVector<uint64_t, 8> Ops;
     DIExpression::appendOffset(Ops, Offset);
@@ -681,6 +685,12 @@ DIE *DwarfCompileUnit::constructVariableDIEImpl(const DbgVariable &DV,
     const unsigned NVPTX_ADDR_local_space = 6;
     addUInt(*VariableDie, dwarf::DW_AT_address_class, dwarf::DW_FORM_data1,
             NVPTXAddressSpace ? *NVPTXAddressSpace : NVPTX_ADDR_local_space);
+=======
+    DwarfExpr.addFragmentOffset(Fragment.Expr);
+    DwarfExpr.AddMachineRegIndirect(*Asm->MF->getSubtarget().getRegisterInfo(),
+                                    FrameReg, Offset);
+    DwarfExpr.AddExpression(Fragment.Expr);
+>>>>>>> origin/release/4.x
   }
   addBlock(*VariableDie, dwarf::DW_AT_location, DwarfExpr.finalize());
   if (DwarfExpr.TagOffset)

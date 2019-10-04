@@ -560,6 +560,7 @@ define void @trunc_wb_128_mem(<8 x i16> %i, <8 x i8>* %res) #0 {
     store <8 x i8> %x, <8 x i8>* %res
     ret void
 }
+<<<<<<< HEAD
 
 
 define void @usat_trunc_wb_256_mem(<16 x i16> %i, <16 x i8>* %res) {
@@ -1044,3 +1045,5 @@ define void @negative_test2_smax_usat_trunc_wb_256_mem(<16 x i16> %i, <16 x i8>*
   store <16 x i8> %x6, <16 x i8>* %res, align 1
   ret void
 }
+=======
+>>>>>>> origin/release/4.x

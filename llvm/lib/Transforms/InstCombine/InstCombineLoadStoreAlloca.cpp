@@ -18,7 +18,10 @@
 #include "llvm/Transforms/Utils/Local.h"
 #include "llvm/IR/ConstantRange.h"
 #include "llvm/IR/DataLayout.h"
+<<<<<<< HEAD
 #include "llvm/IR/DebugInfoMetadata.h"
+=======
+>>>>>>> origin/release/4.x
 #include "llvm/IR/IntrinsicInst.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/MDBuilder.h"
@@ -237,7 +240,10 @@ static Instruction *simplifyAllocaArraySize(InstCombiner &IC, AllocaInst &AI) {
   return nullptr;
 }
 
+<<<<<<< HEAD
 namespace {
+=======
+>>>>>>> origin/release/4.x
 // If I and V are pointers in different address space, it is not allowed to
 // use replaceAllUsesWith since I and V have different types. A
 // non-target-specific transformation should not use addrspacecast on V since
@@ -262,14 +268,21 @@ private:
   MapVector<Value *, Value *> WorkMap;
   InstCombiner &IC;
 };
+<<<<<<< HEAD
 } // end anonymous namespace
+=======
+>>>>>>> origin/release/4.x
 
 void PointerReplacer::findLoadAndReplace(Instruction &I) {
   for (auto U : I.users()) {
     auto *Inst = dyn_cast<Instruction>(&*U);
     if (!Inst)
       return;
+<<<<<<< HEAD
     LLVM_DEBUG(dbgs() << "Found pointer user: " << *U << '\n');
+=======
+    DEBUG(dbgs() << "Found pointer user: " << *U << '\n');
+>>>>>>> origin/release/4.x
     if (isa<LoadInst>(Inst)) {
       for (auto P : Path)
         replace(P);
@@ -298,7 +311,11 @@ void PointerReplacer::replace(Instruction *I) {
   if (auto *LT = dyn_cast<LoadInst>(I)) {
     auto *V = getReplacement(LT->getPointerOperand());
     assert(V && "Operand not replaced");
+<<<<<<< HEAD
     auto *NewI = new LoadInst(I->getType(), V);
+=======
+    auto *NewI = new LoadInst(V);
+>>>>>>> origin/release/4.x
     NewI->takeName(LT);
     IC.InsertNewInstWith(NewI, *LT);
     IC.replaceInstUsesWith(*LT, NewI);
@@ -328,12 +345,18 @@ void PointerReplacer::replace(Instruction *I) {
 }
 
 void PointerReplacer::replacePointer(Instruction &I, Value *V) {
+<<<<<<< HEAD
 #ifndef NDEBUG
+=======
+>>>>>>> origin/release/4.x
   auto *PT = cast<PointerType>(I.getType());
   auto *NT = cast<PointerType>(V->getType());
   assert(PT != NT && PT->getElementType() == NT->getElementType() &&
          "Invalid usage");
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> origin/release/4.x
   WorkMap[&I] = V;
   findLoadAndReplace(I);
 }

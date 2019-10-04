@@ -204,14 +204,23 @@ public:
     template <class... _Args>
         _LIBCPP_INLINE_VISIBILITY
 #if _LIBCPP_STD_VER > 14
+<<<<<<< HEAD
         decltype(auto) emplace(_Args&&... __args)
+=======
+        reference emplace(_Args&&... __args)
+>>>>>>> origin/release/4.x
         { return c.emplace_back(_VSTD::forward<_Args>(__args)...);}
 #else
         void      emplace(_Args&&... __args)
         {        c.emplace_back(_VSTD::forward<_Args>(__args)...);}
 #endif
+<<<<<<< HEAD
 #endif  // _LIBCPP_CXX03_LANG
 
+=======
+#endif  // _LIBCPP_HAS_NO_VARIADICS
+#endif  // _LIBCPP_HAS_NO_RVALUE_REFERENCES
+>>>>>>> origin/release/4.x
     _LIBCPP_INLINE_VISIBILITY
     void pop() {c.pop_back();}
 

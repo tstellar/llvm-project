@@ -97,10 +97,17 @@
 // CHECK-NEXT:     Flags [ (0x0)
 // CHECK-NEXT:     ]
 // CHECK-NEXT:     Address: 0x0
+<<<<<<< HEAD
 // CHECK-NEXT:     Offset: 0xC8
 // CHECK-NEXT:     Size: 16
 // CHECK-NEXT:     Link: 5
 // CHECK-NEXT:     Info: 1
+=======
+// CHECK-NEXT:     Offset: 0x2038
+// CHECK-NEXT:     Size: 32
+// CHECK-NEXT:     Link: 9
+// CHECK-NEXT:     Info: 2
+>>>>>>> origin/release/4.x
 // CHECK-NEXT:     AddressAlignment: 4
 // CHECK-NEXT:     EntrySize: 16
 // CHECK-NEXT:     SectionData (

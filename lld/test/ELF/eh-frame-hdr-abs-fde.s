@@ -12,10 +12,17 @@
 #                                  ^-- DW_EH_PE_pcrel | DW_EH_PE_udata4 | DW_EH_PE_signed
 
 # CHECK:      Contents of section .eh_frame_hdr:
+<<<<<<< HEAD
 # CHECK-NEXT:  200190 011b033b 14000000 01000000 54100000
 #                                                ^-- 0x201000 - 0x200190
 #                                                    .text    - .eh_frame_hdr
 # CHECK-NEXT:  2001a0 30000000
+=======
+# CHECK-NEXT:  10128 011b033b 00000010 00000001 0000fed8
+#                                               ^-- 0x20000 - 0x10138
+#                                                   .text   - .eh_frame_hdr
+# CHECK-NEXT:  10138 0000002c
+>>>>>>> origin/release/4.x
 # CHECK:      Contents of section .text:
 # CHECK-NEXT:  2011e4 90
 

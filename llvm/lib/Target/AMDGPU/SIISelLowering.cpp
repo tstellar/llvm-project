@@ -1634,6 +1634,7 @@ void SITargetLowering::allocateSpecialEntryInputVGPRs(CCState &CCInfo,
     Register Reg = AMDGPU::VGPR1;
     MRI.setType(MF.addLiveIn(Reg, &AMDGPU::VGPR_32RegClass), S32);
 
+<<<<<<< HEAD
     CCInfo.AllocateReg(Reg);
     Info.setWorkItemIDY(ArgDescriptor::createRegister(Reg));
   }
@@ -1641,6 +1642,52 @@ void SITargetLowering::allocateSpecialEntryInputVGPRs(CCState &CCInfo,
   if (Info.hasWorkItemIDZ()) {
     Register Reg = AMDGPU::VGPR2;
     MRI.setType(MF.addLiveIn(Reg, &AMDGPU::VGPR_32RegClass), S32);
+=======
+  // At least one interpolation mode must be enabled or else the GPU will hang.
+  //
+  // Check PSInputAddr instead of PSInputEna. The idea is that if the user set
+  // PSInputAddr, the user wants to enable some bits after the compilation
+  // based on run-time states. Since we can't know what the final PSInputEna
+  // will look like, so we shouldn't do anything here and the user should take
+  // responsibility for the correct programming.
+  //
+  // Otherwise, the following restrictions apply:
+  // - At least one of PERSP_* (0xF) or LINEAR_* (0x70) must be enabled.
+  // - If POS_W_FLOAT (11) is enabled, at least one of PERSP_* must be
+  //   enabled too.
+  if (CallConv == CallingConv::AMDGPU_PS &&
+      ((Info->getPSInputAddr() & 0x7F) == 0 ||
+       ((Info->getPSInputAddr() & 0xF) == 0 && Info->isPSInputAllocated(11)))) {
+    CCInfo.AllocateReg(AMDGPU::VGPR0);
+    CCInfo.AllocateReg(AMDGPU::VGPR1);
+    Info->markPSInputAllocated(0);
+    Info->PSInputEna |= 1;
+  }
+
+  if (!AMDGPU::isShader(CallConv)) {
+    assert(Info->hasWorkGroupIDX() && Info->hasWorkItemIDX());
+  } else {
+    assert(!Info->hasDispatchPtr() &&
+           !Info->hasKernargSegmentPtr() && !Info->hasFlatScratchInit() &&
+           !Info->hasWorkGroupIDX() && !Info->hasWorkGroupIDY() &&
+           !Info->hasWorkGroupIDZ() && !Info->hasWorkGroupInfo() &&
+           !Info->hasWorkItemIDX() && !Info->hasWorkItemIDY() &&
+           !Info->hasWorkItemIDZ());
+  }
+
+  if (Info->hasPrivateMemoryInputPtr()) {
+    unsigned PrivateMemoryPtrReg = Info->addPrivateMemoryPtr(*TRI);
+    MF.addLiveIn(PrivateMemoryPtrReg, &AMDGPU::SReg_64RegClass);
+    CCInfo.AllocateReg(PrivateMemoryPtrReg);
+  }
+
+  // FIXME: How should these inputs interact with inreg / custom SGPR inputs?
+  if (Info->hasPrivateSegmentBuffer()) {
+    unsigned PrivateSegmentBufferReg = Info->addPrivateSegmentBuffer(*TRI);
+    MF.addLiveIn(PrivateSegmentBufferReg, &AMDGPU::SReg_128RegClass);
+    CCInfo.AllocateReg(PrivateSegmentBufferReg);
+  }
+>>>>>>> origin/release/4.x
 
     CCInfo.AllocateReg(Reg);
     Info.setWorkItemIDZ(ArgDescriptor::createRegister(Reg));
@@ -1737,8 +1784,22 @@ void SITargetLowering::allocateSpecialInputSGPRs(
   if (Info.hasQueuePtr())
     ArgInfo.QueuePtr = allocateSGPR64Input(CCInfo);
 
+<<<<<<< HEAD
   if (Info.hasKernargSegmentPtr())
     ArgInfo.KernargSegmentPtr = allocateSGPR64Input(CCInfo);
+=======
+    if (VA.isMemLoc()) {
+      VT = Ins[i].VT;
+      EVT MemVT = VA.getLocVT();
+      const unsigned Offset = Subtarget->getExplicitKernelArgOffset(MF) +
+                              VA.getLocMemOffset();
+      // The first 36 bytes of the input buffer contains information about
+      // thread group and global sizes.
+      SDValue Arg = LowerParameter(DAG, VT, MemVT,  DL, Chain,
+                                   Offset, Ins[i].Flags.isSExt(),
+                                   &Ins[i]);
+      Chains.push_back(Arg.getValue(1));
+>>>>>>> origin/release/4.x
 
   if (Info.hasDispatchID())
     ArgInfo.DispatchID = allocateSGPR64Input(CCInfo);
@@ -1885,9 +1946,17 @@ static void reservePrivateMemoryRegs(const TargetMachine &TM,
   if (TM.getOptLevel() == CodeGenOpt::None)
     HasStackObjects = true;
 
+<<<<<<< HEAD
   // For now assume stack access is needed in any callee functions, so we need
   // the scratch registers to pass in.
   bool RequiresStackAccess = HasStackObjects || MFI.hasCalls();
+=======
+  if (ST.isAmdCodeObjectV2(MF)) {
+    if (HasStackObjects) {
+      // If we have stack objects, we unquestionably need the private buffer
+      // resource. For the Code Object V2 ABI, this will be the first 4 user
+      // SGPR inputs. We can reserve those and use them directly.
+>>>>>>> origin/release/4.x
 
   if (RequiresStackAccess && ST.isAmdHsaOrMesa(MF.getFunction())) {
     // If we have stack objects, we unquestionably need the private buffer
@@ -6525,6 +6594,7 @@ SDValue SITargetLowering::LowerINTRINSIC_W_CHAIN(SDValue Op,
       llvm_unreachable("unhandled atomic opcode");
     }
 
+<<<<<<< HEAD
     return DAG.getMemIntrinsicNode(Opcode, DL, Op->getVTList(), Ops, VT,
                                    M->getMemOperand());
   }
@@ -6596,6 +6666,21 @@ SDValue SITargetLowering::LowerINTRINSIC_W_CHAIN(SDValue Op,
       break;
     default:
       llvm_unreachable("unhandled atomic opcode");
+=======
+  switch (IntrinsicID) {
+  case Intrinsic::amdgcn_implicit_buffer_ptr: {
+    unsigned Reg = TRI->getPreloadedValue(MF, SIRegisterInfo::PRIVATE_SEGMENT_BUFFER);
+    return CreateLiveInRegister(DAG, &AMDGPU::SReg_64RegClass, Reg, VT);
+  }
+  case Intrinsic::amdgcn_dispatch_ptr:
+  case Intrinsic::amdgcn_queue_ptr: {
+    if (!Subtarget->isAmdCodeObjectV2(MF)) {
+      DiagnosticInfoUnsupported BadIntrin(
+          *MF.getFunction(), "unsupported hsa intrinsic without hsa target",
+          DL.getDebugLoc());
+      DAG.getContext()->diagnose(BadIntrin);
+      return DAG.getUNDEF(VT);
+>>>>>>> origin/release/4.x
     }
 
     return DAG.getMemIntrinsicNode(Opcode, DL, Op->getVTList(), Ops, VT,

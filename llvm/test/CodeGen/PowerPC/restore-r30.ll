@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ; RUN: llc -relocation-model=pic < %s | FileCheck %s
+=======
+; RUN: llc -march=ppc32 -relocation-model=pic < %s | FileCheck %s
+>>>>>>> origin/release/4.x
 
 ; The load restoring r30 at the end of the function was placed out of order
 ; relative to its uses as the PIC base pointer.
@@ -11,7 +15,11 @@
 ; CHECK-NOT:   30,
 
 target datalayout = "E-m:e-p:32:32-i64:64-n32"
+<<<<<<< HEAD
 target triple = "powerpc--"
+=======
+target triple = "powerpc"
+>>>>>>> origin/release/4.x
 
 define double @fred(i64 %a) #0 {
 entry:

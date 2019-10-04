@@ -142,6 +142,24 @@ static cl::opt<unsigned> ConstpoolPromotionMaxTotal(
     cl::desc("Maximum size of ALL constants to promote into a constant pool"),
     cl::init(128));
 
+<<<<<<< HEAD
+=======
+namespace {
+  class ARMCCState : public CCState {
+  public:
+    ARMCCState(CallingConv::ID CC, bool isVarArg, MachineFunction &MF,
+               SmallVectorImpl<CCValAssign> &locs, LLVMContext &C,
+               ParmContext PC)
+        : CCState(CC, isVarArg, MF, locs, C) {
+      assert(((PC == Call) || (PC == Prologue)) &&
+             "ARMCCState users must specify whether their context is call"
+             "or prologue generation.");
+      CallOrPrologue = PC;
+    }
+  };
+}
+
+>>>>>>> origin/release/4.x
 // The APCS parameter registers.
 static const MCPhysReg GPRArgRegs[] = {
   ARM::R0, ARM::R1, ARM::R2, ARM::R3
@@ -406,7 +424,19 @@ ARMTargetLowering::ARMTargetLowering(const TargetMachine &TM,
 
   if (!Subtarget->isTargetDarwin() && !Subtarget->isTargetIOS() &&
       !Subtarget->isTargetWatchOS()) {
+<<<<<<< HEAD
     bool IsHFTarget = TM.Options.FloatABIType == FloatABI::Hard;
+=======
+    const auto &E = Subtarget->getTargetTriple().getEnvironment();
+
+    bool IsHFTarget = E == Triple::EABIHF || E == Triple::GNUEABIHF ||
+                      E == Triple::MuslEABIHF;
+    // Windows is a special case.  Technically, we will replace all of the "GNU"
+    // calls with calls to MSVCRT if appropriate and adjust the calling
+    // convention then.
+    IsHFTarget = IsHFTarget || Subtarget->isTargetWindows();
+
+>>>>>>> origin/release/4.x
     for (int LCID = 0; LCID < RTLIB::UNKNOWN_LIBCALL; ++LCID)
       setLibcallCallingConv(static_cast<RTLIB::Libcall>(LCID),
                             IsHFTarget ? CallingConv::ARM_AAPCS_VFP
@@ -3397,6 +3427,7 @@ static SDValue promoteToConstantPool(const ARMTargetLowering *TLI,
   return DAG.getNode(ARMISD::Wrapper, dl, MVT::i32, CPAddr);
 }
 
+<<<<<<< HEAD
 bool ARMTargetLowering::isReadOnly(const GlobalValue *GV) const {
   if (const GlobalAlias *GA = dyn_cast<GlobalAlias>(GV))
     if (!(GV = GA->getBaseObject()))
@@ -3417,6 +3448,13 @@ SDValue ARMTargetLowering::LowerGlobalAddress(SDValue Op,
   case Triple::MachO:
     return LowerGlobalAddressDarwin(Op, DAG);
   }
+=======
+static bool isReadOnly(const GlobalValue *GV) {
+  if (const GlobalAlias *GA = dyn_cast<GlobalAlias>(GV))
+    GV = GA->getBaseObject();
+  return (isa<GlobalVariable>(GV) && cast<GlobalVariable>(GV)->isConstant()) ||
+         isa<Function>(GV);
+>>>>>>> origin/release/4.x
 }
 
 SDValue ARMTargetLowering::LowerGlobalAddressELF(SDValue Op,

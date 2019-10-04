@@ -25,6 +25,7 @@
 
 #if TEST_STD_VER > 14
 constexpr bool check_idx( size_t idx, double val )
+<<<<<<< HEAD
 {
     std::array<double, 3> arr = {1, 2, 3.5};
     return arr[idx] == val;
@@ -32,6 +33,15 @@ constexpr bool check_idx( size_t idx, double val )
 #endif
 
 int main(int, char**)
+=======
+{ 
+    std::array<double, 3> arr = {1, 2, 3.5};
+	return arr[idx] == val;
+}
+#endif
+
+int main()
+>>>>>>> origin/release/4.x
 {
     {
         typedef double T;
@@ -115,6 +125,9 @@ int main(int, char**)
         static_assert (check_idx(2, 3.5), "");
     }
 #endif
+<<<<<<< HEAD
 
   return 0;
+=======
+>>>>>>> origin/release/4.x
 }

@@ -153,6 +153,7 @@ void runAlwaysWarnWithArg(int a) {
 
 // Test that diagnose_if warnings generated in system headers are not ignored.
 #include "Inputs/diagnose-if-warn-system-header.h"
+<<<<<<< HEAD
 
 // Bug: we would complain about `a` being undeclared if this was spelled
 // __diagnose_if__.
@@ -167,3 +168,5 @@ void runConstCharStar() {
   constCharStar(""); // expected-error {{empty string not allowed}}
   charStar(""); // expected-error {{empty string not allowed}}
 }
+=======
+>>>>>>> origin/release/4.x

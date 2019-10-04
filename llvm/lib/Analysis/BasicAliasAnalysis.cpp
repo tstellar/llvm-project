@@ -1412,16 +1412,26 @@ AliasResult BasicAAResult::aliasGEP(
     if (V1Size == LocationSize::unknown() && V2Size == LocationSize::unknown())
       return MayAlias;
 
+<<<<<<< HEAD
     AliasResult R = aliasCheck(UnderlyingV1, LocationSize::unknown(),
                                AAMDNodes(), V2, LocationSize::unknown(),
                                V2AAInfo, AAQI, nullptr, UnderlyingV2);
     if (R != MustAlias) {
+=======
+    AliasResult R = aliasCheck(UnderlyingV1, MemoryLocation::UnknownSize,
+                               AAMDNodes(), V2, MemoryLocation::UnknownSize,
+                               V2AAInfo, nullptr, UnderlyingV2);
+    if (R != MustAlias)
+>>>>>>> origin/release/4.x
       // If V2 may alias GEP base pointer, conservatively returns MayAlias.
       // If V2 is known not to alias GEP base pointer, then the two values
       // cannot alias per GEP semantics: "Any memory access must be done through
       // a pointer value associated with an address range of the memory access,
       // otherwise the behavior is undefined.".
+<<<<<<< HEAD
       assert(R == NoAlias || R == MayAlias);
+=======
+>>>>>>> origin/release/4.x
       return R;
     }
 

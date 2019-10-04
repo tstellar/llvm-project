@@ -3,7 +3,11 @@
 // RUN: %clang_cc1 -std=c++14 %s -verify -fexceptions -fcxx-exceptions -pedantic-errors
 // RUN: %clang_cc1 -std=c++1z %s -verify -fexceptions -fcxx-exceptions -pedantic-errors
 
+<<<<<<< HEAD
 namespace dr1213 { // dr1213: 7
+=======
+namespace dr1213 { // dr1213: 4
+>>>>>>> origin/release/4.x
 #if __cplusplus >= 201103L
   using T = int[3];
   int &&r = T{}[1];
@@ -53,7 +57,11 @@ namespace dr1265 { // dr1265: 5
 #endif
 }
 
+<<<<<<< HEAD
 namespace dr1295 { // dr1295: 4
+=======
+namespace dr1295 {  // dr1295: 4
+>>>>>>> origin/release/4.x
   struct X {
     unsigned bitfield : 4;
   };

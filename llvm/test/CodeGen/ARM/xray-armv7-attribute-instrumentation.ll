@@ -23,6 +23,7 @@ define i32 @foo() nounwind noinline uwtable "function-instrument"="xray-always" 
 ; CHECK-LABEL: Ltmp1:
 ; CHECK-NEXT:  bx lr
 }
+<<<<<<< HEAD
 ; CHECK-LABEL: xray_instr_map
 ; CHECK-LABEL: Lxray_sleds_start0:
 ; CHECK:       .long {{.*}}Lxray_sled_0
@@ -32,3 +33,11 @@ define i32 @foo() nounwind noinline uwtable "function-instrument"="xray-always" 
 ; CHECK:       .long {{.*}}xray_sleds_start0
 ; CHECK-NEXT:  .long {{.*}}xray_sleds_end0
 
+=======
+; CHECK:       .p2align 4
+; CHECK-NEXT:  .long {{.*}}Lxray_synthetic_0
+; CHECK-NEXT:  .section {{.*}}xray_instr_map{{.*}}
+; CHECK-LABEL: Lxray_synthetic_0:
+; CHECK:       .long {{.*}}Lxray_sled_0
+; CHECK:       .long {{.*}}Lxray_sled_1
+>>>>>>> origin/release/4.x

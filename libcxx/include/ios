@@ -610,6 +610,7 @@ public:
     typedef typename traits_type::pos_type pos_type;
     typedef typename traits_type::off_type off_type;
 
+<<<<<<< HEAD
     static_assert((is_same<_CharT, typename traits_type::char_type>::value),
                   "traits_type::char_type must be the same type as CharT");
 
@@ -618,11 +619,19 @@ public:
 
 #if defined(_LIBCPP_CXX03_LANG)
     _LIBCPP_INLINE_VISIBILITY
+=======
+#if defined(_LIBCPP_CXX03_LANG)
+    _LIBCPP_ALWAYS_INLINE
+>>>>>>> origin/release/4.x
     operator __cxx03_bool::__bool_type() const {
         return !fail() ? &__cxx03_bool::__true_value : nullptr;
     }
 #else
+<<<<<<< HEAD
     _LIBCPP_INLINE_VISIBILITY
+=======
+    _LIBCPP_ALWAYS_INLINE
+>>>>>>> origin/release/4.x
     _LIBCPP_EXPLICIT operator bool() const {return !fail();}
 #endif
 

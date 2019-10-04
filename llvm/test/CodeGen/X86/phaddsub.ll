@@ -269,7 +269,11 @@ define <4 x i32> @phsubd4(<4 x i32> %x) {
 
 define <8 x i16> @phsubw1_reverse(<8 x i16> %x, <8 x i16> %y) {
 ; SSSE3-LABEL: phsubw1_reverse:
+<<<<<<< HEAD
 ; SSSE3:       # %bb.0:
+=======
+; SSSE3:       # BB#0:
+>>>>>>> origin/release/4.x
 ; SSSE3-NEXT:    movdqa {{.*#+}} xmm3 = [2,3,6,7,10,11,14,15,14,15,10,11,12,13,14,15]
 ; SSSE3-NEXT:    movdqa %xmm1, %xmm4
 ; SSSE3-NEXT:    pshufb %xmm3, %xmm4
@@ -285,7 +289,11 @@ define <8 x i16> @phsubw1_reverse(<8 x i16> %x, <8 x i16> %y) {
 ; SSSE3-NEXT:    retq
 ;
 ; AVX-LABEL: phsubw1_reverse:
+<<<<<<< HEAD
 ; AVX:       # %bb.0:
+=======
+; AVX:       # BB#0:
+>>>>>>> origin/release/4.x
 ; AVX-NEXT:    vmovdqa {{.*#+}} xmm2 = [2,3,6,7,10,11,14,15,14,15,10,11,12,13,14,15]
 ; AVX-NEXT:    vpshufb %xmm2, %xmm1, %xmm3
 ; AVX-NEXT:    vpshufb %xmm2, %xmm0, %xmm2
@@ -304,7 +312,11 @@ define <8 x i16> @phsubw1_reverse(<8 x i16> %x, <8 x i16> %y) {
 
 define <4 x i32> @phsubd1_reverse(<4 x i32> %x, <4 x i32> %y) {
 ; SSSE3-LABEL: phsubd1_reverse:
+<<<<<<< HEAD
 ; SSSE3:       # %bb.0:
+=======
+; SSSE3:       # BB#0:
+>>>>>>> origin/release/4.x
 ; SSSE3-NEXT:    movaps %xmm0, %xmm2
 ; SSSE3-NEXT:    shufps {{.*#+}} xmm2 = xmm2[1,3],xmm1[1,3]
 ; SSSE3-NEXT:    shufps {{.*#+}} xmm0 = xmm0[0,2],xmm1[0,2]
@@ -313,7 +325,11 @@ define <4 x i32> @phsubd1_reverse(<4 x i32> %x, <4 x i32> %y) {
 ; SSSE3-NEXT:    retq
 ;
 ; AVX-LABEL: phsubd1_reverse:
+<<<<<<< HEAD
 ; AVX:       # %bb.0:
+=======
+; AVX:       # BB#0:
+>>>>>>> origin/release/4.x
 ; AVX-NEXT:    vshufps {{.*#+}} xmm2 = xmm0[1,3],xmm1[1,3]
 ; AVX-NEXT:    vshufps {{.*#+}} xmm0 = xmm0[0,2],xmm1[0,2]
 ; AVX-NEXT:    vpsubd %xmm0, %xmm2, %xmm0
@@ -324,6 +340,7 @@ define <4 x i32> @phsubd1_reverse(<4 x i32> %x, <4 x i32> %y) {
   ret <4 x i32> %r
 }
 
+<<<<<<< HEAD
 define <4 x i32> @phaddd_single_source1(<4 x i32> %x) {
 ; SSSE3-LABEL: phaddd_single_source1:
 ; SSSE3:       # %bb.0:
@@ -669,3 +686,5 @@ define i32 @PR39936_v8i32(<8 x i32>) {
   ret i32 %10
 }
 
+=======
+>>>>>>> origin/release/4.x

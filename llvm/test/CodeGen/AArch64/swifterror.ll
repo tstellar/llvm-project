@@ -21,11 +21,20 @@ define float @foo(%swift_error** swifterror %error_ptr_ref) {
 ; CHECK-O0-LABEL: foo:
 ; CHECK-O0: mov w{{.*}}, #16
 ; CHECK-O0: malloc
+<<<<<<< HEAD
 ; CHECK-O0: mov x1, x0
 ; CHECK-O0-NOT: x1
 ; CHECK-O0: mov [[ID:w[0-9]+]], #1
 ; CHECK-O0: strb [[ID]], [x0, #8]
 ; CHECK-O0: mov x21, x1
+=======
+; CHECK-O0: mov x21, x0
+; CHECK-O0-NOT: x21
+; CHECK-O0: orr [[ID:w[0-9]+]], wzr, #0x1
+; CHECK-O0-NOT: x21
+; CHECK-O0: strb [[ID]], [x0, #8]
+; CHECK-O0-NOT: x21
+>>>>>>> origin/release/4.x
 entry:
   %call = call i8* @malloc(i64 16)
   %call.0 = bitcast i8* %call to %swift_error*
@@ -41,20 +50,32 @@ define float @caller(i8* %error_ref) {
 ; CHECK-APPLE: mov [[ID:x[0-9]+]], x0
 ; CHECK-APPLE: mov x21, xzr
 ; CHECK-APPLE: bl {{.*}}foo
+<<<<<<< HEAD
 ; CHECK-APPLE: mov x0, x21
 ; CHECK-APPLE-AARCH64: cbnz x21
 ; CHECK-APPLE-ARM64_32: cbnz w0
 ; Access part of the error object and save it to error_ref
 ; CHECK-APPLE: ldrb [[CODE:w[0-9]+]], [x0, #8]
 ; CHECK-APPLE: strb [[CODE]], [{{.*}}[[ID]]]
+=======
+; CHECK-APPLE: cbnz x21
+; Access part of the error object and save it to error_ref
+; CHECK-APPLE: ldrb [[CODE:w[0-9]+]], [x21, #8]
+; CHECK-APPLE: strb [[CODE]], [{{.*}}[[ID]]]
+; CHECK-APPLE: mov x0, x21
+>>>>>>> origin/release/4.x
 ; CHECK-APPLE: bl {{.*}}free
 
 ; CHECK-O0-LABEL: caller:
 ; CHECK-O0: mov x21
 ; CHECK-O0: bl {{.*}}foo
 ; CHECK-O0: mov [[ID:x[0-9]+]], x21
+<<<<<<< HEAD
 ; CHECK-O0-AARCH64: cbnz x21
 ; CHECK-O0-ARM64_32: cmp x21, #0
+=======
+; CHECK-O0: cbnz x21
+>>>>>>> origin/release/4.x
 entry:
   %error_ptr_ref = alloca swifterror %swift_error*
   store %swift_error* null, %swift_error** %error_ptr_ref
@@ -80,8 +101,12 @@ define float @caller2(i8* %error_ref) {
 ; CHECK-APPLE: fmov [[CMP:s[0-9]+]], #1.0
 ; CHECK-APPLE: mov x21, xzr
 ; CHECK-APPLE: bl {{.*}}foo
+<<<<<<< HEAD
 ; CHECK-APPLE-AARCH64: cbnz x21
 ; CHECK-APPLE-ARM64_32: cbnz w21
+=======
+; CHECK-APPLE: cbnz x21
+>>>>>>> origin/release/4.x
 ; CHECK-APPLE: fcmp s0, [[CMP]]
 ; CHECK-APPLE: b.le
 ; Access part of the error object and save it to error_ref
@@ -94,8 +119,12 @@ define float @caller2(i8* %error_ref) {
 ; CHECK-O0: mov x21
 ; CHECK-O0: bl {{.*}}foo
 ; CHECK-O0: mov [[ID:x[0-9]+]], x21
+<<<<<<< HEAD
 ; CHECK-O0-AARCH64: cbnz x21
 ; CHECK-O0-ARM64_32: cmp x21, #0
+=======
+; CHECK-O0: cbnz x21
+>>>>>>> origin/release/4.x
 entry:
   %error_ptr_ref = alloca swifterror %swift_error*
   br label %bb_loop
@@ -177,6 +206,7 @@ define float @foo_loop(%swift_error** swifterror %error_ptr_ref, i32 %cc, float 
 ; CHECK-APPLE: mov x21, x0
 ; CHECK-APPLE: ret
 
+<<<<<<< HEAD
 ; CHECK-O0-AARCH64-LABEL: foo_loop:
 ; spill x21
 ; CHECK-O0-AARCH64: str x21, [sp, [[SLOT:#[0-9]+]]]
@@ -189,6 +219,20 @@ define float @foo_loop(%swift_error** swifterror %error_ptr_ref, i32 %cc, float 
 ; CHECK-O0-AARCH64: malloc
 ; CHECK-O0-AARCH64: mov [[ID:x[0-9]+]], x0
 ; CHECK-O0-AARCH64: strb w{{.*}}, [{{.*}}[[ID]], #8]
+=======
+; CHECK-O0-LABEL: foo_loop:
+; spill x21
+; CHECK-O0: str x21, [sp, [[SLOT:#[0-9]+]]]
+; CHECK-O0: b [[BB1:[A-Za-z0-9_]*]]
+; CHECK-O0: [[BB1]]:
+; CHECK-O0: ldr     x0, [sp, [[SLOT]]]
+; CHECK-O0: str     x0, [sp, [[SLOT2:#[0-9]+]]]
+; CHECK-O0: cbz {{.*}}, [[BB2:[A-Za-z0-9_]*]]
+; CHECK-O0: orr w{{.*}}, wzr, #0x10
+; CHECK-O0: malloc
+; CHECK-O0: mov [[ID:x[0-9]+]], x0
+; CHECK-O0: strb w{{.*}}, [{{.*}}[[ID]], #8]
+>>>>>>> origin/release/4.x
 ; spill x0
 ; CHECK-O0-AARCH64: str x0, [sp, [[SLOT2]]]
 ; CHECK-O0-AARCH64:[[BB2]]:
@@ -197,6 +241,7 @@ define float @foo_loop(%swift_error** swifterror %error_ptr_ref, i32 %cc, float 
 ; CHECK-O0-AARCH64: str     x0, [sp]
 ; CHECK-O0-AARCH64: b.le [[BB1]]
 ; reload from stack
+<<<<<<< HEAD
 ; CHECK-O0-AARCH64: ldr [[ID3:x[0-9]+]], [sp]
 ; CHECK-O0-AARCH64: mov x21, [[ID3]]
 ; CHECK-O0-AARCH64: ret
@@ -223,6 +268,11 @@ define float @foo_loop(%swift_error** swifterror %error_ptr_ref, i32 %cc, float 
 ; CHECK-O0-ARM64_32: mov x21, [[ID3]]
 ; CHECK-O0-ARM64_32: ret
 
+=======
+; CHECK-O0: ldr [[ID3:x[0-9]+]], [sp]
+; CHECK-O0: mov x21, [[ID3]]
+; CHECK-O0: ret
+>>>>>>> origin/release/4.x
 entry:
   br label %bb_loop
 
@@ -264,6 +314,11 @@ define void @foo_sret(%struct.S* sret %agg.result, i32 %val1, %swift_error** swi
 ; CHECK-O0: mov w{{.*}}, #16
 ; spill x8
 ; CHECK-O0-DAG: str x8
+<<<<<<< HEAD
+=======
+; spill x21
+; CHECK-O0-DAG: str x21
+>>>>>>> origin/release/4.x
 ; CHECK-O0: malloc
 ; CHECK-O0: mov [[ID:w[0-9]+]], #1
 ; CHECK-O0: strb [[ID]], [x0, #8]
@@ -289,12 +344,20 @@ define float @caller3(i8* %error_ref) {
 ; CHECK-APPLE: mov [[ID:x[0-9]+]], x0
 ; CHECK-APPLE: mov x21, xzr
 ; CHECK-APPLE: bl {{.*}}foo_sret
+<<<<<<< HEAD
 ; CHECK-APPLE: mov x0, x21
 ; CHECK-APPLE-AARCH64: cbnz x21
 ; CHECK-APPLE-ARM64_32: cbnz w0
 ; Access part of the error object and save it to error_ref
 ; CHECK-APPLE: ldrb [[CODE:w[0-9]+]], [x0, #8]
 ; CHECK-APPLE: strb [[CODE]], [{{.*}}[[ID]]]
+=======
+; CHECK-APPLE: cbnz x21
+; Access part of the error object and save it to error_ref
+; CHECK-APPLE: ldrb [[CODE:w[0-9]+]], [x21, #8]
+; CHECK-APPLE: strb [[CODE]], [{{.*}}[[ID]]]
+; CHECK-APPLE: mov x0, x21
+>>>>>>> origin/release/4.x
 ; CHECK-APPLE: bl {{.*}}free
 
 ; CHECK-O0-LABEL: caller3:
@@ -303,8 +366,12 @@ define float @caller3(i8* %error_ref) {
 ; CHECK-O0: mov x21
 ; CHECK-O0: bl {{.*}}foo_sret
 ; CHECK-O0: mov [[ID2:x[0-9]+]], x21
+<<<<<<< HEAD
 ; CHECK-O0-AARCH64: cbnz x21
 ; CHECK-O0-ARM64_32: cmp x21, #0
+=======
+; CHECK-O0: cbnz x21
+>>>>>>> origin/release/4.x
 ; Access part of the error object and save it to error_ref
 ; reload from stack
 ; CHECK-O0: ldrb [[CODE:w[0-9]+]]
@@ -353,6 +420,11 @@ define float @foo_vararg(%swift_error** swifterror %error_ptr_ref, ...) {
 ; CHECK-APPLE-ARM64_32: strb [[ID]], [x0, #8]
 
 
+<<<<<<< HEAD
+=======
+; CHECK-APPLE: mov x21, x0
+; CHECK-APPLE-NOT: x21
+>>>>>>> origin/release/4.x
 entry:
   %call = call i8* @malloc(i64 16)
   %call.0 = bitcast i8* %call to %swift_error*
@@ -384,6 +456,7 @@ define float @caller4(i8* %error_ref) {
 ; CHECK-APPLE-AARCH64: stp {{x[0-9]+}}, {{x[0-9]+}}, [sp, #8]
 ; CHECK-APPLE-AARCH64: str {{x[0-9]+}}, [sp]
 
+<<<<<<< HEAD
 ; CHECK-APPLE-AARCH64: mov x21, xzr
 ; CHECK-APPLE-AARCH64: bl {{.*}}foo_vararg
 ; CHECK-APPLE-AARCH64: mov x0, x21
@@ -392,6 +465,16 @@ define float @caller4(i8* %error_ref) {
 ; CHECK-APPLE-AARCH64: ldrb [[CODE:w[0-9]+]], [x0, #8]
 ; CHECK-APPLE-AARCH64: strb [[CODE]], [{{.*}}[[ID]]]
 ; CHECK-APPLE-AARCH64: bl {{.*}}free
+=======
+; CHECK-APPLE: mov x21, xzr
+; CHECK-APPLE: bl {{.*}}foo_vararg
+; CHECK-APPLE: cbnz x21
+; Access part of the error object and save it to error_ref
+; CHECK-APPLE: ldrb [[CODE:w[0-9]+]], [x21, #8]
+; CHECK-APPLE: strb [[CODE]], [{{.*}}[[ID]]]
+; CHECK-APPLE: mov x0, x21
+; CHECK-APPLE: bl {{.*}}free
+>>>>>>> origin/release/4.x
 entry:
   %error_ptr_ref = alloca swifterror %swift_error*
   store %swift_error* null, %swift_error** %error_ptr_ref
@@ -625,6 +708,7 @@ entry:
   tail call void @acallee(i8* null)
   ret void
 }
+<<<<<<< HEAD
 
 declare swiftcc void @foo2(%swift_error** swifterror)
 
@@ -652,3 +736,5 @@ a:
   %error = load %swift_error*, %swift_error** %error_ptr
   ret %swift_error* %error
 }
+=======
+>>>>>>> origin/release/4.x

@@ -432,9 +432,15 @@ void SIFrameLowering::emitEntryFunctionPrologue(MachineFunction &MF,
       AMDGPUFunctionArgInfo::PRIVATE_SEGMENT_WAVE_BYTE_OFFSET);
 
   unsigned PreloadedPrivateBufferReg = AMDGPU::NoRegister;
+<<<<<<< HEAD
   if (ST.isAmdHsaOrMesa(F)) {
     PreloadedPrivateBufferReg = MFI->getPreloadedReg(
       AMDGPUFunctionArgInfo::PRIVATE_SEGMENT_BUFFER);
+=======
+  if (ST.isAmdCodeObjectV2(MF) || ST.isMesaGfxShader(MF)) {
+    PreloadedPrivateBufferReg = TRI->getPreloadedValue(
+      MF, SIRegisterInfo::PRIVATE_SEGMENT_BUFFER);
+>>>>>>> origin/release/4.x
   }
 
   bool OffsetRegUsed = ScratchWaveOffsetReg != AMDGPU::NoRegister &&
@@ -452,7 +458,11 @@ void SIFrameLowering::emitEntryFunctionPrologue(MachineFunction &MF,
   MBB.addLiveIn(PreloadedScratchWaveOffsetReg);
 
   if (ResourceRegUsed && PreloadedPrivateBufferReg != AMDGPU::NoRegister) {
+<<<<<<< HEAD
     assert(ST.isAmdHsaOrMesa(F) || ST.isMesaGfxShader(F));
+=======
+    assert(ST.isAmdCodeObjectV2(MF) || ST.isMesaGfxShader(MF));
+>>>>>>> origin/release/4.x
     MRI.addLiveIn(PreloadedPrivateBufferReg);
     MBB.addLiveIn(PreloadedPrivateBufferReg);
   }
@@ -477,7 +487,11 @@ void SIFrameLowering::emitEntryFunctionPrologue(MachineFunction &MF,
 
   bool CopyBuffer = ResourceRegUsed &&
     PreloadedPrivateBufferReg != AMDGPU::NoRegister &&
+<<<<<<< HEAD
     ST.isAmdHsaOrMesa(F) &&
+=======
+    ST.isAmdCodeObjectV2(MF) &&
+>>>>>>> origin/release/4.x
     ScratchRsrcReg != PreloadedPrivateBufferReg;
 
   // This needs to be careful of the copying order to avoid overwriting one of
@@ -507,6 +521,7 @@ void SIFrameLowering::emitEntryFunctionPrologue(MachineFunction &MF,
       .addReg(PreloadedPrivateBufferReg, RegState::Kill);
   }
 
+<<<<<<< HEAD
   if (ResourceRegUsed) {
     emitEntryFunctionScratchSetup(ST, MF, MBB, MFI, I,
         PreloadedPrivateBufferReg, ScratchRsrcReg);
@@ -607,10 +622,19 @@ void SIFrameLowering::emitEntryFunctionScratchSetup(const GCNSubtarget &ST,
 
     Register Rsrc2 = TRI->getSubReg(ScratchRsrcReg, AMDGPU::sub2);
     Register Rsrc3 = TRI->getSubReg(ScratchRsrcReg, AMDGPU::sub3);
+=======
+  if (ResourceRegUsed && (ST.isMesaGfxShader(MF) || (PreloadedPrivateBufferReg == AMDGPU::NoRegister))) {
+    assert(!ST.isAmdCodeObjectV2(MF));
+    const MCInstrDesc &SMovB32 = TII->get(AMDGPU::S_MOV_B32);
+
+    unsigned Rsrc2 = TRI->getSubReg(ScratchRsrcReg, AMDGPU::sub2);
+    unsigned Rsrc3 = TRI->getSubReg(ScratchRsrcReg, AMDGPU::sub3);
+>>>>>>> origin/release/4.x
 
     // Use relocations to get the pointer, and setup the other bits manually.
     uint64_t Rsrc23 = TII->getScratchRsrcWords23();
 
+<<<<<<< HEAD
     if (MFI->hasImplicitBufferPtr()) {
       Register Rsrc01 = TRI->getSubReg(ScratchRsrcReg, AMDGPU::sub0_sub1);
 
@@ -619,18 +643,33 @@ void SIFrameLowering::emitEntryFunctionScratchSetup(const GCNSubtarget &ST,
 
         BuildMI(MBB, I, DL, Mov64, Rsrc01)
           .addReg(MFI->getImplicitBufferPtrUserSGPR())
+=======
+    if (MFI->hasPrivateMemoryInputPtr()) {
+      unsigned Rsrc01 = TRI->getSubReg(ScratchRsrcReg, AMDGPU::sub0_sub1);
+
+      if (AMDGPU::isCompute(MF.getFunction()->getCallingConv())) {
+        const MCInstrDesc &Mov64 = TII->get(AMDGPU::S_MOV_B64);
+
+        BuildMI(MBB, I, DL, Mov64, Rsrc01)
+          .addReg(PreloadedPrivateBufferReg)
+>>>>>>> origin/release/4.x
           .addReg(ScratchRsrcReg, RegState::ImplicitDefine);
       } else {
         const MCInstrDesc &LoadDwordX2 = TII->get(AMDGPU::S_LOAD_DWORDX2_IMM);
 
         PointerType *PtrTy =
+<<<<<<< HEAD
           PointerType::get(Type::getInt64Ty(MF.getFunction().getContext()),
+=======
+          PointerType::get(Type::getInt64Ty(MF.getFunction()->getContext()),
+>>>>>>> origin/release/4.x
                            AMDGPUAS::CONSTANT_ADDRESS);
         MachinePointerInfo PtrInfo(UndefValue::get(PtrTy));
         auto MMO = MF.getMachineMemOperand(PtrInfo,
                                            MachineMemOperand::MOLoad |
                                            MachineMemOperand::MOInvariant |
                                            MachineMemOperand::MODereferenceable,
+<<<<<<< HEAD
                                            8, 4);
         BuildMI(MBB, I, DL, LoadDwordX2, Rsrc01)
           .addReg(MFI->getImplicitBufferPtrUserSGPR())
@@ -646,6 +685,19 @@ void SIFrameLowering::emitEntryFunctionScratchSetup(const GCNSubtarget &ST,
     } else {
       Register Rsrc0 = TRI->getSubReg(ScratchRsrcReg, AMDGPU::sub0);
       Register Rsrc1 = TRI->getSubReg(ScratchRsrcReg, AMDGPU::sub1);
+=======
+                                           0, 0);
+        BuildMI(MBB, I, DL, LoadDwordX2, Rsrc01)
+          .addReg(PreloadedPrivateBufferReg)
+          .addImm(0) // offset
+          .addImm(0) // glc
+          .addMemOperand(MMO)
+          .addReg(ScratchRsrcReg, RegState::ImplicitDefine);
+      }
+    } else {
+      unsigned Rsrc0 = TRI->getSubReg(ScratchRsrcReg, AMDGPU::sub0);
+      unsigned Rsrc1 = TRI->getSubReg(ScratchRsrcReg, AMDGPU::sub1);
+>>>>>>> origin/release/4.x
 
       BuildMI(MBB, I, DL, SMovB32, Rsrc0)
         .addExternalSymbol("SCRATCH_RSRC_DWORD0")

@@ -47,9 +47,14 @@ public:
 
   void scanVersionScript();
 
+<<<<<<< HEAD
   Symbol *find(StringRef name);
 
   void handleDynamicList();
+=======
+  SymbolBody *find(StringRef Name);
+  SymbolBody *findInCurrentDSO(StringRef Name);
+>>>>>>> origin/release/4.x
 
   // Set of .so files to not link the same shared object file more than once.
   llvm::DenseMap<StringRef, SharedFile *> soNames;

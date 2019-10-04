@@ -569,6 +569,7 @@ def FeatureEnableSIScheduler : SubtargetFeature<"si-scheduler",
   "Enable SI Machine Scheduler"
 >;
 
+<<<<<<< HEAD
 def FeatureEnableDS128 : SubtargetFeature<"enable-ds128",
   "EnableDS128",
   "true",
@@ -585,6 +586,8 @@ def FeatureEnablePRTStrictNull : SubtargetFeature<"enable-prt-strict-null",
   "Enable zeroing of result registers for sparse texture fetches"
 >;
 
+=======
+>>>>>>> origin/release/4.x
 // Unless +-flat-for-global is specified, turn on FlatForGlobal for
 // all OS-es on VI and newer hardware to avoid assertion failures due
 // to missing ADDR64 variants of MUBUF instructions.

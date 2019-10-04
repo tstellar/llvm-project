@@ -102,15 +102,24 @@ public:
   int foo() override;
 };
 
+<<<<<<< HEAD
 class F {
 public:
   F() {
     void (F::*ptr)() = &F::foo;
+=======
+// Regression test: don't crash when there's no direct callee.
+class F {
+public:
+  F() {
+    void (F::* ptr)() = &F::foo;
+>>>>>>> origin/release/4.x
     (this->*ptr)();
   }
   void foo();
 };
 
+<<<<<<< HEAD
 class G {
 public:
   G() {}
@@ -199,6 +208,15 @@ int main() {
   Y *y = new Y;
   delete y;
   header::Z z;
+=======
+int main() {
+  A *a;
+  B *b;
+  C *c;
+  D *d;
+  E *e;
+  F *f;
+>>>>>>> origin/release/4.x
 }
 
 namespace PR34451 {

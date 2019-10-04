@@ -36,6 +36,7 @@ void invalidNameInIvarAndPropertyBase() {
   float a = ((InvalidNameInIvarAndPropertyBase*)node)->_a; // expected-error {{use of undeclared identifier 'node'}}
   float b = ((InvalidNameInIvarAndPropertyBase*)node)._b; // expected-error {{use of undeclared identifier 'node'}}
 }
+<<<<<<< HEAD
 
 // rdar://problem/33102722
 // Typo correction for a property when it has as correction candidates
@@ -87,3 +88,5 @@ struct Mat2 { int rows; };
 }
 
 @end
+=======
+>>>>>>> origin/release/4.x

@@ -68,6 +68,8 @@ STATISTIC(NumSaturating,
 
 static cl::opt<bool> DontAddNoWrapFlags("cvp-dont-add-nowrap-flags", cl::init(false));
 
+static cl::opt<bool> DontProcessAdds("cvp-dont-process-adds", cl::init(true));
+
 namespace {
 
   class CorrelatedValuePropagation : public FunctionPass {
@@ -640,7 +642,14 @@ static bool processAShr(BinaryOperator *SDI, LazyValueInfo *LVI) {
 static bool processBinOp(BinaryOperator *BinOp, LazyValueInfo *LVI) {
   using OBO = OverflowingBinaryOperator;
 
+<<<<<<< HEAD
   if (DontAddNoWrapFlags)
+=======
+  if (DontProcessAdds)
+    return false;
+
+  if (AddOp->getType()->isVectorTy() || hasLocalDefs(AddOp))
+>>>>>>> origin/release/4.x
     return false;
 
   if (BinOp->getType()->isVectorTy())

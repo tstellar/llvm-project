@@ -23,6 +23,14 @@ v1:
   .gpword foo
   .gpword bar
 
+<<<<<<< HEAD
+=======
+# CHECK: Contents of section .rodata:
+# CHECK:  00f4 fffe8014 fffe8018
+#              ^ 0x10004 - 0x27ff0
+#                       ^ 0x10008 - 0x27ff0
+
+>>>>>>> origin/release/4.x
 # CHECK: SYMBOL TABLE:
 # CHECK: 00020008         .text           00000000 bar
 # CHECK: 00020004         .text           00000000 foo

@@ -5,6 +5,7 @@
 
 # upcast of address with insufficient space for an object of type std::_Rb_tree_node<...>
 src:*bits/stl_tree.h
+<<<<<<< HEAD
 
 # libstdc++ 4.8 creates a null reference when calling
 # data() on an empty vector: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59829
@@ -14,3 +15,5 @@ src:*bits/stl_vector.h
 # libstdc++ 8.0.1 casts an under-aligned pointer to type type_info:
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85930
 src:*bits/shared_ptr_base.h
+=======
+>>>>>>> origin/release/4.x

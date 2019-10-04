@@ -7,6 +7,7 @@
 // RUN: not %clang_asan -Dtestfunc=pvalloc  %s -o %t
 // RUN: not %clang_asan -Dtestfunc=cfree    %s -o %t
 
+<<<<<<< HEAD
 // Conflicts with BIONIC declarations.
 // UNSUPPORTED: android
 
@@ -15,6 +16,8 @@
 #undef __EXTENSIONS__
 #endif
 
+=======
+>>>>>>> origin/release/4.x
 #include <stdlib.h>
 
 // For glibc, cause link failures by referencing a nonexistent function.

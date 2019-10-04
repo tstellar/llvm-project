@@ -532,6 +532,7 @@ function(llvm_add_library name)
       set_target_properties(${name}
         PROPERTIES
 <<<<<<< HEAD
+<<<<<<< HEAD
         # Since 4.0.0, the ABI version is indicated by the major version
         SOVERSION ${LLVM_VERSION_MAJOR}${LLVM_VERSION_SUFFIX}
         VERSION ${LLVM_VERSION_MAJOR}${LLVM_VERSION_SUFFIX})
@@ -542,6 +543,11 @@ function(llvm_add_library name)
         SOVERSION ${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}
         VERSION ${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}${LLVM_VERSION_SUFFIX})
 >>>>>>> release/7.x
+=======
+        # Since 4.0.0, the ABI version is indicated by the major version
+        SOVERSION ${LLVM_VERSION_MAJOR}
+        VERSION ${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}${LLVM_VERSION_SUFFIX})
+>>>>>>> origin/release/4.x
     endif()
   endif()
 
@@ -820,7 +826,11 @@ macro(add_llvm_executable name)
     # libpthreads overrides some standard library symbols, so main
     # executable must be linked with it in order to provide consistent
     # API for all shared libaries loaded by this executable.
+<<<<<<< HEAD
     target_link_libraries(${name} PRIVATE ${LLVM_PTHREAD_LIB})
+=======
+    target_link_libraries(${name} ${LLVM_PTHREAD_LIB})
+>>>>>>> origin/release/4.x
   endif()
 
   llvm_codesign(${name} ENTITLEMENTS ${ARG_ENTITLEMENTS} BUNDLE_PATH ${ARG_BUNDLE_PATH})
@@ -1173,7 +1183,11 @@ function(add_unittest test_suite test_name)
   # libpthreads overrides some standard library symbols, so main
   # executable must be linked with it in order to provide consistent
   # API for all shared libaries loaded by this executable.
+<<<<<<< HEAD
   target_link_libraries(${test_name} PRIVATE gtest_main gtest ${LLVM_PTHREAD_LIB})
+=======
+  target_link_libraries(${test_name} gtest_main gtest ${LLVM_PTHREAD_LIB})
+>>>>>>> origin/release/4.x
 
   add_dependencies(${test_suite} ${test_name})
   get_target_property(test_suite_folder ${test_suite} FOLDER)

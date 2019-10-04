@@ -16,6 +16,7 @@
 
 using namespace llvm;
 
+<<<<<<< HEAD
 enum Style {
   Auto,  ///< auto-detect mangling
   GNU,   ///< GNU
@@ -130,6 +131,16 @@ static void demangleLine(llvm::raw_ostream &OS, StringRef Mangled, bool Split) {
     Result = demangle(OS, Mangled);
   OS << Result << '\n';
   OS.flush();
+=======
+static void demangle(llvm::raw_ostream &OS, const std::string &Mangled) {
+  int Status;
+  char *Demangled = nullptr;
+  if ((Mangled.size() >= 2 && Mangled.compare(0, 2, "_Z")) ||
+      (Mangled.size() >= 4 && Mangled.compare(0, 4, "___Z")))
+    Demangled = itaniumDemangle(Mangled.c_str(), nullptr, nullptr, &Status);
+  OS << (Demangled ? Demangled : Mangled) << '\n';
+  free(Demangled);
+>>>>>>> origin/release/4.x
 }
 
 int main(int argc, char **argv) {
@@ -139,7 +150,11 @@ int main(int argc, char **argv) {
 
   if (Decorated.empty())
     for (std::string Mangled; std::getline(std::cin, Mangled);)
+<<<<<<< HEAD
       demangleLine(llvm::outs(), Mangled, true);
+=======
+      demangle(llvm::outs(), Mangled);
+>>>>>>> origin/release/4.x
   else
     for (const auto &Symbol : Decorated)
       demangleLine(llvm::outs(), Symbol, false);

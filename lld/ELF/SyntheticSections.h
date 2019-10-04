@@ -556,26 +556,42 @@ public:
   std::vector<RelativeReloc> relocs;
 };
 
+<<<<<<< HEAD
 // RelrSection is used to encode offsets for relative relocations.
 // Proposal for adding SHT_RELR sections to generic-abi is here:
 //   https://groups.google.com/forum/#!topic/generic-abi/bX460iggiKg
 // For more details, see the comment in RelrSection::updateAllocSize().
 template <class ELFT> class RelrSection final : public RelrBaseSection {
   using Elf_Relr = typename ELFT::Relr;
+=======
+  void finalize() override;
+  void writeTo(uint8_t *Buf) override;
+  size_t getSize() const override { return getNumSymbols() * sizeof(Elf_Sym); }
+  void addGlobal(SymbolBody *Body);
+  void addLocal(SymbolBody *Body);
+  StringTableSection<ELFT> &getStrTabSec() const { return StrTabSec; }
+  unsigned getNumSymbols() const { return Symbols.size() + 1; }
+  size_t getSymbolIndex(SymbolBody *Body);
+>>>>>>> origin/release/4.x
 
 public:
   RelrSection();
 
+<<<<<<< HEAD
   bool updateAllocSize() override;
   size_t getSize() const override { return relrRelocs.size() * this->entsize; }
   void writeTo(uint8_t *buf) override {
     memcpy(buf, relrRelocs.data(), getSize());
   }
+=======
+  static const OutputSectionBase *getOutputSection(SymbolBody *Sym);
+>>>>>>> origin/release/4.x
 
 private:
   std::vector<Elf_Relr> relrRelocs;
 };
 
+<<<<<<< HEAD
 struct SymbolTableEntry {
   Symbol *sym;
   size_t strTabOffset;
@@ -602,6 +618,14 @@ protected:
   llvm::once_flag onceFlag;
   llvm::DenseMap<Symbol *, size_t> symbolIndexMap;
   llvm::DenseMap<OutputSection *, size_t> sectionIndexMap;
+=======
+  // A vector of symbols and their string table offsets.
+  std::vector<SymbolTableEntry> Symbols;
+
+  StringTableSection<ELFT> &StrTabSec;
+
+  unsigned NumLocals = 0;
+>>>>>>> origin/release/4.x
 };
 
 template <class ELFT>

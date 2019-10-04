@@ -10,14 +10,21 @@
 
 // <queue>
 
+<<<<<<< HEAD
 // template <class... Args> decltype(auto) emplace(Args&&... args);
 // return type is 'decltype(auto)' in C++17; 'void' before
 // whatever the return type of the underlying container's emplace_back() returns.
+=======
+// template <class... Args> reference emplace(Args&&... args);
+// return type is 'reference' in C++17; 'void' before
+>>>>>>> origin/release/4.x
 
 
 #include <queue>
 #include <cassert>
 #include <list>
+
+#include "test_macros.h"
 
 #include "test_macros.h"
 
@@ -44,7 +51,10 @@ int main(int, char**)
 
     std::queue<Emplaceable> q;
 #if TEST_STD_VER > 14
+<<<<<<< HEAD
     typedef Emplaceable T;
+=======
+>>>>>>> origin/release/4.x
     T& r1 = q.emplace(1, 2.5);
     assert(&r1 == &q.back());
     T& r2 = q.emplace(2, 3.5);
@@ -61,6 +71,9 @@ int main(int, char**)
     assert(q.size() == 3);
     assert(q.front() == Emplaceable(1, 2.5));
     assert(q.back() == Emplaceable(3, 4.5));
+<<<<<<< HEAD
 
   return 0;
+=======
+>>>>>>> origin/release/4.x
 }

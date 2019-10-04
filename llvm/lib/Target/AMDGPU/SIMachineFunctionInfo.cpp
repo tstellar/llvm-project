@@ -43,6 +43,7 @@ SIMachineFunctionInfo::SIMachineFunctionInfo(const MachineFunction &MF)
     WorkItemIDX(false),
     WorkItemIDY(false),
     WorkItemIDZ(false),
+<<<<<<< HEAD
     ImplicitBufferPtr(false),
     ImplicitArgPtr(false),
     GITPtrHigh(0xffffffff),
@@ -59,6 +60,18 @@ SIMachineFunctionInfo::SIMachineFunctionInfo(const MachineFunction &MF)
   if (CC == CallingConv::AMDGPU_KERNEL || CC == CallingConv::SPIR_KERNEL) {
     if (!F.arg_empty())
       KernargSegmentPtr = true;
+=======
+    PrivateMemoryInputPtr(false) {
+  const SISubtarget &ST = MF.getSubtarget<SISubtarget>();
+  const Function *F = MF.getFunction();
+
+  PSInputAddr = AMDGPU::getInitialPSInputAddr(*F);
+
+  const MachineFrameInfo &FrameInfo = MF.getFrameInfo();
+
+  if (!AMDGPU::isShader(F->getCallingConv())) {
+    KernargSegmentPtr = true;
+>>>>>>> origin/release/4.x
     WorkGroupIDX = true;
     WorkItemIDX = true;
   } else if (CC == CallingConv::AMDGPU_PS) {
@@ -119,6 +132,7 @@ SIMachineFunctionInfo::SIMachineFunctionInfo(const MachineFunction &MF)
 
     PrivateSegmentWaveByteOffset = true;
 
+<<<<<<< HEAD
     // HS and GS always have the scratch wave offset in SGPR5 on GFX9.
     if (ST.getGeneration() >= AMDGPUSubtarget::GFX9 &&
         (CC == CallingConv::AMDGPU_HS || CC == CallingConv::AMDGPU_GS))
@@ -129,6 +143,11 @@ SIMachineFunctionInfo::SIMachineFunctionInfo(const MachineFunction &MF)
   bool isAmdHsaOrMesa = ST.isAmdHsaOrMesa(F);
   if (isAmdHsaOrMesa) {
     PrivateSegmentBuffer = true;
+=======
+  if (ST.isAmdCodeObjectV2(MF)) {
+    if (HasStackObjects || MaySpill)
+      PrivateSegmentBuffer = true;
+>>>>>>> origin/release/4.x
 
     if (F.hasFnAttribute("amdgpu-dispatch-ptr"))
       DispatchPtr = true;
@@ -138,6 +157,7 @@ SIMachineFunctionInfo::SIMachineFunctionInfo(const MachineFunction &MF)
 
     if (F.hasFnAttribute("amdgpu-dispatch-id"))
       DispatchID = true;
+<<<<<<< HEAD
   } else if (ST.isMesaGfxShader(F)) {
     ImplicitBufferPtr = true;
   }
@@ -161,6 +181,11 @@ SIMachineFunctionInfo::SIMachineFunctionInfo(const MachineFunction &MF)
     // detecting calls that may require it before argument lowering.
     if (hasNonSpillStackObjects() || F.hasFnAttribute("amdgpu-flat-scratch"))
       FlatScratchInit = true;
+=======
+  } else if (ST.isMesaGfxShader(MF)) {
+    if (HasStackObjects || MaySpill)
+      PrivateMemoryInputPtr = true;
+>>>>>>> origin/release/4.x
   }
 
   Attribute A = F.getFnAttribute("amdgpu-git-ptr-high");
@@ -257,6 +282,7 @@ bool SIMachineFunctionInfo::haveFreeLanesForSGPRSpill(const MachineFunction &MF,
   return NumVGPRSpillLanes + NumNeed <= WaveSize * SpillVGPRs.size();
 }
 
+<<<<<<< HEAD
 /// Reserve a slice of a VGPR to support spilling for FrameIndex \p FI.
 bool SIMachineFunctionInfo::allocateSGPRSpillToVGPR(MachineFunction &MF,
                                                     int FI) {
@@ -265,6 +291,21 @@ bool SIMachineFunctionInfo::allocateSGPRSpillToVGPR(MachineFunction &MF,
   // This has already been allocated.
   if (!SpillLanes.empty())
     return true;
+=======
+unsigned SIMachineFunctionInfo::addPrivateMemoryPtr(const SIRegisterInfo &TRI) {
+  PrivateMemoryPtrUserSGPR = TRI.getMatchingSuperReg(
+    getNextUserSGPR(), AMDGPU::sub0, &AMDGPU::SReg_64RegClass);
+  NumUserSGPRs += 2;
+  return PrivateMemoryPtrUserSGPR;
+}
+
+SIMachineFunctionInfo::SpilledReg SIMachineFunctionInfo::getSpilledReg (
+                                                       MachineFunction *MF,
+                                                       unsigned FrameIndex,
+                                                       unsigned SubIdx) {
+  if (!EnableSpillSGPRToVGPR)
+    return SpilledReg();
+>>>>>>> origin/release/4.x
 
   const GCNSubtarget &ST = MF.getSubtarget<GCNSubtarget>();
   const SIRegisterInfo *TRI = ST.getRegisterInfo();

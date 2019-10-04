@@ -31,6 +31,10 @@ add_llvm_unittest(OrcJITTests
   ThreadSafeModuleTest.cpp
   )
 
+<<<<<<< HEAD
 target_link_libraries(OrcJITTests PRIVATE
                         LLVMTestingSupport
                         ${ORC_JIT_TEST_LIBS})
+=======
+target_link_libraries(OrcJITTests ${LLVM_PTHREAD_LIB})
+>>>>>>> origin/release/4.x

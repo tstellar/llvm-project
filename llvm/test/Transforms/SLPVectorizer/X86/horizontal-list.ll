@@ -13,25 +13,26 @@ define float @baz() {
 ; CHECK-NEXT:    [[TMP0:%.*]] = load i32, i32* @n, align 4
 ; CHECK-NEXT:    [[MUL:%.*]] = mul nsw i32 [[TMP0]], 3
 ; CHECK-NEXT:    [[CONV:%.*]] = sitofp i32 [[MUL]] to float
-; CHECK-NEXT:    [[TMP1:%.*]] = load <2 x float>, <2 x float>* bitcast ([20 x float]* @arr to <2 x float>*), align 16
-; CHECK-NEXT:    [[TMP2:%.*]] = load <2 x float>, <2 x float>* bitcast ([20 x float]* @arr1 to <2 x float>*), align 16
-; CHECK-NEXT:    [[TMP3:%.*]] = fmul fast <2 x float> [[TMP2]], [[TMP1]]
-; CHECK-NEXT:    [[TMP4:%.*]] = extractelement <2 x float> [[TMP3]], i32 0
-; CHECK-NEXT:    [[ADD:%.*]] = fadd fast float [[TMP4]], [[CONV]]
-; CHECK-NEXT:    [[TMP5:%.*]] = extractelement <2 x float> [[TMP3]], i32 1
-; CHECK-NEXT:    [[ADD_1:%.*]] = fadd fast float [[TMP5]], [[ADD]]
-; CHECK-NEXT:    [[TMP6:%.*]] = load <2 x float>, <2 x float>* bitcast (float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 2) to <2 x float>*), align 8
-; CHECK-NEXT:    [[TMP7:%.*]] = load <2 x float>, <2 x float>* bitcast (float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 2) to <2 x float>*), align 8
-; CHECK-NEXT:    [[TMP8:%.*]] = fmul fast <2 x float> [[TMP7]], [[TMP6]]
-; CHECK-NEXT:    [[TMP9:%.*]] = extractelement <2 x float> [[TMP8]], i32 0
-; CHECK-NEXT:    [[ADD_2:%.*]] = fadd fast float [[TMP9]], [[ADD_1]]
-; CHECK-NEXT:    [[TMP10:%.*]] = extractelement <2 x float> [[TMP8]], i32 1
-; CHECK-NEXT:    [[ADD_3:%.*]] = fadd fast float [[TMP10]], [[ADD_2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 0), align 16
+; CHECK-NEXT:    [[TMP2:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 0), align 16
+; CHECK-NEXT:    [[MUL4:%.*]] = fmul fast float [[TMP2]], [[TMP1]]
+; CHECK-NEXT:    [[ADD:%.*]] = fadd fast float [[MUL4]], [[CONV]]
+; CHECK-NEXT:    [[TMP3:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 1), align 4
+; CHECK-NEXT:    [[TMP4:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 1), align 4
+; CHECK-NEXT:    [[MUL4_1:%.*]] = fmul fast float [[TMP4]], [[TMP3]]
+; CHECK-NEXT:    [[ADD_1:%.*]] = fadd fast float [[MUL4_1]], [[ADD]]
+; CHECK-NEXT:    [[TMP5:%.*]] = load <2 x float>, <2 x float>* bitcast (float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 2) to <2 x float>*), align 8
+; CHECK-NEXT:    [[TMP6:%.*]] = load <2 x float>, <2 x float>* bitcast (float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 2) to <2 x float>*), align 8
+; CHECK-NEXT:    [[TMP7:%.*]] = fmul fast <2 x float> [[TMP6]], [[TMP5]]
+; CHECK-NEXT:    [[TMP8:%.*]] = extractelement <2 x float> [[TMP7]], i32 0
+; CHECK-NEXT:    [[ADD_2:%.*]] = fadd fast float [[TMP8]], [[ADD_1]]
+; CHECK-NEXT:    [[TMP9:%.*]] = extractelement <2 x float> [[TMP7]], i32 1
+; CHECK-NEXT:    [[ADD_3:%.*]] = fadd fast float [[TMP9]], [[ADD_2]]
 ; CHECK-NEXT:    [[ADD7:%.*]] = fadd fast float [[ADD_3]], [[CONV]]
-; CHECK-NEXT:    [[ADD19:%.*]] = fadd fast float [[TMP4]], [[ADD7]]
-; CHECK-NEXT:    [[ADD19_1:%.*]] = fadd fast float [[TMP5]], [[ADD19]]
-; CHECK-NEXT:    [[ADD19_2:%.*]] = fadd fast float [[TMP9]], [[ADD19_1]]
-; CHECK-NEXT:    [[ADD19_3:%.*]] = fadd fast float [[TMP10]], [[ADD19_2]]
+; CHECK-NEXT:    [[ADD19:%.*]] = fadd fast float [[MUL4]], [[ADD7]]
+; CHECK-NEXT:    [[ADD19_1:%.*]] = fadd fast float [[MUL4_1]], [[ADD19]]
+; CHECK-NEXT:    [[ADD19_2:%.*]] = fadd fast float [[TMP8]], [[ADD19_1]]
+; CHECK-NEXT:    [[ADD19_3:%.*]] = fadd fast float [[TMP9]], [[ADD19_2]]
 ; CHECK-NEXT:    store float [[ADD19_3]], float* @res, align 4
 ; CHECK-NEXT:    ret float [[ADD19_3]]
 ;
@@ -97,6 +98,7 @@ define float @bazz() {
 ; CHECK-NEXT:    [[TMP0:%.*]] = load i32, i32* @n, align 4
 ; CHECK-NEXT:    [[MUL:%.*]] = mul nsw i32 [[TMP0]], 3
 ; CHECK-NEXT:    [[CONV:%.*]] = sitofp i32 [[MUL]] to float
+<<<<<<< HEAD
 ; CHECK-NEXT:    [[TMP1:%.*]] = load <8 x float>, <8 x float>* bitcast ([20 x float]* @arr to <8 x float>*), align 16
 ; CHECK-NEXT:    [[TMP2:%.*]] = load <8 x float>, <8 x float>* bitcast ([20 x float]* @arr1 to <8 x float>*), align 16
 ; CHECK-NEXT:    [[TMP3:%.*]] = fmul fast <8 x float> [[TMP2]], [[TMP1]]
@@ -135,6 +137,44 @@ define float @bazz() {
 ; THRESHOLD-NEXT:    [[OP_EXTRA5:%.*]] = fadd fast float [[OP_EXTRA]], [[CONV6]]
 ; THRESHOLD-NEXT:    store float [[OP_EXTRA5]], float* @res, align 4
 ; THRESHOLD-NEXT:    ret float [[OP_EXTRA5]]
+=======
+; CHECK-NEXT:    [[TMP1:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 0), align 16
+; CHECK-NEXT:    [[TMP2:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 0), align 16
+; CHECK-NEXT:    [[MUL4:%.*]] = fmul fast float [[TMP2]], [[TMP1]]
+; CHECK-NEXT:    [[ADD:%.*]] = fadd fast float [[MUL4]], [[CONV]]
+; CHECK-NEXT:    [[TMP3:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 1), align 4
+; CHECK-NEXT:    [[TMP4:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 1), align 4
+; CHECK-NEXT:    [[MUL4_1:%.*]] = fmul fast float [[TMP4]], [[TMP3]]
+; CHECK-NEXT:    [[ADD_1:%.*]] = fadd fast float [[MUL4_1]], [[ADD]]
+; CHECK-NEXT:    [[TMP5:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 2), align 8
+; CHECK-NEXT:    [[TMP6:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 2), align 8
+; CHECK-NEXT:    [[MUL4_2:%.*]] = fmul fast float [[TMP6]], [[TMP5]]
+; CHECK-NEXT:    [[ADD_2:%.*]] = fadd fast float [[MUL4_2]], [[ADD_1]]
+; CHECK-NEXT:    [[TMP7:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 3), align 4
+; CHECK-NEXT:    [[TMP8:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 3), align 4
+; CHECK-NEXT:    [[MUL4_3:%.*]] = fmul fast float [[TMP8]], [[TMP7]]
+; CHECK-NEXT:    [[ADD_3:%.*]] = fadd fast float [[MUL4_3]], [[ADD_2]]
+; CHECK-NEXT:    [[MUL5:%.*]] = shl nsw i32 [[TMP0]], 2
+; CHECK-NEXT:    [[CONV6:%.*]] = sitofp i32 [[MUL5]] to float
+; CHECK-NEXT:    [[ADD7:%.*]] = fadd fast float [[ADD_3]], [[CONV6]]
+; CHECK-NEXT:    [[TMP9:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 4), align 16
+; CHECK-NEXT:    [[TMP10:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 4), align 16
+; CHECK-NEXT:    [[MUL18:%.*]] = fmul fast float [[TMP10]], [[TMP9]]
+; CHECK-NEXT:    [[ADD19:%.*]] = fadd fast float [[MUL18]], [[ADD7]]
+; CHECK-NEXT:    [[TMP11:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 5), align 4
+; CHECK-NEXT:    [[TMP12:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 5), align 4
+; CHECK-NEXT:    [[MUL18_1:%.*]] = fmul fast float [[TMP12]], [[TMP11]]
+; CHECK-NEXT:    [[ADD19_1:%.*]] = fadd fast float [[MUL18_1]], [[ADD19]]
+; CHECK-NEXT:    [[TMP13:%.*]] = load <2 x float>, <2 x float>* bitcast (float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 6) to <2 x float>*), align 8
+; CHECK-NEXT:    [[TMP14:%.*]] = load <2 x float>, <2 x float>* bitcast (float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 6) to <2 x float>*), align 8
+; CHECK-NEXT:    [[TMP15:%.*]] = fmul fast <2 x float> [[TMP14]], [[TMP13]]
+; CHECK-NEXT:    [[TMP16:%.*]] = extractelement <2 x float> [[TMP15]], i32 0
+; CHECK-NEXT:    [[ADD19_2:%.*]] = fadd fast float [[TMP16]], [[ADD19_1]]
+; CHECK-NEXT:    [[TMP17:%.*]] = extractelement <2 x float> [[TMP15]], i32 1
+; CHECK-NEXT:    [[ADD19_3:%.*]] = fadd fast float [[TMP17]], [[ADD19_2]]
+; CHECK-NEXT:    store float [[ADD19_3]], float* @res, align 4
+; CHECK-NEXT:    ret float [[ADD19_3]]
+>>>>>>> origin/release/4.x
 ;
 entry:
   %0 = load i32, i32* @n, align 4
@@ -184,6 +224,7 @@ define float @bazzz() {
 ; CHECK-NEXT:  entry:
 ; CHECK-NEXT:    [[TMP0:%.*]] = load i32, i32* @n, align 4
 ; CHECK-NEXT:    [[CONV:%.*]] = sitofp i32 [[TMP0]] to float
+<<<<<<< HEAD
 ; CHECK-NEXT:    [[TMP1:%.*]] = load <4 x float>, <4 x float>* bitcast ([20 x float]* @arr to <4 x float>*), align 16
 ; CHECK-NEXT:    [[TMP2:%.*]] = load <4 x float>, <4 x float>* bitcast ([20 x float]* @arr1 to <4 x float>*), align 16
 ; CHECK-NEXT:    [[TMP3:%.*]] = fmul fast <4 x float> [[TMP2]], [[TMP1]]
@@ -211,6 +252,26 @@ define float @bazzz() {
 ; THRESHOLD-NEXT:    [[TMP5:%.*]] = fmul fast float [[CONV]], [[TMP4]]
 ; THRESHOLD-NEXT:    store float [[TMP5]], float* @res, align 4
 ; THRESHOLD-NEXT:    ret float [[TMP5]]
+=======
+; CHECK-NEXT:    [[TMP1:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 0), align 16
+; CHECK-NEXT:    [[TMP2:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 0), align 16
+; CHECK-NEXT:    [[MUL:%.*]] = fmul fast float [[TMP2]], [[TMP1]]
+; CHECK-NEXT:    [[TMP3:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 1), align 4
+; CHECK-NEXT:    [[TMP4:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 1), align 4
+; CHECK-NEXT:    [[MUL_1:%.*]] = fmul fast float [[TMP4]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = fadd fast float [[MUL_1]], [[MUL]]
+; CHECK-NEXT:    [[TMP6:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 2), align 8
+; CHECK-NEXT:    [[TMP7:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 2), align 8
+; CHECK-NEXT:    [[MUL_2:%.*]] = fmul fast float [[TMP7]], [[TMP6]]
+; CHECK-NEXT:    [[TMP8:%.*]] = fadd fast float [[MUL_2]], [[TMP5]]
+; CHECK-NEXT:    [[TMP9:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 3), align 4
+; CHECK-NEXT:    [[TMP10:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 3), align 4
+; CHECK-NEXT:    [[MUL_3:%.*]] = fmul fast float [[TMP10]], [[TMP9]]
+; CHECK-NEXT:    [[TMP11:%.*]] = fadd fast float [[MUL_3]], [[TMP8]]
+; CHECK-NEXT:    [[TMP12:%.*]] = fmul fast float [[CONV]], [[TMP11]]
+; CHECK-NEXT:    store float [[TMP12]], float* @res, align 4
+; CHECK-NEXT:    ret float [[TMP12]]
+>>>>>>> origin/release/4.x
 ;
 entry:
   %0 = load i32, i32* @n, align 4
@@ -240,6 +301,7 @@ define i32 @foo() {
 ; CHECK-NEXT:  entry:
 ; CHECK-NEXT:    [[TMP0:%.*]] = load i32, i32* @n, align 4
 ; CHECK-NEXT:    [[CONV:%.*]] = sitofp i32 [[TMP0]] to float
+<<<<<<< HEAD
 ; CHECK-NEXT:    [[TMP1:%.*]] = load <4 x float>, <4 x float>* bitcast ([20 x float]* @arr to <4 x float>*), align 16
 ; CHECK-NEXT:    [[TMP2:%.*]] = load <4 x float>, <4 x float>* bitcast ([20 x float]* @arr1 to <4 x float>*), align 16
 ; CHECK-NEXT:    [[TMP3:%.*]] = fmul fast <4 x float> [[TMP2]], [[TMP1]]
@@ -250,6 +312,25 @@ define i32 @foo() {
 ; CHECK-NEXT:    [[TMP4:%.*]] = extractelement <4 x float> [[BIN_RDX2]], i32 0
 ; CHECK-NEXT:    [[TMP5:%.*]] = fmul fast float [[CONV]], [[TMP4]]
 ; CHECK-NEXT:    [[CONV4:%.*]] = fptosi float [[TMP5]] to i32
+=======
+; CHECK-NEXT:    [[TMP1:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 0), align 16
+; CHECK-NEXT:    [[TMP2:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 0), align 16
+; CHECK-NEXT:    [[MUL:%.*]] = fmul fast float [[TMP2]], [[TMP1]]
+; CHECK-NEXT:    [[TMP3:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 1), align 4
+; CHECK-NEXT:    [[TMP4:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 1), align 4
+; CHECK-NEXT:    [[MUL_1:%.*]] = fmul fast float [[TMP4]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = fadd fast float [[MUL_1]], [[MUL]]
+; CHECK-NEXT:    [[TMP6:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 2), align 8
+; CHECK-NEXT:    [[TMP7:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 2), align 8
+; CHECK-NEXT:    [[MUL_2:%.*]] = fmul fast float [[TMP7]], [[TMP6]]
+; CHECK-NEXT:    [[TMP8:%.*]] = fadd fast float [[MUL_2]], [[TMP5]]
+; CHECK-NEXT:    [[TMP9:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr, i64 0, i64 3), align 4
+; CHECK-NEXT:    [[TMP10:%.*]] = load float, float* getelementptr inbounds ([20 x float], [20 x float]* @arr1, i64 0, i64 3), align 4
+; CHECK-NEXT:    [[MUL_3:%.*]] = fmul fast float [[TMP10]], [[TMP9]]
+; CHECK-NEXT:    [[TMP11:%.*]] = fadd fast float [[MUL_3]], [[TMP8]]
+; CHECK-NEXT:    [[TMP12:%.*]] = fmul fast float [[CONV]], [[TMP11]]
+; CHECK-NEXT:    [[CONV4:%.*]] = fptosi float [[TMP12]] to i32
+>>>>>>> origin/release/4.x
 ; CHECK-NEXT:    store i32 [[CONV4]], i32* @n, align 4
 ; CHECK-NEXT:    ret i32 [[CONV4]]
 ;

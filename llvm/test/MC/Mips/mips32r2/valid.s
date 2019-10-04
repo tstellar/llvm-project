@@ -76,10 +76,15 @@ a:
         c.ult.s   $fcc7, $f24, $f10    # CHECK: c.ult.s   $fcc7, $f24, $f10       # encoding: [0x46,0x0a,0xc7,0x35]
         c.un.d    $fcc6, $f22, $f24    # CHECK: c.un.d    $fcc6, $f22, $f24       # encoding: [0x46,0x38,0xb6,0x31]
         c.un.s    $fcc1, $f30, $f4     # CHECK: c.un.s    $fcc1, $f30, $f4        # encoding: [0x46,0x04,0xf1,0x31]
+<<<<<<< HEAD
         ceil.w.d  $f11, $f24           # CHECK: ceil.w.d  $f11, $f24 # encoding: [0x46,0x20,0xc2,0xce]
                                        # CHECK:                      # <MCInst #{{.*}} CEIL_W_D32
         ceil.w.s  $f6,$f20             # CHECK: ceil.w.s  $f6, $f20  # encoding: [0x46,0x00,0xa1,0x8e]
                                        # CHECK:                      # <MCInst #{{.*}} CEIL_W_S
+=======
+        ceil.w.d  $f11,$f25
+        ceil.w.s  $f6,$f20
+>>>>>>> origin/release/4.x
         cfc1      $s1,$21
         clo       $11,$a1              # CHECK: clo $11, $5   # encoding: [0x70,0xab,0x58,0x21]
                                        # CHECK-NEXT:          # <MCInst #{{.*}} CLO

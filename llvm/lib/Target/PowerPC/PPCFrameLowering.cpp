@@ -1969,18 +1969,32 @@ void PPCFrameLowering::processFunctionBeforeFrameFinalized(MachineFunction &MF,
     int FI = PFI->getPICBasePointerSaveIndex();
     assert(FI && "No PIC Base Pointer Save Slot!");
     MFI.setObjectOffset(FI, LowerBound + MFI.getObjectOffset(FI));
+<<<<<<< HEAD
 
     MinGPR = std::min<unsigned>(MinGPR, PPC::R30);
     HasGPSaveArea = true;
   }
 
   const PPCRegisterInfo *RegInfo = Subtarget.getRegisterInfo();
+=======
+
+    MinGPR = std::min<unsigned>(MinGPR, PPC::R30);
+    HasGPSaveArea = true;
+  }
+
+  const PPCRegisterInfo *RegInfo =
+      static_cast<const PPCRegisterInfo *>(Subtarget.getRegisterInfo());
+>>>>>>> origin/release/4.x
   if (RegInfo->hasBasePointer(MF)) {
     int FI = PFI->getBasePointerSaveIndex();
     assert(FI && "No Base Pointer Save Slot!");
     MFI.setObjectOffset(FI, LowerBound + MFI.getObjectOffset(FI));
 
+<<<<<<< HEAD
     Register BP = RegInfo->getBaseRegister(MF);
+=======
+    unsigned BP = RegInfo->getBaseRegister(MF);
+>>>>>>> origin/release/4.x
     if (PPC::G8RCRegClass.contains(BP)) {
       MinG8R = std::min<unsigned>(MinG8R, BP);
       HasG8SaveArea = true;

@@ -2500,11 +2500,17 @@ LangOptions getFormattingLangOpts(const FormatStyle &Style) {
   if (LexingStd == FormatStyle::LS_Latest)
     LexingStd = FormatStyle::LS_Cpp20;
   LangOpts.CPlusPlus = 1;
+<<<<<<< HEAD
   LangOpts.CPlusPlus11 = LexingStd >= FormatStyle::LS_Cpp11;
   LangOpts.CPlusPlus14 = LexingStd >= FormatStyle::LS_Cpp14;
   LangOpts.CPlusPlus17 = LexingStd >= FormatStyle::LS_Cpp17;
   LangOpts.CPlusPlus2a = LexingStd >= FormatStyle::LS_Cpp20;
 
+=======
+  LangOpts.CPlusPlus11 = Style.Standard == FormatStyle::LS_Cpp03 ? 0 : 1;
+  LangOpts.CPlusPlus14 = Style.Standard == FormatStyle::LS_Cpp03 ? 0 : 1;
+  LangOpts.CPlusPlus1z = Style.Standard == FormatStyle::LS_Cpp03 ? 0 : 1;
+>>>>>>> origin/release/4.x
   LangOpts.LineComment = 1;
   bool AlternativeOperators = Style.isCpp();
   LangOpts.CXXOperatorNames = AlternativeOperators ? 1 : 0;

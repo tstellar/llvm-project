@@ -5703,6 +5703,7 @@ unsigned MipsAsmParser::checkTargetMatchPredicate(MCInst &Inst) {
     if (Inst.getOperand(0).getReg() == Inst.getOperand(1).getReg())
       return Match_RequiresDifferentOperands;
     return Match_Success;
+<<<<<<< HEAD
   case Mips::DINS: {
     assert(Inst.getOperand(2).isImm() && Inst.getOperand(3).isImm() &&
            "Operands must be immediates for dins!");
@@ -5748,6 +5749,8 @@ unsigned MipsAsmParser::checkTargetMatchPredicate(MCInst &Inst) {
     if (Inst.getOperand(0).getReg() != Inst.getOperand(2).getReg())
       return Match_RequiresSameSrcAndDst;
     return Match_Success;
+=======
+>>>>>>> origin/release/4.x
   }
 
   uint64_t TSFlags = getInstDesc(Inst.getOpcode()).TSFlags;

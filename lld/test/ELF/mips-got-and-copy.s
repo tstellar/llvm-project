@@ -18,8 +18,12 @@
 # CHECK-NEXT:     0x[[DATA1:[0-9A-F]+]] R_MIPS_COPY data1
 # CHECK-NEXT:   }
 # CHECK-NEXT: ]
+<<<<<<< HEAD
 
 # CHECK:      Primary GOT {
+=======
+# CHECK-NEXT: Primary GOT {
+>>>>>>> origin/release/4.x
 # CHECK-NEXT:   Canonical gp value:
 # CHECK-NEXT:   Reserved entries [
 # CHECK:        ]
@@ -30,10 +34,13 @@
 # CHECK-NEXT:       Address:
 # CHECK-NEXT:       Access: -32744
 # CHECK-NEXT:       Initial: 0x[[DATA0]]
+<<<<<<< HEAD
 # CHECK-NEXT:       Value: 0x[[DATA0]]
 # CHECK-NEXT:       Type: Object
 # CHECK-NEXT:       Section: .bss
 # CHECK-NEXT:       Name: data0
+=======
+>>>>>>> origin/release/4.x
 # CHECK-NEXT:     }
 # CHECK-NEXT:     Entry {
 # CHECK-NEXT:       Address:
@@ -42,7 +49,11 @@
 # CHECK-NEXT:       Value: 0x[[DATA1]]
 # CHECK-NEXT:       Type: Object
 # CHECK-NEXT:       Section: .bss
+<<<<<<< HEAD
 # CHECK-NEXT:       Name: data1
+=======
+# CHECK-NEXT:       Name: data1@
+>>>>>>> origin/release/4.x
 # CHECK-NEXT:     }
 # CHECK-NEXT:   ]
 # CHECK-NEXT:   Number of TLS and multi-GOT entries: 0

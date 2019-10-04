@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ; RUN: llc %s -mtriple=i386-pc-linux -o - | FileCheck %s 
+=======
+; RUN: llc %s -mtriple=i386-pc-linux -o - | FileCheck -check-prefix=CHECK %s 
+>>>>>>> origin/release/4.x
 ; RUN: llc %s -mtriple=i386-pc-win32 -o - | FileCheck -check-prefix=WIN %s
 ; RUN: llc %s -mtriple=i386-pc-linux -fast-isel -o - | FileCheck -check-prefix=FAST %s 
 ; RUN: llc %s -mtriple=i386-pc-win32 -fast-isel -o - | FileCheck -check-prefix=FASTWIN %s
@@ -9,7 +13,11 @@ target datalayout = "e-m:e-p:32:32-f64:32:64-f80:32-n8:16:32-S128"
 target triple = "i386-unknown-linux-gnu"
 
 ; Function Attrs: argmemonly nounwind
+<<<<<<< HEAD
 declare void @llvm.memcpy.p0i8.p0i8.i32(i8* nocapture writeonly, i8* nocapture readonly, i32, i1) #1
+=======
+declare void @llvm.memcpy.p0i8.p0i8.i32(i8* nocapture writeonly, i8* nocapture readonly, i32, i32, i1) #1
+>>>>>>> origin/release/4.x
 
 define void @use_memset(i8* inreg nocapture %dest, i8 inreg %c, i32 inreg %n) local_unnamed_addr #0 {
 entry:
@@ -30,12 +38,20 @@ entry:
 ;FASTWIN: 	movzbl	%dl, %edx
 ;FASTWIN-NEXT:     calll	_memset
 ;FASTWIN-NEXT:     retl
+<<<<<<< HEAD
   tail call void @llvm.memset.p0i8.i32(i8* %dest, i8 %c, i32 %n, i1 false)
+=======
+  tail call void @llvm.memset.p0i8.i32(i8* %dest, i8 %c, i32 %n, i32 1, i1 false)
+>>>>>>> origin/release/4.x
   ret void
 }
 
 ; Function Attrs: argmemonly nounwind
+<<<<<<< HEAD
 declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly, i8, i32, i1) #1
+=======
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly, i8, i32, i32, i1) #1
+>>>>>>> origin/release/4.x
 
 
 attributes #0 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="pentium4" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }

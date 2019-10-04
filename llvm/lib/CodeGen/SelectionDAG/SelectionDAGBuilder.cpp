@@ -5799,6 +5799,7 @@ void SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I,
     SDValue Val = getValue(MI.getValue());
     SDValue Length = getValue(MI.getLength());
 
+<<<<<<< HEAD
     unsigned DstAlign = MI.getDestAlignment();
     Type *LengthTy = MI.getLength()->getType();
     unsigned ElemSz = MI.getElementSizeInBytes();
@@ -5808,6 +5809,19 @@ void SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I,
                                      MachinePointerInfo(MI.getRawDest()));
     updateDAGForMaybeTailCall(MC);
     return;
+=======
+    TargetLowering::CallLoweringInfo CLI(DAG);
+    CLI.setDebugLoc(sdl).setChain(getRoot()).setLibCallee(
+        TLI.getLibcallCallingConv(LibraryCall),
+        Type::getVoidTy(*DAG.getContext()),
+        DAG.getExternalSymbol(TLI.getLibcallName(LibraryCall),
+                              TLI.getPointerTy(DAG.getDataLayout())),
+        std::move(Args));
+
+    std::pair<SDValue, SDValue> CallResult = TLI.LowerCallTo(CLI);
+    DAG.setRoot(CallResult.second);
+    return nullptr;
+>>>>>>> origin/release/4.x
   }
   case Intrinsic::dbg_addr:
   case Intrinsic::dbg_declare: {

@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -mcpu=tahiti -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=GCN -check-prefix=FUNC %s
 ; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=VI -check-prefix=GCN -check-prefix=FUNC %s
 
 declare i32 @llvm.r600.read.tidig.x() nounwind readnone
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=GCN -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=VI -check-prefix=GCN -check-prefix=FUNC %s
+>>>>>>> origin/release/4.x
 
 declare i64 @llvm.ctpop.i64(i64) nounwind readnone
 declare <2 x i64> @llvm.ctpop.v2i64(<2 x i64>) nounwind readnone

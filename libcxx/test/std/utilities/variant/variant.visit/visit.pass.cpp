@@ -294,7 +294,11 @@ void test_exceptions() {
 #endif
 }
 
+<<<<<<< HEAD
 // See https://bugs.llvm.org/show_bug.cgi?id=31916
+=======
+// See http://llvm.org/PR31916
+>>>>>>> origin/release/4.x
 void test_caller_accepts_nonconst() {
   struct A {};
   struct Visitor {
@@ -304,12 +308,19 @@ void test_caller_accepts_nonconst() {
   std::visit(Visitor{}, v);
 }
 
+<<<<<<< HEAD
 int main(int, char**) {
+=======
+int main() {
+>>>>>>> origin/release/4.x
   test_call_operator_forwarding();
   test_argument_forwarding();
   test_constexpr();
   test_exceptions();
   test_caller_accepts_nonconst();
+<<<<<<< HEAD
 
   return 0;
+=======
+>>>>>>> origin/release/4.x
 }

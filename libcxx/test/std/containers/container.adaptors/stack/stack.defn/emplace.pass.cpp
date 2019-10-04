@@ -10,13 +10,20 @@
 
 // <stack>
 
+<<<<<<< HEAD
 // template <class... Args> decltype(auto) emplace(Args&&... args);
 // return type is 'decltype(auto)' in C++17; 'void' before
 //  whatever the return type of the underlying container's emplace_back() returns.
+=======
+// template <class... Args> reference emplace(Args&&... args);
+// return type is 'reference' in C++17; 'void' before
+>>>>>>> origin/release/4.x
 
 #include <stack>
 #include <cassert>
 #include <vector>
+
+#include "test_macros.h"
 
 #include "test_macros.h"
 
@@ -43,7 +50,10 @@ int main(int, char**)
 
     std::stack<Emplaceable> q;
 #if TEST_STD_VER > 14
+<<<<<<< HEAD
     typedef Emplaceable T;
+=======
+>>>>>>> origin/release/4.x
     T& r1 = q.emplace(1, 2.5);
     assert(&r1 == &q.top());
     T& r2 = q.emplace(2, 3.5);

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefix=GCN %s
 ; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -enable-var-scope -check-prefix=GCN %s
 
@@ -9,6 +10,25 @@
 ; GCN: buffer_store_dword [[RESULT]]
 define amdgpu_kernel void @test_fmin_f32_ieee_mode_on(float addrspace(1)* %out, float %a, float %b) #0 {
   %val = call float @llvm.minnum.f32(float %a, float %b) #1
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=SI -check-prefix=FUNC %s
+; RUN: llc -march=r600 -mcpu=cypress < %s | FileCheck -check-prefix=EG -check-prefix=FUNC %s
+
+declare float @llvm.minnum.f32(float, float) #0
+declare <2 x float> @llvm.minnum.v2f32(<2 x float>, <2 x float>) #0
+declare <4 x float> @llvm.minnum.v4f32(<4 x float>, <4 x float>) #0
+declare <8 x float> @llvm.minnum.v8f32(<8 x float>, <8 x float>) #0
+declare <16 x float> @llvm.minnum.v16f32(<16 x float>, <16 x float>) #0
+
+; FUNC-LABEL: @test_fmin_f32
+; SI: v_min_f32_e32
+
+; EG: MEM_RAT_CACHELESS STORE_RAW [[OUT:T[0-9]+\.[XYZW]]]
+; EG: MIN_DX10 {{.*}}[[OUT]]
+define void @test_fmin_f32(float addrspace(1)* %out, float %a, float %b) nounwind {
+  %val = call float @llvm.minnum.f32(float %a, float %b) #0
+>>>>>>> origin/release/4.x
   store float %val, float addrspace(1)* %out, align 4
   ret void
 }

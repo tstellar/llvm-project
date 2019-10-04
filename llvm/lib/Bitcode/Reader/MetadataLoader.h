@@ -63,6 +63,11 @@ public:
   /// Return the given metadata, creating a replaceable forward reference if
   /// necessary.
   Metadata *getMetadataFwdRefOrLoad(unsigned Idx);
+<<<<<<< HEAD
+=======
+
+  MDNode *getMDNodeFwdRefOrNull(unsigned Idx);
+>>>>>>> origin/release/4.x
 
   /// Return the DISubprogram metadata for a Function if any, null otherwise.
   DISubprogram *lookupSubprogramForFunction(Function *F);

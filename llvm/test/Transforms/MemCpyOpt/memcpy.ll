@@ -94,7 +94,11 @@ define void @test4(i8 *%P) {
 define void @test4_addrspace(i8 addrspace(1)* %P) {
   %A = alloca %1
   %a = bitcast %1* %A to i8*
+<<<<<<< HEAD
   call void @llvm.memcpy.p0i8.p1i8.i64(i8* align 4 %a, i8 addrspace(1)* align 4 %P, i64 8, i1 false)
+=======
+  call void @llvm.memcpy.p0i8.p1i8.i64(i8* %a, i8 addrspace(1)* %P, i64 8, i32 4, i1 false)
+>>>>>>> origin/release/4.x
   call void @test4a(i8* align 1 byval %a)
   ret void
 ; CHECK-LABEL: @test4_addrspace(
@@ -103,9 +107,15 @@ define void @test4_addrspace(i8 addrspace(1)* %P) {
 }
 
 declare void @test4a(i8* align 1 byval)
+<<<<<<< HEAD
 declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i1) nounwind
 declare void @llvm.memcpy.p0i8.p1i8.i64(i8* nocapture, i8 addrspace(1)* nocapture, i64, i1) nounwind
 declare void @llvm.memcpy.p1i8.p1i8.i64(i8 addrspace(1)* nocapture, i8 addrspace(1)* nocapture, i64, i1) nounwind
+=======
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture, i64, i32, i1) nounwind
+declare void @llvm.memcpy.p0i8.p1i8.i64(i8* nocapture, i8 addrspace(1)* nocapture, i64, i32, i1) nounwind
+declare void @llvm.memcpy.p1i8.p1i8.i64(i8 addrspace(1)* nocapture, i8 addrspace(1)* nocapture, i64, i32, i1) nounwind
+>>>>>>> origin/release/4.x
 
 %struct.S = type { i128, [4 x i8]}
 

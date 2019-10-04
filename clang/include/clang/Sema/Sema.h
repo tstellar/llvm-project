@@ -3067,10 +3067,13 @@ public:
   EnableIfAttr *CheckEnableIf(FunctionDecl *Function, ArrayRef<Expr *> Args,
                               bool MissingImplicitThis = false);
 
+<<<<<<< HEAD
   /// Find the failed Boolean condition within a given Boolean
   /// constant expression, and describe it with a string.
   std::pair<Expr *, std::string> findFailedBooleanCondition(Expr *Cond);
 
+=======
+>>>>>>> origin/release/4.x
   /// Emit diagnostics for the diagnose_if attributes on Function, ignoring any
   /// non-ArgDependent DiagnoseIfAttrs.
   ///
@@ -3090,7 +3093,11 @@ public:
   /// of a function.
   ///
   /// Returns true if any errors were emitted.
+<<<<<<< HEAD
   bool diagnoseArgIndependentDiagnoseIfAttrs(const NamedDecl *ND,
+=======
+  bool diagnoseArgIndependentDiagnoseIfAttrs(const FunctionDecl *Function,
+>>>>>>> origin/release/4.x
                                              SourceLocation Loc);
 
   /// Returns whether the given function's address can be taken or not,

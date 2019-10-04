@@ -5,6 +5,7 @@
 declare i64 @llvm.readcyclecounter() #0
 
 ; GCN-LABEL: {{^}}test_readcyclecounter:
+<<<<<<< HEAD
 ; MEMTIME-DAG: s_memtime s{{\[[0-9]+:[0-9]+\]}}
 ; GCN-DAG:     s_load_dwordx2
 ; GCN-DAG:     lgkmcnt
@@ -14,6 +15,18 @@ declare i64 @llvm.readcyclecounter() #0
 ; MEMTIME:     store_dwordx2
 
 define amdgpu_kernel void @test_readcyclecounter(i64 addrspace(1)* %out) #0 {
+=======
+; SI-DAG: s_memtime s{{\[[0-9]+:[0-9]+\]}}
+; VI-DAG: s_memrealtime s{{\[[0-9]+:[0-9]+\]}}
+; GCN-DAG: s_load_dwordx2
+; GCN: lgkmcnt
+; GCN: store_dwordx2
+; GCN-NOT: lgkmcnt
+; SI: s_memtime s{{\[[0-9]+:[0-9]+\]}}
+; VI: s_memrealtime s{{\[[0-9]+:[0-9]+\]}}
+; GCN: store_dwordx2
+define void @test_readcyclecounter(i64 addrspace(1)* %out) #0 {
+>>>>>>> origin/release/4.x
   %cycle0 = call i64 @llvm.readcyclecounter()
   store volatile i64 %cycle0, i64 addrspace(1)* %out
 

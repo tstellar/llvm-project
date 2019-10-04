@@ -28,6 +28,12 @@
         c.ule.ps        $fcc6,$f17,$f3
         c.ult.ps        $fcc7,$f14,$f0
         c.un.ps         $fcc4,$f2,$f26
+<<<<<<< HEAD
+=======
+        cvt.ps.s        $f3,$f18,$f19
+        cvt.s.pl        $f30,$f1
+        cvt.s.pu        $f14,$f25
+>>>>>>> origin/release/4.x
         dmfc0           $10,c0_watchhi,2
         dmfgc0          $gp,c0_perfcnt,6
         dmt $k0

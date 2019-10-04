@@ -964,11 +964,19 @@ static void InitializePredefinedMacros(const TargetInfo &TI,
   auto addLockFreeMacros = [&](const llvm::Twine &Prefix) {
     // Used by libc++ and libstdc++ to implement ATOMIC_<foo>_LOCK_FREE.
     unsigned InlineWidthBits = TI.getMaxAtomicInlineWidth();
+<<<<<<< HEAD
 #define DEFINE_LOCK_FREE_MACRO(TYPE, Type)                                     \
   Builder.defineMacro(Prefix + #TYPE "_LOCK_FREE",                             \
                       getLockFreeValue(TI.get##Type##Width(),                  \
                                        TI.get##Type##Align(),                  \
                                        InlineWidthBits));
+=======
+#define DEFINE_LOCK_FREE_MACRO(TYPE, Type) \
+    Builder.defineMacro("__GCC_ATOMIC_" #TYPE "_LOCK_FREE", \
+                        getLockFreeValue(TI.get##Type##Width(), \
+                                         TI.get##Type##Align(), \
+                                         InlineWidthBits));
+>>>>>>> origin/release/4.x
     DEFINE_LOCK_FREE_MACRO(BOOL, Bool);
     DEFINE_LOCK_FREE_MACRO(CHAR, Char);
     if (LangOpts.Char8)

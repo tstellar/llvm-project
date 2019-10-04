@@ -185,11 +185,9 @@ bool X86ExpandPseudo::ExpandMI(MachineBasicBlock &MBB,
   default:
     return false;
   case X86::TCRETURNdi:
-  case X86::TCRETURNdicc:
   case X86::TCRETURNri:
   case X86::TCRETURNmi:
   case X86::TCRETURNdi64:
-  case X86::TCRETURNdi64cc:
   case X86::TCRETURNri64:
   case X86::TCRETURNmi64: {
     bool isMem = Opcode == X86::TCRETURNmi || Opcode == X86::TCRETURNmi64;
@@ -208,10 +206,6 @@ bool X86ExpandPseudo::ExpandMI(MachineBasicBlock &MBB,
     Offset = StackAdj - MaxTCDelta;
     assert(Offset >= 0 && "Offset should never be negative");
 
-    if (Opcode == X86::TCRETURNdicc || Opcode == X86::TCRETURNdi64cc) {
-      assert(Offset == 0 && "Conditional tail call cannot adjust the stack.");
-    }
-
     if (Offset) {
       // Check for possible merge with preceding ADD instruction.
       Offset += X86FL->mergeSPUpdates(MBB, MBBI, true);
@@ -220,13 +214,13 @@ bool X86ExpandPseudo::ExpandMI(MachineBasicBlock &MBB,
 
     // Jump to label or value in register.
     bool IsWin64 = STI->isTargetWin64();
-    if (Opcode == X86::TCRETURNdi || Opcode == X86::TCRETURNdicc ||
-        Opcode == X86::TCRETURNdi64 || Opcode == X86::TCRETURNdi64cc) {
+    if (Opcode == X86::TCRETURNdi || Opcode == X86::TCRETURNdi64) {
       unsigned Op;
       switch (Opcode) {
       case X86::TCRETURNdi:
         Op = X86::TAILJMPd;
         break;
+<<<<<<< HEAD
       case X86::TCRETURNdicc:
         Op = X86::TAILJMPd_CC;
         break;
@@ -236,6 +230,8 @@ bool X86ExpandPseudo::ExpandMI(MachineBasicBlock &MBB,
                "the Win64 unwinder.");
         Op = X86::TAILJMPd64_CC;
         break;
+=======
+>>>>>>> origin/release/4.x
       default:
         // Note: Win64 uses REX prefixes indirect jumps out of functions, but
         // not direct ones.
@@ -251,10 +247,6 @@ bool X86ExpandPseudo::ExpandMI(MachineBasicBlock &MBB,
         MIB.addExternalSymbol(JumpTarget.getSymbolName(),
                               JumpTarget.getTargetFlags());
       }
-      if (Op == X86::TAILJMPd_CC || Op == X86::TAILJMPd64_CC) {
-        MIB.addImm(MBBI->getOperand(2).getImm());
-      }
-
     } else if (Opcode == X86::TCRETURNmi || Opcode == X86::TCRETURNmi64) {
       unsigned Op = (Opcode == X86::TCRETURNmi)
                         ? X86::TAILJMPm

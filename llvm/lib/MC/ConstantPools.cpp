@@ -106,6 +106,13 @@ void AssemblerConstantPools::clearCacheForCurrentSection(MCStreamer &Streamer) {
     CP->clearCache();
 }
 
+void AssemblerConstantPools::clearCacheForCurrentSection(MCStreamer &Streamer) {
+  MCSection *Section = Streamer.getCurrentSectionOnly();
+  if (ConstantPool *CP = getConstantPool(Section)) {
+    CP->clearCache();
+  }
+}
+
 const MCExpr *AssemblerConstantPools::addEntry(MCStreamer &Streamer,
                                                const MCExpr *Expr,
                                                unsigned Size, SMLoc Loc) {

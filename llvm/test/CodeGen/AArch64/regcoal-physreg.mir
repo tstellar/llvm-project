@@ -1,7 +1,10 @@
 # RUN: llc -mtriple=aarch64-apple-ios -run-pass=simple-register-coalescing %s -o - | FileCheck %s
 --- |
+<<<<<<< HEAD
   declare void @f2()
 
+=======
+>>>>>>> origin/release/4.x
   define void @func0() { ret void }
   define void @func1() { ret void }
   define void @func2() { ret void }
@@ -10,6 +13,20 @@
 # Check coalescing of COPYs from reserved physregs.
 # CHECK-LABEL: name: func0
 name: func0
+<<<<<<< HEAD
+=======
+registers:
+ - { id: 0, class: gpr32 }
+ - { id: 1, class: gpr64 }
+ - { id: 2, class: gpr64 }
+ - { id: 3, class: gpr32 }
+ - { id: 4, class: gpr64 }
+ - { id: 5, class: gpr32 }
+ - { id: 6, class: xseqpairsclass }
+ - { id: 7, class: gpr64 }
+ - { id: 8, class: gpr64sp }
+ - { id: 9, class: gpr64sp }
+>>>>>>> origin/release/4.x
 body: |
   bb.0:
     ; We usually should not coalesce copies from allocatable physregs.
@@ -56,6 +73,7 @@ body: |
     ; Only coalesce when the source register is reserved as a whole (this is
     ; a limitation of the current code which cannot update liveness information
     ; of the non-reserved part).
+<<<<<<< HEAD
     ; CHECK: %6:xseqpairsclass = COPY $x28_fp
     ; CHECK: HINT 0, implicit %6
     %6 : xseqpairsclass = COPY $x28_fp
@@ -86,11 +104,32 @@ body: |
     %9 : gpr64sp = SUBXri $fp, 8, 0
     STRXui $fp, $fp, 0
     $fp = COPY %9
+=======
+    ; CHECK: %6 = COPY %x28_fp
+    ; CHECK: HINT 0, implicit %6
+    %6 = COPY %x28_fp
+    HINT 0, implicit %6
+
+    ; This can be coalesced.
+    ; CHECK: %fp = SUBXri %fp, 4, 0
+    %8 = SUBXri %fp, 4, 0
+    %fp = COPY %8
+
+    ; Cannot coalesce when there are reads of the physreg.
+    ; CHECK-NOT: %fp = SUBXri %fp, 8, 0
+    ; CHECK: %9 = SUBXri %fp, 8, 0
+    ; CHECK: STRXui %fp, %fp, 0
+    ; CHECK: %fp = COPY %9
+    %9 = SUBXri %fp, 8, 0
+    STRXui %fp, %fp, 0
+    %fp = COPY %9
+>>>>>>> origin/release/4.x
 ...
 ---
 # Check coalescing of COPYs from reserved physregs.
 # CHECK-LABEL: name: func1
 name: func1
+<<<<<<< HEAD
 body: |
   bb.0:
     ; Cannot coalesce physreg because we have reads on other CFG paths (we
@@ -109,11 +148,35 @@ body: |
 
   bb.2:
     STRXui $fp, $fp, 0
+=======
+registers:
+ - { id: 0, class: gpr64sp }
+body: |
+  bb.0:
+    successors: %bb.1, %bb.2
+    ; Cannot coalesce physreg because we have reads on other CFG paths (we
+    ; currently abort for any control flow)
+    ; CHECK-NOT: %fp = SUBXri
+    ; CHECK: %0 = SUBXri %fp, 12, 0
+    ; CHECK: CBZX undef %x0, %bb.1
+    ; CHECK: B %bb.2
+    %0 = SUBXri %fp, 12, 0
+    CBZX undef %x0, %bb.1
+    B %bb.2
+
+  bb.1:
+    %fp = COPY %0
+    RET_ReallyLR
+
+  bb.2:
+    STRXui %fp, %fp, 0
+>>>>>>> origin/release/4.x
     RET_ReallyLR
 ...
 ---
 # CHECK-LABEL: name: func2
 name: func2
+<<<<<<< HEAD
 body: |
   bb.0:
     ; We can coalesce copies from physreg to vreg across multiple blocks.
@@ -128,6 +191,25 @@ body: |
     ; CHECK: STRXui undef $x0, $fp, 0
     ; CHECK-NEXT: RET_ReallyLR
     STRXui undef $x0, %0, 0
+=======
+registers:
+  - { id: 0, class: gpr64sp }
+body: |
+  bb.0:
+    successors: %bb.1, %bb.2
+    ; We can coalesce copies from physreg to vreg across multiple blocks.
+    ; CHECK-NOT: COPY
+    ; CHECK: CBZX undef %x0, %bb.1
+    ; CHECK-NEXT: B %bb.2
+    %0 = COPY %fp
+    CBZX undef %x0, %bb.1
+    B %bb.2
+
+  bb.1:
+    ; CHECK: STRXui undef %x0, %fp, 0
+    ; CHECK-NEXT: RET_ReallyLR
+    STRXui undef %x0, %0, 0
+>>>>>>> origin/release/4.x
     RET_ReallyLR
 
   bb.2:

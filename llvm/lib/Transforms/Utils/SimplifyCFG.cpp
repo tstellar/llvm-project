@@ -1458,6 +1458,7 @@ static bool canSinkInstructions(
     // Conservatively return false if I is an inline-asm instruction. Sinking
     // and merging inline-asm instructions can potentially create arguments
     // that cannot satisfy the inline-asm constraints.
+<<<<<<< HEAD
     if (const auto *C = dyn_cast<CallBase>(I))
       if (C->isInlineAsm())
         return false;
@@ -1466,6 +1467,15 @@ static bool canSinkInstructions(
     if (HasUse && !I->hasOneUse())
       return false;
     if (!HasUse && !I->user_empty())
+=======
+    if (const auto *C = dyn_cast<CallInst>(I))
+      if (C->isInlineAsm())
+        return false;
+
+    // Everything must have only one use too, apart from stores which
+    // have no uses.
+    if (!isa<StoreInst>(I) && !I->hasOneUse())
+>>>>>>> origin/release/4.x
       return false;
   }
 

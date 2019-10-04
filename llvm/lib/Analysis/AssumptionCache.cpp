@@ -35,6 +35,7 @@
 using namespace llvm;
 using namespace llvm::PatternMatch;
 
+<<<<<<< HEAD
 static cl::opt<bool>
     VerifyAssumptionCache("verify-assumption-cache", cl::Hidden,
                           cl::desc("Enable verification of assumption cache"),
@@ -42,6 +43,9 @@ static cl::opt<bool>
 
 SmallVector<WeakTrackingVH, 1> &
 AssumptionCache::getOrInsertAffectedValues(Value *V) {
+=======
+SmallVector<WeakVH, 1> &AssumptionCache::getOrInsertAffectedValues(Value *V) {
+>>>>>>> origin/release/4.x
   // Try using find_as first to avoid creating extra value handles just for the
   // purpose of doing the lookup.
   auto AVI = AffectedValues.find_as(V);
@@ -143,7 +147,11 @@ void AssumptionCache::AffectedValueCallbackVH::deleted() {
   // 'this' now dangles!
 }
 
+<<<<<<< HEAD
 void AssumptionCache::transferAffectedValuesInCache(Value *OV, Value *NV) {
+=======
+void AssumptionCache::copyAffectedValuesInCache(Value *OV, Value *NV) {
+>>>>>>> origin/release/4.x
   auto &NAVV = getOrInsertAffectedValues(NV);
   auto AVI = AffectedValues.find(OV);
   if (AVI == AffectedValues.end())
@@ -152,7 +160,10 @@ void AssumptionCache::transferAffectedValuesInCache(Value *OV, Value *NV) {
   for (auto &A : AVI->second)
     if (std::find(NAVV.begin(), NAVV.end(), A) == NAVV.end())
       NAVV.push_back(A);
+<<<<<<< HEAD
   AffectedValues.erase(OV);
+=======
+>>>>>>> origin/release/4.x
 }
 
 void AssumptionCache::AffectedValueCallbackVH::allUsesReplacedWith(Value *NV) {
@@ -161,7 +172,11 @@ void AssumptionCache::AffectedValueCallbackVH::allUsesReplacedWith(Value *NV) {
 
   // Any assumptions that affected this value now affect the new value.
 
+<<<<<<< HEAD
   AC->transferAffectedValuesInCache(getValPtr(), NV);
+=======
+  AC->copyAffectedValuesInCache(getValPtr(), NV);
+>>>>>>> origin/release/4.x
   // 'this' now might dangle! If the AffectedValues map was resized to add an
   // entry for NV then this object might have been destroyed in favor of some
   // copy in the grown map.

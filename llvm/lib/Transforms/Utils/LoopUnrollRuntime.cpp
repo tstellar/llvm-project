@@ -310,8 +310,14 @@ CloneLoopBlocks(Loop *L, Value *NewIter, const bool CreateRemainderLoop,
   LoopBlocksDFS::RPOIterator BlockEnd = LoopBlocks.endRPO();
   Loop *ParentLoop = L->getParentLoop();
   NewLoopsMap NewLoops;
+<<<<<<< HEAD
   NewLoops[ParentLoop] = ParentLoop;
   if (!CreateRemainderLoop)
+=======
+  if (NewLoop)
+    NewLoops[L] = NewLoop;
+  else if (ParentLoop)
+>>>>>>> origin/release/4.x
     NewLoops[L] = ParentLoop;
 
   // For each block in the original loop, create a new copy,
@@ -319,7 +325,11 @@ CloneLoopBlocks(Loop *L, Value *NewIter, const bool CreateRemainderLoop,
   for (LoopBlocksDFS::RPOIterator BB = BlockBegin; BB != BlockEnd; ++BB) {
     BasicBlock *NewBB = CloneBasicBlock(*BB, VMap, "." + suffix, F);
     NewBlocks.push_back(NewBB);
+<<<<<<< HEAD
 
+=======
+   
+>>>>>>> origin/release/4.x
     // If we're unrolling the outermost loop, there's no remainder loop,
     // and this block isn't in a nested loop, then the new block is not
     // in any loop. Otherwise, add it to loopinfo.

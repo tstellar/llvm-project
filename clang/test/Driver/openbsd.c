@@ -9,6 +9,12 @@
 // CHECK-LD-STATIC-EH: clang{{.*}}" "-cc1" "-triple" "i686-pc-openbsd"
 // CHECK-LD-STATIC-EH: ld{{.*}}" "-e" "__start" "--eh-frame-hdr" "-Bstatic" "-o" "a.out" "{{.*}}rcrt0.o" "{{.*}}crtbegin.o" "{{.*}}.o" "-lcompiler_rt" "-lc" "-lcompiler_rt" "{{.*}}crtend.o"
 
+// Check for --eh-frame-hdr being passed with static linking
+// RUN: %clang -no-canonical-prefixes -target i686-pc-openbsd -static %s -### 2>&1 \
+// RUN:   | FileCheck --check-prefix=CHECK-LD-STATIC-EH %s
+// CHECK-LD-STATIC-EH: clang{{.*}}" "-cc1" "-triple" "i686-pc-openbsd"
+// CHECK-LD-STATIC-EH: ld{{.*}}" "-e" "__start" "--eh-frame-hdr" "-Bstatic" "-o" "a.out" "{{.*}}rcrt0.o" "{{.*}}crtbegin.o" "{{.*}}.o" "-lgcc" "-lc" "-lgcc" "{{.*}}crtend.o"
+
 // RUN: %clang -no-canonical-prefixes -target i686-pc-openbsd -pg -pthread %s -### 2>&1 \
 // RUN:   | FileCheck --check-prefix=CHECK-PG %s
 // CHECK-PG: clang{{.*}}" "-cc1" "-triple" "i686-pc-openbsd"
@@ -78,6 +84,7 @@
 // CHECK-MIPS64EL: as{{.*}}" "-mabi" "64" "-EL"
 // CHECK-MIPS64EL-PIC: as{{.*}}" "-mabi" "64" "-EL" "-KPIC"
 
+<<<<<<< HEAD
 // Check that the integrated assembler is enabled for SPARC
 // RUN: %clang -target sparc-unknown-openbsd -### -c %s 2>&1 \
 // RUN:   | FileCheck -check-prefix=CHECK-IAS %s
@@ -91,6 +98,12 @@
 // RUN: %clang -no-canonical-prefixes -target i686-pc-openbsd -pie %s -### 2>&1 \
 // RUN:   | FileCheck -check-prefix=CHECK-PIE-FLAG %s
 // RUN: %clang -no-canonical-prefixes -target i686-pc-openbsd -fno-pie %s -### 2>&1 \
+=======
+// Check linking against correct startup code when (not) using PIE
+// RUN: %clang -no-canonical-prefixes -target i686-pc-openbsd %s -### 2>&1 \
+// RUN:   | FileCheck -check-prefix=CHECK-PIE %s
+// RUN: %clang -no-canonical-prefixes -target i686-pc-openbsd %s -fno-pie %s -### 2>&1 \
+>>>>>>> origin/release/4.x
 // RUN:   | FileCheck -check-prefix=CHECK-PIE %s
 // RUN: %clang -no-canonical-prefixes -target i686-pc-openbsd -static %s -### 2>&1 \
 // RUN:   | FileCheck -check-prefix=CHECK-STATIC-PIE %s
@@ -106,7 +119,10 @@
 // RUN:   | FileCheck -check-prefix=CHECK-NOPIE %s
 // CHECK-PIE: "{{.*}}crt0.o"
 // CHECK-PIE-NOT: "-nopie"
+<<<<<<< HEAD
 // CHECK-PIE-FLAG: "-pie"
+=======
+>>>>>>> origin/release/4.x
 // CHECK-STATIC-PIE: "{{.*}}rcrt0.o"
 // CHECK-STATIC-PIE-NOT: "-nopie"
 // CHECK-NOPIE: "-nopie" "{{.*}}crt0.o"
@@ -114,6 +130,7 @@
 // Check ARM float ABI
 // RUN: %clang -target arm-unknown-openbsd -### -c %s 2>&1 \
 // RUN:   | FileCheck -check-prefix=CHECK-ARM-FLOAT-ABI %s
+<<<<<<< HEAD
 // CHECK-ARM-FLOAT-ABI-NOT: "-target-feature" "+soft-float"
 // CHECK-ARM-FLOAT-ABI: "-target-feature" "+soft-float-abi"
 
@@ -121,3 +138,6 @@
 // RUN: %clang -target powerpc-unknown-openbsd -### -c %s 2>&1 \
 // RUN:   | FileCheck -check-prefix=CHECK-POWERPC-SECUREPLT %s
 // CHECK-POWERPC-SECUREPLT: "-target-feature" "+secure-plt"
+=======
+// CHECK-ARM-FLOAT-ABI: "-mfloat-abi" "soft"
+>>>>>>> origin/release/4.x

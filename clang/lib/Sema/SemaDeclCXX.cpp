@@ -13403,7 +13403,11 @@ ExprResult Sema::BuildCXXDefaultInitExpr(SourceLocation Loc, FieldDecl *Field) {
   RecordDecl *OutermostClass = ParentRD->getOuterLexicalRecordContext();
   Diag(Loc, diag::err_in_class_initializer_not_yet_parsed)
       << OutermostClass << Field;
+<<<<<<< HEAD
   Diag(Field->getEndLoc(), diag::note_in_class_initializer_not_yet_parsed);
+=======
+  Diag(Field->getLocEnd(), diag::note_in_class_initializer_not_yet_parsed);
+>>>>>>> origin/release/4.x
   // Recover by marking the field invalid, unless we're in a SFINAE context.
   if (!isSFINAEContext())
     Field->setInvalidDecl();

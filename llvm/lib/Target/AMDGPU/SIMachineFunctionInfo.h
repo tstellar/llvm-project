@@ -319,6 +319,7 @@ class SIMachineFunctionInfo final : public AMDGPUMachineFunction {
 
   // Registers that may be reserved for spilling purposes. These may be the same
   // as the input registers.
+<<<<<<< HEAD
   unsigned ScratchRSrcReg = AMDGPU::PRIVATE_RSRC_REG;
   unsigned ScratchWaveOffsetReg = AMDGPU::SCRATCH_WAVE_OFFSET_REG;
 
@@ -334,6 +335,33 @@ class SIMachineFunctionInfo final : public AMDGPUMachineFunction {
 
   // State of MODE register, assumed FP mode.
   AMDGPU::SIModeRegisterDefaults Mode;
+=======
+  unsigned ScratchRSrcReg;
+  unsigned ScratchWaveOffsetReg;
+
+  // Input registers for non-HSA ABI
+  unsigned PrivateMemoryPtrUserSGPR;
+
+  // Input registers setup for the HSA ABI.
+  // User SGPRs in allocation order.
+  unsigned PrivateSegmentBufferUserSGPR;
+  unsigned DispatchPtrUserSGPR;
+  unsigned QueuePtrUserSGPR;
+  unsigned KernargSegmentPtrUserSGPR;
+  unsigned DispatchIDUserSGPR;
+  unsigned FlatScratchInitUserSGPR;
+  unsigned PrivateSegmentSizeUserSGPR;
+  unsigned GridWorkGroupCountXUserSGPR;
+  unsigned GridWorkGroupCountYUserSGPR;
+  unsigned GridWorkGroupCountZUserSGPR;
+
+  // System SGPRs in allocation order.
+  unsigned WorkGroupIDXSystemSGPR;
+  unsigned WorkGroupIDYSystemSGPR;
+  unsigned WorkGroupIDZSystemSGPR;
+  unsigned WorkGroupInfoSystemSGPR;
+  unsigned PrivateSegmentWaveByteOffsetSystemSGPR;
+>>>>>>> origin/release/4.x
 
   // Graphics info.
   unsigned PSInputAddr = 0;
@@ -401,7 +429,16 @@ private:
   // Private memory buffer
   // Compute directly in sgpr[0:1]
   // Other shaders indirect 64-bits at sgpr[0:1]
+<<<<<<< HEAD
   bool ImplicitBufferPtr : 1;
+=======
+  bool PrivateMemoryInputPtr : 1;
+
+  MCPhysReg getNextUserSGPR() const {
+    assert(NumSystemSGPRs == 0 && "System SGPRs must be added after user SGPRs");
+    return AMDGPU::SGPR0 + NumUserSGPRs;
+  }
+>>>>>>> origin/release/4.x
 
   // Pointer to where the ABI inserts special kernel arguments separate from the
   // user arguments. This is an offset from the KernargSegmentPtr.
@@ -536,7 +573,11 @@ public:
   unsigned addKernargSegmentPtr(const SIRegisterInfo &TRI);
   unsigned addDispatchID(const SIRegisterInfo &TRI);
   unsigned addFlatScratchInit(const SIRegisterInfo &TRI);
+<<<<<<< HEAD
   unsigned addImplicitBufferPtr(const SIRegisterInfo &TRI);
+=======
+  unsigned addPrivateMemoryPtr(const SIRegisterInfo &TRI);
+>>>>>>> origin/release/4.x
 
   // Add system SGPRs.
   unsigned addWorkGroupIDX() {
@@ -643,6 +684,7 @@ public:
     return WorkItemIDZ;
   }
 
+<<<<<<< HEAD
   bool hasImplicitArgPtr() const {
     return ImplicitArgPtr;
   }
@@ -679,6 +721,10 @@ public:
 
   unsigned getGDSSize() const {
     return GDSSize;
+=======
+  bool hasPrivateMemoryInputPtr() const {
+    return PrivateMemoryInputPtr;
+>>>>>>> origin/release/4.x
   }
 
   unsigned getNumUserSGPRs() const {
@@ -741,6 +787,10 @@ public:
 
   unsigned getImplicitBufferPtrUserSGPR() const {
     return ArgInfo.ImplicitBufferPtr.getRegister();
+  }
+
+  unsigned getPrivateMemoryPtrUserSGPR() const {
+    return PrivateMemoryPtrUserSGPR;
   }
 
   bool hasSpilledSGPRs() const {

@@ -464,7 +464,10 @@ class MetadataLoader::MetadataLoaderImpl {
   bool StripTBAA = false;
   bool HasSeenOldLoopTags = false;
   bool NeedUpgradeToDIGlobalVariableExpression = false;
+<<<<<<< HEAD
   bool NeedDeclareExpressionUpgrade = false;
+=======
+>>>>>>> origin/release/4.x
 
   /// True if metadata is being parsed for a module being ThinLTO imported.
   bool IsImporting = false;
@@ -503,14 +506,20 @@ class MetadataLoader::MetadataLoaderImpl {
           for (unsigned I = 0; I < GVs->getNumOperands(); I++)
             if (auto *GV =
                     dyn_cast_or_null<DIGlobalVariable>(GVs->getOperand(I))) {
+<<<<<<< HEAD
               auto *DGVE = DIGlobalVariableExpression::getDistinct(
                   Context, GV, DIExpression::get(Context, {}));
+=======
+              auto *DGVE =
+                  DIGlobalVariableExpression::getDistinct(Context, GV, nullptr);
+>>>>>>> origin/release/4.x
               GVs->replaceOperandWith(I, DGVE);
             }
       }
 
     // Upgrade variables attached to globals.
     for (auto &GV : TheModule.globals()) {
+<<<<<<< HEAD
       SmallVector<MDNode *, 1> MDs;
       GV.getMetadata(LLVMContext::MD_dbg, MDs);
       GV.eraseMetadata(LLVMContext::MD_dbg);
@@ -518,12 +527,22 @@ class MetadataLoader::MetadataLoaderImpl {
         if (auto *DGV = dyn_cast<DIGlobalVariable>(MD)) {
           auto *DGVE = DIGlobalVariableExpression::getDistinct(
               Context, DGV, DIExpression::get(Context, {}));
+=======
+      SmallVector<MDNode *, 1> MDs, NewMDs;
+      GV.getMetadata(LLVMContext::MD_dbg, MDs);
+      GV.eraseMetadata(LLVMContext::MD_dbg);
+      for (auto *MD : MDs)
+        if (auto *DGV = dyn_cast_or_null<DIGlobalVariable>(MD)) {
+          auto *DGVE =
+              DIGlobalVariableExpression::getDistinct(Context, DGV, nullptr);
+>>>>>>> origin/release/4.x
           GV.addMetadata(LLVMContext::MD_dbg, *DGVE);
         } else
           GV.addMetadata(LLVMContext::MD_dbg, *MD);
     }
   }
 
+<<<<<<< HEAD
   /// Remove a leading DW_OP_deref from DIExpressions in a dbg.declare that
   /// describes a function argument.
   void upgradeDeclareExpressions(Function &F) {
@@ -626,6 +645,8 @@ class MetadataLoader::MetadataLoaderImpl {
     return Error::success();
   }
 
+=======
+>>>>>>> origin/release/4.x
   void upgradeDebugInfo() {
     upgradeCUSubprograms();
     upgradeCUVariables();
@@ -644,6 +665,25 @@ public:
   Error parseMetadata(bool ModuleLevel);
 
   bool hasFwdRefs() const { return MetadataList.hasFwdRefs(); }
+<<<<<<< HEAD
+=======
+
+  Metadata *getMetadataFwdRefOrLoad(unsigned ID) {
+    if (ID < MDStringRef.size())
+      return lazyLoadOneMDString(ID);
+    if (auto *MD = MetadataList.lookup(ID))
+      return MD;
+    // If lazy-loading is enabled, we try recursively to load the operand
+    // instead of creating a temporary.
+    if (ID < (MDStringRef.size() + GlobalMetadataBitPosIndex.size())) {
+      PlaceholderQueue Placeholders;
+      lazyLoadOneMetadata(ID, Placeholders);
+      resolveForwardRefsAndPlaceholders(Placeholders);
+      return MetadataList.lookup(ID);
+    }
+    return MetadataList.getMetadataFwdRef(ID);
+  }
+>>>>>>> origin/release/4.x
 
   Metadata *getMetadataFwdRefOrLoad(unsigned ID) {
     if (ID < MDStringRef.size())
@@ -987,7 +1027,11 @@ void MetadataLoader::MetadataLoaderImpl::lazyLoadOneMetadata(
   assert(ID >= MDStringRef.size() && "Unexpected lazy-loading of MDString");
   // Lookup first if the metadata hasn't already been loaded.
   if (auto *MD = MetadataList.lookup(ID)) {
+<<<<<<< HEAD
     auto *N = cast<MDNode>(MD);
+=======
+    auto *N = dyn_cast_or_null<MDNode>(MD);
+>>>>>>> origin/release/4.x
     if (!N->isTemporary())
       return;
   }
@@ -1226,8 +1270,12 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
     Metadata *InlinedAt = getMDOrNull(Record[4]);
     bool ImplicitCode = Record.size() == 6 && Record[5];
     MetadataList.assignValue(
+<<<<<<< HEAD
         GET_OR_DISTINCT(DILocation, (Context, Line, Column, Scope, InlinedAt,
                                      ImplicitCode)),
+=======
+        GET_OR_DISTINCT(DILocation, (Context, Line, Column, Scope, InlinedAt)),
+>>>>>>> origin/release/4.x
         NextMetadataNo);
     NextMetadataNo++;
     break;
@@ -1271,8 +1319,16 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
       return error("Invalid record: Unsupported version of DISubrange");
     }
 
+<<<<<<< HEAD
     MetadataList.assignValue(Val, NextMetadataNo);
     IsDistinct = Record[0] & 1;
+=======
+    IsDistinct = Record[0];
+    MetadataList.assignValue(
+        GET_OR_DISTINCT(DISubrange,
+                        (Context, Record[1], unrotateSign(Record[2]))),
+        NextMetadataNo);
+>>>>>>> origin/release/4.x
     NextMetadataNo++;
     break;
   }
@@ -1284,7 +1340,11 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
     bool IsUnsigned = Record[0] & 2;
     MetadataList.assignValue(
         GET_OR_DISTINCT(DIEnumerator, (Context, unrotateSign(Record[1]),
+<<<<<<< HEAD
                                        IsUnsigned, getMDString(Record[2]))),
+=======
+                                       getMDString(Record[2]))),
+>>>>>>> origin/release/4.x
         NextMetadataNo);
     NextMetadataNo++;
     break;
@@ -1300,7 +1360,11 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
     MetadataList.assignValue(
         GET_OR_DISTINCT(DIBasicType,
                         (Context, Record[1], getMDString(Record[2]), Record[3],
+<<<<<<< HEAD
                          Record[4], Record[5], Flags)),
+=======
+                         Record[4], Record[5])),
+>>>>>>> origin/release/4.x
         NextMetadataNo);
     NextMetadataNo++;
     break;
@@ -1323,8 +1387,12 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
                          getMDOrNull(Record[3]), Record[4],
                          getDITypeRefOrNull(Record[5]),
                          getDITypeRefOrNull(Record[6]), Record[7], Record[8],
+<<<<<<< HEAD
                          Record[9], DWARFAddressSpace, Flags,
                          getDITypeRefOrNull(Record[11]))),
+=======
+                         Record[9], Flags, getDITypeRefOrNull(Record[11]))),
+>>>>>>> origin/release/4.x
         NextMetadataNo);
     NextMetadataNo++;
     break;
@@ -1449,9 +1517,16 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
     MetadataList.assignValue(
         GET_OR_DISTINCT(
             DIFile,
+<<<<<<< HEAD
             (Context, getMDString(Record[1]), getMDString(Record[2]), Checksum,
              Record.size() > 5 ? Optional<MDString *>(getMDString(Record[5]))
                                : None)),
+=======
+            (Context, getMDString(Record[1]), getMDString(Record[2]),
+             Record.size() == 3 ? DIFile::CSK_None
+                                : static_cast<DIFile::ChecksumKind>(Record[3]),
+             Record.size() == 3 ? nullptr : getMDString(Record[4]))),
+>>>>>>> origin/release/4.x
         NextMetadataNo);
     NextMetadataNo++;
     break;
@@ -1546,6 +1621,7 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
     }
     Metadata *CUorFn = getMDOrNull(Record[12 + OffsetB]);
     DISubprogram *SP = GET_OR_DISTINCT(
+<<<<<<< HEAD
         DISubprogram,
         (Context,
          getDITypeRefOrNull(Record[1]),                     // scope
@@ -1567,6 +1643,30 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
          HasThrownTypes ? getMDOrNull(Record[17 + OffsetB])
                         : nullptr                           // thrownTypes
          ));
+=======
+        DISubprogram, (Context,
+                       getDITypeRefOrNull(Record[1]),          // scope
+                       getMDString(Record[2]),                 // name
+                       getMDString(Record[3]),                 // linkageName
+                       getMDOrNull(Record[4]),                 // file
+                       Record[5],                              // line
+                       getMDOrNull(Record[6]),                 // type
+                       Record[7],                              // isLocal
+                       Record[8],                              // isDefinition
+                       Record[9],                              // scopeLine
+                       getDITypeRefOrNull(Record[10]),         // containingType
+                       Record[11],                             // virtuality
+                       Record[12],                             // virtualIndex
+                       HasThisAdj ? Record[19] : 0,            // thisAdjustment
+                       static_cast<DINode::DIFlags>(Record[13] // flags
+                                                    ),
+                       Record[14],                       // isOptimized
+                       HasUnit ? CUorFn : nullptr,       // unit
+                       getMDOrNull(Record[15 + Offset]), // templateParams
+                       getMDOrNull(Record[16 + Offset]), // declaration
+                       getMDOrNull(Record[17 + Offset])  // variables
+                       ));
+>>>>>>> origin/release/4.x
     MetadataList.assignValue(SP, NextMetadataNo);
     NextMetadataNo++;
 
@@ -1608,6 +1708,7 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
                          getMDOrNull(Record[2]), Record[3])),
         NextMetadataNo);
     NextMetadataNo++;
+<<<<<<< HEAD
     break;
   }
   case bitc::METADATA_COMMON_BLOCK: {
@@ -1619,6 +1720,8 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
                          getMDOrNull(Record[4]), Record[5])),
         NextMetadataNo);
     NextMetadataNo++;
+=======
+>>>>>>> origin/release/4.x
     break;
   }
   case bitc::METADATA_NAMESPACE: {
@@ -1635,7 +1738,13 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
     bool ExportSymbols = Record[0] & 2;
     MetadataList.assignValue(
         GET_OR_DISTINCT(DINamespace,
+<<<<<<< HEAD
                         (Context, getMDOrNull(Record[1]), Name, ExportSymbols)),
+=======
+                        (Context, getMDOrNull(Record[1]),
+                         getMDOrNull(Record[2]), getMDString(Record[3]),
+                         Record[4], ExportSymbols)),
+>>>>>>> origin/release/4.x
         NextMetadataNo);
     NextMetadataNo++;
     break;
@@ -1719,9 +1828,14 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
                            getMDString(Record[2]), getMDString(Record[3]),
                            getMDOrNull(Record[4]), Record[5],
                            getDITypeRefOrNull(Record[6]), Record[7], Record[8],
+<<<<<<< HEAD
                            getMDOrNull(Record[10]), nullptr, Record[11])),
           NextMetadataNo);
 
+=======
+                           getMDOrNull(Record[10]), Record[11])),
+          NextMetadataNo);
+>>>>>>> origin/release/4.x
       NextMetadataNo++;
     } else if (Version == 0) {
       // Upgrade old metadata, which stored a global variable reference or a
@@ -1756,8 +1870,14 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
 
       DIGlobalVariableExpression *DGVE = nullptr;
       if (Attach || Expr)
+<<<<<<< HEAD
         DGVE = DIGlobalVariableExpression::getDistinct(
             Context, DGV, Expr ? Expr : DIExpression::get(Context, {}));
+=======
+        DGVE = DIGlobalVariableExpression::getDistinct(Context, DGV, Expr);
+      else
+        NeedUpgradeToDIGlobalVariableExpression = true;
+>>>>>>> origin/release/4.x
       if (Attach)
         Attach->addDebugInfo(DGVE);
 
@@ -1796,6 +1916,7 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
                          Record[6 + HasTag], Flags, AlignInBits)),
         NextMetadataNo);
     NextMetadataNo++;
+<<<<<<< HEAD
     break;
   }
   case bitc::METADATA_LABEL: {
@@ -1810,6 +1931,8 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
                          getMDOrNull(Record[3]), Record[4])),
         NextMetadataNo);
     NextMetadataNo++;
+=======
+>>>>>>> origin/release/4.x
     break;
   }
   case bitc::METADATA_EXPRESSION: {
@@ -1825,7 +1948,12 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
       return Err;
 
     MetadataList.assignValue(
+<<<<<<< HEAD
         GET_OR_DISTINCT(DIExpression, (Context, Elts)), NextMetadataNo);
+=======
+        GET_OR_DISTINCT(DIExpression, (Context, makeArrayRef(Record).slice(1))),
+        NextMetadataNo);
+>>>>>>> origin/release/4.x
     NextMetadataNo++;
     break;
   }
@@ -1834,6 +1962,7 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
       return error("Invalid record");
 
     IsDistinct = Record[0];
+<<<<<<< HEAD
     Metadata *Expr = getMDOrNull(Record[2]);
     if (!Expr)
       Expr = DIExpression::get(Context, {});
@@ -1841,6 +1970,12 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
         GET_OR_DISTINCT(DIGlobalVariableExpression,
                         (Context, getMDOrNull(Record[1]), Expr)),
         NextMetadataNo);
+=======
+    MetadataList.assignValue(GET_OR_DISTINCT(DIGlobalVariableExpression,
+                                             (Context, getMDOrNull(Record[1]),
+                                              getMDOrNull(Record[2]))),
+                             NextMetadataNo);
+>>>>>>> origin/release/4.x
     NextMetadataNo++;
     break;
   }
@@ -1868,9 +2003,14 @@ Error MetadataLoader::MetadataLoaderImpl::parseOneMetadata(
     MetadataList.assignValue(
         GET_OR_DISTINCT(DIImportedEntity,
                         (Context, Record[1], getMDOrNull(Record[2]),
+<<<<<<< HEAD
                          getDITypeRefOrNull(Record[3]),
                          HasFile ? getMDOrNull(Record[6]) : nullptr,
                          HasFile ? Record[4] : 0, getMDString(Record[5]))),
+=======
+                         getDITypeRefOrNull(Record[3]), Record[4],
+                         getMDString(Record[5]))),
+>>>>>>> origin/release/4.x
         NextMetadataNo);
     NextMetadataNo++;
     break;
@@ -2146,6 +2286,13 @@ bool MetadataLoader::hasFwdRefs() const { return Pimpl->hasFwdRefs(); }
 /// necessary.
 Metadata *MetadataLoader::getMetadataFwdRefOrLoad(unsigned Idx) {
   return Pimpl->getMetadataFwdRefOrLoad(Idx);
+<<<<<<< HEAD
+=======
+}
+
+MDNode *MetadataLoader::getMDNodeFwdRefOrNull(unsigned Idx) {
+  return Pimpl->getMDNodeFwdRefOrNull(Idx);
+>>>>>>> origin/release/4.x
 }
 
 DISubprogram *MetadataLoader::lookupSubprogramForFunction(Function *F) {

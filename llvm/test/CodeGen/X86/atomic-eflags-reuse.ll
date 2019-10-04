@@ -238,6 +238,7 @@ entry:
   ret i8 %s2
 }
 
+<<<<<<< HEAD
 define i8 @test_sub_1_cmp_1_setcc_eq(i64* %p) #0 {
 ; FASTINCDEC-LABEL: test_sub_1_cmp_1_setcc_eq:
 ; FASTINCDEC:       # %bb.0: # %entry
@@ -336,4 +337,6 @@ entry:
   ret i8 %tmp2
 }
 
+=======
+>>>>>>> origin/release/4.x
 attributes #0 = { nounwind }

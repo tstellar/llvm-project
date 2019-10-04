@@ -248,7 +248,11 @@ DEFINE_COMPILERRT_FUNCTION(__unordsf2)
 END_COMPILERRT_FUNCTION(__unordsf2)
 
 #if defined(COMPILER_RT_ARMHF_TARGET)
+<<<<<<< HEAD
 DEFINE_COMPILERRT_FUNCTION(__aeabi_fcmpun)
+=======
+DEFINE_COMPILERRT_FUNCTION(__aeabi_fcmpum)
+>>>>>>> origin/release/4.x
 	vmov s0, r0
 	vmov s1, r1
 	b SYMBOL_NAME(__unordsf2)

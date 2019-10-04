@@ -72,7 +72,11 @@ struct AbstractTemplate {
 template <>
 struct AbstractTemplate<double> {};
 
+<<<<<<< HEAD
 int main(int, char**)
+=======
+int main()
+>>>>>>> origin/release/4.x
 {
     test_is_not_abstract<void>();
     test_is_not_abstract<int&>();
@@ -90,6 +94,9 @@ int main(int, char**)
     test_is_abstract<Abstract>();
     test_is_abstract<AbstractTemplate<int> >();
     test_is_not_abstract<AbstractTemplate<double> >();
+<<<<<<< HEAD
 
   return 0;
+=======
+>>>>>>> origin/release/4.x
 }

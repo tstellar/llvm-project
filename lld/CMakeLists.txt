@@ -56,6 +56,10 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   include(HandleLLVMOptions)
 
   if(LLVM_INCLUDE_TESTS)
+<<<<<<< HEAD
+=======
+    set(Python_ADDITIONAL_VERSIONS 2.7)
+>>>>>>> origin/release/4.x
     include(FindPythonInterp)
     if(NOT PYTHONINTERP_FOUND)
       message(FATAL_ERROR

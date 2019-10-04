@@ -78,7 +78,11 @@ namespace Auto {
   template<int*> struct IntPtr;
 
   TInt<Auto> ia;
+<<<<<<< HEAD
   TInt<AutoPtr> iap; // FIXME: ill-formed (?)
+=======
+  TInt<AutoPtr> iap; // expected-error {{different template parameters}}
+>>>>>>> origin/release/4.x
   TInt<DecltypeAuto> ida;
   TInt<Int> ii;
   TInt<IntPtr> iip; // expected-error {{different template parameters}}

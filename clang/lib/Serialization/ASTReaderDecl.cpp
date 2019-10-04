@@ -2841,6 +2841,7 @@ static bool isConsumerInterestedIn(ASTContext &Ctx, Decl *D, bool HasBody) {
   // An ObjCMethodDecl is never considered as "interesting" because its
   // implementation container always is.
 
+<<<<<<< HEAD
   // An ImportDecl or VarDecl imported from a module map module will get
   // emitted when we import the relevant module.
   if (isPartOfPerModuleInitializer(D)) {
@@ -2849,6 +2850,13 @@ static bool isConsumerInterestedIn(ASTContext &Ctx, Decl *D, bool HasBody) {
         Ctx.DeclMustBeEmitted(D))
       return false;
   }
+=======
+  // An ImportDecl or VarDecl imported from a module will get emitted when
+  // we import the relevant module.
+  if ((isa<ImportDecl>(D) || isa<VarDecl>(D)) && D->getImportedOwningModule() &&
+      Ctx.DeclMustBeEmitted(D))
+    return false;
+>>>>>>> origin/release/4.x
 
   if (isa<FileScopeAsmDecl>(D) ||
       isa<ObjCProtocolDecl>(D) ||

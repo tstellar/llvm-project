@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=SI -check-prefix=FUNC %s
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -mcpu=bonaire -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=CI -check-prefix=FUNC %s
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=CI -check-prefix=FUNC %s
 
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -enable-unsafe-fp-math -verify-machineinstrs < %s | FileCheck -check-prefix=GCN-UNSAFE -check-prefix=SI-UNSAFE -check-prefix=FUNC %s
 ; RUN:  llc -amdgpu-scalarize-global-loads=false  -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -enable-unsafe-fp-math -verify-machineinstrs < %s | FileCheck -check-prefix=GCN-UNSAFE -check-prefix=VI-UNSAFE -check-prefix=FUNC %s
+=======
+; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=SI -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=bonaire -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=CI -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=GCN -check-prefix=CI -check-prefix=FUNC %s
+
+; RUN: llc -march=amdgcn -enable-unsafe-fp-math -verify-machineinstrs < %s | FileCheck -check-prefix=GCN-UNSAFE -check-prefix=SI-UNSAFE -check-prefix=FUNC %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -enable-unsafe-fp-math -verify-machineinstrs < %s | FileCheck -check-prefix=GCN-UNSAFE -check-prefix=VI-UNSAFE -check-prefix=FUNC %s
+>>>>>>> origin/release/4.x
 
 declare double @llvm.fabs.f64(double) #0
 declare double @llvm.floor.f64(double) #0

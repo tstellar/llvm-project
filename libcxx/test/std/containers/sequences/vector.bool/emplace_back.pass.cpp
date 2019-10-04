@@ -47,7 +47,11 @@ int main(int, char**)
         assert(c.front() == false);
         assert(c.back() == true);
 #endif
+<<<<<<< HEAD
         c.emplace_back(true);
+=======
+        c.emplace_back(1 == 1);
+>>>>>>> origin/release/4.x
         assert(c.size() == 3);
         assert(c.front() == false);
         assert(c[1] == true);
@@ -81,7 +85,11 @@ int main(int, char**)
         assert(c.front() == false);
         assert(c.back() == true);
 #endif
+<<<<<<< HEAD
         c.emplace_back(true);
+=======
+        c.emplace_back(1 == 1);
+>>>>>>> origin/release/4.x
         assert(c.size() == 3);
         assert(c.front() == false);
         assert(c[1] == true);

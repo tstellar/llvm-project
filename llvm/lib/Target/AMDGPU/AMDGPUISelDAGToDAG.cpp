@@ -1097,6 +1097,7 @@ void AMDGPUDAGToDAGISel::SelectDIV_SCALE(SDNode *N) {
 
   SDValue Ops[] = { N->getOperand(0), N->getOperand(1), N->getOperand(2) };
   CurDAG->SelectNodeTo(N, Opc, N->getVTList(), Ops);
+<<<<<<< HEAD
 }
 
 void AMDGPUDAGToDAGISel::SelectDIV_FMAS(SDNode *N) {
@@ -1139,6 +1140,8 @@ void AMDGPUDAGToDAGISel::SelectMAD_64_32(SDNode *N) {
   SDValue Ops[] = { N->getOperand(0), N->getOperand(1), N->getOperand(2),
                     Clamp };
   CurDAG->SelectNodeTo(N, Opc, N->getVTList(), Ops);
+=======
+>>>>>>> origin/release/4.x
 }
 
 bool AMDGPUDAGToDAGISel::isDSOffsetLegal(SDValue Base, unsigned Offset,

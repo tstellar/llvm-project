@@ -6,7 +6,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if defined(__GNUC__) || defined(__clang__)
+#if defined(__GNUC__)
 #pragma GCC diagnostic ignored "-W#warnings"
 #endif
 
@@ -15,11 +15,7 @@
 
 #include <map>
 
-#include "test_macros.h"
-
-int main(int, char**) {
+int main() {
   std::map<int, int> m;
   ((void)m);
-
-  return 0;
 }

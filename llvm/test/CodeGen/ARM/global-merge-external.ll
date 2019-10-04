@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 ; RUN: llc < %s -mtriple=arm-eabi  -arm-global-merge                                 | FileCheck %s --check-prefixes=CHECK,CHECK-MERGE
 ; RUN: llc < %s -mtriple=arm-eabi  -arm-global-merge -global-merge-on-external=true  | FileCheck %s --check-prefixes=CHECK,CHECK-MERGE
 ; RUN: llc < %s -mtriple=arm-eabi  -arm-global-merge -global-merge-on-external=false | FileCheck %s --check-prefixes=CHECK,CHECK-NO-MERGE
 ; RUN: llc < %s -mtriple=arm-macho -arm-global-merge                                 | FileCheck %s --check-prefixes=CHECK,CHECK-NO-MERGE
 ; RUN: llc < %s -mtriple=arm-eabi  -arm-global-merge -relocation-model=pic           | FileCheck %s --check-prefixes=CHECK,CHECK-NO-MERGE
 ; RUN: llc < %s -mtriple=thumbv7-win32 -arm-global-merge                             | FileCheck %s --check-prefixes=CHECK-WIN32
+=======
+; RUN: llc < %s -mtriple=arm-eabi  -arm-global-merge                                 | FileCheck %s --check-prefix=CHECK-MERGE
+; RUN: llc < %s -mtriple=arm-eabi  -arm-global-merge -global-merge-on-external=true  | FileCheck %s --check-prefix=CHECK-MERGE
+; RUN: llc < %s -mtriple=arm-eabi  -arm-global-merge -global-merge-on-external=false | FileCheck %s --check-prefix=CHECK-NO-MERGE
+; RUN: llc < %s -mtriple=arm-macho -arm-global-merge                                 | FileCheck %s --check-prefix=CHECK-NO-MERGE
+; RUN: llc < %s -mtriple=arm-eabi  -arm-global-merge -relocation-model=pic           | FileCheck %s --check-prefix=CHECK-NO-MERGE
+>>>>>>> origin/release/4.x
 
 @x = global i32 0, align 4
 @y = global i32 0, align 4

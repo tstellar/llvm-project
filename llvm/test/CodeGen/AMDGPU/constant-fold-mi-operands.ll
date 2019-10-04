@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ; RUN: llc -mtriple=amdgcn--amdpal -mcpu=verde -verify-machineinstrs < %s | FileCheck -check-prefix=GCN %s
 ; RUN: llc -mtriple=amdgcn--amdpal -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=GCN %s
+=======
+; RUN: llc -march=amdgcn -mcpu=verde -verify-machineinstrs < %s | FileCheck -check-prefix=GCN %s
+; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -check-prefix=GCN %s
+>>>>>>> origin/release/4.x
 
 ; GCN-LABEL: {{^}}fold_mi_v_and_0:
 ; GCN: v_mov_b32_e32 [[RESULT:v[0-9]+]], 0{{$}}

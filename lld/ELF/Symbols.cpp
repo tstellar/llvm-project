@@ -122,7 +122,24 @@ static uint64_t getSymVA(const Symbol &sym, int64_t &addend) {
               " has an STT_TLS symbol but doesn't have an SHF_TLS section");
       return va - Out::tlsPhdr->firstSec->addr;
     }
+<<<<<<< HEAD
     return va;
+=======
+    return VA;
+  }
+  case SymbolBody::DefinedCommonKind:
+    if (!Config->DefineCommon)
+      return 0;
+    return In<ELFT>::Common->OutSec->Addr + In<ELFT>::Common->OutSecOff +
+           cast<DefinedCommon>(Body).Offset;
+  case SymbolBody::SharedKind: {
+    auto &SS = cast<SharedSymbol<ELFT>>(Body);
+    if (!SS.NeedsCopyOrPltAddr)
+      return 0;
+    if (SS.isFunc())
+      return Body.getPltVA<ELFT>();
+    return SS.getBssSectionForCopy()->Addr + SS.CopyOffset;
+>>>>>>> origin/release/4.x
   }
   case Symbol::SharedKind:
   case Symbol::UndefinedKind:
@@ -217,7 +234,11 @@ void Symbol::parseSymbolVersion() {
   nameSize = pos;
 
   // If this is not in this DSO, it is not a definition.
+<<<<<<< HEAD
   if (!isDefined())
+=======
+  if (!isInCurrentDSO())
+>>>>>>> origin/release/4.x
     return;
 
   // '@@' in a symbol name means the default version.
@@ -506,6 +527,7 @@ void Symbol::resolveUndefined(const Undefined &other) {
   }
 }
 
+<<<<<<< HEAD
 // Using .symver foo,foo@@VER unfortunately creates two symbols: foo and
 // foo@@VER. We want to effectively ignore foo, so give precedence to
 // foo@@VER.
@@ -520,6 +542,19 @@ static int compareVersion(StringRef a, StringRef b) {
   if (x && !y)
     return -1;
   return 0;
+=======
+uint8_t Symbol::computeBinding() const {
+  if (Config->Relocatable)
+    return Binding;
+  if (Visibility != STV_DEFAULT && Visibility != STV_PROTECTED)
+    return STB_LOCAL;
+  const SymbolBody *Body = body();
+  if (VersionId == VER_NDX_LOCAL && Body->isInCurrentDSO())
+    return STB_LOCAL;
+  if (Config->NoGnuUnique && Binding == STB_GNU_UNIQUE)
+    return STB_GLOBAL;
+  return Binding;
+>>>>>>> origin/release/4.x
 }
 
 // Compare two symbols. Return 1 if the new symbol should win, -1 if

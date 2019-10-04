@@ -366,10 +366,15 @@ void DependencyFileGenerator::outputDependencyFile(llvm::raw_ostream &OS) {
 
   // Create phony targets if requested.
   if (PhonyTarget && !Files.empty()) {
+<<<<<<< HEAD
     unsigned Index = 0;
     for (auto I = Files.begin(), E = Files.end(); I != E; ++I) {
       if (Index++ == InputFileIndex)
         continue;
+=======
+    // Skip the first entry, this is always the input file itself.
+    for (auto I = Files.begin() + 1, E = Files.end(); I != E; ++I) {
+>>>>>>> origin/release/4.x
       OS << '\n';
       PrintFilename(OS, *I, OutputFormat);
       OS << ":\n";

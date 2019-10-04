@@ -134,12 +134,42 @@ InputSectionBase::InputSectionBase(ObjFile<ELFT> &file,
     fatal(toString(&file) + ": section sh_addralign is too large");
 }
 
+<<<<<<< HEAD
 size_t InputSectionBase::getSize() const {
   if (auto *s = dyn_cast<SyntheticSection>(this))
     return s->getSize();
   if (uncompressedSize >= 0)
     return uncompressedSize;
   return rawData.size();
+=======
+// GNU assembler 2.24 and LLVM 4.0.0's MC (the newest release as of
+// March 2017) fail to infer section types for sections starting with
+// ".init_array." or ".fini_array.". They set SHT_PROGBITS instead of
+// SHF_INIT_ARRAY. As a result, the following assembler directive
+// creates ".init_array.100" with SHT_PROGBITS, for example.
+//
+//   .section .init_array.100, "aw"
+//
+// This function forces SHT_{INIT,FINI}_ARRAY so that we can handle
+// incorrect inputs as if they were correct from the beginning.
+static uint64_t getType(uint64_t Type, StringRef Name) {
+  if (Type == SHT_PROGBITS && Name.startswith(".init_array."))
+    return SHT_INIT_ARRAY;
+  if (Type == SHT_PROGBITS && Name.startswith(".fini_array."))
+    return SHT_FINI_ARRAY;
+  return Type;
+}
+
+template <class ELFT>
+InputSectionBase<ELFT>::InputSectionBase(elf::ObjectFile<ELFT> *File,
+                                         const Elf_Shdr *Hdr, StringRef Name,
+                                         Kind SectionKind)
+    : InputSectionBase(File, Hdr->sh_flags & ~SHF_INFO_LINK,
+                       getType(Hdr->sh_type, Name), Hdr->sh_entsize,
+                       Hdr->sh_link, Hdr->sh_info, Hdr->sh_addralign,
+                       getSectionContents(File, Hdr), Name, SectionKind) {
+  this->Offset = Hdr->sh_offset;
+>>>>>>> origin/release/4.x
 }
 
 void InputSectionBase::uncompress() const {
@@ -415,6 +445,7 @@ InputSectionBase *InputSection::getRelocatedSection() const {
   return sections[info];
 }
 
+<<<<<<< HEAD
 // This is used for -r and --emit-relocs. We can't use memcpy to copy
 // relocations because we need to update symbol table offset and section index
 // for each relocation. So we copy relocations one by one.
@@ -499,6 +530,13 @@ void InputSection::copyRelocations(uint8_t *buf, ArrayRef<RelTy> rels) {
       else if (config->relocatable && type != target->noneRel)
         sec->relocations.push_back({R_ABS, type, rel.r_offset, addend, &sym});
     }
+=======
+    if (Config->Rela)
+      P->r_addend = getAddend<ELFT>(Rel);
+    P->r_offset = RelocatedSection->getOffset(Rel.r_offset);
+    P->setSymbolAndType(In<ELFT>::SymTab->getSymbolIndex(&Body), Type,
+                        Config->Mips64EL);
+>>>>>>> origin/release/4.x
   }
 }
 

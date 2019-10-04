@@ -118,11 +118,18 @@ void  operator delete[](void* ptr, void*) noexcept;
 # define _LIBCPP_HAS_NO_SIZED_DEALLOCATION
 #endif
 
+<<<<<<< HEAD
 =======
 >>>>>>> release/7.x
 #if !__has_builtin(__builtin_operator_new) || \
    __has_builtin(__builtin_operator_new) < 201802L
 #define _LIBCPP_HAS_NO_BUILTIN_OVERLOADED_OPERATOR_NEW_DELETE
+=======
+#if !defined(_LIBCPP_HAS_NO_ALIGNED_ALLOCATION) && \
+    (!(defined(_LIBCPP_BUILDING_NEW) || _LIBCPP_STD_VER > 14 || \
+    (defined(__cpp_aligned_new) && __cpp_aligned_new >= 201606)))
+# define _LIBCPP_HAS_NO_ALIGNED_ALLOCATION
+>>>>>>> origin/release/4.x
 #endif
 
 namespace std  // purposefully not using versioning namespace
@@ -158,8 +165,12 @@ _LIBCPP_FUNC_VIS new_handler get_new_handler() _NOEXCEPT;
 
 _LIBCPP_NORETURN _LIBCPP_FUNC_VIS void __throw_bad_alloc();  // not in C++ spec
 
+<<<<<<< HEAD
 #if !defined(_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION) && \
     !defined(_LIBCPP_ABI_VCRUNTIME)
+=======
+#if !defined(_LIBCPP_HAS_NO_ALIGNED_ALLOCATION) || _LIBCPP_STD_VER > 14
+>>>>>>> origin/release/4.x
 #ifndef _LIBCPP_CXX03_LANG
 enum class _LIBCPP_ENUM_VIS align_val_t : size_t { };
 #else

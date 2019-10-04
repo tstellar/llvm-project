@@ -510,6 +510,20 @@ void InstrEmitter::EmitSubregNode(SDNode *Node,
       DefMI = MRI->getVRegDef(Reg);
     }
 
+<<<<<<< HEAD
+=======
+    unsigned Reg;
+    MachineInstr *DefMI;
+    RegisterSDNode *R = dyn_cast<RegisterSDNode>(Node->getOperand(0));
+    if (R && TargetRegisterInfo::isPhysicalRegister(R->getReg())) {
+      Reg = R->getReg();
+      DefMI = nullptr;
+    } else {
+      Reg = getVR(Node->getOperand(0), VRBaseMap);
+      DefMI = MRI->getVRegDef(Reg);
+    }
+
+>>>>>>> origin/release/4.x
     unsigned SrcReg, DstReg, DefSubIdx;
     if (DefMI &&
         TII->isCoalescableExtInstr(*DefMI, SrcReg, DstReg, DefSubIdx) &&
@@ -528,10 +542,18 @@ void InstrEmitter::EmitSubregNode(SDNode *Node,
       // Reg may not support a SubIdx sub-register, and we may need to
       // constrain its register class or issue a COPY to a compatible register
       // class.
+<<<<<<< HEAD
       if (Register::isVirtualRegister(Reg))
         Reg = ConstrainForSubReg(Reg, SubIdx,
                                  Node->getOperand(0).getSimpleValueType(),
                                  Node->isDivergent(), Node->getDebugLoc());
+=======
+      if (TargetRegisterInfo::isVirtualRegister(Reg))
+        Reg = ConstrainForSubReg(Reg, SubIdx,
+                                 Node->getOperand(0).getSimpleValueType(),
+                                 Node->getDebugLoc());
+
+>>>>>>> origin/release/4.x
       // Create the destreg if it is missing.
       if (VRBase == 0)
         VRBase = MRI->createVirtualRegister(TRC);
@@ -540,7 +562,11 @@ void InstrEmitter::EmitSubregNode(SDNode *Node,
       MachineInstrBuilder CopyMI =
           BuildMI(*MBB, InsertPos, Node->getDebugLoc(),
                   TII->get(TargetOpcode::COPY), VRBase);
+<<<<<<< HEAD
       if (Register::isVirtualRegister(Reg))
+=======
+      if (TargetRegisterInfo::isVirtualRegister(Reg))
+>>>>>>> origin/release/4.x
         CopyMI.addReg(Reg, 0, SubIdx);
       else
         CopyMI.addReg(TRI->getSubReg(Reg, SubIdx));

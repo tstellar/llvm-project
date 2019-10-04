@@ -6,10 +6,16 @@
 // RUN:   %s -o - | FileCheck %s -check-prefix=CHECK-X86
 // RUN: %clang_cc1 -emit-llvm -triple x86_64-unknown-linux-gnu -std=c++11 \
 // RUN:   %s -o - | FileCheck %s -check-prefix=CHECK-X86
+<<<<<<< HEAD
+=======
+// RUN: %clang_cc1 -emit-llvm -triple systemz-unknown-linux-gnu -std=c++11 \
+// RUN:   %s -o - | FileCheck %s -check-prefix=CHECK-SYSZ
+>>>>>>> origin/release/4.x
 // RUN: %clang_cc1 -emit-llvm -triple i686-pc-openbsd -std=c++11 \
 // RUN:   %s -o - | FileCheck %s -check-prefix=CHECK-X86
 // RUN: %clang_cc1 -emit-llvm -triple amd64-pc-openbsd -std=c++11 \
 // RUN:   %s -o - | FileCheck %s -check-prefix=CHECK-X86
+<<<<<<< HEAD
 // RUN: %clang_cc1 -emit-llvm -triple i386-pc-solaris2.11 -std=c++11 \
 // RUN:   %s -o - | FileCheck %s -check-prefix=CHECK-X86
 // RUN: %clang_cc1 -emit-llvm -triple x86_64-pc-solaris2.11 -std=c++11 \
@@ -18,6 +24,8 @@
 // RUN:   %s -o - | FileCheck %s -check-prefix=CHECK-X86
 // RUN: %clang_cc1 -emit-llvm -triple x86_64-unknown-haiku -std=c++11 \
 // RUN:   %s -o - | FileCheck %s -check-prefix=CHECK-X86
+=======
+>>>>>>> origin/release/4.x
 //
 /*  Various contexts where type __float128 can appear. The different check
     prefixes are due to different mangling on X86.  */

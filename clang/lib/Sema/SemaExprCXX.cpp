@@ -7221,8 +7221,14 @@ ExprResult Sema::BuildCXXMemberCallExpr(Expr *E, NamedDecl *FoundDecl,
   ExprValueKind VK = Expr::getValueKindForType(ResultType);
   ResultType = ResultType.getNonLValueExprType(Context);
 
+<<<<<<< HEAD
   CXXMemberCallExpr *CE = CXXMemberCallExpr::Create(
       Context, ME, /*Args=*/{}, ResultType, VK, Exp.get()->getEndLoc());
+=======
+  CXXMemberCallExpr *CE =
+    new (Context) CXXMemberCallExpr(Context, ME, None, ResultType, VK,
+                                    Exp.get()->getLocEnd());
+>>>>>>> origin/release/4.x
 
   if (CheckFunctionCall(Method, CE,
                         Method->getType()->castAs<FunctionProtoType>()))

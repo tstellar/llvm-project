@@ -876,6 +876,7 @@ def : GCNPat<
   (COPY $src)
 >;
 
+<<<<<<< HEAD
 def : GCNPat <
   (i16 (trunc i64:$src)),
   (EXTRACT_SUBREG $src, sub0)
@@ -921,6 +922,11 @@ def : GCNPat <
   (V_MOV_B32_dpp_gfx10 $src, $src, (as_i32imm $dpp_ctrl),
                        (as_i32imm $row_mask), (as_i32imm $bank_mask),
                        (as_i1imm $bound_ctrl), (i32 0))
+=======
+def : Pat <
+  (i16 (trunc i64:$src)),
+  (EXTRACT_SUBREG $src, sub0)
+>>>>>>> origin/release/4.x
 >;
 
 def : GCNPat <

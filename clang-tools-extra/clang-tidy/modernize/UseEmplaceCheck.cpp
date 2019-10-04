@@ -27,6 +27,14 @@ const auto DefaultTupleTypes = "::std::pair; ::std::tuple";
 const auto DefaultTupleMakeFunctions = "::std::make_pair; ::std::make_tuple";
 } // namespace
 
+namespace {
+namespace impl {
+// FIXME: This matcher should be replaced by a matcher from ASTMatcher.h
+const ast_matchers::internal::VariadicDynCastAllOfMatcher<Stmt,
+    CXXStdInitializerListExpr> cxxStdInitializerListExpr;
+} // namespace impl
+} // namespace
+
 UseEmplaceCheck::UseEmplaceCheck(StringRef Name, ClangTidyContext *Context)
     : ClangTidyCheck(Name, Context),
       IgnoreImplicitConstructors(Options.get("IgnoreImplicitConstructors", 0)),
@@ -83,6 +91,14 @@ void UseEmplaceCheck::registerMatchers(MatchFinder *Finder) {
   auto HasInitList = anyOf(has(ignoringImplicit(initListExpr())),
                            has(cxxStdInitializerListExpr()));
 
+<<<<<<< HEAD
+=======
+  auto hasInitList = anyOf(has(ignoringImplicit(initListExpr())),
+                           has(impl::cxxStdInitializerListExpr()));
+  // FIXME: Replace internal C++ initializer list matcher with one from
+  // ASTMatchers.h
+
+>>>>>>> origin/release/4.x
   // FIXME: Discard 0/NULL (as nullptr), static inline const data members,
   // overloaded functions and template names.
   auto SoughtConstructExpr =

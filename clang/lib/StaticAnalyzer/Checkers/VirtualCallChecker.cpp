@@ -115,6 +115,7 @@ void VirtualCallChecker::checkPreCall(const CallEvent &Call,
   if (!ObState)
     return;
 
+<<<<<<< HEAD
   bool IsPure = MD->isPure();
 
   // At this point we're sure that we're calling a virtual method
@@ -134,6 +135,14 @@ void VirtualCallChecker::checkPreCall(const CallEvent &Call,
     OS << "has undefined behavior";
   else
     OS << "bypasses virtual dispatch";
+=======
+  // Get the callee.
+  const CXXMethodDecl *MD =
+      dyn_cast_or_null<CXXMethodDecl>(CE->getDirectCallee());
+  if (MD && MD->isVirtual() && !callIsNonVirtual && !MD->hasAttr<FinalAttr>() &&
+      !MD->getParent()->hasAttr<FinalAttr>())
+    ReportVirtualCall(CE, MD->isPure());
+>>>>>>> origin/release/4.x
 
   ExplodedNode *N =
       IsPure ? C.generateErrorNode() : C.generateNonFatalErrorNode();

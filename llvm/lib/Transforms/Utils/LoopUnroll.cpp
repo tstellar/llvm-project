@@ -141,7 +141,11 @@ const Loop* llvm::addClonedBlockToLoopInfo(BasicBlock *OriginalBB,
     assert(OriginalBB == OldLoop->getHeader() &&
            "Header should be first in RPO");
 
+<<<<<<< HEAD
     NewLoop = LI->AllocateLoop();
+=======
+    NewLoop = new Loop();
+>>>>>>> origin/release/4.x
     Loop *NewLoopParent = NewLoops.lookup(OldLoop->getParentLoop());
 
     if (NewLoopParent)

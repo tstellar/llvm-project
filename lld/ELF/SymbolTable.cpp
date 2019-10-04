@@ -323,7 +323,11 @@ static int compareDefined(Symbol *S, bool WasInserted, uint8_t Binding,
   if (WasInserted)
     return 1;
   SymbolBody *Body = S->body();
+<<<<<<< HEAD
   if (!Body->isInCurrentDSO())
+=======
+  if (Body->isLazy() || !Body->isInCurrentDSO())
+>>>>>>> origin/release/4.x
     return 1;
 
   if (int R = compareVersion(S, Name))
@@ -472,6 +476,7 @@ void SymbolTable<ELFT>::addShared(SharedFile<ELFT> *File, StringRef Name,
   // Make sure we preempt DSO symbols with default visibility.
   if (Sym.getVisibility() == STV_DEFAULT)
     S->ExportDynamic = true;
+<<<<<<< HEAD
 
   SymbolBody *Body = S->body();
   // An undefined symbol with non default visibility must be satisfied
@@ -480,6 +485,10 @@ void SymbolTable<ELFT>::addShared(SharedFile<ELFT> *File, StringRef Name,
       (isa<Undefined>(Body) && Body->getVisibility() == STV_DEFAULT)) {
     replaceBody<SharedSymbol>(S, File, Name, Sym.st_other, Sym.getType(), &Sym,
                               Verdef);
+=======
+  if (WasInserted || isa<Undefined<ELFT>>(S->body())) {
+    replaceBody<SharedSymbol<ELFT>>(S, F, Name, Sym, Verdef);
+>>>>>>> origin/release/4.x
     if (!S->isWeak())
       File->IsUsed = true;
   }
@@ -511,7 +520,49 @@ template <class ELFT> SymbolBody *SymbolTable<ELFT>::find(StringRef Name) {
   Symbol *sym = symVector[it->second];
   if (sym->isPlaceholder())
     return nullptr;
+<<<<<<< HEAD
   return sym;
+=======
+  return SymVector[V.Idx]->body();
+}
+
+template <class ELFT>
+SymbolBody *SymbolTable<ELFT>::findInCurrentDSO(StringRef Name) {
+  if (SymbolBody *S = find(Name))
+    if (S->isInCurrentDSO())
+      return S;
+  return nullptr;
+}
+
+template <class ELFT>
+void SymbolTable<ELFT>::addLazyArchive(ArchiveFile *F,
+                                       const object::Archive::Symbol Sym) {
+  Symbol *S;
+  bool WasInserted;
+  StringRef Name = Sym.getName();
+  std::tie(S, WasInserted) = insert(Name);
+  if (WasInserted) {
+    replaceBody<LazyArchive>(S, *F, Sym, SymbolBody::UnknownType);
+    return;
+  }
+  if (!S->body()->isUndefined())
+    return;
+
+  // Weak undefined symbols should not fetch members from archives. If we were
+  // to keep old symbol we would not know that an archive member was available
+  // if a strong undefined symbol shows up afterwards in the link. If a strong
+  // undefined symbol never shows up, this lazy symbol will get to the end of
+  // the link and must be treated as the weak undefined one. We already marked
+  // this symbol as used when we added it to the symbol table, but we also need
+  // to preserve its type. FIXME: Move the Type field to Symbol.
+  if (S->isWeak()) {
+    replaceBody<LazyArchive>(S, *F, Sym, S->body()->Type);
+    return;
+  }
+  std::pair<MemoryBufferRef, uint64_t> MBInfo = F->getMember(&Sym);
+  if (!MBInfo.first.getBuffer().empty())
+    addFile(createObjectFile(MBInfo.first, F->getName(), MBInfo.second));
+>>>>>>> origin/release/4.x
 }
 
 // Initialize demangledSyms with a map from demangled symbols to symbol

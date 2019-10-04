@@ -292,6 +292,7 @@ void X86Subtarget::initSubtargetFeatures(StringRef CPU, StringRef FS) {
   else if (isTargetDarwin() || isTargetLinux() || isTargetSolaris() ||
            isTargetKFreeBSD() || In64BitMode)
     stackAlignment = 16;
+<<<<<<< HEAD
 
 <<<<<<< HEAD
   // Some CPUs have more overhead for gather. The specified overhead is relative
@@ -313,6 +314,10 @@ void X86Subtarget::initSubtargetFeatures(StringRef CPU, StringRef FS) {
   else if (Prefer256Bit)
     PreferVectorWidth = 256;
 =======
+=======
+}
+
+>>>>>>> origin/release/4.x
 void X86Subtarget::initializeEnvironment() {
   X86SSELevel = NoSSE;
   X863DNowLevel = NoThreeDNow;

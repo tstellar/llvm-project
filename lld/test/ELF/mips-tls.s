@@ -26,9 +26,15 @@
 # DIS: 00000000 g    O *UND*           00000000 foo
 
 # DIS:      Contents of section .got:
+<<<<<<< HEAD
 # DIS-NEXT:  30000 00000000 80000000 00000000 ffff9004
 # DIS-NEXT:  30010 00000000 00000000 00000001 00000000
 # DIS-NEXT:  30020 00000001 ffff8004
+=======
+# DIS-NEXT:  30010 00000000 80000000 00000000 00000000
+# DIS-NEXT:  30020 00000000 00000001 00000000 00000001
+# DIS-NEXT:  30030 ffff8004 ffff9004
+>>>>>>> origin/release/4.x
 
 # DIS:      __start:
 # DIS-NEXT:    addiu   $2, $3, -32736
@@ -39,6 +45,7 @@
 
 # CHECK:      Relocations [
 # CHECK-NEXT:   Section (7) .rel.dyn {
+<<<<<<< HEAD
 # CHECK-NEXT:     0x30008 R_MIPS_TLS_TPREL32 foo 0x0
 # CHECK-NEXT:     0x30010 R_MIPS_TLS_DTPMOD32 foo 0x0
 # CHECK-NEXT:     0x30014 R_MIPS_TLS_DTPREL32 foo 0x0
@@ -46,6 +53,15 @@
 # CHECK-NEXT: ]
 # CHECK:      Primary GOT {
 # CHECK-NEXT:   Canonical gp value: 0x37FF0
+=======
+# CHECK-NEXT:     0x30018 R_MIPS_TLS_DTPMOD32 foo 0x0
+# CHECK-NEXT:     0x3001C R_MIPS_TLS_DTPREL32 foo 0x0
+# CHECK-NEXT:     0x30020 R_MIPS_TLS_TPREL32 foo 0x0
+# CHECK-NEXT:   }
+# CHECK-NEXT: ]
+# CHECK-NEXT: Primary GOT {
+# CHECK-NEXT:   Canonical gp value: 0x38000
+>>>>>>> origin/release/4.x
 # CHECK-NEXT:   Reserved entries [
 # CHECK:        ]
 # CHECK-NEXT:   Local entries [
@@ -53,6 +69,7 @@
 # CHECK-NEXT:   Global entries [
 # CHECK-NEXT:   ]
 # CHECK-NEXT:   Number of TLS and multi-GOT entries: 8
+<<<<<<< HEAD
 #               ^-- -32744 R_MIPS_TLS_GOTTPREL R_MIPS_TLS_TPREL32  foo
 #               ^-- -32740 R_MIPS_TLS_GOTTPREL VA - 0x7000 bar
 #               ^-- -32736 R_MIPS_TLS_GD       R_MIPS_TLS_DTPMOD32 foo
@@ -80,6 +97,35 @@
 # SO-NEXT: ]
 # SO:      Primary GOT {
 # SO-NEXT:   Canonical gp value: 0x37FF0
+=======
+#               ^-- -32744 R_MIPS_TLS_GD       R_MIPS_TLS_DTPMOD32 foo
+#               ^-- -32740                     R_MIPS_TLS_DTPREL32 foo
+#               ^-- -32736 R_MIPS_TLS_GOTTPREL R_MIPS_TLS_TPREL32  foo
+#               ^-- -32732 R_MIPS_TLS_LDM      1 loc
+#               ^-- -32728                     0 loc
+#               ^-- -32724 R_MIPS_TLS_GD       1 bar
+#               ^-- -32720                     VA - 0x8000 bar
+#               ^-- -32716 R_MIPS_TLS_GOTTPREL VA - 0x7000 bar
+
+# DIS-SO:      Contents of section .got:
+# DIS-SO-NEXT:  20000 00000000 80000000 00000000 00000000
+# DIS-SO-NEXT:  20010 00000000 00000000 00000000 00000000
+# DIS-SO-NEXT:  20020 00000000 00000000
+
+# SO:      Relocations [
+# SO-NEXT:   Section (7) .rel.dyn {
+# SO-NEXT:     0x20014 R_MIPS_TLS_DTPMOD32 - 0x0
+# SO-NEXT:     0x2001C R_MIPS_TLS_DTPMOD32 bar 0x0
+# SO-NEXT:     0x20020 R_MIPS_TLS_DTPREL32 bar 0x0
+# SO-NEXT:     0x20024 R_MIPS_TLS_TPREL32 bar 0x0
+# SO-NEXT:     0x20008 R_MIPS_TLS_DTPMOD32 foo 0x0
+# SO-NEXT:     0x2000C R_MIPS_TLS_DTPREL32 foo 0x0
+# SO-NEXT:     0x20010 R_MIPS_TLS_TPREL32 foo 0x0
+# SO-NEXT:   }
+# SO-NEXT: ]
+# SO-NEXT: Primary GOT {
+# SO-NEXT:   Canonical gp value: 0x27FF0
+>>>>>>> origin/release/4.x
 # SO-NEXT:   Reserved entries [
 # SO:        ]
 # SO-NEXT:   Local entries [
@@ -87,6 +133,7 @@
 # SO-NEXT:   Global entries [
 # SO-NEXT:   ]
 # SO-NEXT:   Number of TLS and multi-GOT entries: 8
+<<<<<<< HEAD
 #            ^-- -32744 R_MIPS_TLS_GOTTPREL R_MIPS_TLS_TPREL32  foo
 #            ^-- -32740 R_MIPS_TLS_GOTTPREL R_MIPS_TLS_TPREL32  bar
 #            ^-- -32736 R_MIPS_TLS_GD       R_MIPS_TLS_DTPMOD32 foo
@@ -95,6 +142,16 @@
 #            ^-- -32724 0 loc
 #            ^-- -32720 R_MIPS_TLS_GD       R_MIPS_TLS_DTPMOD32 bar
 #            ^-- -32716 R_MIPS_TLS_DTPREL32 bar
+=======
+#            ^-- -32744 R_MIPS_TLS_GD       R_MIPS_TLS_DTPMOD32 foo
+#            ^-- -32740 R_MIPS_TLS_DTPREL32 foo
+#            ^-- -32736 R_MIPS_TLS_GOTTPREL R_MIPS_TLS_TPREL32  foo
+#            ^-- -32732 R_MIPS_TLS_LDM      R_MIPS_TLS_DTPMOD32 loc
+#            ^-- -32728 0 loc
+#            ^-- -32724 R_MIPS_TLS_GD       R_MIPS_TLS_DTPMOD32 bar
+#            ^-- -32720 R_MIPS_TLS_DTPREL32 bar
+#            ^-- -32716 R_MIPS_TLS_GOTTPREL R_MIPS_TLS_TPREL32  bar
+>>>>>>> origin/release/4.x
 
   .text
   .global  __start

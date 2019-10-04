@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -mcpu=tahiti  -verify-machineinstrs -show-mc-encoding < %s | FileCheck -check-prefix=SI   -check-prefix=GCN -check-prefix=SICIVI -check-prefix=SICI -check-prefix=SIVIGFX9_10 %s
 ; RUN: llc -march=amdgcn -mcpu=bonaire -verify-machineinstrs -show-mc-encoding < %s | FileCheck -check-prefix=CI   -check-prefix=GCN -check-prefix=SICIVI -check-prefix=SICI %s
 ; RUN: llc -march=amdgcn -mcpu=tonga   -verify-machineinstrs -show-mc-encoding < %s | FileCheck -check-prefix=VI   -check-prefix=GCN -check-prefix=SICIVI -check-prefix=VIGFX9_10 -check-prefix=SIVIGFX9_10 %s
 ; RUN: llc -march=amdgcn -mcpu=gfx900  -verify-machineinstrs -show-mc-encoding < %s | FileCheck -check-prefix=GFX9 -check-prefix=GCN -check-prefix=VIGFX9_10 -check-prefix=SIVIGFX9_10  %s
 ; RUN: llc -march=amdgcn -mcpu=gfx1010 -verify-machineinstrs -show-mc-encoding < %s | FileCheck -check-prefix=GFX10 -check-prefix=GCN -check-prefix=VIGFX9_10 -check-prefix=SIVIGFX9_10  %s
+=======
+; RUN: llc < %s -march=amdgcn -show-mc-encoding -verify-machineinstrs | FileCheck --check-prefix=SI --check-prefix=GCN --check-prefix=SIVI %s
+; RUN: llc < %s -march=amdgcn -mcpu=bonaire -show-mc-encoding -verify-machineinstrs | FileCheck --check-prefix=CI --check-prefix=GCN  %s
+; RUN: llc < %s -march=amdgcn -mcpu=tonga -show-mc-encoding -verify-machineinstrs | FileCheck --check-prefix=VI --check-prefix=GCN --check-prefix=SIVI %s
+>>>>>>> origin/release/4.x
 
 ; SMRD load with an immediate offset.
 ; GCN-LABEL: {{^}}smrd0:

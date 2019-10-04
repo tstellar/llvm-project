@@ -2885,7 +2885,11 @@ CFGBlock *CFGBuilder::VisitIfStmt(IfStmt *I) {
   if (VarDecl *VD = I->getConditionVariable())
     addLocalScopeForVarDecl(VD);
 
+<<<<<<< HEAD
   addAutomaticObjHandling(ScopePos, save_scope_pos.get(), I);
+=======
+  addAutomaticObjDtors(ScopePos, save_scope_pos.get(), I);
+>>>>>>> origin/release/4.x
 
   // The block we were processing is now finished.  Make it the successor
   // block.
@@ -2973,8 +2977,13 @@ CFGBlock *CFGBuilder::VisitIfStmt(IfStmt *I) {
 
     // Add the successors.  If we know that specific branches are
     // unreachable, inform addSuccessor() of that knowledge.
+<<<<<<< HEAD
     addSuccessor(Block, ThenBlock, /* IsReachable = */ !KnownVal.isFalse());
     addSuccessor(Block, ElseBlock, /* IsReachable = */ !KnownVal.isTrue());
+=======
+    addSuccessor(Block, ThenBlock, /* isReachable = */ !KnownVal.isFalse());
+    addSuccessor(Block, ElseBlock, /* isReachable = */ !KnownVal.isTrue());
+>>>>>>> origin/release/4.x
 
     // Add the condition as the last statement in the new block.  This may
     // create new blocks as the condition may contain control-flow.  Any newly
@@ -3969,7 +3978,11 @@ CFGBlock *CFGBuilder::VisitSwitchStmt(SwitchStmt *Terminator) {
   if (VarDecl *VD = Terminator->getConditionVariable())
     addLocalScopeForVarDecl(VD);
 
+<<<<<<< HEAD
   addAutomaticObjHandling(ScopePos, save_scope_pos.get(), Terminator);
+=======
+  addAutomaticObjDtors(ScopePos, save_scope_pos.get(), Terminator);
+>>>>>>> origin/release/4.x
 
   if (Block) {
     if (badCFG)

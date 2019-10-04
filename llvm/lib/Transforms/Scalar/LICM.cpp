@@ -2178,8 +2178,19 @@ LoopInvariantCodeMotion::collectAliasInfoForLoop(Loop *L, LoopInfo *LI,
     }
     LoopToAliasSetMap.erase(MapI);
   }
+<<<<<<< HEAD
   if (!CurAST)
     CurAST = std::make_unique<AliasSetTracker>(*AA);
+=======
+  if (CurAST == nullptr)
+    CurAST = new AliasSetTracker(*AA);
+
+  auto mergeLoop = [&](Loop *L) {
+    // Loop over the body of this loop, looking for calls, invokes, and stores.
+    for (BasicBlock *BB : L->blocks())
+        CurAST->add(*BB);          // Incorporate the specified basic block
+  };
+>>>>>>> origin/release/4.x
 
   // Add everything from the sub loops that are no longer directly available.
   for (Loop *InnerL : RecomputeLoops)

@@ -1218,7 +1218,11 @@ SDValue R600TargetLowering::lowerPrivateTruncStore(StoreSDNode *Store,
 
   // Store dword
   // TODO: Can we be smarter about MachinePointerInfo?
+<<<<<<< HEAD
   SDValue NewStore = DAG.getStore(Chain, DL, Value, Ptr, PtrInfo);
+=======
+  SDValue NewStore = DAG.getStore(Chain, DL, Value, Ptr, MachinePointerInfo());
+>>>>>>> origin/release/4.x
 
   // If we are part of expanded vector, make our neighbors depend on this store
   if (VectorTrunc) {
@@ -1249,7 +1253,11 @@ SDValue R600TargetLowering::LowerSTORE(SDValue Op, SelectionDAG &DAG) const {
   if ((AS == AMDGPUAS::LOCAL_ADDRESS || AS == AMDGPUAS::PRIVATE_ADDRESS ||
        TruncatingStore) &&
       VT.isVector()) {
+<<<<<<< HEAD
     if ((AS == AMDGPUAS::PRIVATE_ADDRESS) && TruncatingStore) {
+=======
+    if ((AS == AMDGPUAS::PRIVATE_ADDRESS) && StoreNode->isTruncatingStore()) {
+>>>>>>> origin/release/4.x
       // Add an extra level of chain to isolate this vector
       SDValue NewChain = DAG.getNode(AMDGPUISD::DUMMY_CHAIN, DL, MVT::Other, Chain);
       // TODO: can the chain be replaced without creating a new store?
@@ -1640,7 +1648,11 @@ SDValue R600TargetLowering::LowerFormalArguments(
 
     unsigned ValBase = ArgLocs[In.getOrigArgIndex()].getLocMemOffset();
     unsigned PartOffset = VA.getLocMemOffset();
+<<<<<<< HEAD
     unsigned Alignment = MinAlign(VT.getStoreSize(), PartOffset);
+=======
+    unsigned Offset = Subtarget->getExplicitKernelArgOffset(MF) + VA.getLocMemOffset();
+>>>>>>> origin/release/4.x
 
     MachinePointerInfo PtrInfo(UndefValue::get(PtrTy), PartOffset - ValBase);
     SDValue Arg = DAG.getLoad(

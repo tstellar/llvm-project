@@ -1427,26 +1427,44 @@ bool ARMExpandPseudo::ExpandMI(MachineBasicBlock &MBB,
         MachineConstantPool *MCP = MF->getConstantPool();
         unsigned PCLabelID = AFI->createPICLabelUId();
         MachineConstantPoolValue *CPV =
+<<<<<<< HEAD
             ARMConstantPoolSymbol::Create(MF->getFunction().getContext(),
                                           "__aeabi_read_tp", PCLabelID, 0);
         Register Reg = MI.getOperand(0).getReg();
+=======
+            ARMConstantPoolSymbol::Create(MF->getFunction()->getContext(),
+                                          "__aeabi_read_tp", PCLabelID, 0);
+        unsigned Reg = MI.getOperand(0).getReg();
+>>>>>>> origin/release/4.x
         MIB = BuildMI(MBB, MBBI, MI.getDebugLoc(),
                       TII->get(Thumb ? ARM::tLDRpci : ARM::LDRi12), Reg)
                   .addConstantPoolIndex(MCP->getConstantPoolIndex(CPV, 4));
         if (!Thumb)
           MIB.addImm(0);
+<<<<<<< HEAD
         MIB.add(predOps(ARMCC::AL));
+=======
+        MIB.addImm(static_cast<unsigned>(ARMCC::AL)).addReg(0);
+>>>>>>> origin/release/4.x
 
         MIB = BuildMI(MBB, MBBI, MI.getDebugLoc(),
                       TII->get(Thumb ? ARM::tBLXr : ARM::BLX));
         if (Thumb)
+<<<<<<< HEAD
           MIB.add(predOps(ARMCC::AL));
+=======
+          MIB.addImm(static_cast<unsigned>(ARMCC::AL)).addReg(0);
+>>>>>>> origin/release/4.x
         MIB.addReg(Reg, RegState::Kill);
       } else {
         MIB = BuildMI(MBB, MBBI, MI.getDebugLoc(),
                       TII->get(Thumb ? ARM::tBL : ARM::BL));
         if (Thumb)
+<<<<<<< HEAD
           MIB.add(predOps(ARMCC::AL));
+=======
+          MIB.addImm(static_cast<unsigned>(ARMCC::AL)).addReg(0);
+>>>>>>> origin/release/4.x
         MIB.addExternalSymbol("__aeabi_read_tp", 0);
       }
 

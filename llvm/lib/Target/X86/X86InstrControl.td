@@ -314,6 +314,7 @@ let isCall = 1, isTerminator = 1, isReturn = 1, isBarrier = 1,
                          []>, Sched<[WriteJumpLd]>;
 }
 
+<<<<<<< HEAD
 // Conditional tail calls are similar to the above, but they are branches
 // rather than barriers, and they use EFLAGS.
 let isCall = 1, isTerminator = 1, isReturn = 1, isBranch = 1,
@@ -326,6 +327,8 @@ let isCall = 1, isTerminator = 1, isReturn = 1, isBranch = 1,
   def TAILJMPd_CC : PseudoI<(outs), (ins i32imm_pcrel:$dst, i32imm:$cond), []>;
 }
 
+=======
+>>>>>>> origin/release/4.x
 
 //===----------------------------------------------------------------------===//
 //  Call Instructions...
@@ -451,6 +454,7 @@ let isPseudo = 1, isCall = 1, isCodeGenOnly = 1,
       PseudoI<(outs), (ins GR32:$dst, i32imm:$offset), []>;
   }
 }
+<<<<<<< HEAD
 
 // Conditional tail calls are similar to the above, but they are branches
 // rather than barriers, and they use EFLAGS.
@@ -465,3 +469,5 @@ let isCall = 1, isTerminator = 1, isReturn = 1, isBranch = 1,
   def TAILJMPd64_CC : PseudoI<(outs),
                               (ins i64i32imm_pcrel:$dst, i32imm:$cond), []>;
 }
+=======
+>>>>>>> origin/release/4.x

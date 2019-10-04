@@ -588,6 +588,7 @@ Version 4.0
   Symbol added: _ZTSSt12bad_any_cast
   Symbol added: _ZTVSt12bad_any_cast
 
+<<<<<<< HEAD
 * r295398 - Remove basic_string::insert and basic_string::replace template methods
     which should be inline.
 
@@ -602,3 +603,6 @@ Version 4.0
   SYMBOL REMOVED: _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7replaceIPKcEENS_9enable_ifIXsr19__is_input_iteratorIT_EE5valueERS5_E4typeENS_11__wrap_iterIS8_EESF_SA_SA_
   SYMBOL REMOVED: _ZNSt3__112basic_stringIwNS_11char_traitsIwEENS_9allocatorIwEEE6insertIPKwEENS_9enable_ifIXaasr21__is_forward_iteratorIT_EE5valuesr38__libcpp_string_gets_noexcept_iteratorISA_EE5valueENS_11__wrap_iterIPwEEE4typeENSB_IS8_EESA_SA_
   SYMBOL REMOVED: _ZNSt3__112basic_stringIwNS_11char_traitsIwEENS_9allocatorIwEEE7replaceIPKwEENS_9enable_ifIXsr19__is_input_iteratorIT_EE5valueERS5_E4typeENS_11__wrap_iterIS8_EESF_SA_SA_
+=======
+  
+>>>>>>> origin/release/4.x

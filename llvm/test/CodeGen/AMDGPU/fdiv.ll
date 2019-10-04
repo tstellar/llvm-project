@@ -284,7 +284,11 @@ define amdgpu_kernel void @fdiv_v4f32_arcp_math(<4 x float> addrspace(1)* %out, 
   ret void
 }
 
+<<<<<<< HEAD
 attributes #0 = { nounwind "enable-unsafe-fp-math"="false" "target-features"="-fp32-denormals,+fp64-fp16-denormals,-flat-for-global" }
+=======
+attributes #0 = { nounwind "enable-unsafe-fp-math"="false" "target-features"="-fp32-denormals,-flat-for-global" }
+>>>>>>> origin/release/4.x
 attributes #1 = { nounwind "enable-unsafe-fp-math"="true" "target-features"="-fp32-denormals,-flat-for-global" }
 attributes #2 = { nounwind "enable-unsafe-fp-math"="false" "target-features"="+fp32-denormals,-flat-for-global" }
 

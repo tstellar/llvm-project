@@ -5506,6 +5506,7 @@ NamedDecl *Sema::FindInstantiatedDecl(SourceLocation Loc, NamedDecl *D,
     // find it. Does that ever matter?
     if (auto Name = D->getDeclName()) {
       DeclarationNameInfo NameInfo(Name, D->getLocation());
+<<<<<<< HEAD
       DeclarationNameInfo NewNameInfo =
           SubstDeclarationNameInfo(NameInfo, TemplateArgs);
       Name = NewNameInfo.getName();
@@ -5523,6 +5524,13 @@ NamedDecl *Sema::FindInstantiatedDecl(SourceLocation Loc, NamedDecl *D,
             Templ, &VTSD->getTemplateArgsInfo(), NewNameInfo, SourceLocation());
       } else
         Result = findInstantiationOf(Context, D, Found.begin(), Found.end());
+=======
+      Name = SubstDeclarationNameInfo(NameInfo, TemplateArgs).getName();
+      if (!Name)
+        return nullptr;
+      DeclContext::lookup_result Found = ParentDC->lookup(Name);
+      Result = findInstantiationOf(Context, D, Found.begin(), Found.end());
+>>>>>>> origin/release/4.x
     } else {
       // Since we don't have a name for the entity we're looking for,
       // our only option is to walk through all of the declarations to

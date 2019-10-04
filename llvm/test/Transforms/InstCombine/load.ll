@@ -280,6 +280,7 @@ entry:
 }
 
 ; Make sure we preseve the type of the store to a swifterror pointer.
+<<<<<<< HEAD
 
 declare void @initi8(i8**)
 define void @test19(%swift.error** swifterror %err) {
@@ -292,6 +293,17 @@ define void @test19(%swift.error** swifterror %err) {
 ; CHECK-NEXT:    store %swift.error* [[ERR_RES]], %swift.error** [[ERR:%.*]], align 8
 ; CHECK-NEXT:    ret void
 ;
+=======
+; CHECK-LABEL: @test19(
+; CHECK: [[A:%.*]] = alloca
+; CHECK: call
+; CHECK: [[BC:%.*]] = bitcast i8** [[A]] to
+; CHECK: [[ERRVAL:%.*]] =  load {{.*}}[[BC]]
+; CHECK: store {{.*}}[[ERRVAL]]
+; CHECK: ret
+declare void @initi8(i8**)
+define void @test19(%swift.error** swifterror %err) {
+>>>>>>> origin/release/4.x
 entry:
   %tmp = alloca i8*, align 8
   call void @initi8(i8** %tmp)

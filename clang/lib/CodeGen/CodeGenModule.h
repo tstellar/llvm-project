@@ -192,7 +192,11 @@ struct ObjCEntrypoints {
   llvm::FunctionCallee objc_releaseRuntimeFunction;
 
   /// void objc_storeStrong(id*, id);
+<<<<<<< HEAD
   llvm::Function *objc_storeStrong;
+=======
+  llvm::Constant *objc_storeStrong;
+>>>>>>> origin/release/4.x
 
   /// id objc_storeWeak(id*, id);
   llvm::Function *objc_storeWeak;

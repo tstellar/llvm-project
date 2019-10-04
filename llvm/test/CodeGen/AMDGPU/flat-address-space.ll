@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 ; RUN: llc -O0 -mtriple=amdgcn-mesa-mesa3d -mcpu=bonaire < %s | FileCheck -check-prefixes=CHECK,CIVI %s
 ; RUN: llc -O0 -mtriple=amdgcn-mesa-mesa3d -mcpu=tonga -mattr=-flat-for-global < %s | FileCheck -check-prefixes=CHECK,CIVI %s
 ; RUN: llc -O0 -mtriple=amdgcn-amd-amdhsa -mcpu=fiji -mattr=-flat-for-global < %s | FileCheck -check-prefixes=CHECK,HSA %s
 ; RUN: llc -O0 -mtriple=amdgcn-amd-amdhsa -mcpu=gfx900 -mattr=-flat-for-global < %s | FileCheck -check-prefixes=CHECK,HSA,GFX9 %s
+=======
+; RUN: llc -O0 -mtriple=amdgcn-mesa-mesa3d -mcpu=bonaire < %s | FileCheck  %s
+; RUN: llc -O0 -mtriple=amdgcn-mesa-mesa3d -mcpu=tonga -mattr=-flat-for-global < %s | FileCheck  %s
+; RUN: llc -O0 -mtriple=amdgcn-amd-amdhsa -mcpu=fiji -mattr=-flat-for-global < %s | FileCheck -check-prefixes=CHECK,HSA %s
+>>>>>>> origin/release/4.x
 
 ; Disable optimizations in case there are optimizations added that
 ; specialize away generic pointer accesses.

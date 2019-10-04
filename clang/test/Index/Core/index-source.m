@@ -158,6 +158,7 @@ extern int setjmp(jmp_buf);
 // CHECK-NEXT: RelChild | I2 | [[I2_USR]]
 @synthesize prop = _prop;
 
+<<<<<<< HEAD
 // CHECK: [[@LINE+11]]:12 | instance-method(IB)/ObjC | doAction:foo: | [[doAction_USR:.*]] | -[I2 doAction:foo:] | Def,Dyn,RelChild | rel: 1
 // CHECK-NEXT: RelChild | I2 | [[I2_USR]]
 // CHECK: [[@LINE+9]]:22 | class/ObjC | I1 | c:objc(cs)I1 | _OBJC_CLASS_$_I1 | Ref,RelCont,RelIBType | rel: 1
@@ -194,6 +195,14 @@ extern int setjmp(jmp_buf);
   // CHECK-NEXT: RelCall,RelCont | doAction:foo: | [[doAction_USR]]
   // CHECK-NEXT: RelRec | I2 | [[I2_USR]]
 }
+=======
+// CHECK: [[@LINE+5]]:12 | instance-method(IB)/ObjC | doAction:foo: | c:objc(cs)I2(im)doAction:foo: | -[I2 doAction:foo:] | Def,Dyn,RelChild | rel: 1
+// CHECK-NEXT: RelChild | I2 | c:objc(cs)I2
+// CHECK: [[@LINE+3]]:22 | class/ObjC | I1 | c:objc(cs)I1 | _OBJC_CLASS_$_I1 | Ref,RelCont,RelIBType | rel: 1
+// CHECK-NEXT: RelCont,RelIBType | doAction:foo: | c:objc(cs)I2(im)doAction:foo:
+// CHECK: [[@LINE+1]]:39 | class/ObjC | I1 | c:objc(cs)I1 | _OBJC_CLASS_$_I1 | Ref,RelCont | rel: 1
+-(IBAction)doAction:(I1 *)sender foo:(I1 *)bar {}
+>>>>>>> origin/release/4.x
 @end
 
 @interface I3
@@ -202,7 +211,11 @@ extern int setjmp(jmp_buf);
 // CHECK-NEXT: RelChild | I3 | c:objc(cs)I3
 // CHECK-NEXT: RelAcc | prop | c:objc(cs)I3(py)prop
 -(id)prop;
+<<<<<<< HEAD
 // CHECK: [[@LINE+4]]:8 | instance-method/acc-set/ObjC | setProp: | c:objc(cs)I3(im)setProp: | -[I3 setProp:] | Decl,Dyn,RelChild,RelAcc | rel: 2
+=======
+// CHECK: [[@LINE+3]]:8 | instance-method/acc-set/ObjC | setProp: | c:objc(cs)I3(im)setProp: | -[I3 setProp:] | Decl,Dyn,RelChild,RelAcc | rel: 2
+>>>>>>> origin/release/4.x
 // CHECK-NEXT: RelChild | I3 | c:objc(cs)I3
 // CHECK-NEXT: RelAcc | prop | c:objc(cs)I3(py)prop
 // LOCAL-NOT: [[@LINE+1]]:20 | param

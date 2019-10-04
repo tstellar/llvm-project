@@ -2568,8 +2568,13 @@ void ItaniumCXXABI::EmitThreadLocalInitFuncs(
     CharUnits GuardAlign = CharUnits::One();
     Guard->setAlignment(GuardAlign.getAsAlign());
 
+<<<<<<< HEAD
     CodeGenFunction(CGM).GenerateCXXGlobalInitFunc(
         InitFunc, OrderedInits, ConstantAddress(Guard, GuardAlign));
+=======
+    CodeGenFunction(CGM).GenerateCXXGlobalInitFunc(InitFunc, OrderedInits,
+                                                   Address(Guard, GuardAlign));
+>>>>>>> origin/release/4.x
     // On Darwin platforms, use CXX_FAST_TLS calling convention.
     if (CGM.getTarget().getTriple().isOSDarwin()) {
       InitFunc->setCallingConv(llvm::CallingConv::CXX_FAST_TLS);
@@ -2577,8 +2582,12 @@ void ItaniumCXXABI::EmitThreadLocalInitFuncs(
     }
   }
 
+<<<<<<< HEAD
   // Create declarations for thread wrappers for all thread-local variables
   // with non-discardable definitions in this translation unit.
+=======
+  // Emit thread wrappers.
+>>>>>>> origin/release/4.x
   for (const VarDecl *VD : CXXThreadLocals) {
     if (VD->hasDefinition() &&
         !isDiscardableGVALinkage(getContext().GetGVALinkageForVariable(VD))) {
@@ -2592,11 +2601,16 @@ void ItaniumCXXABI::EmitThreadLocalInitFuncs(
     const VarDecl *VD = VDAndWrapper.first;
     llvm::GlobalVariable *Var =
         cast<llvm::GlobalVariable>(CGM.GetGlobalValue(CGM.getMangledName(VD)));
+<<<<<<< HEAD
     llvm::Function *Wrapper = VDAndWrapper.second;
+=======
+    llvm::Function *Wrapper = getOrCreateThreadLocalWrapper(VD, Var);
+>>>>>>> origin/release/4.x
 
     // Some targets require that all access to thread local variables go through
     // the thread wrapper.  This means that we cannot attempt to create a thread
     // wrapper or a thread helper.
+<<<<<<< HEAD
     if (!VD->hasDefinition()) {
       if (isThreadWrapperReplaceable(VD, CGM)) {
         Wrapper->setLinkage(llvm::Function::ExternalLinkage);
@@ -2610,6 +2624,12 @@ void ItaniumCXXABI::EmitThreadLocalInitFuncs(
     }
 
     CGM.SetLLVMFunctionAttributesForDefinition(nullptr, Wrapper);
+=======
+    if (isThreadWrapperReplaceable(VD, CGM) && !VD->hasDefinition()) {
+      Wrapper->setLinkage(llvm::Function::ExternalLinkage);
+      continue;
+    }
+>>>>>>> origin/release/4.x
 
     // Mangle the name for the thread_local initialization function.
     SmallString<256> InitFnName;
@@ -2641,7 +2661,12 @@ void ItaniumCXXABI::EmitThreadLocalInitFuncs(
       // This function will not exist if the TU defining the thread_local
       // variable in question does not need any dynamic initialization for
       // its thread_local variables.
+<<<<<<< HEAD
       Init = llvm::Function::Create(InitFnTy,
+=======
+      llvm::FunctionType *FnTy = llvm::FunctionType::get(CGM.VoidTy, false);
+      Init = llvm::Function::Create(FnTy,
+>>>>>>> origin/release/4.x
                                     llvm::GlobalVariable::ExternalWeakLinkage,
                                     InitFnName.str(), &CGM.getModule());
       const CGFunctionInfo &FI = CGM.getTypes().arrangeNullaryFunction();

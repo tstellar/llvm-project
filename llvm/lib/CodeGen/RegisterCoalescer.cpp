@@ -1981,7 +1981,11 @@ bool RegisterCoalescer::joinReservedPhysReg(CoalescerPair &CP) {
   assert(CP.isPhys() && "Must be a physreg copy");
   assert(MRI->isReserved(DstReg) && "Not a reserved register");
   LiveInterval &RHS = LIS->getInterval(SrcReg);
+<<<<<<< HEAD
   LLVM_DEBUG(dbgs() << "\t\tRHS = " << RHS << '\n');
+=======
+  DEBUG(dbgs() << "\t\tRHS = " << RHS << '\n');
+>>>>>>> origin/release/4.x
 
   assert(RHS.containsOneValue() && "Invalid join with reserved register");
 
@@ -2024,6 +2028,7 @@ bool RegisterCoalescer::joinReservedPhysReg(CoalescerPair &CP) {
   MachineInstr *CopyMI;
   if (CP.isFlipped()) {
     // Physreg is copied into vreg
+<<<<<<< HEAD
     //   %y = COPY %physreg_x
     //   ...  //< no other def of %physreg_x here
     //   use %y
@@ -2049,6 +2054,33 @@ bool RegisterCoalescer::joinReservedPhysReg(CoalescerPair &CP) {
       return false;
     }
 
+=======
+    //   %vregY = COPY %X
+    //   ...  //< no other def of %X here
+    //   use %vregY
+    // =>
+    //   ...
+    //   use %X
+    CopyMI = MRI->getVRegDef(SrcReg);
+  } else {
+    // VReg is copied into physreg:
+    //   %vregX = def
+    //   ... //< no other def or use of %Y here
+    //   %Y = COPY %vregX
+    // =>
+    //   %Y = def
+    //   ...
+    if (!MRI->hasOneNonDBGUse(SrcReg)) {
+      DEBUG(dbgs() << "\t\tMultiple vreg uses!\n");
+      return false;
+    }
+
+    if (!LIS->intervalIsInOneMBB(RHS)) {
+      DEBUG(dbgs() << "\t\tComplex control flow!\n");
+      return false;
+    }
+
+>>>>>>> origin/release/4.x
     MachineInstr &DestMI = *MRI->getVRegDef(SrcReg);
     CopyMI = &*MRI->use_instr_nodbg_begin(SrcReg);
     SlotIndex CopyRegIdx = LIS->getInstructionIndex(*CopyMI).getRegSlot();
@@ -2071,8 +2103,13 @@ bool RegisterCoalescer::joinReservedPhysReg(CoalescerPair &CP) {
 
     // We're going to remove the copy which defines a physical reserved
     // register, so remove its valno, etc.
+<<<<<<< HEAD
     LLVM_DEBUG(dbgs() << "\t\tRemoving phys reg def of "
                       << printReg(DstReg, TRI) << " at " << CopyRegIdx << "\n");
+=======
+    DEBUG(dbgs() << "\t\tRemoving phys reg def of " << PrintReg(DstReg, TRI)
+          << " at " << CopyRegIdx << "\n");
+>>>>>>> origin/release/4.x
 
     LIS->removePhysRegDefAt(DstReg, CopyRegIdx);
     // Create a new dead def at the new def location.

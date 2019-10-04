@@ -7525,7 +7525,23 @@ void __kmp_cleanup(void) {
     __kmp_affinity_format = NULL;
   }
 
+<<<<<<< HEAD
   __kmp_i18n_catclose();
+=======
+   #if KMP_USE_ADAPTIVE_LOCKS
+   #if KMP_DEBUG_ADAPTIVE_LOCKS
+       __kmp_print_speculative_stats();
+   #endif
+   #endif
+    KMP_INTERNAL_FREE( __kmp_nested_nth.nth );
+    __kmp_nested_nth.nth = NULL;
+    __kmp_nested_nth.size = 0;
+    __kmp_nested_nth.used = 0;
+    KMP_INTERNAL_FREE( __kmp_nested_proc_bind.bind_types );
+    __kmp_nested_proc_bind.bind_types = NULL;
+    __kmp_nested_proc_bind.size = 0;
+    __kmp_nested_proc_bind.used = 0;
+>>>>>>> origin/release/4.x
 
 #if KMP_USE_HIER_SCHED
   __kmp_hier_scheds.deallocate();

@@ -863,7 +863,10 @@ void OverloadCandidateSet::clear(CandidateSetKind CSK) {
   NumInlineBytesUsed = 0;
   Candidates.clear();
   Functions.clear();
+<<<<<<< HEAD
   Kind = CSK;
+=======
+>>>>>>> origin/release/4.x
 }
 
 namespace {
@@ -6119,6 +6122,7 @@ void Sema::AddOverloadCandidate(
         return;
       }
     }
+<<<<<<< HEAD
 
     // Check that the constructor is capable of constructing an object in the
     // destination address space.
@@ -6128,6 +6132,8 @@ void Sema::AddOverloadCandidate(
       Candidate.Viable = false;
       Candidate.FailureKind = ovl_fail_object_addrspace_mismatch;
     }
+=======
+>>>>>>> origin/release/4.x
   }
 
   unsigned NumParams = Proto->getNumParams();
@@ -6198,6 +6204,7 @@ void Sema::AddOverloadCandidate(
     }
   }
 
+<<<<<<< HEAD
   if (!AllowExplicit) {
     ExplicitSpecifier ES = ExplicitSpecifier::getFromDecl(Function);
     if (ES.getKind() != ExplicitSpecKind::ResolvedFalse) {
@@ -6207,6 +6214,8 @@ void Sema::AddOverloadCandidate(
     }
   }
 
+=======
+>>>>>>> origin/release/4.x
   if (EnableIfAttr *FailedAttr = CheckEnableIf(Function, Args)) {
     Candidate.Viable = false;
     Candidate.FailureKind = ovl_fail_enable_if;
@@ -6415,11 +6424,19 @@ EnableIfAttr *Sema::CheckEnableIf(FunctionDecl *Function, ArrayRef<Expr *> Args,
 }
 
 template <typename CheckFn>
+<<<<<<< HEAD
 static bool diagnoseDiagnoseIfAttrsWith(Sema &S, const NamedDecl *ND,
                                         bool ArgDependent, SourceLocation Loc,
                                         CheckFn &&IsSuccessful) {
   SmallVector<const DiagnoseIfAttr *, 8> Attrs;
   for (const auto *DIA : ND->specific_attrs<DiagnoseIfAttr>()) {
+=======
+static bool diagnoseDiagnoseIfAttrsWith(Sema &S, const FunctionDecl *FD,
+                                        bool ArgDependent, SourceLocation Loc,
+                                        CheckFn &&IsSuccessful) {
+  SmallVector<const DiagnoseIfAttr *, 8> Attrs;
+  for (const auto *DIA : FD->specific_attrs<DiagnoseIfAttr>()) {
+>>>>>>> origin/release/4.x
     if (ArgDependent == DIA->getArgDependent())
       Attrs.push_back(DIA);
   }
@@ -6466,16 +6483,27 @@ bool Sema::diagnoseArgDependentDiagnoseIfAttrs(const FunctionDecl *Function,
         // EvaluateWithSubstitution only cares about the position of each
         // argument in the arg list, not the ParmVarDecl* it maps to.
         if (!DIA->getCond()->EvaluateWithSubstitution(
+<<<<<<< HEAD
                 Result, Context, cast<FunctionDecl>(DIA->getParent()), Args, ThisArg))
+=======
+                Result, Context, DIA->getParent(), Args, ThisArg))
+>>>>>>> origin/release/4.x
           return false;
         return Result.isInt() && Result.getInt().getBoolValue();
       });
 }
 
+<<<<<<< HEAD
 bool Sema::diagnoseArgIndependentDiagnoseIfAttrs(const NamedDecl *ND,
                                                  SourceLocation Loc) {
   return diagnoseDiagnoseIfAttrsWith(
       *this, ND, /*ArgDependent=*/false, Loc,
+=======
+bool Sema::diagnoseArgIndependentDiagnoseIfAttrs(const FunctionDecl *Function,
+                                                 SourceLocation Loc) {
+  return diagnoseDiagnoseIfAttrsWith(
+      *this, Function, /*ArgDependent=*/false, Loc,
+>>>>>>> origin/release/4.x
       [&](const DiagnoseIfAttr *DIA) {
         bool Result;
         return DIA->getCond()->EvaluateAsBooleanCondition(Result, Context) &&
@@ -6494,6 +6522,7 @@ void Sema::AddFunctionCandidates(const UnresolvedSetImpl &Fns,
                                  bool FirstArgumentIsBase) {
   for (UnresolvedSetIterator F = Fns.begin(), E = Fns.end(); F != E; ++F) {
     NamedDecl *D = F.getDecl()->getUnderlyingDecl();
+<<<<<<< HEAD
     ArrayRef<Expr *> FunctionArgs = Args;
 
     FunctionTemplateDecl *FunTmpl = dyn_cast<FunctionTemplateDecl>(D);
@@ -6548,6 +6577,33 @@ void Sema::AddFunctionCandidates(const UnresolvedSetImpl &Fns,
         AddOverloadCandidate(FD, F.getPair(), FunctionArgs, CandidateSet,
                              SuppressUserConversions, PartialOverloading);
       }
+=======
+    if (FunctionDecl *FD = dyn_cast<FunctionDecl>(D)) {
+      if (isa<CXXMethodDecl>(FD) && !cast<CXXMethodDecl>(FD)->isStatic())
+        AddMethodCandidate(cast<CXXMethodDecl>(FD), F.getPair(),
+                           cast<CXXMethodDecl>(FD)->getParent(),
+                           Args[0]->getType(), Args[0]->Classify(Context),
+                           Args.slice(1), CandidateSet, SuppressUserConversions,
+                           PartialOverloading);
+      else
+        AddOverloadCandidate(FD, F.getPair(), Args, CandidateSet,
+                             SuppressUserConversions, PartialOverloading);
+    } else {
+      FunctionTemplateDecl *FunTmpl = cast<FunctionTemplateDecl>(D);
+      if (isa<CXXMethodDecl>(FunTmpl->getTemplatedDecl()) &&
+          !cast<CXXMethodDecl>(FunTmpl->getTemplatedDecl())->isStatic())
+        AddMethodTemplateCandidate(
+            FunTmpl, F.getPair(),
+            cast<CXXRecordDecl>(FunTmpl->getDeclContext()),
+            ExplicitTemplateArgs, Args[0]->getType(),
+            Args[0]->Classify(Context), Args.slice(1), CandidateSet,
+            SuppressUserConversions, PartialOverloading);
+      else
+        AddTemplateOverloadCandidate(FunTmpl, F.getPair(),
+                                     ExplicitTemplateArgs, Args,
+                                     CandidateSet, SuppressUserConversions,
+                                     PartialOverloading);
+>>>>>>> origin/release/4.x
     }
   }
 }
@@ -6714,12 +6770,15 @@ Sema::AddMethodCandidate(CXXMethodDecl *Method, DeclAccessPair FoundDecl,
     Candidate.DeductionFailure.Data = FailedAttr;
     return;
   }
+<<<<<<< HEAD
 
   if (Method->isMultiVersion() && Method->hasAttr<TargetAttr>() &&
       !Method->getAttr<TargetAttr>()->isDefaultVersion()) {
     Candidate.Viable = false;
     Candidate.FailureKind = ovl_non_default_multiversion_function;
   }
+=======
+>>>>>>> origin/release/4.x
 }
 
 /// Add a C++ member function template as a candidate to the candidate
@@ -7129,12 +7188,15 @@ void Sema::AddConversionCandidate(
     Candidate.DeductionFailure.Data = FailedAttr;
     return;
   }
+<<<<<<< HEAD
 
   if (Conversion->isMultiVersion() && Conversion->hasAttr<TargetAttr>() &&
       !Conversion->getAttr<TargetAttr>()->isDefaultVersion()) {
     Candidate.Viable = false;
     Candidate.FailureKind = ovl_non_default_multiversion_function;
   }
+=======
+>>>>>>> origin/release/4.x
 }
 
 /// Adds a conversion function template specialization
@@ -7336,7 +7398,11 @@ void Sema::AddMemberOperatorCandidates(OverloadedOperatorKind Op,
          ++Oper)
       AddMethodCandidate(Oper.getPair(), Args[0]->getType(),
                          Args[0]->Classify(Context), Args.slice(1),
+<<<<<<< HEAD
                          CandidateSet, /*SuppressUserConversion=*/false);
+=======
+                         CandidateSet, /*SuppressUserConversions=*/false);
+>>>>>>> origin/release/4.x
   }
 }
 
@@ -9412,7 +9478,11 @@ void Sema::diagnoseEquivalentInternalLinkageDeclarations(
   }
 }
 
+<<<<<<< HEAD
 /// Computes the best viable function (C++ 13.3.3)
+=======
+/// \brief Computes the best viable function (C++ 13.3.3)
+>>>>>>> origin/release/4.x
 /// within an overload candidate set.
 ///
 /// \param Loc The location of the function name (or operator symbol) for
@@ -9487,7 +9557,13 @@ OverloadCandidateSet::BestViableFunction(Sema &S, SourceLocation Loc,
   }
 
   // Best is the best viable function.
+<<<<<<< HEAD
   if (Best->Function && Best->Function->isDeleted())
+=======
+  if (Best->Function &&
+      (Best->Function->isDeleted() ||
+       S.isFunctionConsideredUnavailable(Best->Function)))
+>>>>>>> origin/release/4.x
     return OR_Deleted;
 
   if (!EquivalentCands.empty())
@@ -13085,7 +13161,11 @@ Sema::BuildCallToMemberFunction(Scope *S, Expr *MemExprE,
         AddMethodTemplateCandidate(
             cast<FunctionTemplateDecl>(Func), I.getPair(), ActingDC,
             TemplateArgs, ObjectType, ObjectClassification, Args, CandidateSet,
+<<<<<<< HEAD
             /*SuppressUserConversions=*/false);
+=======
+            /*SuppressUsedConversions=*/false);
+>>>>>>> origin/release/4.x
       }
     }
 
@@ -13281,7 +13361,11 @@ Sema::BuildCallToObjectOfClassType(Scope *S, Expr *Obj,
        Oper != OperEnd; ++Oper) {
     AddMethodCandidate(Oper.getPair(), Object.get()->getType(),
                        Object.get()->Classify(Context), Args, CandidateSet,
+<<<<<<< HEAD
                        /*SuppressUserConversion=*/false);
+=======
+                       /*SuppressUserConversions=*/false);
+>>>>>>> origin/release/4.x
   }
 
   // C++ [over.call.object]p2:
@@ -13556,7 +13640,11 @@ Sema::BuildOverloadedArrowExpr(Scope *S, Expr *Base, SourceLocation OpLoc,
   for (LookupResult::iterator Oper = R.begin(), OperEnd = R.end();
        Oper != OperEnd; ++Oper) {
     AddMethodCandidate(Oper.getPair(), Base->getType(), Base->Classify(Context),
+<<<<<<< HEAD
                        None, CandidateSet, /*SuppressUserConversion=*/false);
+=======
+                       None, CandidateSet, /*SuppressUserConversions=*/false);
+>>>>>>> origin/release/4.x
   }
 
   bool HadMultipleCandidates = (CandidateSet.size() > 1);

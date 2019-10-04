@@ -341,6 +341,7 @@ enum : int {
 
 namespace __cxxabiv1 {
 extern "C" _LIBCXXABI_FUNC_VIS char *
+<<<<<<< HEAD
 __cxa_demangle(const char *MangledName, char *Buf, size_t *N, int *Status) {
   if (MangledName == nullptr || (Buf != nullptr && N == nullptr)) {
     if (Status)
@@ -370,5 +371,64 @@ __cxa_demangle(const char *MangledName, char *Buf, size_t *N, int *Status) {
   if (Status)
     *Status = InternalStatus;
   return InternalStatus == demangle_success ? Buf : nullptr;
+=======
+__cxa_demangle(const char *mangled_name, char *buf, size_t *n, int *status) {
+    if (mangled_name == nullptr || (buf != nullptr && n == nullptr))
+    {
+        if (status)
+            *status = invalid_args;
+        return nullptr;
+    }
+
+    size_t internal_size = buf != nullptr ? *n : 0;
+    arena<bs> a;
+    Db db(a);
+    db.template_param.emplace_back(a);
+    int internal_status = success;
+    size_t len = std::strlen(mangled_name);
+    demangle(mangled_name, mangled_name + len, db,
+             internal_status);
+    if (internal_status == success && db.fix_forward_references &&
+           !db.template_param.empty() && !db.template_param.front().empty())
+    {
+        db.fix_forward_references = false;
+        db.tag_templates = false;
+        db.names.clear();
+        db.subs.clear();
+        demangle(mangled_name, mangled_name + len, db, internal_status);
+        if (db.fix_forward_references)
+            internal_status = invalid_mangled_name;
+    }
+    if (internal_status == success)
+    {
+        size_t sz = db.names.back().size() + 1;
+        if (sz > internal_size)
+        {
+            char* newbuf = static_cast<char*>(std::realloc(buf, sz));
+            if (newbuf == nullptr)
+            {
+                internal_status = memory_alloc_failure;
+                buf = nullptr;
+            }
+            else
+            {
+                buf = newbuf;
+                if (n != nullptr)
+                    *n = sz;
+            }
+        }
+        if (buf != nullptr)
+        {
+            db.names.back().first += db.names.back().second;
+            std::memcpy(buf, db.names.back().first.data(), sz-1);
+            buf[sz-1] = char(0);
+        }
+    }
+    else
+        buf = nullptr;
+    if (status)
+        *status = internal_status;
+    return buf;
+>>>>>>> origin/release/4.x
 }
 }  // __cxxabiv1

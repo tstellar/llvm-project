@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 ; RUN: llc -march=amdgcn -verify-machineinstrs < %s | FileCheck -allow-deprecated-dag-overlap -enable-var-scope -check-prefixes=GCN,FUNC %s
 ; RUN: llc -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs < %s | FileCheck -allow-deprecated-dag-overlap -enable-var-scope -check-prefixes=GCN,FUNC %s
 ; RUN: llc -march=r600 -mcpu=redwood < %s | FileCheck -allow-deprecated-dag-overlap -enable-var-scope -check-prefixes=R600,FUNC %s
+=======
+; RUN: llc < %s -march=r600 -mcpu=redwood | FileCheck --check-prefix=R600 %s
+; RUN: llc < %s -march=amdgcn -verify-machineinstrs | FileCheck --check-prefix=SI %s
+; RUN: llc < %s -march=amdgcn -mcpu=tonga -mattr=-flat-for-global -verify-machineinstrs | FileCheck --check-prefix=SI %s
+>>>>>>> origin/release/4.x
 
 ; BFI_INT Definition pattern from ISA docs
 ; (y & x) | (z & ~x)

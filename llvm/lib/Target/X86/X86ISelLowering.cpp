@@ -54,6 +54,7 @@
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Support/KnownBits.h"
 #include "llvm/Support/MathExtras.h"
+#include "llvm/Target/TargetLowering.h"
 #include "llvm/Target/TargetOptions.h"
 #include <algorithm>
 #include <bitset>
@@ -2197,18 +2198,30 @@ void X86TargetLowering::markLibCallAttributes(MachineFunction *MF, unsigned CC,
                                               ArgListTy &Args) const {
 
   // Only relabel X86-32 for C / Stdcall CCs.
+<<<<<<< HEAD
   if (Subtarget.is64Bit())
+=======
+  if (static_cast<const X86Subtarget &>(MF->getSubtarget()).is64Bit())
+>>>>>>> origin/release/4.x
     return;
   if (CC != CallingConv::C && CC != CallingConv::X86_StdCall)
     return;
   unsigned ParamRegs = 0;
+<<<<<<< HEAD
   if (auto *M = MF->getFunction().getParent())
+=======
+  if (auto *M = MF->getFunction()->getParent())
+>>>>>>> origin/release/4.x
     ParamRegs = M->getNumberRegisterParameters();
 
   // Mark the first N int arguments as having reg
   for (unsigned Idx = 0; Idx < Args.size(); Idx++) {
     Type *T = Args[Idx].Ty;
+<<<<<<< HEAD
     if (T->isIntOrPtrTy())
+=======
+    if (T->isPointerTy() || T->isIntegerTy())
+>>>>>>> origin/release/4.x
       if (MF->getDataLayout().getTypeAllocSize(T) <= 8) {
         unsigned numRegs = 1;
         if (MF->getDataLayout().getTypeAllocSize(T) > 4)
@@ -2216,7 +2229,11 @@ void X86TargetLowering::markLibCallAttributes(MachineFunction *MF, unsigned CC,
         if (ParamRegs < numRegs)
           return;
         ParamRegs -= numRegs;
+<<<<<<< HEAD
         Args[Idx].IsInReg = true;
+=======
+        Args[Idx].isInReg = true;
+>>>>>>> origin/release/4.x
       }
   }
 }
@@ -36582,7 +36599,10 @@ static SDValue combineExtractVectorElt(SDNode *N, SelectionDAG &DAG,
 
 /// If a vector select has an operand that is -1 or 0, try to simplify the
 /// select to a bitwise logic operation.
+<<<<<<< HEAD
 /// TODO: Move to DAGCombiner, possibly using TargetLowering::hasAndNot()?
+=======
+>>>>>>> origin/release/4.x
 static SDValue
 combineVSelectWithAllOnesOrZeros(SDNode *N, SelectionDAG &DAG,
                                  TargetLowering::DAGCombinerInfo &DCI,
@@ -36656,6 +36676,7 @@ combineVSelectWithAllOnesOrZeros(SDNode *N, SelectionDAG &DAG,
     }
   }
 
+<<<<<<< HEAD
   // Cond value must be 'sign splat' to be converted to a logical op.
   if (DAG.ComputeNumSignBits(Cond) != CondVT.getScalarSizeInBits())
     return SDValue();
@@ -36667,6 +36688,15 @@ combineVSelectWithAllOnesOrZeros(SDNode *N, SelectionDAG &DAG,
   if (!DCI.isBeforeLegalize() && !TLI.isTypeLegal(CondVT))
     return SDValue();
 
+=======
+  // vselect Cond, 111..., 000... -> Cond
+  if (TValIsAllOnes && FValIsAllZeros)
+    return DAG.getBitcast(VT, Cond);
+
+  if (!DCI.isBeforeLegalize() && !TLI.isTypeLegal(CondVT))
+    return SDValue();
+
+>>>>>>> origin/release/4.x
   // vselect Cond, 111..., X -> or Cond, X
   if (TValIsAllOnes) {
     SDValue CastRHS = DAG.getBitcast(CondVT, RHS);
@@ -36680,6 +36710,7 @@ combineVSelectWithAllOnesOrZeros(SDNode *N, SelectionDAG &DAG,
     SDValue And = DAG.getNode(ISD::AND, DL, CondVT, Cond, CastLHS);
     return DAG.getBitcast(VT, And);
   }
+<<<<<<< HEAD
 
   // vselect Cond, 000..., X -> andn Cond, X
   if (TValIsAllZeros) {
@@ -36724,6 +36755,10 @@ static SDValue narrowVectorSelect(SDNode *N, SelectionDAG &DAG,
   };
   return SplitOpsAndApply(DAG, Subtarget, SDLoc(N), VT, { Cond, TVal, FVal },
                           makeBlend, /*CheckBWI*/ false);
+=======
+
+  return SDValue();
+>>>>>>> origin/release/4.x
 }
 
 static SDValue combineSelectOfTwoConstants(SDNode *N, SelectionDAG &DAG) {
@@ -37224,6 +37259,7 @@ static SDValue combineSelect(SDNode *N, SelectionDAG &DAG,
     }
   }
 
+<<<<<<< HEAD
   // Match VSELECTs into add with unsigned saturation.
   if (N->getOpcode() == ISD::VSELECT && Cond.getOpcode() == ISD::SETCC &&
       // paddus is available in SSE2 for i8 and i16 vectors.
@@ -37232,6 +37268,10 @@ static SDValue combineSelect(SDNode *N, SelectionDAG &DAG,
       (VT.getVectorElementType() == MVT::i8 ||
        VT.getVectorElementType() == MVT::i16)) {
     ISD::CondCode CC = cast<CondCodeSDNode>(Cond.getOperand(2))->get();
+=======
+  if (SDValue V = combineVSelectWithAllOnesOrZeros(N, DAG, DCI, Subtarget))
+    return V;
+>>>>>>> origin/release/4.x
 
     SDValue CondLHS = Cond->getOperand(0);
     SDValue CondRHS = Cond->getOperand(1);
@@ -37404,7 +37444,16 @@ static SDValue combineSetCCAtomicArith(SDValue Cmp, X86::CondCode &CC,
   if (!CmpLHS.hasOneUse())
     return SDValue();
 
+<<<<<<< HEAD
   unsigned Opc = CmpLHS.getOpcode();
+=======
+  auto *CmpRHSC = dyn_cast<ConstantSDNode>(CmpRHS);
+  if (!CmpRHSC || CmpRHSC->getZExtValue() != 0)
+    return SDValue();
+
+  const unsigned Opc = CmpLHS.getOpcode();
+
+>>>>>>> origin/release/4.x
   if (Opc != ISD::ATOMIC_LOAD_ADD && Opc != ISD::ATOMIC_LOAD_SUB)
     return SDValue();
 
@@ -37417,6 +37466,7 @@ static SDValue combineSetCCAtomicArith(SDValue Cmp, X86::CondCode &CC,
   if (Opc == ISD::ATOMIC_LOAD_SUB)
     Addend = -Addend;
 
+<<<<<<< HEAD
   auto *CmpRHSC = dyn_cast<ConstantSDNode>(CmpRHS);
   if (!CmpRHSC)
     return SDValue();
@@ -37446,6 +37496,8 @@ static SDValue combineSetCCAtomicArith(SDValue Cmp, X86::CondCode &CC,
   if (!Comparison.isNullValue())
     return SDValue();
 
+=======
+>>>>>>> origin/release/4.x
   if (CC == X86::COND_S && Addend == 1)
     CC = X86::COND_LE;
   else if (CC == X86::COND_NS && Addend == 1)
@@ -39919,6 +39971,7 @@ static SDValue foldVectorXorShiftIntoCmp(SDNode *N, SelectionDAG &DAG,
   return DAG.getNode(X86ISD::PCMPGT, SDLoc(N), VT, Shift.getOperand(0), Ones);
 }
 
+<<<<<<< HEAD
 /// Check if truncation with saturation form type \p SrcVT to \p DstVT
 /// is valid for the given \p Subtarget.
 static bool isSATValidOnAVX512Subtarget(EVT SrcVT, EVT DstVT,
@@ -40083,6 +40136,8 @@ static SDValue combineTruncateWithSat(SDValue In, EVT VT, const SDLoc &DL,
   return SDValue();
 }
 
+=======
+>>>>>>> origin/release/4.x
 /// This function detects the AVG pattern between vectors of unsigned i8/i16,
 /// which is c = (a + b + 1) / 2, and replace this operation with the efficient
 /// X86ISD::AVG instruction.
@@ -40640,12 +40695,54 @@ static SDValue combineStore(SDNode *N, SelectionDAG &DAG,
     // Check if we can detect an AVG pattern from the truncation. If yes,
     // replace the trunc store by a normal store with the result of X86ISD::AVG
     // instruction.
+<<<<<<< HEAD
     if (DCI.isBeforeLegalize() || TLI.isTypeLegal(St->getMemoryVT()))
       if (SDValue Avg = detectAVGPattern(St->getValue(), St->getMemoryVT(), DAG,
                                          Subtarget, dl))
         return DAG.getStore(St->getChain(), dl, Avg, St->getBasePtr(),
                             St->getPointerInfo(), St->getAlignment(),
                             St->getMemOperand()->getFlags());
+=======
+    if (SDValue Avg = detectAVGPattern(St->getValue(), St->getMemoryVT(), DAG,
+                                       Subtarget, dl))
+      return DAG.getStore(St->getChain(), dl, Avg, St->getBasePtr(),
+                          St->getPointerInfo(), St->getAlignment(),
+                          St->getMemOperand()->getFlags());
+
+    const TargetLowering &TLI = DAG.getTargetLoweringInfo();
+    unsigned NumElems = VT.getVectorNumElements();
+    assert(StVT != VT && "Cannot truncate to the same type");
+    unsigned FromSz = VT.getScalarSizeInBits();
+    unsigned ToSz = StVT.getScalarSizeInBits();
+
+    // The truncating store is legal in some cases. For example
+    // vpmovqb, vpmovqw, vpmovqd, vpmovdb, vpmovdw
+    // are designated for truncate store.
+    // In this case we don't need any further transformations.
+    if (TLI.isTruncStoreLegalOrCustom(VT, StVT))
+      return SDValue();
+
+    // From, To sizes and ElemCount must be pow of two
+    if (!isPowerOf2_32(NumElems * FromSz * ToSz)) return SDValue();
+    // We are going to use the original vector elt for storing.
+    // Accumulated smaller vector elements must be a multiple of the store size.
+    if (0 != (NumElems * FromSz) % ToSz) return SDValue();
+
+    unsigned SizeRatio  = FromSz / ToSz;
+
+    assert(SizeRatio * NumElems * ToSz == VT.getSizeInBits());
+
+    // Create a type on which we perform the shuffle
+    EVT WideVecVT = EVT::getVectorVT(*DAG.getContext(),
+            StVT.getScalarType(), NumElems*SizeRatio);
+
+    assert(WideVecVT.getSizeInBits() == VT.getSizeInBits());
+
+    SDValue WideVec = DAG.getBitcast(WideVecVT, St->getValue());
+    SmallVector<int, 8> ShuffleVec(NumElems * SizeRatio, -1);
+    for (unsigned i = 0; i != NumElems; ++i)
+      ShuffleVec[i] = i * SizeRatio;
+>>>>>>> origin/release/4.x
 
     if (TLI.isTruncStoreLegal(VT, StVT)) {
       if (SDValue Val = detectSSatPattern(St->getValue(), St->getMemoryVT()))
@@ -41401,6 +41498,7 @@ static SDValue combineTruncate(SDNode *N, SelectionDAG &DAG,
   if (SDValue Avg = detectAVGPattern(Src, VT, DAG, Subtarget, DL))
     return Avg;
 
+<<<<<<< HEAD
   // Try to detect PMADD
   if (SDValue PMAdd = detectPMADDUBSW(Src, VT, DAG, Subtarget, DL))
     return PMAdd;
@@ -41413,6 +41511,8 @@ static SDValue combineTruncate(SDNode *N, SelectionDAG &DAG,
   if (SDValue V = combinePMULH(Src, VT, DL, DAG, Subtarget))
     return V;
 
+=======
+>>>>>>> origin/release/4.x
   // The bitcast source is a direct mmx result.
   // Detect bitcasts between i32 to x86mmx
   if (Src.getOpcode() == ISD::BITCAST && VT == MVT::i32) {
@@ -44127,6 +44227,7 @@ static SDValue combineSub(SDNode *N, SelectionDAG &DAG,
   }
 
   // Try to synthesize horizontal subs from subs of shuffles.
+<<<<<<< HEAD
   EVT VT = N->getValueType(0);
   if ((VT == MVT::v8i16 || VT == MVT::v4i32 || VT == MVT::v16i16 ||
        VT == MVT::v8i32) &&
@@ -44485,6 +44586,13 @@ static SDValue combineExtractSubvector(SDNode *N, SelectionDAG &DAG,
   // insert/extract and 'not'.
   // This pattern emerges during AVX1 legalization. We handle it before lowering
   // to avoid complications like splitting constant vector loads.
+=======
+  EVT VT = N->getValueType(0);
+  if (((Subtarget.hasSSSE3() && (VT == MVT::v8i16 || VT == MVT::v4i32)) ||
+       (Subtarget.hasInt256() && (VT == MVT::v16i16 || VT == MVT::v8i32))) &&
+      isHorizontalBinOp(Op0, Op1, false))
+    return DAG.getNode(X86ISD::HSUB, SDLoc(N), VT, Op0, Op1);
+>>>>>>> origin/release/4.x
 
   // Capture the original wide type in the likely case that we need to bitcast
   // back to this type.
@@ -45906,6 +46014,7 @@ X86TargetLowering::getRegForInlineAsmConstraint(const TargetRegisterInfo *TRI,
     if (StringRef("{dirflag}").equals_lower(Constraint))
       return std::make_pair(X86::DF, &X86::DFCCRRegClass);
 
+<<<<<<< HEAD
     // fpsr -> FPSW
     if (StringRef("{fpsr}").equals_lower(Constraint))
       return std::make_pair(X86::FPSW, &X86::FPCCRRegClass);
@@ -45919,6 +46028,20 @@ X86TargetLowering::getRegForInlineAsmConstraint(const TargetRegisterInfo *TRI,
       assert((Subtarget.is32Bit() || Subtarget.is16Bit()) &&
              "Expecting 64, 32 or 16 bit subtarget");
       return std::make_pair(X86::EAX, &X86::GR32_ADRegClass);
+=======
+    // 'A' means [ER]AX + [ER]DX.
+    if (Constraint == "A") {
+      if (Subtarget.is64Bit()) {
+        Res.first = X86::RAX;
+        Res.second = &X86::GR64_ADRegClass;
+      } else {
+        assert((Subtarget.is32Bit() || Subtarget.is16Bit()) &&
+               "Expecting 64, 32 or 16 bit subtarget");
+        Res.first = X86::EAX;
+        Res.second = &X86::GR32_ADRegClass;
+      }
+      return Res;
+>>>>>>> origin/release/4.x
     }
 >>>>>>> release/8.x
     return Res;

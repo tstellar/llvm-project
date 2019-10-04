@@ -254,10 +254,19 @@ static void combineKnownMetadata(Instruction *ReplInst, Instruction *I) {
 // cases reduce critical path (by exposing more ILP).
 class GVNHoist {
 public:
+<<<<<<< HEAD
   GVNHoist(DominatorTree *DT, PostDominatorTree *PDT, AliasAnalysis *AA,
            MemoryDependenceResults *MD, MemorySSA *MSSA)
       : DT(DT), PDT(PDT), AA(AA), MD(MD), MSSA(MSSA),
         MSSAUpdater(std::make_unique<MemorySSAUpdater>(MSSA)) {}
+=======
+  GVNHoist(DominatorTree *DT, AliasAnalysis *AA, MemoryDependenceResults *MD,
+           MemorySSA *MSSA)
+      : DT(DT), AA(AA), MD(MD), MSSA(MSSA),
+        HoistingGeps(false),
+        HoistedCtr(0)
+  { }
+>>>>>>> origin/release/4.x
 
   bool run(Function &F) {
     NumFuncArgs = F.arg_size();
@@ -332,7 +341,11 @@ private:
   AliasAnalysis *AA;
   MemoryDependenceResults *MD;
   MemorySSA *MSSA;
+<<<<<<< HEAD
   std::unique_ptr<MemorySSAUpdater> MSSAUpdater;
+=======
+  const bool HoistingGeps;
+>>>>>>> origin/release/4.x
   DenseMap<const Value *, unsigned> DFSNumber;
   BBSideEffectsSet BBSideEffects;
   DenseSet<const BasicBlock *> HoistBarrier;
@@ -559,8 +572,14 @@ private:
   // WL to HoistBB.
   bool safeToHoistScalar(const BasicBlock *HoistBB, const BasicBlock *BB,
                          int &NBBsOnAllPaths) {
+<<<<<<< HEAD
     return !hasEHOnPath(HoistBB, BB, NBBsOnAllPaths);
   }
+=======
+    // Check that the hoisted expression is needed on all paths.
+    if (!hoistingFromAllPaths(HoistBB, WL))
+      return false;
+>>>>>>> origin/release/4.x
 
   // In the inverse CFG, the dominance frontier of basic block (BB) is the
   // point where ANTIC needs to be computed for instructions which are going
@@ -1155,7 +1174,11 @@ public:
     auto &MD = getAnalysis<MemoryDependenceWrapperPass>().getMemDep();
     auto &MSSA = getAnalysis<MemorySSAWrapperPass>().getMSSA();
 
+<<<<<<< HEAD
     GVNHoist G(&DT, &PDT, &AA, &MD, &MSSA);
+=======
+    GVNHoist G(&DT, &AA, &MD, &MSSA);
+>>>>>>> origin/release/4.x
     return G.run(F);
   }
 
@@ -1179,7 +1202,11 @@ PreservedAnalyses GVNHoistPass::run(Function &F, FunctionAnalysisManager &AM) {
   AliasAnalysis &AA = AM.getResult<AAManager>(F);
   MemoryDependenceResults &MD = AM.getResult<MemoryDependenceAnalysis>(F);
   MemorySSA &MSSA = AM.getResult<MemorySSAAnalysis>(F).getMSSA();
+<<<<<<< HEAD
   GVNHoist G(&DT, &PDT, &AA, &MD, &MSSA);
+=======
+  GVNHoist G(&DT, &AA, &MD, &MSSA);
+>>>>>>> origin/release/4.x
   if (!G.run(F))
     return PreservedAnalyses::all();
 

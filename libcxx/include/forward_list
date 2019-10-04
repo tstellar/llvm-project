@@ -766,11 +766,20 @@ public:
     _LIBCPP_INLINE_VISIBILITY
     const_reference front() const {return base::__before_begin()->__next_->__value_;}
 
+<<<<<<< HEAD
 #ifndef _LIBCPP_CXX03_LANG
+=======
+#ifndef _LIBCPP_HAS_NO_RVALUE_REFERENCES
+#ifndef _LIBCPP_HAS_NO_VARIADICS
+>>>>>>> origin/release/4.x
 #if _LIBCPP_STD_VER > 14
     template <class... _Args> reference emplace_front(_Args&&... __args);
 #else
     template <class... _Args> void      emplace_front(_Args&&... __args);
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> origin/release/4.x
 #endif
     void push_front(value_type&& __v);
 #endif  // _LIBCPP_CXX03_LANG

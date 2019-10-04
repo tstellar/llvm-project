@@ -25,7 +25,11 @@ foo:
 # CHECK-NEXT:     SHF_MIPS_GPREL
 # CHECK-NEXT:     SHF_WRITE
 # CHECK-NEXT:   ]
+<<<<<<< HEAD
 # CHECK-NEXT:   Address: 0xF0
+=======
+# CHECK-NEXT:   Address: 0xE0
+>>>>>>> origin/release/4.x
 # CHECK:      }
 # CHECK:      Section {
 # CHECK:        Name: .got
@@ -39,5 +43,10 @@ foo:
 # CHECK:      }
 
 # CHECK:      Name: _gp (5)
+<<<<<<< HEAD
 # CHECK-NEXT: Value: 0x80E0
 #                    ^-- 0xF0 + 0x7ff0
+=======
+# CHECK-NEXT: Value: 0x80D0
+#                    ^-- 0xE0 + 0x7ff0
+>>>>>>> origin/release/4.x

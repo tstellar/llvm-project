@@ -924,7 +924,11 @@ class Sema;
     SourceLocation getLocation() const { return Loc; }
     CandidateSetKind getKind() const { return Kind; }
 
+<<<<<<< HEAD
     /// Determine when this overload candidate will be new to the
+=======
+    /// \brief Determine when this overload candidate will be new to the
+>>>>>>> origin/release/4.x
     /// overload set.
     bool isNewCandidate(Decl *F) {
       return Functions.insert(F->getCanonicalDecl()).second;

@@ -59,7 +59,12 @@ add_lld_library(lldELF
   Support
 
   LINK_LIBS
+<<<<<<< HEAD
   lldCommon
+=======
+  lldConfig
+  lldCore
+>>>>>>> origin/release/4.x
   ${LLVM_PTHREAD_LIB}
 
   DEPENDS
