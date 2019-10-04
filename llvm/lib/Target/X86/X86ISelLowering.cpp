@@ -45585,6 +45585,17 @@ X86TargetLowering::getRegForInlineAsmConstraint(const TargetRegisterInfo *TRI,
     if (StringRef("{fpsr}").equals_lower(Constraint))
       return std::make_pair(X86::FPSW, &X86::FPCCRRegClass);
 
+<<<<<<< HEAD
+=======
+    // 'A' means [ER]AX + [ER]DX.
+    if (Constraint == "A") {
+      if (Subtarget.is64Bit())
+        return std::make_pair(X86::RAX, &X86::GR64_ADRegClass);
+      assert((Subtarget.is32Bit() || Subtarget.is16Bit()) &&
+             "Expecting 64, 32 or 16 bit subtarget");
+      return std::make_pair(X86::EAX, &X86::GR32_ADRegClass);
+    }
+>>>>>>> release/8.x
     return Res;
   }
 

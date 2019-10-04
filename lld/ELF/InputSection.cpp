@@ -251,9 +251,15 @@ void InputSectionBase::parseCompressedHeader() {
       return;
     }
 
+<<<<<<< HEAD
     uncompressedSize = hdr->ch_size;
     alignment = std::max<uint32_t>(hdr->ch_addralign, 1);
     rawData = rawData.slice(sizeof(*hdr));
+=======
+    UncompressedSize = Hdr->ch_size;
+    Alignment = std::max<uint64_t>(Hdr->ch_addralign, 1);
+    RawData = RawData.slice(sizeof(*Hdr));
+>>>>>>> release/8.x
     return;
   }
 
@@ -269,9 +275,15 @@ void InputSectionBase::parseCompressedHeader() {
     return;
   }
 
+<<<<<<< HEAD
   uncompressedSize = hdr->ch_size;
   alignment = std::max<uint32_t>(hdr->ch_addralign, 1);
   rawData = rawData.slice(sizeof(*hdr));
+=======
+  UncompressedSize = Hdr->ch_size;
+  Alignment = std::max<uint64_t>(Hdr->ch_addralign, 1);
+  RawData = RawData.slice(sizeof(*Hdr));
+>>>>>>> release/8.x
 }
 
 InputSection *InputSectionBase::getLinkOrderDep() const {
@@ -624,6 +636,7 @@ static int64_t getTlsTpOffset(const Symbol &s) {
     // Variant 1.
   case EM_ARM:
   case EM_AARCH64:
+<<<<<<< HEAD
     return s.getVA(0) + config->wordsize * 2 +
            ((tls->p_vaddr - config->wordsize * 2) & (tls->p_align - 1));
   case EM_MIPS:
@@ -637,6 +650,12 @@ static int64_t getTlsTpOffset(const Symbol &s) {
     return s.getVA(0) + (tls->p_vaddr & (tls->p_align - 1));
 
     // Variant 2.
+=======
+    // Variant 1. The thread pointer points to a TCB with a fixed 2-word size,
+    // followed by a variable amount of alignment padding, followed by the TLS
+    // segment.
+    return alignTo(Config->Wordsize * 2, Out::TlsPhdr->p_align);
+>>>>>>> release/8.x
   case EM_386:
   case EM_X86_64:
     return s.getVA(0) - tls->p_memsz -

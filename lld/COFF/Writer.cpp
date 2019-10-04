@@ -337,6 +337,7 @@ void OutputSection::addContributingPartialSection(PartialSection *sec) {
 } // namespace lld
 
 // Check whether the target address S is in range from a relocation
+<<<<<<< HEAD
 // of type relType at address P.
 static bool isInRange(uint16_t relType, uint64_t s, uint64_t p, int margin) {
   if (config->machine == ARMNT) {
@@ -359,6 +360,30 @@ static bool isInRange(uint16_t relType, uint64_t s, uint64_t p, int margin) {
       return isInt<21>(diff);
     case IMAGE_REL_ARM64_BRANCH14:
       return isInt<16>(diff);
+=======
+// of type RelType at address P.
+static bool isInRange(uint16_t RelType, uint64_t S, uint64_t P, int Margin) {
+  if (Config->Machine == ARMNT) {
+    int64_t Diff = AbsoluteDifference(S, P + 4) + Margin;
+    switch (RelType) {
+    case IMAGE_REL_ARM_BRANCH20T:
+      return isInt<21>(Diff);
+    case IMAGE_REL_ARM_BRANCH24T:
+    case IMAGE_REL_ARM_BLX23T:
+      return isInt<25>(Diff);
+    default:
+      return true;
+    }
+  } else if (Config->Machine == ARM64) {
+    int64_t Diff = AbsoluteDifference(S, P) + Margin;
+    switch (RelType) {
+    case IMAGE_REL_ARM64_BRANCH26:
+      return isInt<28>(Diff);
+    case IMAGE_REL_ARM64_BRANCH19:
+      return isInt<21>(Diff);
+    case IMAGE_REL_ARM64_BRANCH14:
+      return isInt<16>(Diff);
+>>>>>>> release/8.x
     default:
       return true;
     }
@@ -370,6 +395,7 @@ static bool isInRange(uint16_t relType, uint64_t s, uint64_t p, int margin) {
 // Return the last thunk for the given target if it is in range,
 // or create a new one.
 static std::pair<Defined *, bool>
+<<<<<<< HEAD
 getThunk(DenseMap<uint64_t, Defined *> &lastThunks, Defined *target, uint64_t p,
          uint16_t type, int margin) {
   Defined *&lastThunk = lastThunks[target->getRVA()];
@@ -382,13 +408,33 @@ getThunk(DenseMap<uint64_t, Defined *> &lastThunks, Defined *target, uint64_t p,
     break;
   case ARM64:
     c = make<RangeExtensionThunkARM64>(target);
+=======
+getThunk(DenseMap<uint64_t, Defined *> &LastThunks, Defined *Target, uint64_t P,
+         uint16_t Type, int Margin) {
+  Defined *&LastThunk = LastThunks[Target->getRVA()];
+  if (LastThunk && isInRange(Type, LastThunk->getRVA(), P, Margin))
+    return {LastThunk, false};
+  Chunk *C;
+  switch (Config->Machine) {
+  case ARMNT:
+    C = make<RangeExtensionThunkARM>(Target);
+    break;
+  case ARM64:
+    C = make<RangeExtensionThunkARM64>(Target);
+>>>>>>> release/8.x
     break;
   default:
     llvm_unreachable("Unexpected architecture");
   }
+<<<<<<< HEAD
   Defined *d = make<DefinedSynthetic>("", c);
   lastThunk = d;
   return {d, true};
+=======
+  Defined *D = make<DefinedSynthetic>("", C);
+  LastThunk = D;
+  return {D, true};
+>>>>>>> release/8.x
 }
 
 // This checks all relocations, and for any relocation which isn't in range
@@ -402,6 +448,7 @@ getThunk(DenseMap<uint64_t, Defined *> &lastThunks, Defined *target, uint64_t p,
 // After adding thunks, we verify that all relocations are in range (with
 // no extra margin requirements). If this failed, we restart (throwing away
 // the previously created thunks) and retry with a wider margin.
+<<<<<<< HEAD
 static bool createThunks(OutputSection *os, int margin) {
   bool addressesChanged = false;
   DenseMap<uint64_t, Defined *> lastThunks;
@@ -412,6 +459,17 @@ static bool createThunks(OutputSection *os, int margin) {
   for (size_t i = 0; i != os->chunks.size(); ++i) {
     SectionChunk *sc = dyn_cast_or_null<SectionChunk>(os->chunks[i]);
     if (!sc)
+=======
+static bool createThunks(OutputSection *OS, int Margin) {
+  bool AddressesChanged = false;
+  DenseMap<uint64_t, Defined *> LastThunks;
+  size_t ThunksSize = 0;
+  // Recheck Chunks.size() each iteration, since we can insert more
+  // elements into it.
+  for (size_t I = 0; I != OS->Chunks.size(); ++I) {
+    SectionChunk *SC = dyn_cast_or_null<SectionChunk>(OS->Chunks[I]);
+    if (!SC)
+>>>>>>> release/8.x
       continue;
     size_t thunkInsertionSpot = i + 1;
 
@@ -444,6 +502,7 @@ static bool createThunks(OutputSection *os, int margin) {
 
       // If the target isn't in range, hook it up to an existing or new
       // thunk.
+<<<<<<< HEAD
       Defined *thunk;
       bool wasNew;
       std::tie(thunk, wasNew) = getThunk(lastThunks, sym, p, rel.Type, margin);
@@ -456,6 +515,21 @@ static bool createThunks(OutputSection *os, int margin) {
         thunksSize += thunkChunk->getSize();
         thunkInsertionRVA += thunkChunk->getSize();
         addressesChanged = true;
+=======
+      Defined *Thunk;
+      bool WasNew;
+      std::tie(Thunk, WasNew) = getThunk(LastThunks, Sym, P, Rel.Type, Margin);
+      if (WasNew) {
+        Chunk *ThunkChunk = Thunk->getChunk();
+        ThunkChunk->setRVA(
+            ThunkInsertionRVA); // Estimate of where it will be located.
+        ThunkChunk->setOutputSection(OS);
+        OS->Chunks.insert(OS->Chunks.begin() + ThunkInsertionSpot, ThunkChunk);
+        ThunkInsertionSpot++;
+        ThunksSize += ThunkChunk->getSize();
+        ThunkInsertionRVA += ThunkChunk->getSize();
+        AddressesChanged = true;
+>>>>>>> release/8.x
       }
 
       // To redirect the relocation, add a symbol to the parent object file's
@@ -529,7 +603,11 @@ static bool verifyRanges(const std::vector<Chunk *> chunks) {
 // Assign addresses and add thunks if necessary.
 void Writer::finalizeAddresses() {
   assignAddresses();
+<<<<<<< HEAD
   if (config->machine != ARMNT && config->machine != ARM64)
+=======
+  if (Config->Machine != ARMNT && Config->Machine != ARM64)
+>>>>>>> release/8.x
     return;
 
   size_t origNumChunks = 0;
@@ -573,9 +651,15 @@ void Writer::finalizeAddresses() {
 
     // Try adding thunks everywhere where it is needed, with a margin
     // to avoid things going out of range due to the added thunks.
+<<<<<<< HEAD
     bool addressesChanged = false;
     for (OutputSection *sec : outputSections)
       addressesChanged |= createThunks(sec, margin);
+=======
+    bool AddressesChanged = false;
+    for (OutputSection *Sec : OutputSections)
+      AddressesChanged |= createThunks(Sec, Margin);
+>>>>>>> release/8.x
     // If the verification above thought we needed thunks, we should have
     // added some.
     assert(addressesChanged);
@@ -1501,12 +1585,21 @@ static void addSymbolToRVASet(SymbolRVASet &rvaSet, Defined *s) {
 
 // Given a symbol, add it to the GFIDs table if it is a live, defined, function
 // symbol in an executable section.
+<<<<<<< HEAD
 static void maybeAddAddressTakenFunction(SymbolRVASet &addressTakenSyms,
                                          Symbol *s) {
   if (!s)
     return;
 
   switch (s->kind()) {
+=======
+static void maybeAddAddressTakenFunction(SymbolRVASet &AddressTakenSyms,
+                                         Symbol *S) {
+  if (!S)
+    return;
+
+  switch (S->kind()) {
+>>>>>>> release/8.x
   case Symbol::DefinedLocalImportKind:
   case Symbol::DefinedImportDataKind:
     // Defines an __imp_ pointer, so it is data, so it is ignored.
@@ -1519,8 +1612,12 @@ static void maybeAddAddressTakenFunction(SymbolRVASet &addressTakenSyms,
     // Absolute is never code, synthetic generally isn't and usually isn't
     // determinable.
     break;
+<<<<<<< HEAD
   case Symbol::LazyArchiveKind:
   case Symbol::LazyObjectKind:
+=======
+  case Symbol::LazyKind:
+>>>>>>> release/8.x
   case Symbol::UndefinedKind:
     // Undefined symbols resolve to zero, so they don't have an RVA. Lazy
     // symbols shouldn't have relocations.
@@ -1528,19 +1625,32 @@ static void maybeAddAddressTakenFunction(SymbolRVASet &addressTakenSyms,
 
   case Symbol::DefinedImportThunkKind:
     // Thunks are always code, include them.
+<<<<<<< HEAD
     addSymbolToRVASet(addressTakenSyms, cast<Defined>(s));
+=======
+    addSymbolToRVASet(AddressTakenSyms, cast<Defined>(S));
+>>>>>>> release/8.x
     break;
 
   case Symbol::DefinedRegularKind: {
     // This is a regular, defined, symbol from a COFF file. Mark the symbol as
     // address taken if the symbol type is function and it's in an executable
     // section.
+<<<<<<< HEAD
     auto *d = cast<DefinedRegular>(s);
     if (d->getCOFFSymbol().getComplexType() == COFF::IMAGE_SYM_DTYPE_FUNCTION) {
       SectionChunk *sc = dyn_cast<SectionChunk>(d->getChunk());
       if (sc && sc->live &&
           sc->getOutputCharacteristics() & IMAGE_SCN_MEM_EXECUTE)
         addSymbolToRVASet(addressTakenSyms, d);
+=======
+    auto *D = cast<DefinedRegular>(S);
+    if (D->getCOFFSymbol().getComplexType() == COFF::IMAGE_SYM_DTYPE_FUNCTION) {
+      Chunk *RefChunk = D->getChunk();
+      OutputSection *OS = RefChunk ? RefChunk->getOutputSection() : nullptr;
+      if (OS && OS->Header.Characteristics & IMAGE_SCN_MEM_EXECUTE)
+        addSymbolToRVASet(AddressTakenSyms, D);
+>>>>>>> release/8.x
     }
     break;
   }

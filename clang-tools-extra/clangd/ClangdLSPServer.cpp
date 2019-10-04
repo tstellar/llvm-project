@@ -481,10 +481,13 @@ void ClangdLSPServer::onInitialize(const InitializeParams &Params,
   if (UseDirBasedCDB) {
     BaseCDB = std::make_unique<DirectoryBasedGlobalCompilationDatabase>(
         CompileCommandsDir);
+<<<<<<< HEAD
     BaseCDB = getQueryDriverDatabase(
         llvm::makeArrayRef(ClangdServerOpts.QueryDriverGlobs),
         std::move(BaseCDB));
   }
+=======
+>>>>>>> release/8.x
   CDB.emplace(BaseCDB.get(), Params.initializationOptions.fallbackFlags,
               ClangdServerOpts.ResourceDir);
   Server.emplace(*CDB, FSProvider, static_cast<DiagnosticsConsumer &>(*this),

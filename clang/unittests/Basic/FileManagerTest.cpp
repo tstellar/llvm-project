@@ -218,6 +218,7 @@ TEST_F(FileManagerTest, getFileReturnsErrorForNonexistentFile) {
   // Create a virtual bar.cpp file.
   manager.getVirtualFile("bar.cpp", 200, 0);
 
+<<<<<<< HEAD
   auto file = manager.getFile("xyz.txt");
   ASSERT_FALSE(file);
   ASSERT_EQ(file.getError(), std::errc::no_such_file_or_directory);
@@ -229,6 +230,10 @@ TEST_F(FileManagerTest, getFileReturnsErrorForNonexistentFile) {
   auto readingFileAsDir = manager.getDirectory("foo.cpp");
   ASSERT_FALSE(readingFileAsDir);
   ASSERT_EQ(readingFileAsDir.getError(), std::errc::not_a_directory);
+=======
+  const FileEntry *file = manager.getFile("xyz.txt");
+  EXPECT_EQ(nullptr, file);
+>>>>>>> release/8.x
 }
 
 // The following tests apply to Unix-like system only.

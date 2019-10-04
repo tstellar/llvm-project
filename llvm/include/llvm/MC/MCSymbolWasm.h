@@ -18,7 +18,10 @@ class MCSymbolWasm : public MCSymbol {
   bool IsWeak = false;
   bool IsHidden = false;
   bool IsComdat = false;
+<<<<<<< HEAD
   mutable bool IsUsedInGOT = false;
+=======
+>>>>>>> release/8.x
   Optional<std::string> ImportModule;
   Optional<std::string> ImportName;
   wasm::WasmSignature *Signature = nullptr;
@@ -85,9 +88,12 @@ public:
       return getName();
   }
   void setImportName(StringRef Name) { ImportName = Name; }
+<<<<<<< HEAD
 
   void setUsedInGOT() const { IsUsedInGOT = true; }
   bool isUsedInGOT() const { return IsUsedInGOT; }
+=======
+>>>>>>> release/8.x
 
   const wasm::WasmSignature *getSignature() const { return Signature; }
   void setSignature(wasm::WasmSignature *Sig) { Signature = Sig; }

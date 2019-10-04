@@ -1800,12 +1800,60 @@ void CodeGenFunction::EmitAutoVarInit(const AutoVarEmission &emission) {
     // Only initialize a __block's storage: we always initialize the header.
     if (emission.IsEscapingByRef && !locIsByrefHeader)
       Loc = emitBlockByrefAddress(Loc, &D, /*follow=*/false);
+<<<<<<< HEAD
+=======
+
+    CharUnits Size = getContext().getTypeSizeInChars(type);
+    if (!Size.isZero()) {
+      switch (trivialAutoVarInit) {
+      case LangOptions::TrivialAutoVarInitKind::Uninitialized:
+        llvm_unreachable("Uninitialized handled above");
+      case LangOptions::TrivialAutoVarInitKind::Zero:
+        emitStoresForZeroInit(CGM, D, Loc, isVolatile, Builder);
+        break;
+      case LangOptions::TrivialAutoVarInitKind::Pattern:
+        emitStoresForPatternInit(CGM, D, Loc, isVolatile, Builder);
+        break;
+      }
+      return;
+    }
+
+    // VLAs look zero-sized to getTypeInfo. We can't emit constant stores to
+    // them, so emit a memcpy with the VLA size to initialize each element.
+    // Technically zero-sized or negative-sized VLAs are undefined, and UBSan
+    // will catch that code, but there exists code which generates zero-sized
+    // VLAs. Be nice and initialize whatever they requested.
+    const VariableArrayType *VlaType =
+        dyn_cast_or_null<VariableArrayType>(getContext().getAsArrayType(type));
+    if (!VlaType)
+      return;
+    auto VlaSize = getVLASize(VlaType);
+    auto SizeVal = VlaSize.NumElts;
+    CharUnits EltSize = getContext().getTypeSizeInChars(VlaSize.Type);
+    switch (trivialAutoVarInit) {
+    case LangOptions::TrivialAutoVarInitKind::Uninitialized:
+      llvm_unreachable("Uninitialized handled above");
+
+    case LangOptions::TrivialAutoVarInitKind::Zero:
+      if (!EltSize.isOne())
+        SizeVal = Builder.CreateNUWMul(SizeVal, CGM.getSize(EltSize));
+      Builder.CreateMemSet(Loc, llvm::ConstantInt::get(Int8Ty, 0), SizeVal,
+                           isVolatile);
+      break;
+>>>>>>> release/8.x
 
     return emitZeroOrPatternForAutoVarInit(type, D, Loc);
   };
 
+<<<<<<< HEAD
   if (isTrivialInitializer(Init))
     return initializeWhatIsTechnicallyUninitialized(Loc);
+=======
+  if (isTrivialInitializer(Init)) {
+    initializeWhatIsTechnicallyUninitialized(Loc);
+    return;
+  }
+>>>>>>> release/8.x
 
   llvm::Constant *constant = nullptr;
   if (emission.IsConstantAggregate ||
@@ -1847,7 +1895,11 @@ void CodeGenFunction::EmitAutoVarInit(const AutoVarEmission &emission) {
   llvm::Type *BP = CGM.Int8Ty->getPointerTo(Loc.getAddressSpace());
   emitStoresForConstant(
       CGM, D, (Loc.getType() == BP) ? Loc : Builder.CreateBitCast(Loc, BP),
+<<<<<<< HEAD
       type.isVolatileQualified(), Builder, constant);
+=======
+      isVolatile, Builder, constant);
+>>>>>>> release/8.x
 }
 
 /// Emit an expression as an initializer for an object (variable, field, etc.)

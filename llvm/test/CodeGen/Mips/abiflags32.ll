@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 ; RUN: llc -filetype=asm -mtriple mipsel-unknown-linux \
 ; RUN:     -mcpu=mips32 %s -o - | FileCheck %s
 ; RUN: llc -filetype=asm -mtriple mipsel-unknown-linux \
 ; RUN:     -mcpu=mips32r2 -mattr=fp64 %s -o - | FileCheck -check-prefix=CHECK-64 %s
 ; RUN: llc -filetype=asm -mtriple mipsel-unknown-linux \
 ; RUN:     -mcpu=mips64 -target-abi n32 %s -o - | FileCheck -check-prefix=CHECK-64n %s
+=======
+; RUN: llc -filetype=asm -mtriple mipsel-unknown-linux -mcpu=mips32 %s -o - | FileCheck %s
+; RUN: llc -filetype=asm -mtriple mipsel-unknown-linux -mcpu=mips32 -mattr=fp64 %s -o - | FileCheck  -check-prefix=CHECK-64 %s
+; RUN: llc -filetype=asm -mtriple mipsel-unknown-linux -mcpu=mips64 -target-abi n32 %s -o - | FileCheck  -check-prefix=CHECK-64n %s
+>>>>>>> release/8.x
 ; RUN: llc -filetype=asm -mtriple mipsel-unknown-linux -mcpu=mips32 \
 ; RUN:     -mattr=soft-float %s -o - | FileCheck  -check-prefix=SOFT %s
 ; RUN: llc -filetype=asm -mtriple mipsel-unknown-linux -mcpu=mips32r6 \

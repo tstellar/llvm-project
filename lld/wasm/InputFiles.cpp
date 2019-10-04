@@ -430,6 +430,7 @@ Symbol *ObjFile::createUndefined(const WasmSymbol &sym, bool isCalledDirectly) {
 
   switch (sym.Info.Kind) {
   case WASM_SYMBOL_TYPE_FUNCTION:
+<<<<<<< HEAD
     if (sym.isBindingLocal())
       return make<UndefinedFunction>(name, sym.Info.ImportName,
                                      sym.Info.ImportModule, flags, this,
@@ -437,11 +438,17 @@ Symbol *ObjFile::createUndefined(const WasmSymbol &sym, bool isCalledDirectly) {
     return symtab->addUndefinedFunction(name, sym.Info.ImportName,
                                         sym.Info.ImportModule, flags, this,
                                         sym.Signature, isCalledDirectly);
+=======
+    return Symtab->addUndefinedFunction(Name, Sym.Info.ImportName,
+                                        Sym.Info.ImportModule, Flags, this,
+                                        Sym.Signature);
+>>>>>>> release/8.x
   case WASM_SYMBOL_TYPE_DATA:
     if (sym.isBindingLocal())
       return make<UndefinedData>(name, flags, this);
     return symtab->addUndefinedData(name, flags, this);
   case WASM_SYMBOL_TYPE_GLOBAL:
+<<<<<<< HEAD
     if (sym.isBindingLocal())
       return make<UndefinedGlobal>(name, sym.Info.ImportName,
                                    sym.Info.ImportModule, flags, this,
@@ -449,6 +456,11 @@ Symbol *ObjFile::createUndefined(const WasmSymbol &sym, bool isCalledDirectly) {
     return symtab->addUndefinedGlobal(name, sym.Info.ImportName,
                                       sym.Info.ImportModule, flags, this,
                                       sym.GlobalType);
+=======
+    return Symtab->addUndefinedGlobal(Name, Sym.Info.ImportName,
+                                      Sym.Info.ImportModule, Flags, this,
+                                      Sym.GlobalType);
+>>>>>>> release/8.x
   case WASM_SYMBOL_TYPE_SECTION:
     llvm_unreachable("section symbols cannot be undefined");
   }
@@ -513,12 +525,20 @@ static Symbol *createBitcodeSymbol(const std::vector<bool> &keptComdats,
   int c = objSym.getComdatIndex();
   bool excludedByComdat = c != -1 && !keptComdats[c];
 
+<<<<<<< HEAD
   if (objSym.isUndefined() || excludedByComdat) {
     flags |= WASM_SYMBOL_UNDEFINED;
     if (objSym.isExecutable())
       return symtab->addUndefinedFunction(name, name, defaultModule, flags, &f,
                                           nullptr, true);
     return symtab->addUndefinedData(name, flags, &f);
+=======
+  if (ObjSym.isUndefined()) {
+    if (ObjSym.isExecutable())
+      return Symtab->addUndefinedFunction(Name, Name, DefaultModule, Flags, &F,
+                                          nullptr);
+    return Symtab->addUndefinedData(Name, Flags, &F);
+>>>>>>> release/8.x
   }
 
   if (objSym.isExecutable())

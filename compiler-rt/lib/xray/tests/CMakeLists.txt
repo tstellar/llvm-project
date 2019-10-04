@@ -48,9 +48,13 @@ endfunction()
 
 set(XRAY_TEST_ARCH ${XRAY_SUPPORTED_ARCH})
 set(XRAY_UNITTEST_LINK_FLAGS
+<<<<<<< HEAD
   ${COMPILER_RT_UNITTEST_LINK_FLAGS}
   ${CMAKE_THREAD_LIBS_INIT}
   )
+=======
+  ${CMAKE_THREAD_LIBS_INIT})
+>>>>>>> release/8.x
 
 if (NOT APPLE)
   # Needed by LLVMSupport.
@@ -82,9 +86,13 @@ if (NOT APPLE)
   append_list_if(COMPILER_RT_HAS_LIBEXECINFO -lexecinfo XRAY_UNITTEST_LINK_FLAGS)
 endif()
 
+<<<<<<< HEAD
 foreach(lib ${SANITIZER_TEST_CXX_LIBRARIES})
   list(APPEND XRAY_UNITTEST_LINK_FLAGS -l${lib})
 endforeach()
+=======
+list(APPEND XRAY_UNITTEST_LINK_FLAGS -l${SANITIZER_CXX_ABI_LIBRARY})
+>>>>>>> release/8.x
 
 macro(add_xray_unittest testname)
   cmake_parse_arguments(TEST "" "" "SOURCES;HEADERS" ${ARGN})

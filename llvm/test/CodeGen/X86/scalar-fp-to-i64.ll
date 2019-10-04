@@ -1031,7 +1031,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; AVX512_32_WIN-NEXT:    fsub %st(1), %st
 ; AVX512_32_WIN-NEXT:    xorl %edx, %edx
 ; AVX512_32_WIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; AVX512_32_WIN-NEXT:    fucompi %st(2), %st
+=======
+; AVX512_32_WIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; AVX512_32_WIN-NEXT:    fcmovnbe %st(1), %st
 ; AVX512_32_WIN-NEXT:    fstp %st(1)
 ; AVX512_32_WIN-NEXT:    fisttpll (%esp)
@@ -1052,7 +1056,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; AVX512_32_LIN-NEXT:    fsub %st(1), %st
 ; AVX512_32_LIN-NEXT:    xorl %edx, %edx
 ; AVX512_32_LIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; AVX512_32_LIN-NEXT:    fucompi %st(2), %st
+=======
+; AVX512_32_LIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; AVX512_32_LIN-NEXT:    fcmovnbe %st(1), %st
 ; AVX512_32_LIN-NEXT:    fstp %st(1)
 ; AVX512_32_LIN-NEXT:    fisttpll (%esp)
@@ -1072,7 +1080,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; AVX512_64_WIN-NEXT:    fsub %st(1), %st
 ; AVX512_64_WIN-NEXT:    xorl %eax, %eax
 ; AVX512_64_WIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; AVX512_64_WIN-NEXT:    fucompi %st(2), %st
+=======
+; AVX512_64_WIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; AVX512_64_WIN-NEXT:    fcmovnbe %st(1), %st
 ; AVX512_64_WIN-NEXT:    fstp %st(1)
 ; AVX512_64_WIN-NEXT:    fisttpll (%rsp)
@@ -1090,7 +1102,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; AVX512_64_LIN-NEXT:    fsub %st(1), %st
 ; AVX512_64_LIN-NEXT:    xorl %eax, %eax
 ; AVX512_64_LIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; AVX512_64_LIN-NEXT:    fucompi %st(2), %st
+=======
+; AVX512_64_LIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; AVX512_64_LIN-NEXT:    fcmovnbe %st(1), %st
 ; AVX512_64_LIN-NEXT:    fstp %st(1)
 ; AVX512_64_LIN-NEXT:    fisttpll -{{[0-9]+}}(%rsp)
@@ -1111,7 +1127,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; SSE3_32_WIN-NEXT:    fsub %st(1), %st
 ; SSE3_32_WIN-NEXT:    xorl %edx, %edx
 ; SSE3_32_WIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; SSE3_32_WIN-NEXT:    fucompi %st(2), %st
+=======
+; SSE3_32_WIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; SSE3_32_WIN-NEXT:    fcmovnbe %st(1), %st
 ; SSE3_32_WIN-NEXT:    fstp %st(1)
 ; SSE3_32_WIN-NEXT:    fisttpll (%esp)
@@ -1132,7 +1152,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; SSE3_32_LIN-NEXT:    fsub %st(1), %st
 ; SSE3_32_LIN-NEXT:    xorl %edx, %edx
 ; SSE3_32_LIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; SSE3_32_LIN-NEXT:    fucompi %st(2), %st
+=======
+; SSE3_32_LIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; SSE3_32_LIN-NEXT:    fcmovnbe %st(1), %st
 ; SSE3_32_LIN-NEXT:    fstp %st(1)
 ; SSE3_32_LIN-NEXT:    fisttpll (%esp)
@@ -1152,7 +1176,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; SSE3_64_WIN-NEXT:    fsub %st(1), %st
 ; SSE3_64_WIN-NEXT:    xorl %eax, %eax
 ; SSE3_64_WIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; SSE3_64_WIN-NEXT:    fucompi %st(2), %st
+=======
+; SSE3_64_WIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; SSE3_64_WIN-NEXT:    fcmovnbe %st(1), %st
 ; SSE3_64_WIN-NEXT:    fstp %st(1)
 ; SSE3_64_WIN-NEXT:    fisttpll (%rsp)
@@ -1170,7 +1198,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; SSE3_64_LIN-NEXT:    fsub %st(1), %st
 ; SSE3_64_LIN-NEXT:    xorl %eax, %eax
 ; SSE3_64_LIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; SSE3_64_LIN-NEXT:    fucompi %st(2), %st
+=======
+; SSE3_64_LIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; SSE3_64_LIN-NEXT:    fcmovnbe %st(1), %st
 ; SSE3_64_LIN-NEXT:    fstp %st(1)
 ; SSE3_64_LIN-NEXT:    fisttpll -{{[0-9]+}}(%rsp)
@@ -1191,7 +1223,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; SSE2_32_WIN-NEXT:    fsub %st(1), %st
 ; SSE2_32_WIN-NEXT:    xorl %edx, %edx
 ; SSE2_32_WIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; SSE2_32_WIN-NEXT:    fucompi %st(2), %st
+=======
+; SSE2_32_WIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; SSE2_32_WIN-NEXT:    fcmovnbe %st(1), %st
 ; SSE2_32_WIN-NEXT:    fstp %st(1)
 ; SSE2_32_WIN-NEXT:    setbe %dl
@@ -1218,7 +1254,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; SSE2_32_LIN-NEXT:    fsub %st(1), %st
 ; SSE2_32_LIN-NEXT:    xorl %edx, %edx
 ; SSE2_32_LIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; SSE2_32_LIN-NEXT:    fucompi %st(2), %st
+=======
+; SSE2_32_LIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; SSE2_32_LIN-NEXT:    fcmovnbe %st(1), %st
 ; SSE2_32_LIN-NEXT:    fstp %st(1)
 ; SSE2_32_LIN-NEXT:    setbe %dl
@@ -1244,7 +1284,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; SSE2_64_WIN-NEXT:    fsub %st(1), %st
 ; SSE2_64_WIN-NEXT:    xorl %eax, %eax
 ; SSE2_64_WIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; SSE2_64_WIN-NEXT:    fucompi %st(2), %st
+=======
+; SSE2_64_WIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; SSE2_64_WIN-NEXT:    fcmovnbe %st(1), %st
 ; SSE2_64_WIN-NEXT:    fstp %st(1)
 ; SSE2_64_WIN-NEXT:    setbe %al
@@ -1268,7 +1312,11 @@ define i64 @x_to_u64(x86_fp80 %a) nounwind {
 ; SSE2_64_LIN-NEXT:    fsub %st(1), %st
 ; SSE2_64_LIN-NEXT:    xorl %eax, %eax
 ; SSE2_64_LIN-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; SSE2_64_LIN-NEXT:    fucompi %st(2), %st
+=======
+; SSE2_64_LIN-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; SSE2_64_LIN-NEXT:    fcmovnbe %st(1), %st
 ; SSE2_64_LIN-NEXT:    fstp %st(1)
 ; SSE2_64_LIN-NEXT:    setbe %al

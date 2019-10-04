@@ -94,6 +94,17 @@ struct pair {
   T2 b;
 };
 
+<<<<<<< HEAD
+=======
+namespace instantiate_template {
+
+template <typename T1, typename T2>
+struct pair {
+  T1 a;
+  T2 b;
+};
+
+>>>>>>> release/8.x
 const pair<int, int> &f1();
 
 int f2() {

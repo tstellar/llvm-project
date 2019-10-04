@@ -7304,7 +7304,11 @@ Value *CodeGenFunction::EmitAArch64BuiltinExpr(unsigned BuiltinID,
     llvm::Type *Types[] = { RegisterType };
 
     if (BuiltinID == AArch64::BI_ReadStatusReg) {
+<<<<<<< HEAD
       llvm::Function *F = CGM.getIntrinsic(llvm::Intrinsic::read_register, Types);
+=======
+      llvm::Value *F = CGM.getIntrinsic(llvm::Intrinsic::read_register, Types);
+>>>>>>> release/8.x
 
       return Builder.CreateCall(F, Metadata);
     }

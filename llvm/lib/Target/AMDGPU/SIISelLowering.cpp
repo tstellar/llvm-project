@@ -6104,12 +6104,17 @@ SDValue SITargetLowering::LowerINTRINSIC_W_CHAIN(SDValue Op,
     SDValue Chain = M->getOperand(0);
     SDValue M0 = M->getOperand(2);
     SDValue Value = M->getOperand(3);
+<<<<<<< HEAD
     unsigned IndexOperand = M->getConstantOperandVal(7);
+=======
+    unsigned OrderedCountIndex = M->getConstantOperandVal(7);
+>>>>>>> release/8.x
     unsigned WaveRelease = M->getConstantOperandVal(8);
     unsigned WaveDone = M->getConstantOperandVal(9);
     unsigned ShaderType;
     unsigned Instruction;
 
+<<<<<<< HEAD
     unsigned OrderedCountIndex = IndexOperand & 0x3f;
     IndexOperand &= ~0x3f;
     unsigned CountDw = 0;
@@ -6127,6 +6132,8 @@ SDValue SITargetLowering::LowerINTRINSIC_W_CHAIN(SDValue Op,
     if (IndexOperand)
       report_fatal_error("ds_ordered_count: bad index operand");
 
+=======
+>>>>>>> release/8.x
     switch (IntrID) {
     case Intrinsic::amdgcn_ds_ordered_add:
       Instruction = 0;
@@ -6160,10 +6167,13 @@ SDValue SITargetLowering::LowerINTRINSIC_W_CHAIN(SDValue Op,
     unsigned Offset0 = OrderedCountIndex << 2;
     unsigned Offset1 = WaveRelease | (WaveDone << 1) | (ShaderType << 2) |
                        (Instruction << 4);
+<<<<<<< HEAD
 
     if (Subtarget->getGeneration() >= AMDGPUSubtarget::GFX10)
       Offset1 |= (CountDw - 1) << 6;
 
+=======
+>>>>>>> release/8.x
     unsigned Offset = Offset0 | (Offset1 << 8);
 
     SDValue Ops[] = {
@@ -6176,6 +6186,7 @@ SDValue SITargetLowering::LowerINTRINSIC_W_CHAIN(SDValue Op,
                                    M->getVTList(), Ops, M->getMemoryVT(),
                                    M->getMemOperand());
   }
+<<<<<<< HEAD
   case Intrinsic::amdgcn_ds_fadd: {
     MemSDNode *M = cast<MemSDNode>(Op);
     unsigned Opc;
@@ -6189,6 +6200,8 @@ SDValue SITargetLowering::LowerINTRINSIC_W_CHAIN(SDValue Op,
                          M->getOperand(0), M->getOperand(2), M->getOperand(3),
                          M->getMemOperand());
   }
+=======
+>>>>>>> release/8.x
   case Intrinsic::amdgcn_atomic_inc:
   case Intrinsic::amdgcn_atomic_dec:
   case Intrinsic::amdgcn_ds_fmin:

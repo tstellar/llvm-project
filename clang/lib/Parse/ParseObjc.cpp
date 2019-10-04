@@ -2760,7 +2760,11 @@ StmtResult Parser::ParseObjCAtStatement(SourceLocation AtLoc,
 
   // Otherwise, eat the semicolon.
   ExpectAndConsumeSemi(diag::err_expected_semi_after_expr);
+<<<<<<< HEAD
   return handleExprStmt(Res, StmtCtx);
+=======
+  return Actions.ActOnExprStmt(Res);
+>>>>>>> release/8.x
 }
 
 ExprResult Parser::ParseObjCAtExpression(SourceLocation AtLoc) {

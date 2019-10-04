@@ -440,6 +440,7 @@ static Symbol *handleUndefined(StringRef name) {
 }
 
 static UndefinedGlobal *
+<<<<<<< HEAD
 createUndefinedGlobal(StringRef name, llvm::wasm::WasmGlobalType *type) {
   auto *sym = cast<UndefinedGlobal>(symtab->addUndefinedGlobal(
       name, name, defaultModule, WASM_SYMBOL_UNDEFINED, nullptr, type));
@@ -457,6 +458,16 @@ static GlobalSymbol *createGlobalVariable(StringRef name, bool isMutable,
   wasmGlobal.SymbolName = name;
   return symtab->addSyntheticGlobal(name, WASM_SYMBOL_VISIBILITY_HIDDEN,
                                     make<InputGlobal>(wasmGlobal, nullptr));
+=======
+createUndefinedGlobal(StringRef Name, llvm::wasm::WasmGlobalType *Type) {
+  auto *Sym =
+      cast<UndefinedGlobal>(Symtab->addUndefinedGlobal(Name, Name,
+                                                       DefaultModule, 0,
+                                                       nullptr, Type));
+  Config->AllowUndefinedSymbols.insert(Sym->getName());
+  Sym->IsUsedInRegularObj = true;
+  return Sym;
+>>>>>>> release/8.x
 }
 
 // Create ABI-defined synthetic symbols

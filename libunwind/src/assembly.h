@@ -131,12 +131,29 @@
 
 #endif
 
+<<<<<<< HEAD
 #define DEFINE_LIBUNWIND_FUNCTION(name)                                        \
   .globl SYMBOL_NAME(name) SEPARATOR                                           \
   HIDDEN_SYMBOL(SYMBOL_NAME(name)) SEPARATOR                                   \
   SYMBOL_IS_FUNC(SYMBOL_NAME(name)) SEPARATOR                                  \
   PPC64_OPD1                                                                   \
   SYMBOL_NAME(name):                                                           \
+=======
+#define DEFINE_LIBUNWIND_FUNCTION(name)                   \
+  .globl SYMBOL_NAME(name) SEPARATOR                      \
+  EXPORT_SYMBOL(name) SEPARATOR                           \
+  SYMBOL_IS_FUNC(SYMBOL_NAME(name)) SEPARATOR             \
+  PPC64_OPD1                                              \
+  SYMBOL_NAME(name):                                      \
+  PPC64_OPD2
+
+#define DEFINE_LIBUNWIND_PRIVATE_FUNCTION(name)           \
+  .globl SYMBOL_NAME(name) SEPARATOR                      \
+  HIDDEN_SYMBOL(SYMBOL_NAME(name)) SEPARATOR              \
+  SYMBOL_IS_FUNC(SYMBOL_NAME(name)) SEPARATOR             \
+  PPC64_OPD1                                              \
+  SYMBOL_NAME(name):                                      \
+>>>>>>> release/8.x
   PPC64_OPD2
 
 #if defined(__arm__)

@@ -570,6 +570,7 @@ def : DivergentBinOp<sra, V_ASHRREV_I32_e64>;
 def : DivergentBinOp<shl, V_LSHLREV_B32_e64>;
 
 let SubtargetPredicate = HasAddNoCarryInsts in {
+<<<<<<< HEAD
   def : DivergentClampingBinOp<add, V_ADD_U32_e64>;
   def : DivergentClampingBinOp<sub, V_SUB_U32_e64>;
 }
@@ -579,6 +580,18 @@ def : DivergentClampingBinOp<add, V_ADD_I32_e64>;
 def : DivergentClampingBinOp<sub, V_SUB_I32_e64>;
 }
 
+=======
+  def : DivergentBinOp<add, V_ADD_U32_e64>;
+  def : DivergentBinOp<sub, V_SUB_U32_e64>;
+}
+
+def : DivergentBinOp<add, V_ADD_I32_e64>;
+def : DivergentBinOp<sub, V_SUB_I32_e64>;
+
+def : DivergentBinOp<srl, V_LSHRREV_B32_e32>;
+def : DivergentBinOp<sra, V_ASHRREV_I32_e32>;
+def : DivergentBinOp<shl, V_LSHLREV_B32_e32>;
+>>>>>>> release/8.x
 def : DivergentBinOp<adde, V_ADDC_U32_e32>;
 def : DivergentBinOp<sube, V_SUBB_U32_e32>;
 

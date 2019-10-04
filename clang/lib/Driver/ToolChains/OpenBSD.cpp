@@ -227,7 +227,11 @@ void openbsd::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   const char *Exec = Args.MakeArgString(ToolChain.GetLinkerPath());
+<<<<<<< HEAD
   C.addCommand(std::make_unique<Command>(JA, *this, Exec, CmdArgs, Inputs));
+=======
+  C.addCommand(llvm::make_unique<Command>(JA, *this, Exec, CmdArgs, Inputs));
+>>>>>>> release/8.x
 }
 
 SanitizerMask OpenBSD::getSupportedSanitizers() const {

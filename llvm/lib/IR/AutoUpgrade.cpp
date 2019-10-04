@@ -559,6 +559,7 @@ static bool UpgradeIntrinsicFunction1(Function *F, Function *&NewFn) {
       NewFn = Intrinsic::getDeclaration(F->getParent(), Intrinsic::thread_pointer);
       return true;
     }
+<<<<<<< HEAD
     if (Name.startswith("aarch64.neon.addp")) {
       if (F->arg_size() != 2)
         break; // Invalid IR.
@@ -570,6 +571,8 @@ static bool UpgradeIntrinsicFunction1(Function *F, Function *&NewFn) {
         return true;
       }
     }
+=======
+>>>>>>> release/8.x
     break;
   }
 

@@ -54,6 +54,31 @@ namespace clang {
 namespace clangd {
 namespace {
 
+<<<<<<< HEAD
+=======
+class RefactoringResultCollector final
+    : public tooling::RefactoringResultConsumer {
+public:
+  void handleError(llvm::Error Err) override {
+    assert(!Result.hasValue());
+    // FIXME: figure out a way to return better message for DiagnosticError.
+    // clangd uses llvm::toString to convert the Err to string, however, for
+    // DiagnosticError, only "clang diagnostic" will be generated.
+    Result = std::move(Err);
+  }
+
+  // Using the handle(SymbolOccurrences) from parent class.
+  using tooling::RefactoringResultConsumer::handle;
+
+  void handle(tooling::AtomicChanges SourceReplacements) override {
+    assert(!Result.hasValue());
+    Result = std::move(SourceReplacements);
+  }
+
+  llvm::Optional<llvm::Expected<tooling::AtomicChanges>> Result;
+};
+
+>>>>>>> release/8.x
 // Update the FileIndex with new ASTs and plumb the diagnostics responses.
 struct UpdateIndexCallbacks : public ParsingCallbacks {
   UpdateIndexCallbacks(FileIndex *FIndex, DiagnosticsConsumer &DiagConsumer,
@@ -113,7 +138,11 @@ ClangdServer::ClangdServer(const GlobalCompilationDatabase &CDB,
                            const FileSystemProvider &FSProvider,
                            DiagnosticsConsumer &DiagConsumer,
                            const Options &Opts)
+<<<<<<< HEAD
     : FSProvider(FSProvider),
+=======
+    : CDB(CDB), FSProvider(FSProvider),
+>>>>>>> release/8.x
       DynamicIdx(Opts.BuildDynamicSymbolIndex
                      ? new FileIndex(Opts.HeavyweightDynamicSymbolIndex)
                      : nullptr),
@@ -142,11 +171,18 @@ ClangdServer::ClangdServer(const GlobalCompilationDatabase &CDB,
   if (Opts.StaticIndex)
     AddIndex(Opts.StaticIndex);
   if (Opts.BackgroundIndex) {
+<<<<<<< HEAD
     BackgroundIdx = std::make_unique<BackgroundIndex>(
         Context::current().clone(), FSProvider, CDB,
         BackgroundIndexStorage::createDiskBackedStorageFactory(
             [&CDB](llvm::StringRef File) { return CDB.getProjectInfo(File); }),
         std::max(Opts.AsyncThreadsCount, 1u));
+=======
+    BackgroundIdx = llvm::make_unique<BackgroundIndex>(
+        Context::current().clone(), FSProvider, CDB,
+        BackgroundIndexStorage::createDiskBackedStorageFactory(),
+        Opts.BackgroundIndexRebuildPeriodMs);
+>>>>>>> release/8.x
     AddIndex(BackgroundIdx.get());
   }
   if (DynamicIdx)
@@ -527,11 +563,20 @@ void ClangdServer::typeHierarchy(PathRef File, Position Pos, int Resolve,
   WorkScheduler.runWithAST("Type Hierarchy", File, std::move(Action));
 }
 
+<<<<<<< HEAD
 void ClangdServer::resolveTypeHierarchy(
     TypeHierarchyItem Item, int Resolve, TypeHierarchyDirection Direction,
     Callback<llvm::Optional<TypeHierarchyItem>> CB) {
   clangd::resolveTypeHierarchy(Item, Resolve, Direction, Index);
   CB(Item);
+=======
+tooling::CompileCommand ClangdServer::getCompileCommand(PathRef File) {
+  trace::Span Span("GetCompileCommand");
+  llvm::Optional<tooling::CompileCommand> C = CDB.getCompileCommand(File);
+  if (!C) // FIXME: Suppress diagnostics? Let the user know?
+    C = CDB.getFallbackCommand(File);
+  return std::move(*C);
+>>>>>>> release/8.x
 }
 
 void ClangdServer::onFileEvent(const DidChangeWatchedFilesParams &Params) {

@@ -48,10 +48,29 @@ class SourceManager;
 
 namespace Builtin { struct Info; }
 
+<<<<<<< HEAD
 /// Fields controlling how types are laid out in memory; these may need to
 /// be copied for targets like AMDGPU that base their ABIs on an auxiliary
 /// CPU target.
 struct TransferrableTargetInfo {
+=======
+/// Exposes information about the current target.
+///
+class TargetInfo : public RefCountedBase<TargetInfo> {
+  std::shared_ptr<TargetOptions> TargetOpts;
+  llvm::Triple Triple;
+protected:
+  // Target values set by the ctor of the actual target implementation.  Default
+  // values are specified by the TargetInfo constructor.
+  bool BigEndian;
+  bool TLSSupported;
+  bool VLASupported;
+  bool NoAsmVariants;  // True if {|} are normal characters.
+  bool HasLegalHalfType; // True if the backend supports operations on the half
+                         // LLVM IR type.
+  bool HasFloat128;
+  bool HasFloat16;
+>>>>>>> release/8.x
   unsigned char PointerWidth, PointerAlign;
   unsigned char BoolWidth, BoolAlign;
   unsigned char IntWidth, IntAlign;
@@ -882,10 +901,15 @@ public:
     }
     bool isValidAsmImmediate(const llvm::APInt &Value) const {
       if (!ImmSet.empty())
+<<<<<<< HEAD
         return Value.isSignedIntN(32) &&
                ImmSet.count(Value.getZExtValue()) != 0;
       return !ImmRange.isConstrained ||
              (Value.sge(ImmRange.Min) && Value.sle(ImmRange.Max));
+=======
+        return ImmSet.count(Value.getZExtValue()) != 0;
+      return !ImmRange.isConstrained || (Value.sge(ImmRange.Min) && Value.sle(ImmRange.Max));
+>>>>>>> release/8.x
     }
 
     void setIsReadWrite() { Flags |= CI_ReadWrite; }

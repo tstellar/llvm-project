@@ -31,8 +31,16 @@ bar:
   nop
   blr
 
+<<<<<<< HEAD
 # CHECK:      10010164: bl .-12
 # CHECK-NEXT:           nop
 # CHECK-NEXT: 1001016c: bl .-20
 # CHECK-NEXT:           nop
 # CHECK-NEXT:           blr
+=======
+# CHECK: 1001000c:       {{.*}}     bl .-12
+# CHECK: 10010010:       {{.*}}     nop
+# CHECK: 10010014:       {{.*}}     bl .-20
+# CHECK: 10010018:       {{.*}}     nop
+# CHECK: 1001001c:       {{.*}}     blr
+>>>>>>> release/8.x

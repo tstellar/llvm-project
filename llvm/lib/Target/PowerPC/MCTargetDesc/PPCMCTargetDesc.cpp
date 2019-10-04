@@ -14,7 +14,10 @@
 #include "MCTargetDesc/PPCInstPrinter.h"
 #include "MCTargetDesc/PPCMCAsmInfo.h"
 #include "PPCTargetStreamer.h"
+<<<<<<< HEAD
 #include "TargetInfo/PowerPCTargetInfo.h"
+=======
+>>>>>>> release/8.x
 #include "llvm/ADT/SmallPtrSet.h"
 #include "llvm/ADT/StringRef.h"
 #include "llvm/ADT/Triple.h"

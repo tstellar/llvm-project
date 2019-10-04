@@ -16,4 +16,8 @@ define i32 @main() {
 
 ; CHECK-LABEL: main:
 ; CHECK-NEXT: .functype main (i32, i32) -> (i32)
+<<<<<<< HEAD
 ; CHECK:      call __original_main
+=======
+; CHECK:      call __original_main@FUNCTION
+>>>>>>> release/8.x

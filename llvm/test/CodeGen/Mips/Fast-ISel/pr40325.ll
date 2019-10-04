@@ -5,8 +5,13 @@ define void @test(i32 %x, i1* %p) nounwind {
 ; CHECK-LABEL: test:
 ; CHECK:       # %bb.0:
 ; CHECK-NEXT:    move $1, $4
+<<<<<<< HEAD
 ; CHECK-NEXT:    andi $2, $4, 1
 ; CHECK-NEXT:    sb $2, 0($5)
+=======
+; CHECK-NEXT:    andi $4, $4, 1
+; CHECK-NEXT:    sb $4, 0($5)
+>>>>>>> release/8.x
 ; CHECK-NEXT:    andi $1, $1, 1
 ; CHECK-NEXT:    bgtz $1, $BB0_1
 ; CHECK-NEXT:    nop

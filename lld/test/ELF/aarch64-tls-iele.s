@@ -17,10 +17,17 @@
 # CHECK: Disassembly of section .text:
 # CHECK-EMPTY:
 # CHECK: _start:
+<<<<<<< HEAD
 # CHECK-NEXT: movz   x0, #0, lsl #16
 # CHECK-NEXT: movk   x0, #20
 # CHECK-NEXT: movz   x0, #0, lsl #16
 # CHECK-NEXT: movk   x0, #16
+=======
+# CHECK-NEXT: 210000:  00 00 a0 d2   movz   x0, #0, lsl #16
+# CHECK-NEXT: 210004:  80 02 80 f2   movk   x0, #20
+# CHECK-NEXT: 210008:  00 00 a0 d2   movz   x0, #0, lsl #16
+# CHECK-NEXT: 21000c:  00 02 80 f2   movk   x0, #16
+>>>>>>> release/8.x
 
 .section .tdata
 .align 2

@@ -3,6 +3,9 @@
 // This number-less file directive is ignored on MachO.
         .file "bar/baz.s"
 
+// This number-less file directive is ignored on MachO.
+        .file "bar/baz.s"
+
         .file	1 "dir/foo"
         nop
 

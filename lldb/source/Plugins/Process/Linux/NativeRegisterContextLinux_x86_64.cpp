@@ -29,6 +29,7 @@ static inline int get_cpuid_count(unsigned int __leaf,
                                   unsigned int *__eax, unsigned int *__ebx,
                                   unsigned int *__ecx, unsigned int *__edx)
 {
+<<<<<<< HEAD
   unsigned int __max_leaf = __get_cpuid_max(__leaf & 0x80000000, nullptr);
 
   if (__max_leaf == 0 || __max_leaf < __leaf)
@@ -36,6 +37,15 @@ static inline int get_cpuid_count(unsigned int __leaf,
 
   __cpuid_count(__leaf, __subleaf, *__eax, *__ebx, *__ecx, *__edx);
   return 1;
+=======
+    unsigned int __max_leaf = __get_cpuid_max(__leaf & 0x80000000, 0);
+
+    if (__max_leaf == 0 || __max_leaf < __leaf)
+        return 0;
+
+    __cpuid_count(__leaf, __subleaf, *__eax, *__ebx, *__ecx, *__edx);
+    return 1;
+>>>>>>> release/8.x
 }
 
 using namespace lldb_private;
@@ -903,6 +913,7 @@ bool NativeRegisterContextLinux_x86_64::CopyXSTATEtoYMM(
     return false;
 
   if (byte_order == lldb::eByteOrderLittle) {
+<<<<<<< HEAD
     uint32_t reg_no = reg_index - m_reg_info.first_ymm;
     m_ymm_set.ymm[reg_no] = XStateToYMM(
         m_xstate->fxsave.xmm[reg_no].bytes,
@@ -910,6 +921,28 @@ bool NativeRegisterContextLinux_x86_64::CopyXSTATEtoYMM(
     return true;
   }
 
+=======
+    ::memcpy(m_ymm_set.ymm[reg_index - m_reg_info.first_ymm].bytes,
+             m_xstate->fxsave.xmm[reg_index - m_reg_info.first_ymm].bytes,
+             sizeof(XMMReg));
+    ::memcpy(m_ymm_set.ymm[reg_index - m_reg_info.first_ymm].bytes +
+                 sizeof(XMMReg),
+             m_xstate->xsave.ymmh[reg_index - m_reg_info.first_ymm].bytes,
+             sizeof(YMMHReg));
+    return true;
+  }
+
+  if (byte_order == lldb::eByteOrderBig) {
+    ::memcpy(m_ymm_set.ymm[reg_index - m_reg_info.first_ymm].bytes +
+                 sizeof(XMMReg),
+             m_xstate->fxsave.xmm[reg_index - m_reg_info.first_ymm].bytes,
+             sizeof(XMMReg));
+    ::memcpy(m_ymm_set.ymm[reg_index - m_reg_info.first_ymm].bytes,
+             m_xstate->xsave.ymmh[reg_index - m_reg_info.first_ymm].bytes,
+             sizeof(YMMHReg));
+    return true;
+  }
+>>>>>>> release/8.x
   return false; // unsupported or invalid byte order
 }
 
@@ -919,6 +952,7 @@ bool NativeRegisterContextLinux_x86_64::CopyYMMtoXSTATE(
     return false;
 
   if (byte_order == lldb::eByteOrderLittle) {
+<<<<<<< HEAD
     uint32_t reg_no = reg - m_reg_info.first_ymm;
     YMMToXState(m_ymm_set.ymm[reg_no],
         m_xstate->fxsave.xmm[reg_no].bytes,
@@ -926,6 +960,24 @@ bool NativeRegisterContextLinux_x86_64::CopyYMMtoXSTATE(
     return true;
   }
 
+=======
+    ::memcpy(m_xstate->fxsave.xmm[reg - m_reg_info.first_ymm].bytes,
+             m_ymm_set.ymm[reg - m_reg_info.first_ymm].bytes, sizeof(XMMReg));
+    ::memcpy(m_xstate->xsave.ymmh[reg - m_reg_info.first_ymm].bytes,
+             m_ymm_set.ymm[reg - m_reg_info.first_ymm].bytes + sizeof(XMMReg),
+             sizeof(YMMHReg));
+    return true;
+  }
+
+  if (byte_order == lldb::eByteOrderBig) {
+    ::memcpy(m_xstate->fxsave.xmm[reg - m_reg_info.first_ymm].bytes,
+             m_ymm_set.ymm[reg - m_reg_info.first_ymm].bytes + sizeof(XMMReg),
+             sizeof(XMMReg));
+    ::memcpy(m_xstate->xsave.ymmh[reg - m_reg_info.first_ymm].bytes,
+             m_ymm_set.ymm[reg - m_reg_info.first_ymm].bytes, sizeof(YMMHReg));
+    return true;
+  }
+>>>>>>> release/8.x
   return false; // unsupported or invalid byte order
 }
 

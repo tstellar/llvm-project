@@ -47,7 +47,10 @@ void L(int i, int j) {
   static const int Invalid1 = 1;
   static const int Invalid2 = 42;
   static const int Invalid3 = 0;
+<<<<<<< HEAD
   static const long long Invalid4 = 0x1000000ff;
+=======
+>>>>>>> release/8.x
   static const int Valid1 = 0xff;
   static const int Valid2 = 0xffff;
   static const int Valid3 = 0xffffffff;
@@ -62,9 +65,12 @@ void L(int i, int j) {
           : "0"(i), "L"(Invalid3)); // expected-error{{value '0' out of range for constraint 'L'}}
   __asm__("xorl %0,%2"
           : "=r"(i)
+<<<<<<< HEAD
           : "0"(i), "L"(Invalid4)); // expected-error{{value '4294967551' out of range for constraint 'L'}}
   __asm__("xorl %0,%2"
           : "=r"(i)
+=======
+>>>>>>> release/8.x
           : "0"(i), "L"(Valid1)); // expected-no-error
   __asm__("xorl %0,%2"
           : "=r"(i)
@@ -125,6 +131,13 @@ void pr40890(void) {
   __asm__ __volatile__("\n#define S_A abcd%0\n" : : "n"(&((struct s*)0)->a));
   // This offset-from-null pointer can be used as an integer constant expression.
   __asm__ __volatile__("\n#define S_B abcd%0\n" : : "n"(&((struct s*)0)->b));
+<<<<<<< HEAD
+=======
+  // This pointer cannot be used as an integer constant expression.
+  __asm__ __volatile__("\n#define GLOBAL_A abcd%0\n" : : "n"(&s.a)); // expected-error{{constraint 'n' expects an integer constant expression}}
+  // Floating-point is also not okay.
+  __asm__ __volatile__("\n#define PI abcd%0\n" : : "n"(3.14f)); // expected-error{{constraint 'n' expects an integer constant expression}}
+>>>>>>> release/8.x
 #ifdef AMD64
   // This arbitrary pointer is fine.
   __asm__ __volatile__("\n#define BEEF abcd%0\n" : : "n"((int*)0xdeadbeeeeeef));

@@ -34,6 +34,7 @@ static cl::opt<bool> EnableDiscriminateMemops(
              "the build of the binary consuming the profile."),
     cl::Hidden);
 
+<<<<<<< HEAD
 static cl::opt<bool> BypassPrefetchInstructions(
     "x86-bypass-prefetch-instructions", cl::init(true),
     cl::desc("When discriminating instructions with memory operands, ignore "
@@ -42,6 +43,8 @@ static cl::opt<bool> BypassPrefetchInstructions(
              "prefetches, allowing for successive insertions."),
     cl::Hidden);
 
+=======
+>>>>>>> release/8.x
 namespace {
 
 using Location = std::pair<StringRef, unsigned>;

@@ -2,8 +2,11 @@
 Protocol extensions
 ===================
 
+<<<<<<< HEAD
 .. contents::
 
+=======
+>>>>>>> release/8.x
 clangd supports some features that are not in the official
 `Language Server Protocol specification
 <https://microsoft.github.io/language-server-protocol/specification>`__.
@@ -40,6 +43,11 @@ provided) or source file (if a header was provided).
 
 If the corresponding file can't be determined, ``""`` is returned.
 
+<<<<<<< HEAD
+=======
+.. _lsp-extension-file-status:
+
+>>>>>>> release/8.x
 File status
 ===========
 
@@ -66,6 +74,11 @@ Parameter: ``FileStatus`` object with properties:
 
 Enables receiving ``textDocument/clangd.fileStatus`` notifications.
 
+<<<<<<< HEAD
+=======
+.. _lsp-extension-compilation-commands:
+
+>>>>>>> release/8.x
 Compilation commands
 ====================
 
@@ -135,6 +148,11 @@ same code will always have the same category.
 
 Requests that clangd send ``Diagnostic.category``.
 
+<<<<<<< HEAD
+=======
+.. _lsp-extension-code-actions-in-diagnostics:
+
+>>>>>>> release/8.x
 Inline fixes for diagnostics
 ============================
 
@@ -152,6 +170,11 @@ All the code actions that address this diagnostic.
 
 Requests clangd to send ``Diagnostic.codeActions``.
 
+<<<<<<< HEAD
+=======
+.. _lsp-extension-symbol-info:
+
+>>>>>>> release/8.x
 Symbol info request
 ===================
 

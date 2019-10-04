@@ -9,6 +9,7 @@
 #include "GlobalCompilationDatabase.h"
 #include "FS.h"
 #include "Logger.h"
+<<<<<<< HEAD
 #include "Path.h"
 #include "clang/Frontend/CompilerInvocation.h"
 #include "clang/Tooling/ArgumentsAdjusters.h"
@@ -17,6 +18,12 @@
 #include "llvm/ADT/Optional.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/ADT/SmallString.h"
+=======
+#include "clang/Frontend/CompilerInvocation.h"
+#include "clang/Tooling/ArgumentsAdjusters.h"
+#include "clang/Tooling/CompilationDatabase.h"
+#include "llvm/ADT/Optional.h"
+>>>>>>> release/8.x
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/Path.h"
 #include <string>
@@ -29,6 +36,7 @@ namespace {
 
 void adjustArguments(tooling::CompileCommand &Cmd,
                      llvm::StringRef ResourceDir) {
+<<<<<<< HEAD
   tooling::ArgumentsAdjuster ArgsAdjuster = tooling::combineAdjusters(
       // clangd should not write files to disk, including dependency files
       // requested on the command line.
@@ -40,6 +48,13 @@ void adjustArguments(tooling::CompileCommand &Cmd,
                                 tooling::getClangSyntaxOnlyAdjuster()));
 
   Cmd.CommandLine = ArgsAdjuster(Cmd.CommandLine, Cmd.Filename);
+=======
+  // Strip plugin related command line arguments. Clangd does
+  // not support plugins currently. Therefore it breaks if
+  // compiler tries to load plugins.
+  Cmd.CommandLine =
+      tooling::getStripPluginsAdjuster()(Cmd.CommandLine, Cmd.Filename);
+>>>>>>> release/8.x
   // Inject the resource dir.
   // FIXME: Don't overwrite it if it's already there.
   if (!ResourceDir.empty())
@@ -51,6 +66,7 @@ std::string getStandardResourceDir() {
   return CompilerInvocation::GetResourcesPath("clangd", (void *)&Dummy);
 }
 
+<<<<<<< HEAD
 // Runs the given action on all parent directories of filename, starting from
 // deepest directory and going up to root. Stops whenever action succeeds.
 void actOnAllParentDirectories(PathRef FileName,
@@ -61,6 +77,8 @@ void actOnAllParentDirectories(PathRef FileName,
     ;
 }
 
+=======
+>>>>>>> release/8.x
 } // namespace
 
 static std::string getFallbackClangPath() {
@@ -274,6 +292,7 @@ OverlayCDB::OverlayCDB(const GlobalCompilationDatabase *Base,
 }
 
 llvm::Optional<tooling::CompileCommand>
+<<<<<<< HEAD
 OverlayCDB::getCompileCommand(PathRef File) const {
   llvm::Optional<tooling::CompileCommand> Cmd;
   {
@@ -284,6 +303,21 @@ OverlayCDB::getCompileCommand(PathRef File) const {
   }
   if (!Cmd && Base)
     Cmd = Base->getCompileCommand(File);
+=======
+OverlayCDB::getCompileCommand(PathRef File, ProjectInfo *Project) const {
+  llvm::Optional<tooling::CompileCommand> Cmd;
+  {
+    std::lock_guard<std::mutex> Lock(Mutex);
+    auto It = Commands.find(File);
+    if (It != Commands.end()) {
+      if (Project)
+        Project->SourceRoot = "";
+      Cmd = It->second;
+    }
+  }
+  if (!Cmd && Base)
+    Cmd = Base->getCompileCommand(File, Project);
+>>>>>>> release/8.x
   if (!Cmd)
     return llvm::None;
   adjustArguments(*Cmd, ResourceDir);

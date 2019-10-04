@@ -6650,7 +6650,13 @@ void SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I,
           .addFrameIndex(FI);
     }
 
+<<<<<<< HEAD
     return;
+=======
+    MF.setHasLocalEscape(true);
+
+    return nullptr;
+>>>>>>> release/8.x
   }
 
   case Intrinsic::localrecover: {

@@ -75,6 +75,7 @@ BitcodeCompiler::BitcodeCompiler() : ltoObj(createLTO()) {}
 
 BitcodeCompiler::~BitcodeCompiler() = default;
 
+<<<<<<< HEAD
 static void undefine(Symbol *s) {
   if (auto f = dyn_cast<DefinedFunction>(s))
     replaceSymbol<UndefinedFunction>(f, f->getName(), f->getName(),
@@ -82,6 +83,15 @@ static void undefine(Symbol *s) {
                                      f->getFile(), f->signature);
   else if (isa<DefinedData>(s))
     replaceSymbol<UndefinedData>(s, s->getName(), 0, s->getFile());
+=======
+static void undefine(Symbol *S) {
+  if (auto F = dyn_cast<DefinedFunction>(S))
+    replaceSymbol<UndefinedFunction>(F, F->getName(), F->getName(),
+                                     DefaultModule, 0,
+                                     F->getFile(), F->Signature);
+  else if (isa<DefinedData>(S))
+    replaceSymbol<UndefinedData>(S, S->getName(), 0, S->getFile());
+>>>>>>> release/8.x
   else
     llvm_unreachable("unexpected symbol kind");
 }

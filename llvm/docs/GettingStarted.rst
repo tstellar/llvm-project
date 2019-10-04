@@ -169,7 +169,11 @@ uses the package and provides other details.
 =========================================================== ============ ==========================================
 Package                                                     Version      Notes
 =========================================================== ============ ==========================================
+<<<<<<< HEAD
 `CMake <http://cmake.org/>`__                               >=3.4.3      Makefile/workspace generator
+=======
+`GNU Make <http://savannah.gnu.org/projects/make>`_         3.79, 3.79.1 Makefile/build processor
+>>>>>>> release/8.x
 `GCC <http://gcc.gnu.org/>`_                                >=5.1.0      C/C++ compiler\ :sup:`1`
 `python <http://www.python.org/>`_                          >=2.7        Automated test suite\ :sup:`2`
 `zlib <http://zlib.net>`_                                   >=1.2.3.4    Compression library\ :sup:`3`
@@ -229,11 +233,28 @@ host C++ toolchain, both compiler and standard library, in order to build LLVM.
 LLVM is written using the subset of C++ documented in :doc:`coding
 standards<CodingStandards>`. To enforce this language version, we check the most
 popular host toolchains for specific minimum versions in our build systems:
+<<<<<<< HEAD
 
 * Clang 3.5
 * Apple Clang 6.0
 * GCC 5.1
 * Visual Studio 2017
+=======
+
+* Clang 3.5
+* Apple Clang 6.0
+* GCC 5.1
+* Visual Studio 2017
+
+The below versions currently soft-error as we transition to the new compiler
+versions listed above. The LLVM codebase is currently known to compile correctly
+with the following compilers, though this will change in the near future:
+
+* Clang 3.1
+* Apple Clang 3.1
+* GCC 4.8
+* Visual Studio 2015 (Update 3)
+>>>>>>> release/8.x
 
 Anything older than these toolchains *may* work, but will require forcing the
 build system with a special option and is not really a supported host platform.

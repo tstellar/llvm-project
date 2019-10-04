@@ -183,6 +183,7 @@ protected:
 };
 
 // .o file.
+<<<<<<< HEAD
 template <class ELFT> class ObjFile : public ELFFileBase {
   using Elf_Rel = typename ELFT::Rel;
   using Elf_Rela = typename ELFT::Rela;
@@ -190,6 +191,19 @@ template <class ELFT> class ObjFile : public ELFFileBase {
   using Elf_Shdr = typename ELFT::Shdr;
   using Elf_Word = typename ELFT::Word;
   using Elf_CGProfile = typename ELFT::CGProfile;
+=======
+template <class ELFT> class ObjFile : public ELFFileBase<ELFT> {
+  typedef ELFFileBase<ELFT> Base;
+  typedef typename ELFT::Rel Elf_Rel;
+  typedef typename ELFT::Rela Elf_Rela;
+  typedef typename ELFT::Sym Elf_Sym;
+  typedef typename ELFT::Shdr Elf_Shdr;
+  typedef typename ELFT::Word Elf_Word;
+  typedef typename ELFT::CGProfile Elf_CGProfile;
+
+  StringRef getShtGroupSignature(ArrayRef<Elf_Shdr> Sections,
+                                 const Elf_Shdr &Sec);
+>>>>>>> release/8.x
 
 public:
   static bool classof(const InputFile *f) { return f->kind() == ObjKind; }

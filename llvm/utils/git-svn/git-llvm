@@ -45,8 +45,13 @@ except ImportError:
     from pipes import quote
 
 # It's *almost* a straightforward mapping from the monorepo to svn...
+<<<<<<< HEAD
 LLVM_MONOREPO_SVN_MAPPING = {
     d: (d + '/trunk')
+=======
+GIT_TO_SVN_DIR = {
+    d: (d + '/branches/release_80')
+>>>>>>> release/8.x
     for d in [
         'clang-tools-extra',
         'compiler-rt',
@@ -68,11 +73,16 @@ LLVM_MONOREPO_SVN_MAPPING = {
         'pstl',
     ]
 }
+<<<<<<< HEAD
 LLVM_MONOREPO_SVN_MAPPING.update({'clang': 'cfe/trunk'})
 LLVM_MONOREPO_SVN_MAPPING.update({'': 'monorepo-root/trunk'})
 
 SPLIT_REPO_NAMES = {'llvm-' + d: d + '/trunk'
                     for d in ['www', 'zorg', 'test-suite', 'lnt']}
+=======
+GIT_TO_SVN_DIR.update({'clang': 'cfe/branches/release_80'})
+GIT_TO_SVN_DIR.update({'': 'monorepo-root/branches/release_80'})
+>>>>>>> release/8.x
 
 VERBOSE = False
 QUIET = False

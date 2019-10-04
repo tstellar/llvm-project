@@ -11,7 +11,10 @@
 
 #include "Function.h"
 #include "Path.h"
+<<<<<<< HEAD
 #include "clang/Tooling/CompilationDatabase.h"
+=======
+>>>>>>> release/8.x
 #include "llvm/ADT/Optional.h"
 #include "llvm/ADT/StringMap.h"
 #include <memory>

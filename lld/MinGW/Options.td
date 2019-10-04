@@ -87,6 +87,7 @@ def Xlink : J<"Xlink=">, MetaVarName<"<arg>">,
 def alias_entry_e: JoinedOrSeparate<["-"], "e">, Alias<entry>;
 def alias_strip_s: Flag<["-"], "s">, Alias<strip_all>;
 def alias_strip_S: Flag<["-"], "S">, Alias<strip_debug>;
+<<<<<<< HEAD
 def alias_undefined_u: JoinedOrSeparate<["-"], "u">, Alias<undefined>;
 
 // Ignored options
@@ -103,10 +104,17 @@ def: S<"minor-image-version">;
 def: F<"no-seh">;
 def: F<"nxcompat">;
 def: F<"pic-executable">;
+=======
+
+// Ignored options
+>>>>>>> release/8.x
 def: S<"plugin">;
 def: J<"plugin=">;
 def: S<"plugin-opt">;
 def: J<"plugin-opt=">;
+<<<<<<< HEAD
 def: J<"sysroot">;
 def: F<"start-group">;
 def: F<"tsaware">;
+=======
+>>>>>>> release/8.x

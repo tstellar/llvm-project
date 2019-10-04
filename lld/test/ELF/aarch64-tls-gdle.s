@@ -10,11 +10,20 @@
 # RELOC-NEXT: ]
 
 # TCB size = 0x16 and foo is first element from TLS register.
+<<<<<<< HEAD
 # CHECK-LABEL: _start:
 # CHECK-NEXT:    2101c8: movz    x0, #0, lsl #16
 # CHECK-NEXT:    2101cc: movk    x0, #16
 # CHECK-NEXT:    2101d0: nop
 # CHECK-NEXT:    2101d4: nop
+=======
+# CHECK: Disassembly of section .text:
+# CHECK: _start:
+# CHECK:  210000:	00 00 a0 d2	movz	x0, #0, lsl #16
+# CHECK:  210004:	00 02 80 f2 	movk	x0, #16
+# CHECK:  210008:	1f 20 03 d5 	nop
+# CHECK:  21000c:	1f 20 03 d5 	nop
+>>>>>>> release/8.x
 
 .globl _start
 _start:

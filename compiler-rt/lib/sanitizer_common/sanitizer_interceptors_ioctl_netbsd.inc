@@ -24,7 +24,11 @@ struct ioctl_desc {
   const char *name;
 };
 
+<<<<<<< HEAD
 const unsigned ioctl_table_max = 1236;
+=======
+const unsigned ioctl_table_max = 1200;
+>>>>>>> release/8.x
 static ioctl_desc ioctl_table[ioctl_table_max];
 static unsigned ioctl_table_size = 0;
 
@@ -645,7 +649,11 @@ static void ioctl_table_fill() {
   _(SPKRTUNE, NONE, 0);
   _(SPKRGETVOL, WRITE, sizeof(unsigned int));
   _(SPKRSETVOL, READ, sizeof(unsigned int));
+<<<<<<< HEAD
 #if defined(__x86_64__)
+=======
+#if 0 /* WIP */
+>>>>>>> release/8.x
   /* Entries from file: dev/nvmm/nvmm_ioctl.h */
   _(NVMM_IOC_CAPABILITY, WRITE, struct_nvmm_ioc_capability_sz);
   _(NVMM_IOC_MACHINE_CREATE, READWRITE, struct_nvmm_ioc_machine_create_sz);

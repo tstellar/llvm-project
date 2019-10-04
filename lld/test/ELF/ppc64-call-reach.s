@@ -2,6 +2,7 @@
 
 # RUN: llvm-mc -filetype=obj -triple=powerpc64le-unknown-linux %s -o %t.o
 # RUN: ld.lld --defsym callee=0x12010010 --defsym tail_callee=0x12010020 \
+<<<<<<< HEAD
 # RUN:   -z separate-code %t.o -o %t
 # RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck %s
 # RUN: ld.lld --defsym callee=0x12010010 --defsym tail_callee=0x12010020 \
@@ -12,6 +13,18 @@
 # RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck --check-prefix=NEGOFFSET  %s
 # RUN: ld.lld --defsym callee=0x12010018 --defsym tail_callee=0x12010028 \
 # RUN:   -z separate-code %t.o -o %t
+=======
+# RUN: %t.o -o %t
+# RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck %s
+# RUN: ld.lld --defsym callee=0x12010010 --defsym tail_callee=0x12010020 \
+# RUN: %t.o -o %t
+# RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck %s
+# RUN: ld.lld --defsym callee=0xE010014 --defsym tail_callee=0xE010024 \
+# RUN: %t.o -o %t
+# RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck --check-prefix=NEGOFFSET  %s
+# RUN: ld.lld --defsym callee=0x12010018 --defsym tail_callee=0x12010028 \
+# RUN: %t.o -o %t
+>>>>>>> release/8.x
 # RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck --check-prefix=THUNK %s
 # RUN: llvm-readelf --sections %t | FileCheck --check-prefix=BRANCHLT %s
 # RUN: not ld.lld --defsym callee=0x1001002D --defsym tail_callee=0x1001002F \
@@ -19,6 +32,7 @@
 
 # RUN: llvm-mc -filetype=obj -triple=powerpc64-unknown-linux %s -o %t.o
 # RUN: ld.lld --defsym callee=0x12010010 --defsym tail_callee=0x12010020 \
+<<<<<<< HEAD
 # RUN:   -z separate-code %t.o -o %t
 # RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck %s
 # RUN: ld.lld --defsym callee=0x12010010 --defsym tail_callee=0x12010020 \
@@ -29,6 +43,18 @@
 # RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck --check-prefix=NEGOFFSET  %s
 # RUN: ld.lld --defsym callee=0x12010018 --defsym tail_callee=0x12010028 \
 # RUN:   -z separate-code %t.o -o %t
+=======
+# RUN: %t.o -o %t
+# RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck %s
+# RUN: ld.lld --defsym callee=0x12010010 --defsym tail_callee=0x12010020 \
+# RUN: %t.o -o %t
+# RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck %s
+# RUN: ld.lld --defsym callee=0xE010014 --defsym tail_callee=0xE010024 \
+# RUN: %t.o -o %t
+# RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck --check-prefix=NEGOFFSET  %s
+# RUN: ld.lld --defsym callee=0x12010018 --defsym tail_callee=0x12010028 \
+# RUN: %t.o -o %t
+>>>>>>> release/8.x
 # RUN: llvm-objdump -d --no-show-raw-insn %t | FileCheck --check-prefix=THUNK %s
 # RUN: llvm-readelf --sections %t | FileCheck --check-prefix=BRANCHLT %s
 # RUN: not ld.lld --defsym callee=0x1001002D --defsym tail_callee=0x1001002F \
@@ -71,6 +97,7 @@ test:
 
 # .branch_lt[0]
 # THUNK-LABEL: __long_branch_callee:
+<<<<<<< HEAD
 # THUNK-NEXT: 10010028:       addis 12, 2, 1
 # THUNK-NEXT:                 ld 12, -32760(12)
 # THUNK-NEXT:                 mtctr 12
@@ -82,6 +109,19 @@ test:
 # THUNK-NEXT:                 ld 12, -32752(12)
 # THUNK-NEXT:                 mtctr 12
 # THUNK-NEXT:                 bctr
+=======
+# THUNK-NEXT: 10010028:        addis 12, 2, -1
+# THUNK-NEXT:                  ld 12, -32768(12)
+# THUNK-NEXT:                  mtctr 12
+# THUNK-NEXT:                  bctr
+
+# .branch_lt[1]
+# THUNK-LABEL: __long_branch_tail_callee:
+# THUNK-NEXT: 10010038:        addis 12, 2, -1
+# THUNK-NEXT:                  ld 12, -32760(12)
+# THUNK-NEXT:                  mtctr 12
+# THUNK-NEXT:                  bctr
+>>>>>>> release/8.x
 
 # The offset from the TOC to the .branch_lt section  is (-1 << 16) - 32768.
 #                Name             Type            Address          Off    Size

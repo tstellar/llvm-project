@@ -28,7 +28,11 @@
 // enabled by default with -cl-std=CL2.0).
 //
 // RUN: %clang_cc1 %s -triple amdgcn-unknown-unknown -verify -pedantic -fsyntax-only -cl-std=CL2.0 -finclude-default-header
+<<<<<<< HEAD
 // RUN: %clang_cc1 %s -triple spir-unknown-unknown -verify -pedantic -fsyntax-only -cl-std=clc++
+=======
+// RUN: %clang_cc1 %s -triple spir-unknown-unknown -verify -pedantic -fsyntax-only -cl-std=c++
+>>>>>>> release/8.x
 
 #ifdef _OPENCL_H_
 // expected-no-diagnostics

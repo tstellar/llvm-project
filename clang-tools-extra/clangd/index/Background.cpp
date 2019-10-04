@@ -137,10 +137,19 @@ bool shardIsStale(const LoadedShard &LS, llvm::vfs::FileSystem *FS) {
 BackgroundIndex::BackgroundIndex(
     Context BackgroundContext, const FileSystemProvider &FSProvider,
     const GlobalCompilationDatabase &CDB,
+<<<<<<< HEAD
     BackgroundIndexStorage::Factory IndexStorageFactory, size_t ThreadPoolSize)
     : SwapIndex(std::make_unique<MemIndex>()), FSProvider(FSProvider),
       CDB(CDB), BackgroundContext(std::move(BackgroundContext)),
       Rebuilder(this, &IndexedSymbols, ThreadPoolSize),
+=======
+    BackgroundIndexStorage::Factory IndexStorageFactory,
+    size_t BuildIndexPeriodMs, size_t ThreadPoolSize)
+    : SwapIndex(llvm::make_unique<MemIndex>()), FSProvider(FSProvider),
+      CDB(CDB), BackgroundContext(std::move(BackgroundContext)),
+      BuildIndexPeriodMs(BuildIndexPeriodMs),
+      SymbolsUpdatedSinceLastIndex(false),
+>>>>>>> release/8.x
       IndexStorageFactory(std::move(IndexStorageFactory)),
       CommandsChanged(
           CDB.watch([&](const std::vector<std::string> &ChangedFiles) {
@@ -190,6 +199,7 @@ static llvm::StringRef filenameWithoutExtension(llvm::StringRef Path) {
   return Path.drop_back(llvm::sys::path::extension(Path).size());
 }
 
+<<<<<<< HEAD
 BackgroundQueue::Task
 BackgroundIndex::indexFileTask(tooling::CompileCommand Cmd) {
   BackgroundQueue::Task T([this, Cmd] {
@@ -202,6 +212,21 @@ BackgroundIndex::indexFileTask(tooling::CompileCommand Cmd) {
   T.QueuePri = IndexFile;
   T.Tag = filenameWithoutExtension(Cmd.Filename);
   return T;
+=======
+void BackgroundIndex::enqueue(tooling::CompileCommand Cmd,
+                              BackgroundIndexStorage *Storage) {
+  enqueueTask(Bind(
+                  [this, Storage](tooling::CompileCommand Cmd) {
+                    // We can't use llvm::StringRef here since we are going to
+                    // move from Cmd during the call below.
+                    const std::string FileName = Cmd.Filename;
+                    if (auto Error = index(std::move(Cmd), Storage))
+                      elog("Indexing {0} failed: {1}", FileName,
+                           std::move(Error));
+                  },
+                  std::move(Cmd)),
+              ThreadPriority::Low);
+>>>>>>> release/8.x
 }
 
 void BackgroundIndex::boostRelated(llvm::StringRef Path) {

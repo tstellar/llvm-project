@@ -14,5 +14,9 @@ define i32 @foo() {
 
 ; CHECK-LABEL: foo:
 ; CHECK-NEXT:    .functype foo () -> (i32)
+<<<<<<< HEAD
 ; CHECK-NEXT:    call __original_main
+=======
+; CHECK-NEXT:    call __original_main@FUNCTION
+>>>>>>> release/8.x
 ; CHECK-NEXT:    end_function

@@ -55,6 +55,12 @@ def use_lldb_substitutions(config):
 
     llvm_config.add_tool_substitutions(primary_tools,
                                        [config.lldb_tools_dir])
+<<<<<<< HEAD
+=======
+    # lldb-mi always fails without Python support
+    if lldbmi.was_resolved and not config.lldb_disable_python:
+        config.available_features.add('lldb-mi')
+>>>>>>> release/8.x
 
 def _use_msvc_substitutions(config):
     # If running from a Visual Studio Command prompt (e.g. vcvars), this will

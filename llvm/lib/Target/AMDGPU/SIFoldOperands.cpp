@@ -237,7 +237,11 @@ static bool updateOperand(FoldCandidate &Fold,
     }
   }
 
+<<<<<<< HEAD
   if ((Fold.isImm() || Fold.isFI() || Fold.isGlobal()) && Fold.needsShrink()) {
+=======
+  if ((Fold.isImm() || Fold.isFI()) && Fold.needsShrink()) {
+>>>>>>> release/8.x
     MachineBasicBlock *MBB = MI->getParent();
     auto Liveness = MBB->computeRegisterLiveness(&TRI, AMDGPU::VCC, MI);
     if (Liveness != MachineBasicBlock::LQR_Dead)
@@ -252,7 +256,11 @@ static bool updateOperand(FoldCandidate &Fold,
     bool HaveNonDbgCarryUse = !MRI.use_nodbg_empty(Dst1.getReg());
 
     const TargetRegisterClass *Dst0RC = MRI.getRegClass(Dst0.getReg());
+<<<<<<< HEAD
     Register NewReg0 = MRI.createVirtualRegister(Dst0RC);
+=======
+    unsigned NewReg0 = MRI.createVirtualRegister(Dst0RC);
+>>>>>>> release/8.x
 
     MachineInstr *Inst32 = TII.buildShrunkInst(*MI, Op32);
 
@@ -281,6 +289,14 @@ static bool updateOperand(FoldCandidate &Fold,
 
   if (Fold.isImm()) {
     Old.ChangeToImmediate(Fold.ImmToFold);
+<<<<<<< HEAD
+=======
+    return true;
+  }
+
+  if (Fold.isFI()) {
+    Old.ChangeToFrameIndex(Fold.FrameIndexToFold);
+>>>>>>> release/8.x
     return true;
   }
 
@@ -384,7 +400,11 @@ static bool tryAddToFoldList(SmallVectorImpl<FoldCandidate> &FoldList,
       if ((Opc == AMDGPU::V_ADD_I32_e64 ||
            Opc == AMDGPU::V_SUB_I32_e64 ||
            Opc == AMDGPU::V_SUBREV_I32_e64) && // FIXME
+<<<<<<< HEAD
           (OpToFold->isImm() || OpToFold->isFI() || OpToFold->isGlobal())) {
+=======
+          (OpToFold->isImm() || OpToFold->isFI())) {
+>>>>>>> release/8.x
         MachineRegisterInfo &MRI = MI->getParent()->getParent()->getRegInfo();
 
         // Verify the other operand is a VGPR, otherwise we would violate the

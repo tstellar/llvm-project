@@ -103,10 +103,17 @@ void lld::wasm::markLive() {
       // zero is only reachable via "call", not via "call_indirect".  The stub
       // functions used for weak-undefined symbols have this behaviour (compare
       // equal to null pointer, only reachable via direct call).
+<<<<<<< HEAD
       if (reloc.Type == R_WASM_TABLE_INDEX_SLEB ||
           reloc.Type == R_WASM_TABLE_INDEX_I32) {
         auto *funcSym = cast<FunctionSymbol>(sym);
         if (funcSym->hasTableIndex() && funcSym->getTableIndex() == 0)
+=======
+      if (Reloc.Type == R_WEBASSEMBLY_TABLE_INDEX_SLEB ||
+          Reloc.Type == R_WEBASSEMBLY_TABLE_INDEX_I32) {
+        auto *FuncSym = cast<FunctionSymbol>(Sym);
+        if (FuncSym->hasTableIndex() && FuncSym->getTableIndex() == 0)
+>>>>>>> release/8.x
           continue;
       }
 

@@ -6,10 +6,17 @@
 # RUN: llvm-readobj --file-headers %t3x64 | FileCheck --check-prefix=AMD64 %s
 # RUN: llvm-mc -filetype=obj -triple=x86_64-unknown-linux %s -o %t.sysv
 # RUN: ld.lld -m elf_amd64_fbsd %t.sysv -o %t.freebsd
+<<<<<<< HEAD
 # RUN: llvm-readobj --file-headers %t.freebsd | FileCheck --check-prefix=AMD64 %s
 # RUN: echo 'OUTPUT_FORMAT(elf64-x86-64-freebsd)' > %t4x64.script
 # RUN: ld.lld %t4x64.script %tx64 -o %t4x64
 # RUN: llvm-readobj --file-headers %t4x64 | FileCheck --check-prefix=AMD64 %s
+=======
+# RUN: llvm-readobj -file-headers %t.freebsd | FileCheck --check-prefix=AMD64 %s
+# RUN: echo 'OUTPUT_FORMAT(elf64-x86-64-freebsd)' > %t4x64.script
+# RUN: ld.lld %t4x64.script %tx64 -o %t4x64
+# RUN: llvm-readobj -file-headers %t4x64 | FileCheck --check-prefix=AMD64 %s
+>>>>>>> release/8.x
 # AMD64:      ElfHeader {
 # AMD64-NEXT:   Ident {
 # AMD64-NEXT:     Magic: (7F 45 4C 46)
@@ -141,12 +148,21 @@
 
 # RUN: llvm-mc -filetype=obj -triple=i686-unknown-freebsd %s -o %tx86fbsd
 # RUN: ld.lld -m elf_i386_fbsd %tx86fbsd -o %t2x86fbsd
+<<<<<<< HEAD
 # RUN: llvm-readobj --file-headers %t2x86fbsd | FileCheck --check-prefix=X86FBSD %s
 # RUN: ld.lld %tx86fbsd -o %t3x86fbsd
 # RUN: llvm-readobj --file-headers %t3x86fbsd | FileCheck --check-prefix=X86FBSD %s
 # RUN: echo 'OUTPUT_FORMAT(elf32-i386-freebsd)' > %t4x86fbsd.script
 # RUN: ld.lld %t4x86fbsd.script %tx86fbsd -o %t4x86fbsd
 # RUN: llvm-readobj --file-headers %t4x86fbsd | FileCheck --check-prefix=X86FBSD %s
+=======
+# RUN: llvm-readobj -file-headers %t2x86fbsd | FileCheck --check-prefix=X86FBSD %s
+# RUN: ld.lld %tx86fbsd -o %t3x86fbsd
+# RUN: llvm-readobj -file-headers %t3x86fbsd | FileCheck --check-prefix=X86FBSD %s
+# RUN: echo 'OUTPUT_FORMAT(elf32-i386-freebsd)' > %t4x86fbsd.script
+# RUN: ld.lld %t4x86fbsd.script %tx86fbsd -o %t4x86fbsd
+# RUN: llvm-readobj -file-headers %t4x86fbsd | FileCheck --check-prefix=X86FBSD %s
+>>>>>>> release/8.x
 # X86FBSD:      ElfHeader {
 # X86FBSD-NEXT:   Ident {
 # X86FBSD-NEXT:     Magic: (7F 45 4C 46)

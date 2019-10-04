@@ -54,6 +54,7 @@ void usenotmyobject() {
 @implementation FromSelf
 +(FromSelf*)another_one {
   [self new];
+<<<<<<< HEAD
 }
 @end
 
@@ -67,5 +68,7 @@ void usenotmyobject() {
 -(void)meth:(Class)c {
   [c new]; // No error; unknown interface.
   [NoInitSub new]; // expected-error {{'new' is unavailable}}
+=======
+>>>>>>> release/8.x
 }
 @end

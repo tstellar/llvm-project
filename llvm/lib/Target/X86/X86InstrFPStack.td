@@ -592,7 +592,11 @@ def ISTT_FP64m : FPI<0xDD, MRM1m, (outs), (ins i64mem:$dst), "fisttp{ll}\t$dst">
 }
 
 // FP Stack manipulation instructions.
+<<<<<<< HEAD
 let SchedRW = [WriteMove], Uses = [FPCW] in {
+=======
+let SchedRW = [WriteMove] in {
+>>>>>>> release/8.x
 def LD_Frr   : FPI<0xD9, MRM0r, (outs), (ins RSTi:$op), "fld\t$op">;
 def ST_Frr   : FPI<0xDD, MRM2r, (outs), (ins RSTi:$op), "fst\t$op">;
 def ST_FPrr  : FPI<0xDD, MRM3r, (outs), (ins RSTi:$op), "fstp\t$op">;
@@ -621,7 +625,11 @@ def LD_F0 : FPI<0xD9, MRM_EE, (outs), (ins), "fldz">;
 let SchedRW = [WriteFLD1], Uses = [FPCW] in
 def LD_F1 : FPI<0xD9, MRM_E8, (outs), (ins), "fld1">;
 
+<<<<<<< HEAD
 let SchedRW = [WriteFLDC], Uses = [FPCW] in {
+=======
+let SchedRW = [WriteFLDC] in {
+>>>>>>> release/8.x
 def FLDL2T : I<0xD9, MRM_E9, (outs), (ins), "fldl2t", []>;
 def FLDL2E : I<0xD9, MRM_EA, (outs), (ins), "fldl2e", []>;
 def FLDPI : I<0xD9, MRM_EB, (outs), (ins), "fldpi", []>;

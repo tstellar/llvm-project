@@ -22,7 +22,11 @@
 ; CHECK:       mov     x29, sp
 ; CHECK:       sub     sp, sp, #624
 ; CHECK:       mov     x19, sp
+<<<<<<< HEAD
 ; CHECK:       mov     x0, #-2
+=======
+; CHECK:       orr     x0, xzr, #0xfffffffffffffffe
+>>>>>>> release/8.x
 ; CHECK:       stur    x0, [x19]
 
 ; Now check that x is stored at fp - 20.  We check that this is the same

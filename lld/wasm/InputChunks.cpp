@@ -22,8 +22,13 @@ using namespace llvm::support::endian;
 using namespace lld;
 using namespace lld::wasm;
 
+<<<<<<< HEAD
 StringRef lld::relocTypeToString(uint8_t relocType) {
   switch (relocType) {
+=======
+static StringRef reloctTypeToString(uint8_t RelocType) {
+  switch (RelocType) {
+>>>>>>> release/8.x
 #define WASM_RELOC(NAME, REL)                                                  \
   case REL:                                                                    \
     return #NAME;
@@ -76,6 +81,7 @@ void InputChunk::verifyRelocTargets() const {
 
     if (bytesRead && bytesRead != 5)
       warn("expected LEB at relocation site be 5-byte padded");
+<<<<<<< HEAD
 
     if (rel.Type != R_WASM_GLOBAL_INDEX_LEB) {
       uint32_t expectedValue = file->calcExpectedValue(rel);
@@ -84,6 +90,13 @@ void InputChunk::verifyRelocTargets() const {
              ": existing=" + Twine(existingValue) +
              " expected=" + Twine(expectedValue));
     }
+=======
+    uint32_t ExpectedValue = File->calcExpectedValue(Rel);
+    if (ExpectedValue != ExistingValue)
+      warn("unexpected existing value for " + reloctTypeToString(Rel.Type) +
+           ": existing=" + Twine(ExistingValue) +
+           " expected=" + Twine(ExpectedValue));
+>>>>>>> release/8.x
   }
 }
 
@@ -100,6 +113,7 @@ void InputChunk::writeTo(uint8_t *buf) const {
   verifyRelocTargets();
 #endif
 
+<<<<<<< HEAD
   LLVM_DEBUG(dbgs() << "applying relocations: " << toString(this)
                     << " count=" << relocations.size() << "\n");
   int32_t off = outputOffset - getInputSectionOffset();
@@ -112,6 +126,18 @@ void InputChunk::writeTo(uint8_t *buf) const {
       LLVM_DEBUG(dbgs() << " sym=" << file->getSymbols()[rel.Index]->getName());
     LLVM_DEBUG(dbgs() << " addend=" << rel.Addend << " index=" << rel.Index
                       << " value=" << value << " offset=" << rel.Offset
+=======
+  LLVM_DEBUG(dbgs() << "applying relocations: " << getName()
+                    << " count=" << Relocations.size() << "\n");
+  int32_t Off = OutputOffset - getInputSectionOffset();
+
+  for (const WasmRelocation &Rel : Relocations) {
+    uint8_t *Loc = Buf + Rel.Offset + Off;
+    uint32_t Value = File->calcNewValue(Rel);
+    LLVM_DEBUG(dbgs() << "apply reloc: type=" << reloctTypeToString(Rel.Type)
+                      << " addend=" << Rel.Addend << " index=" << Rel.Index
+                      << " value=" << Value << " offset=" << Rel.Offset
+>>>>>>> release/8.x
                       << "\n");
 
     switch (rel.Type) {

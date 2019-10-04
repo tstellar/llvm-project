@@ -1844,7 +1844,7 @@ ExprResult Sema::BuildBlockForLambdaConversion(SourceLocation CurrentLocation,
                                                  /*NRVO=*/false),
       CurrentLocation, Src);
   if (!Init.isInvalid())
-    Init = ActOnFinishFullExpr(Init.get(), /*DiscardedValue*/ false);
+    Init = ActOnFinishFullExpr(Init.get());
 
   if (Init.isInvalid())
     return ExprError();

@@ -71,8 +71,16 @@ x:
 // CHECK-EMPTY:
 // CHECK-NEXT: _start:
 // offset of x from Thread pointer = (TcbSize + 0x0 = 0x8)
+<<<<<<< HEAD
 // CHECK-NEXT:   11114:         08 00 00 00
 // offset of z from Thread pointer = (TcbSize + 0x8 = 0x10)
 // CHECK-NEXT:   11118:         10 00 00 00
 // offset of y from Thread pointer = (TcbSize + 0x4 = 0xc)
 // CHECK-NEXT:   1111c:         0c 00 00 00
+=======
+// CHECK-NEXT:   11000:         08 00 00 00
+// offset of z from Thread pointer = (TcbSize + 0x8 = 0x10)
+// CHECK-NEXT:   11004:         10 00 00 00
+// offset of y from Thread pointer = (TcbSize + 0x4 = 0xc)
+// CHECK-NEXT:   11008:         0c 00 00 00
+>>>>>>> release/8.x

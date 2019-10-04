@@ -84,7 +84,11 @@ kernel void format_v4f32(float4 arg)
     printf("%v4f\n", arg); // expected-warning{{format specifies type 'double __attribute__((ext_vector_type(4)))' but the argument has type 'float4' (vector of 4 'float' values)}}
 
     // Precision modifier
+<<<<<<< HEAD
     printf("%.2v4f\n", arg); //expected-warning{{format specifies type 'double __attribute__((ext_vector_type(4)))' but the argument has type 'float4' (vector of 4 'float' values)}}
+=======
+    printf("%.2v4f\n", arg); // expected-warning{{format specifies type 'double __attribute__((ext_vector_type(4)))' but the argument has type 'float4' (vector of 4 'float' values)}}
+>>>>>>> release/8.x
 #else
     // FIXME: These should not warn, and the type should be expected to be float.
     printf("%v4f\n", arg);  // expected-warning {{double __attribute__((ext_vector_type(4)))' but the argument has type 'float4' (vector of 4 'float' values)}}

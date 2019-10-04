@@ -1161,6 +1161,7 @@ enum InEnum2 : int {
 enum class InEnum3 {
   THREE = indirect_builtin_constant_p("abc")
 };
+<<<<<<< HEAD
 
 // [class.ctor]p4:
 //   A constructor can be invoked for a const, volatile or const volatile
@@ -1242,3 +1243,5 @@ namespace TemporaryWithBadPointer {
     (dbt2.wp = nullptr, 0)
   };
 }
+=======
+>>>>>>> release/8.x

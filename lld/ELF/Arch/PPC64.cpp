@@ -195,6 +195,7 @@ public:
   PPC64();
   int getTlsGdRelaxSkip(RelType type) const override;
   uint32_t calcEFlags() const override;
+<<<<<<< HEAD
   RelExpr getRelExpr(RelType type, const Symbol &s,
                      const uint8_t *loc) const override;
   RelType getDynRel(RelType type) const override;
@@ -217,6 +218,28 @@ public:
 
   bool adjustPrologueForCrossSplitStack(uint8_t *loc, uint8_t *end,
                                         uint8_t stOther) const override;
+=======
+  RelExpr getRelExpr(RelType Type, const Symbol &S,
+                     const uint8_t *Loc) const override;
+  void writePltHeader(uint8_t *Buf) const override;
+  void writePlt(uint8_t *Buf, uint64_t GotPltEntryAddr, uint64_t PltEntryAddr,
+                int32_t Index, unsigned RelOff) const override;
+  void relocateOne(uint8_t *Loc, RelType Type, uint64_t Val) const override;
+  void writeGotHeader(uint8_t *Buf) const override;
+  bool needsThunk(RelExpr Expr, RelType Type, const InputFile *File,
+                  uint64_t BranchAddr, const Symbol &S) const override;
+  uint32_t getThunkSectionSpacing() const override;
+  bool inBranchRange(RelType Type, uint64_t Src, uint64_t Dst) const override;
+  RelExpr adjustRelaxExpr(RelType Type, const uint8_t *Data,
+                          RelExpr Expr) const override;
+  void relaxTlsGdToIe(uint8_t *Loc, RelType Type, uint64_t Val) const override;
+  void relaxTlsGdToLe(uint8_t *Loc, RelType Type, uint64_t Val) const override;
+  void relaxTlsLdToLe(uint8_t *Loc, RelType Type, uint64_t Val) const override;
+  void relaxTlsIeToLe(uint8_t *Loc, RelType Type, uint64_t Val) const override;
+
+  bool adjustPrologueForCrossSplitStack(uint8_t *Loc, uint8_t *End,
+                                        uint8_t StOther) const override;
+>>>>>>> release/8.x
 };
 } // namespace
 
@@ -913,9 +936,15 @@ bool PPC64::needsThunk(RelExpr expr, RelType type, const InputFile *file,
   // If the offset exceeds the range of the branch type then it will need
   // a range-extending thunk.
   // See the comment in getRelocTargetVA() about R_PPC64_CALL.
+<<<<<<< HEAD
   return !inBranchRange(type, branchAddr,
                         s.getVA() +
                             getPPC64GlobalEntryToLocalEntryOffset(s.stOther));
+=======
+  return !inBranchRange(Type, BranchAddr,
+                        S.getVA() +
+                            getPPC64GlobalEntryToLocalEntryOffset(S.StOther));
+>>>>>>> release/8.x
 }
 
 uint32_t PPC64::getThunkSectionSpacing() const {

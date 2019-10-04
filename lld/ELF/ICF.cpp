@@ -425,6 +425,7 @@ void ICF<ELFT>::forEachClass(llvm::function_ref<void(size_t, size_t)> fn) {
 // Combine the hashes of the sections referenced by the given section into its
 // hash.
 template <class ELFT, class RelTy>
+<<<<<<< HEAD
 static void combineRelocHashes(unsigned cnt, InputSection *isec,
                                ArrayRef<RelTy> rels) {
   uint32_t hash = isec->eqClass[cnt % 2];
@@ -436,6 +437,19 @@ static void combineRelocHashes(unsigned cnt, InputSection *isec,
   }
   // Set MSB to 1 to avoid collisions with non-hash IDs.
   isec->eqClass[(cnt + 1) % 2] = hash | (1U << 31);
+=======
+static void combineRelocHashes(unsigned Cnt, InputSection *IS,
+                               ArrayRef<RelTy> Rels) {
+  uint32_t Hash = IS->Class[Cnt % 2];
+  for (RelTy Rel : Rels) {
+    Symbol &S = IS->template getFile<ELFT>()->getRelocTargetSym(Rel);
+    if (auto *D = dyn_cast<Defined>(&S))
+      if (auto *RelSec = dyn_cast_or_null<InputSection>(D->Section))
+        Hash += RelSec->Class[Cnt % 2];
+  }
+  // Set MSB to 1 to avoid collisions with non-hash IDs.
+  IS->Class[(Cnt + 1) % 2] = Hash | (1U << 31);
+>>>>>>> release/8.x
 }
 
 static void print(const Twine &s) {
@@ -453,6 +467,7 @@ template <class ELFT> void ICF<ELFT>::run() {
   }
 
   // Initially, we use hash values to partition sections.
+<<<<<<< HEAD
   parallelForEach(sections, [&](InputSection *s) {
     s->eqClass[0] = xxHash64(s->data());
   });
@@ -463,6 +478,18 @@ template <class ELFT> void ICF<ELFT>::run() {
         combineRelocHashes<ELFT>(cnt, s, s->template relas<ELFT>());
       else
         combineRelocHashes<ELFT>(cnt, s, s->template rels<ELFT>());
+=======
+  parallelForEach(Sections, [&](InputSection *S) {
+    S->Class[0] = xxHash64(S->data());
+  });
+
+  for (unsigned Cnt = 0; Cnt != 2; ++Cnt) {
+    parallelForEach(Sections, [&](InputSection *S) {
+      if (S->AreRelocsRela)
+        combineRelocHashes<ELFT>(Cnt, S, S->template relas<ELFT>());
+      else
+        combineRelocHashes<ELFT>(Cnt, S, S->template rels<ELFT>());
+>>>>>>> release/8.x
     });
   }
 

@@ -298,9 +298,17 @@ void X86_64::relaxTlsIeToLe(uint8_t *loc, RelType type, uint64_t val) const {
   write32le(loc, val + 4);
 }
 
+<<<<<<< HEAD
 void X86_64::relaxTlsLdToLe(uint8_t *loc, RelType type, uint64_t val) const {
   if (type == R_X86_64_DTPOFF64) {
     write64le(loc, val);
+=======
+template <class ELFT>
+void X86_64<ELFT>::relaxTlsLdToLe(uint8_t *Loc, RelType Type,
+                                  uint64_t Val) const {
+  if (Type == R_X86_64_DTPOFF64) {
+    write64le(Loc, Val);
+>>>>>>> release/8.x
     return;
   }
   if (type == R_X86_64_DTPOFF32) {
@@ -314,7 +322,11 @@ void X86_64::relaxTlsLdToLe(uint8_t *loc, RelType type, uint64_t val) const {
       0x64, 0x48, 0x8b, 0x04, 0x25, 0x00, 0x00, 0x00, 0x00, // mov %fs:0,%rax
   };
 
+<<<<<<< HEAD
   if (loc[4] == 0xe8) {
+=======
+  if (Loc[4] == 0xe8) {
+>>>>>>> release/8.x
     // Convert
     //   leaq bar@tlsld(%rip), %rdi           # 48 8d 3d <Loc>
     //   callq __tls_get_addr@PLT             # e8 <disp32>
@@ -324,11 +336,19 @@ void X86_64::relaxTlsLdToLe(uint8_t *loc, RelType type, uint64_t val) const {
     //   .byte 0x66
     //   mov %fs:0,%rax
     //   leaq bar@tpoff(%rax), %rcx
+<<<<<<< HEAD
     memcpy(loc - 3, inst, sizeof(inst));
     return;
   }
 
   if (loc[4] == 0xff && loc[5] == 0x15) {
+=======
+    memcpy(Loc - 3, Inst, sizeof(Inst));
+    return;
+  }
+
+  if (Loc[4] == 0xff && Loc[5] == 0x15) {
+>>>>>>> release/8.x
     // Convert
     //   leaq  x@tlsld(%rip),%rdi               # 48 8d 3d <Loc>
     //   call *__tls_get_addr@GOTPCREL(%rip)    # ff 15 <disp32>
@@ -337,12 +357,21 @@ void X86_64::relaxTlsLdToLe(uint8_t *loc, RelType type, uint64_t val) const {
     //   movq   %fs:0,%rax
     // See "Table 11.9: LD -> LE Code Transition (LP64)" in
     // https://raw.githubusercontent.com/wiki/hjl-tools/x86-psABI/x86-64-psABI-1.0.pdf
+<<<<<<< HEAD
     loc[-3] = 0x66;
     memcpy(loc - 2, inst, sizeof(inst));
     return;
   }
 
   error(getErrorLocation(loc - 3) +
+=======
+    Loc[-3] = 0x66;
+    memcpy(Loc - 2, Inst, sizeof(Inst));
+    return;
+  }
+
+  error(getErrorLocation(Loc - 3) +
+>>>>>>> release/8.x
         "expected R_X86_64_PLT32 or R_X86_64_GOTPCRELX after R_X86_64_TLSLD");
 }
 

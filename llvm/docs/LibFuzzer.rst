@@ -677,7 +677,11 @@ Q. Does libFuzzer Support Windows?
 ------------------------------------------------------------------------------------
 
 Yes, libFuzzer now supports Windows. Initial support was added in r341082.
+<<<<<<< HEAD
 Any build of Clang 9 supports it. You can download a build of Clang for Windows
+=======
+You can download a build of Clang for Windows
+>>>>>>> release/8.x
 that has libFuzzer from
 `LLVM Snapshot Builds <https://llvm.org/builds/>`_.
 

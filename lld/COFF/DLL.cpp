@@ -45,10 +45,17 @@ public:
     return alignTo(name.size() + 3, 2);
   }
 
+<<<<<<< HEAD
   void writeTo(uint8_t *buf) const override {
     memset(buf, 0, getSize());
     write16le(buf, hint);
     memcpy(buf + 2, name.data(), name.size());
+=======
+  void writeTo(uint8_t *Buf) const override {
+    memset(Buf + OutputSectionOff, 0, getSize());
+    write16le(Buf + OutputSectionOff, Hint);
+    memcpy(Buf + OutputSectionOff + 2, Name.data(), Name.size());
+>>>>>>> release/8.x
   }
 
 private:
@@ -64,11 +71,19 @@ public:
   }
   size_t getSize() const override { return config->wordsize; }
 
+<<<<<<< HEAD
   void writeTo(uint8_t *buf) const override {
     if (config->is64())
       write64le(buf, hintName->getRVA());
     else
       write32le(buf, hintName->getRVA());
+=======
+  void writeTo(uint8_t *Buf) const override {
+    if (Config->is64())
+      write64le(Buf + OutputSectionOff, HintName->getRVA());
+    else
+      write32le(Buf + OutputSectionOff, HintName->getRVA());
+>>>>>>> release/8.x
   }
 
   Chunk *hintName;
@@ -103,6 +118,7 @@ public:
   explicit ImportDirectoryChunk(Chunk *n) : dllName(n) {}
   size_t getSize() const override { return sizeof(ImportDirectoryTableEntry); }
 
+<<<<<<< HEAD
   void writeTo(uint8_t *buf) const override {
     memset(buf, 0, getSize());
 
@@ -110,6 +126,15 @@ public:
     e->ImportLookupTableRVA = lookupTab->getRVA();
     e->NameRVA = dllName->getRVA();
     e->ImportAddressTableRVA = addressTab->getRVA();
+=======
+  void writeTo(uint8_t *Buf) const override {
+    memset(Buf + OutputSectionOff, 0, getSize());
+
+    auto *E = (coff_import_directory_table_entry *)(Buf + OutputSectionOff);
+    E->ImportLookupTableRVA = LookupTab->getRVA();
+    E->NameRVA = DLLName->getRVA();
+    E->ImportAddressTableRVA = AddressTab->getRVA();
+>>>>>>> release/8.x
   }
 
   Chunk *dllName;
@@ -126,6 +151,10 @@ public:
 
   void writeTo(uint8_t *buf) const override {
     memset(buf, 0, size);
+  }
+
+  void writeTo(uint8_t *Buf) const override {
+    memset(Buf + OutputSectionOff, 0, Size);
   }
 
 private:
@@ -169,6 +198,7 @@ public:
     return sizeof(delay_import_directory_table_entry);
   }
 
+<<<<<<< HEAD
   void writeTo(uint8_t *buf) const override {
     memset(buf, 0, getSize());
 
@@ -178,6 +208,17 @@ public:
     e->ModuleHandle = moduleHandle->getRVA();
     e->DelayImportAddressTable = addressTab->getRVA();
     e->DelayImportNameTable = nameTab->getRVA();
+=======
+  void writeTo(uint8_t *Buf) const override {
+    memset(Buf + OutputSectionOff, 0, getSize());
+
+    auto *E = (delay_import_directory_table_entry *)(Buf + OutputSectionOff);
+    E->Attributes = 1;
+    E->Name = DLLName->getRVA();
+    E->ModuleHandle = ModuleHandle->getRVA();
+    E->DelayImportAddressTable = AddressTab->getRVA();
+    E->DelayImportNameTable = NameTab->getRVA();
+>>>>>>> release/8.x
   }
 
   Chunk *dllName;
@@ -478,6 +519,7 @@ public:
     return sizeof(export_directory_table_entry);
   }
 
+<<<<<<< HEAD
   void writeTo(uint8_t *buf) const override {
     memset(buf, 0, getSize());
 
@@ -489,6 +531,19 @@ public:
     e->ExportAddressTableRVA = addressTab->getRVA();
     e->NamePointerRVA = nameTab->getRVA();
     e->OrdinalTableRVA = ordinalTab->getRVA();
+=======
+  void writeTo(uint8_t *Buf) const override {
+    memset(Buf + OutputSectionOff, 0, getSize());
+
+    auto *E = (export_directory_table_entry *)(Buf + OutputSectionOff);
+    E->NameRVA = DLLName->getRVA();
+    E->OrdinalBase = 0;
+    E->AddressTableEntries = MaxOrdinal + 1;
+    E->NumberOfNamePointers = NameTabSize;
+    E->ExportAddressTableRVA = AddressTab->getRVA();
+    E->NamePointerRVA = NameTab->getRVA();
+    E->OrdinalTableRVA = OrdinalTab->getRVA();
+>>>>>>> release/8.x
   }
 
   uint16_t maxOrdinal;

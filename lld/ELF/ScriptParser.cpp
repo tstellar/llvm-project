@@ -97,8 +97,13 @@ private:
   InputSectionDescription *readInputSectionRules(StringRef filePattern);
   unsigned readPhdrType();
   SortSectionPolicy readSortKind();
+<<<<<<< HEAD
   SymbolAssignment *readProvideHidden(bool provide, bool hidden);
   SymbolAssignment *readAssignment(StringRef tok);
+=======
+  SymbolAssignment *readProvideHidden(bool Provide, bool Hidden);
+  SymbolAssignment *readAssignment(StringRef Tok);
+>>>>>>> release/8.x
   void readSort();
   Expr readAssert();
   Expr readConstant();
@@ -380,8 +385,13 @@ void ScriptParser::readOutputArch() {
     skip();
 }
 
+<<<<<<< HEAD
 static std::pair<ELFKind, uint16_t> parseBfdName(StringRef s) {
   return StringSwitch<std::pair<ELFKind, uint16_t>>(s)
+=======
+static std::pair<ELFKind, uint16_t> parseBfdName(StringRef S) {
+  return StringSwitch<std::pair<ELFKind, uint16_t>>(S)
+>>>>>>> release/8.x
       .Case("elf32-i386", {ELF32LEKind, EM_386})
       .Case("elf32-iamcu", {ELF32LEKind, EM_IAMCU})
       .Case("elf32-littlearm", {ELF32LEKind, EM_ARM})
@@ -398,8 +408,11 @@ static std::pair<ELFKind, uint16_t> parseBfdName(StringRef s) {
       .Case("elf32-ntradlittlemips", {ELF32LEKind, EM_MIPS})
       .Case("elf64-tradbigmips", {ELF64BEKind, EM_MIPS})
       .Case("elf64-tradlittlemips", {ELF64LEKind, EM_MIPS})
+<<<<<<< HEAD
       .Case("elf32-littleriscv", {ELF32LEKind, EM_RISCV})
       .Case("elf64-littleriscv", {ELF64LEKind, EM_RISCV})
+=======
+>>>>>>> release/8.x
       .Default({ELFNoneKind, EM_NONE});
 }
 
@@ -408,6 +421,7 @@ static std::pair<ELFKind, uint16_t> parseBfdName(StringRef s) {
 void ScriptParser::readOutputFormat() {
   expect("(");
 
+<<<<<<< HEAD
   StringRef name = unquote(next());
   StringRef s = name;
   if (s.consume_back("-freebsd"))
@@ -418,6 +432,18 @@ void ScriptParser::readOutputFormat() {
     setError("unknown output format name: " + name);
   if (s == "elf32-ntradlittlemips" || s == "elf32-ntradbigmips")
     config->mipsN32Abi = true;
+=======
+  StringRef Name = unquote(next());
+  StringRef S = Name;
+  if (S.consume_back("-freebsd"))
+    Config->OSABI = ELFOSABI_FREEBSD;
+
+  std::tie(Config->EKind, Config->EMachine) = parseBfdName(S);
+  if (Config->EMachine == EM_NONE)
+    setError("unknown output format name: " + Name);
+  if (S == "elf32-ntradlittlemips" || S == "elf32-ntradbigmips")
+    Config->MipsN32Abi = true;
+>>>>>>> release/8.x
 
   if (consume(")"))
     return;

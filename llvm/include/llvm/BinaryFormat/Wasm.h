@@ -328,9 +328,13 @@ const unsigned WASM_SYMBOL_BINDING_LOCAL = 0x2;
 const unsigned WASM_SYMBOL_VISIBILITY_DEFAULT = 0x0;
 const unsigned WASM_SYMBOL_VISIBILITY_HIDDEN = 0x4;
 const unsigned WASM_SYMBOL_UNDEFINED = 0x10;
+<<<<<<< HEAD
 const unsigned WASM_SYMBOL_EXPORTED = 0x20;
 const unsigned WASM_SYMBOL_EXPLICIT_NAME = 0x40;
 const unsigned WASM_SYMBOL_NO_STRIP = 0x80;
+=======
+const unsigned WASM_SYMBOL_EXPLICIT_NAME = 0x40;
+>>>>>>> release/8.x
 
 #define WASM_RELOC(name, value) name = value,
 

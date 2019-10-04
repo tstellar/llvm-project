@@ -72,6 +72,7 @@ for cachedir in [config.clang_module_cache, config.lldb_module_cache]:
         print("Deleting module cache at %s."%cachedir)
         shutil.rmtree(cachedir)
 
+<<<<<<< HEAD
 # Set a default per-test timeout of 10 minutes. Setting a timeout per test
 # requires that killProcessAndChildren() is supported on the platform and
 # lit complains if the value is set but it is not supported.
@@ -96,5 +97,7 @@ if 'native' in config.available_features:
         else:
             lit_config.warning("lit-cpuid failed: %s" % err)
 
+=======
+>>>>>>> release/8.x
 if not config.lldb_disable_python:
     config.available_features.add('python')

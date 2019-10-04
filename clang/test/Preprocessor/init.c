@@ -9706,10 +9706,17 @@
 // RUN: %clang_cc1 -E -dM -ffreestanding -triple=wasm64-unknown-unknown \
 // RUN:   < /dev/null \
 // RUN:   | FileCheck -match-full-lines -check-prefixes=WEBASSEMBLY,WEBASSEMBLY64 %s
+<<<<<<< HEAD
 // RUN: %clang_cc1 -E -dM -ffreestanding -triple=wasm32-wasi \
 // RUN:   < /dev/null \
 // RUN:   | FileCheck -match-full-lines -check-prefixes=WEBASSEMBLY,WEBASSEMBLY32,WEBASSEMBLY-WASI %s
 // RUN: %clang_cc1 -E -dM -ffreestanding -triple=wasm64-wasi \
+=======
+// RUN: %clang_cc1 -E -dM -ffreestanding -triple=wasm32-unknown-wasi \
+// RUN:   < /dev/null \
+// RUN:   | FileCheck -match-full-lines -check-prefixes=WEBASSEMBLY,WEBASSEMBLY32,WEBASSEMBLY-WASI %s
+// RUN: %clang_cc1 -E -dM -ffreestanding -triple=wasm64-unknown-wasi \
+>>>>>>> release/8.x
 // RUN:   < /dev/null \
 // RUN:   | FileCheck -match-full-lines -check-prefixes=WEBASSEMBLY,WEBASSEMBLY64,WEBASSEMBLY-WASI %s
 //
@@ -9757,6 +9764,7 @@
 // WEBASSEMBLY-NEXT:#define __DECIMAL_DIG__ __LDBL_DECIMAL_DIG__
 // WEBASSEMBLY-NOT:#define __ELF__
 // WEBASSEMBLY-NEXT:#define __FINITE_MATH_ONLY__ 0
+<<<<<<< HEAD
 // WEBASSEMBLY-NEXT:#define __FLOAT128__ 1
 // WEBASSEMBLY-NOT:#define __FLT16_DECIMAL_DIG__
 // WEBASSEMBLY-NOT:#define __FLT16_DENORM_MIN__
@@ -9772,6 +9780,22 @@
 // WEBASSEMBLY-NOT:#define __FLT16_MIN_10_EXP__
 // WEBASSEMBLY-NOT:#define __FLT16_MIN_EXP__
 // WEBASSEMBLY-NOT:#define __FLT16_MIN__
+=======
+// WEBASSEMBLY-NEXT:#define __FLT16_DECIMAL_DIG__ 5
+// WEBASSEMBLY-NEXT:#define __FLT16_DENORM_MIN__ 5.9604644775390625e-8F16
+// WEBASSEMBLY-NEXT:#define __FLT16_DIG__ 3
+// WEBASSEMBLY-NEXT:#define __FLT16_EPSILON__ 9.765625e-4F16
+// WEBASSEMBLY-NEXT:#define __FLT16_HAS_DENORM__ 1
+// WEBASSEMBLY-NEXT:#define __FLT16_HAS_INFINITY__ 1
+// WEBASSEMBLY-NEXT:#define __FLT16_HAS_QUIET_NAN__ 1
+// WEBASSEMBLY-NEXT:#define __FLT16_MANT_DIG__ 11
+// WEBASSEMBLY-NEXT:#define __FLT16_MAX_10_EXP__ 4
+// WEBASSEMBLY-NEXT:#define __FLT16_MAX_EXP__ 15
+// WEBASSEMBLY-NEXT:#define __FLT16_MAX__ 6.5504e+4F16
+// WEBASSEMBLY-NEXT:#define __FLT16_MIN_10_EXP__ (-13)
+// WEBASSEMBLY-NEXT:#define __FLT16_MIN_EXP__ (-14)
+// WEBASSEMBLY-NEXT:#define __FLT16_MIN__ 6.103515625e-5F16
+>>>>>>> release/8.x
 // WEBASSEMBLY-NEXT:#define __FLT_DECIMAL_DIG__ 9
 // WEBASSEMBLY-NEXT:#define __FLT_DENORM_MIN__ 1.40129846e-45F
 // WEBASSEMBLY-NEXT:#define __FLT_DIG__ 6

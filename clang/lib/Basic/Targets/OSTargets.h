@@ -853,6 +853,7 @@ public:
       : WebAssemblyOSTargetInfo<Target>(Triple, Opts) {}
 };
 
+<<<<<<< HEAD
 // Emscripten target
 template <typename Target>
 class LLVM_LIBRARY_VISIBILITY EmscriptenTargetInfo
@@ -868,6 +869,8 @@ public:
       : WebAssemblyOSTargetInfo<Target>(Triple, Opts) {}
 };
 
+=======
+>>>>>>> release/8.x
 } // namespace targets
 } // namespace clang
 #endif // LLVM_CLANG_LIB_BASIC_TARGETS_OSTARGETS_H

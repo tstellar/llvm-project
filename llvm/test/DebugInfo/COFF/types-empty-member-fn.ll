@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 ; RUN: llc < %s -filetype=obj | llvm-readobj - --codeview | FileCheck %s
 ; RUN: llc < %s | llvm-mc -filetype=obj --triple=x86_64-windows | llvm-readobj - --codeview | FileCheck %s
+=======
+; RUN: llc < %s -filetype=obj | llvm-readobj - -codeview | FileCheck %s
+>>>>>>> release/8.x
 
 ; ModuleID = 'foo.3a1fbbbh-cgu.0'
 source_filename = "foo.3a1fbbbh-cgu.0"

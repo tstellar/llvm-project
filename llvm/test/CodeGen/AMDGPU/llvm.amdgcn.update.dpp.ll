@@ -25,6 +25,7 @@ define amdgpu_kernel void @dpp_test_bc(i32 addrspace(1)* %out, i32 %in1, i32 %in
 
 
 ; VI-LABEL: {{^}}dpp_test1:
+<<<<<<< HEAD
 ; GFX10: v_add_nc_u32_e32 [[REG:v[0-9]+]], v{{[0-9]+}}, v{{[0-9]+}}
 ; GFX8-OPT: v_add_u32_e32 [[REG:v[0-9]+]], vcc, v{{[0-9]+}}, v{{[0-9]+}}
 ; GFX8-NOOPT: v_add_u32_e64 [[REG:v[0-9]+]], s{{\[[0-9]+:[0-9]+\]}}, v{{[0-9]+}}, v{{[0-9]+}}
@@ -32,6 +33,14 @@ define amdgpu_kernel void @dpp_test_bc(i32 addrspace(1)* %out, i32 %in1, i32 %in
 ; GFX8: s_nop 0
 ; GFX8-NEXT: s_nop 0
 ; GFX8-OPT-NEXT: v_mov_b32_dpp {{v[0-9]+}}, [[REG]] quad_perm:[1,0,3,2] row_mask:0xf bank_mask:0xf
+=======
+; VI-OPT: v_add_u32_e32 [[REG:v[0-9]+]], vcc, v{{[0-9]+}}, v{{[0-9]+}}
+; VI-NOOPT: v_add_u32_e64 [[REG:v[0-9]+]], s{{\[[0-9]+:[0-9]+\]}}, v{{[0-9]+}}, v{{[0-9]+}}
+; VI-NOOPT: v_mov_b32_e32 v{{[0-9]+}}, 0
+; VI-NEXT: s_nop 0
+; VI-NEXT: s_nop 0
+; VI-NEXT: v_mov_b32_dpp {{v[0-9]+}}, [[REG]] quad_perm:[1,0,3,2] row_mask:0xf bank_mask:0xf
+>>>>>>> release/8.x
 @0 = internal unnamed_addr addrspace(3) global [448 x i32] undef, align 4
 define weak_odr amdgpu_kernel void @dpp_test1(i32* %arg) local_unnamed_addr {
 bb:

@@ -2237,8 +2237,13 @@ void BoUpSLP::buildTree_rec(ArrayRef<Value *> VL, unsigned Depth,
   // If any of the scalars is marked as a value that needs to stay scalar, then
   // we need to gather the scalars.
   // The reduction nodes (stored in UserIgnoreList) also should stay scalar.
+<<<<<<< HEAD
   for (Value *V : VL) {
     if (MustGather.count(V) || is_contained(UserIgnoreList, V)) {
+=======
+  for (unsigned i = 0, e = VL.size(); i != e; ++i) {
+    if (MustGather.count(VL[i]) || is_contained(UserIgnoreList, VL[i])) {
+>>>>>>> release/8.x
       LLVM_DEBUG(dbgs() << "SLP: Gathering due to gathered scalar.\n");
       newTreeEntry(VL, None /*not vectorized*/, S, UserTreeIdx);
       return;

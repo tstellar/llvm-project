@@ -200,7 +200,11 @@ SparcRegisterInfo::eliminateFrameIndex(MachineBasicBlock::iterator II,
       MachineInstr *LdMI =
         BuildMI(*MI.getParent(), II, dl, TII.get(SP::LDDFri), DestEvenReg)
         .addReg(FrameReg).addImm(0);
+<<<<<<< HEAD
       replaceFI(MF, *LdMI, *LdMI, dl, 1, Offset, FrameReg);
+=======
+      replaceFI(MF, *StMI, *StMI, dl, 1, Offset, FrameReg);
+>>>>>>> release/8.x
 
       MI.setDesc(TII.get(SP::LDDFri));
       MI.getOperand(0).setReg(DestOddReg);

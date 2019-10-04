@@ -262,12 +262,18 @@ void ICF::run(ArrayRef<Chunk *> vec) {
         sc->eqClass[0] = nextId++;
 
   // Initially, we use hash values to partition sections.
+<<<<<<< HEAD
   parallelForEach(chunks, [&](SectionChunk *sc) {
     sc->eqClass[0] = xxHash64(sc->getContents());
+=======
+  parallelForEach(Chunks, [&](SectionChunk *SC) {
+    SC->Class[0] = xxHash64(SC->getContents());
+>>>>>>> release/8.x
   });
 
   // Combine the hashes of the sections referenced by each section into its
   // hash.
+<<<<<<< HEAD
   for (unsigned cnt = 0; cnt != 2; ++cnt) {
     parallelForEach(chunks, [&](SectionChunk *sc) {
       uint32_t hash = sc->eqClass[cnt % 2];
@@ -276,6 +282,16 @@ void ICF::run(ArrayRef<Chunk *> vec) {
           hash += sym->getChunk()->eqClass[cnt % 2];
       // Set MSB to 1 to avoid collisions with non-hash classs.
       sc->eqClass[(cnt + 1) % 2] = hash | (1U << 31);
+=======
+  for (unsigned Cnt = 0; Cnt != 2; ++Cnt) {
+    parallelForEach(Chunks, [&](SectionChunk *SC) {
+      uint32_t Hash = SC->Class[Cnt % 2];
+      for (Symbol *B : SC->symbols())
+        if (auto *Sym = dyn_cast_or_null<DefinedRegular>(B))
+          Hash += Sym->getChunk()->Class[Cnt % 2];
+      // Set MSB to 1 to avoid collisions with non-hash classs.
+      SC->Class[(Cnt + 1) % 2] = Hash | (1U << 31);
+>>>>>>> release/8.x
     });
   }
 

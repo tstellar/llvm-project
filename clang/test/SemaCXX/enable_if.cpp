@@ -522,6 +522,7 @@ void test() {
   InConstantContext::foo("abc");
 }
 } // namespace InConstantContext
+<<<<<<< HEAD
 
 namespace StringLiteralDetector {
   void need_string_literal(const char *p) __attribute__((enable_if(__builtin_constant_p(p), "argument is not a string literal"))); // expected-note 2{{not a string literal}}
@@ -533,3 +534,5 @@ namespace StringLiteralDetector {
   }
 }
 
+=======
+>>>>>>> release/8.x

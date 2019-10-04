@@ -526,6 +526,11 @@ void X86PassConfig::addPreEmitPass2() {
   // Verify basic block incoming and outgoing cfa offset and register values and
   // correct CFA calculation rule where needed by inserting appropriate CFI
   // instructions.
+<<<<<<< HEAD
+=======
+  const Triple &TT = TM->getTargetTriple();
+  const MCAsmInfo *MAI = TM->getMCAsmInfo();
+>>>>>>> release/8.x
   if (!TT.isOSDarwin() &&
       (!TT.isOSWindows() ||
        MAI->getExceptionHandlingType() == ExceptionHandling::DwarfCFI))

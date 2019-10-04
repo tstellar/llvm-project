@@ -163,6 +163,7 @@ entry:
 ; RELOC-NEXT:         Functions:       [ 1 ]
 ; RELOC-NEXT:   - Type:            CODE
 ; RELOC-NEXT:     Relocations:
+<<<<<<< HEAD
 ; RELOC-NEXT:       - Type:            R_WASM_FUNCTION_INDEX_LEB
 ; RELOC-NEXT:         Index:           1
 ; RELOC-NEXT:         Offset:          0x00000004
@@ -170,6 +171,15 @@ entry:
 ; RELOC-NEXT:         Index:           2
 ; RELOC-NEXT:         Offset:          0x00000013
 ; RELOC-NEXT:       - Type:            R_WASM_FUNCTION_INDEX_LEB
+=======
+; RELOC-NEXT:       - Type:            R_WEBASSEMBLY_FUNCTION_INDEX_LEB
+; RELOC-NEXT:         Index:           1
+; RELOC-NEXT:         Offset:          0x00000004
+; RELOC-NEXT:       - Type:            R_WEBASSEMBLY_FUNCTION_INDEX_LEB
+; RELOC-NEXT:         Index:           2
+; RELOC-NEXT:         Offset:          0x00000013
+; RELOC-NEXT:       - Type:            R_WEBASSEMBLY_FUNCTION_INDEX_LEB
+>>>>>>> release/8.x
 ; RELOC-NEXT:         Index:           1
 ; RELOC-NEXT:         Offset:          0x0000001C
 ; RELOC-NEXT:       - Type:            R_WASM_GLOBAL_INDEX_LEB
@@ -178,10 +188,17 @@ entry:
 ; RELOC-NEXT:       - Type:            R_WASM_GLOBAL_INDEX_LEB
 ; RELOC-NEXT:         Index:           6
 ; RELOC-NEXT:         Offset:          0x00000032
+<<<<<<< HEAD
 ; RELOC-NEXT:       - Type:            R_WASM_TABLE_INDEX_SLEB
 ; RELOC-NEXT:         Index:           1
 ; RELOC-NEXT:         Offset:          0x0000003A
 ; RELOC-NEXT:       - Type:            R_WASM_FUNCTION_INDEX_LEB
+=======
+; RELOC-NEXT:       - Type:            R_WEBASSEMBLY_TABLE_INDEX_SLEB
+; RELOC-NEXT:         Index:           1
+; RELOC-NEXT:         Offset:          0x0000003A
+; RELOC-NEXT:       - Type:            R_WEBASSEMBLY_FUNCTION_INDEX_LEB
+>>>>>>> release/8.x
 ; RELOC-NEXT:         Index:           1
 ; RELOC-NEXT:         Offset:          0x00000043
 ; RELOC-NEXT:       - Type:            R_WASM_GLOBAL_INDEX_LEB
@@ -193,10 +210,17 @@ entry:
 ; RELOC-NEXT:       - Type:            R_WASM_GLOBAL_INDEX_LEB
 ; RELOC-NEXT:         Index:           6
 ; RELOC-NEXT:         Offset:          0x00000068
+<<<<<<< HEAD
 ; RELOC-NEXT:       - Type:            R_WASM_TABLE_INDEX_SLEB
 ; RELOC-NEXT:         Index:           2
 ; RELOC-NEXT:         Offset:          0x00000070
 ; RELOC-NEXT:       - Type:            R_WASM_FUNCTION_INDEX_LEB
+=======
+; RELOC-NEXT:       - Type:            R_WEBASSEMBLY_TABLE_INDEX_SLEB
+; RELOC-NEXT:         Index:           2
+; RELOC-NEXT:         Offset:          0x00000070
+; RELOC-NEXT:       - Type:            R_WEBASSEMBLY_FUNCTION_INDEX_LEB
+>>>>>>> release/8.x
 ; RELOC-NEXT:         Index:           2
 ; RELOC-NEXT:         Offset:          0x00000079
 ; RELOC-NEXT:       - Type:            R_WASM_GLOBAL_INDEX_LEB

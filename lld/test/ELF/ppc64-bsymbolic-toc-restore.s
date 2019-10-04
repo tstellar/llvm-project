@@ -63,6 +63,10 @@ caller:
 # CHECK-EMPTY:
 # CHECK-NEXT:  def:
 # CHECK-NEXT:    addis 2, 12, 2
+<<<<<<< HEAD
 # CHECK-NEXT:    addi 2, 2, -32456
+=======
+# CHECK-NEXT:    addi 2, 2, -32616
+>>>>>>> release/8.x
 # CHECK-NEXT:    li 3, 55
 # CHECK-NEXT:    blr

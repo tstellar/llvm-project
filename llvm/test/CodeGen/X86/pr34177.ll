@@ -18,6 +18,7 @@ define void @test(<4 x i64> %a, <4 x x86_fp80> %b, <8 x x86_fp80>* %c) local_unn
 ; CHECK-NEXT:    fldz
 ; CHECK-NEXT:    fld %st(0)
 ; CHECK-NEXT:    fcmove %st(2), %st
+<<<<<<< HEAD
 ; CHECK-NEXT:    cmpq $2, %rdx
 ; CHECK-NEXT:    fld %st(1)
 ; CHECK-NEXT:    fcmove %st(3), %st
@@ -25,6 +26,16 @@ define void @test(<4 x i64> %a, <4 x x86_fp80> %b, <8 x x86_fp80>* %c) local_unn
 ; CHECK-NEXT:    fld %st(2)
 ; CHECK-NEXT:    fcmove %st(4), %st
 ; CHECK-NEXT:    testq %rax, %rax
+=======
+; CHECK-NEXT:    cmpq %rax, %rsi
+; CHECK-NEXT:    fld %st(1)
+; CHECK-NEXT:    fcmove %st(3), %st
+; CHECK-NEXT:    cmpq %rdx, %r9
+; CHECK-NEXT:    fld %st(2)
+; CHECK-NEXT:    fcmove %st(4), %st
+; CHECK-NEXT:    movl $1, %eax
+; CHECK-NEXT:    cmpq %r8, %rax
+>>>>>>> release/8.x
 ; CHECK-NEXT:    fxch %st(3)
 ; CHECK-NEXT:    fcmove %st(4), %st
 ; CHECK-NEXT:    fstp %st(4)
@@ -36,11 +47,20 @@ define void @test(<4 x i64> %a, <4 x x86_fp80> %b, <8 x x86_fp80>* %c) local_unn
 ; CHECK-NEXT:    fstpt 30(%rdi)
 ; CHECK-NEXT:    fldt {{[0-9]+}}(%rsp)
 ; CHECK-NEXT:    fstpt 10(%rdi)
+<<<<<<< HEAD
 ; CHECK-NEXT:    fxch %st(1)
 ; CHECK-NEXT:    fadd %st, %st(0)
 ; CHECK-NEXT:    fstpt 60(%rdi)
 ; CHECK-NEXT:    fadd %st, %st(0)
 ; CHECK-NEXT:    fstpt 40(%rdi)
+=======
+; CHECK-NEXT:    fadd %st, %st(0)
+; CHECK-NEXT:    fstpt 60(%rdi)
+; CHECK-NEXT:    fxch %st(1)
+; CHECK-NEXT:    fadd %st, %st(0)
+; CHECK-NEXT:    fstpt 40(%rdi)
+; CHECK-NEXT:    fxch %st(1)
+>>>>>>> release/8.x
 ; CHECK-NEXT:    fadd %st, %st(0)
 ; CHECK-NEXT:    fstpt 20(%rdi)
 ; CHECK-NEXT:    fadd %st, %st(0)

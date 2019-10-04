@@ -2,8 +2,11 @@
 Getting started with clangd
 ===========================
 
+<<<<<<< HEAD
 .. contents::
 
+=======
+>>>>>>> release/8.x
 .. role:: raw-html(raw)
    :format: html
 
@@ -324,7 +327,11 @@ symlink it (or copy it) to the root of your source tree, if they are different.
 
 ::
 
+<<<<<<< HEAD
   $ ln -s ~/myproject-build/compile_commands.json ~/myproject/
+=======
+  $ ln -s ~/myproject/compile_commands.json ~/myproject-build/
+>>>>>>> release/8.x
 
 :raw-html:`</details>`
 
@@ -352,6 +359,7 @@ Clangd will assume the compile command is ``clang $FLAGS some_file.cc``.
 Creating this file by hand is a reasonable place to start if your project is
 quite simple.
 
+<<<<<<< HEAD
 Background Indexing
 ===================
 
@@ -377,3 +385,24 @@ which generates an index file for your project. To use the index, pass the flag
 `-index=file=/path/to/index_file` to clangd. *Note that clangd-indexer isn't
 included alongside clangd in the Debian clang-tools package. You will likely
 have to build it from source to use this option.*
+=======
+.. _project-wide-index:
+
+Project-wide Index
+==================
+
+By default clangd only has a view on symbols coming from files you are
+currently editing. You can extend this view to whole project by providing a
+project-wide index to clangd.  There are two ways to do this.
+
+- Pass an experimental `-background-index` command line argument.  With
+  this feature enabled, clangd incrementally builds an index of projects
+  that you work on and uses the just-built index automatically.
+
+- Generate an index file using `clangd-indexer
+  <https://github.com/llvm/llvm-project/blob/master/clang-tools-extra/clangd/indexer/IndexerMain.cpp>`__
+  Then you can pass generated index file to clangd using
+  `-index-file=/path/to/index_file`.  *Note that clangd-indexer isn't
+  included alongside clangd in the Debian clang-tools package. You will
+  likely have to build clangd from source to use this option.*
+>>>>>>> release/8.x

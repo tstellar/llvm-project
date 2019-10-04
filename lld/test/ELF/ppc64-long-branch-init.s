@@ -11,7 +11,10 @@
 ## is not foolproof but good enough to not break in practice.
 
 # CHECK: Disassembly of section .init:
+<<<<<<< HEAD
 # CHECK-EMPTY:
+=======
+>>>>>>> release/8.x
 # CHECK-LABEL: _init:
 # CHECK:         blr
 # CHECK-EMPTY:

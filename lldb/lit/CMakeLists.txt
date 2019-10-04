@@ -58,7 +58,10 @@ list(APPEND LLDB_TEST_DEPS
   llvm-dwarfdump
   llvm-mc
   llvm-objcopy
+<<<<<<< HEAD
   llvm-readobj
+=======
+>>>>>>> release/8.x
   )
 
 if(TARGET lld)
@@ -86,10 +89,13 @@ configure_lit_site_cfg(
   ${CMAKE_CURRENT_SOURCE_DIR}/Suite/lit.site.cfg.in
   ${CMAKE_CURRENT_BINARY_DIR}/Suite/lit.site.cfg)
 
+<<<<<<< HEAD
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/lit-lldb-init.in
   ${CMAKE_CURRENT_BINARY_DIR}/lit-lldb-init)
 
+=======
+>>>>>>> release/8.x
 if(NOT LLDB_BUILT_STANDALONE)
   list(APPEND LLDB_TEST_DEPS
     FileCheck

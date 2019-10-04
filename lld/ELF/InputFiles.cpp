@@ -484,7 +484,11 @@ StringRef ObjFile<ELFT>::getShtGroupSignature(ArrayRef<Elf_Shdr> sections,
   return signature;
 }
 
+<<<<<<< HEAD
 template <class ELFT> bool ObjFile<ELFT>::shouldMerge(const Elf_Shdr &sec) {
+=======
+template <class ELFT> bool ObjFile<ELFT>::shouldMerge(const Elf_Shdr &Sec) {
+>>>>>>> release/8.x
   // On a regular link we don't merge sections if -O0 (default is -O1). This
   // sometimes makes the linker significantly faster, although the output will
   // be bigger.
@@ -604,6 +608,7 @@ void ObjFile<ELFT>::initializeSections(bool ignoreComdats) {
     switch (sec.sh_type) {
     case SHT_GROUP: {
       // De-duplicate section groups by their signatures.
+<<<<<<< HEAD
       StringRef signature = getShtGroupSignature(objSections, sec);
       this->sections[i] = &InputSection::discarded;
 
@@ -611,12 +616,22 @@ void ObjFile<ELFT>::initializeSections(bool ignoreComdats) {
       ArrayRef<Elf_Word> entries =
           CHECK(obj.template getSectionContentsAsArray<Elf_Word>(&sec), this);
       if (entries.empty())
+=======
+      StringRef Signature = getShtGroupSignature(ObjSections, Sec);
+      this->Sections[I] = &InputSection::Discarded;
+
+
+      ArrayRef<Elf_Word> Entries =
+          CHECK(Obj.template getSectionContentsAsArray<Elf_Word>(&Sec), this);
+      if (Entries.empty())
+>>>>>>> release/8.x
         fatal(toString(this) + ": empty SHT_GROUP");
 
       // The first word of a SHT_GROUP section contains flags. Currently,
       // the standard defines only "GRP_COMDAT" flag for the COMDAT group.
       // An group with the empty flag doesn't define anything; such sections
       // are just skipped.
+<<<<<<< HEAD
       if (entries[0] == 0)
         continue;
 
@@ -631,11 +646,30 @@ void ObjFile<ELFT>::initializeSections(bool ignoreComdats) {
         if (config->relocatable)
           this->sections[i] = createInputSection(sec);
         continue;
+=======
+      if (Entries[0] == 0)
+        continue;
+
+      if (Entries[0] != GRP_COMDAT)
+        fatal(toString(this) + ": unsupported SHT_GROUP format");
+
+      bool IsNew = ComdatGroups.insert(CachedHashStringRef(Signature)).second;
+      if (IsNew) {
+        if (Config->Relocatable)
+          this->Sections[I] = createInputSection(Sec);
+	continue;
+>>>>>>> release/8.x
       }
 
+
       // Otherwise, discard group members.
+<<<<<<< HEAD
       for (uint32_t secIndex : entries.slice(1)) {
         if (secIndex >= size)
+=======
+      for (uint32_t SecIndex : Entries.slice(1)) {
+        if (SecIndex >= Size)
+>>>>>>> release/8.x
           fatal(toString(this) +
                 ": invalid section index in group: " + Twine(secIndex));
         this->sections[secIndex] = &InputSection::discarded;
@@ -1016,9 +1050,15 @@ InputSectionBase *ObjFile<ELFT>::createInputSection(const Elf_Shdr &sec) {
   // sections. Drop those sections to avoid duplicate symbol errors.
   // FIXME: This is glibc PR20543, we should remove this hack once that has been
   // fixed for a while.
+<<<<<<< HEAD
   if (name == ".gnu.linkonce.t.__x86.get_pc_thunk.bx" ||
       name == ".gnu.linkonce.t.__i686.get_pc_thunk.bx")
     return &InputSection::discarded;
+=======
+  if (Name == ".gnu.linkonce.t.__x86.get_pc_thunk.bx" ||
+      Name == ".gnu.linkonce.t.__i686.get_pc_thunk.bx")
+    return &InputSection::Discarded;
+>>>>>>> release/8.x
 
   // If we are creating a new .build-id section, strip existing .build-id
   // sections so that the output won't have more than one .build-id.

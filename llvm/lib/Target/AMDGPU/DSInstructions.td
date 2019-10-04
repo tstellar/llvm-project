@@ -836,6 +836,11 @@ def : Pat <
   (DS_ORDERED_COUNT $value, (as_i16imm $offset))
 >;
 
+def : Pat <
+  (SIds_ordered_count i32:$value, i16:$offset),
+  (DS_ORDERED_COUNT $value, (as_i16imm $offset))
+>;
+
 //===----------------------------------------------------------------------===//
 // Target-specific instruction encodings.
 //===----------------------------------------------------------------------===//

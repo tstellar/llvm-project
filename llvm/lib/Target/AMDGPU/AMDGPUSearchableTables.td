@@ -101,6 +101,7 @@ def : SourceOfDivergence<int_amdgcn_ps_live>;
 def : SourceOfDivergence<int_amdgcn_ds_swizzle>;
 def : SourceOfDivergence<int_amdgcn_ds_ordered_add>;
 def : SourceOfDivergence<int_amdgcn_ds_ordered_swap>;
+<<<<<<< HEAD
 def : SourceOfDivergence<int_amdgcn_permlane16>;
 def : SourceOfDivergence<int_amdgcn_permlanex16>;
 def : SourceOfDivergence<int_amdgcn_mov_dpp>;
@@ -128,6 +129,8 @@ def : SourceOfDivergence<int_amdgcn_mfma_i32_32x32x4i8>;
 def : SourceOfDivergence<int_amdgcn_mfma_i32_32x32x8i8>;
 def : SourceOfDivergence<int_amdgcn_mfma_f32_32x32x2bf16>;
 def : SourceOfDivergence<int_amdgcn_mfma_f32_32x32x4bf16>;
+=======
+>>>>>>> release/8.x
 
 foreach intr = AMDGPUImageDimAtomicIntrinsics in
 def : SourceOfDivergence<intr>;

@@ -2,8 +2,11 @@
 Features
 ========
 
+<<<<<<< HEAD
 .. contents::
 
+=======
+>>>>>>> release/8.x
 .. role:: raw-html(raw)
    :format: html
 
@@ -40,6 +43,7 @@ clangd can update the code for you.
 
 :raw-html:`</details>`
 
+<<<<<<< HEAD
 **(New in v9)**
 If a missing symbol was seen in a file you've edited recently, clangd will
 suggest inserting it.
@@ -64,6 +68,8 @@ clangd respects your project's ``.clang-tidy`` file which controls the checks
 to run. Not all checks work within clangd.  You must pass the ``-clang-tidy``
 flag to enable this feature.
 
+=======
+>>>>>>> release/8.x
 Code completion
 ===============
 
@@ -118,9 +124,12 @@ The following features let you navigate your codebase.
 If there is no project-wide index, cross-references work across the files
 you have opened.
 
+<<<<<<< HEAD
 **(New in v9)**
 clangd will also automatically index your whole project.
 
+=======
+>>>>>>> release/8.x
 Find definition/declaration
 ---------------------------
 
@@ -134,6 +143,7 @@ Jump to the definition or declaration of a symbol under the cursor.
 
 :raw-html:`</details>`
 
+<<<<<<< HEAD
 **(New in v9)**
 Some editors only expose "find definition"; use "find definition" on the
 definition to jump to the declaration.
@@ -141,6 +151,8 @@ definition to jump to the declaration.
 "Find definition" also works on ``#include`` lines, to jump to the included
 file.
 
+=======
+>>>>>>> release/8.x
 Find references
 ---------------
 
@@ -214,6 +226,7 @@ It is not clear whether or not some of the features mentioned below should be a
 part of the Language Server Protocol; those features might be eventually
 developed outside clangd or become clangd extensions to LSP.
 
+<<<<<<< HEAD
 +-------------------------------------+-------------+----------+
 | C/C++ Editor feature                |  LSP        |  Clangd  |
 +=====================================+=============+==========+
@@ -269,3 +282,56 @@ developed outside clangd or become clangd extensions to LSP.
 .. [1] https://github.com/microsoft/language-server-protocol/issues/18
 .. [2] https://github.com/microsoft/language-server-protocol/issues/468
 .. [3] https://github.com/microsoft/language-server-protocol/issues/136
+=======
++-------------------------------------+------------+----------+
+| C/C++ Editor feature                |  LSP       |  Clangd  |
++=====================================+============+==========+
+| Formatting                          | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Completion                          | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Diagnostics                         | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Fix-its                             | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Go to Definition                    | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Signature Help                      | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Document Highlights                 | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Rename                              | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Source hover                        | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Find References                     | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Document Symbols                    | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Workspace Symbols                   | Yes        |   Yes    |
++-------------------------------------+------------+----------+
+| Code Lens                           | Yes        |   No     |
++-------------------------------------+------------+----------+
+| Code folding                        | Yes        |   No     |
++-------------------------------------+------------+----------+
+| Extract Local Variable              | Yes        |   No     |
++-------------------------------------+------------+----------+
+| Extract Function/Method             | Yes        |   No     |
++-------------------------------------+------------+----------+
+| Quick Assist                        | Yes        |   No     |
++-------------------------------------+------------+----------+
+| Hide Method                         | Yes        |   No     |
++-------------------------------------+------------+----------+
+| Implement Method                    | Yes        |   No     |
++-------------------------------------+------------+----------+
+| Gen. Getters/Setters                | Yes        |   No     |
++-------------------------------------+------------+----------+
+| Syntax and Semantic Coloring        | No         |   No     |
++-------------------------------------+------------+----------+
+| Call hierarchy                      | No         |   No     |
++-------------------------------------+------------+----------+
+| Type hierarchy                      | No         |   No     |
++-------------------------------------+------------+----------+
+| Organize Includes                   | No         |   No     |
++-------------------------------------+------------+----------+
+>>>>>>> release/8.x

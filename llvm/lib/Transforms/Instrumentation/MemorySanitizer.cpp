@@ -925,7 +925,11 @@ void MemorySanitizer::initializeModule(Module &M) {
             /*InitArgs=*/{},
             // This callback is invoked when the functions are created the first
             // time. Hook them into the global ctors list in that case:
+<<<<<<< HEAD
             [&](Function *Ctor, FunctionCallee) {
+=======
+            [&](Function *Ctor, Function *) {
+>>>>>>> release/8.x
               if (!ClWithComdat) {
                 appendToGlobalCtors(M, Ctor, 0);
                 return;

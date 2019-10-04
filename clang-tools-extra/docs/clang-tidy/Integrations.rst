@@ -32,9 +32,15 @@ well-known :program:`clang-tidy` integrations in detail.
 +--------------------------------------+------------------------+---------------------------------+--------------------------+-----------------------------------------+--------------------------+
 |KDevelop IDE                          |         \-\            |               \+\               |           \+\            |                 \+\                     |           \+\            |
 +--------------------------------------+------------------------+---------------------------------+--------------------------+-----------------------------------------+--------------------------+
+<<<<<<< HEAD
 |Qt Creator IDE                        |         \+\            |               \+\               |           \-\            |                 \+\                     |           \+\            |
 +--------------------------------------+------------------------+---------------------------------+--------------------------+-----------------------------------------+--------------------------+
 |ReSharper C++ for Visual Studio       |         \+\            |               \+\               |           \-\            |                 \+\                     |           \+\            |
+=======
+|Qt Creator IDE                        |         \+\            |               \+\               |           \-\            |                 \-\                     |           \+\            |
++--------------------------------------+------------------------+---------------------------------+--------------------------+-----------------------------------------+--------------------------+
+|ReSharper C++ for Visual Studio       |         \+\            |               \+\               |           \-\            |                 \+\                     |           \-\            |
+>>>>>>> release/8.x
 +--------------------------------------+------------------------+---------------------------------+--------------------------+-----------------------------------------+--------------------------+
 |Syntastic for Vim                     |         \+\            |               \-\               |           \-\            |                 \-\                     |           \+\            |
 +--------------------------------------+------------------------+---------------------------------+--------------------------+-----------------------------------------+--------------------------+
@@ -64,20 +70,32 @@ static analysis using :program:`clang-tidy`. The plugin launches the
 output to provide a list of issues.
 
 .. _QtCreator: https://www.qt.io/
+<<<<<<< HEAD
 .. _Clang Code Model: https://doc.qt.io/qtcreator/creator-clang-codemodel.html
 .. _Clang Tools: https://doc.qt.io/qtcreator/creator-clang-tools.html
+=======
+.. _Clang Code Model: http://doc.qt.io/qtcreator/creator-clang-codemodel.html
+>>>>>>> release/8.x
 
 QtCreator_ 4.6 integrates :program:`clang-tidy` warnings into the editor
 diagnostics under the `Clang Code Model`_. To employ :program:`clang-tidy`
 inspection in QtCreator, you need to create a copy of one of the presets and
+<<<<<<< HEAD
 choose the checks to be performed. Since QtCreator 4.7 project-wide analysis is
 possible with the `Clang Tools`_ analyzer.
+=======
+choose the checks to be performed in the Clang Code Model Warnings menu.
+>>>>>>> release/8.x
 
 .. _MS Visual Studio: https://visualstudio.microsoft.com/
 .. _ReSharper C++: https://www.jetbrains.com/help/resharper/Clang_Tidy_Integration.html
 .. _Visual Assist: https://docs.wholetomato.com/default.asp?W761
 .. _Clang Power Tools: https://marketplace.visualstudio.com/items?itemName=caphyon.ClangPowerTools
+<<<<<<< HEAD
 .. _clang-tidy-vs: https://github.com/llvm/llvm-project/tree/master/clang-tools-extra/clang-tidy-vs
+=======
+.. _clang-tidy-vs: https://github.com/llvm-mirror/clang-tools-extra/tree/master/clang-tidy-vs
+>>>>>>> release/8.x
 
 `MS Visual Studio`_ has a native clang-tidy-vs_ plugin and also can integrate
 :program:`clang-tidy` by means of three other tools. The `ReSharper C++`_

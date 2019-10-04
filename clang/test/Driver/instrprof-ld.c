@@ -121,6 +121,7 @@
 //
 // CHECK-WINDOWS-X86-64: "{{.*}}link{{(.exe)?}}"
 // CHECK-WINDOWS-X86-64: "{{.*}}clang_rt.profile-x86_64.lib"
+<<<<<<< HEAD
 //
 // RUN: %clang -no-canonical-prefixes %s -### -o %t.o 2>&1 \
 // RUN:     -target x86_64-mingw32 -fprofile-instr-generate -fuse-ld=ld \
@@ -129,6 +130,8 @@
 //
 // CHECK-MINGW-X86-64: "{{(.*[^.0-9A-Z_a-z])?}}ld{{(.exe)?}}"
 // CHECK-MINGW-X86-64: "{{.*}}/Inputs/resource_dir{{/|\\\\}}lib{{/|\\\\}}windows{{/|\\\\}}libclang_rt.profile-x86_64.a"
+=======
+>>>>>>> release/8.x
 
 // Test instrumented profiling dependent-lib flags
 //

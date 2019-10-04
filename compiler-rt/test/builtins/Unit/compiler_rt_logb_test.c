@@ -43,7 +43,11 @@ int main() {
   // Do not the run the compiler-rt logb test case if using GLIBC version
   // < 2.23. Older versions might not compute to the same value as the
   // compiler-rt value.
+<<<<<<< HEAD
 #if __GLIBC_PREREQ(2, 23)
+=======
+#if !defined(__GLIBC__) || (defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 23))
+>>>>>>> release/8.x
   const unsigned N = sizeof(cases) / sizeof(cases[0]);
   unsigned i;
   for (i = 0; i < N; ++i) {

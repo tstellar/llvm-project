@@ -225,7 +225,11 @@ static Function *createWrapper(Function *F, FunctionType *Ty) {
 
 // Test whether a main function with type FuncTy should be rewritten to have
 // type MainTy.
+<<<<<<< HEAD
 static bool shouldFixMainFunction(FunctionType *FuncTy, FunctionType *MainTy) {
+=======
+bool shouldFixMainFunction(FunctionType *FuncTy, FunctionType *MainTy) {
+>>>>>>> release/8.x
   // Only fix the main function if it's the standard zero-arg form. That way,
   // the standard cases will work as expected, and users will see signature
   // mismatches from the linker for non-standard cases.

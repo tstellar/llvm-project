@@ -38,7 +38,11 @@ IMPORT-NEXT: }
 
 # RUN: lld-link /out:%t.exe /entry:main /subsystem:console /merge:.rdata=.text \
 # RUN:   %p/Inputs/hello64.obj %p/Inputs/std64.lib /include:ExitProcess
+<<<<<<< HEAD
 # RUN: llvm-readobj --coff-imports %t.exe | FileCheck -check-prefix=MERGE %s
+=======
+# RUN: llvm-readobj -coff-imports %t.exe | FileCheck -check-prefix=MERGE %s
+>>>>>>> release/8.x
 
 MERGE:      Import {
 MERGE-NEXT:   Name: std64.dll

@@ -351,10 +351,17 @@ static bool needsGot(RelExpr expr) {
 
 // True if this expression is of the form Sym - X, where X is a position in the
 // file (PC, or GOT for example).
+<<<<<<< HEAD
 static bool isRelExpr(RelExpr expr) {
   return oneof<R_PC, R_GOTREL, R_GOTPLTREL, R_MIPS_GOTREL, R_PPC64_CALL,
                R_PPC64_RELAX_TOC, R_AARCH64_PAGE_PC, R_RELAX_GOT_PC,
                R_RISCV_PC_INDIRECT>(expr);
+=======
+static bool isRelExpr(RelExpr Expr) {
+  return isRelExprOneOf<R_PC, R_GOTREL, R_GOTREL_FROM_END, R_MIPS_GOTREL,
+                        R_PPC_CALL, R_PPC_CALL_PLT, R_AARCH64_PAGE_PC,
+                        R_AARCH64_PLT_PAGE_PC, R_RELAX_GOT_PC>(Expr);
+>>>>>>> release/8.x
 }
 
 // Returns true if a given relocation can be computed at link-time.

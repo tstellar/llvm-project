@@ -17204,11 +17204,16 @@ static SDValue reduceBuildVecToShuffleWithZero(SDNode *BV, SelectionDAG &DAG) {
   SDLoc DL(BV);
   EVT VecVT = Extract.getOperand(0).getValueType();
   SDValue ZeroVec = DAG.getConstant(0, DL, VecVT);
+<<<<<<< HEAD
   const TargetLowering &TLI = DAG.getTargetLoweringInfo();
   SDValue Shuf = TLI.buildLegalVectorShuffle(VecVT, DL, Extract.getOperand(0),
                                              ZeroVec, ShufMask, DAG);
   if (!Shuf)
     return SDValue();
+=======
+  SDValue Shuf = DAG.getVectorShuffle(VecVT, DL, Extract.getOperand(0), ZeroVec,
+                                      ShufMask);
+>>>>>>> release/8.x
   return DAG.getBitcast(VT, Shuf);
 }
 

@@ -1123,8 +1123,13 @@ uint64_t WasmObjectWriter::writeObject(MCAssembler &Asm,
   // valid without it. In the future, we could perhaps be more clever and omit
   // it if there are no loads or stores.
   wasm::WasmImport MemImport;
+<<<<<<< HEAD
   MemImport.Module = "env";
   MemImport.Field = "__linear_memory";
+=======
+  MemImport.Module = MemorySym->getImportModule();
+  MemImport.Field = MemorySym->getImportName();
+>>>>>>> release/8.x
   MemImport.Kind = wasm::WASM_EXTERNAL_MEMORY;
   Imports.push_back(MemImport);
 
@@ -1132,8 +1137,13 @@ uint64_t WasmObjectWriter::writeObject(MCAssembler &Asm,
   // valid without it. In the future, we could perhaps be more clever and omit
   // it if there are no indirect calls.
   wasm::WasmImport TableImport;
+<<<<<<< HEAD
   TableImport.Module = "env";
   TableImport.Field = "__indirect_function_table";
+=======
+  TableImport.Module = TableSym->getImportModule();
+  TableImport.Field = TableSym->getImportName();
+>>>>>>> release/8.x
   TableImport.Kind = wasm::WASM_EXTERNAL_TABLE;
   TableImport.Table.ElemType = wasm::WASM_TYPE_FUNCREF;
   Imports.push_back(TableImport);
@@ -1171,6 +1181,10 @@ uint64_t WasmObjectWriter::writeObject(MCAssembler &Asm,
           report_fatal_error("undefined global symbol cannot be weak");
 
         wasm::WasmImport Import;
+<<<<<<< HEAD
+=======
+        Import.Module = WS.getImportModule();
+>>>>>>> release/8.x
         Import.Field = WS.getImportName();
         Import.Kind = wasm::WASM_EXTERNAL_GLOBAL;
         Import.Module = WS.getImportModule();
@@ -1446,12 +1460,15 @@ uint64_t WasmObjectWriter::writeObject(MCAssembler &Asm,
       Flags |= wasm::WASM_SYMBOL_BINDING_LOCAL;
     if (WS.isUndefined())
       Flags |= wasm::WASM_SYMBOL_UNDEFINED;
+<<<<<<< HEAD
     if (WS.isNoStrip()) {
       Flags |= wasm::WASM_SYMBOL_NO_STRIP;
       if (isEmscripten()) {
         Flags |= wasm::WASM_SYMBOL_EXPORTED;
       }
     }
+=======
+>>>>>>> release/8.x
     if (WS.getName() != WS.getImportName())
       Flags |= wasm::WASM_SYMBOL_EXPLICIT_NAME;
 

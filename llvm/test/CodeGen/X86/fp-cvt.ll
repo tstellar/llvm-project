@@ -481,7 +481,11 @@ define i64 @fptoui_i64_fp80(x86_fp80 %a0) nounwind {
 ; X64-X87-NEXT:    fsub %st(1), %st
 ; X64-X87-NEXT:    xorl %eax, %eax
 ; X64-X87-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; X64-X87-NEXT:    fucompi %st(2), %st
+=======
+; X64-X87-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; X64-X87-NEXT:    fcmovnbe %st(1), %st
 ; X64-X87-NEXT:    fstp %st(1)
 ; X64-X87-NEXT:    setbe %al
@@ -504,7 +508,11 @@ define i64 @fptoui_i64_fp80(x86_fp80 %a0) nounwind {
 ; X64-SSSE3-NEXT:    fsub %st(1), %st
 ; X64-SSSE3-NEXT:    xorl %eax, %eax
 ; X64-SSSE3-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; X64-SSSE3-NEXT:    fucompi %st(2), %st
+=======
+; X64-SSSE3-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; X64-SSSE3-NEXT:    fcmovnbe %st(1), %st
 ; X64-SSSE3-NEXT:    fstp %st(1)
 ; X64-SSSE3-NEXT:    fisttpll -{{[0-9]+}}(%rsp)
@@ -563,7 +571,11 @@ define i64 @fptoui_i64_fp80_ld(x86_fp80 *%a0) nounwind {
 ; X64-X87-NEXT:    fsub %st(1), %st
 ; X64-X87-NEXT:    xorl %eax, %eax
 ; X64-X87-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; X64-X87-NEXT:    fucompi %st(2), %st
+=======
+; X64-X87-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; X64-X87-NEXT:    fcmovnbe %st(1), %st
 ; X64-X87-NEXT:    fstp %st(1)
 ; X64-X87-NEXT:    setbe %al
@@ -586,7 +598,11 @@ define i64 @fptoui_i64_fp80_ld(x86_fp80 *%a0) nounwind {
 ; X64-SSSE3-NEXT:    fsub %st(1), %st
 ; X64-SSSE3-NEXT:    xorl %eax, %eax
 ; X64-SSSE3-NEXT:    fxch %st(1)
+<<<<<<< HEAD
 ; X64-SSSE3-NEXT:    fucompi %st(2), %st
+=======
+; X64-SSSE3-NEXT:    fucompi %st(2)
+>>>>>>> release/8.x
 ; X64-SSSE3-NEXT:    fcmovnbe %st(1), %st
 ; X64-SSSE3-NEXT:    fstp %st(1)
 ; X64-SSSE3-NEXT:    fisttpll -{{[0-9]+}}(%rsp)

@@ -7,7 +7,10 @@ clangd
 
    Installation
    Features
+<<<<<<< HEAD
    Configuration
+=======
+>>>>>>> release/8.x
 
 What is clangd?
 ===============

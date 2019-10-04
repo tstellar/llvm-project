@@ -16,7 +16,10 @@
 #include "MSP430InstrInfo.h"
 #include "MSP430MCInstLower.h"
 #include "MSP430TargetMachine.h"
+<<<<<<< HEAD
 #include "TargetInfo/MSP430TargetInfo.h"
+=======
+>>>>>>> release/8.x
 #include "llvm/BinaryFormat/ELF.h"
 #include "llvm/CodeGen/AsmPrinter.h"
 #include "llvm/CodeGen/MachineConstantPool.h"
@@ -48,7 +51,10 @@ namespace {
 
     bool runOnMachineFunction(MachineFunction &MF) override;
 
+<<<<<<< HEAD
     void PrintSymbolOperand(const MachineOperand &MO, raw_ostream &O) override;
+=======
+>>>>>>> release/8.x
     void printOperand(const MachineInstr *MI, int OpNum,
                       raw_ostream &O, const char* Modifier = nullptr);
     void printSrcMemOperand(const MachineInstr *MI, int OpNum,
@@ -159,9 +165,14 @@ void MSP430AsmPrinter::EmitInstruction(const MachineInstr *MI) {
 void MSP430AsmPrinter::EmitInterruptVectorSection(MachineFunction &ISR) {
   MCSection *Cur = OutStreamer->getCurrentSectionOnly();
   const auto *F = &ISR.getFunction();
+<<<<<<< HEAD
   if (F->getCallingConv() != CallingConv::MSP430_INTR) {
     report_fatal_error("Functions with 'interrupt' attribute must have msp430_intrcc CC");
   }
+=======
+  assert(F->hasFnAttribute("interrupt") &&
+         "Functions with MSP430_INTR CC should have 'interrupt' attribute");
+>>>>>>> release/8.x
   StringRef IVIdx = F->getFnAttribute("interrupt").getValueAsString();
   MCSection *IV = OutStreamer->getContext().getELFSection(
     "__interrupt_vector_" + IVIdx,
@@ -175,9 +186,14 @@ void MSP430AsmPrinter::EmitInterruptVectorSection(MachineFunction &ISR) {
 
 bool MSP430AsmPrinter::runOnMachineFunction(MachineFunction &MF) {
   // Emit separate section for an interrupt vector if ISR
+<<<<<<< HEAD
   if (MF.getFunction().hasFnAttribute("interrupt")) {
     EmitInterruptVectorSection(MF);
   }
+=======
+  if (MF.getFunction().getCallingConv() == CallingConv::MSP430_INTR)
+    EmitInterruptVectorSection(MF);
+>>>>>>> release/8.x
 
   SetupMachineFunction(MF);
   EmitFunctionBody();

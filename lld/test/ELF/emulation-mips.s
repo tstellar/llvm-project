@@ -11,6 +11,7 @@
 # RUN:   | FileCheck -DOSABI=SystemV --check-prefix=MIPS %s
 # RUN: echo 'OUTPUT_FORMAT(elf32-tradbigmips)' > %tmips.script
 # RUN: ld.lld %tmips.script -e _start %tmips -o %t4mips
+<<<<<<< HEAD
 # RUN: llvm-readobj --file-headers %t4mips \
 # RUN:   | FileCheck -DOSABI=SystemV --check-prefix=MIPS %s
 # RUN: echo 'OUTPUT_FORMAT(elf32-tradbigmips-freebsd)' > %tmips.script
@@ -21,6 +22,12 @@
 # RUN: ld.lld %tmips2.script -e _start %tmips -o %t5mips
 # RUN: llvm-readobj --file-headers %t5mips \
 # RUN:   | FileCheck -DOSABI=SystemV --check-prefix=MIPS %s
+=======
+# RUN: llvm-readobj -file-headers %t4mips | FileCheck --check-prefix=MIPS %s
+# RUN: echo 'OUTPUT_FORMAT(elf32-bigmips)' > %tmips2.script
+# RUN: ld.lld %tmips2.script -e _start %tmips -o %t5mips
+# RUN: llvm-readobj -file-headers %t5mips | FileCheck --check-prefix=MIPS %s
+>>>>>>> release/8.x
 # MIPS:      ElfHeader {
 # MIPS-NEXT:   Ident {
 # MIPS-NEXT:     Magic: (7F 45 4C 46)

@@ -162,10 +162,34 @@ const Expr *bugreporter::getDerefExpr(const Stmt *S) {
 /// are the immediate snapshots of the tracked region's bindings within the
 /// node's respective states but not really checking that these snapshots
 /// actually contain the same set of bindings.
+<<<<<<< HEAD
 static bool hasVisibleUpdate(const ExplodedNode *LeftNode, SVal LeftVal,
                              const ExplodedNode *RightNode, SVal RightVal) {
   if (LeftVal == RightVal)
     return true;
+=======
+bool hasVisibleUpdate(const ExplodedNode *LeftNode, SVal LeftVal,
+                      const ExplodedNode *RightNode, SVal RightVal) {
+  if (LeftVal == RightVal)
+    return true;
+
+  const auto LLCV = LeftVal.getAs<nonloc::LazyCompoundVal>();
+  if (!LLCV)
+    return false;
+
+  const auto RLCV = RightVal.getAs<nonloc::LazyCompoundVal>();
+  if (!RLCV)
+    return false;
+
+  return LLCV->getRegion() == RLCV->getRegion() &&
+    LLCV->getStore() == LeftNode->getState()->getStore() &&
+    RLCV->getStore() == RightNode->getState()->getStore();
+}
+
+//===----------------------------------------------------------------------===//
+// Definitions for bug reporter visitors.
+//===----------------------------------------------------------------------===//
+>>>>>>> release/8.x
 
   const auto LLCV = LeftVal.getAs<nonloc::LazyCompoundVal>();
   if (!LLCV)

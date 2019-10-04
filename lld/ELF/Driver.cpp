@@ -1089,6 +1089,7 @@ static void readConfigs(opt::InputArgList &args) {
 // command line options, but computed based on other Config values.
 // This function initialize such members. See Config.h for the details
 // of these values.
+<<<<<<< HEAD
 static void setConfigs(opt::InputArgList &args) {
   ELFKind k = config->ekind;
   uint16_t m = config->emachine;
@@ -1101,6 +1102,20 @@ static void setConfigs(opt::InputArgList &args) {
   config->isPic = config->pie || config->shared;
   config->picThunk = args.hasArg(OPT_pic_veneer, config->isPic);
   config->wordsize = config->is64 ? 8 : 4;
+=======
+static void setConfigs(opt::InputArgList &Args) {
+  ELFKind K = Config->EKind;
+  uint16_t M = Config->EMachine;
+
+  Config->CopyRelocs = (Config->Relocatable || Config->EmitRelocs);
+  Config->Is64 = (K == ELF64LEKind || K == ELF64BEKind);
+  Config->IsLE = (K == ELF32LEKind || K == ELF64LEKind);
+  Config->Endianness = Config->IsLE ? endianness::little : endianness::big;
+  Config->IsMips64EL = (K == ELF64LEKind && M == EM_MIPS);
+  Config->Pic = Config->Pie || Config->Shared;
+  Config->PicThunk = Args.hasArg(OPT_pic_veneer, Config->Pic);
+  Config->Wordsize = Config->Is64 ? 8 : 4;
+>>>>>>> release/8.x
 
   // ELF defines two different ways to store relocation addends as shown below:
   //

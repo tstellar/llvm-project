@@ -394,7 +394,11 @@ Lnovec:
 
 #elif defined(__ppc__)
 
+<<<<<<< HEAD
 DEFINE_LIBUNWIND_FUNCTION(_ZN9libunwind13Registers_ppc6jumptoEv)
+=======
+DEFINE_LIBUNWIND_PRIVATE_FUNCTION(_ZN9libunwind13Registers_ppc6jumptoEv)
+>>>>>>> release/8.x
 //
 // void libunwind::Registers_ppc::jumpto()
 //
@@ -469,12 +473,21 @@ DEFINE_LIBUNWIND_FUNCTION(_ZN9libunwind13Registers_ppc6jumptoEv)
   lfd     %f29,392(%r3)
   lfd     %f30,400(%r3)
   lfd     %f31,408(%r3)
+<<<<<<< HEAD
 
   // restore vector registers if any are in use
   lwz     %r5, 156(%r3)       // test VRsave
   cmpwi   %r5, 0
   beq     Lnovec
 
+=======
+
+  // restore vector registers if any are in use
+  lwz     %r5, 156(%r3)       // test VRsave
+  cmpwi   %r5, 0
+  beq     Lnovec
+
+>>>>>>> release/8.x
   subi    %r4, %r1, 16
   rlwinm  %r4, %r4, 0, 0, 27  // mask low 4-bits
   // r4 is now a 16-byte aligned pointer into the red zone

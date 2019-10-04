@@ -402,7 +402,10 @@ class AMDGPULDSF32Intrin<string clang_builtin> :
     [IntrArgMemOnly, NoCapture<0>, ImmArg<2>, ImmArg<3>, ImmArg<4>]
 >;
 
+<<<<<<< HEAD
 // FIXME: The m0 argument should be moved after the normal arguments
+=======
+>>>>>>> release/8.x
 class AMDGPUDSOrderedIntrinsic : Intrinsic<
   [llvm_i32_ty],
   // M0 = {hi16:address, lo16:waveID}. Allow passing M0 as a pointer, so that
@@ -413,6 +416,7 @@ class AMDGPUDSOrderedIntrinsic : Intrinsic<
    llvm_i32_ty, // scope
    llvm_i1_ty,  // isVolatile
    llvm_i32_ty, // ordered count index (OA index), also added to the address
+<<<<<<< HEAD
                 // gfx10: bits 24-27 indicate the number of active threads/dwords
    llvm_i1_ty,  // wave release, usually set to 1
    llvm_i1_ty], // wave done, set to 1 for the last ordered instruction
@@ -429,15 +433,23 @@ class AMDGPUDSAppendConsumedIntrinsic : Intrinsic<
    [IntrConvergent, IntrArgMemOnly, NoCapture<0>, ImmArg<1>],
    "",
    [SDNPMemOperand]
+=======
+   llvm_i1_ty,  // wave release, usually set to 1
+   llvm_i1_ty], // wave done, set to 1 for the last ordered instruction
+  [NoCapture<0>]
+>>>>>>> release/8.x
 >;
 
 def int_amdgcn_ds_ordered_add : AMDGPUDSOrderedIntrinsic;
 def int_amdgcn_ds_ordered_swap : AMDGPUDSOrderedIntrinsic;
 
+<<<<<<< HEAD
 // The pointer argument is assumed to be dynamically uniform if a VGPR.
 def int_amdgcn_ds_append : AMDGPUDSAppendConsumedIntrinsic;
 def int_amdgcn_ds_consume : AMDGPUDSAppendConsumedIntrinsic;
 
+=======
+>>>>>>> release/8.x
 def int_amdgcn_ds_fadd : AMDGPULDSF32Intrin<"__builtin_amdgcn_ds_faddf">;
 def int_amdgcn_ds_fmin : AMDGPULDSF32Intrin<"__builtin_amdgcn_ds_fminf">;
 def int_amdgcn_ds_fmax : AMDGPULDSF32Intrin<"__builtin_amdgcn_ds_fmaxf">;

@@ -609,6 +609,7 @@ LLVM-specific variables
   If enabled, the compiler version check will only warn when using a toolchain
   which is about to be deprecated, instead of emitting an error.
 
+<<<<<<< HEAD
 **LLVM_USE_NEWPM**:BOOL
   If enabled, use the experimental new pass manager.
 
@@ -619,6 +620,8 @@ LLVM-specific variables
   If enabled, the Z3 constraint solver is activated for the Clang static analyzer.
   A recent version of the z3 library needs to be available on the system.
 
+=======
+>>>>>>> release/8.x
 CMake Caches
 ============
 

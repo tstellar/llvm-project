@@ -109,6 +109,7 @@ void CodeSection::writeTo(uint8_t *buf) {
   memcpy(buf, codeSectionHeader.data(), codeSectionHeader.size());
 
   // Write code section bodies
+<<<<<<< HEAD
   for (const InputChunk *chunk : functions)
     chunk->writeTo(buf);
 }
@@ -150,6 +151,44 @@ void DataSection::finalizeContents() {
         initExpr.Value.Int32 = segment->startVA;
       }
       writeInitExpr(os, initExpr);
+=======
+  for (const InputChunk *Chunk : Functions)
+    Chunk->writeTo(Buf);
+}
+
+uint32_t CodeSection::numRelocations() const {
+  uint32_t Count = 0;
+  for (const InputChunk *Func : Functions)
+    Count += Func->NumRelocations();
+  return Count;
+}
+
+void CodeSection::writeRelocations(raw_ostream &OS) const {
+  for (const InputChunk *C : Functions)
+    C->writeRelocations(OS);
+}
+
+DataSection::DataSection(ArrayRef<OutputSegment *> Segments)
+    : OutputSection(WASM_SEC_DATA), Segments(Segments) {
+  raw_string_ostream OS(DataSectionHeader);
+
+  writeUleb128(OS, Segments.size(), "data segment count");
+  OS.flush();
+  BodySize = DataSectionHeader.size();
+
+  for (OutputSegment *Segment : Segments) {
+    raw_string_ostream OS(Segment->Header);
+    writeUleb128(OS, 0, "memory index");
+    WasmInitExpr InitExpr;
+    if (Config->Pic) {
+      assert(Segments.size() <= 1 &&
+             "Currenly only a single data segment is supported in PIC mode");
+      InitExpr.Opcode = WASM_OPCODE_GLOBAL_GET;
+      InitExpr.Value.Global = WasmSym::MemoryBase->getGlobalIndex();
+    } else {
+      InitExpr.Opcode = WASM_OPCODE_I32_CONST;
+      InitExpr.Value.Int32 = Segment->StartVA;
+>>>>>>> release/8.x
     }
     writeUleb128(os, segment->size, "segment size");
     os.flush();
@@ -179,14 +218,23 @@ void DataSection::writeTo(uint8_t *buf) {
   // Write data section headers
   memcpy(buf, dataSectionHeader.data(), dataSectionHeader.size());
 
+<<<<<<< HEAD
   for (const OutputSegment *segment : segments) {
+=======
+  for (const OutputSegment *Segment : Segments) {
+>>>>>>> release/8.x
     // Write data segment header
     uint8_t *segStart = buf + segment->sectionOffset;
     memcpy(segStart, segment->header.data(), segment->header.size());
 
     // Write segment data payload
+<<<<<<< HEAD
     for (const InputChunk *chunk : segment->inputSegments)
       chunk->writeTo(buf);
+=======
+    for (const InputChunk *Chunk : Segment->InputSegments)
+      Chunk->writeTo(Buf);
+>>>>>>> release/8.x
   }
 }
 
@@ -233,8 +281,13 @@ void CustomSection::writeTo(uint8_t *buf) {
   buf += nameData.size();
 
   // Write custom sections payload
+<<<<<<< HEAD
   for (const InputSection *section : inputSections)
     section->writeTo(buf);
+=======
+  for (const InputSection *Section : InputSections)
+    Section->writeTo(Buf);
+>>>>>>> release/8.x
 }
 
 uint32_t CustomSection::getNumRelocations() const {

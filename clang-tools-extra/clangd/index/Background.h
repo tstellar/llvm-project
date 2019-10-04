@@ -56,6 +56,7 @@ public:
   using Factory = llvm::unique_function<BackgroundIndexStorage *(PathRef)>;
 
   // Creates an Index Storage that saves shards into disk. Index storage uses
+<<<<<<< HEAD
   // CDBDirectory + ".clangd/index/" as the folder to save shards. CDBDirectory
   // is the first directory containing a CDB in parent directories of a file, or
   // user's home directory if none was found, e.g. standard library headers.
@@ -106,6 +107,10 @@ private:
   bool ShouldStop = false;
   std::vector<Task> Queue; // max-heap
   llvm::StringMap<unsigned> Boosts;
+=======
+  // CDBDirectory + ".clangd/index/" as the folder to save shards.
+  static Factory createDiskBackedStorageFactory();
+>>>>>>> release/8.x
 };
 
 // Builds an in-memory index by by running the static indexer action over
@@ -121,6 +126,10 @@ public:
       Context BackgroundContext, const FileSystemProvider &,
       const GlobalCompilationDatabase &CDB,
       BackgroundIndexStorage::Factory IndexStorageFactory,
+<<<<<<< HEAD
+=======
+      size_t BuildIndexPeriodMs = 0,
+>>>>>>> release/8.x
       size_t ThreadPoolSize = llvm::heavyweight_hardware_concurrency());
   ~BackgroundIndex(); // Blocks while the current task finishes.
 

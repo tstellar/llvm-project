@@ -373,6 +373,7 @@ class Parser : public CodeCompletionHandler {
   /// just a regular sub-expression.
   SourceLocation ExprStatementTokLoc;
 
+<<<<<<< HEAD
   /// Flags describing a context in which we're parsing a statement.
   enum class ParsedStmtContext {
     /// This context permits declarations in language modes where declarations
@@ -396,6 +397,8 @@ class Parser : public CodeCompletionHandler {
   /// a statement expression and builds a suitable expression statement.
   StmtResult handleExprStmt(ExprResult E, ParsedStmtContext StmtCtx);
 
+=======
+>>>>>>> release/8.x
 public:
   Parser(Preprocessor &PP, Sema &Actions, bool SkipFunctionBodies);
   ~Parser() override;

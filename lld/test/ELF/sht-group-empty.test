@@ -1,6 +1,10 @@
 # RUN: yaml2obj %s -o %t.o
 # RUN: ld.lld %t.o %t.o -o %t -r
+<<<<<<< HEAD
 # RUN: llvm-readobj -S %t | FileCheck %s
+=======
+# RUN: llvm-readobj -s %t | FileCheck %s
+>>>>>>> release/8.x
 
 # CHECK:     Name: .text.foo
 # CHECK:     Name: .rela.text.foo
@@ -49,7 +53,14 @@ Sections:
         Symbol:          bar
         Type:            R_X86_64_64
 Symbols:
+<<<<<<< HEAD
   - Name:            foo
     Binding:         STB_GLOBAL
   - Name:            bar
     Binding:         STB_GLOBAL
+=======
+  Global:
+    - Name:            foo
+    - Name:            bar
+
+>>>>>>> release/8.x

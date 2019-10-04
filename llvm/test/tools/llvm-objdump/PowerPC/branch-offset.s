@@ -7,10 +7,17 @@
 # RUN: llvm-mc -triple=powerpc-unknown-linux -filetype=obj %s -o %t.o
 # RUN: llvm-objdump -d %t.o | FileCheck %s
 
+<<<<<<< HEAD
 # CHECK: {{0*}}00000000 callee_back:
 # CHECK: 18: {{.*}} bl .-24
 # CHECK: 20: {{.*}} bl .+16
 # CHECK: {{0*}}00000030 callee_forward:
+=======
+# CHECK: 0000000000000000 callee_back:
+# CHECK: 18: {{.*}} bl .-24
+# CHECK: 20: {{.*}} bl .+16
+# CHECK: 0000000000000030 callee_forward:
+>>>>>>> release/8.x
 
         .text
         .global caller

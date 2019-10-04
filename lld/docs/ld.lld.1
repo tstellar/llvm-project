@@ -355,6 +355,7 @@ Filter optimization remarks by only allowing the passes matching
 .Ar pass-regex .
 .It Fl -opt-remarks-with-hotness
 Include hotness information in the optimization remarks file.
+<<<<<<< HEAD
 .It Fl -orphan-handling Ns = Ns Ar mode
 Control how orphan sections are handled.
 An orphan section is one not specifically mentioned in a linker script.
@@ -406,6 +407,11 @@ AArch64 only, use pointer authentication in PLT.
 .It Fl -pic-veneer
 Always generate position independent thunks.
 .It Fl -pie , Fl -pic-executable
+=======
+.It Fl -pic-veneer
+Always generate position independent thunks.
+.It Fl -pie
+>>>>>>> release/8.x
 Create a position independent executable.
 .It Fl -print-gc-sections
 List removed unused sections.

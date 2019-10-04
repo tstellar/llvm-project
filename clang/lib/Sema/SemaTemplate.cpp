@@ -6512,11 +6512,16 @@ ExprResult Sema::CheckTemplateArgument(NonTypeTemplateParmDecl *Param,
       // -- a string literal
       // -- the result of a typeid expression, or
       // -- a predefined __func__ variable
+<<<<<<< HEAD
       APValue::LValueBase Base = Value.getLValueBase();
       auto *VD = const_cast<ValueDecl *>(Base.dyn_cast<const ValueDecl *>());
       if (Base && !VD) {
         auto *E = Base.dyn_cast<const Expr *>();
         if (E && isa<CXXUuidofExpr>(E)) {
+=======
+      if (auto *E = Value.getLValueBase().dyn_cast<const Expr*>()) {
+        if (isa<CXXUuidofExpr>(E)) {
+>>>>>>> release/8.x
           Converted = TemplateArgument(ArgResult.get()->IgnoreImpCasts());
           break;
         }

@@ -66,12 +66,21 @@ define void @_Z1fe(x86_fp80 %z) local_unnamed_addr #0 {
 ; SSE2-SCHEDULE-NEXT:    movsd %xmm0, -32(%rbp)
 ; SSE2-SCHEDULE-NEXT:    fsubl -32(%rbp)
 ; SSE2-SCHEDULE-NEXT:    flds {{.*}}(%rip)
+<<<<<<< HEAD
 ; SSE2-SCHEDULE-NEXT:    fmul %st, %st(1)
 ; SSE2-SCHEDULE-NEXT:    fnstcw -2(%rbp)
 ; SSE2-SCHEDULE-NEXT:    movzwl -2(%rbp), %eax
 ; SSE2-SCHEDULE-NEXT:    orl $3072, %eax ## imm = 0xC00
 ; SSE2-SCHEDULE-NEXT:    movw %ax, -6(%rbp)
 ; SSE2-SCHEDULE-NEXT:    fldcw -6(%rbp)
+=======
+; SSE2-SCHEDULE-NEXT:    fnstcw -2(%rbp)
+; SSE2-SCHEDULE-NEXT:    fmul %st, %st(1)
+; SSE2-SCHEDULE-NEXT:    movzwl -2(%rbp), %eax
+; SSE2-SCHEDULE-NEXT:    movw $3199, -2(%rbp) ## imm = 0xC7F
+; SSE2-SCHEDULE-NEXT:    fldcw -2(%rbp)
+; SSE2-SCHEDULE-NEXT:    movw %ax, -2(%rbp)
+>>>>>>> release/8.x
 ; SSE2-SCHEDULE-NEXT:    fxch %st(1)
 ; SSE2-SCHEDULE-NEXT:    fistl -16(%rbp)
 ; SSE2-SCHEDULE-NEXT:    fldcw -2(%rbp)

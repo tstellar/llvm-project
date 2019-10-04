@@ -4388,6 +4388,7 @@ void PPCDAGToDAGISel::Select(SDNode *N) {
   case PPCISD::ADDI_TLSGD_L_ADDR: {
     const Module *Mod = MF->getFunction().getParent();
     if (PPCLowering->getPointerTy(CurDAG->getDataLayout()) != MVT::i32 ||
+<<<<<<< HEAD
         !PPCSubTarget->isSecurePlt() || !PPCSubTarget->isTargetELF() ||
         Mod->getPICLevel() == PICLevel::SmallPIC)
       break;
@@ -4399,6 +4400,10 @@ void PPCDAGToDAGISel::Select(SDNode *N) {
     if (PPCLowering->getPointerTy(CurDAG->getDataLayout()) != MVT::i32 ||
         !TM.isPositionIndependent() || !PPCSubTarget->isSecurePlt() ||
         !PPCSubTarget->isTargetELF())
+=======
+        (!TM.isPositionIndependent() || !PPCSubTarget->isSecurePlt()) ||
+        !PPCSubTarget->isTargetELF() || M->getPICLevel() == PICLevel::SmallPIC)
+>>>>>>> release/8.x
       break;
 
     SDValue Op = N->getOperand(1);

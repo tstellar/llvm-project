@@ -203,6 +203,7 @@ public:
 
 class UndefinedFunction : public FunctionSymbol {
 public:
+<<<<<<< HEAD
   UndefinedFunction(StringRef name, StringRef importName,
                     StringRef importModule, uint32_t flags,
                     InputFile *file = nullptr,
@@ -229,12 +230,25 @@ public:
       : Symbol("", OutputSectionKind, llvm::wasm::WASM_SYMBOL_BINDING_LOCAL,
                nullptr),
         section(s) {}
+=======
+  UndefinedFunction(StringRef Name, StringRef ImportName,
+                    StringRef ImportModule, uint32_t Flags,
+                    InputFile *File = nullptr,
+                    const WasmSignature *Type = nullptr)
+      : FunctionSymbol(Name, UndefinedFunctionKind, Flags, File, Type),
+        ImportName(ImportName), ImportModule(ImportModule) {}
+>>>>>>> release/8.x
 
   static bool classof(const Symbol *s) {
     return s->kind() == OutputSectionKind;
   }
 
+<<<<<<< HEAD
   const OutputSection *section;
+=======
+  StringRef ImportName;
+  StringRef ImportModule;
+>>>>>>> release/8.x
 };
 
 class SectionSymbol : public Symbol {
@@ -335,6 +349,7 @@ public:
 
 class UndefinedGlobal : public GlobalSymbol {
 public:
+<<<<<<< HEAD
   UndefinedGlobal(StringRef name, StringRef importName, StringRef importModule,
                   uint32_t flags, InputFile *file = nullptr,
                   const WasmGlobalType *type = nullptr)
@@ -347,6 +362,20 @@ public:
 
   StringRef importName;
   StringRef importModule;
+=======
+  UndefinedGlobal(StringRef Name, StringRef ImportName, StringRef ImportModule,
+                  uint32_t Flags, InputFile *File = nullptr,
+                  const WasmGlobalType *Type = nullptr)
+      : GlobalSymbol(Name, UndefinedGlobalKind, Flags, File, Type),
+        ImportName(ImportName), ImportModule(ImportModule) {}
+
+  static bool classof(const Symbol *S) {
+    return S->kind() == UndefinedGlobalKind;
+  }
+
+  StringRef ImportName;
+  StringRef ImportModule;
+>>>>>>> release/8.x
 };
 
 // Wasm events are features that suspend the current execution and transfer the

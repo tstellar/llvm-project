@@ -42,7 +42,13 @@ using namespace llvm::wasm;
 using namespace lld;
 using namespace lld::wasm;
 
+<<<<<<< HEAD
 static constexpr int stackAlignment = 16;
+=======
+static constexpr int StackAlignment = 16;
+static constexpr const char *FunctionTableName = "__indirect_function_table";
+const char *lld::wasm::DefaultModule = "env";
+>>>>>>> release/8.x
 
 namespace {
 
@@ -103,6 +109,199 @@ private:
 
 } // anonymous namespace
 
+<<<<<<< HEAD
+=======
+void Writer::createImportSection() {
+  uint32_t NumImports = ImportedSymbols.size();
+  if (Config->ImportMemory)
+    ++NumImports;
+  if (Config->ImportTable)
+    ++NumImports;
+
+  if (NumImports == 0)
+    return;
+
+  SyntheticSection *Section = createSyntheticSection(WASM_SEC_IMPORT);
+  raw_ostream &OS = Section->getStream();
+
+  writeUleb128(OS, NumImports, "import count");
+
+  if (Config->ImportMemory) {
+    WasmImport Import;
+    Import.Module = DefaultModule;
+    Import.Field = "memory";
+    Import.Kind = WASM_EXTERNAL_MEMORY;
+    Import.Memory.Flags = 0;
+    Import.Memory.Initial = NumMemoryPages;
+    if (MaxMemoryPages != 0) {
+      Import.Memory.Flags |= WASM_LIMITS_FLAG_HAS_MAX;
+      Import.Memory.Maximum = MaxMemoryPages;
+    }
+    if (Config->SharedMemory)
+      Import.Memory.Flags |= WASM_LIMITS_FLAG_IS_SHARED;
+    writeImport(OS, Import);
+  }
+
+  if (Config->ImportTable) {
+    uint32_t TableSize = TableBase + IndirectFunctions.size();
+    WasmImport Import;
+    Import.Module = DefaultModule;
+    Import.Field = FunctionTableName;
+    Import.Kind = WASM_EXTERNAL_TABLE;
+    Import.Table.ElemType = WASM_TYPE_FUNCREF;
+    Import.Table.Limits = {0, TableSize, 0};
+    writeImport(OS, Import);
+  }
+
+  for (const Symbol *Sym : ImportedSymbols) {
+    WasmImport Import;
+    if (auto *F = dyn_cast<UndefinedFunction>(Sym)) {
+      Import.Field = F->ImportName;
+      Import.Module = F->ImportModule;
+    } else if (auto *G = dyn_cast<UndefinedGlobal>(Sym)) {
+      Import.Field = G->ImportName;
+      Import.Module = G->ImportModule;
+    } else {
+      Import.Field = Sym->getName();
+      Import.Module = DefaultModule;
+    }
+
+    if (auto *FunctionSym = dyn_cast<FunctionSymbol>(Sym)) {
+      Import.Kind = WASM_EXTERNAL_FUNCTION;
+      Import.SigIndex = lookupType(*FunctionSym->Signature);
+    } else if (auto *GlobalSym = dyn_cast<GlobalSymbol>(Sym)) {
+      Import.Kind = WASM_EXTERNAL_GLOBAL;
+      Import.Global = *GlobalSym->getGlobalType();
+    } else {
+      auto *EventSym = cast<EventSymbol>(Sym);
+      Import.Kind = WASM_EXTERNAL_EVENT;
+      Import.Event.Attribute = EventSym->getEventType()->Attribute;
+      Import.Event.SigIndex = lookupType(*EventSym->Signature);
+    }
+    writeImport(OS, Import);
+  }
+}
+
+void Writer::createTypeSection() {
+  SyntheticSection *Section = createSyntheticSection(WASM_SEC_TYPE);
+  raw_ostream &OS = Section->getStream();
+  writeUleb128(OS, Types.size(), "type count");
+  for (const WasmSignature *Sig : Types)
+    writeSig(OS, *Sig);
+}
+
+void Writer::createFunctionSection() {
+  if (InputFunctions.empty())
+    return;
+
+  SyntheticSection *Section = createSyntheticSection(WASM_SEC_FUNCTION);
+  raw_ostream &OS = Section->getStream();
+
+  writeUleb128(OS, InputFunctions.size(), "function count");
+  for (const InputFunction *Func : InputFunctions)
+    writeUleb128(OS, lookupType(Func->Signature), "sig index");
+}
+
+void Writer::createMemorySection() {
+  if (Config->ImportMemory)
+    return;
+
+  SyntheticSection *Section = createSyntheticSection(WASM_SEC_MEMORY);
+  raw_ostream &OS = Section->getStream();
+
+  bool HasMax = MaxMemoryPages != 0;
+  writeUleb128(OS, 1, "memory count");
+  unsigned Flags = 0;
+  if (HasMax)
+    Flags |= WASM_LIMITS_FLAG_HAS_MAX;
+  if (Config->SharedMemory)
+    Flags |= WASM_LIMITS_FLAG_IS_SHARED;
+  writeUleb128(OS, Flags, "memory limits flags");
+  writeUleb128(OS, NumMemoryPages, "initial pages");
+  if (HasMax)
+    writeUleb128(OS, MaxMemoryPages, "max pages");
+}
+
+void Writer::createGlobalSection() {
+  unsigned NumGlobals = InputGlobals.size() + DefinedFakeGlobals.size();
+  if (NumGlobals == 0)
+    return;
+
+  SyntheticSection *Section = createSyntheticSection(WASM_SEC_GLOBAL);
+  raw_ostream &OS = Section->getStream();
+
+  writeUleb128(OS, NumGlobals, "global count");
+  for (const InputGlobal *G : InputGlobals)
+    writeGlobal(OS, G->Global);
+  for (const DefinedData *Sym : DefinedFakeGlobals) {
+    WasmGlobal Global;
+    Global.Type = {WASM_TYPE_I32, false};
+    Global.InitExpr.Opcode = WASM_OPCODE_I32_CONST;
+    Global.InitExpr.Value.Int32 = Sym->getVirtualAddress();
+    writeGlobal(OS, Global);
+  }
+}
+
+// The event section contains a list of declared wasm events associated with the
+// module. Currently the only supported event kind is exceptions. A single event
+// entry represents a single event with an event tag. All C++ exceptions are
+// represented by a single event. An event entry in this section contains
+// information on what kind of event it is (e.g. exception) and the type of
+// values contained in a single event object. (In wasm, an event can contain
+// multiple values of primitive types. But for C++ exceptions, we just throw a
+// pointer which is an i32 value (for wasm32 architecture), so the signature of
+// C++ exception is (i32)->(void), because all event types are assumed to have
+// void return type to share WasmSignature with functions.)
+void Writer::createEventSection() {
+  unsigned NumEvents = InputEvents.size();
+  if (NumEvents == 0)
+    return;
+
+  SyntheticSection *Section = createSyntheticSection(WASM_SEC_EVENT);
+  raw_ostream &OS = Section->getStream();
+
+  writeUleb128(OS, NumEvents, "event count");
+  for (InputEvent *E : InputEvents) {
+    E->Event.Type.SigIndex = lookupType(E->Signature);
+    writeEvent(OS, E->Event);
+  }
+}
+
+void Writer::createTableSection() {
+  if (Config->ImportTable)
+    return;
+
+  // Always output a table section (or table import), even if there are no
+  // indirect calls.  There are two reasons for this:
+  //  1. For executables it is useful to have an empty table slot at 0
+  //     which can be filled with a null function call handler.
+  //  2. If we don't do this, any program that contains a call_indirect but
+  //     no address-taken function will fail at validation time since it is
+  //     a validation error to include a call_indirect instruction if there
+  //     is not table.
+  uint32_t TableSize = TableBase + IndirectFunctions.size();
+
+  SyntheticSection *Section = createSyntheticSection(WASM_SEC_TABLE);
+  raw_ostream &OS = Section->getStream();
+
+  writeUleb128(OS, 1, "table count");
+  WasmLimits Limits = {WASM_LIMITS_FLAG_HAS_MAX, TableSize, TableSize};
+  writeTableType(OS, WasmTable{WASM_TYPE_FUNCREF, Limits});
+}
+
+void Writer::createExportSection() {
+  if (!Exports.size())
+    return;
+
+  SyntheticSection *Section = createSyntheticSection(WASM_SEC_EXPORT);
+  raw_ostream &OS = Section->getStream();
+
+  writeUleb128(OS, Exports.size(), "export count");
+  for (const WasmExport &Export : Exports)
+    writeExport(OS, Export);
+}
+
+>>>>>>> release/8.x
 void Writer::calculateCustomSections() {
   log("calculateCustomSections");
   bool stripDebug = config->stripDebug || config->stripAll;
@@ -168,11 +367,224 @@ void Writer::createRelocSections() {
   }
 }
 
+<<<<<<< HEAD
 void Writer::populateProducers() {
   for (ObjFile *file : symtab->objectFiles) {
     const WasmProducerInfo &info = file->getWasmObj()->getProducerInfo();
     out.producersSec->addInfo(info);
   }
+=======
+static uint32_t getWasmFlags(const Symbol *Sym) {
+  uint32_t Flags = 0;
+  if (Sym->isLocal())
+    Flags |= WASM_SYMBOL_BINDING_LOCAL;
+  if (Sym->isWeak())
+    Flags |= WASM_SYMBOL_BINDING_WEAK;
+  if (Sym->isHidden())
+    Flags |= WASM_SYMBOL_VISIBILITY_HIDDEN;
+  if (Sym->isUndefined())
+    Flags |= WASM_SYMBOL_UNDEFINED;
+  if (auto *F = dyn_cast<UndefinedFunction>(Sym)) {
+    if (F->getName() != F->ImportName)
+      Flags |= WASM_SYMBOL_EXPLICIT_NAME;
+  } else if (auto *G = dyn_cast<UndefinedGlobal>(Sym)) {
+    if (G->getName() != G->ImportName)
+      Flags |= WASM_SYMBOL_EXPLICIT_NAME;
+  }
+  return Flags;
+}
+
+// Some synthetic sections (e.g. "name" and "linking") have subsections.
+// Just like the synthetic sections themselves these need to be created before
+// they can be written out (since they are preceded by their length). This
+// class is used to create subsections and then write them into the stream
+// of the parent section.
+class SubSection {
+public:
+  explicit SubSection(uint32_t Type) : Type(Type) {}
+
+  void writeTo(raw_ostream &To) {
+    OS.flush();
+    writeUleb128(To, Type, "subsection type");
+    writeUleb128(To, Body.size(), "subsection size");
+    To.write(Body.data(), Body.size());
+  }
+
+private:
+  uint32_t Type;
+  std::string Body;
+
+public:
+  raw_string_ostream OS{Body};
+};
+
+// Create the custom "dylink" section containing information for the dynamic
+// linker.
+// See
+// https://github.com/WebAssembly/tool-conventions/blob/master/DynamicLinking.md
+void Writer::createDylinkSection() {
+  SyntheticSection *Section = createSyntheticSection(WASM_SEC_CUSTOM, "dylink");
+  raw_ostream &OS = Section->getStream();
+
+  writeUleb128(OS, MemSize, "MemSize");
+  writeUleb128(OS, MemAlign, "MemAlign");
+  writeUleb128(OS, IndirectFunctions.size(), "TableSize");
+  writeUleb128(OS, 0, "TableAlign");
+  writeUleb128(OS, 0, "Needed");  // TODO: Support "needed" shared libraries
+}
+
+// Create the custom "linking" section containing linker metadata.
+// This is only created when relocatable output is requested.
+void Writer::createLinkingSection() {
+  SyntheticSection *Section =
+      createSyntheticSection(WASM_SEC_CUSTOM, "linking");
+  raw_ostream &OS = Section->getStream();
+
+  writeUleb128(OS, WasmMetadataVersion, "Version");
+
+  if (!SymtabEntries.empty()) {
+    SubSection Sub(WASM_SYMBOL_TABLE);
+    writeUleb128(Sub.OS, SymtabEntries.size(), "num symbols");
+
+    for (const Symbol *Sym : SymtabEntries) {
+      assert(Sym->isDefined() || Sym->isUndefined());
+      WasmSymbolType Kind = Sym->getWasmType();
+      uint32_t Flags = getWasmFlags(Sym);
+
+      writeU8(Sub.OS, Kind, "sym kind");
+      writeUleb128(Sub.OS, Flags, "sym flags");
+
+      if (auto *F = dyn_cast<FunctionSymbol>(Sym)) {
+        writeUleb128(Sub.OS, F->getFunctionIndex(), "index");
+        if (Sym->isDefined() ||
+            (Flags & WASM_SYMBOL_EXPLICIT_NAME) != 0)
+          writeStr(Sub.OS, Sym->getName(), "sym name");
+      } else if (auto *G = dyn_cast<GlobalSymbol>(Sym)) {
+        writeUleb128(Sub.OS, G->getGlobalIndex(), "index");
+        if (Sym->isDefined() ||
+            (Flags & WASM_SYMBOL_EXPLICIT_NAME) != 0)
+          writeStr(Sub.OS, Sym->getName(), "sym name");
+      } else if (auto *E = dyn_cast<EventSymbol>(Sym)) {
+        writeUleb128(Sub.OS, E->getEventIndex(), "index");
+        if (Sym->isDefined() ||
+            (Flags & WASM_SYMBOL_EXPLICIT_NAME) != 0)
+          writeStr(Sub.OS, Sym->getName(), "sym name");
+      } else if (isa<DataSymbol>(Sym)) {
+        writeStr(Sub.OS, Sym->getName(), "sym name");
+        if (auto *DataSym = dyn_cast<DefinedData>(Sym)) {
+          writeUleb128(Sub.OS, DataSym->getOutputSegmentIndex(), "index");
+          writeUleb128(Sub.OS, DataSym->getOutputSegmentOffset(),
+                       "data offset");
+          writeUleb128(Sub.OS, DataSym->getSize(), "data size");
+        }
+      } else {
+        auto *S = cast<SectionSymbol>(Sym);
+        writeUleb128(Sub.OS, S->getOutputSectionIndex(), "sym section index");
+      }
+    }
+
+    Sub.writeTo(OS);
+  }
+
+  if (Segments.size()) {
+    SubSection Sub(WASM_SEGMENT_INFO);
+    writeUleb128(Sub.OS, Segments.size(), "num data segments");
+    for (const OutputSegment *S : Segments) {
+      writeStr(Sub.OS, S->Name, "segment name");
+      writeUleb128(Sub.OS, S->Alignment, "alignment");
+      writeUleb128(Sub.OS, 0, "flags");
+    }
+    Sub.writeTo(OS);
+  }
+
+  if (!InitFunctions.empty()) {
+    SubSection Sub(WASM_INIT_FUNCS);
+    writeUleb128(Sub.OS, InitFunctions.size(), "num init functions");
+    for (const WasmInitEntry &F : InitFunctions) {
+      writeUleb128(Sub.OS, F.Priority, "priority");
+      writeUleb128(Sub.OS, F.Sym->getOutputSymbolIndex(), "function index");
+    }
+    Sub.writeTo(OS);
+  }
+
+  struct ComdatEntry {
+    unsigned Kind;
+    uint32_t Index;
+  };
+  std::map<StringRef, std::vector<ComdatEntry>> Comdats;
+
+  for (const InputFunction *F : InputFunctions) {
+    StringRef Comdat = F->getComdatName();
+    if (!Comdat.empty())
+      Comdats[Comdat].emplace_back(
+          ComdatEntry{WASM_COMDAT_FUNCTION, F->getFunctionIndex()});
+  }
+  for (uint32_t I = 0; I < Segments.size(); ++I) {
+    const auto &InputSegments = Segments[I]->InputSegments;
+    if (InputSegments.empty())
+      continue;
+    StringRef Comdat = InputSegments[0]->getComdatName();
+#ifndef NDEBUG
+    for (const InputSegment *IS : InputSegments)
+      assert(IS->getComdatName() == Comdat);
+#endif
+    if (!Comdat.empty())
+      Comdats[Comdat].emplace_back(ComdatEntry{WASM_COMDAT_DATA, I});
+  }
+
+  if (!Comdats.empty()) {
+    SubSection Sub(WASM_COMDAT_INFO);
+    writeUleb128(Sub.OS, Comdats.size(), "num comdats");
+    for (const auto &C : Comdats) {
+      writeStr(Sub.OS, C.first, "comdat name");
+      writeUleb128(Sub.OS, 0, "comdat flags"); // flags for future use
+      writeUleb128(Sub.OS, C.second.size(), "num entries");
+      for (const ComdatEntry &Entry : C.second) {
+        writeU8(Sub.OS, Entry.Kind, "entry kind");
+        writeUleb128(Sub.OS, Entry.Index, "entry index");
+      }
+    }
+    Sub.writeTo(OS);
+  }
+}
+
+// Create the custom "name" section containing debug symbol names.
+void Writer::createNameSection() {
+  unsigned NumNames = NumImportedFunctions;
+  for (const InputFunction *F : InputFunctions)
+    if (!F->getName().empty() || !F->getDebugName().empty())
+      ++NumNames;
+
+  if (NumNames == 0)
+    return;
+
+  SyntheticSection *Section = createSyntheticSection(WASM_SEC_CUSTOM, "name");
+
+  SubSection Sub(WASM_NAMES_FUNCTION);
+  writeUleb128(Sub.OS, NumNames, "name count");
+
+  // Names must appear in function index order.  As it happens ImportedSymbols
+  // and InputFunctions are numbered in order with imported functions coming
+  // first.
+  for (const Symbol *S : ImportedSymbols) {
+    if (auto *F = dyn_cast<FunctionSymbol>(S)) {
+      writeUleb128(Sub.OS, F->getFunctionIndex(), "func index");
+      writeStr(Sub.OS, toString(*S), "symbol name");
+    }
+  }
+  for (const InputFunction *F : InputFunctions) {
+    if (!F->getName().empty()) {
+      writeUleb128(Sub.OS, F->getFunctionIndex(), "func index");
+      if (!F->getDebugName().empty()) {
+        writeStr(Sub.OS, F->getDebugName(), "symbol name");
+      } else {
+        writeStr(Sub.OS, maybeDemangleSymbol(F->getName()), "symbol name");
+      }
+    }
+  }
+
+  Sub.writeTo(Section->getStream());
+>>>>>>> release/8.x
 }
 
 void Writer::writeHeader() {
@@ -206,6 +618,7 @@ void Writer::layoutMemory() {
   auto placeStack = [&]() {
     if (config->relocatable || config->isPic)
       return;
+<<<<<<< HEAD
     memoryPtr = alignTo(memoryPtr, stackAlignment);
     if (config->zStackSize != alignTo(config->zStackSize, stackAlignment))
       error("stack size must be " + Twine(stackAlignment) + "-byte aligned");
@@ -215,6 +628,17 @@ void Writer::layoutMemory() {
     auto *sp = cast<DefinedGlobal>(WasmSym::stackPointer);
     sp->global->global.InitExpr.Value.Int32 = memoryPtr;
     log("mem: stack top   = " + Twine(memoryPtr));
+=======
+    MemoryPtr = alignTo(MemoryPtr, StackAlignment);
+    if (Config->ZStackSize != alignTo(Config->ZStackSize, StackAlignment))
+      error("stack size must be " + Twine(StackAlignment) + "-byte aligned");
+    log("mem: stack size  = " + Twine(Config->ZStackSize));
+    log("mem: stack base  = " + Twine(MemoryPtr));
+    MemoryPtr += Config->ZStackSize;
+    auto *SP = cast<DefinedGlobal>(WasmSym::StackPointer);
+    SP->Global->Global.InitExpr.Value.Int32 = MemoryPtr;
+    log("mem: stack top   = " + Twine(MemoryPtr));
+>>>>>>> release/8.x
   };
 
   if (config->stackFirst) {
@@ -505,9 +929,14 @@ void Writer::calculateExports() {
     out.exportSec->exports.push_back(
         WasmExport{"memory", WASM_EXTERNAL_MEMORY, 0});
 
+<<<<<<< HEAD
   if (!config->relocatable && config->exportTable)
     out.exportSec->exports.push_back(
         WasmExport{functionTableName, WASM_EXTERNAL_TABLE, 0});
+=======
+  if (!Config->Relocatable && Config->ExportTable)
+    Exports.push_back(WasmExport{FunctionTableName, WASM_EXTERNAL_TABLE, 0});
+>>>>>>> release/8.x
 
   unsigned globalIndex =
       out.importSec->getNumImportedGlobals() + out.globalSec->numGlobals();
@@ -553,12 +982,70 @@ void Writer::populateSymtab() {
     if (sym->isUsedInRegularObj && sym->isLive())
       out.linkingSec->addToSymtab(sym);
 
+<<<<<<< HEAD
   for (ObjFile *file : symtab->objectFiles) {
     LLVM_DEBUG(dbgs() << "Local symtab entries: " << file->getName() << "\n");
     for (Symbol *sym : file->getSymbols())
       if (sym->isLocal() && !isa<SectionSymbol>(sym) && sym->isLive())
         out.linkingSec->addToSymtab(sym);
   }
+=======
+  unsigned SymbolIndex = SymtabEntries.size();
+
+  auto AddSymbol = [&](Symbol *Sym) {
+    if (auto *S = dyn_cast<SectionSymbol>(Sym)) {
+      StringRef Name = S->getName();
+      if (CustomSectionMapping.count(Name) == 0)
+        return;
+
+      auto SSI = SectionSymbolIndices.find(Name);
+      if (SSI != SectionSymbolIndices.end()) {
+        Sym->setOutputSymbolIndex(SSI->second);
+        return;
+      }
+
+      SectionSymbolIndices[Name] = SymbolIndex;
+      CustomSectionSymbols[Name] = cast<SectionSymbol>(Sym);
+
+      Sym->markLive();
+    }
+
+    // (Since this is relocatable output, GC is not performed so symbols must
+    // be live.)
+    assert(Sym->isLive());
+    Sym->setOutputSymbolIndex(SymbolIndex++);
+    SymtabEntries.emplace_back(Sym);
+  };
+
+  for (Symbol *Sym : Symtab->getSymbols())
+    if (!Sym->isLazy())
+      AddSymbol(Sym);
+
+  for (ObjFile *File : Symtab->ObjectFiles) {
+    LLVM_DEBUG(dbgs() << "Local symtab entries: " << File->getName() << "\n");
+    for (Symbol *Sym : File->getSymbols())
+      if (Sym->isLocal())
+        AddSymbol(Sym);
+  }
+}
+
+uint32_t Writer::lookupType(const WasmSignature &Sig) {
+  auto It = TypeIndices.find(Sig);
+  if (It == TypeIndices.end()) {
+    error("type not found: " + toString(Sig));
+    return 0;
+  }
+  return It->second;
+}
+
+uint32_t Writer::registerType(const WasmSignature &Sig) {
+  auto Pair = TypeIndices.insert(std::make_pair(Sig, Types.size()));
+  if (Pair.second) {
+    LLVM_DEBUG(dbgs() << "type " << toString(Sig) << "\n");
+    Types.push_back(&Sig);
+  }
+  return Pair.first->second;
+>>>>>>> release/8.x
 }
 
 void Writer::calculateTypes() {

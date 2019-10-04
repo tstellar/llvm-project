@@ -331,8 +331,16 @@ The formal syntax of ``NOLINT``/``NOLINTNEXTLINE`` is the following:
 
 Note that whitespaces between ``NOLINT``/``NOLINTNEXTLINE`` and the opening
 parenthesis are not allowed (in this case the comment will be treated just as
+<<<<<<< HEAD
 ``NOLINT``/``NOLINTNEXTLINE``), whereas in check names list (inside the
 parenthesis) whitespaces can be used and will be ignored.
 
 .. _LibTooling: https://clang.llvm.org/docs/LibTooling.html
 .. _How To Setup Tooling For LLVM: https://clang.llvm.org/docs/HowToSetupToolingForLLVM.html
+=======
+``NOLINT``/``NOLINTNEXTLINE``), whereas in check names list (inside
+the parenthesis) whitespaces can be used and will be ignored.
+
+.. _LibTooling: http://clang.llvm.org/docs/LibTooling.html
+.. _How To Setup Tooling For LLVM: http://clang.llvm.org/docs/HowToSetupToolingForLLVM.html
+>>>>>>> release/8.x

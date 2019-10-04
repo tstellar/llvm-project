@@ -17,7 +17,11 @@
 OpenMP Support
 ==================
 
+<<<<<<< HEAD
 Clang supports the following OpenMP 5.0 features (see also `OpenMP implementation details`_):
+=======
+Clang supports the following OpenMP 5.0 features
+>>>>>>> release/8.x
 
 * The `reduction`-based clauses in the `task` and `target`-based directives.
 
@@ -37,7 +41,11 @@ Clang supports the following OpenMP 5.0 features (see also `OpenMP implementatio
 Clang fully supports OpenMP 4.5. Clang supports offloading to X86_64, AArch64,
 PPC64[LE] and has `basic support for Cuda devices`_.
 
+<<<<<<< HEAD
 * #pragma omp declare simd: :part:`Partial`.  We support parsing/semantic
+=======
+* #pragma omp declare simd: :partial:`Partial`.  We support parsing/semantic
+>>>>>>> release/8.x
   analysis + generation of special attributes for X86 target, but still
   missing the LLVM pass for vectorization.
 

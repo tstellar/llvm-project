@@ -562,7 +562,11 @@ DEFINE_LIBUNWIND_FUNCTION(__unw_getcontext)
 // On entry:
 //  thread_state pointer is in r3
 //
+<<<<<<< HEAD
 DEFINE_LIBUNWIND_FUNCTION(__unw_getcontext)
+=======
+DEFINE_LIBUNWIND_FUNCTION(unw_getcontext)
+>>>>>>> release/8.x
   stw     %r0,   8(%r3)
   mflr    %r0
   stw     %r0,   0(%r3) // store lr as ssr0

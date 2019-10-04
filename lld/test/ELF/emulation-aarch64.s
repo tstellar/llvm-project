@@ -33,7 +33,11 @@
 # RUN: llvm-mc -filetype=obj -triple=aarch64-unknown-freebsd %s -o %taarch64fbsd
 # RUN: echo 'OUTPUT_FORMAT(elf64-aarch64-freebsd)' > %taarch64fbsd.script
 # RUN: ld.lld %taarch64fbsd.script %taarch64fbsd -o %t2aarch64fbsd
+<<<<<<< HEAD
 # RUN: llvm-readobj --file-headers %t2aarch64fbsd | FileCheck --check-prefix=AARCH64-FBSD %s
+=======
+# RUN: llvm-readobj -file-headers %t2aarch64fbsd | FileCheck --check-prefix=AARCH64-FBSD %s
+>>>>>>> release/8.x
 # AARCH64-FBSD:      ElfHeader {
 # AARCH64-FBSD-NEXT:   Ident {
 # AARCH64-FBSD-NEXT:     Magic: (7F 45 4C 46)

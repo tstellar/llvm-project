@@ -59,6 +59,7 @@ public:
   Symbol *addDefinedEvent(StringRef name, uint32_t flags, InputFile *file,
                           InputEvent *e);
 
+<<<<<<< HEAD
   Symbol *addUndefinedFunction(StringRef name, StringRef importName,
                                StringRef importModule, uint32_t flags,
                                InputFile *file, const WasmSignature *signature,
@@ -67,6 +68,15 @@ public:
   Symbol *addUndefinedGlobal(StringRef name, StringRef importName,
                              StringRef importModule,  uint32_t flags,
                              InputFile *file, const WasmGlobalType *type);
+=======
+  Symbol *addUndefinedFunction(StringRef Name, StringRef ImportName,
+                               StringRef ImportModule, uint32_t Flags,
+                               InputFile *File, const WasmSignature *Signature);
+  Symbol *addUndefinedData(StringRef Name, uint32_t Flags, InputFile *File);
+  Symbol *addUndefinedGlobal(StringRef Name, StringRef ImportName,
+                             StringRef ImportModule,  uint32_t Flags,
+                             InputFile *File, const WasmGlobalType *Type);
+>>>>>>> release/8.x
 
   void addLazy(ArchiveFile *f, const llvm::object::Archive::Symbol *sym);
 

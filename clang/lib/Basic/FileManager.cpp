@@ -198,6 +198,7 @@ FileManager::getFileRef(StringRef Filename, bool openFile, bool CacheFailure) {
   ++NumFileLookups;
 
   // See if there is already an entry in the map.
+<<<<<<< HEAD
   auto SeenFileInsertResult =
       SeenFileEntries.insert({Filename, std::errc::no_such_file_or_directory});
   if (!SeenFileInsertResult.second) {
@@ -212,11 +213,19 @@ FileManager::getFileRef(StringRef Filename, bool openFile, bool CacheFailure) {
       return FileEntryRef(SeenFileInsertResult.first->first(), *FE);
     return getFileRef(*Value.get<const StringRef *>(), openFile, CacheFailure);
   }
+=======
+  if (NamedFileEnt.second)
+    return NamedFileEnt.second == NON_EXISTENT_FILE ? nullptr
+                                                    : NamedFileEnt.second;
+>>>>>>> release/8.x
 
   // We've not seen this before. Fill it in.
   ++NumFileCacheMisses;
   auto &NamedFileEnt = *SeenFileInsertResult.first;
   assert(!NamedFileEnt.second && "should be newly-created");
+
+  // By default, initialize it to invalid.
+  NamedFileEnt.second = NON_EXISTENT_FILE;
 
   // Get the null-terminated file name as stored as the key of the
   // SeenFileEntries map.
@@ -260,12 +269,17 @@ FileManager::getFileRef(StringRef Filename, bool openFile, bool CacheFailure) {
 
   // It exists.  See if we have already opened a file with the same inode.
   // This occurs when one dir is symlinked to another, for example.
+<<<<<<< HEAD
   FileEntry &UFE = UniqueRealFiles[Status.getUniqueID()];
+=======
+  FileEntry &UFE = UniqueRealFiles[Data.UniqueID];
+>>>>>>> release/8.x
 
   NamedFileEnt.second = &UFE;
 
   // If the name returned by getStatValue is different than Filename, re-intern
   // the name.
+<<<<<<< HEAD
   if (Status.getName() != Filename) {
     auto &NewNamedFileEnt =
         *SeenFileEntries.insert({Status.getName(), &UFE}).first;
@@ -276,6 +290,17 @@ FileManager::getFileRef(StringRef Filename, bool openFile, bool CacheFailure) {
     // entry, that will point to the name the filesystem actually wants to use.
     StringRef *Redirect = new (CanonicalNameStorage) StringRef(InterndFileName);
     NamedFileEnt.second = Redirect;
+=======
+  if (Data.Name != Filename) {
+    auto &NamedFileEnt =
+        *SeenFileEntries.insert(std::make_pair(Data.Name, nullptr)).first;
+    if (!NamedFileEnt.second)
+      NamedFileEnt.second = &UFE;
+    else
+      assert(NamedFileEnt.second == &UFE &&
+             "filename from getStatValue() refers to wrong file");
+    InterndFileName = NamedFileEnt.first().data();
+>>>>>>> release/8.x
   }
 
   if (UFE.isValid()) { // Already have an entry with this inode, return it.
@@ -307,19 +332,30 @@ FileManager::getFileRef(StringRef Filename, bool openFile, bool CacheFailure) {
   UFE.ModTime = llvm::sys::toTimeT(Status.getLastModificationTime());
   UFE.Dir     = DirInfo;
   UFE.UID     = NextFileUID++;
+<<<<<<< HEAD
   UFE.UniqueID = Status.getUniqueID();
   UFE.IsNamedPipe = Status.getType() == llvm::sys::fs::file_type::fifo_file;
+=======
+  UFE.UniqueID = Data.UniqueID;
+  UFE.IsNamedPipe = Data.IsNamedPipe;
+  UFE.InPCH = Data.InPCH;
+>>>>>>> release/8.x
   UFE.File = std::move(F);
   UFE.IsValid = true;
 
   if (UFE.File) {
     if (auto PathName = UFE.File->getName())
       fillRealPathName(&UFE, *PathName);
+<<<<<<< HEAD
   } else if (!openFile) {
     // We should still fill the path even if we aren't opening the file.
     fillRealPathName(&UFE, InterndFileName);
   }
   return FileEntryRef(InterndFileName, UFE);
+=======
+  }
+  return &UFE;
+>>>>>>> release/8.x
 }
 
 const FileEntry *

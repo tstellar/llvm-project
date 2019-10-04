@@ -633,6 +633,11 @@ static bool shouldKeepInSymtab(const Defined &sym) {
   if (config->emitRelocs)
     return true;
 
+  // If -emit-reloc is given, all symbols including local ones need to be
+  // copied because they may be referenced by relocations.
+  if (Config->EmitRelocs)
+    return true;
+
   // In ELF assembly .L symbols are normally discarded by the assembler.
   // If the assembler fails to do so, the linker discards them if
   // * --discard-locals is used.
@@ -2409,8 +2414,19 @@ template <class ELFT> void Writer<ELFT>::setPhdrs(Partition &part) {
       // musl/glibc ld.so rounds the size down, so we need to round up
       // to protect the last page. This is a no-op on FreeBSD which always
       // rounds up.
+<<<<<<< HEAD
       p->p_memsz = alignTo(p->p_offset + p->p_memsz, config->commonPageSize) -
                    p->p_offset;
+=======
+      P->p_memsz = alignTo(P->p_memsz, Target->PageSize);
+    }
+
+    if (P->p_type == PT_TLS && P->p_memsz) {
+      // The TLS pointer goes after PT_TLS for variant 2 targets. At least glibc
+      // will align it, so round up the size to make sure the offsets are
+      // correct.
+      P->p_memsz = alignTo(P->p_memsz, P->p_align);
+>>>>>>> release/8.x
     }
   }
 }

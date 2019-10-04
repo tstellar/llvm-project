@@ -38,7 +38,11 @@
 # RUN: llvm-mc -filetype=obj -triple=powerpc64-unknown-freebsd %s -o %tppc64fbsd
 # RUN: echo 'OUTPUT_FORMAT(elf64-powerpc-freebsd)' > %tppc64fbsd.script
 # RUN: ld.lld %tppc64fbsd.script  %tppc64fbsd -o %t2ppc64fbsd
+<<<<<<< HEAD
 # RUN: llvm-readobj --file-headers %t2ppc64fbsd | FileCheck --check-prefix=PPC64-FBSD %s
+=======
+# RUN: llvm-readobj -file-headers %t2ppc64fbsd | FileCheck --check-prefix=PPC64-FBSD %s
+>>>>>>> release/8.x
 
 # PPC64-FBSD:      ElfHeader {
 # PPC64-FBSD-NEXT:   Ident {
@@ -105,6 +109,7 @@
 
 # RUN: llvm-mc -filetype=obj -triple=powerpc-unknown-linux %s -o %tppc32
 # RUN: ld.lld -m elf32ppc %tppc32 -o %t2ppc32
+<<<<<<< HEAD
 # RUN: llvm-readobj --file-headers %t2ppc32 | FileCheck --check-prefix=PPC32 %s
 # RUN: ld.lld %tppc32 -o %t3ppc32
 # RUN: llvm-readobj --file-headers %t3ppc32 | FileCheck --check-prefix=PPC32 %s
@@ -113,6 +118,16 @@
 # RUN: llvm-readobj --file-headers %t4ppc32 | FileCheck --check-prefix=PPC32 %s
 # RUN: ld.lld -m elf32ppclinux %tppc32 -o %t5ppc32
 # RUN: llvm-readobj --file-headers %t5ppc32 | FileCheck --check-prefix=PPC32 %s
+=======
+# RUN: llvm-readobj -file-headers %t2ppc32 | FileCheck --check-prefix=PPC32 %s
+# RUN: ld.lld %tppc32 -o %t3ppc32
+# RUN: llvm-readobj -file-headers %t3ppc32 | FileCheck --check-prefix=PPC32 %s
+# RUN: echo 'OUTPUT_FORMAT(elf32-powerpc)' > %tppc32.script
+# RUN: ld.lld %tppc32.script  %tppc32 -o %t4ppc32
+# RUN: llvm-readobj -file-headers %t4ppc32 | FileCheck --check-prefix=PPC32 %s
+# RUN: ld.lld -m elf32ppclinux %tppc32 -o %t5ppc32
+# RUN: llvm-readobj -file-headers %t5ppc32 | FileCheck --check-prefix=PPC32 %s
+>>>>>>> release/8.x
 
 # PPC32:      ElfHeader {
 # PPC32-NEXT:   Ident {

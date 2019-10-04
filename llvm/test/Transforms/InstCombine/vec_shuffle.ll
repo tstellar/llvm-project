@@ -1140,6 +1140,7 @@ define <2 x i1> @PR40734(<1 x i1> %x, <4 x i1> %y) {
   ret <2 x i1> %r
 }
 
+<<<<<<< HEAD
 ; Negative test - do not transform non-power-of-2 unless we know the backend handles these sequences identically.
 
 define <7 x i8> @insert_subvector_shuffles(<3 x i8> %x, <3 x i8> %y) {
@@ -1252,3 +1253,5 @@ define <4 x float> @insert_subvector_crash_invalid_mask_elt(<2 x float> %x, <4 x
   store <4 x float> %I, <4 x float>* %p
   ret <4 x float> %widen
 }
+=======
+>>>>>>> release/8.x

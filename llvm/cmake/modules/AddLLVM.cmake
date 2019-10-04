@@ -900,7 +900,10 @@ if(NOT LLVM_TOOLCHAIN_TOOLS)
     llvm-objdump
     llvm-rc
     llvm-profdata
+<<<<<<< HEAD
     llvm-symbolizer
+=======
+>>>>>>> release/8.x
     )
 endif()
 

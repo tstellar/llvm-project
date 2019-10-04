@@ -100,7 +100,10 @@
 // CHECK-NEXT: ObjCBridge (SubjectMatchRule_record, SubjectMatchRule_type_alias)
 // CHECK-NEXT: ObjCBridgeMutable (SubjectMatchRule_record)
 // CHECK-NEXT: ObjCBridgeRelated (SubjectMatchRule_record)
+<<<<<<< HEAD
 // CHECK-NEXT: ObjCClassStub (SubjectMatchRule_objc_interface)
+=======
+>>>>>>> release/8.x
 // CHECK-NEXT: ObjCDesignatedInitializer (SubjectMatchRule_objc_method)
 // CHECK-NEXT: ObjCException (SubjectMatchRule_objc_interface)
 // CHECK-NEXT: ObjCExplicitProtocolImpl (SubjectMatchRule_objc_protocol)

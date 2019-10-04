@@ -174,7 +174,12 @@ DWARFDebugLoclists::parseOneLocationList(const DataExtractor &Data,
     }
 
     if (Kind != dwarf::DW_LLE_base_address) {
+<<<<<<< HEAD
       unsigned Bytes = Version >= 5 ? Data.getULEB128(C) : Data.getU16(C);
+=======
+      unsigned Bytes =
+          Version >= 5 ? Data.getULEB128(Offset) : Data.getU16(Offset);
+>>>>>>> release/8.x
       // A single location description describing the location of the object...
       Data.getU8(C, E.Loc, Bytes);
     }

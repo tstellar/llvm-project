@@ -90,12 +90,21 @@ target triple = "wasm32-unknown-unknown"
 
 ; RELOC:       - Type:            DATA
 ; RELOC-NEXT:     Relocations:
+<<<<<<< HEAD
 ; RELOC-NEXT:       - Type:            R_WASM_MEMORY_ADDR_I32
 ; RELOC-NEXT:         Index:           3
 ; RELOC-NEXT:         Offset:          0x00000024
 ; RELOC-NEXT:       - Type:            R_WASM_MEMORY_ADDR_I32
 ; RELOC-NEXT:         Index:           4
 ; RELOC-NEXT:         Offset:          0x0000002D
+=======
+; RELOC-NEXT:       - Type:            R_WEBASSEMBLY_MEMORY_ADDR_I32
+; RELOC-NEXT:         Index:           3
+; RELOC-NEXT:         Offset:          0x00000018
+; RELOC-NEXT:       - Type:            R_WEBASSEMBLY_MEMORY_ADDR_I32
+; RELOC-NEXT:         Index:           4
+; RELOC-NEXT:         Offset:          0x0000002E
+>>>>>>> release/8.x
 ; RELOC-NEXT:         Addend:          4
 ; RELOC-NEXT:     Segments:
 ; RELOC-NEXT:       - SectionOffset:   6

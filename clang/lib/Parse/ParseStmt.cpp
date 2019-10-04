@@ -452,7 +452,11 @@ StmtResult Parser::ParseExprStatement(ParsedStmtContext StmtCtx) {
 
   // Otherwise, eat the semicolon.
   ExpectAndConsumeSemi(diag::err_expected_semi_after_expr);
+<<<<<<< HEAD
   return handleExprStmt(Expr, StmtCtx);
+=======
+  return Actions.ActOnExprStmt(Expr);
+>>>>>>> release/8.x
 }
 
 /// ParseSEHTryBlockCommon
@@ -983,6 +987,7 @@ bool Parser::ConsumeNullStmt(StmtVector &Stmts) {
   return true;
 }
 
+<<<<<<< HEAD
 StmtResult Parser::handleExprStmt(ExprResult E, ParsedStmtContext StmtCtx) {
   bool IsStmtExprResult = false;
   if ((StmtCtx & ParsedStmtContext::InStmtExpr) != ParsedStmtContext()) {
@@ -1003,6 +1008,8 @@ StmtResult Parser::handleExprStmt(ExprResult E, ParsedStmtContext StmtCtx) {
   return Actions.ActOnExprStmt(E, /*DiscardedValue=*/!IsStmtExprResult);
 }
 
+=======
+>>>>>>> release/8.x
 /// ParseCompoundStatementBody - Parse a sequence of statements and invoke the
 /// ActOnCompoundStmt action.  This expects the '{' to be the current token, and
 /// consume the '}' at the end of the block.  It does not manipulate the scope
@@ -1110,9 +1117,13 @@ StmtResult Parser::ParseCompoundStatementBody(bool isStmtExpr) {
         // Eat the semicolon at the end of stmt and convert the expr into a
         // statement.
         ExpectAndConsumeSemi(diag::err_expected_semi_after_expr);
+<<<<<<< HEAD
         R = handleExprStmt(Res, SubStmtCtx);
         if (R.isUsable())
           R = Actions.ProcessStmtAttributes(R.get(), attrs, attrs.Range);
+=======
+        R = Actions.ActOnExprStmt(Res);
+>>>>>>> release/8.x
       }
     }
 
@@ -1748,16 +1759,8 @@ StmtResult Parser::ParseForStatement(SourceLocation *TrailingElseLoc) {
     if (!Value.isInvalid()) {
       if (ForEach)
         FirstPart = Actions.ActOnForEachLValueExpr(Value.get());
-      else {
-        // We already know this is not an init-statement within a for loop, so
-        // if we are parsing a C++11 range-based for loop, we should treat this
-        // expression statement as being a discarded value expression because
-        // we will err below. This way we do not warn on an unused expression
-        // that was an error in the first place, like with: for (expr : expr);
-        bool IsRangeBasedFor =
-            getLangOpts().CPlusPlus11 && !ForEach && Tok.is(tok::colon);
-        FirstPart = Actions.ActOnExprStmt(Value, !IsRangeBasedFor);
-      }
+      else
+        FirstPart = Actions.ActOnExprStmt(Value);
     }
 
     if (Tok.is(tok::semi)) {

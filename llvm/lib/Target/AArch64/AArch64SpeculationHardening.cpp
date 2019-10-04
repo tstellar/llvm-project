@@ -561,8 +561,13 @@ bool AArch64SpeculationHardening::expandSpeculationSafeValue(
     // miss-speculation isn't happening because we're already inserting barriers
     // to guarantee that.
     if (!UseControlFlowSpeculationBarrier && !UsesFullSpeculationBarrier) {
+<<<<<<< HEAD
       Register DstReg = MI.getOperand(0).getReg();
       Register SrcReg = MI.getOperand(1).getReg();
+=======
+      unsigned DstReg = MI.getOperand(0).getReg();
+      unsigned SrcReg = MI.getOperand(1).getReg();
+>>>>>>> release/8.x
       // Mark this register and all its aliasing registers as needing to be
       // value speculation hardened before its next use, by using a CSDB
       // barrier instruction.

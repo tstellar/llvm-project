@@ -141,10 +141,13 @@ entry:
 ; GNU_SINCOS_FASTMATH: fldt 16(%{{[re]}}sp)
 ; GNU_SINCOS_FASTMATH: fldt 32(%{{[re]}}sp)
 ; GNU_SINCOS_FASTMATH: faddp %st, %st(1)
+<<<<<<< HEAD
 
 ; PS4_SINCOS-LABEL: test3:
 ; PS4_SINCOS: callq sinl
 ; PS4_SINCOS: callq cosl
+=======
+>>>>>>> release/8.x
   %call = tail call x86_fp80 @sinl(x86_fp80 %x) readnone
   %call1 = tail call x86_fp80 @cosl(x86_fp80 %x) readnone
   %add = fadd x86_fp80 %call, %call1

@@ -802,9 +802,15 @@ Thunk::~Thunk() = default;
 static Thunk *addThunkAArch64(RelType type, Symbol &s) {
   if (type != R_AARCH64_CALL26 && type != R_AARCH64_JUMP26)
     fatal("unrecognized relocation type");
+<<<<<<< HEAD
   if (config->picThunk)
     return make<AArch64ADRPThunk>(s);
   return make<AArch64ABSLongThunk>(s);
+=======
+  if (Config->PicThunk)
+    return make<AArch64ADRPThunk>(S);
+  return make<AArch64ABSLongThunk>(S);
+>>>>>>> release/8.x
 }
 
 // Creates a thunk for Thumb-ARM interworking.
@@ -819,9 +825,15 @@ static Thunk *addThunkPreArmv7(RelType reloc, Symbol &s) {
   case R_ARM_JUMP24:
   case R_ARM_CALL:
   case R_ARM_THM_CALL:
+<<<<<<< HEAD
     if (config->picThunk)
       return make<ARMV5PILongThunk>(s);
     return make<ARMV5ABSLongThunk>(s);
+=======
+    if (Config->PicThunk)
+      return make<ARMV5PILongThunk>(S);
+    return make<ARMV5ABSLongThunk>(S);
+>>>>>>> release/8.x
   }
   fatal("relocation " + toString(reloc) + " to " + toString(s) +
         " not supported for Armv5 or Armv6 targets");
@@ -874,6 +886,7 @@ static Thunk *addThunkArm(RelType reloc, Symbol &s) {
   case R_ARM_PLT32:
   case R_ARM_JUMP24:
   case R_ARM_CALL:
+<<<<<<< HEAD
     if (config->picThunk)
       return make<ARMV7PILongThunk>(s);
     return make<ARMV7ABSLongThunk>(s);
@@ -883,6 +896,17 @@ static Thunk *addThunkArm(RelType reloc, Symbol &s) {
     if (config->picThunk)
       return make<ThumbV7PILongThunk>(s);
     return make<ThumbV7ABSLongThunk>(s);
+=======
+    if (Config->PicThunk)
+      return make<ARMV7PILongThunk>(S);
+    return make<ARMV7ABSLongThunk>(S);
+  case R_ARM_THM_JUMP19:
+  case R_ARM_THM_JUMP24:
+  case R_ARM_THM_CALL:
+    if (Config->PicThunk)
+      return make<ThumbV7PILongThunk>(S);
+    return make<ThumbV7ABSLongThunk>(S);
+>>>>>>> release/8.x
   }
   fatal("unrecognized relocation type");
 }
@@ -906,8 +930,13 @@ static Thunk *addThunkPPC64(RelType type, Symbol &s) {
   if (s.isInPlt())
     return make<PPC64PltCallStub>(s);
 
+<<<<<<< HEAD
   if (config->picThunk)
     return make<PPC64PILongBranchThunk>(s);
+=======
+  if (Config->PicThunk)
+    return make<PPC64PILongBranchThunk>(S);
+>>>>>>> release/8.x
 
   return make<PPC64PDLongBranchThunk>(s);
 }

@@ -1566,10 +1566,17 @@ void RelocationBaseSection::finalizeContents() {
   else
     getParent()->link = 0;
 
+<<<<<<< HEAD
   if (in.relaPlt == this)
     getParent()->info = in.gotPlt->getParent()->sectionIndex;
   if (in.relaIplt == this)
     getParent()->info = in.igotPlt->getParent()->sectionIndex;
+=======
+  if (In.RelaPlt == this)
+    getParent()->Info = In.GotPlt->getParent()->SectionIndex;
+  if (In.RelaIplt == this)
+    getParent()->Info = In.IgotPlt->getParent()->SectionIndex;
+>>>>>>> release/8.x
 }
 
 RelrBaseSection::RelrBaseSection()
@@ -2131,6 +2138,7 @@ template <class ELFT> void SymbolTableSection<ELFT>::writeTo(uint8_t *buf) {
 
     // The 3 most significant bits of st_other are used by OpenPOWER ABI.
     // See getPPC64GlobalEntryToLocalEntryOffset() for more details.
+<<<<<<< HEAD
     if (config->emachine == EM_PPC64)
       eSym->st_other |= sym->stOther & 0xe0;
 
@@ -2139,6 +2147,13 @@ template <class ELFT> void SymbolTableSection<ELFT>::writeTo(uint8_t *buf) {
       eSym->st_shndx = getSymSectionIndex(ent.sym);
     else
       eSym->st_shndx = 0;
+=======
+    if (Config->EMachine == EM_PPC64)
+      ESym->st_other |= Sym->StOther & 0xe0;
+
+    ESym->st_name = Ent.StrTabOffset;
+    ESym->st_shndx = getSymSectionIndex(Ent.Sym);
+>>>>>>> release/8.x
 
     // Copy symbol size if it is a defined symbol. st_size is not significant
     // for undefined symbols, so whether copying it or not is up to us if that's

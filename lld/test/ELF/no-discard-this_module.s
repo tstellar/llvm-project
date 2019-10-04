@@ -1,7 +1,11 @@
 // REQUIRES: x86
 // RUN: llvm-mc -filetype=obj -triple=x86_64-linux-gnu -save-temp-labels %s -o %t
 // RUN: ld.lld %t -o %t2
+<<<<<<< HEAD
 // RUN: llvm-readobj -S --section-data --symbols %t2 | FileCheck %s
+=======
+// RUN: llvm-readobj -s -sd -t %t2 | FileCheck %s
+>>>>>>> release/8.x
 
 .global _start
 _start:

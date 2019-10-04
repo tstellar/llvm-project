@@ -7137,6 +7137,7 @@ define <16 x i32> @test_x86_avx512_psllv_d_512(<16 x i32> %a0, <16 x i32> %a1) {
 }
 
 define <16 x i32> @test_x86_avx512_psllv_d_512_const() {
+<<<<<<< HEAD
 ; X64-LABEL: test_x86_avx512_psllv_d_512_const:
 ; X64:       # %bb.0:
 ; X64-NEXT:    vmovdqa64 {{.*#+}} zmm0 = [2,9,0,4294967295,3,7,4294967295,0,4,5,4294967294,0,5,3,4294967293,0]
@@ -7154,6 +7155,16 @@ define <16 x i32> @test_x86_avx512_psllv_d_512_const() {
 ; X86-NEXT:    vpsllvd {{\.LCPI.*}}, %zmm1, %zmm1
 ; X86-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; X86-NEXT:    retl
+=======
+; CHECK-LABEL: test_x86_avx512_psllv_d_512_const:
+; CHECK:       ## %bb.0:
+; CHECK-NEXT:    vmovdqa64 {{.*#+}} zmm0 = [2,9,0,4294967295,3,7,4294967295,0,4,5,4294967294,0,5,3,4294967293,0]
+; CHECK-NEXT:    vpsllvd {{.*}}(%rip), %zmm0, %zmm0
+; CHECK-NEXT:    vmovdqa64 {{.*#+}} zmm1 = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4294967295]
+; CHECK-NEXT:    vpsllvd {{.*}}(%rip), %zmm1, %zmm1
+; CHECK-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
+; CHECK-NEXT:    retq
+>>>>>>> release/8.x
   %res0 = call <16 x i32> @llvm.x86.avx512.psllv.d.512(<16 x i32> <i32 2, i32 9, i32 0, i32 -1, i32 3, i32 7, i32 -1, i32 0, i32 4, i32 5, i32 -2, i32 0, i32 5, i32 3, i32 -3, i32 0>, <16 x i32> <i32 1, i32 0, i32 33, i32 -1,i32 2, i32 0, i32 34, i32 -2, i32 3, i32 0, i32 35, i32 -1, i32 4, i32 0, i32 36, i32 -3>)
   %res1 = call <16 x i32> @llvm.x86.avx512.psllv.d.512(<16 x i32> <i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 -1>, <16 x i32> <i32 1, i32 1, i32 1,  i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1,  i32 1, i32 1, i32 1, i32 1, i32 -1>)
   %res2 = add <16 x i32> %res0, %res1
@@ -7210,6 +7221,7 @@ define <8 x i64> @test_x86_avx512_psllv_q_512(<8 x i64> %a0, <8 x i64> %a1) {
 }
 
 define <8 x i64> @test_x86_avx512_psllv_q_512_const() {
+<<<<<<< HEAD
 ; X64-LABEL: test_x86_avx512_psllv_q_512_const:
 ; X64:       # %bb.0:
 ; X64-NEXT:    vmovdqa64 {{.*#+}} zmm0 = [2,9,0,18446744073709551615,3,7,18446744073709551615,0]
@@ -7227,6 +7239,16 @@ define <8 x i64> @test_x86_avx512_psllv_q_512_const() {
 ; X86-NEXT:    vpsllvq {{\.LCPI.*}}, %zmm1, %zmm1
 ; X86-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
 ; X86-NEXT:    retl
+=======
+; CHECK-LABEL: test_x86_avx512_psllv_q_512_const:
+; CHECK:       ## %bb.0:
+; CHECK-NEXT:    vmovdqa64 {{.*#+}} zmm0 = [2,9,0,18446744073709551615,3,7,18446744073709551615,0]
+; CHECK-NEXT:    vpsllvq {{.*}}(%rip), %zmm0, %zmm0
+; CHECK-NEXT:    vmovdqa64 {{.*#+}} zmm1 = [4,4,4,4,4,4,4,18446744073709551615]
+; CHECK-NEXT:    vpsllvq {{.*}}(%rip), %zmm1, %zmm1
+; CHECK-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
+; CHECK-NEXT:    retq
+>>>>>>> release/8.x
   %res0 = call <8 x i64> @llvm.x86.avx512.psllv.q.512(<8 x i64> <i64 2, i64 9, i64 0, i64 -1, i64 3, i64 7, i64 -1, i64 0>, <8 x i64> <i64 1, i64 0, i64 33, i64 -1,i64 2, i64 0, i64 34, i64 -2>)
   %res1 = call <8 x i64> @llvm.x86.avx512.psllv.q.512(<8 x i64> <i64 4, i64 4, i64 4, i64 4, i64 4, i64 4, i64 4, i64 -1>, <8 x i64> <i64 1, i64 1, i64 1, i64 1,  i64 1, i64 1, i64 1, i64 -1>)
   %res2 = add <8 x i64> %res0, %res1
@@ -7385,6 +7407,7 @@ define <16 x i32> @test_x86_avx512_psrlv_d_512(<16 x i32> %a0, <16 x i32> %a1) {
 }
 
 define <16 x i32> @test_x86_avx512_psrlv_d_512_const() {
+<<<<<<< HEAD
 ; X64-LABEL: test_x86_avx512_psrlv_d_512_const:
 ; X64:       # %bb.0:
 ; X64-NEXT:    vmovdqa64 {{.*#+}} zmm0 = [2,9,0,4294967295,3,7,4294967295,0,4,5,4294967294,0,5,3,4294967293,0]
@@ -7402,6 +7425,16 @@ define <16 x i32> @test_x86_avx512_psrlv_d_512_const() {
 ; X86-NEXT:    vpsrlvd {{\.LCPI.*}}, %zmm1, %zmm1
 ; X86-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
 ; X86-NEXT:    retl
+=======
+; CHECK-LABEL: test_x86_avx512_psrlv_d_512_const:
+; CHECK:       ## %bb.0:
+; CHECK-NEXT:    vmovdqa64 {{.*#+}} zmm0 = [2,9,0,4294967295,3,7,4294967295,0,4,5,4294967294,0,5,3,4294967293,0]
+; CHECK-NEXT:    vpsrlvd {{.*}}(%rip), %zmm0, %zmm0
+; CHECK-NEXT:    vmovdqa64 {{.*#+}} zmm1 = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4294967295]
+; CHECK-NEXT:    vpsrlvd {{.*}}(%rip), %zmm1, %zmm1
+; CHECK-NEXT:    vpaddd %zmm1, %zmm0, %zmm0
+; CHECK-NEXT:    retq
+>>>>>>> release/8.x
   %res0 = call <16 x i32> @llvm.x86.avx512.psrlv.d.512(<16 x i32> <i32 2, i32 9, i32 0, i32 -1, i32 3, i32 7, i32 -1, i32 0, i32 4, i32 5, i32 -2, i32 0, i32 5, i32 3, i32 -3, i32 0>, <16 x i32> <i32 1, i32 0, i32 33, i32 -1,i32 2, i32 0, i32 34, i32 -2, i32 3, i32 0, i32 35, i32 -1, i32 4, i32 0, i32 36, i32 -3>)
   %res1 = call <16 x i32> @llvm.x86.avx512.psrlv.d.512(<16 x i32> <i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 4, i32 -1>, <16 x i32> <i32 1, i32 1, i32 1,  i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1,  i32 1, i32 1, i32 1, i32 1, i32 -1  >)
   %res2 = add <16 x i32> %res0, %res1
@@ -7458,6 +7491,7 @@ define <8 x i64> @test_x86_avx512_psrlv_q_512(<8 x i64> %a0, <8 x i64> %a1) {
 }
 
 define <8 x i64> @test_x86_avx512_psrlv_q_512_const() {
+<<<<<<< HEAD
 ; X64-LABEL: test_x86_avx512_psrlv_q_512_const:
 ; X64:       # %bb.0:
 ; X64-NEXT:    vmovdqa64 {{.*#+}} zmm0 = [2,9,0,18446744073709551615,3,7,18446744073709551615,0]
@@ -7475,6 +7509,16 @@ define <8 x i64> @test_x86_avx512_psrlv_q_512_const() {
 ; X86-NEXT:    vpsrlvq {{\.LCPI.*}}, %zmm1, %zmm1
 ; X86-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
 ; X86-NEXT:    retl
+=======
+; CHECK-LABEL: test_x86_avx512_psrlv_q_512_const:
+; CHECK:       ## %bb.0:
+; CHECK-NEXT:    vmovdqa64 {{.*#+}} zmm0 = [2,9,0,18446744073709551615,3,7,18446744073709551615,0]
+; CHECK-NEXT:    vpsrlvq {{.*}}(%rip), %zmm0, %zmm0
+; CHECK-NEXT:    vmovdqa64 {{.*#+}} zmm1 = [4,4,4,4,4,4,4,18446744073709551615]
+; CHECK-NEXT:    vpsrlvq {{.*}}(%rip), %zmm1, %zmm1
+; CHECK-NEXT:    vpaddq %zmm1, %zmm0, %zmm0
+; CHECK-NEXT:    retq
+>>>>>>> release/8.x
   %res0 = call <8 x i64> @llvm.x86.avx512.psrlv.q.512(<8 x i64> <i64 2, i64 9, i64 0, i64 -1, i64 3, i64 7, i64 -1, i64 0>, <8 x i64> <i64 1, i64 0, i64 33, i64 -1,i64 2, i64 0, i64 34, i64 -2>)
   %res1 = call <8 x i64> @llvm.x86.avx512.psrlv.q.512(<8 x i64> <i64 4, i64 4, i64 4, i64 4, i64 4, i64 4, i64 4, i64 -1>, <8 x i64> <i64 1, i64 1, i64 1, i64 1,  i64 1, i64 1, i64 1, i64 -1>)
   %res2 = add <8 x i64> %res0, %res1

@@ -261,11 +261,42 @@ static void pdbMakeAbsolute(SmallVectorImpl<char> &fileName) {
   // It's not absolute in any path syntax.  Relative paths necessarily refer to
   // the local file system, so we can make it native without ending up with a
   // nonsensical path.
+<<<<<<< HEAD
   if (config->pdbSourcePath.empty()) {
     sys::path::native(fileName);
     sys::fs::make_absolute(fileName);
     return;
   }
+=======
+  if (Config->PDBSourcePath.empty()) {
+    sys::path::native(FileName);
+    sys::fs::make_absolute(FileName);
+    return;
+  }
+
+  // Try to guess whether /PDBSOURCEPATH is a unix path or a windows path.
+  // Since PDB's are more of a Windows thing, we make this conservative and only
+  // decide that it's a unix path if we're fairly certain.  Specifically, if
+  // it starts with a forward slash.
+  SmallString<128> AbsoluteFileName = Config->PDBSourcePath;
+  sys::path::Style GuessedStyle = AbsoluteFileName.startswith("/")
+                                      ? sys::path::Style::posix
+                                      : sys::path::Style::windows;
+  sys::path::append(AbsoluteFileName, GuessedStyle, FileName);
+  sys::path::native(AbsoluteFileName, GuessedStyle);
+  sys::path::remove_dots(AbsoluteFileName, true, GuessedStyle);
+
+  FileName = std::move(AbsoluteFileName);
+}
+
+static SectionChunk *findByName(ArrayRef<SectionChunk *> Sections,
+                                StringRef Name) {
+  for (SectionChunk *C : Sections)
+    if (C->getSectionName() == Name)
+      return C;
+  return nullptr;
+}
+>>>>>>> release/8.x
 
   // Try to guess whether /PDBSOURCEPATH is a unix path or a windows path.
   // Since PDB's are more of a Windows thing, we make this conservative and only

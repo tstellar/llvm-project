@@ -513,7 +513,11 @@ define double @tanh_test2(float %f) {
 ; flags are propagated for shrunken *binary* double FP calls.
 define float @max1(float %a, float %b) {
 ; CHECK-LABEL: @max1(
+<<<<<<< HEAD
 ; ISC99-NEXT:    [[FMAXF:%.*]] = call nsz arcp float @llvm.maxnum.f32(float [[A:%.*]], float [[B:%.*]])
+=======
+; ISC99-NEXT:    [[FMAXF:%.*]] = call arcp float @fmaxf(float [[A:%.*]], float [[B:%.*]])
+>>>>>>> release/8.x
 ; ISC99-NEXT:    ret float [[FMAXF]]
 ; ISC89:         [[FMAXF:%.*]] = call arcp double @fmax(double [[A:%.*]], double [[B:%.*]])
 ;

@@ -93,7 +93,11 @@ class FileEntry {
 
 public:
   FileEntry()
+<<<<<<< HEAD
       : UniqueID(0, 0), IsNamedPipe(false), IsValid(false)
+=======
+      : UniqueID(0, 0), IsNamedPipe(false), InPCH(false), IsValid(false)
+>>>>>>> release/8.x
   {}
 
   FileEntry(const FileEntry &) = delete;

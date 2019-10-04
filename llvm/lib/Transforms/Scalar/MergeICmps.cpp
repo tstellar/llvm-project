@@ -41,9 +41,12 @@
 //
 //===----------------------------------------------------------------------===//
 
+<<<<<<< HEAD
 #include "llvm/Transforms/Scalar/MergeICmps.h"
 #include "llvm/Analysis/DomTreeUpdater.h"
 #include "llvm/Analysis/GlobalsModRef.h"
+=======
+>>>>>>> release/8.x
 #include "llvm/Analysis/Loads.h"
 #include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/Analysis/TargetTransformInfo.h"
@@ -82,6 +85,7 @@ struct BCEAtom {
   BCEAtom(GetElementPtrInst *GEP, LoadInst *LoadI, int BaseId, APInt Offset)
       : GEP(GEP), LoadI(LoadI), BaseId(BaseId), Offset(Offset) {}
 
+<<<<<<< HEAD
   BCEAtom(const BCEAtom &) = delete;
   BCEAtom &operator=(const BCEAtom &) = delete;
 
@@ -96,6 +100,8 @@ struct BCEAtom {
     return *this;
   }
 
+=======
+>>>>>>> release/8.x
   // We want to order BCEAtoms by (Base, Offset). However we cannot use
   // the pointer values for Base because these are non-deterministic.
   // To make sure that the sort order is stable, we first assign to each atom
@@ -162,7 +168,11 @@ BCEAtom visitICmpLoadOperand(Value *const Val, BaseIdentifier &BaseId) {
     return {};
   }
   const auto &DL = GEP->getModule()->getDataLayout();
+<<<<<<< HEAD
   if (!isDereferenceablePointer(GEP, LoadI->getType(), DL)) {
+=======
+  if (!isDereferenceablePointer(GEP, DL)) {
+>>>>>>> release/8.x
     LLVM_DEBUG(dbgs() << "not dereferenceable\n");
     // We need to make sure that we can do comparison in any order, so we
     // require memory to be unconditionnally dereferencable.
@@ -522,8 +532,12 @@ BCECmpChain::BCECmpChain(const std::vector<BasicBlock *> &Blocks, PHINode &Phi,
   // semantics because we are only accessing dereferencable memory.
   llvm::sort(Comparisons_,
              [](const BCECmpBlock &LhsBlock, const BCECmpBlock &RhsBlock) {
+<<<<<<< HEAD
                return std::tie(LhsBlock.Lhs(), LhsBlock.Rhs()) <
                       std::tie(RhsBlock.Lhs(), RhsBlock.Rhs());
+=======
+               return LhsBlock.Lhs() < RhsBlock.Lhs();
+>>>>>>> release/8.x
              });
 #ifdef MERGEICMPS_DOT_ON
   errs() << "AFTER REORDERING:\n\n";
