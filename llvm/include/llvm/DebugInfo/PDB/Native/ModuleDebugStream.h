@@ -52,8 +52,11 @@ public:
   BinarySubstreamRef getGlobalRefsSubstream() const;
 
   ModuleDebugStreamRef &operator=(ModuleDebugStreamRef &&Other) = delete;
+<<<<<<< HEAD
 
   codeview::CVSymbol readSymbolAtOffset(uint32_t Offset) const;
+=======
+>>>>>>> release/7.x
 
   iterator_range<DebugSubsectionIterator> subsections() const;
   codeview::DebugSubsectionArray getSubsectionsArray() const {

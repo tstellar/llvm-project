@@ -228,6 +228,7 @@ def err_invalid_vfs_overlay : Error<
 def warn_option_invalid_ocl_version : Warning<
   "OpenCL version %0 does not support the option '%1'">, InGroup<Deprecated>;
 
+<<<<<<< HEAD
 def err_builtin_needs_feature : Error<"%0 needs target feature %1">;
 def err_function_needs_feature : Error<
   "always_inline function %1 requires target feature '%2', but would "
@@ -277,4 +278,10 @@ def warn_profile_data_misexpect : Warning<
   DefaultIgnore;
 } // end of instrumentation issue category
 
+=======
+def warn_stdlibcxx_not_found : Warning<
+  "include path for stdlibc++ headers not found; pass '-stdlib=libc++' on the "
+  "command line to use the libc++ standard library instead">,
+  InGroup<DiagGroup<"stdlibcxx-not-found">>;
+>>>>>>> release/7.x
 }

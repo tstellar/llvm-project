@@ -93,10 +93,17 @@ _LIBUNWIND_EXPORT void *_Unwind_FindEnclosingFunction(void *pc) {
   unw_cursor_t cursor;
   unw_context_t uc;
   unw_proc_info_t info;
+<<<<<<< HEAD
   __unw_getcontext(&uc);
   __unw_init_local(&cursor, &uc);
   __unw_set_reg(&cursor, UNW_REG_IP, (unw_word_t)(intptr_t)pc);
   if (__unw_get_proc_info(&cursor, &info) == UNW_ESUCCESS)
+=======
+  unw_getcontext(&uc);
+  unw_init_local(&cursor, &uc);
+  unw_set_reg(&cursor, UNW_REG_IP, (unw_word_t)(intptr_t) pc);
+  if (unw_get_proc_info(&cursor, &info) == UNW_ESUCCESS)
+>>>>>>> release/7.x
     return (void *)(intptr_t) info.start_ip;
   else
     return NULL;
@@ -191,10 +198,17 @@ _LIBUNWIND_EXPORT const void *_Unwind_Find_FDE(const void *pc,
   unw_cursor_t cursor;
   unw_context_t uc;
   unw_proc_info_t info;
+<<<<<<< HEAD
   __unw_getcontext(&uc);
   __unw_init_local(&cursor, &uc);
   __unw_set_reg(&cursor, UNW_REG_IP, (unw_word_t)(intptr_t)pc);
   __unw_get_proc_info(&cursor, &info);
+=======
+  unw_getcontext(&uc);
+  unw_init_local(&cursor, &uc);
+  unw_set_reg(&cursor, UNW_REG_IP, (unw_word_t)(intptr_t) pc);
+  unw_get_proc_info(&cursor, &info);
+>>>>>>> release/7.x
   bases->tbase = (uintptr_t)info.extra;
   bases->dbase = 0; // dbase not used on Mac OS X
   bases->func = (uintptr_t)info.start_ip;

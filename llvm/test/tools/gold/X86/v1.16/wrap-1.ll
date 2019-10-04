@@ -1,13 +1,21 @@
 ; LTO
 ; RUN: llvm-as %s -o %t.o
 ; RUN: %gold -m elf_x86_64 -plugin %llvmshlibdir/LLVMgold%shlibext %t.o -o %t.out -wrap=bar -plugin-opt=save-temps
+<<<<<<< HEAD
 ; RUN: llvm-readobj --symbols %t.out | FileCheck %s
+=======
+; RUN: llvm-readobj -t %t.out | FileCheck %s
+>>>>>>> release/7.x
 ; RUN: cat %t.out.resolution.txt | FileCheck -check-prefix=RESOLS %s
 
 ; ThinLTO
 ; RUN: opt -module-summary %s -o %t.o
 ; RUN: %gold -m elf_x86_64 -plugin %llvmshlibdir/LLVMgold%shlibext %t.o -o %t.out -wrap=bar -plugin-opt=save-temps
+<<<<<<< HEAD
 ; RUN: llvm-readobj --symbols %t.out | FileCheck %s
+=======
+; RUN: llvm-readobj -t %t.out | FileCheck %s
+>>>>>>> release/7.x
 ; RUN: cat %t.out.resolution.txt | FileCheck -check-prefix=RESOLS %s
 
 ; CHECK:      Name: __wrap_bar

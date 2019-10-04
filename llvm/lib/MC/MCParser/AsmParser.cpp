@@ -3405,6 +3405,7 @@ bool AsmParser::parseDirectiveFile(SMLoc DirectiveLoc) {
     }
   }
 
+<<<<<<< HEAD
   if (FileNumber == -1) {
     // Ignore the directive if there is no number and the target doesn't support
     // numberless .file directives. This allows some portability of assembler
@@ -3421,6 +3422,20 @@ bool AsmParser::parseDirectiveFile(SMLoc DirectiveLoc) {
     }
 
     Optional<MD5::MD5Result> CKMem;
+=======
+  if (FileNumber == -1)
+    getStreamer().EmitFileDirective(Filename);
+  else {
+    // In case there is a -g option as well as debug info from directive .file,
+    // we turn off the -g option, directly use the existing debug info instead.
+    // Also reset any implicit ".file 0" for the assembler source.
+    if (Ctx.getGenDwarfForAssembly()) {
+      Ctx.getMCDwarfLineTable(0).resetRootFile();
+      Ctx.setGenDwarfForAssembly(false);
+    }
+
+    MD5::MD5Result *CKMem = nullptr;
+>>>>>>> release/7.x
     if (HasMD5) {
       MD5::MD5Result Sum;
       for (unsigned i = 0; i != 8; ++i) {

@@ -3118,7 +3118,11 @@ private:
         unsigned LoadAlign = LI->getAlignment();
         if (!LoadAlign)
           LoadAlign = DL.getABITypeAlignment(LI->getType());
+<<<<<<< HEAD
         LI->setAlignment(MaybeAlign(std::min(LoadAlign, getSliceAlign())));
+=======
+        LI->setAlignment(std::min(LoadAlign, getSliceAlign()));
+>>>>>>> release/7.x
         continue;
       }
       if (StoreInst *SI = dyn_cast<StoreInst>(I)) {
@@ -3127,6 +3131,7 @@ private:
           Value *Op = SI->getOperand(0);
           StoreAlign = DL.getABITypeAlignment(Op->getType());
         }
+<<<<<<< HEAD
         SI->setAlignment(MaybeAlign(std::min(StoreAlign, getSliceAlign())));
         continue;
       }
@@ -3134,6 +3139,14 @@ private:
       assert(isa<BitCastInst>(I) || isa<AddrSpaceCastInst>(I) ||
              isa<PHINode>(I) || isa<SelectInst>(I) ||
              isa<GetElementPtrInst>(I));
+=======
+        SI->setAlignment(std::min(StoreAlign, getSliceAlign()));
+        continue;
+      }
+
+      assert(isa<BitCastInst>(I) || isa<PHINode>(I) ||
+             isa<SelectInst>(I) || isa<GetElementPtrInst>(I));
+>>>>>>> release/7.x
       for (User *U : I->users())
         if (Visited.insert(cast<Instruction>(U)).second)
           Uses.push_back(cast<Instruction>(U));

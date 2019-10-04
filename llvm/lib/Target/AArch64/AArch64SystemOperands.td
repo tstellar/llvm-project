@@ -1483,6 +1483,15 @@ def : RWSysReg<"TRBTRG_EL1",    0b11, 0b000, 0b1001, 0b1011, 0b110>;
 def : ROSysReg<"TRBIDR_EL1",    0b11, 0b000, 0b1001, 0b1011, 0b111>;
 } // FeatureTRBE
 
+// SVE control registers
+//                                 Op0   Op1    CRn     CRm     Op2
+let Requires = [{ {AArch64::FeatureSVE} }] in {
+def : RWSysReg<"ZCR_EL1",          0b11, 0b000, 0b0001, 0b0010, 0b000>;
+def : RWSysReg<"ZCR_EL2",          0b11, 0b100, 0b0001, 0b0010, 0b000>;
+def : RWSysReg<"ZCR_EL3",          0b11, 0b110, 0b0001, 0b0010, 0b000>;
+def : RWSysReg<"ZCR_EL12",         0b11, 0b101, 0b0001, 0b0010, 0b000>;
+}
+
 // Cyclone specific system registers
 //                                 Op0    Op1     CRn     CRm    Op2
 let Requires = [{ {AArch64::ProcCyclone} }] in

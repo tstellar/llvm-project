@@ -223,12 +223,18 @@ bool llvm::formLCSSAForInstructions(SmallVectorImpl<Instruction *> &Worklist,
       BasicBlock *UserBB = DVI->getParent();
       if (InstBB == UserBB || L->contains(UserBB))
         continue;
+<<<<<<< HEAD
       // We currently only handle debug values residing in blocks that were
       // traversed while rewriting the uses. If we inserted just a single PHI,
       // we will handle all relevant debug values.
       Value *V = AddedPHIs.size() == 1 ? AddedPHIs[0]
                                        : SSAUpdate.FindValueForBlock(UserBB);
       if (V)
+=======
+      // We currently only handle debug values residing in blocks where we have
+      // inserted a PHI instruction.
+      if (Value *V = SSAUpdate.FindValueForBlock(UserBB))
+>>>>>>> release/7.x
         DVI->setOperand(0, MetadataAsValue::get(Ctx, ValueAsMetadata::get(V)));
     }
 

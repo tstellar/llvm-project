@@ -109,6 +109,7 @@ static void expandMemoryRegion(MemoryRegion *memRegion, uint64_t size,
           "': overflowed by " + Twine(newSize - memRegion->length) + " bytes");
 }
 
+<<<<<<< HEAD
 void LinkerScript::expandMemoryRegions(uint64_t size) {
   if (ctx->memRegion)
     expandMemoryRegion(ctx->memRegion, size, ctx->memRegion->name,
@@ -117,6 +118,16 @@ void LinkerScript::expandMemoryRegions(uint64_t size) {
   if (ctx->lmaRegion && ctx->memRegion != ctx->lmaRegion)
     expandMemoryRegion(ctx->lmaRegion, size, ctx->lmaRegion->name,
                        ctx->outSec->name);
+=======
+void LinkerScript::expandMemoryRegions(uint64_t Size) {
+  if (Ctx->MemRegion)
+    expandMemoryRegion(Ctx->MemRegion, Size, Ctx->MemRegion->Name,
+                       Ctx->OutSec->Name);
+  // Only expand the LMARegion if it is different from MemRegion.
+  if (Ctx->LMARegion && Ctx->MemRegion != Ctx->LMARegion)
+    expandMemoryRegion(Ctx->LMARegion, Size, Ctx->LMARegion->Name,
+                       Ctx->OutSec->Name);
+>>>>>>> release/7.x
 }
 
 void LinkerScript::expandOutputSection(uint64_t size) {
@@ -800,6 +811,13 @@ static OutputSection *findFirstSection(PhdrEntry *load) {
   return nullptr;
 }
 
+static OutputSection *findFirstSection(PhdrEntry *Load) {
+  for (OutputSection *Sec : OutputSections)
+    if (Sec->PtLoad == Load)
+      return Sec;
+  return nullptr;
+}
+
 // This function assigns offsets to input sections and an output section
 // for a single sections command (e.g. ".text { *(.text); }").
 void LinkerScript::assignOffsets(OutputSection *sec) {
@@ -836,9 +854,15 @@ void LinkerScript::assignOffsets(OutputSection *sec) {
   // https://sourceware.org/binutils/docs-2.20/ld/Output-Section-LMA.html
   // This, however, should only be done by the first "non-header" section
   // in the segment.
+<<<<<<< HEAD
   if (PhdrEntry *l = ctx->outSec->ptLoad)
     if (sec == findFirstSection(l))
       l->lmaOffset = ctx->lmaOffset;
+=======
+  if (PhdrEntry *L = Ctx->OutSec->PtLoad)
+    if (Sec == findFirstSection(L))
+      L->LMAOffset = Ctx->LMAOffset;
+>>>>>>> release/7.x
 
   // We can call this method multiple times during the creation of
   // thunks and want to start over calculation each time.
@@ -1013,7 +1037,11 @@ void LinkerScript::adjustSectionsAfterSorting() {
   }
 }
 
+<<<<<<< HEAD
 static uint64_t computeBase(uint64_t min, bool allocateHeaders) {
+=======
+static uint64_t computeBase(uint64_t Min, bool AllocateHeaders) {
+>>>>>>> release/7.x
   // If there is no SECTIONS or if the linkerscript is explicit about program
   // headers, do our best to allocate them.
   if (!script->hasSectionsCommand || allocateHeaders)

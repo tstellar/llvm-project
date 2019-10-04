@@ -278,7 +278,13 @@ uint8_t Symbol::computeBinding() const {
   if ((visibility != STV_DEFAULT && visibility != STV_PROTECTED) ||
       versionId == VER_NDX_LOCAL)
     return STB_LOCAL;
+<<<<<<< HEAD
   if (!config->gnuUnique && binding == STB_GNU_UNIQUE)
+=======
+  if (VersionId == VER_NDX_LOCAL && isDefined() && !IsPreemptible)
+    return STB_LOCAL;
+  if (!Config->GnuUnique && Binding == STB_GNU_UNIQUE)
+>>>>>>> release/7.x
     return STB_GLOBAL;
   return binding;
 }

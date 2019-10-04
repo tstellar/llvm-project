@@ -3247,6 +3247,7 @@ def OMPDeclareTargetDecl : InheritableAttr {
 
       return llvm::None;
     }
+<<<<<<< HEAD
     static llvm::Optional<DevTypeTy> getDeviceType(const ValueDecl *VD) {
       if (!VD->hasAttrs())
         return llvm::None;
@@ -3350,6 +3351,8 @@ def OMPDeclareVariant : InheritableAttr {
       }
       OS << ")";
     }
+=======
+>>>>>>> release/7.x
   }];
 }
 

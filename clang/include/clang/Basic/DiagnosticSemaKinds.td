@@ -2989,6 +2989,23 @@ def err_attribute_weakref_without_alias : Error<
   "weakref declaration of %0 must also have an alias attribute">;
 def err_alias_not_supported_on_darwin : Error <
   "aliases are not supported on darwin">;
+<<<<<<< HEAD
+=======
+def err_alias_to_undefined : Error<
+  "%select{alias|ifunc}0 must point to a defined %select{variable or |}1function">;
+def warn_alias_to_weak_alias : Warning<
+  "%select{alias|ifunc}2 will always resolve to %0 even if weak definition of %1 is overridden">,
+  InGroup<IgnoredAttributes>;
+def warn_alias_with_section : Warning<
+  "%select{alias|ifunc}1 will not be in section '%0' but in the same section as the %select{aliasee|resolver}2">,
+  InGroup<IgnoredAttributes>;
+def err_duplicate_mangled_name : Error<
+  "definition with same mangled name '%0' as another definition">;
+def err_cyclic_alias : Error<
+  "%select{alias|ifunc}0 definition is part of a cycle">;
+def err_ifunc_resolver_return : Error<
+  "ifunc resolver function must return a pointer">;
+>>>>>>> release/7.x
 def warn_attribute_wrong_decl_type_str : Warning<
   "%0 attribute only applies to %1">, InGroup<IgnoredAttributes>;
 def err_attribute_wrong_decl_type_str : Error<
@@ -6737,7 +6754,11 @@ def warn_overaligned_type : Warning<
 def err_aligned_allocation_unavailable : Error<
   "aligned %select{allocation|deallocation}0 function of type '%1' is only "
   "available on %2 %3 or newer">;
+<<<<<<< HEAD
 def note_silence_aligned_allocation_unavailable : Note<
+=======
+def note_silence_unligned_allocation_unavailable : Note<
+>>>>>>> release/7.x
   "if you supply your own aligned allocation functions, use "
   "-faligned-allocation to silence this diagnostic">;
 

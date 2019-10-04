@@ -219,6 +219,7 @@ public:
 
     // Don't allow copies to/flow GR8/GR16 physical registers.
     // FIXME: Is there some better way to support this?
+<<<<<<< HEAD
     Register DstReg = MI->getOperand(0).getReg();
     if (Register::isPhysicalRegister(DstReg) &&
         (X86::GR8RegClass.contains(DstReg) ||
@@ -226,6 +227,15 @@ public:
       return false;
     Register SrcReg = MI->getOperand(1).getReg();
     if (Register::isPhysicalRegister(SrcReg) &&
+=======
+    unsigned DstReg = MI->getOperand(0).getReg();
+    if (TargetRegisterInfo::isPhysicalRegister(DstReg) &&
+        (X86::GR8RegClass.contains(DstReg) ||
+         X86::GR16RegClass.contains(DstReg)))
+      return false;
+    unsigned SrcReg = MI->getOperand(1).getReg();
+    if (TargetRegisterInfo::isPhysicalRegister(SrcReg) &&
+>>>>>>> release/7.x
         (X86::GR8RegClass.contains(SrcReg) ||
          X86::GR16RegClass.contains(SrcReg)))
       return false;

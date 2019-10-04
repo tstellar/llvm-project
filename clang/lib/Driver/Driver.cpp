@@ -3183,6 +3183,7 @@ void Driver::handleArguments(Compilation &C, DerivedArgList &Args,
     Args.eraseArg(options::OPT__SLASH_Yc);
     YcArg = nullptr;
   }
+<<<<<<< HEAD
 
   Arg *FinalPhaseArg;
   phases::ID FinalPhase = getFinalPhase(Args, &FinalPhaseArg);
@@ -3195,6 +3196,8 @@ void Driver::handleArguments(Compilation &C, DerivedArgList &Args,
       Diag(clang::diag::err_drv_lto_without_lld);
   }
 
+=======
+>>>>>>> release/7.x
   if (FinalPhase == phases::Preprocess || Args.hasArg(options::OPT__SLASH_Y_)) {
     // If only preprocessing or /Y- is used, all pch handling is disabled.
     // Rather than check for it everywhere, just remove clang-cl pch-related

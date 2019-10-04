@@ -120,6 +120,7 @@ else()
   set(OPENMP_TEST_COMPILER_VERSION "${LLVM_VERSION}")
   set(OPENMP_TEST_COMPILER_VERSION_MAJOR "${LLVM_MAJOR_VERSION}")
   set(OPENMP_TEST_COMPILER_VERSION_MAJOR_MINOR "${LLVM_MAJOR_VERSION}.${LLVM_MINOR_VERSION}")
+<<<<<<< HEAD
   # Unfortunately the top-level cmake/config-ix.cmake file mangles CMake's
   # CMAKE_THREAD_LIBS_INIT variable from the FindThreads package, so work
   # around that, until it is fixed there.
@@ -128,6 +129,8 @@ else()
   else()
     set(OPENMP_TEST_COMPILER_THREAD_FLAGS "${CMAKE_THREAD_LIBS_INIT}")
   endif()
+=======
+>>>>>>> release/7.x
   # TODO: Implement blockaddress in GlobalISel and remove this flag!
   set(OPENMP_TEST_COMPILER_OPENMP_FLAGS "-fopenmp ${OPENMP_TEST_COMPILER_THREAD_FLAGS} -fno-experimental-isel")
 endif()

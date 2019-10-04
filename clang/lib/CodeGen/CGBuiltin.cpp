@@ -9953,6 +9953,7 @@ llvm::Value *CodeGenFunction::EmitX86CpuSupports(uint64_t FeaturesMask) {
     llvm::Constant *CpuModel = CGM.CreateRuntimeVariable(STy, "__cpu_model");
     cast<llvm::GlobalValue>(CpuModel)->setDSOLocal(true);
 
+<<<<<<< HEAD
     // Grab the first (0th) element from the field __cpu_features off of the
     // global in the struct STy.
     Value *Idxs[] = {Builder.getInt32(0), Builder.getInt32(3),
@@ -9984,6 +9985,20 @@ llvm::Value *CodeGenFunction::EmitX86CpuSupports(uint64_t FeaturesMask) {
   }
 
   return Result;
+=======
+  // Grab the first (0th) element from the field __cpu_features off of the
+  // global in the struct STy.
+  Value *Idxs[] = {ConstantInt::get(Int32Ty, 0), ConstantInt::get(Int32Ty, 3),
+                   ConstantInt::get(Int32Ty, 0)};
+  Value *CpuFeatures = Builder.CreateGEP(STy, CpuModel, Idxs);
+  Value *Features =
+      Builder.CreateAlignedLoad(CpuFeatures, CharUnits::fromQuantity(4));
+
+  // Check the value of the bit corresponding to the feature requested.
+  Value *Mask = Builder.getInt32(FeaturesMask);
+  Value *Bitset = Builder.CreateAnd(Features, Mask);
+  return Builder.CreateICmpEQ(Bitset, Mask);
+>>>>>>> release/7.x
 }
 
 Value *CodeGenFunction::EmitX86CpuInit() {
@@ -12061,10 +12076,16 @@ Value *CodeGenFunction::EmitX86BuiltinExpr(unsigned BuiltinID,
     // Ops[2] = Builder.CreateZExt(Ops[2], Int64Ty);
     // return Builder.CreateCall(F, Ops);
     llvm::Type *Int128Ty = Builder.getInt128Ty();
+<<<<<<< HEAD
     Value *HighPart128 =
         Builder.CreateShl(Builder.CreateZExt(Ops[1], Int128Ty), 64);
     Value *LowPart128 = Builder.CreateZExt(Ops[0], Int128Ty);
     Value *Val = Builder.CreateOr(HighPart128, LowPart128);
+=======
+    Value *Val = Builder.CreateOr(
+        Builder.CreateShl(Builder.CreateZExt(Ops[1], Int128Ty), 64),
+        Builder.CreateZExt(Ops[0], Int128Ty));
+>>>>>>> release/7.x
     Value *Amt = Builder.CreateAnd(Builder.CreateZExt(Ops[2], Int128Ty),
                                    llvm::ConstantInt::get(Int128Ty, 0x3f));
     Value *Res;

@@ -1752,12 +1752,19 @@ void Sema::diagnoseUnavailableAlignedAllocation(const FunctionDecl &FD,
     StringRef OSName = AvailabilityAttr::getPlatformNameSourceSpelling(
         getASTContext().getTargetInfo().getPlatformName());
 
+<<<<<<< HEAD
     OverloadedOperatorKind Kind = FD.getDeclName().getCXXOverloadedOperator();
     bool IsDelete = Kind == OO_Delete || Kind == OO_Array_Delete;
     Diag(Loc, diag::err_aligned_allocation_unavailable)
         << IsDelete << FD.getType().getAsString() << OSName
         << alignedAllocMinVersion(T.getOS()).getAsString();
     Diag(Loc, diag::note_silence_aligned_allocation_unavailable);
+=======
+    S.Diag(Loc, diag::err_aligned_allocation_unavailable)
+        << IsDelete << FD.getType().getAsString() << OSName
+        << alignedAllocMinVersion(T.getOS()).getAsString();
+    S.Diag(Loc, diag::note_silence_unligned_allocation_unavailable);
+>>>>>>> release/7.x
   }
 }
 

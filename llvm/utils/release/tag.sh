@@ -16,8 +16,12 @@ set -e
 release=""
 rc=""
 rebranch="no"
+<<<<<<< HEAD
 # All the projects that make it into the monorepo, plus test-suite.
 projects="monorepo-root cfe clang-tools-extra compiler-rt debuginfo-tests libclc libcxx libcxxabi libunwind lld lldb llgo llvm openmp parallel-libs polly pstl test-suite"
+=======
+projects="llvm cfe test-suite compiler-rt libcxx libcxxabi clang-tools-extra polly lldb lld openmp libunwind debuginfo-tests"
+>>>>>>> release/7.x
 dryrun=""
 revision="HEAD"
 

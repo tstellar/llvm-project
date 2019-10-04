@@ -999,7 +999,11 @@ void PhdrEntry::add(OutputSection *sec) {
 // need these symbols, since IRELATIVE relocs are resolved through GOT
 // and PLT. For details, see http://www.airs.com/blog/archives/403.
 template <class ELFT> void Writer<ELFT>::addRelIpltSymbols() {
+<<<<<<< HEAD
   if (config->relocatable || needsInterpSection())
+=======
+  if (Config->Relocatable || needsInterpSection())
+>>>>>>> release/7.x
     return;
 
   // By default, __rela_iplt_{start,end} belong to a dummy section 0
@@ -2138,6 +2142,7 @@ std::vector<PhdrEntry *> Writer<ELFT>::createPhdrs(Partition &part) {
     // region using AT or AT> linker script command, respectively. At the same
     // time, we don't want to create a separate load segment for the headers,
     // even if the first output section has an AT or AT> attribute.
+<<<<<<< HEAD
     uint64_t newFlags = computeFlags(sec->getPhdrFlags());
     if (!load ||
         ((sec->lmaExpr ||
@@ -2147,6 +2152,16 @@ std::vector<PhdrEntry *> Writer<ELFT>::createPhdrs(Partition &part) {
         sec == relroEnd) {
       load = addHdr(PT_LOAD, newFlags);
       flags = newFlags;
+=======
+    uint64_t NewFlags = computeFlags(Sec->getPhdrFlags());
+    if (((Sec->LMAExpr ||
+          (Sec->LMARegion && (Sec->LMARegion != Load->FirstSec->LMARegion))) &&
+         Load->LastSec != Out::ProgramHeaders) ||
+        Sec->MemRegion != Load->FirstSec->MemRegion || Flags != NewFlags) {
+
+      Load = AddHdr(PT_LOAD, NewFlags);
+      Flags = NewFlags;
+>>>>>>> release/7.x
     }
 
     load->add(sec);

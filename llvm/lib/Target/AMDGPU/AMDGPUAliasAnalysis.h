@@ -52,6 +52,21 @@ public:
 private:
   bool Aliases(const MDNode *A, const MDNode *B) const;
   bool PathAliases(const MDNode *A, const MDNode *B) const;
+<<<<<<< HEAD
+=======
+
+  class ASAliasRulesTy {
+  public:
+    ASAliasRulesTy(AMDGPUAS AS_, Triple::ArchType Arch_);
+
+    AliasResult getAliasResult(unsigned AS1, unsigned AS2) const;
+
+  private:
+    Triple::ArchType Arch;
+    AMDGPUAS AS;
+    const AliasResult (*ASAliasRules)[7][7];
+  } ASAliasRules;
+>>>>>>> release/7.x
 };
 
 /// Analysis pass providing a never-invalidated alias analysis result.

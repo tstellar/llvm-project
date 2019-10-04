@@ -110,9 +110,13 @@ private:
 
   std::set<std::string> visitedLibs;
 
+<<<<<<< HEAD
   Symbol *addUndefined(StringRef sym);
 
   StringRef mangleMaybe(Symbol *s);
+=======
+  Symbol *addUndefined(StringRef Sym);
+>>>>>>> release/7.x
 
   // Windows specific -- "main" is not the only main function in Windows.
   // You can choose one from these four -- {w,}{WinMain,main}.

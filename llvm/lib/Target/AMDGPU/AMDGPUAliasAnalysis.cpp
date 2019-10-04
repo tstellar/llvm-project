@@ -49,6 +49,7 @@ ImmutablePass *llvm::createAMDGPUExternalAAWrapperPass() {
   return new AMDGPUExternalAAWrapper();
 }
 
+<<<<<<< HEAD
 void AMDGPUAAWrapperPass::getAnalysisUsage(AnalysisUsage &AU) const {
   AU.setPreservesAll();
 }
@@ -73,6 +74,63 @@ static AliasResult getAliasResult(unsigned AS1, unsigned AS2) {
     return MayAlias;
 
   return ASAliasRules[AS1][AS2];
+=======
+// Must match the table in getAliasResult.
+AMDGPUAAResult::ASAliasRulesTy::ASAliasRulesTy(AMDGPUAS AS_, Triple::ArchType Arch_)
+  : Arch(Arch_), AS(AS_) {
+  // These arrarys are indexed by address space value
+  // enum elements 0 ... to 6
+  static const AliasResult ASAliasRulesPrivIsZero[7][7] = {
+  /*                    Private    Global    Constant  Group     Flat      Region    Constant 32-bit */
+  /* Private  */        {MayAlias, NoAlias , NoAlias , NoAlias , MayAlias, NoAlias , NoAlias},
+  /* Global   */        {NoAlias , MayAlias, MayAlias, NoAlias , MayAlias, NoAlias , MayAlias},
+  /* Constant */        {NoAlias , MayAlias, MayAlias, NoAlias , MayAlias, NoAlias , MayAlias},
+  /* Group    */        {NoAlias , NoAlias , NoAlias , MayAlias, MayAlias, NoAlias , NoAlias},
+  /* Flat     */        {MayAlias, MayAlias, MayAlias, MayAlias, MayAlias, MayAlias, MayAlias},
+  /* Region   */        {NoAlias , NoAlias , NoAlias , NoAlias , MayAlias, MayAlias, NoAlias},
+  /* Constant 32-bit */ {NoAlias , MayAlias, MayAlias, NoAlias , MayAlias, NoAlias , MayAlias}
+  };
+  static const AliasResult ASAliasRulesGenIsZero[7][7] = {
+  /*                    Flat       Global    Region    Group     Constant  Private   Constant 32-bit */
+  /* Flat     */        {MayAlias, MayAlias, MayAlias, MayAlias, MayAlias, MayAlias, MayAlias},
+  /* Global   */        {MayAlias, MayAlias, NoAlias , NoAlias , MayAlias, NoAlias , MayAlias},
+  /* Region   */        {MayAlias, NoAlias , NoAlias , NoAlias,  MayAlias, NoAlias , MayAlias},
+  /* Group    */        {MayAlias, NoAlias , NoAlias , MayAlias, NoAlias , NoAlias , NoAlias},
+  /* Constant */        {MayAlias, MayAlias, MayAlias, NoAlias , NoAlias,  NoAlias , MayAlias},
+  /* Private  */        {MayAlias, NoAlias , NoAlias , NoAlias , NoAlias , MayAlias, NoAlias},
+  /* Constant 32-bit */ {MayAlias, MayAlias, MayAlias, NoAlias , MayAlias, NoAlias , NoAlias}
+  };
+  static_assert(AMDGPUAS::MAX_AMDGPU_ADDRESS <= 6, "Addr space out of range");
+  if (AS.FLAT_ADDRESS == 0) {
+    assert(AS.GLOBAL_ADDRESS         == 1 &&
+           AS.REGION_ADDRESS         == 2 &&
+           AS.LOCAL_ADDRESS          == 3 &&
+           AS.CONSTANT_ADDRESS       == 4 &&
+           AS.PRIVATE_ADDRESS        == 5 &&
+           AS.CONSTANT_ADDRESS_32BIT == 6);
+    ASAliasRules = &ASAliasRulesGenIsZero;
+  } else {
+    assert(AS.PRIVATE_ADDRESS        == 0 &&
+           AS.GLOBAL_ADDRESS         == 1 &&
+           AS.CONSTANT_ADDRESS       == 2 &&
+           AS.LOCAL_ADDRESS          == 3 &&
+           AS.FLAT_ADDRESS           == 4 &&
+           AS.REGION_ADDRESS         == 5 &&
+           AS.CONSTANT_ADDRESS_32BIT == 6);
+    ASAliasRules = &ASAliasRulesPrivIsZero;
+  }
+}
+
+AliasResult AMDGPUAAResult::ASAliasRulesTy::getAliasResult(unsigned AS1,
+    unsigned AS2) const {
+  if (AS1 > AS.MAX_AMDGPU_ADDRESS || AS2 > AS.MAX_AMDGPU_ADDRESS) {
+    if (Arch == Triple::amdgcn)
+      report_fatal_error("Pointer address space out of range");
+    return AS1 == AS2 ? MayAlias : NoAlias;
+  }
+
+  return (*ASAliasRules)[AS1][AS2];
+>>>>>>> release/7.x
 }
 
 AliasResult AMDGPUAAResult::alias(const MemoryLocation &LocA,

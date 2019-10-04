@@ -148,6 +148,7 @@ static std::future<MBErrPair> createFutureForFile(std::string path) {
 }
 
 // Symbol names are mangled by prepending "_" on x86.
+<<<<<<< HEAD
 static StringRef mangle(StringRef sym) {
   assert(config->machine != IMAGE_FILE_MACHINE_UNKNOWN);
   if (config->machine == I386)
@@ -163,6 +164,23 @@ static bool findUnderscoreMangle(StringRef sym) {
 MemoryBufferRef LinkerDriver::takeBuffer(std::unique_ptr<MemoryBuffer> mb) {
   MemoryBufferRef mbref = *mb;
   make<std::unique_ptr<MemoryBuffer>>(std::move(mb)); // take ownership
+=======
+static StringRef mangle(StringRef Sym) {
+  assert(Config->Machine != IMAGE_FILE_MACHINE_UNKNOWN);
+  if (Config->Machine == I386)
+    return Saver.save("_" + Sym);
+  return Sym;
+}
+
+static bool findUnderscoreMangle(StringRef Sym) {
+  StringRef Entry = Symtab->findMangle(mangle(Sym));
+  return !Entry.empty() && !isa<Undefined>(Symtab->find(Entry));
+}
+
+MemoryBufferRef LinkerDriver::takeBuffer(std::unique_ptr<MemoryBuffer> MB) {
+  MemoryBufferRef MBRef = *MB;
+  make<std::unique_ptr<MemoryBuffer>>(std::move(MB)); // take ownership
+>>>>>>> release/7.x
 
   if (driver->tar)
     driver->tar->append(relativeToRoot(mbref.getBufferIdentifier()),
@@ -515,6 +533,7 @@ Symbol *LinkerDriver::addUndefined(StringRef name) {
   return b;
 }
 
+<<<<<<< HEAD
 StringRef LinkerDriver::mangleMaybe(Symbol *s) {
   // If the plain symbol name has already been resolved, do nothing.
   Undefined *unmangled = dyn_cast<Undefined>(s);
@@ -533,12 +552,15 @@ StringRef LinkerDriver::mangleMaybe(Symbol *s) {
   return mangled->getName();
 }
 
+=======
+>>>>>>> release/7.x
 // Windows specific -- find default entry point name.
 //
 // There are four different entry point functions for Windows executables,
 // each of which corresponds to a user-defined "main" function. This function
 // infers an entry point from a user-defined "main" function.
 StringRef LinkerDriver::findDefaultEntry() {
+<<<<<<< HEAD
   assert(config->subsystem != IMAGE_SUBSYSTEM_UNKNOWN &&
          "must handle /subsystem before calling this");
 
@@ -561,11 +583,32 @@ StringRef LinkerDriver::findDefaultEntry() {
     warn("found both wmain and main; using latter");
   }
   return mangle("mainCRTStartup");
+=======
+  assert(Config->Subsystem != IMAGE_SUBSYSTEM_UNKNOWN &&
+         "must handle /subsystem before calling this");
+
+  // As a special case, if /nodefaultlib is given, we directly look for an
+  // entry point. This is because, if no default library is linked, users
+  // need to define an entry point instead of a "main".
+  bool FindMain = !Config->NoDefaultLibAll;
+  if (Config->Subsystem == IMAGE_SUBSYSTEM_WINDOWS_GUI) {
+    if (findUnderscoreMangle(FindMain ? "WinMain" : "WinMainCRTStartup"))
+      return mangle("WinMainCRTStartup");
+    if (findUnderscoreMangle(FindMain ? "wWinMain" : "wWinMainCRTStartup"))
+      return mangle("wWinMainCRTStartup");
+  }
+  if (findUnderscoreMangle(FindMain ? "main" : "mainCRTStartup"))
+    return mangle("mainCRTStartup");
+  if (findUnderscoreMangle(FindMain ? "wmain" : "wmainCRTStartup"))
+    return mangle("wmainCRTStartup");
+  return "";
+>>>>>>> release/7.x
 }
 
 WindowsSubsystem LinkerDriver::inferSubsystem() {
   if (config->dll)
     return IMAGE_SUBSYSTEM_WINDOWS_GUI;
+<<<<<<< HEAD
   if (config->mingw)
     return IMAGE_SUBSYSTEM_WINDOWS_CUI;
   // Note that link.exe infers the subsystem from the presence of these
@@ -584,6 +627,11 @@ WindowsSubsystem LinkerDriver::inferSubsystem() {
     return IMAGE_SUBSYSTEM_WINDOWS_CUI;
   }
   if (haveWinMain || haveWWinMain)
+=======
+  if (findUnderscoreMangle("main") || findUnderscoreMangle("wmain"))
+    return IMAGE_SUBSYSTEM_WINDOWS_CUI;
+  if (findUnderscoreMangle("WinMain") || findUnderscoreMangle("wWinMain"))
+>>>>>>> release/7.x
     return IMAGE_SUBSYSTEM_WINDOWS_GUI;
   return IMAGE_SUBSYSTEM_UNKNOWN;
 }
@@ -1656,7 +1704,11 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
   if (!config->dynamicBase &&
       (config->machine == ARMNT || config->machine == ARM64))
     error("/dynamicbase:no is not compatible with " +
+<<<<<<< HEAD
           machineToStr(config->machine));
+=======
+          machineToStr(Config->Machine));
+>>>>>>> release/7.x
 
   // Handle /export
   for (auto *arg : args.filtered(OPT_export)) {
@@ -1686,13 +1738,20 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
   // Windows specific -- if no /subsystem is given, we need to infer
   // that from entry point name.  Must happen before /entry handling,
   // and after the early return when just writing an import library.
+<<<<<<< HEAD
   if (config->subsystem == IMAGE_SUBSYSTEM_UNKNOWN) {
     config->subsystem = inferSubsystem();
     if (config->subsystem == IMAGE_SUBSYSTEM_UNKNOWN)
+=======
+  if (Config->Subsystem == IMAGE_SUBSYSTEM_UNKNOWN) {
+    Config->Subsystem = inferSubsystem();
+    if (Config->Subsystem == IMAGE_SUBSYSTEM_UNKNOWN)
+>>>>>>> release/7.x
       fatal("subsystem must be defined");
   }
 
   // Handle /entry and /dll
+<<<<<<< HEAD
   if (auto *arg = args.getLastArg(OPT_entry)) {
     config->entry = addUndefined(mangle(arg->getValue()));
   } else if (!config->entry && !config->noEntry) {
@@ -1708,6 +1767,23 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
         fatal("entry point must be defined");
       config->entry = addUndefined(s);
       log("Entry name inferred: " + s);
+=======
+  if (auto *Arg = Args.getLastArg(OPT_entry)) {
+    Config->Entry = addUndefined(mangle(Arg->getValue()));
+  } else if (!Config->Entry && !Config->NoEntry) {
+    if (Args.hasArg(OPT_dll)) {
+      StringRef S = (Config->Machine == I386) ? "__DllMainCRTStartup@12"
+                                              : "_DllMainCRTStartup";
+      Config->Entry = addUndefined(S);
+    } else {
+      // Windows specific -- If entry point name is not given, we need to
+      // infer that from user-defined entry name.
+      StringRef S = findDefaultEntry();
+      if (S.empty())
+        fatal("entry point must be defined");
+      Config->Entry = addUndefined(S);
+      log("Entry name inferred: " + S);
+>>>>>>> release/7.x
     }
   }
 
@@ -1883,6 +1959,7 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
   if (errorCount())
     return;
 
+<<<<<<< HEAD
   config->hadExplicitExports = !config->exports.empty();
   if (config->mingw) {
     // In MinGW, all symbols are automatically exported if no symbols
@@ -1904,6 +1981,35 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
         break;
       }
     }
+=======
+  // Handle /safeseh.
+  if (Args.hasFlag(OPT_safeseh, OPT_safeseh_no, false)) {
+    for (ObjFile *File : ObjFile::Instances)
+      if (!File->hasSafeSEH())
+        error("/safeseh: " + File->getName() + " is not compatible with SEH");
+    if (errorCount())
+      return;
+  }
+
+  // In MinGW, all symbols are automatically exported if no symbols
+  // are chosen to be exported.
+  if (Config->DLL && ((Config->MinGW && Config->Exports.empty()) ||
+                      Args.hasArg(OPT_export_all_symbols))) {
+    AutoExporter Exporter;
+
+    Symtab->forEachSymbol([=](Symbol *S) {
+      auto *Def = dyn_cast<Defined>(S);
+      if (!Exporter.shouldExport(Def))
+        return;
+      Export E;
+      E.Name = Def->getName();
+      E.Sym = Def;
+      if (Def->getChunk() &&
+          !(Def->getChunk()->getOutputCharacteristics() & IMAGE_SCN_MEM_EXECUTE))
+        E.Data = true;
+      Config->Exports.push_back(E);
+    });
+>>>>>>> release/7.x
   }
 
   // Windows specific -- when we are creating a .dll file, we also
@@ -1933,8 +2039,13 @@ void LinkerDriver::link(ArrayRef<const char *> argsArr) {
 
     // If the symbol isn't common, it must have been replaced with a regular
     // symbol, which will carry its own alignment.
+<<<<<<< HEAD
     auto *dc = dyn_cast<DefinedCommon>(sym);
     if (!dc)
+=======
+    auto *DC = dyn_cast<DefinedCommon>(Sym);
+    if (!DC)
+>>>>>>> release/7.x
       continue;
 
     CommonChunk *c = dc->getChunk();

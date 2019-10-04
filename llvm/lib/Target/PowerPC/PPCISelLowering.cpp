@@ -8949,7 +8949,11 @@ SDValue PPCTargetLowering::LowerVECTOR_SHUFFLE(SDValue Op,
 
   if (Subtarget.hasVSX()) {
     if (V2.isUndef() && PPC::isSplatShuffleMask(SVOp, 4)) {
+<<<<<<< HEAD
       int SplatIdx = PPC::getSplatIdxForPPCMnemonics(SVOp, 4, DAG);
+=======
+      int SplatIdx = PPC::getVSPLTImmediate(SVOp, 4, DAG);
+>>>>>>> release/7.x
 
       SDValue Conv = DAG.getNode(ISD::BITCAST, dl, MVT::v4i32, V1);
       SDValue Splat = DAG.getNode(PPCISD::XXSPLT, dl, MVT::v4i32, Conv,
@@ -12522,6 +12526,7 @@ SDValue PPCTargetLowering::DAGCombineExtBoolTrunc(SDNode *N,
       ShiftCst);
 }
 
+<<<<<<< HEAD
 SDValue PPCTargetLowering::combineSetCC(SDNode *N,
                                         DAGCombinerInfo &DCI) const {
   assert(N->getOpcode() == ISD::SETCC &&
@@ -12553,6 +12558,8 @@ SDValue PPCTargetLowering::combineSetCC(SDNode *N,
   return DAGCombineTruncBoolExt(N, DCI);
 }
 
+=======
+>>>>>>> release/7.x
 // Is this an extending load from an f32 to an f64?
 static bool isFPExtLoad(SDValue Op) {
   if (LoadSDNode *LD = dyn_cast<LoadSDNode>(Op.getNode()))

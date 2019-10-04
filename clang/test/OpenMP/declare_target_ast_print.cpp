@@ -217,6 +217,7 @@ int baz() { return 1; }
 // CHECK: }
 // CHECK: #pragma omp end declare target
 
+<<<<<<< HEAD
 #pragma omp declare target
   #include "declare_target_include.h"
   void xyz();
@@ -243,6 +244,8 @@ int baz() { return 1; }
 // CHECK: void cba();
 // CHECK: #pragma omp end declare target
 
+=======
+>>>>>>> release/7.x
 int main (int argc, char **argv) {
   foo();
   foo_c();

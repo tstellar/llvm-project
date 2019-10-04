@@ -540,8 +540,13 @@ public:
 // See comments for DefinedLocalImport class.
 class LocalImportChunk : public NonSectionChunk {
 public:
+<<<<<<< HEAD
   explicit LocalImportChunk(Defined *s) : sym(s) {
     setAlignment(config->wordsize);
+=======
+  explicit LocalImportChunk(Defined *S) : Sym(S) {
+    Alignment = Config->is64() ? 8 : 4;
+>>>>>>> release/7.x
   }
   size_t getSize() const override;
   void getBaserels(std::vector<Baserel> *res) override;

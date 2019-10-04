@@ -152,12 +152,17 @@
 #    define TEST_HAS_C11_FEATURES
 #    define TEST_HAS_TIMESPEC_GET
 #  elif defined(__linux__)
+<<<<<<< HEAD
 // This block preserves the old behavior used by include/__config:
 // _LIBCPP_GLIBC_PREREQ would be defined to 0 if __GLIBC_PREREQ was not
 // available. The configuration here may be too vague though, as Bionic, uClibc,
 // newlib, etc may all support these features but need to be configured.
 #    if defined(TEST_GLIBC_PREREQ)
 #      if TEST_GLIBC_PREREQ(2, 17)
+=======
+#    if !defined(_LIBCPP_HAS_MUSL_LIBC)
+#      if _LIBCPP_GLIBC_PREREQ(2, 17)
+>>>>>>> release/7.x
 #        define TEST_HAS_TIMESPEC_GET
 #        define TEST_HAS_C11_FEATURES
 #      endif

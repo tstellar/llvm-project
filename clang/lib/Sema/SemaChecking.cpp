@@ -6615,11 +6615,21 @@ class FormatStringLiteral {
                                     StartToken, StartTokenByteOffset);
   }
 
+<<<<<<< HEAD
   SourceLocation getBeginLoc() const LLVM_READONLY {
     return FExpr->getBeginLoc().getLocWithOffset(Offset);
   }
 
   SourceLocation getEndLoc() const LLVM_READONLY { return FExpr->getEndLoc(); }
+=======
+  SourceLocation getLocStart() const LLVM_READONLY { return getBeginLoc(); }
+  SourceLocation getBeginLoc() const LLVM_READONLY {
+    return FExpr->getLocStart().getLocWithOffset(Offset);
+  }
+
+  SourceLocation getLocEnd() const LLVM_READONLY { return getEndLoc(); }
+  SourceLocation getEndLoc() const LLVM_READONLY { return FExpr->getLocEnd(); }
+>>>>>>> release/7.x
 };
 
 }  // namespace

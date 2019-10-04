@@ -6,10 +6,13 @@
 // These compilers don't support the taskloop construct
 // UNSUPPORTED: gcc-4, gcc-5, icc-16
 
+<<<<<<< HEAD
 // This test is known to be fragile on NetBSD kernel at the moment,
 // https://bugs.llvm.org/show_bug.cgi?id=42020.
 // UNSUPPORTED: netbsd
 
+=======
+>>>>>>> release/7.x
 /*
  * Test for taskloop
  * Method: caculate how many times the iteration space is dispatched

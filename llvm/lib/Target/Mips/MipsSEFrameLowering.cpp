@@ -304,9 +304,15 @@ bool ExpandPseudo::expandBuildPairF64(MachineBasicBlock &MBB,
   // stack is used.
   if (I->getNumOperands() == 4 && I->getOperand(3).isReg()
       && I->getOperand(3).getReg() == Mips::SP) {
+<<<<<<< HEAD
     Register DstReg = I->getOperand(0).getReg();
     Register LoReg = I->getOperand(1).getReg();
     Register HiReg = I->getOperand(2).getReg();
+=======
+    unsigned DstReg = I->getOperand(0).getReg();
+    unsigned LoReg = I->getOperand(1).getReg();
+    unsigned HiReg = I->getOperand(2).getReg();
+>>>>>>> release/7.x
 
     // It should be impossible to have FGR64 on MIPS-II or MIPS32r1 (which are
     // the cases where mthc1 is not available). 64-bit architectures and
@@ -369,8 +375,13 @@ bool ExpandPseudo::expandExtractElementF64(MachineBasicBlock &MBB,
   // stack is used.
   if (I->getNumOperands() == 4 && I->getOperand(3).isReg()
       && I->getOperand(3).getReg() == Mips::SP) {
+<<<<<<< HEAD
     Register DstReg = I->getOperand(0).getReg();
     Register SrcReg = Op1.getReg();
+=======
+    unsigned DstReg = I->getOperand(0).getReg();
+    unsigned SrcReg = Op1.getReg();
+>>>>>>> release/7.x
     unsigned N = Op2.getImm();
     int64_t Offset = 4 * (Subtarget.isLittle() ? N : (1 - N));
 

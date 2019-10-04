@@ -10,10 +10,13 @@ Attributes in Clang
 .. contents::
    :local:
 
+<<<<<<< HEAD
 .. |br| raw:: html
 
   <br/>
 
+=======
+>>>>>>> release/7.x
 Introduction
 ============
 
@@ -26,9 +29,15 @@ Function Attributes
 #pragma omp declare simd
 ------------------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","","``omp declare simd``",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","", "X", ""
+>>>>>>> release/7.x
 
 The `declare simd` construct can be applied to a function to enable the creation
 of one or more versions that can process multiple arguments using SIMD
@@ -62,9 +71,15 @@ where clause is one of the following:
 #pragma omp declare target
 --------------------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","","``omp declare target``",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","", "X", ""
+>>>>>>> release/7.x
 
 The `declare target` directive specifies that variables and functions are mapped
 to a device for OpenMP offload mechanism.
@@ -81,21 +96,36 @@ The syntax of the declare target directive is as follows:
 _Noreturn
 ---------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","``_Noreturn``","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+>>>>>>> release/7.x
 
 A function declared as ``_Noreturn`` shall not return to its caller. The
 compiler will generate a diagnostic for a function declared as ``_Noreturn``
 that appears to be capable of returning to its caller.
 
 
+<<<<<<< HEAD
 abi_tag
 -------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``abi_tag``","``gnu::abi_tag``","","","","","Yes"
+=======
+abi_tag (gnu::abi_tag)
+----------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The ``abi_tag`` attribute can be applied to a function, variable, class or
 inline namespace declaration to modify the mangled name of the entity. It gives
@@ -107,22 +137,40 @@ a global variable of the class type. Therefore, the old code could keep using
 the old manged name and the new code will use the new mangled name with tags.
 
 
+<<<<<<< HEAD
 acquire_capability, acquire_shared_capability
 ---------------------------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``acquire_capability`` |br| ``acquire_shared_capability`` |br| ``exclusive_lock_function`` |br| ``shared_lock_function``","``clang::acquire_capability`` |br| ``clang::acquire_shared_capability``","","","","",""
+=======
+acquire_capability (acquire_shared_capability, clang::acquire_capability, clang::acquire_shared_capability)
+-----------------------------------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 Marks a function as acquiring a capability.
 
 
+<<<<<<< HEAD
 alloc_align
 -----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``alloc_align``","``gnu::alloc_align``","","","","",""
+=======
+alloc_align (gnu::alloc_align)
+------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 Use ``__attribute__((alloc_align(<alignment>))`` on a function
 declaration to specify that the return value of the function (which must be a
@@ -150,12 +198,21 @@ emit code to enforce that alignment.  The behavior is undefined if the returned
 poitner is not sufficiently aligned.
 
 
+<<<<<<< HEAD
 alloc_size
 ----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``alloc_size``","``gnu::alloc_size``","","","","","Yes"
+=======
+alloc_size (gnu::alloc_size)
+----------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The ``alloc_size`` attribute can be placed on functions that return pointers in
 order to hint to the compiler how many bytes of memory will be available at the
@@ -191,12 +248,21 @@ An example of how to use ``alloc_size``
   other attributes, such as ``enable_if``.
 
 
+<<<<<<< HEAD
 artificial
 ----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``artificial``","``gnu::artificial``","","","","",""
+=======
+artificial (gnu::artificial)
+----------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 The ``artificial`` attribute can be applied to an inline function. If such a
 function is inlined, the attribute indicates that debuggers should associate
@@ -204,23 +270,41 @@ the resulting instructions with the call site, rather than with the
 corresponding line within the inlined callee.
 
 
+<<<<<<< HEAD
 assert_capability, assert_shared_capability
 -------------------------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``assert_capability`` |br| ``assert_shared_capability``","``clang::assert_capability`` |br| ``clang::assert_shared_capability``","","","","",""
+=======
+assert_capability (assert_shared_capability, clang::assert_capability, clang::assert_shared_capability)
+-------------------------------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 Marks a function that dynamically tests whether a capability is held, and halts
 the program if it is not held.
 
 
+<<<<<<< HEAD
 assume_aligned
 --------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``assume_aligned``","``gnu::assume_aligned``","","","","","Yes"
+=======
+assume_aligned (gnu::assume_aligned)
+------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Use ``__attribute__((assume_aligned(<alignment>[,<offset>]))`` on a function
 declaration to specify that the return value of the function (which must be a
@@ -241,12 +325,21 @@ condition that the code already ensures is true. It does not cause the compiler
 to enforce the provided alignment assumption.
 
 
+<<<<<<< HEAD
 availability
 ------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``availability``","``clang::availability``","``clang::availability``","","","","Yes"
+=======
+availability (clang::availability, clang::availability)
+-------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``availability`` attribute can be placed on declarations to describe the
 lifecycle of that declaration relative to operating system versions.  Consider
@@ -379,9 +472,15 @@ Also see the documentation for `@available
 carries_dependency
 ------------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``carries_dependency``","``carries_dependency``","","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The ``carries_dependency`` attribute specifies dependency propagation into and
 out of functions.
@@ -396,6 +495,7 @@ Note, this attribute does not change the meaning of the program, but may result
 in generation of more efficient code.
 
 
+<<<<<<< HEAD
 cf_consumed
 -----------
 .. csv-table:: Supported Syntaxes
@@ -606,6 +706,14 @@ code_seg
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","``code_seg``","","",""
+=======
+code_seg
+--------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","X","", "", ""
+>>>>>>> release/7.x
 
 The ``__declspec(code_seg)`` attribute enables the placement of code into separate
 named segments that can be paged or locked in memory individually. This attribute
@@ -615,12 +723,21 @@ code. See the documentation for `__declspec(code_seg)`_ on MSDN.
 .. _`__declspec(code_seg)`: http://msdn.microsoft.com/en-us/library/dn636922.aspx
 
 
+<<<<<<< HEAD
 convergent
 ----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``convergent``","``clang::convergent``","``clang::convergent``","","","","Yes"
+=======
+convergent (clang::convergent, clang::convergent)
+-------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``convergent`` attribute can be placed on a function declaration. It is
 translated into the LLVM ``convergent`` attribute, which indicates that the call
@@ -644,12 +761,21 @@ Sample usage:
   // void convfunc(void) [[clang::convergent]];
 
 
+<<<<<<< HEAD
 cpu_dispatch
 ------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``cpu_dispatch``","``clang::cpu_dispatch``","``clang::cpu_dispatch``","``cpu_dispatch``","","","Yes"
+=======
+cpu_dispatch (clang::cpu_dispatch, clang::cpu_dispatch)
+-------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``cpu_specific`` and ``cpu_dispatch`` attributes are used to define and
 resolve multiversioned functions. This form of multiversioning provides a
@@ -706,12 +832,21 @@ name. The behavior of a program executing on a processor that doesn't satisfy
 any option of a multiversioned function is undefined.
 
 
+<<<<<<< HEAD
 cpu_specific
 ------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``cpu_specific``","``clang::cpu_specific``","``clang::cpu_specific``","``cpu_specific``","","","Yes"
+=======
+cpu_specific (clang::cpu_specific, clang::cpu_specific)
+-------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``cpu_specific`` and ``cpu_dispatch`` attributes are used to define and
 resolve multiversioned functions. This form of multiversioning provides a
@@ -768,12 +903,21 @@ name. The behavior of a program executing on a processor that doesn't satisfy
 any option of a multiversioned function is undefined.
 
 
+<<<<<<< HEAD
 deprecated
 ----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``deprecated``","``gnu::deprecated`` |br| ``deprecated``","``deprecated``","``deprecated``","","",""
+=======
+deprecated (gnu::deprecated)
+----------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","X","", "", ""
+>>>>>>> release/7.x
 
 The ``deprecated`` attribute can be applied to a function, a variable, or a
 type. This is useful when identifying functions, variables, or types that are
@@ -796,9 +940,15 @@ string argument which is the message to display when emitting the warning.
 diagnose_if
 -----------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``diagnose_if``","","","","","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","","","","", "", ""
+>>>>>>> release/7.x
 
 The ``diagnose_if`` attribute can be placed on function declarations to emit
 warnings or errors at compile-time if calls to the attributed function meet
@@ -806,9 +956,15 @@ certain user-defined criteria. For example:
 
 .. code-block:: c
 
+<<<<<<< HEAD
   int abs(int a)
     __attribute__((diagnose_if(a >= 0, "Redundant abs call", "warning")));
   int must_abs(int a)
+=======
+  void abs(int a)
+    __attribute__((diagnose_if(a >= 0, "Redundant abs call", "warning")));
+  void must_abs(int a)
+>>>>>>> release/7.x
     __attribute__((diagnose_if(a >= 0, "Redundant abs call", "error")));
 
   int val = abs(1); // warning: Redundant abs call
@@ -856,12 +1012,21 @@ same function. For example:
 Query for this feature with ``__has_attribute(diagnose_if)``.
 
 
+<<<<<<< HEAD
 disable_tail_calls
 ------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``disable_tail_calls``","``clang::disable_tail_calls``","``clang::disable_tail_calls``","","","","Yes"
+=======
+disable_tail_calls (clang::disable_tail_calls, clang::disable_tail_calls)
+-------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``disable_tail_calls`` attribute instructs the backend to not perform tail call optimization inside the marked function.
 
@@ -899,9 +1064,15 @@ Marking virtual functions as ``disable_tail_calls`` is legal.
 enable_if
 ---------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``enable_if``","","","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","","","","", "", "X"
+>>>>>>> release/7.x
 
 .. Note:: Some features of this attribute are experimental. The meaning of
   multiple enable_if attributes on a single declaration is subject to change in
@@ -1033,6 +1204,7 @@ conditions for ``foo`` fail). However, in ``baz``, ``foo`` is resolved during
 template instantiation, so the value for ``T::number`` is known.
 
 
+<<<<<<< HEAD
 exclude_from_explicit_instantiation
 -----------------------------------
 .. csv-table:: Supported Syntaxes
@@ -1104,6 +1276,14 @@ external_source_symbol
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``external_source_symbol``","``clang::external_source_symbol``","``clang::external_source_symbol``","","","","Yes"
+=======
+external_source_symbol (clang::external_source_symbol, clang::external_source_symbol)
+-------------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``external_source_symbol`` attribute specifies that a declaration originates
 from an external source and describes the nature of that source.
@@ -1159,24 +1339,42 @@ The clauses can be specified in any order. The clauses that are listed above are
 all optional, but the attribute has to have at least one clause.
 
 
+<<<<<<< HEAD
 flatten
 -------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``flatten``","``gnu::flatten``","","","","","Yes"
+=======
+flatten (gnu::flatten)
+----------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The ``flatten`` attribute causes calls within the attributed function to
 be inlined unless it is impossible to do so, for example if the body of the
 callee is unavailable or if the callee has the ``noinline`` attribute.
 
 
+<<<<<<< HEAD
 force_align_arg_pointer
 -----------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``force_align_arg_pointer``","``gnu::force_align_arg_pointer``","","","","",""
+=======
+force_align_arg_pointer (gnu::force_align_arg_pointer)
+------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 Use this attribute to force stack alignment.
 
@@ -1198,12 +1396,21 @@ jumps from i386 arch code).
     }
 
 
+<<<<<<< HEAD
 format
 ------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``format``","``gnu::format``","","","","",""
+=======
+format (gnu::format)
+--------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 Clang supports the ``format`` attribute, which indicates that the function
 accepts a ``printf`` or ``scanf``-like format string and corresponding
@@ -1263,6 +1470,7 @@ Clang implements two kinds of checks with this attribute.
    incorrect, the caller of ``foo`` will receive a warning.
 
 
+<<<<<<< HEAD
 gnu_inline
 ----------
 .. csv-table:: Supported Syntaxes
@@ -1363,6 +1571,30 @@ internal_linkage
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``internal_linkage``","``clang::internal_linkage``","``clang::internal_linkage``","","","","Yes"
+=======
+ifunc (gnu::ifunc)
+------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+
+``__attribute__((ifunc("resolver")))`` is used to mark that the address of a declaration should be resolved at runtime by calling a resolver function.
+
+The symbol name of the resolver function is given in quotes.  A function with this name (after mangling) must be defined in the current translation unit; it may be ``static``.  The resolver function should take no arguments and return a pointer.
+
+The ``ifunc`` attribute may only be used on a function declaration.  A function declaration with an ``ifunc`` attribute is considered to be a definition of the declared entity.  The entity must not have weak linkage; for example, in C++, it cannot be applied to a declaration if a definition at that location would be considered inline.
+
+Not all targets support this attribute.  ELF targets support this attribute when using binutils v2.20.1 or higher and glibc v2.11.1 or higher.  Non-ELF targets currently do not support this attribute.
+
+
+internal_linkage (clang::internal_linkage, clang::internal_linkage)
+-------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``internal_linkage`` attribute changes the linkage type of the declaration to internal.
 This is similar to C-style ``static``, but can be used on classes and class methods. When applied to a class definition,
@@ -1373,9 +1605,15 @@ This can be used to contain the ABI of a C++ library by excluding unwanted class
 interrupt (ARM)
 ---------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``interrupt``","``gnu::interrupt``","","","","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 Clang supports the GNU style ``__attribute__((interrupt("TYPE")))`` attribute on
 ARM targets. This attribute may be attached to a function definition and
@@ -1417,9 +1655,15 @@ The semantics are as follows:
 interrupt (AVR)
 ---------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``interrupt``","``gnu::interrupt``","","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the GNU style ``__attribute__((interrupt))`` attribute on
 AVR targets. This attribute may be attached to a function definition and instructs
@@ -1435,9 +1679,15 @@ does not insert a SEI instruction.
 interrupt (MIPS)
 ----------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``interrupt``","``gnu::interrupt``","","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the GNU style ``__attribute__((interrupt("ARGUMENT")))`` attribute on
 MIPS targets. This attribute may be attached to a function definition and instructs
@@ -1478,9 +1728,15 @@ The semantics are as follows:
 interrupt (RISCV)
 -----------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``interrupt``","``gnu::interrupt``","","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the GNU style ``__attribute__((interrupt))`` attribute on RISCV
 targets. This attribute may be attached to a function definition and instructs
@@ -1503,9 +1759,15 @@ Version 1.10.
 kernel
 ------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``kernel``","","","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","","","","", "", "X"
+>>>>>>> release/7.x
 
 ``__attribute__((kernel))`` is used to mark a ``kernel`` function in
 RenderScript.
@@ -1518,12 +1780,21 @@ See the RenderScript_ documentation for more information.
 .. _RenderScript: https://developer.android.com/guide/topics/renderscript/compute.html
 
 
+<<<<<<< HEAD
 lifetimebound
 -------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``lifetimebound``","``clang::lifetimebound``","","","","",""
+=======
+lifetimebound (clang::lifetimebound)
+------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 The ``lifetimebound`` attribute indicates that a resource owned by
 a function parameter or implicit object parameter
@@ -1537,12 +1808,21 @@ and is subject to change as the design of the corresponding functionality
 changes.
 
 
+<<<<<<< HEAD
 long_call, far
 --------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``long_call`` |br| ``far``","``gnu::long_call`` |br| ``gnu::far``","","","","","Yes"
+=======
+long_call (gnu::long_call, gnu::far)
+------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the ``__attribute__((long_call))``, ``__attribute__((far))``,
 and ``__attribute__((near))`` attributes on MIPS targets. These attributes may
@@ -1560,12 +1840,21 @@ These attributes take priority over command line switches such
 as ``-mlong-calls`` and ``-mno-long-calls``.
 
 
+<<<<<<< HEAD
 micromips
 ---------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``micromips``","``gnu::micromips``","","","","","Yes"
+=======
+micromips (gnu::micromips)
+--------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the GNU style ``__attribute__((micromips))`` and
 ``__attribute__((nomicromips))`` attributes on MIPS targets. These attributes
@@ -1576,12 +1865,21 @@ These attributes override the `-mmicromips` and `-mno-micromips` options
 on the command line.
 
 
+<<<<<<< HEAD
 min_vector_width
 ----------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``min_vector_width``","``clang::min_vector_width``","``clang::min_vector_width``","","","","Yes"
+=======
+min_vector_width (clang::min_vector_width, clang::min_vector_width)
+-------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the ``__attribute__((min_vector_width(width)))`` attribute. This
 attribute may be attached to a function and informs the backend that this
@@ -1603,12 +1901,21 @@ code using the X86 intrinsics will prevent ``prefer-vector-width`` from
 affecting the code.
 
 
+<<<<<<< HEAD
 no_caller_saved_registers
 -------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``no_caller_saved_registers``","``gnu::no_caller_saved_registers``","","","","",""
+=======
+no_caller_saved_registers (gnu::no_caller_saved_registers)
+----------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 Use this attribute to indicate that the specified function has no
 caller-saved registers. That is, all registers are callee-saved except for
@@ -1640,12 +1947,21 @@ For example:
   should save and restore any modified registers except for ECX and EDX.
 
 
+<<<<<<< HEAD
 no_sanitize
 -----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``no_sanitize``","``clang::no_sanitize``","``clang::no_sanitize``","","","","Yes"
+=======
+no_sanitize (clang::no_sanitize, clang::no_sanitize)
+----------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 Use the ``no_sanitize`` attribute on a function or a global variable
 declaration to specify that a particular instrumentation or set of
@@ -1660,12 +1976,21 @@ See :ref:`Controlling Code Generation <controlling-code-generation>` for a
 full list of supported sanitizer flags.
 
 
+<<<<<<< HEAD
 no_sanitize_address, no_address_safety_analysis
 -----------------------------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``no_address_safety_analysis`` |br| ``no_sanitize_address`` |br| ``no_sanitize_thread`` |br| ``no_sanitize_memory``","``gnu::no_address_safety_analysis`` |br| ``gnu::no_sanitize_address`` |br| ``gnu::no_sanitize_thread`` |br| ``clang::no_sanitize_memory``","``clang::no_sanitize_memory``","","","","Yes"
+=======
+no_sanitize_address (no_address_safety_analysis, gnu::no_address_safety_analysis, gnu::no_sanitize_address)
+-----------------------------------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 .. _langext-address_sanitizer:
 
@@ -1677,9 +2002,15 @@ variable declaration to specify that address safety instrumentation
 no_sanitize_memory
 ------------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``no_address_safety_analysis`` |br| ``no_sanitize_address`` |br| ``no_sanitize_thread`` |br| ``no_sanitize_memory``","``gnu::no_address_safety_analysis`` |br| ``gnu::no_sanitize_address`` |br| ``gnu::no_sanitize_thread`` |br| ``clang::no_sanitize_memory``","``clang::no_sanitize_memory``","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 .. _langext-memory_sanitizer:
 
@@ -1692,9 +2023,15 @@ to avoid false positives in other places.
 no_sanitize_thread
 ------------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``no_address_safety_analysis`` |br| ``no_sanitize_address`` |br| ``no_sanitize_thread`` |br| ``no_sanitize_memory``","``gnu::no_address_safety_analysis`` |br| ``gnu::no_sanitize_address`` |br| ``gnu::no_sanitize_thread`` |br| ``clang::no_sanitize_memory``","``clang::no_sanitize_memory``","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 .. _langext-thread_sanitizer:
 
@@ -1704,24 +2041,42 @@ not be inserted by ThreadSanitizer. The function is still instrumented by the
 tool to avoid false positives and provide meaningful stack traces.
 
 
+<<<<<<< HEAD
 no_split_stack
 --------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``no_split_stack``","``gnu::no_split_stack``","","","","","Yes"
+=======
+no_split_stack (gnu::no_split_stack)
+------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The ``no_split_stack`` attribute disables the emission of the split stack
 preamble for a particular function. It has no effect if ``-fsplit-stack``
 is not specified.
 
 
+<<<<<<< HEAD
 no_stack_protector
 ------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``no_stack_protector``","``clang::no_stack_protector``","``clang::no_stack_protector``","","","","Yes"
+=======
+no_stack_protector (clang::no_stack_protector, clang::no_stack_protector)
+-------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the ``__attribute__((no_stack_protector))`` attribute which disables
 the stack protector on the specified function. This attribute is useful for
@@ -1743,21 +2098,36 @@ option.
 noalias
 -------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","``noalias``","","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","X","", "", ""
+>>>>>>> release/7.x
 
 The ``noalias`` attribute indicates that the only memory accesses inside
 function are loads and stores from objects pointed to by its pointer-typed
 arguments, with arbitrary offsets.
 
 
+<<<<<<< HEAD
 nocf_check
 ----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``nocf_check``","``gnu::nocf_check``","","","","","Yes"
+=======
+nocf_check (gnu::nocf_check)
+----------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Jump Oriented Programming attacks rely on tampering with addresses used by
 indirect call / jmp, e.g. redirect control-flow to non-programmer
@@ -1772,12 +2142,21 @@ the function.
 pointer (by adding nocf_check prefix to the indirect-call instruction).
 
 
+<<<<<<< HEAD
 nodiscard, warn_unused_result
 -----------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``warn_unused_result``","``nodiscard`` |br| ``clang::warn_unused_result`` |br| ``gnu::warn_unused_result``","``nodiscard``","","","","Yes"
+=======
+nodiscard, warn_unused_result, clang::warn_unused_result, gnu::warn_unused_result
+---------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the ability to diagnose when the results of a function call
 expression are discarded under suspicious circumstances. A diagnostic is
@@ -1799,12 +2178,21 @@ potentially-evaluated discarded-value expression that is not explicitly cast to
   void f() { foo(); } // Does not diagnose, error_info is a reference.
 
 
+<<<<<<< HEAD
 noduplicate
 -----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``noduplicate``","``clang::noduplicate``","``clang::noduplicate``","","","","Yes"
+=======
+noduplicate (clang::noduplicate, clang::noduplicate)
+----------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``noduplicate`` attribute can be placed on function declarations to control
 whether function calls to this function can be duplicated or not as a result of
@@ -1845,12 +2233,21 @@ where the call to "nodupfunc" is duplicated and sunk into the two branches
 of the condition.
 
 
+<<<<<<< HEAD
 nomicromips
 -----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``nomicromips``","``gnu::nomicromips``","","","","","Yes"
+=======
+nomicromips (gnu::nomicromips)
+------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the GNU style ``__attribute__((micromips))`` and
 ``__attribute__((nomicromips))`` attributes on MIPS targets. These attributes
@@ -1864,21 +2261,36 @@ on the command line.
 noreturn
 --------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","``noreturn``","","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","X","","","", "", "X"
+>>>>>>> release/7.x
 
 A function declared as ``[[noreturn]]`` shall not return to its caller. The
 compiler will generate a diagnostic for a function declared as ``[[noreturn]]``
 that appears to be capable of returning to its caller.
 
 
+<<<<<<< HEAD
 not_tail_called
 ---------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``not_tail_called``","``clang::not_tail_called``","``clang::not_tail_called``","","","","Yes"
+=======
+not_tail_called (clang::not_tail_called, clang::not_tail_called)
+----------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``not_tail_called`` attribute prevents tail-call optimization on statically bound calls. It has no effect on indirect calls. Virtual functions, objective-c methods, and functions marked as ``always_inline`` cannot be marked as ``not_tail_called``.
 
@@ -1930,12 +2342,21 @@ Marking virtual functions as ``not_tail_called`` is an error:
     };
 
 
+<<<<<<< HEAD
 nothrow
 -------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``nothrow``","``gnu::nothrow``","","``nothrow``","","","Yes"
+=======
+nothrow (gnu::nothrow)
+----------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","X","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the GNU style ``__attribute__((nothrow))`` and Microsoft style
 ``__declspec(nothrow)`` attribute as an equivalent of `noexcept` on function
@@ -1945,6 +2366,7 @@ is particularly useful on functions in the C Standard Library that are
 guaranteed to not throw an exception.
 
 
+<<<<<<< HEAD
 ns_consumed
 -----------
 .. csv-table:: Supported Syntaxes
@@ -2291,6 +2713,14 @@ objc_boxable
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``objc_boxable``","``clang::objc_boxable``","``clang::objc_boxable``","","","","Yes"
+=======
+objc_boxable (clang::objc_boxable, clang::objc_boxable)
+-------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 Structs and unions marked with the ``objc_boxable`` attribute can be used
 with the Objective-C boxed expression syntax, ``@(...)``.
@@ -2315,12 +2745,21 @@ can only be placed on a declaration of a trivially-copyable struct or union:
   NSValue *boxed = @(ss);
 
 
+<<<<<<< HEAD
 objc_method_family
 ------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``objc_method_family``","``clang::objc_method_family``","``clang::objc_method_family``","","","","Yes"
+=======
+objc_method_family (clang::objc_method_family, clang::objc_method_family)
+-------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 Many methods in Objective-C have conventional meanings determined by their
 selectors. It is sometimes useful to be able to mark a method as having a
@@ -2345,12 +2784,21 @@ use the retaining behavior attributes (``ns_returns_retained``,
 Query for this feature with ``__has_attribute(objc_method_family)``.
 
 
+<<<<<<< HEAD
 objc_requires_super
 -------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``objc_requires_super``","``clang::objc_requires_super``","``clang::objc_requires_super``","","","","Yes"
+=======
+objc_requires_super (clang::objc_requires_super, clang::objc_requires_super)
+----------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 Some Objective-C classes allow a subclass to override a particular method in a
 parent class but expect that the overriding method also calls the overridden
@@ -2393,12 +2841,21 @@ implementation of an override in a subclass does not call super.  For example:
                       ^
 
 
+<<<<<<< HEAD
 objc_runtime_name
 -----------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``objc_runtime_name``","``clang::objc_runtime_name``","``clang::objc_runtime_name``","","","","Yes"
+=======
+objc_runtime_name (clang::objc_runtime_name, clang::objc_runtime_name)
+----------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 By default, the Objective-C interface or protocol identifier is used
 in the metadata name for that object. The `objc_runtime_name`
@@ -2416,22 +2873,40 @@ can only be placed before an @protocol or @interface declaration:
   @end
 
 
+<<<<<<< HEAD
 objc_runtime_visible
 --------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``objc_runtime_visible``","``clang::objc_runtime_visible``","``clang::objc_runtime_visible``","","","","Yes"
+=======
+objc_runtime_visible (clang::objc_runtime_visible, clang::objc_runtime_visible)
+-------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 This attribute specifies that the Objective-C class to which it applies is visible to the Objective-C runtime but not to the linker. Classes annotated with this attribute cannot be subclassed and cannot have categories defined for them.
 
 
+<<<<<<< HEAD
 optnone
 -------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``optnone``","``clang::optnone``","``clang::optnone``","","","","Yes"
+=======
+optnone (clang::optnone, clang::optnone)
+----------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``optnone`` attribute suppresses essentially all optimizations
 on a function or method, regardless of the optimization level applied to
@@ -2445,6 +2920,7 @@ This attribute is incompatible with the ``always_inline`` and ``minsize``
 attributes.
 
 
+<<<<<<< HEAD
 os_consumed
 -----------
 .. csv-table:: Supported Syntaxes
@@ -2859,6 +3335,14 @@ overloadable
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``overloadable``","``clang::overloadable``","``clang::overloadable``","","","","Yes"
+=======
+overloadable (clang::overloadable, clang::overloadable)
+-------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 Clang provides support for C++ function overloading in C.  Function overloading
 in C is introduced using the ``overloadable`` attribute.  For example, one
@@ -2974,6 +3458,7 @@ query for it using ``__has_extension(overloadable_unmarked)``.
 Query for this attribute with ``__has_attribute(overloadable)``.
 
 
+<<<<<<< HEAD
 reinitializes
 -------------
 .. csv-table:: Supported Syntaxes
@@ -3011,16 +3496,33 @@ release_capability, release_shared_capability
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``release_capability`` |br| ``release_shared_capability`` |br| ``release_generic_capability`` |br| ``unlock_function``","``clang::release_capability`` |br| ``clang::release_shared_capability`` |br| ``clang::release_generic_capability`` |br| ``clang::unlock_function``","","","","",""
+=======
+release_capability (release_shared_capability, clang::release_capability, clang::release_shared_capability)
+-----------------------------------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 Marks a function as releasing a capability.
 
 
+<<<<<<< HEAD
 short_call, near
 ----------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``short_call`` |br| ``near``","``gnu::short_call`` |br| ``gnu::near``","","","","","Yes"
+=======
+short_call (gnu::short_call, gnu::near)
+---------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the ``__attribute__((long_call))``, ``__attribute__((far))``,
 ``__attribute__((short__call))``, and ``__attribute__((near))`` attributes
@@ -3039,12 +3541,21 @@ These attributes take priority over command line switches such
 as ``-mlong-calls`` and ``-mno-long-calls``.
 
 
+<<<<<<< HEAD
 signal
 ------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``signal``","``gnu::signal``","","","","","Yes"
+=======
+signal (gnu::signal)
+--------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the GNU style ``__attribute__((signal))`` attribute on
 AVR targets. This attribute may be attached to a function definition and instructs
@@ -3054,6 +3565,7 @@ directly as an interrupt service routine.
 Interrupt handler functions defined with the signal attribute do not re-enable interrupts.
 
 
+<<<<<<< HEAD
 speculative_load_hardening
 --------------------------
 .. csv-table:: Supported Syntaxes
@@ -3087,6 +3599,14 @@ target
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``target``","``gnu::target``","","","","","Yes"
+=======
+target (gnu::target)
+--------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the GNU style ``__attribute__((target("OPTIONS")))`` attribute.
 This attribute may be attached to a function definition and instructs
@@ -3122,12 +3642,21 @@ implementation, otherwise usages of the function are considered invalid.
 Additionally, a function may not become multiversioned after its first use.
 
 
+<<<<<<< HEAD
 try_acquire_capability, try_acquire_shared_capability
 -----------------------------------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``try_acquire_capability`` |br| ``try_acquire_shared_capability``","``clang::try_acquire_capability`` |br| ``clang::try_acquire_shared_capability``","","","","",""
+=======
+try_acquire_capability (try_acquire_shared_capability, clang::try_acquire_capability, clang::try_acquire_shared_capability)
+---------------------------------------------------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 Marks a function that attempts to acquire a capability. This function may fail to
 actually acquire the capability; they accept a Boolean value determining
@@ -3135,12 +3664,21 @@ whether acquiring the capability means success (true), or failing to acquire
 the capability means success (false).
 
 
+<<<<<<< HEAD
 xray_always_instrument, xray_never_instrument, xray_log_args
 ------------------------------------------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``xray_always_instrument`` |br| ``xray_never_instrument``","``clang::xray_always_instrument`` |br| ``clang::xray_never_instrument``","``clang::xray_always_instrument`` |br| ``clang::xray_never_instrument``","","","","Yes"
+=======
+xray_always_instrument (clang::xray_always_instrument), xray_never_instrument (clang::xray_never_instrument), xray_log_args (clang::xray_log_args)
+--------------------------------------------------------------------------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 ``__attribute__((xray_always_instrument))`` or ``[[clang::xray_always_instrument]]`` is used to mark member functions (in C++), methods (in Objective C), and free functions (in C, C++, and Objective C) to be instrumented with XRay. This will cause the function to always have space at the beginning and exit points to allow for runtime patching.
 
@@ -3151,12 +3689,21 @@ If a function has neither of these attributes, they become subject to the XRay h
 ``__attribute__((xray_log_args(N)))`` or ``[[clang::xray_log_args(N)]]`` is used to preserve N function arguments for the logging function.  Currently, only N==1 is supported.
 
 
+<<<<<<< HEAD
 xray_always_instrument, xray_never_instrument, xray_log_args
 ------------------------------------------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``xray_log_args``","``clang::xray_log_args``","``clang::xray_log_args``","","","","Yes"
+=======
+xray_always_instrument (clang::xray_always_instrument), xray_never_instrument (clang::xray_never_instrument), xray_log_args (clang::xray_log_args)
+--------------------------------------------------------------------------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 ``__attribute__((xray_always_instrument))`` or ``[[clang::xray_always_instrument]]`` is used to mark member functions (in C++), methods (in Objective C), and free functions (in C, C++, and Objective C) to be instrumented with XRay. This will cause the function to always have space at the beginning and exit points to allow for runtime patching.
 
@@ -3171,6 +3718,7 @@ Variable Attributes
 ===================
 
 
+<<<<<<< HEAD
 always_destroy
 --------------
 .. csv-table:: Supported Syntaxes
@@ -3189,6 +3737,14 @@ dllexport
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``dllexport``","``gnu::dllexport``","","``dllexport``","","","Yes"
+=======
+dllexport (gnu::dllexport)
+--------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","X","", "", "X"
+>>>>>>> release/7.x
 
 The ``__declspec(dllexport)`` attribute declares a variable, function, or
 Objective-C interface to be exported from the module.  It is available under the
@@ -3200,12 +3756,21 @@ information.
 .. _dllexport: https://msdn.microsoft.com/en-us/library/3y1sfaz2.aspx
 
 
+<<<<<<< HEAD
 dllimport
 ---------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``dllimport``","``gnu::dllimport``","","``dllimport``","","","Yes"
+=======
+dllimport (gnu::dllimport)
+--------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","X","", "", "X"
+>>>>>>> release/7.x
 
 The ``__declspec(dllimport)`` attribute declares a variable, function, or
 Objective-C interface to be imported from an external module.  It is available
@@ -3220,9 +3785,15 @@ for more information.
 init_seg
 --------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","","``init_seg``",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","", "X", ""
+>>>>>>> release/7.x
 
 The attribute applied by ``pragma init_seg()`` controls the section into
 which global initialization function pointers are emitted.  It is only
@@ -3236,12 +3807,21 @@ documentation on MSDN for more information.
 .. _init_seg: http://msdn.microsoft.com/en-us/library/7977wcck(v=vs.110).aspx
 
 
+<<<<<<< HEAD
 maybe_unused, unused
 --------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``unused``","``maybe_unused`` |br| ``gnu::unused``","``maybe_unused``","","","",""
+=======
+maybe_unused, unused, gnu::unused
+---------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", ""
+>>>>>>> release/7.x
 
 When passing the ``-Wunused`` flag to Clang, entities that are unused by the
 program may be diagnosed. The ``[[maybe_unused]]`` (or
@@ -3264,6 +3844,7 @@ enumerator, a non-static data member, or a label.
   }
 
 
+<<<<<<< HEAD
 no_destroy
 ----------
 .. csv-table:: Supported Syntaxes
@@ -3283,18 +3864,35 @@ nodebug
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``nodebug``","``gnu::nodebug``","","","","","Yes"
+=======
+nodebug (gnu::nodebug)
+----------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The ``nodebug`` attribute allows you to suppress debugging information for a
 function or method, or for a variable that is not a parameter or a non-static
 data member.
 
 
+<<<<<<< HEAD
 noescape
 --------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``noescape``","``clang::noescape``","``clang::noescape``","","","","Yes"
+=======
+noescape (clang::noescape, clang::noescape)
+-------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 ``noescape`` placed on a function parameter of a pointer type is used to inform
 the compiler that the pointer cannot escape: that is, no reference to the object
@@ -3338,9 +3936,15 @@ applies to copies of the block. For example:
 nosvm
 -----
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``nosvm``","","","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","","","","", "", "X"
+>>>>>>> release/7.x
 
 OpenCL 2.0 supports the optional ``__attribute__((nosvm))`` qualifier for
 pointer variable. It informs the compiler that the pointer does not refer
@@ -3350,6 +3954,7 @@ Since it is not widely used and has been removed from OpenCL 2.1, it is ignored
 by Clang.
 
 
+<<<<<<< HEAD
 objc_externally_retained
 ------------------------
 .. csv-table:: Supported Syntaxes
@@ -3388,6 +3993,14 @@ pass_object_size
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``pass_object_size``","``clang::pass_object_size``","``clang::pass_object_size``","","","","Yes"
+=======
+pass_object_size (clang::pass_object_size, clang::pass_object_size)
+-------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 .. Note:: The mangling of functions with parameters that are annotated with
   ``pass_object_size`` is subject to change. You can get around this by
@@ -3482,12 +4095,21 @@ Currently, ``pass_object_size`` is a bit restricted in terms of its usage:
   applied to must be marked ``const`` at its function's definition.
 
 
+<<<<<<< HEAD
 require_constant_initialization
 -------------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``require_constant_initialization``","``clang::require_constant_initialization``","","","","","Yes"
+=======
+require_constant_initialization (clang::require_constant_initialization)
+------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 This attribute specifies that the variable to which it is attached is intended
 to have a `constant initializer <http://en.cppreference.com/w/cpp/language/constant_initialization>`_
@@ -3522,23 +4144,41 @@ of silently falling back on dynamic initialization.
   // copy initialization is not a constant expression on a non-literal type.
 
 
+<<<<<<< HEAD
 section, __declspec(allocate)
 -----------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``section``","``gnu::section``","","``allocate``","","","Yes"
+=======
+section (gnu::section, __declspec(allocate))
+--------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","X","", "", "X"
+>>>>>>> release/7.x
 
 The ``section`` attribute allows you to specify a specific section a
 global variable or function should be in after translation.
 
 
+<<<<<<< HEAD
 swift_context
 -------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``swift_context``","``clang::swift_context``","``clang::swift_context``","","","","Yes"
+=======
+swift_context (clang::swift_context, clang::swift_context)
+----------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``swift_context`` attribute marks a parameter of a ``swiftcall``
 function as having the special context-parameter ABI treatment.
@@ -3553,12 +4193,21 @@ the last parameter).
 A context parameter must have pointer or reference type.
 
 
+<<<<<<< HEAD
 swift_error_result
 ------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``swift_error_result``","``clang::swift_error_result``","``clang::swift_error_result``","","","","Yes"
+=======
+swift_error_result (clang::swift_error_result, clang::swift_error_result)
+-------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``swift_error_result`` attribute marks a parameter of a ``swiftcall``
 function as having the special error-result ABI treatment.
@@ -3591,12 +4240,21 @@ value stored in the apparent argument) will be null upon function entry,
 but this is not enforced by the ABI.
 
 
+<<<<<<< HEAD
 swift_indirect_result
 ---------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``swift_indirect_result``","``clang::swift_indirect_result``","``clang::swift_indirect_result``","","","","Yes"
+=======
+swift_indirect_result (clang::swift_indirect_result, clang::swift_indirect_result)
+----------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 The ``swift_indirect_result`` attribute marks a parameter of a ``swiftcall``
 function as having the special indirect-result ABI treatment.
@@ -3622,12 +4280,21 @@ directly construct objects into them without relying on language
 optimizations like C++'s named return value optimization (NRVO).
 
 
+<<<<<<< HEAD
 swiftcall
 ---------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``swiftcall``","``clang::swiftcall``","``clang::swiftcall``","","","",""
+=======
+swiftcall (clang::swiftcall, clang::swiftcall)
+----------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", ""
+>>>>>>> release/7.x
 
 The ``swiftcall`` attribute indicates that a function should be called
 using the Swift calling convention for a function or function pointer.
@@ -3692,9 +4359,15 @@ attributes.
 thread
 ------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","``thread``","","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","X","", "", ""
+>>>>>>> release/7.x
 
 The ``__declspec(thread)`` attribute declares a variable with thread local
 storage.  It is available under the ``-fms-extensions`` flag for MSVC
@@ -3709,12 +4382,21 @@ declared with static storage duration, such as globals, class static data
 members, and static locals.
 
 
+<<<<<<< HEAD
 tls_model
 ---------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``tls_model``","``gnu::tls_model``","","","","","Yes"
+=======
+tls_model (gnu::tls_model)
+--------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The ``tls_model`` attribute allows you to specify which thread-local storage
 model to use. It accepts the following strings:
@@ -3727,12 +4409,21 @@ model to use. It accepts the following strings:
 TLS models are mutually exclusive.
 
 
+<<<<<<< HEAD
 trivial_abi
 -----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``trivial_abi``","``clang::trivial_abi``","","","","","Yes"
+=======
+trivial_abi (clang::trivial_abi)
+--------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The ``trivial_abi`` attribute can be applied to a C++ class, struct, or union.
 It instructs the compiler to pass and return the type using the C ABI for the
@@ -3772,6 +4463,7 @@ Attribute ``trivial_abi`` has no effect in the following cases:
   - arrays of any of the above
 
 
+<<<<<<< HEAD
 uninitialized
 -------------
 .. csv-table:: Supported Syntaxes
@@ -3787,6 +4479,8 @@ semantic meaning in that using uninitialized values is undefined behavior,
 it rather documents the programmer's intent.
 
 
+=======
+>>>>>>> release/7.x
 Type Attributes
 ===============
 
@@ -3794,9 +4488,15 @@ Type Attributes
 __single_inhertiance, __multiple_inheritance, __virtual_inheritance
 -------------------------------------------------------------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","``__single_inheritance`` |br| ``__multiple_inheritance`` |br| ``__virtual_inheritance`` |br| ``__unspecified_inheritance``","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+>>>>>>> release/7.x
 
 This collection of keywords is enabled under ``-fms-extensions`` and controls
 the pointer-to-member representation used on ``*-*-win32`` targets.
@@ -3843,9 +4543,15 @@ an error:
 align_value
 -----------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``align_value``","","","","","","Yes"
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","","","","", "", "X"
+>>>>>>> release/7.x
 
 The align_value attribute can be added to the typedef of a pointer type or the
 declaration of a variable of pointer or reference type. It specifies that the
@@ -3866,9 +4572,15 @@ behavior of the program is undefined.
 empty_bases
 -----------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","``empty_bases``","","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","X","", "", ""
+>>>>>>> release/7.x
 
 The empty_bases attribute permits the compiler to utilize the
 empty-base-optimization more frequently.
@@ -3876,12 +4588,21 @@ This attribute only applies to struct, class, and union types.
 It is only supported when using the Microsoft C++ ABI.
 
 
+<<<<<<< HEAD
 enum_extensibility
 ------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``enum_extensibility``","``clang::enum_extensibility``","``clang::enum_extensibility``","","","","Yes"
+=======
+enum_extensibility (clang::enum_extensibility, clang::enum_extensibility)
+-------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 Attribute ``enum_extensibility`` is used to distinguish between enum definitions
 that are extensible and those that are not. The attribute can take either
@@ -3927,12 +4648,21 @@ standard and instructs clang to be more lenient when issuing warnings.
   }
 
 
+<<<<<<< HEAD
 flag_enum
 ---------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``flag_enum``","``clang::flag_enum``","``clang::flag_enum``","","","","Yes"
+=======
+flag_enum (clang::flag_enum, clang::flag_enum)
+----------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 This attribute can be added to an enumerator to signal to the compiler that it
 is intended to be used as a flag type. This will cause the compiler to assume
@@ -3943,9 +4673,15 @@ manipulating bits of the enumerator when issuing warnings.
 layout_version
 --------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","``layout_version``","","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","X","", "", ""
+>>>>>>> release/7.x
 
 The layout_version attribute requests that the compiler utilize the class
 layout rules of a particular compiler version.
@@ -3953,16 +4689,26 @@ This attribute only applies to struct, class, and union types.
 It is only supported when using the Microsoft C++ ABI.
 
 
+<<<<<<< HEAD
 lto_visibility_public
 ---------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``lto_visibility_public``","``clang::lto_visibility_public``","``clang::lto_visibility_public``","","","","Yes"
+=======
+lto_visibility_public (clang::lto_visibility_public, clang::lto_visibility_public)
+----------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 See :doc:`LTOVisibility`.
 
 
+<<<<<<< HEAD
 noderef
 -------
 .. csv-table:: Supported Syntaxes
@@ -4029,29 +4775,55 @@ novtable
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","``novtable``","","",""
+=======
+novtable
+--------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","X","", "", ""
+>>>>>>> release/7.x
 
 This attribute can be added to a class declaration or definition to signal to
 the compiler that constructors and destructors will not reference the virtual
 function table. It is only supported when using the Microsoft C++ ABI.
 
 
+<<<<<<< HEAD
 objc_subclassing_restricted
 ---------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``objc_subclassing_restricted``","``clang::objc_subclassing_restricted``","``clang::objc_subclassing_restricted``","","","","Yes"
+=======
+objc_subclassing_restricted (clang::objc_subclassing_restricted, clang::objc_subclassing_restricted)
+----------------------------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", "X"
+>>>>>>> release/7.x
 
 This attribute can be added to an Objective-C ``@interface`` declaration to
 ensure that this class cannot be subclassed.
 
 
+<<<<<<< HEAD
 selectany
 ---------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``selectany``","``gnu::selectany``","","``selectany``","","",""
+=======
+selectany (gnu::selectany)
+--------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","X","", "", ""
+>>>>>>> release/7.x
 
 This attribute appertains to a global symbol, causing it to have a weak
 definition (
@@ -4063,12 +4835,21 @@ For more information see
 or `msvc documentation <https://docs.microsoft.com/pl-pl/cpp/cpp/selectany>`_.
 
 
+<<<<<<< HEAD
 transparent_union
 -----------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``transparent_union``","``gnu::transparent_union``","","","","",""
+=======
+transparent_union (gnu::transparent_union)
+------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 This attribute can be applied to a union to change the behaviour of calls to
 functions that have an argument with a transparent union type. The compiler
@@ -4091,6 +4872,7 @@ Statement Attributes
 #pragma clang loop
 ------------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","","``clang loop`` |br| ``unroll`` |br| ``nounroll`` |br| ``unroll_and_jam`` |br| ``nounroll_and_jam``",""
@@ -4100,6 +4882,17 @@ specified for the subsequent loop. The directive allows pipelining to be
 disabled, or vectorization, interleaving, and unrolling to be enabled or disabled.
 Vector width, interleave count, unrolling count, and the initiation interval
 for pipelining can be explicitly specified. See `language extensions
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","", "X", ""
+
+The ``#pragma clang loop`` directive allows loop optimization hints to be
+specified for the subsequent loop. The directive allows vectorization,
+interleaving, and unrolling to be enabled or disabled. Vector width as well
+as interleave and unrolling count can be manually specified. See
+`language extensions
+>>>>>>> release/7.x
 <http://clang.llvm.org/docs/LanguageExtensions.html#extensions-for-loop-hint-optimizations>`_
 for details.
 
@@ -4107,9 +4900,15 @@ for details.
 #pragma unroll, #pragma nounroll
 --------------------------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","","``clang loop`` |br| ``unroll`` |br| ``nounroll`` |br| ``unroll_and_jam`` |br| ``nounroll_and_jam``",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","", "X", ""
+>>>>>>> release/7.x
 
 Loop unrolling optimization hints can be specified with ``#pragma unroll`` and
 ``#pragma nounroll``. The pragma is placed immediately before a for, while,
@@ -4161,12 +4960,53 @@ is equivalent to ``#pragma clang loop unroll(disable)``.  See
 for further details including limitations of the unroll hints.
 
 
+<<<<<<< HEAD
 __read_only, __write_only, __read_write (read_only, write_only, read_write)
 ---------------------------------------------------------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","``__read_only`` |br| ``read_only`` |br| ``__write_only`` |br| ``write_only`` |br| ``__read_write`` |br| ``read_write``","",""
+=======
+__attribute__((intel_reqd_sub_group_size))
+------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","","","","", "", "X"
+
+The optional attribute intel_reqd_sub_group_size can be used to indicate that
+the kernel must be compiled and executed with the specified subgroup size. When
+this attribute is present, get_max_sub_group_size() is guaranteed to return the
+specified integer value. This is important for the correctness of many subgroup
+algorithms, and in some cases may be used by the compiler to generate more optimal
+code. See `cl_intel_required_subgroup_size
+<https://www.khronos.org/registry/OpenCL/extensions/intel/cl_intel_required_subgroup_size.txt>`
+for details.
+
+
+__attribute__((opencl_unroll_hint))
+-----------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","","","","", "", ""
+
+The opencl_unroll_hint attribute qualifier can be used to specify that a loop
+(for, while and do loops) can be unrolled. This attribute qualifier can be
+used to specify full unrolling or partial unrolling by a specified amount.
+This is a compiler hint and the compiler may ignore this directive. See
+`OpenCL v2.0 <https://www.khronos.org/registry/cl/specs/opencl-2.0.pdf>`_
+s6.11.5 for details.
+
+
+__read_only, __write_only, __read_write (read_only, write_only, read_write)
+---------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+>>>>>>> release/7.x
 
 The access qualifiers must be used with image object arguments or pipe arguments
 to declare if they are being read or written by a kernel or function.
@@ -4190,12 +5030,21 @@ The read_write (or __read_write) qualifier can not be used with pipe.
 More details can be found in the OpenCL C language Spec v2.0, Section 6.6.
 
 
+<<<<<<< HEAD
 fallthrough
 -----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","``fallthrough`` |br| ``clang::fallthrough``","``fallthrough``","","","",""
+=======
+fallthrough, clang::fallthrough
+-------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","X","X","","", "", ""
+>>>>>>> release/7.x
 
 The ``fallthrough`` (or ``clang::fallthrough``) attribute is used
 to annotate intentional fall-through
@@ -4244,6 +5093,7 @@ Here is an example:
   }
 
 
+<<<<<<< HEAD
 intel_reqd_sub_group_size
 -------------------------
 .. csv-table:: Supported Syntaxes
@@ -4282,6 +5132,14 @@ suppress
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","``gsl::suppress``","","","","",""
+=======
+suppress (gsl::suppress)
+------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","X","","","", "", ""
+>>>>>>> release/7.x
 
 The ``[[gsl::suppress]]`` attribute suppresses specific
 clang-tidy diagnostics for rules of the `C++ Core Guidelines`_ in a portable
@@ -4309,12 +5167,21 @@ AMD GPU Attributes
 ==================
 
 
+<<<<<<< HEAD
 amdgpu_flat_work_group_size
 ---------------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``amdgpu_flat_work_group_size``","``clang::amdgpu_flat_work_group_size``","","","","","Yes"
+=======
+amdgpu_flat_work_group_size (clang::amdgpu_flat_work_group_size)
+----------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The flat work-group size is the number of work-items in the work-group size
 specified when the kernel is dispatched. It is the product of the sizes of the
@@ -4340,12 +5207,21 @@ An error will be given if:
     attributes.
 
 
+<<<<<<< HEAD
 amdgpu_num_sgpr
 ---------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``amdgpu_num_sgpr``","``clang::amdgpu_num_sgpr``","","","","","Yes"
+=======
+amdgpu_num_sgpr (clang::amdgpu_num_sgpr)
+----------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the ``__attribute__((amdgpu_num_sgpr(<num_sgpr>)))`` and
 ``__attribute__((amdgpu_num_vgpr(<num_vgpr>)))`` attributes for the AMDGPU
@@ -4371,12 +5247,21 @@ An error will be given if:
     request.
 
 
+<<<<<<< HEAD
 amdgpu_num_vgpr
 ---------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``amdgpu_num_vgpr``","``clang::amdgpu_num_vgpr``","","","","","Yes"
+=======
+amdgpu_num_vgpr (clang::amdgpu_num_vgpr)
+----------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Clang supports the ``__attribute__((amdgpu_num_sgpr(<num_sgpr>)))`` and
 ``__attribute__((amdgpu_num_vgpr(<num_vgpr>)))`` attributes for the AMDGPU
@@ -4402,12 +5287,21 @@ An error will be given if:
     request.
 
 
+<<<<<<< HEAD
 amdgpu_waves_per_eu
 -------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``amdgpu_waves_per_eu``","``clang::amdgpu_waves_per_eu``","","","","","Yes"
+=======
+amdgpu_waves_per_eu (clang::amdgpu_waves_per_eu)
+------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 A compute unit (CU) is responsible for executing the wavefronts of a work-group.
 It is composed of one or more execution units (EU), which are responsible for
@@ -4453,6 +5347,7 @@ An error will be given if:
     request.
 
 
+<<<<<<< HEAD
 OpenCL Address Spaces
 =====================
 The address space qualifier may be used to specify the region of memory that is
@@ -4547,6 +5442,8 @@ private address space. Kernel function arguments of a pointer or an array type
 cannot point to the private address space.
 
 
+=======
+>>>>>>> release/7.x
 Calling Conventions
 ===================
 Clang supports several different calling conventions, depending on the target
@@ -4554,6 +5451,7 @@ platform and architecture. The calling convention used for a function determines
 how parameters are passed, how results are returned to the caller, and other
 low-level details of calling a function.
 
+<<<<<<< HEAD
 aarch64_vector_pcs
 ------------------
 .. csv-table:: Supported Syntaxes
@@ -4588,6 +5486,14 @@ fastcall
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``fastcall``","``gnu::fastcall``","","","``__fastcall`` |br| ``_fastcall``","",""
+=======
+fastcall (gnu::fastcall, __fastcall, _fastcall)
+-----------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","X", "", ""
+>>>>>>> release/7.x
 
 On 32-bit x86 targets, this attribute changes the calling convention of a
 function to use ECX and EDX as register parameters and clear parameters off of
@@ -4600,36 +5506,63 @@ not require callee-cleanup.  See the documentation for `__fastcall`_ on MSDN.
 .. _`__fastcall`: http://msdn.microsoft.com/en-us/library/6xa169sk.aspx
 
 
+<<<<<<< HEAD
 ms_abi
 ------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``ms_abi``","``gnu::ms_abi``","","","","",""
+=======
+ms_abi (gnu::ms_abi)
+--------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 On non-Windows x86_64 targets, this attribute changes the calling convention of
 a function to match the default convention used on Windows x86_64. This
 attribute has no effect on Windows targets or non-x86_64 targets.
 
 
+<<<<<<< HEAD
 pcs
 ---
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``pcs``","``gnu::pcs``","","","","",""
+=======
+pcs (gnu::pcs)
+--------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 On ARM targets, this attribute can be used to select calling conventions
 similar to ``stdcall`` on x86. Valid parameter values are "aapcs" and
 "aapcs-vfp".
 
 
+<<<<<<< HEAD
 preserve_all
 ------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``preserve_all``","``clang::preserve_all``","``clang::preserve_all``","","","",""
+=======
+preserve_all (clang::preserve_all, clang::preserve_all)
+-------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", ""
+>>>>>>> release/7.x
 
 On X86-64 and AArch64 targets, this attribute changes the calling convention of
 a function. The ``preserve_all`` calling convention attempts to make the code
@@ -4654,12 +5587,21 @@ used by a future version of the Objective-C runtime and should be considered
 experimental at this time.
 
 
+<<<<<<< HEAD
 preserve_most
 -------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``preserve_most``","``clang::preserve_most``","``clang::preserve_most``","","","",""
+=======
+preserve_most (clang::preserve_most, clang::preserve_most)
+----------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", ""
+>>>>>>> release/7.x
 
 On X86-64 and AArch64 targets, this attribute changes the calling convention of
 a function. The ``preserve_most`` calling convention attempts to make the code
@@ -4696,12 +5638,21 @@ supports X86-64 and AArch64, but the intention is to support more architectures
 in the future.
 
 
+<<<<<<< HEAD
 regcall
 -------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``regcall``","``gnu::regcall``","","","``__regcall``","",""
+=======
+regcall (gnu::regcall, __regcall)
+---------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","X", "", ""
+>>>>>>> release/7.x
 
 On x86 targets, this attribute changes the calling convention to
 `__regcall`_ convention. This convention aims to pass as many arguments
@@ -4711,12 +5662,21 @@ return value whenever it is possible.
 .. _`__regcall`: https://software.intel.com/en-us/node/693069
 
 
+<<<<<<< HEAD
 regparm
 -------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``regparm``","``gnu::regparm``","","","","",""
+=======
+regparm (gnu::regparm)
+----------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 On 32-bit x86 targets, the regparm attribute causes the compiler to pass
 the first three integer parameters in EAX, EDX, and ECX instead of on the
@@ -4724,12 +5684,21 @@ stack. This attribute has no effect on variadic functions, and all parameters
 are passed via the stack as normal.
 
 
+<<<<<<< HEAD
 stdcall
 -------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``stdcall``","``gnu::stdcall``","","","``__stdcall`` |br| ``_stdcall``","",""
+=======
+stdcall (gnu::stdcall, __stdcall, _stdcall)
+-------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","X", "", ""
+>>>>>>> release/7.x
 
 On 32-bit x86 targets, this attribute changes the calling convention of a
 function to clear parameters off of the stack on return. This convention does
@@ -4740,12 +5709,21 @@ COM applications.  See the documentation for `__stdcall`_ on MSDN.
 .. _`__stdcall`: http://msdn.microsoft.com/en-us/library/zxk0tw93.aspx
 
 
+<<<<<<< HEAD
 thiscall
 --------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``thiscall``","``gnu::thiscall``","","","``__thiscall`` |br| ``_thiscall``","",""
+=======
+thiscall (gnu::thiscall, __thiscall, _thiscall)
+-----------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","X", "", ""
+>>>>>>> release/7.x
 
 On 32-bit x86 targets, this attribute changes the calling convention of a
 function to use ECX for the first parameter (typically the implicit ``this``
@@ -4757,12 +5735,21 @@ MSDN.
 .. _`__thiscall`: http://msdn.microsoft.com/en-us/library/ek8tkfbw.aspx
 
 
+<<<<<<< HEAD
 vectorcall
 ----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``vectorcall``","``clang::vectorcall``","``clang::vectorcall``","","``__vectorcall`` |br| ``_vectorcall``","",""
+=======
+vectorcall (clang::vectorcall, clang::vectorcall, __vectorcall, _vectorcall)
+----------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","X", "", ""
+>>>>>>> release/7.x
 
 On 32-bit x86 *and* x86_64 targets, this attribute changes the calling
 convention of a function to pass vector parameters in SSE registers.
@@ -4793,12 +5780,21 @@ properties, specifically for unique objects that have a single owning reference.
 The following attributes are currently supported, although **the implementation
 for these annotations is currently in development and are subject to change.**
 
+<<<<<<< HEAD
 callable_when
 -------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``callable_when``","``clang::callable_when``","","","","","Yes"
+=======
+callable_when (clang::callable_when)
+------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Use ``__attribute__((callable_when(...)))`` to indicate what states a method
 may be called in.  Valid states are unconsumed, consumed, or unknown.  Each
@@ -4807,12 +5803,21 @@ argument to this attribute must be a quoted string.  E.g.:
 ``__attribute__((callable_when("unconsumed", "unknown")))``
 
 
+<<<<<<< HEAD
 consumable
 ----------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``consumable``","``clang::consumable``","","","","","Yes"
+=======
+consumable (clang::consumable)
+------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Each ``class`` that uses any of the typestate annotations must first be marked
 using the ``consumable`` attribute.  Failure to do so will result in a warning.
@@ -4821,12 +5826,21 @@ This attribute accepts a single parameter that must be one of the following:
 ``unknown``, ``consumed``, or ``unconsumed``.
 
 
+<<<<<<< HEAD
 param_typestate
 ---------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``param_typestate``","``clang::param_typestate``","","","","","Yes"
+=======
+param_typestate (clang::param_typestate)
+----------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 This attribute specifies expectations about function parameters.  Calls to an
 function with annotated parameters will issue a warning if the corresponding
@@ -4834,12 +5848,21 @@ argument isn't in the expected state.  The attribute is also used to set the
 initial state of the parameter when analyzing the function's body.
 
 
+<<<<<<< HEAD
 return_typestate
 ----------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``return_typestate``","``clang::return_typestate``","","","","","Yes"
+=======
+return_typestate (clang::return_typestate)
+------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The ``return_typestate`` attribute can be applied to functions or parameters.
 When applied to a function the attribute specifies the state of the returned
@@ -4852,24 +5875,42 @@ a call to the function returns.  The function's body is checked to ensure that
 the parameter is in the expected state before returning.
 
 
+<<<<<<< HEAD
 set_typestate
 -------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``set_typestate``","``clang::set_typestate``","","","","","Yes"
+=======
+set_typestate (clang::set_typestate)
+------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Annotate methods that transition an object into a new state with
 ``__attribute__((set_typestate(new_state)))``.  The new state must be
 unconsumed, consumed, or unknown.
 
 
+<<<<<<< HEAD
 test_typestate
 --------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``test_typestate``","``clang::test_typestate``","","","","","Yes"
+=======
+test_typestate (clang::test_typestate)
+--------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 Use ``__attribute__((test_typestate(tested_state)))`` to indicate that a method
 returns true if the object is in the specified state..
@@ -4911,9 +5952,15 @@ example:
 argument_with_type_tag
 ----------------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``argument_with_type_tag`` |br| ``pointer_with_type_tag``","``clang::argument_with_type_tag`` |br| ``clang::pointer_with_type_tag``","``clang::argument_with_type_tag`` |br| ``clang::pointer_with_type_tag``","","","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", ""
+>>>>>>> release/7.x
 
 Use ``__attribute__((argument_with_type_tag(arg_kind, arg_idx,
 type_tag_idx)))`` on a function declaration to specify that the function
@@ -4948,9 +5995,15 @@ For example:
 pointer_with_type_tag
 ---------------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``argument_with_type_tag`` |br| ``pointer_with_type_tag``","``clang::argument_with_type_tag`` |br| ``clang::pointer_with_type_tag``","``clang::argument_with_type_tag`` |br| ``clang::pointer_with_type_tag``","","","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", ""
+>>>>>>> release/7.x
 
 Use ``__attribute__((pointer_with_type_tag(ptr_kind, ptr_idx, type_tag_idx)))``
 on a function declaration to specify that the function accepts a type tag that
@@ -4982,12 +6035,21 @@ For example:
   // determine the expected pointee type of the function's 1st argument.
 
 
+<<<<<<< HEAD
 type_tag_for_datatype
 ---------------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``type_tag_for_datatype``","``clang::type_tag_for_datatype``","``clang::type_tag_for_datatype``","","","",""
+=======
+type_tag_for_datatype (clang::type_tag_for_datatype, clang::type_tag_for_datatype)
+----------------------------------------------------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","X","","", "", ""
+>>>>>>> release/7.x
 
 When declaring a variable, use
 ``__attribute__((type_tag_for_datatype(kind, type)))`` to create a type tag that
@@ -5095,6 +6157,103 @@ values for this optional third argument:
                                                           // is not a null pointer
 
 
+<<<<<<< HEAD
+=======
+OpenCL Address Spaces
+=====================
+The address space qualifier may be used to specify the region of memory that is
+used to allocate the object. OpenCL supports the following address spaces:
+__generic(generic), __global(global), __local(local), __private(private),
+__constant(constant).
+
+  .. code-block:: c
+
+    __constant int c = ...;
+
+    __generic int* foo(global int* g) {
+      __local int* l;
+      private int p;
+      ...
+      return l;
+    }
+
+More details can be found in the OpenCL C language Spec v2.0, Section 6.5.
+
+constant (__constant)
+---------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+
+The constant address space attribute signals that an object is located in
+a constant (non-modifiable) memory region. It is available to all work items.
+Any type can be annotated with the constant address space attribute. Objects
+with the constant address space qualifier can be declared in any scope and must
+have an initializer.
+
+
+generic (__generic)
+-------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+
+The generic address space attribute is only available with OpenCL v2.0 and later.
+It can be used with pointer types. Variables in global and local scope and
+function parameters in non-kernel functions can have the generic address space
+type attribute. It is intended to be a placeholder for any other address space
+except for '__constant' in OpenCL code which can be used with multiple address
+spaces.
+
+
+global (__global)
+-----------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+
+The global address space attribute specifies that an object is allocated in
+global memory, which is accessible by all work items. The content stored in this
+memory area persists between kernel executions. Pointer types to the global
+address space are allowed as function parameters or local variables. Starting
+with OpenCL v2.0, the global address space can be used with global (program
+scope) variables and static local variable as well.
+
+
+local (__local)
+---------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+
+The local address space specifies that an object is allocated in the local (work
+group) memory area, which is accessible to all work items in the same work
+group. The content stored in this memory region is not accessible after
+the kernel execution ends. In a kernel function scope, any variable can be in
+the local address space. In other scopes, only pointer types to the local address
+space are allowed. Local address space variables cannot have an initializer.
+
+
+private (__private)
+-------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+
+The private address space specifies that an object is allocated in the private
+(work item) memory. Other work items cannot access the same memory area and its
+content is destroyed after work item execution ends. Local variables can be
+declared in the private address space. Function arguments are always in the
+private address space. Kernel function arguments of a pointer or an array type
+cannot point to the private address space.
+
+
+>>>>>>> release/7.x
 Nullability Attributes
 ======================
 Whether a particular pointer may be "null" is an important concern when working with pointers in the C family of languages. The various nullability attributes indicate whether a particular pointer can be null or not, which makes APIs more expressive and can help static analysis tools identify bugs involving null pointers. Clang supports several kinds of nullability attributes: the ``nonnull`` and ``returns_nonnull`` attributes indicate which function or method parameters and result types can never be null, while nullability type qualifiers indicate which pointer types can be null (``_Nullable``) or cannot be null (``_Nonnull``).
@@ -5127,9 +6286,15 @@ In Objective-C, there is an alternate spelling for the nullability qualifiers th
 _Nonnull
 --------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","``_Nonnull``","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+>>>>>>> release/7.x
 
 The ``_Nonnull`` nullability qualifier indicates that null is not a meaningful value for a value of the ``_Nonnull`` pointer type. For example, given a declaration such as:
 
@@ -5143,9 +6308,15 @@ a caller of ``fetch`` should not provide a null value, and the compiler will pro
 _Null_unspecified
 -----------------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","``_Null_unspecified``","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+>>>>>>> release/7.x
 
 The ``_Null_unspecified`` nullability qualifier indicates that neither the ``_Nonnull`` nor ``_Nullable`` qualifiers make sense for a particular pointer type. It is used primarily to indicate that the role of null with specific pointers in a nullability-annotated header is unclear, e.g., due to overly-complex implementations or historical factors with a long-lived API.
 
@@ -5153,9 +6324,15 @@ The ``_Null_unspecified`` nullability qualifier indicates that neither the ``_No
 _Nullable
 ---------
 .. csv-table:: Supported Syntaxes
+<<<<<<< HEAD
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "","","","","``_Nullable``","",""
+=======
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "","","","","X", "", ""
+>>>>>>> release/7.x
 
 The ``_Nullable`` nullability qualifier indicates that a value of the ``_Nullable`` pointer type can be null. For example, given:
 
@@ -5166,12 +6343,21 @@ The ``_Nullable`` nullability qualifier indicates that a value of the ``_Nullabl
 a caller of ``fetch_or_zero`` can provide null.
 
 
+<<<<<<< HEAD
 nonnull
 -------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``nonnull``","``gnu::nonnull``","","","","",""
+=======
+nonnull (gnu::nonnull)
+----------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", ""
+>>>>>>> release/7.x
 
 The ``nonnull`` attribute indicates that some function parameters must not be null, and can be used in several different ways. It's original usage (`from GCC <https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#Common-Function-Attributes>`_) is as a function (or Objective-C method) attribute that specifies which parameters of the function are nonnull in a comma-separated list. For example:
 
@@ -5198,12 +6384,21 @@ Clang also allows the ``nonnull`` attribute to be placed directly on a function 
 Note that the ``nonnull`` attribute indicates that passing null to a non-null parameter is undefined behavior, which the optimizer may take advantage of to, e.g., remove null checks. The ``_Nonnull`` type qualifier indicates that a pointer cannot be null in a more general manner (because it is part of the type system) and does not imply undefined behavior, making it more widely applicable.
 
 
+<<<<<<< HEAD
 returns_nonnull
 ---------------
 .. csv-table:: Supported Syntaxes
    :header: "GNU", "C++11", "C2x", "``__declspec``", "Keyword", "``#pragma``", "``#pragma clang attribute``"
 
    "``returns_nonnull``","``gnu::returns_nonnull``","","","","","Yes"
+=======
+returns_nonnull (gnu::returns_nonnull)
+--------------------------------------
+.. csv-table:: Supported Syntaxes
+   :header: "GNU", "C++11", "C2x", "__declspec", "Keyword", "Pragma", "Pragma clang attribute"
+
+   "X","X","","","", "", "X"
+>>>>>>> release/7.x
 
 The ``returns_nonnull`` attribute indicates that a particular function (or Objective-C method) always returns a non-null pointer. For example, a particular system ``malloc`` might be defined to terminate a process when memory is not available rather than returning a null pointer:
 

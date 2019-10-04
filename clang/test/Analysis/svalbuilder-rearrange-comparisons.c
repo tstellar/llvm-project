@@ -991,8 +991,12 @@ unsigned fu() {
 
 void unsigned_concrete_int_no_crash() {
   unsigned x = fu() + 1U, y = fu() + 1U;
+<<<<<<< HEAD
   clang_analyzer_denote(x - 1U, "$x");
   clang_analyzer_denote(y - 1U, "$y");
   clang_analyzer_express(y); // expected-warning {{$y}}
   clang_analyzer_express(x == y); // expected-warning {{$x + 1U == $y + 1U}}
+=======
+  clang_analyzer_dump(x == y); // expected-warning {{((conj_$2{unsigned int}) + 1U) == ((conj_$7{unsigned int}) + 1U)}}
+>>>>>>> release/7.x
 }

@@ -107,6 +107,7 @@ void  operator delete[](void* ptr, void*) noexcept;
 #define _LIBCPP_HAS_NO_LANGUAGE_SIZED_DEALLOCATION
 #endif
 
+<<<<<<< HEAD
 #if !defined(_LIBCPP_BUILDING_LIBRARY) && _LIBCPP_STD_VER < 14 && \
     defined(_LIBCPP_HAS_NO_LANGUAGE_SIZED_DEALLOCATION)
 # define _LIBCPP_HAS_NO_LIBRARY_SIZED_DEALLOCATION
@@ -117,6 +118,8 @@ void  operator delete[](void* ptr, void*) noexcept;
 # define _LIBCPP_HAS_NO_SIZED_DEALLOCATION
 #endif
 
+=======
+>>>>>>> release/7.x
 #if !__has_builtin(__builtin_operator_new) || \
    __has_builtin(__builtin_operator_new) < 201802L
 #define _LIBCPP_HAS_NO_BUILTIN_OVERLOADED_OPERATOR_NEW_DELETE

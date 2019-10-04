@@ -685,6 +685,14 @@ class Configuration(object):
         # Transform each macro name into the feature name used in the tests.
         # Ex. _LIBCPP_HAS_NO_THREADS -> libcpp-has-no-threads
         for m in feature_macros:
+<<<<<<< HEAD
+=======
+            if modules_enabled:
+                define = '-D%s' % m
+                if feature_macros[m]:
+                    define += '=%s' % (feature_macros[m])
+                self.cxx.compile_flags += [define]
+>>>>>>> release/7.x
             if m == '_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS' or \
                m == '_LIBCPP_HIDE_FROM_ABI_PER_TU_BY_DEFAULT':
                 continue

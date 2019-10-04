@@ -66,6 +66,10 @@ public:
 
   void setStartLoc(SourceLocation Loc) { LocStart = Loc; }
 
+<<<<<<< HEAD
+=======
+  SourceLocation getStartLoc() const LLVM_READONLY { return getBeginLoc(); }
+>>>>>>> release/7.x
   SourceLocation getBeginLoc() const {
     assert(LocStart && "Region has no start location");
     return *LocStart;

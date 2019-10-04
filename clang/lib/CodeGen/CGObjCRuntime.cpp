@@ -21,6 +21,10 @@
 #include "clang/AST/RecordLayout.h"
 #include "clang/AST/StmtObjC.h"
 #include "clang/CodeGen/CGFunctionInfo.h"
+<<<<<<< HEAD
+=======
+#include "llvm/IR/CallSite.h"
+>>>>>>> release/7.x
 #include "llvm/Support/SaveAndRestore.h"
 
 using namespace clang;
@@ -202,7 +206,11 @@ void CGObjCRuntime::EmitTryCatchStmt(CodeGenFunction &CGF,
         // Emit the original filter expression, convert to i32, and return.
         HelperCGF.EmitStmt(FinallyBlock);
 
+<<<<<<< HEAD
         HelperCGF.FinishFunction(FinallyBlock->getEndLoc());
+=======
+        HelperCGF.FinishFunction(FinallyBlock->getLocEnd());
+>>>>>>> release/7.x
 
         llvm::Function *FinallyFunc = HelperCGF.CurFn;
 

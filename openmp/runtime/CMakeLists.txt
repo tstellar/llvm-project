@@ -291,7 +291,11 @@ endif()
 # OMPT-support defaults to ON for OpenMP 5.0+ and if the requirements in
 # cmake/config-ix.cmake are fulfilled.
 set(OMPT_DEFAULT FALSE)
+<<<<<<< HEAD
 if ((LIBOMP_HAVE_OMPT_SUPPORT) AND (NOT WIN32))
+=======
+if ((${LIBOMP_OMP_VERSION} GREATER 49) AND (LIBOMP_HAVE_OMPT_SUPPORT) AND (NOT WIN32))
+>>>>>>> release/7.x
   set(OMPT_DEFAULT TRUE)
 endif()
 set(LIBOMP_OMPT_SUPPORT ${OMPT_DEFAULT} CACHE BOOL

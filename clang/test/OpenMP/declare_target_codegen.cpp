@@ -168,6 +168,7 @@ int baz5() {
   return a;
 }
 
+<<<<<<< HEAD
 template <typename T>
 struct Base {
   virtual ~Base() {}
@@ -253,4 +254,9 @@ void device_fun() {}
 // DEV5-NOT: define {{.*}}void {{.*}}host_fun{{.*}}
 #endif // OMP5
 
+=======
+// CHECK-DAG: declare extern_weak signext i32 @__create()
+
+// CHECK-NOT: define {{.*}}{{baz1|baz4|maini1}}
+>>>>>>> release/7.x
 #endif // HEADER

@@ -910,6 +910,7 @@ class CGObjCGNUstep2 : public CGObjCGNUstep {
     ConstantStringSection
   };
   static const char *const SectionsBaseNames[8];
+<<<<<<< HEAD
   static const char *const PECOFFSectionsBaseNames[8];
   template<SectionKind K>
   std::string sectionName() {
@@ -919,6 +920,14 @@ class CGObjCGNUstep2 : public CGObjCGNUstep {
       return name;
     }
     return SectionsBaseNames[K];
+=======
+  template<SectionKind K>
+  std::string sectionName() {
+    std::string name(SectionsBaseNames[K]);
+    if (CGM.getTriple().isOSBinFormatCOFF())
+      name += "$m";
+    return name;
+>>>>>>> release/7.x
   }
   /// The GCC ABI superclass message lookup function.  Takes a pointer to a
   /// structure describing the receiver and the class, and a selector as
@@ -1318,7 +1327,11 @@ class CGObjCGNUstep2 : public CGObjCGNUstep {
           llvm::ConstantExpr::getBitCast(Protocol, ProtocolPtrTy), RefName);
       GV->setComdat(TheModule.getOrInsertComdat(RefName));
       GV->setSection(sectionName<ProtocolReferenceSection>());
+<<<<<<< HEAD
       GV->setAlignment(CGM.getPointerAlign().getAsAlign());
+=======
+      GV->setAlignment(CGM.getPointerAlign().getQuantity());
+>>>>>>> release/7.x
       Ref = GV;
     }
     EmittedProtocolRef = true;
@@ -1497,7 +1510,11 @@ class CGObjCGNUstep2 : public CGObjCGNUstep {
         Sym->setSection((Section + SecSuffix).str());
         Sym->setComdat(TheModule.getOrInsertComdat((Prefix +
             Section).str()));
+<<<<<<< HEAD
         Sym->setAlignment(CGM.getPointerAlign().getAsAlign());
+=======
+        Sym->setAlignment(1);
+>>>>>>> release/7.x
         return Sym;
       };
       return { Sym("__start_", "$a"), Sym("__stop", "$z") };
@@ -1532,12 +1549,20 @@ class CGObjCGNUstep2 : public CGObjCGNUstep {
     ConstantInitBuilder builder(CGM);
     auto InitStructBuilder = builder.beginStruct();
     InitStructBuilder.addInt(Int64Ty, 0);
+<<<<<<< HEAD
     auto &sectionVec = CGM.getTriple().isOSBinFormatCOFF() ? PECOFFSectionsBaseNames : SectionsBaseNames;
     for (auto *s : sectionVec) {
       auto bounds = GetSectionBounds(s);
       InitStructBuilder.add(bounds.first);
       InitStructBuilder.add(bounds.second);
     }
+=======
+    for (auto *s : SectionsBaseNames) {
+      auto bounds = GetSectionBounds(s);
+      InitStructBuilder.add(bounds.first);
+      InitStructBuilder.add(bounds.second);
+    };
+>>>>>>> release/7.x
     auto *InitStruct = InitStructBuilder.finishAndCreateGlobal(".objc_init",
         CGM.getPointerAlign(), false, llvm::GlobalValue::LinkOnceODRLinkage);
     InitStruct->setVisibility(llvm::GlobalValue::HiddenVisibility);
@@ -1564,12 +1589,16 @@ class CGObjCGNUstep2 : public CGObjCGNUstep {
     if (CGM.getTriple().isOSBinFormatCOFF())
         InitVar->setSection(".CRT$XCLz");
     else
+<<<<<<< HEAD
     {
       if (CGM.getCodeGenOpts().UseInitArray)
         InitVar->setSection(".init_array");
       else
         InitVar->setSection(".ctors");
     }
+=======
+      InitVar->setSection(".ctors");
+>>>>>>> release/7.x
     InitVar->setVisibility(llvm::GlobalValue::HiddenVisibility);
     InitVar->setComdat(TheModule.getOrInsertComdat(".objc_ctor"));
     CGM.addUsedGlobal(InitVar);
@@ -1608,7 +1637,11 @@ class CGObjCGNUstep2 : public CGObjCGNUstep {
             sectionName<CategorySection>());
       if (!EmittedClass) {
         createNullGlobal(".objc_null_cls_init_ref", NULLPtr,
+<<<<<<< HEAD
             sectionName<ClassSection>());
+=======
+            sectionName<ClassReferenceSection>());
+>>>>>>> release/7.x
         createNullGlobal(".objc_null_class_ref", { NULLPtr, NULLPtr },
             sectionName<ClassReferenceSection>());
       }
@@ -1632,6 +1665,7 @@ class CGObjCGNUstep2 : public CGObjCGNUstep {
     ConstantStrings.clear();
     Categories.clear();
     Classes.clear();
+<<<<<<< HEAD
 
     if (EarlyInitList.size() > 0) {
       auto *Init = llvm::Function::Create(llvm::FunctionType::get(CGM.VoidTy,
@@ -1655,6 +1689,8 @@ class CGObjCGNUstep2 : public CGObjCGNUstep {
       InitVar->setSection(".CRT$XCLb");
       CGM.addUsedGlobal(InitVar);
     }
+=======
+>>>>>>> release/7.x
     return nullptr;
   }
   /// In the v2 ABI, ivar offset variables use the type encoding in their name
@@ -1971,7 +2007,11 @@ class CGObjCGNUstep2 : public CGObjCGNUstep {
 
     auto classInitRef = new llvm::GlobalVariable(TheModule,
         classStruct->getType(), false, llvm::GlobalValue::ExternalLinkage,
+<<<<<<< HEAD
         classStruct, ManglePublicSymbol("OBJC_INIT_CLASS_") + className);
+=======
+        classStruct, "._OBJC_INIT_CLASS_" + className);
+>>>>>>> release/7.x
     classInitRef->setSection(sectionName<ClassSection>());
     CGM.addUsedGlobal(classInitRef);
 
@@ -2008,6 +2048,7 @@ const char *const CGObjCGNUstep2::SectionsBaseNames[8] =
 "__objc_constant_string"
 };
 
+<<<<<<< HEAD
 const char *const CGObjCGNUstep2::PECOFFSectionsBaseNames[8] =
 {
 ".objcrt$SEL",
@@ -2020,6 +2061,8 @@ const char *const CGObjCGNUstep2::PECOFFSectionsBaseNames[8] =
 ".objcrt$STR"
 };
 
+=======
+>>>>>>> release/7.x
 /// Support for the ObjFW runtime.
 class CGObjCObjFW: public CGObjCGNU {
 protected:
@@ -3951,6 +3994,7 @@ void CGObjCGNU::EmitThrowStmt(CodeGenFunction &CGF,
     // that was passed into the `@catch` block, then this code path is not
     // reached and we will instead call `objc_exception_throw` with an explicit
     // argument.
+<<<<<<< HEAD
     llvm::CallBase *Throw = CGF.EmitRuntimeCallOrInvoke(ExceptionReThrowFn);
     Throw->setDoesNotReturn();
   }
@@ -3959,6 +4003,15 @@ void CGObjCGNU::EmitThrowStmt(CodeGenFunction &CGF,
     llvm::CallBase *Throw =
         CGF.EmitRuntimeCallOrInvoke(ExceptionThrowFn, ExceptionAsObject);
     Throw->setDoesNotReturn();
+=======
+    CGF.EmitRuntimeCallOrInvoke(ExceptionReThrowFn).setDoesNotReturn();
+  }
+  else {
+    ExceptionAsObject = CGF.Builder.CreateBitCast(ExceptionAsObject, IdTy);
+    llvm::CallSite Throw =
+        CGF.EmitRuntimeCallOrInvoke(ExceptionThrowFn, ExceptionAsObject);
+    Throw.setDoesNotReturn();
+>>>>>>> release/7.x
   }
   CGF.Builder.CreateUnreachable();
   if (ClearInsertionPoint)

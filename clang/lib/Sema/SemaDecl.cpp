@@ -9611,6 +9611,16 @@ bool Sema::shouldLinkDependentDeclWithPrevious(Decl *D, Decl *PrevDecl) {
   // the way of access checks.
   if (D->getFriendObjectKind() && D->getDeclContext()->isFileContext())
     return false;
+<<<<<<< HEAD
+=======
+
+  auto *VD = dyn_cast<ValueDecl>(D);
+  auto *PrevVD = dyn_cast<ValueDecl>(PrevDecl);
+  return !VD || !PrevVD ||
+         canFullyTypeCheckRedeclaration(VD, PrevVD, VD->getType(),
+                                        PrevVD->getType());
+}
+>>>>>>> release/7.x
 
   auto *VD = dyn_cast<ValueDecl>(D);
   auto *PrevVD = dyn_cast<ValueDecl>(PrevDecl);

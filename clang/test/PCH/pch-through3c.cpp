@@ -2,7 +2,10 @@
 // RUN:   -include Inputs/pch-through3c.h \
 // RUN:   -pch-through-header=Inputs/pch-through3c.h -o %t.3c %s
 
+<<<<<<< HEAD
 // Checks that no warnings appear for this successful use.
+=======
+>>>>>>> release/7.x
 // RUN: %clang_cc1 -verify -I %S -include-pch %t.3c \
 // RUN:   -include Inputs/pch-through3c.h \
 // RUN:   -pch-through-header=Inputs/pch-through3c.h \

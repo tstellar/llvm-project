@@ -533,6 +533,7 @@ __nop(void) {
   __asm__ volatile ("nop");
 }
 #endif
+<<<<<<< HEAD
 
 /*----------------------------------------------------------------------------*\
 |* MS AArch64 specific
@@ -547,6 +548,8 @@ unsigned short __cdecl _byteswap_ushort(unsigned short val);
 unsigned long __cdecl _byteswap_ulong (unsigned long val);
 unsigned __int64 __cdecl _byteswap_uint64(unsigned __int64 val);
 #endif
+=======
+>>>>>>> release/7.x
 
 /*----------------------------------------------------------------------------*\
 |* Privileged intrinsics

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // RUN: %clang_cc1 %s -triple x86_64-linux-gnu -std=c++2a -fsyntax-only -verify -pedantic -Wno-vla-extension
 // RUN: %clang_cc1 %s -triple x86_64-linux-gnu -std=gnu++2a -fsyntax-only -verify -pedantic -Wno-vla-extension -DGNUMODE
 // RUN: %clang_cc1 %s -triple x86_64-linux-gnu -std=c++2a -fsyntax-only -verify -pedantic -Wno-vla-extension -fno-signed-char
@@ -8,6 +9,13 @@
 // RUN: %clang_cc1 %s -triple armebv7-unknown-linux -std=c++2a -fsyntax-only -verify -pedantic -Wno-vla-extension -fno-wchar -DNO_PREDEFINED_WCHAR_T
 
 # 9 "/usr/include/string.h" 1 3 4
+=======
+// RUN: %clang_cc1 %s -std=c++1z -fsyntax-only -verify -pedantic
+// RUN: %clang_cc1 %s -std=c++1z -fsyntax-only -verify -pedantic -fno-signed-char
+// RUN: %clang_cc1 %s -std=c++1z -fsyntax-only -verify -pedantic -fno-wchar -Dwchar_t=__WCHAR_TYPE__
+
+# 6 "/usr/include/string.h" 1 3 4
+>>>>>>> release/7.x
 extern "C" {
   typedef decltype(sizeof(int)) size_t;
 
@@ -23,13 +31,16 @@ extern "C" {
 
   extern char *strchr(const char *s, int c);
   extern void *memchr(const void *s, int c, size_t n);
-
-  extern void *memcpy(void *d, const void *s, size_t n);
-  extern void *memmove(void *d, const void *s, size_t n);
 }
+<<<<<<< HEAD
 # 25 "SemaCXX/constexpr-string.cpp" 2
 
 # 27 "/usr/include/wchar.h" 1 3 4
+=======
+# 19 "SemaCXX/constexpr-string.cpp" 2
+
+# 21 "/usr/include/wchar.h" 1 3 4
+>>>>>>> release/7.x
 extern "C" {
 #if NO_PREDEFINED_WCHAR_T
   typedef decltype(L'0') wchar_t;
@@ -42,12 +53,13 @@ extern "C" {
 
   extern wchar_t *wcschr(const wchar_t *s, wchar_t c);
   extern wchar_t *wmemchr(const wchar_t *s, wchar_t c, size_t n);
-
-  extern wchar_t *wmemcpy(wchar_t *d, const wchar_t *s, size_t n);
-  extern wchar_t *wmemmove(wchar_t *d, const wchar_t *s, size_t n);
 }
 
+<<<<<<< HEAD
 # 45 "SemaCXX/constexpr-string.cpp" 2
+=======
+# 33 "SemaCXX/constexpr-string.cpp" 2
+>>>>>>> release/7.x
 namespace Strlen {
   constexpr int n = __builtin_strlen("hello"); // ok
   static_assert(n == 5);
@@ -464,6 +476,7 @@ namespace WcschrEtc {
   constexpr bool a = !wcschr(L"hello", L'h'); // expected-error {{constant expression}} expected-note {{non-constexpr function 'wcschr' cannot be used in a constant expression}}
   constexpr bool b = !wmemchr(L"hello", L'h', 3); // expected-error {{constant expression}} expected-note {{non-constexpr function 'wmemchr' cannot be used in a constant expression}}
 }
+<<<<<<< HEAD
 
 namespace MemcpyEtc {
   template<typename T>
@@ -648,3 +661,5 @@ namespace MemcpyEtc {
   }
   static_assert(test_address_of_incomplete_struct_type()); // expected-error {{constant}} expected-note {{in call}}
 }
+=======
+>>>>>>> release/7.x

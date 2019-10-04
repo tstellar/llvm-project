@@ -89,7 +89,11 @@ QualType CXXUuidofExpr::getTypeOperand(ASTContext &Context) const {
 
 // CXXScalarValueInitExpr
 SourceLocation CXXScalarValueInitExpr::getBeginLoc() const {
+<<<<<<< HEAD
   return TypeInfo ? TypeInfo->getTypeLoc().getBeginLoc() : getRParenLoc();
+=======
+  return TypeInfo ? TypeInfo->getTypeLoc().getBeginLoc() : RParenLoc;
+>>>>>>> release/7.x
 }
 
 // CXXNewExpr
@@ -842,6 +846,7 @@ CXXFunctionalCastExpr::CreateEmpty(const ASTContext &C, unsigned PathSize) {
 }
 
 SourceLocation CXXFunctionalCastExpr::getBeginLoc() const {
+<<<<<<< HEAD
   return getTypeInfoAsWritten()->getTypeLoc().getBeginLoc();
 }
 
@@ -883,6 +888,13 @@ UserDefinedLiteral *UserDefinedLiteral::CreateEmpty(const ASTContext &Ctx,
   void *Mem = Ctx.Allocate(sizeof(UserDefinedLiteral) + SizeOfTrailingObjects,
                            alignof(UserDefinedLiteral));
   return new (Mem) UserDefinedLiteral(NumArgs, Empty);
+=======
+  return getTypeInfoAsWritten()->getTypeLoc().getLocStart();
+}
+
+SourceLocation CXXFunctionalCastExpr::getEndLoc() const {
+  return RParenLoc.isValid() ? RParenLoc : getSubExpr()->getLocEnd();
+>>>>>>> release/7.x
 }
 
 UserDefinedLiteral::LiteralOperatorKind
@@ -947,6 +959,7 @@ CXXBindTemporaryExpr *CXXBindTemporaryExpr::Create(const ASTContext &C,
   return new (C) CXXBindTemporaryExpr(Temp, SubExpr);
 }
 
+<<<<<<< HEAD
 CXXTemporaryObjectExpr::CXXTemporaryObjectExpr(
     CXXConstructorDecl *Cons, QualType Ty, TypeSourceInfo *TSI,
     ArrayRef<Expr *> Args, SourceRange ParenOrBraceRange,
@@ -988,6 +1001,27 @@ CXXTemporaryObjectExpr::CreateEmpty(const ASTContext &Ctx, unsigned NumArgs) {
 
 SourceLocation CXXTemporaryObjectExpr::getBeginLoc() const {
   return getTypeSourceInfo()->getTypeLoc().getBeginLoc();
+=======
+CXXTemporaryObjectExpr::CXXTemporaryObjectExpr(const ASTContext &C,
+                                               CXXConstructorDecl *Cons,
+                                               QualType Type,
+                                               TypeSourceInfo *TSI,
+                                               ArrayRef<Expr*> Args,
+                                               SourceRange ParenOrBraceRange,
+                                               bool HadMultipleCandidates,
+                                               bool ListInitialization,
+                                               bool StdInitListInitialization,
+                                               bool ZeroInitialization)
+    : CXXConstructExpr(C, CXXTemporaryObjectExprClass, Type,
+                       TSI->getTypeLoc().getBeginLoc(), Cons, false, Args,
+                       HadMultipleCandidates, ListInitialization,
+                       StdInitListInitialization,  ZeroInitialization,
+                       CXXConstructExpr::CK_Complete, ParenOrBraceRange),
+      Type(TSI) {}
+
+SourceLocation CXXTemporaryObjectExpr::getBeginLoc() const {
+  return Type->getTypeLoc().getBeginLoc();
+>>>>>>> release/7.x
 }
 
 SourceLocation CXXTemporaryObjectExpr::getEndLoc() const {
@@ -1320,7 +1354,11 @@ CXXUnresolvedConstructExpr::CreateEmpty(const ASTContext &Context,
 }
 
 SourceLocation CXXUnresolvedConstructExpr::getBeginLoc() const {
+<<<<<<< HEAD
   return TSI->getTypeLoc().getBeginLoc();
+=======
+  return Type->getTypeLoc().getBeginLoc();
+>>>>>>> release/7.x
 }
 
 CXXDependentScopeMemberExpr::CXXDependentScopeMemberExpr(

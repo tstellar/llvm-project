@@ -1213,12 +1213,15 @@ OPTIONS:
    By default, the exit status of scan-build is the same as the executed build
    command. Specifying this option causes the exit status of scan-build to be 1
    if it found potential bugs and the exit status of the build itself otherwise.
+<<<<<<< HEAD
 
  --exclude <path>
 
    Do not run static analyzer against files found in this
    directory (You can specify this option multiple times).
    Could be useful when project contains 3rd party libraries.
+=======
+>>>>>>> release/7.x
 
  --use-cc [compiler path]
  --use-cc=[compiler path]

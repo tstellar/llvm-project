@@ -77,7 +77,11 @@ ASTContext &StmtSequence::getASTContext() const {
 }
 
 SourceLocation StmtSequence::getBeginLoc() const {
+<<<<<<< HEAD
   return front()->getBeginLoc();
+=======
+  return front()->getLocStart();
+>>>>>>> release/7.x
 }
 
 SourceLocation StmtSequence::getEndLoc() const { return back()->getEndLoc(); }

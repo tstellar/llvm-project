@@ -215,6 +215,7 @@ const OMPClauseWithPostUpdate *OMPClauseWithPostUpdate::get(const OMPClause *C) 
   return nullptr;
 }
 
+<<<<<<< HEAD
 /// Gets the address of the original, non-captured, expression used in the
 /// clause as the preinitializer.
 static Stmt **getAddrOfExprAsWritten(Stmt *S) {
@@ -234,6 +235,8 @@ OMPClause::child_range OMPIfClause::used_children() {
   return child_range(&Condition, &Condition + 1);
 }
 
+=======
+>>>>>>> release/7.x
 OMPOrderedClause *OMPOrderedClause::Create(const ASTContext &C, Expr *Num,
                                            unsigned NumLoops,
                                            SourceLocation StartLoc,
@@ -275,12 +278,20 @@ void OMPOrderedClause::setLoopCounter(unsigned NumLoop, Expr *Counter) {
   getTrailingObjects<Expr *>()[NumberOfLoops + NumLoop] = Counter;
 }
 
+<<<<<<< HEAD
 Expr *OMPOrderedClause::getLoopCounter(unsigned NumLoop) {
+=======
+Expr *OMPOrderedClause::getLoopCunter(unsigned NumLoop) {
+>>>>>>> release/7.x
   assert(NumLoop < NumberOfLoops && "out of loops number.");
   return getTrailingObjects<Expr *>()[NumberOfLoops + NumLoop];
 }
 
+<<<<<<< HEAD
 const Expr *OMPOrderedClause::getLoopCounter(unsigned NumLoop) const {
+=======
+const Expr *OMPOrderedClause::getLoopCunter(unsigned NumLoop) const {
+>>>>>>> release/7.x
   assert(NumLoop < NumberOfLoops && "out of loops number.");
   return getTrailingObjects<Expr *>()[NumberOfLoops + NumLoop];
 }

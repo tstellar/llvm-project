@@ -622,6 +622,10 @@ public:
     return SourceRange(LocStart, RBraceLoc);
   }
 
+<<<<<<< HEAD
+=======
+  SourceLocation getLocStart() const LLVM_READONLY { return getBeginLoc(); }
+>>>>>>> release/7.x
   SourceLocation getBeginLoc() const LLVM_READONLY { return LocStart; }
   SourceLocation getRBraceLoc() const { return RBraceLoc; }
   void setLocStart(SourceLocation L) { LocStart = L; }
@@ -743,6 +747,10 @@ public:
 
   SourceRange getSourceRange() const override LLVM_READONLY;
 
+<<<<<<< HEAD
+=======
+  SourceLocation getLocStart() const LLVM_READONLY { return getBeginLoc(); }
+>>>>>>> release/7.x
   SourceLocation getBeginLoc() const LLVM_READONLY {
     return getOuterLocStart();
   }
@@ -2379,6 +2387,7 @@ public:
     return T->castAs<FunctionType>()->getReturnType();
   }
 
+<<<<<<< HEAD
   /// Gets the ExceptionSpecificationType as declared.
   ExceptionSpecificationType getExceptionSpecType() const {
     auto *TSI = getTypeSourceInfo();
@@ -2387,6 +2396,8 @@ public:
     return FPT ? FPT->getExceptionSpecType() : EST_None;
   }
 
+=======
+>>>>>>> release/7.x
   /// Attempt to compute an informative source range covering the
   /// function exception specification, if any.
   SourceRange getExceptionSpecSourceRange() const;
@@ -2967,6 +2978,10 @@ public:
   const Type *getTypeForDecl() const { return TypeForDecl; }
   void setTypeForDecl(const Type *TD) { TypeForDecl = TD; }
 
+<<<<<<< HEAD
+=======
+  SourceLocation getLocStart() const LLVM_READONLY { return getBeginLoc(); }
+>>>>>>> release/7.x
   SourceLocation getBeginLoc() const LLVM_READONLY { return LocStart; }
   void setLocStart(SourceLocation L) { LocStart = L; }
   SourceRange getSourceRange() const override LLVM_READONLY {
@@ -4333,10 +4348,16 @@ public:
   SourceLocation getRBraceLoc() const { return RBraceLoc; }
   void setRBraceLoc(SourceLocation L) { RBraceLoc = L; }
 
+<<<<<<< HEAD
   bool hasBraces() const { return RBraceLoc.isValid(); }
 
   SourceLocation getEndLoc() const LLVM_READONLY {
     if (hasBraces())
+=======
+  SourceLocation getLocEnd() const LLVM_READONLY { return getEndLoc(); }
+  SourceLocation getEndLoc() const LLVM_READONLY {
+    if (RBraceLoc.isValid())
+>>>>>>> release/7.x
       return RBraceLoc;
     // No braces: get the end location of the (only) declaration in context
     // (if present).

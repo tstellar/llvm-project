@@ -31,6 +31,7 @@ define void @test_constant_32bit_vs_constant(i8 addrspace(6)* %p, i8 addrspace(4
   ret void
 }
 
+<<<<<<< HEAD
 ; CHECK: MayAlias:	i8 addrspace(999)* %p0, i8* %p
 define void @test_0_999(i8 addrspace(0)* %p, i8 addrspace(999)* %p0) {
   ret void
@@ -125,3 +126,5 @@ define void @test_7_6(i8 addrspace(7)* %p, i8 addrspace(6)* %p1) {
 define void @test_7_7(i8 addrspace(7)* %p, i8 addrspace(7)* %p1) {
   ret void
 }
+=======
+>>>>>>> release/7.x

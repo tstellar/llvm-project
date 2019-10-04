@@ -1758,11 +1758,19 @@ static bool canEmitConjunction(const SDValue Val, bool &CanNegate,
     bool CanNegateR;
     bool MustBeFirstR;
     if (!canEmitConjunction(O1, CanNegateR, MustBeFirstR, IsOR, Depth+1))
+<<<<<<< HEAD
       return false;
 
     if (MustBeFirstL && MustBeFirstR)
       return false;
 
+=======
+      return false;
+
+    if (MustBeFirstL && MustBeFirstR)
+      return false;
+
+>>>>>>> release/7.x
     if (IsOR) {
       // For an OR expression we need to be able to naturally negate at least
       // one side or we cannot do the transformation at all.

@@ -1,7 +1,11 @@
 # REQUIRES: x86
 # RUN: llvm-mc -filetype=obj -triple=i686-- %s -o %t1.o
 # RUN: ld.lld -r %t1.o -o %t2.o
+<<<<<<< HEAD
 # RUN: llvm-readobj --symbols %t2.o | FileCheck %s
+=======
+# RUN: llvm-readobj -t %t2.o | FileCheck %s
+>>>>>>> release/7.x
 
 // CHECK:      Symbols [
 // CHECK-NEXT:   Symbol {
@@ -14,7 +18,11 @@
 // CHECK-NEXT:     Section: Undefined (0x0)
 // CHECK-NEXT:   }
 // CHECK-NEXT:   Symbol {
+<<<<<<< HEAD
 // CHECK-NEXT:     Name: .text (0)
+=======
+// CHECK-NEXT:     Name:  (0)
+>>>>>>> release/7.x
 // CHECK-NEXT:     Value: 0x0
 // CHECK-NEXT:     Size: 0
 // CHECK-NEXT:     Binding: Local (0x0)

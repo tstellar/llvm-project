@@ -1304,6 +1304,29 @@ entry:
   %splat.splatinsert = insertelement <4 x i32> undef, i32 %0, i32 0
   %splat.splat = shufflevector <4 x i32> %splat.splatinsert, <4 x i32> undef, <4 x i32> zeroinitializer
   ret <4 x i32> %splat.splat
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: spltMemVali
+; P9LE-LABEL: spltMemVali
+; P8BE-LABEL: spltMemVali
+; P8LE-LABEL: spltMemVali
+; P9BE: lfiwzx f0, 0, r3
+; P9BE: xxsldwi vs0, f0, f0, 1
+; P9BE: xxspltw v2, vs0, 0
+; P9BE: blr
+; P9LE: lfiwzx f0, 0, r3
+; P9LE: xxpermdi vs0, f0, f0, 2
+; P9LE: xxspltw v2, vs0, 3
+; P9LE: blr
+; P8BE: lfiwzx f0, 0, r3
+; P8BE: xxsldwi vs0, f0, f0, 1
+; P8BE: xxspltw v2, vs0, 0
+; P8BE: blr
+; P8LE: lfiwzx f0, 0, r3
+; P8LE: xxpermdi vs0, f0, f0, 2
+; P8LE: xxspltw v2, vs0, 3
+; P8LE: blr
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readnone
@@ -1394,6 +1417,33 @@ entry:
   %conv5 = fptosi float %d to i32
   %vecinit6 = insertelement <4 x i32> %vecinit4, i32 %conv5, i32 3
   ret <4 x i32> %vecinit6
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromRegsConvftoi
+; P9LE-LABEL: fromRegsConvftoi
+; P8BE-LABEL: fromRegsConvftoi
+; P8LE-LABEL: fromRegsConvftoi
+; P9BE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs1, vs3
+; P9BE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs2, vs4
+; P9BE-DAG: xvcvdpsxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P9BE-DAG: xvcvdpsxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P9BE: vmrgew v2, [[REG3]], [[REG4]]
+; P9LE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs3, vs1
+; P9LE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs4, vs2
+; P9LE-DAG: xvcvdpsxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P9LE-DAG: xvcvdpsxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P9LE: vmrgew v2, [[REG4]], [[REG3]]
+; P8BE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs1, vs3
+; P8BE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs2, vs4
+; P8BE-DAG: xvcvdpsxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P8BE-DAG: xvcvdpsxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P8BE: vmrgew v2, [[REG3]], [[REG4]]
+; P8LE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs3, vs1
+; P8LE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs4, vs2
+; P8LE-DAG: xvcvdpsxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P8LE-DAG: xvcvdpsxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P8LE: vmrgew v2, [[REG4]], [[REG3]]
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readnone
@@ -1856,6 +1906,33 @@ entry:
   %conv5 = fptosi double %d to i32
   %vecinit6 = insertelement <4 x i32> %vecinit4, i32 %conv5, i32 3
   ret <4 x i32> %vecinit6
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromRegsConvdtoi
+; P9LE-LABEL: fromRegsConvdtoi
+; P8BE-LABEL: fromRegsConvdtoi
+; P8LE-LABEL: fromRegsConvdtoi
+; P9BE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs1, vs3
+; P9BE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs2, vs4
+; P9BE-DAG: xvcvdpsxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P9BE-DAG: xvcvdpsxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P9BE: vmrgew v2, [[REG3]], [[REG4]]
+; P9LE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs3, vs1
+; P9LE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs4, vs2
+; P9LE-DAG: xvcvdpsxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P9LE-DAG: xvcvdpsxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P9LE: vmrgew v2, [[REG4]], [[REG3]]
+; P8BE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs1, vs3
+; P8BE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs2, vs4
+; P8BE-DAG: xvcvdpsxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P8BE-DAG: xvcvdpsxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P8BE: vmrgew v2, [[REG3]], [[REG4]]
+; P8LE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs3, vs1
+; P8LE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs4, vs2
+; P8LE-DAG: xvcvdpsxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P8LE-DAG: xvcvdpsxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P8LE: vmrgew v2, [[REG4]], [[REG3]]
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readnone
@@ -1950,6 +2027,43 @@ entry:
   %5 = fptosi <2 x double> %4 to <2 x i32>
   %vecinit9 = shufflevector <2 x i32> %2, <2 x i32> %5, <4 x i32> <i32 0, i32 1, i32 2, i32 3>
   ret <4 x i32> %vecinit9
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromDiffMemConsAConvdtoi
+; P9LE-LABEL: fromDiffMemConsAConvdtoi
+; P8BE-LABEL: fromDiffMemConsAConvdtoi
+; P8LE-LABEL: fromDiffMemConsAConvdtoi
+; P9BE-DAG: lxv [[REG1:[vs0-9]+]], 0(r3)
+; P9BE-DAG: lxv [[REG2:[vs0-9]+]], 16(r3)
+; P9BE-DAG: xxmrgld [[REG3:[vs0-9]+]], [[REG1]], [[REG2]]
+; P9BE-DAG: xxmrghd [[REG4:[vs0-9]+]], [[REG1]], [[REG2]]
+; P9BE-DAG: xvcvdpsxws [[REG5:[vs0-9]+]], [[REG3]]
+; P9BE-DAG: xvcvdpsxws [[REG6:[vs0-9]+]], [[REG4]]
+; P9BE: vmrgew v2, [[REG6]], [[REG5]]
+; P9LE-DAG: lxv [[REG1:[vs0-9]+]], 0(r3)
+; P9LE-DAG: lxv [[REG2:[vs0-9]+]], 16(r3)
+; P9LE-DAG: xxmrgld [[REG3:[vs0-9]+]], [[REG2]], [[REG1]]
+; P9LE-DAG: xxmrghd [[REG4:[vs0-9]+]], [[REG2]], [[REG1]]
+; P9LE-DAG: xvcvdpsxws [[REG5:[vs0-9]+]], [[REG3]]
+; P9LE-DAG: xvcvdpsxws [[REG6:[vs0-9]+]], [[REG4]]
+; P9LE: vmrgew v2, [[REG6]], [[REG5]]
+; P8BE: lxvd2x [[REG1:[vs0-9]+]], 0, r3
+; P8BE: lxvd2x [[REG2:[vs0-9]+]], r3, r4
+; P8BE-DAG: xxmrgld [[REG3:[vs0-9]+]], [[REG1]], [[REG2]]
+; P8BE-DAG: xxmrghd [[REG4:[vs0-9]+]], [[REG1]], [[REG2]]
+; P8BE-DAG: xvcvdpsxws [[REG5:[vs0-9]+]], [[REG3]]
+; P8BE-DAG: xvcvdpsxws [[REG6:[vs0-9]+]], [[REG4]]
+; P8BE: vmrgew v2, [[REG6]], [[REG5]]
+; P8LE: lxvd2x [[REG1:[vs0-9]+]], 0, r3
+; P8LE: lxvd2x [[REG2:[vs0-9]+]], r3, r4
+; P8LE-DAG: xxswapd [[REG3:[vs0-9]+]], [[REG1]]
+; P8LE-DAG: xxswapd [[REG4:[vs0-9]+]], [[REG2]]
+; P8LE-DAG: xxmrgld [[REG5:[vs0-9]+]], [[REG4]], [[REG3]]
+; P8LE-DAG: xxmrghd [[REG6:[vs0-9]+]], [[REG4]], [[REG3]]
+; P8LE-DAG: xvcvdpsxws [[REG7:[vs0-9]+]], [[REG5]]
+; P8LE-DAG: xvcvdpsxws [[REG8:[vs0-9]+]], [[REG6]]
+; P8LE: vmrgew v2, [[REG8]], [[REG7]]
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readonly
@@ -2022,6 +2136,49 @@ entry:
   %conv8 = fptosi double %3 to i32
   %vecinit9 = insertelement <4 x i32> %vecinit6, i32 %conv8, i32 3
   ret <4 x i32> %vecinit9
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromDiffMemConsDConvdtoi
+; P9LE-LABEL: fromDiffMemConsDConvdtoi
+; P8BE-LABEL: fromDiffMemConsDConvdtoi
+; P8LE-LABEL: fromDiffMemConsDConvdtoi
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: xxmrghd
+; P9BE: xxmrghd
+; P9BE: xvcvdpsxws
+; P9BE: xvcvdpsxws
+; P9BE: vmrgew v2
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: xxmrghd
+; P9LE: xxmrghd
+; P9LE: xvcvdpsxws
+; P9LE: xvcvdpsxws
+; P9LE: vmrgew v2
+; P8BE: lfdx
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: xxmrghd
+; P8BE: xxmrghd
+; P8BE: xvcvdpsxws
+; P8BE: xvcvdpsxws
+; P8BE: vmrgew v2
+; P8LE: lfdx
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: xxmrghd
+; P8LE: xxmrghd
+; P8LE: xvcvdpsxws
+; P8LE: xvcvdpsxws
+; P8LE: vmrgew v2
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readonly
@@ -2106,6 +2263,49 @@ entry:
   %conv13 = fptosi double %3 to i32
   %vecinit14 = insertelement <4 x i32> %vecinit9, i32 %conv13, i32 3
   ret <4 x i32> %vecinit14
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromDiffMemVarAConvdtoi
+; P9LE-LABEL: fromDiffMemVarAConvdtoi
+; P8BE-LABEL: fromDiffMemVarAConvdtoi
+; P8LE-LABEL: fromDiffMemVarAConvdtoi
+; P9BE: lfdux
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: xxmrghd
+; P9BE: xxmrghd
+; P9BE: xvcvdpsxws
+; P9BE: xvcvdpsxws
+; P9BE: vmrgew v2
+; P9LE: lfdux
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: xxmrghd
+; P9LE: xxmrghd
+; P9LE: xvcvdpsxws
+; P9LE: xvcvdpsxws
+; P9LE: vmrgew v2
+; P8BE: lfdux
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: xxmrghd
+; P8BE: xxmrghd
+; P8BE: xvcvdpsxws
+; P8BE: xvcvdpsxws
+; P8BE: vmrgew v2
+; P8LE: lfdux
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: xxmrghd
+; P8LE: xxmrghd
+; P8LE: xvcvdpsxws
+; P8LE: xvcvdpsxws
+; P8LE: vmrgew v2
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readonly
@@ -2190,6 +2390,49 @@ entry:
   %conv13 = fptosi double %3 to i32
   %vecinit14 = insertelement <4 x i32> %vecinit9, i32 %conv13, i32 3
   ret <4 x i32> %vecinit14
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromDiffMemVarDConvdtoi
+; P9LE-LABEL: fromDiffMemVarDConvdtoi
+; P8BE-LABEL: fromDiffMemVarDConvdtoi
+; P8LE-LABEL: fromDiffMemVarDConvdtoi
+; P9BE: lfdux
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: xxmrghd
+; P9BE: xxmrghd
+; P9BE: xvcvdpsxws
+; P9BE: xvcvdpsxws
+; P9BE: vmrgew v2
+; P9LE: lfdux
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: xxmrghd
+; P9LE: xxmrghd
+; P9LE: xvcvdpsxws
+; P9LE: xvcvdpsxws
+; P9LE: vmrgew v2
+; P8BE: lfdux
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: xxmrghd
+; P8BE: xxmrghd
+; P8BE: xvcvdpsxws
+; P8BE: xvcvdpsxws
+; P8BE: vmrgew v2
+; P8LE: lfdux
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: xxmrghd
+; P8LE: xxmrghd
+; P8LE: xvcvdpsxws
+; P8LE: xvcvdpsxws
+; P8LE: vmrgew v2
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readnone
@@ -2855,6 +3098,29 @@ entry:
   %splat.splatinsert = insertelement <4 x i32> undef, i32 %0, i32 0
   %splat.splat = shufflevector <4 x i32> %splat.splatinsert, <4 x i32> undef, <4 x i32> zeroinitializer
   ret <4 x i32> %splat.splat
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: spltMemValui
+; P9LE-LABEL: spltMemValui
+; P8BE-LABEL: spltMemValui
+; P8LE-LABEL: spltMemValui
+; P9BE: lfiwzx f0, 0, r3
+; P9BE: xxsldwi vs0, f0, f0, 1
+; P9BE: xxspltw v2, vs0, 0
+; P9BE: blr
+; P9LE: lfiwzx f0, 0, r3
+; P9LE: xxpermdi vs0, f0, f0, 2
+; P9LE: xxspltw v2, vs0, 3
+; P9LE: blr
+; P8BE: lfiwzx f0, 0, r3
+; P8BE: xxsldwi vs0, f0, f0, 1
+; P8BE: xxspltw v2, vs0, 0
+; P8BE: blr
+; P8LE: lfiwzx f0, 0, r3
+; P8LE: xxpermdi vs0, f0, f0, 2
+; P8LE: xxspltw v2, vs0, 3
+; P8LE: blr
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readnone
@@ -2945,6 +3211,33 @@ entry:
   %conv5 = fptoui float %d to i32
   %vecinit6 = insertelement <4 x i32> %vecinit4, i32 %conv5, i32 3
   ret <4 x i32> %vecinit6
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromRegsConvftoui
+; P9LE-LABEL: fromRegsConvftoui
+; P8BE-LABEL: fromRegsConvftoui
+; P8LE-LABEL: fromRegsConvftoui
+; P9BE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs1, vs3
+; P9BE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs2, vs4
+; P9BE-DAG: xvcvdpuxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P9BE-DAG: xvcvdpuxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P9BE: vmrgew v2, [[REG3]], [[REG4]]
+; P9LE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs3, vs1
+; P9LE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs4, vs2
+; P9LE-DAG: xvcvdpuxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P9LE-DAG: xvcvdpuxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P9LE: vmrgew v2, [[REG4]], [[REG3]]
+; P8BE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs1, vs3
+; P8BE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs2, vs4
+; P8BE-DAG: xvcvdpuxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P8BE-DAG: xvcvdpuxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P8BE: vmrgew v2, [[REG3]], [[REG4]]
+; P8LE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs3, vs1
+; P8LE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs4, vs2
+; P8LE-DAG: xvcvdpuxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P8LE-DAG: xvcvdpuxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P8LE: vmrgew v2, [[REG4]], [[REG3]]
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readnone
@@ -3407,6 +3700,33 @@ entry:
   %conv5 = fptoui double %d to i32
   %vecinit6 = insertelement <4 x i32> %vecinit4, i32 %conv5, i32 3
   ret <4 x i32> %vecinit6
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromRegsConvdtoui
+; P9LE-LABEL: fromRegsConvdtoui
+; P8BE-LABEL: fromRegsConvdtoui
+; P8LE-LABEL: fromRegsConvdtoui
+; P9BE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs1, vs3
+; P9BE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs2, vs4
+; P9BE-DAG: xvcvdpuxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P9BE-DAG: xvcvdpuxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P9BE: vmrgew v2, [[REG3]], [[REG4]]
+; P9LE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs3, vs1
+; P9LE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs4, vs2
+; P9LE-DAG: xvcvdpuxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P9LE-DAG: xvcvdpuxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P9LE: vmrgew v2, [[REG4]], [[REG3]]
+; P8BE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs1, vs3
+; P8BE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs2, vs4
+; P8BE-DAG: xvcvdpuxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P8BE-DAG: xvcvdpuxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P8BE: vmrgew v2, [[REG3]], [[REG4]]
+; P8LE-DAG: xxmrghd {{[vs]+}}[[REG1:[0-9]+]], vs3, vs1
+; P8LE-DAG: xxmrghd {{[vs]+}}[[REG2:[0-9]+]], vs4, vs2
+; P8LE-DAG: xvcvdpuxws [[REG3:v[0-9]+]], {{[vs]+}}[[REG1]]
+; P8LE-DAG: xvcvdpuxws [[REG4:v[0-9]+]], {{[vs]+}}[[REG2]]
+; P8LE: vmrgew v2, [[REG4]], [[REG3]]
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readnone
@@ -3501,6 +3821,43 @@ entry:
   %5 = fptoui <2 x double> %4 to <2 x i32>
   %vecinit9 = shufflevector <2 x i32> %2, <2 x i32> %5, <4 x i32> <i32 0, i32 1, i32 2, i32 3>
   ret <4 x i32> %vecinit9
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromDiffMemConsAConvdtoui
+; P9LE-LABEL: fromDiffMemConsAConvdtoui
+; P8BE-LABEL: fromDiffMemConsAConvdtoui
+; P8LE-LABEL: fromDiffMemConsAConvdtoui
+; P9BE-DAG: lxv [[REG1:[vs0-9]+]], 0(r3)
+; P9BE-DAG: lxv [[REG2:[vs0-9]+]], 16(r3)
+; P9BE-DAG: xxmrgld [[REG3:[vs0-9]+]], [[REG1]], [[REG2]]
+; P9BE-DAG: xxmrghd [[REG4:[vs0-9]+]], [[REG1]], [[REG2]]
+; P9BE-DAG: xvcvdpuxws [[REG5:[vs0-9]+]], [[REG3]]
+; P9BE-DAG: xvcvdpuxws [[REG6:[vs0-9]+]], [[REG4]]
+; P9BE: vmrgew v2, [[REG6]], [[REG5]]
+; P9LE-DAG: lxv [[REG1:[vs0-9]+]], 0(r3)
+; P9LE-DAG: lxv [[REG2:[vs0-9]+]], 16(r3)
+; P9LE-DAG: xxmrghd [[REG4:[vs0-9]+]], [[REG2]], [[REG1]]
+; P9LE-DAG: xxmrgld [[REG3:[vs0-9]+]], [[REG2]], [[REG1]]
+; P9LE-DAG: xvcvdpuxws [[REG5:[vs0-9]+]], [[REG3]]
+; P9LE-DAG: xvcvdpuxws [[REG6:[vs0-9]+]], [[REG4]]
+; P9LE: vmrgew v2, [[REG6]], [[REG5]]
+; P8BE: lxvd2x [[REG1:[vs0-9]+]], 0, r3
+; P8BE: lxvd2x [[REG2:[vs0-9]+]], r3, r4
+; P8BE-DAG: xxmrgld [[REG3:[vs0-9]+]], [[REG1]], [[REG2]]
+; P8BE-DAG: xxmrghd [[REG4:[vs0-9]+]], [[REG1]], [[REG2]]
+; P8BE-DAG: xvcvdpuxws [[REG5:[vs0-9]+]], [[REG3]]
+; P8BE-DAG: xvcvdpuxws [[REG6:[vs0-9]+]], [[REG4]]
+; P8BE: vmrgew v2, [[REG6]], [[REG5]]
+; P8LE: lxvd2x [[REG1:[vs0-9]+]], 0, r3
+; P8LE: lxvd2x [[REG2:[vs0-9]+]], r3, r4
+; P8LE-DAG: xxswapd [[REG3:[vs0-9]+]], [[REG1]]
+; P8LE-DAG: xxswapd [[REG4:[vs0-9]+]], [[REG2]]
+; P8LE-DAG: xxmrgld [[REG5:[vs0-9]+]], [[REG4]], [[REG3]]
+; P8LE-DAG: xxmrghd [[REG6:[vs0-9]+]], [[REG4]], [[REG3]]
+; P8LE-DAG: xvcvdpuxws [[REG7:[vs0-9]+]], [[REG5]]
+; P8LE-DAG: xvcvdpuxws [[REG8:[vs0-9]+]], [[REG6]]
+; P8LE: vmrgew v2, [[REG8]], [[REG7]]
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readonly
@@ -3573,6 +3930,49 @@ entry:
   %conv8 = fptoui double %3 to i32
   %vecinit9 = insertelement <4 x i32> %vecinit6, i32 %conv8, i32 3
   ret <4 x i32> %vecinit9
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromDiffMemConsDConvdtoui
+; P9LE-LABEL: fromDiffMemConsDConvdtoui
+; P8BE-LABEL: fromDiffMemConsDConvdtoui
+; P8LE-LABEL: fromDiffMemConsDConvdtoui
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: xxmrghd
+; P9BE: xxmrghd
+; P9BE: xvcvdpuxws
+; P9BE: xvcvdpuxws
+; P9BE: vmrgew v2
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: xxmrghd
+; P9LE: xxmrghd
+; P9LE: xvcvdpuxws
+; P9LE: xvcvdpuxws
+; P9LE: vmrgew v2
+; P8BE: lfdx
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: xxmrghd
+; P8BE: xxmrghd
+; P8BE: xvcvdpuxws
+; P8BE: xvcvdpuxws
+; P8BE: vmrgew v2
+; P8LE: lfdx
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: xxmrghd
+; P8LE: xxmrghd
+; P8LE: xvcvdpuxws
+; P8LE: xvcvdpuxws
+; P8LE: vmrgew v2
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readonly
@@ -3657,6 +4057,49 @@ entry:
   %conv13 = fptoui double %3 to i32
   %vecinit14 = insertelement <4 x i32> %vecinit9, i32 %conv13, i32 3
   ret <4 x i32> %vecinit14
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromDiffMemVarAConvdtoui
+; P9LE-LABEL: fromDiffMemVarAConvdtoui
+; P8BE-LABEL: fromDiffMemVarAConvdtoui
+; P8LE-LABEL: fromDiffMemVarAConvdtoui
+; P9BE: lfdux
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: xxmrghd
+; P9BE: xxmrghd
+; P9BE: xvcvdpuxws
+; P9BE: xvcvdpuxws
+; P9BE: vmrgew v2
+; P9LE: lfdux
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: xxmrghd
+; P9LE: xxmrghd
+; P9LE: xvcvdpuxws
+; P9LE: xvcvdpuxws
+; P9LE: vmrgew v2
+; P8BE: lfdux
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: xxmrghd
+; P8BE: xxmrghd
+; P8BE: xvcvdpuxws
+; P8BE: xvcvdpuxws
+; P8BE: vmrgew v2
+; P8LE: lfdux
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: xxmrghd
+; P8LE: xxmrghd
+; P8LE: xvcvdpuxws
+; P8LE: xvcvdpuxws
+; P8LE: vmrgew v2
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readonly
@@ -3741,6 +4184,49 @@ entry:
   %conv13 = fptoui double %3 to i32
   %vecinit14 = insertelement <4 x i32> %vecinit9, i32 %conv13, i32 3
   ret <4 x i32> %vecinit14
+<<<<<<< HEAD
+=======
+; P9BE-LABEL: fromDiffMemVarDConvdtoui
+; P9LE-LABEL: fromDiffMemVarDConvdtoui
+; P8BE-LABEL: fromDiffMemVarDConvdtoui
+; P8LE-LABEL: fromDiffMemVarDConvdtoui
+; P9BE: lfdux
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: lfd
+; P9BE: xxmrghd
+; P9BE: xxmrghd
+; P9BE: xvcvdpuxws
+; P9BE: xvcvdpuxws
+; P9BE: vmrgew v2
+; P9LE: lfdux
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: lfd
+; P9LE: xxmrghd
+; P9LE: xxmrghd
+; P9LE: xvcvdpuxws
+; P9LE: xvcvdpuxws
+; P9LE: vmrgew v2
+; P8BE: lfdux
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: lfd
+; P8BE: xxmrghd
+; P8BE: xxmrghd
+; P8BE: xvcvdpuxws
+; P8BE: xvcvdpuxws
+; P8BE: vmrgew v2
+; P8LE: lfdux
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: lfd
+; P8LE: xxmrghd
+; P8LE: xxmrghd
+; P8LE: xvcvdpuxws
+; P8LE: xvcvdpuxws
+; P8LE: vmrgew v2
+>>>>>>> release/7.x
 }
 
 ; Function Attrs: norecurse nounwind readnone

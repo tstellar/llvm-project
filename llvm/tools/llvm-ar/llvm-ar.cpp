@@ -66,19 +66,33 @@ OPTIONS:
 const char ArHelp[] = R"(
 OVERVIEW: LLVM Archiver
 
+<<<<<<< HEAD
 USAGE: llvm-ar [options] [-]<operation>[modifiers] [relpos] [count] <archive> [files]
        llvm-ar -M [<mri-script]
 
 OPTIONS:
   --format              - archive format to create
+=======
+USAGE: llvm-ar [options] [-]<operation>[modifiers] [relpos] <archive> [files]
+       llvm-ar -M [<mri-script]
+
+OPTIONS:
+  --format              - Archive format to create
+>>>>>>> release/7.x
     =default            -   default
     =gnu                -   gnu
     =darwin             -   darwin
     =bsd                -   bsd
+<<<<<<< HEAD
   --plugin=<string>     - ignored for compatibility
   -h --help             - display this help and exit
   --version             - print the version and exit
   @<file>               - read options from <file>
+=======
+  --plugin=<string>     - Ignored for compatibility
+  --help                - Display available options
+  --version             - Display the version of this program
+>>>>>>> release/7.x
 
 OPERATIONS:
   d - delete [files] from the archive
@@ -97,8 +111,11 @@ MODIFIERS:
   [D] - use zero for timestamps and uids/gids (default)
   [i] - put [files] before [relpos] (same as [b])
   [l] - ignored for compatibility
+<<<<<<< HEAD
   [L] - add archive's contents
   [N] - use instance [count] of name
+=======
+>>>>>>> release/7.x
   [o] - preserve original dates
   [P] - use full names when matching (implied for thin archives)
   [s] - create an archive index (cf. ranlib)

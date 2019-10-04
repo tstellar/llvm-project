@@ -405,13 +405,22 @@ namespace PR33222 {
   };
   Y<float> yf; // expected-note {{instantiation}}
 
+<<<<<<< HEAD
   int h(); // expected-note {{previous}}
   template<typename T> struct Z {
     friend T h(); // expected-error {{return type}}
+=======
+  int h();
+  template<typename T> struct Z {
+    // FIXME: The note here should point at the non-friend declaration, not the
+    // instantiation in Z<int>.
+    friend T h(); // expected-error {{return type}} expected-note {{previous}}
+>>>>>>> release/7.x
   };
   Z<int> zi;
   Z<float> zf; // expected-note {{instantiation}}
 }
+<<<<<<< HEAD
 
 namespace qualified_friend_no_match {
   void f(int); // expected-note {{type mismatch at 1st parameter}}
@@ -429,3 +438,5 @@ namespace qualified_friend_no_match {
     friend void Y::f(double); // expected-error {{friend declaration of 'f' does not match any declaration in 'qualified_friend_no_match::Y'}}
   };
 }
+=======
+>>>>>>> release/7.x

@@ -177,6 +177,7 @@ public:
     assert(hasVal);
     return value;
   }
+<<<<<<< HEAD
 #if LLVM_HAS_RVALUE_REFERENCE_THIS
   T &&getValue() && noexcept {
     assert(hasVal);
@@ -208,6 +209,8 @@ public:
     }
     return *this;
   }
+=======
+>>>>>>> release/7.x
 };
 
 } // namespace optional_detail

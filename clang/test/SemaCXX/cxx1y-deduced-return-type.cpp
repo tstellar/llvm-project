@@ -565,7 +565,11 @@ namespace PR33222 {
     static auto f1();
     static auto f2();
 
+<<<<<<< HEAD
     template<typename T> static decltype(auto) g0(T x) { return x.n; }
+=======
+    template<typename T> static decltype(auto) g0(T x) { return x.n; } // FIXME (PR38883): expected-error {{private}}
+>>>>>>> release/7.x
     template<typename T> static decltype(auto) g1(T);
     template<typename T> static decltype(auto) g2(T);
   };
@@ -574,6 +578,11 @@ namespace PR33222 {
     friend auto f1();
     friend auto f2();
 
+<<<<<<< HEAD
+=======
+    // FIXME (PR38883): This friend declaration doesn't actually work, because
+    // we fail to look up the named function properly during instantiation.
+>>>>>>> release/7.x
     friend decltype(auto) g0<>(A);
     template<typename T> friend decltype(auto) g1(T);
     template<typename T> friend decltype(auto) g2(T);
@@ -587,7 +596,11 @@ namespace PR33222 {
     template<typename T_> friend decltype(auto) X::g1(T_);
     template<typename T_> friend decltype(auto) X::g2(T_);
 
+<<<<<<< HEAD
     int n;
+=======
+    int n; // FIXME: expected-note {{here}}
+>>>>>>> release/7.x
   };
 
   auto f1() { return A<int>().n; }
@@ -598,7 +611,11 @@ namespace PR33222 {
 
   A<int> ai;
   int k1 = g0(ai);
+<<<<<<< HEAD
   int k2 = X::g0(ai);
+=======
+  int k2 = X::g0(ai); // FIXME: expected-note {{in instantiation of}}
+>>>>>>> release/7.x
 
   int k3 = g1(ai);
   int k4 = X::g1(ai);

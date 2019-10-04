@@ -18,6 +18,7 @@ int main() {
   // CHECK: [[LOAD:%[^ ]+]] = load i32, i32* getelementptr inbounds ({ i32, i32, i32, [1 x i32] }, { i32, i32, i32, [1 x i32] }* @__cpu_model, i32 0, i32 3, i32 0)
   // CHECK: [[AND:%[^ ]+]] = and i32 [[LOAD]], 256
   // CHECK: = icmp eq i32 [[AND]], 256
+<<<<<<< HEAD
 
   if (__builtin_cpu_supports("gfni"))
     a("gfni");
@@ -25,6 +26,8 @@ int main() {
   // CHECK: [[LOAD:%[^ ]+]] = load i32, i32* @__cpu_features2
   // CHECK: [[AND:%[^ ]+]] = and i32 [[LOAD]], 1
   // CHECK: = icmp eq i32 [[AND]], 1
+=======
+>>>>>>> release/7.x
 
   return 0;
 }

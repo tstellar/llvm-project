@@ -264,7 +264,11 @@ enum TargetIndex {
 namespace AMDGPUAS {
   enum : unsigned {
     // The maximum value for flat, generic, local, private, constant and region.
+<<<<<<< HEAD
     MAX_AMDGPU_ADDRESS = 7,
+=======
+    MAX_AMDGPU_ADDRESS = 6,
+>>>>>>> release/7.x
 
     FLAT_ADDRESS = 0,     ///< Address space for flat memory.
     GLOBAL_ADDRESS = 1,   ///< Address space for global memory (RAT0, VTX0).

@@ -10019,6 +10019,10 @@ bool ASTContext::DeclMustBeEmitted(const Decl *D) {
     return true;
 
   if (const auto *FD = dyn_cast<FunctionDecl>(D)) {
+    // Multiversioned functions always have to be emitted, because they are used
+    // by the resolver.
+    if (FD->isMultiVersion())
+      return true;
     // Forward declarations aren't required.
     if (!FD->doesThisDeclarationHaveABody())
       return FD->doesDeclarationForceExternallyVisibleDefinition();
@@ -10088,6 +10092,14 @@ bool ASTContext::DeclMustBeEmitted(const Decl *D) {
         if (DeclMustBeEmitted(BindingVD))
           return true;
 
+<<<<<<< HEAD
+=======
+  // If the decl is marked as `declare target`, it should be emitted.
+  if (const llvm::Optional<OMPDeclareTargetDeclAttr::MapTypeTy> Res =
+          OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(VD))
+    return *Res != OMPDeclareTargetDeclAttr::MT_Link;
+
+>>>>>>> release/7.x
   return false;
 }
 

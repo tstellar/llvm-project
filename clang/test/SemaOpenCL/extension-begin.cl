@@ -16,6 +16,7 @@
 //
 // RUN: %clang_cc1 -cl-std=CL2.0 -DIMPLICIT_INCLUDE -include %S/extension-begin.h -triple spir-unknown-unknown -O0 -emit-llvm -o - -fmodules -fimplicit-module-maps -fmodules-cache-path=%t.modules %s -verify -pedantic
 
+<<<<<<< HEAD
 #pragma OPENCL EXTENSION my_ext : enable
 #ifndef IMPLICIT_INCLUDE
 // expected-warning@-2 {{unknown OpenCL extension 'my_ext' - ignoring}}
@@ -23,6 +24,8 @@
 #endif // IMPLICIT_INCLUDE
 #pragma OPENCL EXTENSION my_ext : disable
 
+=======
+>>>>>>> release/7.x
 #ifndef IMPLICIT_INCLUDE
 #include "extension-begin.h"
 #endif // IMPLICIT_INCLUDE
@@ -47,7 +50,11 @@ void test_f2(void) {
   PointerOfA test_A_pointer; // expected-error {{use of type 'PointerOfA' (aka 'const struct A *') requires my_ext extension to be enabled}}
   f(); // expected-error {{use of declaration 'f' requires my_ext extension to be enabled}}
   g(0); // expected-error {{no matching function for call to 'g'}}
+<<<<<<< HEAD
         // expected-note@extension-begin.h:18 {{candidate unavailable as it requires OpenCL extension 'my_ext' to be enabled}}
+=======
+        // expected-note@extension-begin.h:18 {{candidate disabled due to OpenCL extension}}
+>>>>>>> release/7.x
         // expected-note@extension-begin.h:23 {{candidate function not viable: requires 0 arguments, but 1 was provided}}
 }
 

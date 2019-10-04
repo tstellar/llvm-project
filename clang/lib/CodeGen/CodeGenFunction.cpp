@@ -2264,6 +2264,7 @@ void CodeGenFunction::EmitSanitizerStatReport(llvm::SanitizerStatKind SSK) {
 llvm::Value *
 CodeGenFunction::FormResolverCondition(const MultiVersionResolverOption &RO) {
   llvm::Value *Condition = nullptr;
+<<<<<<< HEAD
 
   if (!RO.Conditions.Architecture.empty())
     Condition = EmitX86CpuIs(RO.Conditions.Architecture);
@@ -2297,6 +2298,18 @@ static void CreateMultiVersionResolverReturn(CodeGenModule &CGM,
     Builder.CreateRetVoid();
   else
     Builder.CreateRet(Result);
+=======
+
+  if (!RO.Conditions.Architecture.empty())
+    Condition = EmitX86CpuIs(RO.Conditions.Architecture);
+
+  if (!RO.Conditions.Features.empty()) {
+    llvm::Value *FeatureCond = EmitX86CpuSupports(RO.Conditions.Features);
+    Condition =
+        Condition ? Builder.CreateAnd(Condition, FeatureCond) : FeatureCond;
+  }
+  return Condition;
+>>>>>>> release/7.x
 }
 
 void CodeGenFunction::EmitMultiVersionResolver(
@@ -2306,9 +2319,12 @@ void CodeGenFunction::EmitMultiVersionResolver(
           getContext().getTargetInfo().getTriple().getArch() ==
               llvm::Triple::x86_64) &&
          "Only implemented for x86 targets");
+<<<<<<< HEAD
 
   bool SupportsIFunc = getContext().getTargetInfo().supportsIFunc();
 
+=======
+>>>>>>> release/7.x
   // Main function's basic block.
   llvm::BasicBlock *CurBlock = createBasicBlock("resolver_entry", Resolver);
   Builder.SetInsertPoint(CurBlock);
@@ -2322,8 +2338,12 @@ void CodeGenFunction::EmitMultiVersionResolver(
     if (!Condition) {
       assert(&RO == Options.end() - 1 &&
              "Default or Generic case must be last");
+<<<<<<< HEAD
       CreateMultiVersionResolverReturn(CGM, Resolver, Builder, RO.Function,
                                        SupportsIFunc);
+=======
+      Builder.CreateRet(RO.Function);
+>>>>>>> release/7.x
       return;
     }
 

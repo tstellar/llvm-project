@@ -616,7 +616,10 @@
 // RUN:     --driver-mode=cl \
 // RUN:     -fblocks \
 // RUN:     -fcrash-diagnostics-dir=/foo \
+<<<<<<< HEAD
 // RUN:     -fno-crash-diagnostics \
+=======
+>>>>>>> release/7.x
 // RUN:     -fno-blocks \
 // RUN:     -fbuiltin \
 // RUN:     -fno-builtin \

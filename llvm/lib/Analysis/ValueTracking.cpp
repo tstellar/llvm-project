@@ -3021,6 +3021,7 @@ static bool cannotBeOrderedLessThanZeroImpl(const Value *V,
     default:
       break;
     case Intrinsic::maxnum:
+<<<<<<< HEAD
       return (isKnownNeverNaN(I->getOperand(0), TLI) &&
               cannotBeOrderedLessThanZeroImpl(I->getOperand(0), TLI,
                                               SignBitOnly, Depth + 1)) ||
@@ -3033,6 +3034,15 @@ static bool cannotBeOrderedLessThanZeroImpl(const Value *V,
                                              Depth + 1) ||
              cannotBeOrderedLessThanZeroImpl(I->getOperand(1), TLI, SignBitOnly,
                                              Depth + 1);
+=======
+      return (isKnownNeverNaN(I->getOperand(0)) &&
+              cannotBeOrderedLessThanZeroImpl(I->getOperand(0), TLI,
+                                              SignBitOnly, Depth + 1)) ||
+             (isKnownNeverNaN(I->getOperand(1)) &&
+              cannotBeOrderedLessThanZeroImpl(I->getOperand(1), TLI,
+                                              SignBitOnly, Depth + 1));
+
+>>>>>>> release/7.x
     case Intrinsic::minnum:
     case Intrinsic::minimum:
       return cannotBeOrderedLessThanZeroImpl(I->getOperand(0), TLI, SignBitOnly,

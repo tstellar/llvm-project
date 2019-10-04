@@ -144,7 +144,11 @@ void MipsSEDAGToDAGISel::processFunctionAfterISel(MachineFunction &MF) {
           MI.addOperand(MachineOperand::CreateReg(Mips::SP, false, true));
           break;
         }
+<<<<<<< HEAD
         LLVM_FALLTHROUGH;
+=======
+      // fallthrough
+>>>>>>> release/7.x
       case Mips::BuildPairF64:
       case Mips::ExtractElementF64:
         if (Subtarget->isABI_FPXX() && !Subtarget->hasMTHC1())

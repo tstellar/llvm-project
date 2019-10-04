@@ -980,6 +980,11 @@ public:
 
   bool ParseRegister(unsigned &RegNo, SMLoc &StartLoc, SMLoc &EndLoc) override;
 
+<<<<<<< HEAD
+=======
+  void SetFrameRegister(unsigned RegNo) override;
+
+>>>>>>> release/7.x
   bool parsePrimaryExpr(const MCExpr *&Res, SMLoc &EndLoc) override;
 
   bool ParseInstruction(ParseInstructionInfo &Info, StringRef Name,
@@ -2328,13 +2333,24 @@ std::unique_ptr<X86Operand> X86AsmParser::ParseMemOperand(unsigned SegReg,
 // Parse either a standard primary expression or a register.
 bool X86AsmParser::parsePrimaryExpr(const MCExpr *&Res, SMLoc &EndLoc) {
   MCAsmParser &Parser = getParser();
+<<<<<<< HEAD
   // See if this is a register first.
   if (getTok().is(AsmToken::Percent) ||
       (isParsingIntelSyntax() && getTok().is(AsmToken::Identifier) &&
        MatchRegisterName(Parser.getTok().getString()))) {
+=======
+  if (Parser.parsePrimaryExpr(Res, EndLoc)) {
+>>>>>>> release/7.x
     SMLoc StartLoc = Parser.getTok().getLoc();
     unsigned RegNo;
+<<<<<<< HEAD
     if (ParseRegister(RegNo, StartLoc, EndLoc))
+=======
+    bool TryRegParse =
+        getTok().is(AsmToken::Percent) ||
+        (isParsingIntelSyntax() && getTok().is(AsmToken::Identifier));
+    if (!TryRegParse || ParseRegister(RegNo, StartLoc, EndLoc))
+>>>>>>> release/7.x
       return true;
     Res = X86MCExpr::create(RegNo, Parser.getContext());
     return false;

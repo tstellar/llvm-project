@@ -1437,8 +1437,11 @@ static llvm::Constant *buildGlobalBlock(CodeGenModule &CGM,
       "__block_literal_global", blockInfo.BlockAlign,
       /*constant*/ !IsWindows, llvm::GlobalVariable::InternalLinkage, AddrSpace);
 
+<<<<<<< HEAD
   literal->addAttribute("objc_arc_inert");
 
+=======
+>>>>>>> release/7.x
   // Windows does not allow globals to be initialised to point to globals in
   // different DLLs.  Any such variables must run code to initialise them.
   if (IsWindows) {

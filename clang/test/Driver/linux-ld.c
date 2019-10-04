@@ -1900,6 +1900,7 @@
 // CHECK-ARMV7EB: "-m" "armelfb_linux_eabi"
 
 // RUN: %clang -no-canonical-prefixes %s -### -o %t.o 2>&1 \
+<<<<<<< HEAD
 // RUN:     --target=armv7-unknown-linux \
 // RUN:     -mbig-endian \
 // RUN:     --gcc-toolchain="" \
@@ -1938,11 +1939,14 @@
 // RUN:   | FileCheck --check-prefix=CHECK-ARMV7EL %s
 
 // RUN: %clang -no-canonical-prefixes %s -### -o %t.o 2>&1 \
+=======
+>>>>>>> release/7.x
 // RUN:     --target=aarch64_be-unknown-linux \
 // RUN:     --gcc-toolchain="" \
 // RUN:     --sysroot=%S/Inputs/basic_linux_tree \
 // RUN:   | FileCheck --check-prefix=CHECK-AARCH64BE %s
 // CHECK-AARCH64BE: "{{.*}}ld{{(.exe)?}}" "--sysroot=[[SYSROOT:[^"]+]]"
+<<<<<<< HEAD
 // CHECK-AARCH64BE-NOT: "--be8"
 // CHECK-AARCH64BE: "-EB"
 // CHECK-AARCH64BE: "-m" "aarch64linuxb"
@@ -1978,6 +1982,10 @@
 // RUN:     --sysroot=%S/Inputs/basic_linux_tree \
 // RUN:   | FileCheck --check-prefix=CHECK-AARCH64LE %s
 
+=======
+// CHECK-AARCH64BE: "-m" "aarch64linuxb"
+
+>>>>>>> release/7.x
 // Check dynamic-linker for musl-libc
 // RUN: %clang %s -### -o %t.o 2>&1 \
 // RUN:     --target=i386-pc-linux-musl \

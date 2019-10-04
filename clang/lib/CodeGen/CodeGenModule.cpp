@@ -2853,9 +2853,17 @@ void CodeGenModule::emitMultiVersionFunctions() {
       ResolverFunc->setComdat(
           getModule().getOrInsertComdat(ResolverFunc->getName()));
 
+<<<<<<< HEAD
     llvm::stable_sort(
         Options, [&TI](const CodeGenFunction::MultiVersionResolverOption &LHS,
                        const CodeGenFunction::MultiVersionResolverOption &RHS) {
+=======
+    const TargetInfo &TI = getTarget();
+    std::stable_sort(
+        Options.begin(), Options.end(),
+        [&TI](const CodeGenFunction::MultiVersionResolverOption &LHS,
+              const CodeGenFunction::MultiVersionResolverOption &RHS) {
+>>>>>>> release/7.x
           return TargetMVPriority(TI, LHS) > TargetMVPriority(TI, RHS);
         });
     CodeGenFunction CGF(*this);
@@ -2868,7 +2876,12 @@ void CodeGenModule::emitCPUDispatchDefinition(GlobalDecl GD) {
   assert(FD && "Not a FunctionDecl?");
   const auto *DD = FD->getAttr<CPUDispatchAttr>();
   assert(DD && "Not a cpu_dispatch Function?");
+<<<<<<< HEAD
   llvm::Type *DeclTy = getTypes().ConvertType(FD->getType());
+=======
+  QualType CanonTy = Context.getCanonicalType(FD->getType());
+  llvm::Type *DeclTy = getTypes().ConvertFunctionType(CanonTy, FD);
+>>>>>>> release/7.x
 
   if (const auto *CXXFD = dyn_cast<CXXMethodDecl>(FD)) {
     const CGFunctionInfo &FInfo = getTypes().arrangeCXXMethodDeclaration(CXXFD);
@@ -2876,6 +2889,7 @@ void CodeGenModule::emitCPUDispatchDefinition(GlobalDecl GD) {
   }
 
   StringRef ResolverName = getMangledName(GD);
+<<<<<<< HEAD
 
   llvm::Type *ResolverType;
   GlobalDecl ResolverGD;
@@ -2895,6 +2909,15 @@ void CodeGenModule::emitCPUDispatchDefinition(GlobalDecl GD) {
   if (supportsCOMDAT())
     ResolverFunc->setComdat(
         getModule().getOrInsertComdat(ResolverFunc->getName()));
+=======
+  llvm::Type *ResolverType = llvm::FunctionType::get(
+      llvm::PointerType::get(DeclTy,
+                             Context.getTargetAddressSpace(FD->getType())),
+      false);
+  auto *ResolverFunc = cast<llvm::Function>(
+      GetOrCreateLLVMFunction(ResolverName, ResolverType, GlobalDecl{},
+                              /*ForVTable=*/false));
+>>>>>>> release/7.x
 
   SmallVector<CodeGenFunction::MultiVersionResolverOption, 10> Options;
   const TargetInfo &Target = getTarget();
@@ -2903,6 +2926,7 @@ void CodeGenModule::emitCPUDispatchDefinition(GlobalDecl GD) {
     // Get the name of the target function so we can look it up/create it.
     std::string MangledName = getMangledNameImpl(*this, GD, FD, true) +
                               getCPUSpecificMangling(*this, II->getName());
+<<<<<<< HEAD
 
     llvm::Constant *Func = GetGlobalValue(MangledName);
 
@@ -2923,6 +2947,11 @@ void CodeGenModule::emitCPUDispatchDefinition(GlobalDecl GD) {
       }
     }
 
+=======
+    llvm::Constant *Func = GetOrCreateLLVMFunction(
+        MangledName, DeclTy, GD, /*ForVTable=*/false, /*DontDefer=*/true,
+        /*IsThunk=*/false, llvm::AttributeList(), ForDefinition);
+>>>>>>> release/7.x
     llvm::SmallVector<StringRef, 32> Features;
     Target.getCPUSpecificCPUDispatchFeatures(II->getName(), Features);
     llvm::transform(Features, Features.begin(),
@@ -2932,12 +2961,21 @@ void CodeGenModule::emitCPUDispatchDefinition(GlobalDecl GD) {
           return !Target.validateCpuSupports(Feat);
         }), Features.end());
     Options.emplace_back(cast<llvm::Function>(Func), StringRef{}, Features);
+<<<<<<< HEAD
     ++Index;
   }
 
   llvm::sort(
       Options, [](const CodeGenFunction::MultiVersionResolverOption &LHS,
                   const CodeGenFunction::MultiVersionResolverOption &RHS) {
+=======
+  }
+
+  llvm::sort(
+      Options.begin(), Options.end(),
+      [](const CodeGenFunction::MultiVersionResolverOption &LHS,
+         const CodeGenFunction::MultiVersionResolverOption &RHS) {
+>>>>>>> release/7.x
         return CodeGenFunction::GetX86CpuSupportsMask(LHS.Conditions.Features) >
                CodeGenFunction::GetX86CpuSupportsMask(RHS.Conditions.Features);
       });
@@ -2959,6 +2997,7 @@ void CodeGenModule::emitCPUDispatchDefinition(GlobalDecl GD) {
 
   CodeGenFunction CGF(*this);
   CGF.EmitMultiVersionResolver(ResolverFunc, Options);
+<<<<<<< HEAD
 
   if (getTarget().supportsIFunc()) {
     std::string AliasName = getMangledNameImpl(
@@ -2974,6 +3013,8 @@ void CodeGenModule::emitCPUDispatchDefinition(GlobalDecl GD) {
       SetCommonAttributes(GD, GA);
     }
   }
+=======
+>>>>>>> release/7.x
 }
 
 /// If a dispatcher for the specified mangled name is not in the module, create
@@ -3045,6 +3086,7 @@ llvm::Constant *CodeGenModule::GetOrCreateLLVMFunction(
     if (getLangOpts().OpenMPIsDevice && OpenMPRuntime &&
         !OpenMPRuntime->markAsGlobalTarget(GD) && FD->isDefined() &&
         !DontDefer && !IsForDefinition) {
+<<<<<<< HEAD
       if (const FunctionDecl *FDDef = FD->getDefinition()) {
         GlobalDecl GDDef;
         if (const auto *CD = dyn_cast<CXXConstructorDecl>(FDDef))
@@ -3055,6 +3097,19 @@ llvm::Constant *CodeGenModule::GetOrCreateLLVMFunction(
           GDDef = GlobalDecl(FDDef);
         EmitGlobal(GDDef);
       }
+=======
+      if (const FunctionDecl *FDDef = FD->getDefinition())
+        if (getContext().DeclMustBeEmitted(FDDef)) {
+          GlobalDecl GDDef;
+          if (const auto *CD = dyn_cast<CXXConstructorDecl>(FDDef))
+            GDDef = GlobalDecl(CD, GD.getCtorType());
+          else if (const auto *DD = dyn_cast<CXXDestructorDecl>(FDDef))
+            GDDef = GlobalDecl(DD, GD.getDtorType());
+          else
+            GDDef = GlobalDecl(FDDef);
+          addDeferredDeclToEmit(GDDef);
+        }
+>>>>>>> release/7.x
     }
     // Check if this must be emitted as declare variant and emit reference to
     // the the declare variant function.

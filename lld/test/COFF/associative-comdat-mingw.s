@@ -4,18 +4,29 @@
 # RUN: llvm-mc -triple=x86_64-windows-gnu %S/Inputs/associative-comdat-mingw-2.s -filetype=obj -o %t2.obj
 
 # RUN: lld-link -lldmingw -entry:main %t1.obj %t2.obj -out:%t.gc.exe -verbose
+<<<<<<< HEAD
 # RUN: llvm-readobj --sections %t.gc.exe | FileCheck %s
+=======
+# RUN: llvm-readobj -sections %t.gc.exe | FileCheck %s
+>>>>>>> release/7.x
 
 # CHECK: Sections [
 # CHECK:   Section {
 # CHECK:     Number: 2
 # CHECK-LABEL:     Name: .rdata (2E 72 64 61 74 61 00 00)
 #             This is the critical check to show that only *one* definition of
+<<<<<<< HEAD
 #             .xdata$foo was retained. This *must* be 0x24 (0x4 for the .xdata
 #             section and 0x20 for the .ctors/.dtors headers/ends).
 #             Make sure that no other .xdata sections get included, which would
 #             increase the size here.
 # CHECK-NEXT:     VirtualSize: 0x24
+=======
+#             .xdata$foo was retained. This *must* be 4.
+#             Make sure that no other .xdata sections get included, which would
+#             increase the size here.
+# CHECK-NEXT:     VirtualSize: 0x4
+>>>>>>> release/7.x
 
         .text
         .def            main;

@@ -304,6 +304,7 @@ static void computeImportForReferencedGlobals(
     };
 
     for (auto &RefSummary : VI.getSummaryList())
+<<<<<<< HEAD
       if (isa<GlobalVarSummary>(RefSummary.get()) &&
           canImportGlobalVar(RefSummary.get()) &&
           !LocalNotInModule(RefSummary.get())) {
@@ -311,6 +312,13 @@ static void computeImportForReferencedGlobals(
         // Only update stat if we haven't already imported this variable.
         if (ILI.second)
           NumImportedGlobalVarsThinLink++;
+=======
+      if (RefSummary->getSummaryKind() == GlobalValueSummary::GlobalVarKind &&
+          !RefSummary->notEligibleToImport() &&
+          !GlobalValue::isInterposableLinkage(RefSummary->linkage()) &&
+          RefSummary->refs().empty()) {
+        ImportList[RefSummary->modulePath()].insert(VI.getGUID());
+>>>>>>> release/7.x
         if (ExportLists)
           (*ExportLists)[RefSummary->modulePath()].insert(VI.getGUID());
         break;

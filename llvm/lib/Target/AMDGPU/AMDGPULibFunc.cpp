@@ -82,7 +82,11 @@ class UnmangledFuncInfo {
 
 public:
   using ID = AMDGPULibFunc::EFuncId;
+<<<<<<< HEAD
   constexpr UnmangledFuncInfo(const char *_Name, unsigned _NumArgs)
+=======
+  UnmangledFuncInfo(StringRef _Name, unsigned _NumArgs)
+>>>>>>> release/7.x
       : Name(_Name), NumArgs(_NumArgs) {}
   // Get index to Table by function name.
   static bool lookup(StringRef Name, ID &Id);

@@ -604,8 +604,11 @@ static void computeVariableSummary(ModuleSummaryIndex &Index,
     CantBePromoted.insert(V.getGUID());
   if (HasBlockAddress)
     GVarSummary->setNotEligibleToImport();
+<<<<<<< HEAD
   if (!VTableFuncs.empty())
     GVarSummary->setVTableFuncs(VTableFuncs);
+=======
+>>>>>>> release/7.x
   Index.addGlobalValueSummary(V, std::move(GVarSummary));
 }
 

@@ -66,6 +66,7 @@ if(LLVM_BUILD_LLVM_DYLIB)
     set(LIB_NAMES -Wl,-all_load ${LIB_NAMES})
   endif()
 
+<<<<<<< HEAD
   target_link_libraries(LLVM PRIVATE ${LIB_NAMES})
 
   if (APPLE)
@@ -73,6 +74,13 @@ if(LLVM_BUILD_LLVM_DYLIB)
                 LINK_FLAGS
                 " -compatibility_version 1 -current_version ${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}")
   endif()
+=======
+if (APPLE)
+  set_property(TARGET LLVM APPEND_STRING PROPERTY
+              LINK_FLAGS
+              " -compatibility_version 1 -current_version ${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}")
+endif()
+>>>>>>> release/7.x
 
   if(TARGET libLLVMExports)
     add_dependencies(LLVM libLLVMExports)

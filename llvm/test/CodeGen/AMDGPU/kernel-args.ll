@@ -83,9 +83,15 @@ define amdgpu_kernel void @i8_sext_arg(i32 addrspace(1)* nocapture %out, i8 sign
 ; MESA-VI: s_load_dword [[VAL:s[0-9]+]], s[{{[0-9]+:[0-9]+}}], 0x2c
 ; MESA-GCN: s_and_b32 s{{[0-9]+}}, [[VAL]], 0xff
 
+<<<<<<< HEAD
 ; HSA-GFX9: s_load_dword [[VAL:s[0-9]+]], s[{{[0-9]+:[0-9]+}}], 0x8
 ; HSA-GFX9: s_and_b32 s{{[0-9]+}}, [[VAL]], 0xffff{{$}}
 ; HSA-GFX9: global_store_dword
+=======
+; HSA-VI: s_load_dword [[VAL:s[0-9]+]], s[{{[0-9]+:[0-9]+}}], 0x8
+; HSA-VI: s_and_b32 s{{[0-9]+}}, [[VAL]], 0xffff{{$}}
+; HSA-VI: flat_store_dword
+>>>>>>> release/7.x
 
 ; EGCM: VTX_READ_16
 ; EGCM: KC0[2].Y

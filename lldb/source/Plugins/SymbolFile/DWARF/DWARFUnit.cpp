@@ -241,7 +241,11 @@ void DWARFUnit::ExtractDIEsRWLocked() {
   if (!m_die_array.empty()) {
     if (m_first_die) {
       // Only needed for the assertion.
+<<<<<<< HEAD
       m_first_die.SetHasChildren(m_die_array.front().HasChildren());
+=======
+      m_first_die.SetEmptyChildren(m_die_array.front().GetEmptyChildren());
+>>>>>>> release/7.x
       lldbassert(m_first_die == m_die_array.front());
     }
     m_first_die = m_die_array.front();

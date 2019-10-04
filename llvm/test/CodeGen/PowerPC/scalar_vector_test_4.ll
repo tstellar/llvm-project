@@ -172,8 +172,13 @@ define <2 x float> @s2v_test_f2(float* nocapture readonly %f64, <2 x float> %vec
 ; P9LE-LABEL: s2v_test_f2:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    addi r3, r3, 4
+<<<<<<< HEAD
 ; P9LE-DAG:     xxspltw v2, v2, 2
 ; P9LE-DAG:     lfiwzx f0, 0, r3
+=======
+; P9LE-NEXT:    xxspltw v2, v2, 2
+; P9LE-NEXT:    lfiwzx f0, 0, r3
+>>>>>>> release/7.x
 ; P9LE-NEXT:    xxpermdi v3, f0, f0, 2
 ; P9LE-NEXT:    vmrglw v2, v2, v3
 ; P9LE-NEXT:    blr
@@ -181,8 +186,13 @@ define <2 x float> @s2v_test_f2(float* nocapture readonly %f64, <2 x float> %vec
 ; P9BE-LABEL: s2v_test_f2:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE:       addi r3, r3, 4
+<<<<<<< HEAD
 ; P9BE-DAG:   xxspltw v2, v2, 1
 ; P9BE-DAG:   lfiwzx f0, 0, r3
+=======
+; P9BE:       xxspltw v2, v2, 1
+; P9BE:       lfiwzx f0, 0, r3
+>>>>>>> release/7.x
 ; P9BE-NEXT:  xxsldwi v3, f0, f0, 1
 ; P9BE:       vmrghw v2, v3, v2
 ; P9BE-NEXT:  blr
@@ -216,18 +226,30 @@ define <2 x float> @s2v_test_f3(float* nocapture readonly %f64, <2 x float> %vec
 ; P9LE-LABEL: s2v_test_f3:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    sldi r4, r7, 2
+<<<<<<< HEAD
 ; P9LE-NEXT:    lfiwzx f0, r3, r4
 ; P9LE-DAG:     xxspltw v2, v2, 2
 ; P9LE-DAG:     xxpermdi v3, f0, f0, 2
+=======
+; P9LE-NEXT:    xxspltw v2, v2, 2
+; P9LE-NEXT:    lfiwzx f0, r3, r4
+; P9LE-NEXT:    xxpermdi v3, f0, f0, 2
+>>>>>>> release/7.x
 ; P9LE-NEXT:    vmrglw v2, v2, v3
 ; P9LE-NEXT:    blr
 
 ; P9BE-LABEL: s2v_test_f3:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE:         sldi r4, r7, 2
+<<<<<<< HEAD
 ; P9BE:         lfiwzx f0, r3, r4
 ; P9BE-DAG:     xxspltw v2, v2, 1
 ; P9BE-DAG:     xxsldwi v3, f0, f0, 1
+=======
+; P9BE:         xxspltw v2, v2, 1
+; P9BE:         lfiwzx f0, r3, r4
+; P9BE-NEXT:    xxsldwi v3, f0, f0, 1
+>>>>>>> release/7.x
 ; P9BE:         vmrghw v2, v3, v2
 ; P9BE-NEXT:    blr
 
@@ -261,18 +283,30 @@ define <2 x float> @s2v_test_f4(float* nocapture readonly %f64, <2 x float> %vec
 ; P9LE-LABEL: s2v_test_f4:
 ; P9LE:       # %bb.0: # %entry
 ; P9LE-NEXT:    addi r3, r3, 4
+<<<<<<< HEAD
 ; P9LE-NEXT:    lfiwzx f0, 0, r3
 ; P9LE-DAG:    xxspltw v2, v2, 2
 ; P9LE-DAG:    xxpermdi v3, f0, f0, 2
+=======
+; P9LE-NEXT:    xxspltw v2, v2, 2
+; P9LE-NEXT:    lfiwzx f0, 0, r3
+; P9LE-NEXT:    xxpermdi v3, f0, f0, 2
+>>>>>>> release/7.x
 ; P9LE-NEXT:    vmrglw v2, v2, v3
 ; P9LE-NEXT:    blr
 
 ; P9BE-LABEL: s2v_test_f4:
 ; P9BE:       # %bb.0: # %entry
 ; P9BE:         addi r3, r3, 4
+<<<<<<< HEAD
 ; P9BE:         lfiwzx f0, 0, r3
 ; P9BE-DAG:     xxspltw v2, v2, 1
 ; P9BE-DAG:     xxsldwi v3, f0, f0, 1
+=======
+; P9BE:         xxspltw v2, v2, 1
+; P9BE:         lfiwzx f0, 0, r3
+; P9BE-NEXT:    xxsldwi v3, f0, f0, 1
+>>>>>>> release/7.x
 ; P9BE:         vmrghw v2, v3, v2
 ; P9BE-NEXT:    blr
 

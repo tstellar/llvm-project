@@ -216,13 +216,20 @@ Flush denormal floating point values to zero in CUDA device mode.
 
 Use 32-bit pointers for accessing const/local/shared address spaces.
 
+.. option:: -fcuda-short-ptr, -fno-cuda-short-ptr
+
+Use 32-bit pointers for accessing const/local/shared address spaces.
+
 .. option:: -ffixed-r19
 
 Reserve register r19 (Hexagon only)
+<<<<<<< HEAD
 
 .. option:: -fgpu-rdc, -fcuda-rdc, -fno-gpu-rdc
 
 Generate relocatable device code, also known as separate compilation mode.
+=======
+>>>>>>> release/7.x
 
 .. option:: -fheinous-gnu-extensions
 
@@ -1295,8 +1302,11 @@ Enable C++ static destructor registration (the default)
 
 Instrument control-flow architecture protection. Options: return, branch, full, none.
 
+<<<<<<< HEAD
 .. option:: -fcf-runtime-abi=<arg>
 
+=======
+>>>>>>> release/7.x
 .. option:: -fchar8\_t, -fno-char8\_t
 
 Enable C++ builtin type char8\_t
@@ -2217,8 +2227,11 @@ Link stack frames through backchain on System Z
 
 .. option:: -mcpu=<arg>, -mv5 (equivalent to -mcpu=hexagonv5), -mv55 (equivalent to -mcpu=hexagonv55), -mv60 (equivalent to -mcpu=hexagonv60), -mv62 (equivalent to -mcpu=hexagonv62), -mv65 (equivalent to -mcpu=hexagonv65), -mv66 (equivalent to -mcpu=hexagonv66)
 
+<<<<<<< HEAD
 Use -mcpu=? to see a list of supported cpu models.
 
+=======
+>>>>>>> release/7.x
 .. option:: -mcrc, -mno-crc
 
 Allow use of CRC instructions (ARM/Mips only)
@@ -2275,7 +2288,11 @@ Generate branches with extended addressability, usually via indirect jumps.
 
 .. option:: -mmacosx-version-min=<arg>, -mmacos-version-min=<arg>
 
+<<<<<<< HEAD
 Set macOS deployment target
+=======
+Set Mac OS X deployment target
+>>>>>>> release/7.x
 
 .. option:: -mmcu=<arg>
 
@@ -2321,10 +2338,13 @@ Enable hexagon-qdsp6 backward compatibility
 
 Make StdCall calling convention the default
 
+<<<<<<< HEAD
 .. option:: -msign-return-address=<arg>
 
 Select return address signing scope
 
+=======
+>>>>>>> release/7.x
 .. option:: -msoft-float, -mno-soft-float
 
 Use software floating point

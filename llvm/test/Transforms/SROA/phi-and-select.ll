@@ -682,6 +682,7 @@ exit:
   %result = load i32, i32* %phi, align 4
   ret i32 %result
 }
+<<<<<<< HEAD
 
 ; Don't speculate a load based on an earlier volatile operation.
 define i8 @volatile_select(i8* %p, i1 %b) {
@@ -694,3 +695,5 @@ define i8 @volatile_select(i8* %p, i1 %b) {
   %v2 = load i8, i8* %px
   ret i8 %v2
 }
+=======
+>>>>>>> release/7.x

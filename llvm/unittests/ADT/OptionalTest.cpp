@@ -543,6 +543,7 @@ TEST_F(OptionalTest, OperatorGreaterEqual) {
   CheckRelation<GreaterEqual>(InequalityLhs, InequalityRhs, !IsLess);
 }
 
+<<<<<<< HEAD
 struct ComparableAndStreamable {
   friend bool operator==(ComparableAndStreamable,
                          ComparableAndStreamable) LLVM_ATTRIBUTE_USED {
@@ -569,6 +570,9 @@ TEST_F(OptionalTest, StreamOperator) {
             to_string(ComparableAndStreamable::get()));
   EXPECT_EQ("None", to_string(None));
 }
+=======
+} // end anonymous namespace
+>>>>>>> release/7.x
 
 struct Comparable {
   friend bool operator==(Comparable, Comparable) LLVM_ATTRIBUTE_USED {

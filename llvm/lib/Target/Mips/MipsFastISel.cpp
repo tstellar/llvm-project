@@ -958,11 +958,25 @@ bool MipsFastISel::selectBranch(const Instruction *I) {
   // in the same block.
   unsigned ZExtCondReg = 0;
   if (const CmpInst *CI = dyn_cast<CmpInst>(BI->getCondition())) {
+<<<<<<< HEAD
     if (CI->hasOneUse() && CI->getParent() == I->getParent()) {
       ZExtCondReg = createResultReg(&Mips::GPR32RegClass);
       if (!emitCmp(ZExtCondReg, CI))
         return false;
     }
+=======
+    MVT CIMVT =
+        TLI.getValueType(DL, CI->getOperand(0)->getType(), true).getSimpleVT();
+    if (CIMVT == MVT::i1)
+      return false;
+
+    unsigned CondReg = getRegForValue(CI);
+    BuildMI(*BrBB, FuncInfo.InsertPt, DbgLoc, TII.get(Mips::BGTZ))
+        .addReg(CondReg)
+        .addMBB(TBB);
+    finishCondBranch(BI->getParent(), TBB, FBB);
+    return true;
+>>>>>>> release/7.x
   }
 
   // For the general case, we need to mask with 1.

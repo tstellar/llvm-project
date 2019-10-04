@@ -2522,6 +2522,7 @@ LValue CodeGenFunction::EmitDeclRefLValue(const DeclRefExpr *E) {
         VD->hasAttr<AsmLabelAttr>() && !VD->isLocalVarDecl())
       return EmitGlobalNamedRegister(VD, CGM);
 
+<<<<<<< HEAD
     // If this DeclRefExpr does not constitute an odr-use of the variable,
     // we're not permitted to emit a reference to it in general, and it might
     // not be captured if capture would be necessary for a use. Emit the
@@ -2554,6 +2555,35 @@ LValue CodeGenFunction::EmitDeclRefLValue(const DeclRefExpr *E) {
         Addr = Address(Val, Alignment);
       }
       return MakeAddrLValue(Addr, T, AlignmentSource::Decl);
+=======
+    // A DeclRefExpr for a reference initialized by a constant expression can
+    // appear without being odr-used. Directly emit the constant initializer.
+    const Expr *Init = VD->getAnyInitializer(VD);
+    const auto *BD = dyn_cast_or_null<BlockDecl>(CurCodeDecl);
+    if (Init && !isa<ParmVarDecl>(VD) && VD->getType()->isReferenceType() &&
+        VD->isUsableInConstantExpressions(getContext()) &&
+        VD->checkInitIsICE() &&
+        // Do not emit if it is private OpenMP variable.
+        !(E->refersToEnclosingVariableOrCapture() &&
+          ((CapturedStmtInfo &&
+            (LocalDeclMap.count(VD->getCanonicalDecl()) ||
+             CapturedStmtInfo->lookup(VD->getCanonicalDecl()))) ||
+           LambdaCaptureFields.lookup(VD->getCanonicalDecl()) ||
+           (BD && BD->capturesVariable(VD))))) {
+      llvm::Constant *Val =
+        ConstantEmitter(*this).emitAbstract(E->getLocation(),
+                                            *VD->evaluateValue(),
+                                            VD->getType());
+      assert(Val && "failed to emit reference constant expression");
+      // FIXME: Eventually we will want to emit vector element references.
+
+      // Should we be using the alignment of the constant pointer we emitted?
+      CharUnits Alignment = getNaturalTypeAlignment(E->getType(),
+                                                    /* BaseInfo= */ nullptr,
+                                                    /* TBAAInfo= */ nullptr,
+                                                    /* forPointeeType= */ true);
+      return MakeAddrLValue(Address(Val, Alignment), T, AlignmentSource::Decl);
+>>>>>>> release/7.x
     }
 
     // FIXME: Handle other kinds of non-odr-use DeclRefExprs.

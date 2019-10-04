@@ -8377,6 +8377,7 @@ void SelectionDAGBuilder::visitInlineAsm(ImmutableCallSite CS) {
                       DAG.getVTList(MVT::Other, MVT::Glue), AsmNodeOperands);
   Flag = Chain.getValue(1);
 
+<<<<<<< HEAD
   // Do additional work to generate outputs.
 
   SmallVector<EVT, 1> ResultVTs;
@@ -8428,6 +8429,70 @@ void SelectionDAGBuilder::visitInlineAsm(ImmutableCallSite CS) {
       // Skip trivial output operands.
       if (OpInfo.AssignedRegs.Regs.empty())
         continue;
+=======
+  // If this asm returns a register value, copy the result from that register
+  // and set it as the value of the call.
+  if (!RetValRegs.Regs.empty()) {
+    SDValue Val = RetValRegs.getCopyFromRegs(DAG, FuncInfo, getCurSDLoc(),
+                                             Chain, &Flag, CS.getInstruction());
+
+    llvm::Type *CSResultType = CS.getType();
+    unsigned numRet;
+    ArrayRef<Type *> ResultTypes;
+    SmallVector<SDValue, 1> ResultValues(1);
+    if (CSResultType->isSingleValueType()) {
+      numRet = 1;
+      ResultValues[0] = Val;
+      ResultTypes = makeArrayRef(CSResultType);
+    } else {
+      numRet = CSResultType->getNumContainedTypes();
+      assert(Val->getNumOperands() == numRet &&
+             "Mismatch in number of output operands in asm result");
+      ResultTypes = CSResultType->subtypes();
+      ArrayRef<SDUse> ValueUses = Val->ops();
+      ResultValues.resize(numRet);
+      std::transform(ValueUses.begin(), ValueUses.end(), ResultValues.begin(),
+                     [](const SDUse &u) -> SDValue { return u.get(); });
+    }
+    SmallVector<EVT, 1> ResultVTs(numRet);
+    for (unsigned i = 0; i < numRet; i++) {
+      EVT ResultVT = TLI.getValueType(DAG.getDataLayout(), ResultTypes[i]);
+      SDValue Val = ResultValues[i];
+      assert(ResultTypes[i]->isSized() && "Unexpected unsized type");
+      // If the type of the inline asm call site return value is different but
+      // has same size as the type of the asm output bitcast it.  One example
+      // of this is for vectors with different width / number of elements.
+      // This can happen for register classes that can contain multiple
+      // different value types.  The preg or vreg allocated may not have the
+      // same VT as was expected.
+      //
+      // This can also happen for a return value that disagrees with the
+      // register class it is put in, eg. a double in a general-purpose
+      // register on a 32-bit machine.
+      if (ResultVT != Val.getValueType() &&
+          ResultVT.getSizeInBits() == Val.getValueSizeInBits())
+        Val = DAG.getNode(ISD::BITCAST, getCurSDLoc(), ResultVT, Val);
+      else if (ResultVT != Val.getValueType() && ResultVT.isInteger() &&
+               Val.getValueType().isInteger()) {
+        // If a result value was tied to an input value, the computed result
+        // may have a wider width than the expected result.  Extract the
+        // relevant portion.
+        Val = DAG.getNode(ISD::TRUNCATE, getCurSDLoc(), ResultVT, Val);
+      }
+
+      assert(ResultVT == Val.getValueType() && "Asm result value mismatch!");
+      ResultVTs[i] = ResultVT;
+      ResultValues[i] = Val;
+    }
+
+    Val = DAG.getNode(ISD::MERGE_VALUES, getCurSDLoc(),
+                      DAG.getVTList(ResultVTs), ResultValues);
+    setValue(CS.getInstruction(), Val);
+    // Don't need to use this as a chain in this case.
+    if (!IA->hasSideEffects() && !hasMemory && IndirectStoresToEmit.empty())
+      return;
+  }
+>>>>>>> release/7.x
 
       switch (OpInfo.ConstraintType) {
       case TargetLowering::C_Register:

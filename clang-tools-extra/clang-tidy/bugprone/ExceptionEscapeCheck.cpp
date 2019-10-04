@@ -56,11 +56,20 @@ void ExceptionEscapeCheck::registerMatchers(MatchFinder *Finder) {
     return;
 
   Finder->addMatcher(
+<<<<<<< HEAD
       functionDecl(anyOf(isNoThrow(), cxxDestructorDecl(),
                          cxxConstructorDecl(isMoveConstructor()),
                          cxxMethodDecl(isMoveAssignmentOperator()),
                          hasName("main"), hasName("swap"),
                          isEnabled(FunctionsThatShouldNotThrow)))
+=======
+      functionDecl(allOf(anyOf(isNoThrow(), cxxDestructorDecl(),
+                               cxxConstructorDecl(isMoveConstructor()),
+                               cxxMethodDecl(isMoveAssignmentOperator()),
+                               hasName("main"), hasName("swap"),
+                               isEnabled(FunctionsThatShouldNotThrow)),
+                         throws(unless(isIgnored(IgnoredExceptions)))))
+>>>>>>> release/7.x
           .bind("thrower"),
       this);
 }

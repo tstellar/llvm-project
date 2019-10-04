@@ -563,6 +563,9 @@ void ScriptParser::readSections() {
     } else if (tok == "INCLUDE") {
       readInclude();
       continue;
+    } else if (Tok == "INCLUDE") {
+      readInclude();
+      continue;
     }
 
     if (BaseCommand *cmd = readAssignment(tok))
@@ -859,7 +862,11 @@ OutputSection *ScriptParser::readOutputSectionDescription(StringRef outSec) {
       expect(")");
     } else if (tok == "SORT") {
       readSort();
+<<<<<<< HEAD
     } else if (tok == "INCLUDE") {
+=======
+    } else if (Tok == "INCLUDE") {
+>>>>>>> release/7.x
       readInclude();
     } else if (peek() == "(") {
       cmd->sectionCommands.push_back(readInputSectionDescription(tok));
@@ -1483,8 +1490,13 @@ uint64_t ScriptParser::readMemoryAssignment(StringRef s1, StringRef s2,
 void ScriptParser::readMemory() {
   expect("{");
   while (!errorCount() && !consume("}")) {
+<<<<<<< HEAD
     StringRef tok = next();
     if (tok == "INCLUDE") {
+=======
+    StringRef Tok = next();
+    if (Tok == "INCLUDE") {
+>>>>>>> release/7.x
       readInclude();
       continue;
     }
@@ -1502,9 +1514,15 @@ void ScriptParser::readMemory() {
     uint64_t length = readMemoryAssignment("LENGTH", "len", "l");
 
     // Add the memory region to the region map.
+<<<<<<< HEAD
     MemoryRegion *mr = make<MemoryRegion>(tok, origin, length, flags, negFlags);
     if (!script->memoryRegions.insert({tok, mr}).second)
       setError("region '" + tok + "' already defined");
+=======
+    MemoryRegion *MR = make<MemoryRegion>(Tok, Origin, Length, Flags, NegFlags);
+    if (!Script->MemoryRegions.insert({Tok, MR}).second)
+      setError("region '" + Tok + "' already defined");
+>>>>>>> release/7.x
   }
 }
 

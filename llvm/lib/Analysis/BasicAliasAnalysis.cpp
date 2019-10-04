@@ -880,7 +880,11 @@ ModRefInfo BasicAAResult::getModRefInfo(const CallBase *Call,
   // contents of the alloca into argument registers or stack slots, so there is
   // no lifetime issue.
   if (isa<AllocaInst>(Object))
+<<<<<<< HEAD
     if (const CallInst *CI = dyn_cast<CallInst>(Call))
+=======
+    if (const CallInst *CI = dyn_cast<CallInst>(CS.getInstruction()))
+>>>>>>> release/7.x
       if (CI->isTailCall() &&
           !CI->getAttributes().hasAttrSomewhere(Attribute::ByVal))
         return ModRefInfo::NoModRef;

@@ -18,7 +18,10 @@
 #include <regex>
 #include <cassert>
 
+<<<<<<< HEAD
 #include "test_macros.h"
+=======
+>>>>>>> release/7.x
 
 
 // PR34310

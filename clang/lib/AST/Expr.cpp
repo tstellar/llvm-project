@@ -1512,6 +1512,7 @@ QualType CallExpr::getCallReturnType(const ASTContext &Ctx) const {
   return FnType->getReturnType();
 }
 
+<<<<<<< HEAD
 const Attr *CallExpr::getUnusedResultAttr(const ASTContext &Ctx) const {
   // If the return type is a struct, union, or enum that is marked nodiscard,
   // then return the return type attribute.
@@ -1525,6 +1526,8 @@ const Attr *CallExpr::getUnusedResultAttr(const ASTContext &Ctx) const {
   return D ? D->getAttr<WarnUnusedResultAttr>() : nullptr;
 }
 
+=======
+>>>>>>> release/7.x
 SourceLocation CallExpr::getBeginLoc() const {
   if (isa<CXXOperatorCallExpr>(this))
     return cast<CXXOperatorCallExpr>(this)->getBeginLoc();
@@ -1715,6 +1718,7 @@ MemberExpr *MemberExpr::Create(
   return E;
 }
 
+<<<<<<< HEAD
 MemberExpr *MemberExpr::CreateEmpty(const ASTContext &Context,
                                     bool HasQualifier, bool HasFoundDecl,
                                     bool HasTemplateKWAndArgsInfo,
@@ -1731,6 +1735,8 @@ MemberExpr *MemberExpr::CreateEmpty(const ASTContext &Context,
   return new (Mem) MemberExpr(EmptyShell());
 }
 
+=======
+>>>>>>> release/7.x
 SourceLocation MemberExpr::getBeginLoc() const {
   if (isImplicitAccess()) {
     if (hasQualifier())
@@ -4346,7 +4352,11 @@ SourceLocation DesignatedInitExpr::getBeginLoc() const {
 }
 
 SourceLocation DesignatedInitExpr::getEndLoc() const {
+<<<<<<< HEAD
   return getInit()->getEndLoc();
+=======
+  return getInit()->getLocEnd();
+>>>>>>> release/7.x
 }
 
 Expr *DesignatedInitExpr::getArrayIndex(const Designator& D) const {
@@ -4405,11 +4415,19 @@ DesignatedInitUpdateExpr::DesignatedInitUpdateExpr(const ASTContext &C,
 }
 
 SourceLocation DesignatedInitUpdateExpr::getBeginLoc() const {
+<<<<<<< HEAD
   return getBase()->getBeginLoc();
 }
 
 SourceLocation DesignatedInitUpdateExpr::getEndLoc() const {
   return getBase()->getEndLoc();
+=======
+  return getBase()->getLocStart();
+}
+
+SourceLocation DesignatedInitUpdateExpr::getEndLoc() const {
+  return getBase()->getLocEnd();
+>>>>>>> release/7.x
 }
 
 ParenListExpr::ParenListExpr(SourceLocation LParenLoc, ArrayRef<Expr *> Exprs,

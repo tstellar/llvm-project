@@ -1,8 +1,15 @@
 //===----------------------------------------------------------------------===//
 //
+<<<<<<< HEAD
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+=======
+//                     The LLVM Compiler Infrastructure
+//
+// This file is dual licensed under the MIT and the University of Illinois Open
+// Source Licenses. See LICENSE.TXT for details.
+>>>>>>> release/7.x
 //
 //===----------------------------------------------------------------------===//
 
@@ -14,10 +21,15 @@
 #include <cassert>
 #include <regex>
 
+<<<<<<< HEAD
 #include "test_macros.h"
 
 
 int main(int, char**) {
+=======
+
+int main() {
+>>>>>>> release/7.x
     assert(std::regex_match("X", std::regex("[X]")));
     assert(std::regex_match("X", std::regex("[XY]")));
     assert(!std::regex_match("X", std::regex("[^X]")));
@@ -42,6 +54,7 @@ int main(int, char**) {
     assert(!std::regex_match("_", std::regex("[\\W]")));
     assert(std::regex_match("X", std::regex("[^\\W]")));
     assert(std::regex_match("_", std::regex("[^\\W]")));
+<<<<<<< HEAD
 
     // Those test cases are taken from PR40904
     assert(std::regex_match("abZcd", std::regex("^ab[\\d\\D]cd")));
@@ -57,4 +70,6 @@ int main(int, char**) {
     assert(std::regex_match("_xyz_", std::regex("_[\\s\\S]+_")));
 
     return 0;
+=======
+>>>>>>> release/7.x
 }

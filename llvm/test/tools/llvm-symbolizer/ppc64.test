@@ -4,7 +4,11 @@ int foo() { return 0; }
 int bar() { return foo(); }
 int _start() { return bar(); }
 
+<<<<<<< HEAD
 RUN: llvm-symbolizer 0x1000014c 0x1000018c 0x100001cc -obj=%p/Inputs/ppc64 | FileCheck %s
+=======
+RUN: %python -c "print('0x1000014c\n0x1000018c\n0x100001cc')" | llvm-symbolizer -obj=%p/Inputs/ppc64 | FileCheck %s
+>>>>>>> release/7.x
 
 CHECK: foo
 CHECK: bar

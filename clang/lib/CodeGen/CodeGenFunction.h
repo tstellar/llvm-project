@@ -4321,7 +4321,10 @@ public:
 
   struct MultiVersionResolverOption {
     llvm::Function *Function;
+<<<<<<< HEAD
     FunctionDecl *FD;
+=======
+>>>>>>> release/7.x
     struct Conds {
       StringRef Architecture;
       llvm::SmallVector<StringRef, 8> Features;
@@ -4334,6 +4337,15 @@ public:
                                ArrayRef<StringRef> Feats)
         : Function(F), Conditions(Arch, Feats) {}
   };
+<<<<<<< HEAD
+=======
+
+  // Emits the body of a multiversion function's resolver. Assumes that the
+  // options are already sorted in the proper order, with the 'default' option
+  // last (if it exists).
+  void EmitMultiVersionResolver(llvm::Function *Resolver,
+                                ArrayRef<MultiVersionResolverOption> Options);
+>>>>>>> release/7.x
 
   // Emits the body of a multiversion function's resolver. Assumes that the
   // options are already sorted in the proper order, with the 'default' option

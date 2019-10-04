@@ -227,6 +227,7 @@ def note_constexpr_unsupported_unsized_array : Note<
 def note_constexpr_unsized_array_indexed : Note<
   "indexing of array without known bound is not allowed "
   "in a constant expression">;
+<<<<<<< HEAD
 def note_constexpr_memcpy_null : Note<
   "%select{source|destination}2 of "
   "'%select{%select{memcpy|wmemcpy}1|%select{memmove|wmemmove}1}0' "
@@ -317,6 +318,8 @@ def note_constexpr_memory_leak : Note<
   "%plural{0:|: (along with %0 other memory leak%s0)}0">;
 def err_experimental_clang_interp_failed : Error<
   "the experimental clang interpreter failed to evaluate an expression">;
+=======
+>>>>>>> release/7.x
 
 def warn_integer_constant_overflow : Warning<
   "overflow in expression; result is %0 with type %1">,

@@ -188,7 +188,13 @@ public:
 
   /// Retrieves the source range that contains the entire base specifier.
   SourceRange getSourceRange() const LLVM_READONLY { return Range; }
+<<<<<<< HEAD
   SourceLocation getBeginLoc() const LLVM_READONLY { return Range.getBegin(); }
+=======
+  SourceLocation getLocStart() const LLVM_READONLY { return getBeginLoc(); }
+  SourceLocation getBeginLoc() const LLVM_READONLY { return Range.getBegin(); }
+  SourceLocation getLocEnd() const LLVM_READONLY { return getEndLoc(); }
+>>>>>>> release/7.x
   SourceLocation getEndLoc() const LLVM_READONLY { return Range.getEnd(); }
 
   /// Get the location at which the base class type was written.
@@ -2992,6 +2998,10 @@ public:
     LinkageSpecDeclBits.HasBraces = RBraceLoc.isValid();
   }
 
+<<<<<<< HEAD
+=======
+  SourceLocation getLocEnd() const LLVM_READONLY { return getEndLoc(); }
+>>>>>>> release/7.x
   SourceLocation getEndLoc() const LLVM_READONLY {
     if (hasBraces())
       return getRBraceLoc();

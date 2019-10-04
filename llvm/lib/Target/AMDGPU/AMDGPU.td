@@ -442,6 +442,7 @@ def FeatureAtomicFaddInsts : SubtargetFeature<"atomic-fadd-insts",
   "global_atomic_pk_add_f16 instructions"
 >;
 
+<<<<<<< HEAD
 def FeatureDoesNotSupportSRAMECC : SubtargetFeature<"no-sram-ecc-support",
   "DoesNotSupportSRAMECC",
   "true",
@@ -488,6 +489,8 @@ def FeatureNoDataDepHazard : SubtargetFeature<"no-data-dep-hazard",
 // Subtarget Features (options and debugging)
 //===------------------------------------------------------------===//
 
+=======
+>>>>>>> release/7.x
 // Denormal handling for fp64 and fp16 is controlled by the same
 // config register when fp16 supported.
 // TODO: Do we need a separate f16 setting when not legal?

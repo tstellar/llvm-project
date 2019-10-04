@@ -2665,9 +2665,13 @@ Address CGOpenMPRuntime::getAddrOfDeclareTargetVar(const VarDecl *VD) {
     return Address::invalid();
   llvm::Optional<OMPDeclareTargetDeclAttr::MapTypeTy> Res =
       OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(VD);
+<<<<<<< HEAD
   if (Res && (*Res == OMPDeclareTargetDeclAttr::MT_Link ||
               (*Res == OMPDeclareTargetDeclAttr::MT_To &&
                HasRequiresUnifiedSharedMemory))) {
+=======
+  if (Res && *Res == OMPDeclareTargetDeclAttr::MT_Link) {
+>>>>>>> release/7.x
     SmallString<64> PtrName;
     {
       llvm::raw_svector_ostream OS(PtrName);
@@ -2868,8 +2872,14 @@ llvm::Function *CGOpenMPRuntime::emitThreadPrivateVarDefinition(
 bool CGOpenMPRuntime::emitDeclareTargetVarDefinition(const VarDecl *VD,
                                                      llvm::GlobalVariable *Addr,
                                                      bool PerformInit) {
+<<<<<<< HEAD
   if (CGM.getLangOpts().OMPTargetTriples.empty() &&
       !CGM.getLangOpts().OpenMPIsDevice)
+=======
+  Optional<OMPDeclareTargetDeclAttr::MapTypeTy> Res =
+      OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(VD);
+  if (!Res || *Res == OMPDeclareTargetDeclAttr::MT_Link)
+>>>>>>> release/7.x
     return false;
   Optional<OMPDeclareTargetDeclAttr::MapTypeTy> Res =
       OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(VD);
@@ -7653,12 +7663,19 @@ private:
       if (const auto *VD =
               dyn_cast_or_null<VarDecl>(I->getAssociatedDeclaration())) {
         if (llvm::Optional<OMPDeclareTargetDeclAttr::MapTypeTy> Res =
+<<<<<<< HEAD
                 OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(VD)) {
           if ((*Res == OMPDeclareTargetDeclAttr::MT_Link) ||
               (*Res == OMPDeclareTargetDeclAttr::MT_To &&
                CGF.CGM.getOpenMPRuntime().hasRequiresUnifiedSharedMemory())) {
             RequiresReference = true;
             BP = CGF.CGM.getOpenMPRuntime().getAddrOfDeclareTargetVar(VD);
+=======
+                OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(VD))
+          if (*Res == OMPDeclareTargetDeclAttr::MT_Link) {
+            IsLink = true;
+            BP = CGF.CGM.getOpenMPRuntime().getAddrOfDeclareTargetLink(VD);
+>>>>>>> release/7.x
           }
         }
       }
@@ -8583,8 +8600,12 @@ public:
           continue;
         llvm::Optional<OMPDeclareTargetDeclAttr::MapTypeTy> Res =
             OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(VD);
+<<<<<<< HEAD
         if (CGF.CGM.getOpenMPRuntime().hasRequiresUnifiedSharedMemory() ||
             !Res || *Res != OMPDeclareTargetDeclAttr::MT_Link)
+=======
+        if (!Res || *Res != OMPDeclareTargetDeclAttr::MT_Link)
+>>>>>>> release/7.x
           continue;
         StructRangeInfoTy PartialStruct;
         generateInfoForComponentList(
@@ -9733,8 +9754,13 @@ bool CGOpenMPRuntime::emitTargetFunctions(GlobalDecl GD) {
   }
 
   // Do not to emit function if it is not marked as declare target.
+<<<<<<< HEAD
   return !OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(VD) &&
          AlreadyEmittedTargetFunctions.count(Name) == 0;
+=======
+  return !OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(FD) &&
+         AlreadyEmittedTargetFunctions.count(FD->getCanonicalDecl()) == 0;
+>>>>>>> release/7.x
 }
 
 bool CGOpenMPRuntime::emitTargetGlobalVariable(GlobalDecl GD) {
@@ -9762,6 +9788,7 @@ bool CGOpenMPRuntime::emitTargetGlobalVariable(GlobalDecl GD) {
   llvm::Optional<OMPDeclareTargetDeclAttr::MapTypeTy> Res =
       OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(
           cast<VarDecl>(GD.getDecl()));
+<<<<<<< HEAD
   if (!Res || *Res == OMPDeclareTargetDeclAttr::MT_Link ||
       (*Res == OMPDeclareTargetDeclAttr::MT_To &&
        HasRequiresUnifiedSharedMemory)) {
@@ -9803,10 +9830,14 @@ CGOpenMPRuntime::registerTargetFirstprivateCopy(CodeGenFunction &CGF,
       VarName, Addr, VarSize,
       OffloadEntriesInfoManagerTy::OMPTargetGlobalVarEntryTo, Linkage);
   return Addr;
+=======
+  return !Res || *Res == OMPDeclareTargetDeclAttr::MT_Link;
+>>>>>>> release/7.x
 }
 
 void CGOpenMPRuntime::registerTargetGlobalVariable(const VarDecl *VD,
                                                    llvm::Constant *Addr) {
+<<<<<<< HEAD
   if (CGM.getLangOpts().OMPTargetTriples.empty() &&
       !CGM.getLangOpts().OpenMPIsDevice)
     return;
@@ -9832,6 +9863,18 @@ void CGOpenMPRuntime::registerTargetGlobalVariable(const VarDecl *VD,
     Flags = OffloadEntriesInfoManagerTy::OMPTargetGlobalVarEntryTo;
     VarName = CGM.getMangledName(VD);
     if (VD->hasDefinition(CGM.getContext()) != VarDecl::DeclarationOnly) {
+=======
+  if (llvm::Optional<OMPDeclareTargetDeclAttr::MapTypeTy> Res =
+          OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(VD)) {
+    OffloadEntriesInfoManagerTy::OMPTargetGlobalVarEntryKind Flags;
+    StringRef VarName;
+    CharUnits VarSize;
+    llvm::GlobalValue::LinkageTypes Linkage;
+    switch (*Res) {
+    case OMPDeclareTargetDeclAttr::MT_To:
+      Flags = OffloadEntriesInfoManagerTy::OMPTargetGlobalVarEntryTo;
+      VarName = CGM.getMangledName(VD);
+>>>>>>> release/7.x
       VarSize = CGM.getContext().getTypeSizeInChars(VD->getType());
       assert(!VarSize.isZero() && "Expected non-zero size of the variable");
     } else {
@@ -9970,8 +10013,14 @@ bool CGOpenMPRuntime::markAsGlobalTarget(GlobalDecl GD) {
   // Do not to emit function if it is marked as declare target as it was already
   // emitted.
   if (OMPDeclareTargetDeclAttr::isDeclareTargetDeclaration(D)) {
+<<<<<<< HEAD
     if (D->hasBody() && AlreadyEmittedTargetFunctions.count(Name) == 0) {
       if (auto *F = dyn_cast_or_null<llvm::Function>(CGM.GetGlobalValue(Name)))
+=======
+    if (D->hasBody() && AlreadyEmittedTargetFunctions.count(FD) == 0) {
+      if (auto *F = dyn_cast_or_null<llvm::Function>(
+              CGM.GetGlobalValue(CGM.getMangledName(GD))))
+>>>>>>> release/7.x
         return !F->isDeclaration();
       return false;
     }
@@ -10967,15 +11016,26 @@ void CGOpenMPRuntime::emitDoacrossInit(CodeGenFunction &CGF,
   }
   llvm::APInt Size(/*numBits=*/32, NumIterations.size());
   QualType ArrayTy =
+<<<<<<< HEAD
       C.getConstantArrayType(KmpDimTy, Size, nullptr, ArrayType::Normal, 0);
+=======
+      C.getConstantArrayType(KmpDimTy, Size, ArrayType::Normal, 0);
+>>>>>>> release/7.x
 
   Address DimsAddr = CGF.CreateMemTemp(ArrayTy, "dims");
   CGF.EmitNullInitialization(DimsAddr, ArrayTy);
   enum { LowerFD = 0, UpperFD, StrideFD };
   // Fill dims with data.
   for (unsigned I = 0, E = NumIterations.size(); I < E; ++I) {
+<<<<<<< HEAD
     LValue DimsLVal = CGF.MakeAddrLValue(
         CGF.Builder.CreateConstArrayGEP(DimsAddr, I), KmpDimTy);
+=======
+    LValue DimsLVal =
+        CGF.MakeAddrLValue(CGF.Builder.CreateConstArrayGEP(
+                               DimsAddr, I, C.getTypeSizeInChars(KmpDimTy)),
+                           KmpDimTy);
+>>>>>>> release/7.x
     // dims.upper = num_iterations;
     LValue UpperLVal = CGF.EmitLValueForField(
         DimsLVal, *std::next(RD->field_begin(), UpperFD));
@@ -10994,11 +11054,21 @@ void CGOpenMPRuntime::emitDoacrossInit(CodeGenFunction &CGF,
   // Build call void __kmpc_doacross_init(ident_t *loc, kmp_int32 gtid,
   // kmp_int32 num_dims, struct kmp_dim * dims);
   llvm::Value *Args[] = {
+<<<<<<< HEAD
       emitUpdateLocation(CGF, D.getBeginLoc()),
       getThreadID(CGF, D.getBeginLoc()),
       llvm::ConstantInt::getSigned(CGM.Int32Ty, NumIterations.size()),
       CGF.Builder.CreatePointerBitCastOrAddrSpaceCast(
           CGF.Builder.CreateConstArrayGEP(DimsAddr, 0).getPointer(),
+=======
+      emitUpdateLocation(CGF, D.getLocStart()),
+      getThreadID(CGF, D.getLocStart()),
+      llvm::ConstantInt::getSigned(CGM.Int32Ty, NumIterations.size()),
+      CGF.Builder.CreatePointerBitCastOrAddrSpaceCast(
+          CGF.Builder
+              .CreateConstArrayGEP(DimsAddr, 0, C.getTypeSizeInChars(KmpDimTy))
+              .getPointer(),
+>>>>>>> release/7.x
           CGM.VoidPtrTy)};
 
   llvm::FunctionCallee RTLFn =
@@ -11018,7 +11088,11 @@ void CGOpenMPRuntime::emitDoacrossOrdered(CodeGenFunction &CGF,
       CGM.getContext().getIntTypeForBitwidth(/*DestWidth=*/64, /*Signed=*/1);
   llvm::APInt Size(/*numBits=*/32, C->getNumLoops());
   QualType ArrayTy = CGM.getContext().getConstantArrayType(
+<<<<<<< HEAD
       Int64Ty, Size, nullptr, ArrayType::Normal, 0);
+=======
+      Int64Ty, Size, ArrayType::Normal, 0);
+>>>>>>> release/7.x
   Address CntAddr = CGF.CreateMemTemp(ArrayTy, ".cnt.addr");
   for (unsigned I = 0, E = C->getNumLoops(); I < E; ++I) {
     const Expr *CounterVal = C->getLoopData(I);
@@ -11026,6 +11100,7 @@ void CGOpenMPRuntime::emitDoacrossOrdered(CodeGenFunction &CGF,
     llvm::Value *CntVal = CGF.EmitScalarConversion(
         CGF.EmitScalarExpr(CounterVal), CounterVal->getType(), Int64Ty,
         CounterVal->getExprLoc());
+<<<<<<< HEAD
     CGF.EmitStoreOfScalar(CntVal, CGF.Builder.CreateConstArrayGEP(CntAddr, I),
                           /*Volatile=*/false, Int64Ty);
   }
@@ -11034,6 +11109,22 @@ void CGOpenMPRuntime::emitDoacrossOrdered(CodeGenFunction &CGF,
       getThreadID(CGF, C->getBeginLoc()),
       CGF.Builder.CreateConstArrayGEP(CntAddr, 0).getPointer()};
   llvm::FunctionCallee RTLFn;
+=======
+    CGF.EmitStoreOfScalar(
+        CntVal,
+        CGF.Builder.CreateConstArrayGEP(
+            CntAddr, I, CGM.getContext().getTypeSizeInChars(Int64Ty)),
+        /*Volatile=*/false, Int64Ty);
+  }
+  llvm::Value *Args[] = {
+      emitUpdateLocation(CGF, C->getLocStart()),
+      getThreadID(CGF, C->getLocStart()),
+      CGF.Builder
+          .CreateConstArrayGEP(CntAddr, 0,
+                               CGM.getContext().getTypeSizeInChars(Int64Ty))
+          .getPointer()};
+  llvm::Value *RTLFn;
+>>>>>>> release/7.x
   if (C->getDependencyKind() == OMPC_DEPEND_source) {
     RTLFn = createRuntimeFunction(OMPRTL__kmpc_doacross_post);
   } else {

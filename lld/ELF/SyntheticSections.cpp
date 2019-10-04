@@ -3162,9 +3162,18 @@ MipsRldMapSection::MipsRldMapSection()
     : SyntheticSection(SHF_ALLOC | SHF_WRITE, SHT_PROGBITS, config->wordsize,
                        ".rld_map") {}
 
+<<<<<<< HEAD
 ARMExidxSyntheticSection::ARMExidxSyntheticSection()
     : SyntheticSection(SHF_ALLOC | SHF_LINK_ORDER, SHT_ARM_EXIDX,
                        config->wordsize, ".ARM.exidx") {}
+=======
+    // We do not want to handle sections that are not alive, so just remove
+    // them instead of trying to merge.
+    if (!MS->Live) {
+      S = nullptr;
+      continue;
+    }
+>>>>>>> release/7.x
 
 static InputSection *findExidxSection(InputSection *isec) {
   for (InputSection *d : isec->dependentSections)

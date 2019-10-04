@@ -802,6 +802,12 @@ public:
     return SourceRange(getBeginLoc(), getEndLoc());
   }
 
+<<<<<<< HEAD
+=======
+  SourceLocation getLocStart() const LLVM_READONLY { return getBeginLoc(); }
+
+  SourceLocation getLocEnd() const LLVM_READONLY { return getEndLoc(); }
+>>>>>>> release/7.x
   SourceLocation getEndLoc() const LLVM_READONLY {
     SourceLocation EndLoc = getEndLocPrivate();
     return EndLoc.isValid() ? EndLoc : getBeginLoc();

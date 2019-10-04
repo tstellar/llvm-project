@@ -10,6 +10,10 @@
 .section .rodata.str1,"aMS",@progbits,1
 .asciz "a"
 
+# This mergeable section will be garbage collected. We had a crash issue in that case. Test it.
+.section .rodata.str1,"aMS",@progbits,1
+.asciz "a"
+
 .section .text.func, "ax", %progbits
 .globl func
 .type func,@function

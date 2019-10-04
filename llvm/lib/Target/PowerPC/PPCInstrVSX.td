@@ -3468,6 +3468,39 @@ let AddedComplexity = 400, Predicates = [HasP9Vector] in {
     } // IsBigEndian, HasP9Vector
   }
 
+
+  let AddedComplexity = 400 in {
+  // The following pseudoinstructions are used to ensure the utilization
+  // of all 64 VSX registers.
+    let Predicates = [IsLittleEndian, HasP9Vector] in {
+      def : Pat<(v2i64 (scalar_to_vector (i64 (load ixaddr:$src)))),
+                (v2i64 (XXPERMDIs
+                (COPY_TO_REGCLASS (DFLOADf64 ixaddr:$src), VSRC), 2))>;
+      def : Pat<(v2i64 (scalar_to_vector (i64 (load xaddr:$src)))),
+                (v2i64 (XXPERMDIs
+		(COPY_TO_REGCLASS (XFLOADf64 xaddr:$src), VSRC), 2))>;
+
+      def : Pat<(v2f64 (scalar_to_vector (f64 (load ixaddr:$src)))),
+                (v2f64 (XXPERMDIs
+                (COPY_TO_REGCLASS (DFLOADf64 ixaddr:$src), VSRC), 2))>;
+      def : Pat<(v2f64 (scalar_to_vector (f64 (load xaddr:$src)))),
+                (v2f64 (XXPERMDIs
+                (COPY_TO_REGCLASS (XFLOADf64 xaddr:$src), VSRC), 2))>;
+    }
+
+    let Predicates = [IsBigEndian, HasP9Vector] in {
+      def : Pat<(v2i64 (scalar_to_vector (i64 (load ixaddr:$src)))),
+                (v2i64 (COPY_TO_REGCLASS (DFLOADf64 ixaddr:$src), VSRC))>;
+      def : Pat<(v2i64 (scalar_to_vector (i64 (load xaddr:$src)))),
+                (v2i64 (COPY_TO_REGCLASS (XFLOADf64 xaddr:$src), VSRC))>;
+
+      def : Pat<(v2f64 (scalar_to_vector (f64 (load ixaddr:$src)))),
+                (v2f64 (COPY_TO_REGCLASS (DFLOADf64 ixaddr:$src), VSRC))>;
+      def : Pat<(v2f64 (scalar_to_vector (f64 (load xaddr:$src)))),
+                (v2f64 (COPY_TO_REGCLASS (XFLOADf64 xaddr:$src), VSRC))>;
+    }
+  }
+
   let Predicates = [IsBigEndian, HasP9Vector] in {
 
     // (Un)Signed DWord vector extract -> QP
@@ -4042,6 +4075,7 @@ let AddedComplexity = 400 in {
     def : Pat<(v4i32 (build_vector ExtDbl.A0U, ExtDbl.A1U,
                                    ExtDbl.B0U, ExtDbl.B1U)),
               (v4i32 (VMRGEW MrgWords.CVA0B0U, MrgWords.CVA1B1U))>;
+<<<<<<< HEAD
   }
 
   let Predicates = [IsLittleEndian, HasP8Vector] in {
@@ -4068,6 +4102,8 @@ let AddedComplexity = 400 in {
                 (STIWX (EXTRACT_SUBREG (XXSLDWI $A, $A, !head(!tail(Idx))),
                                        sub_64), xoaddr:$src)>;
     }
+=======
+>>>>>>> release/7.x
   }
 
   let Predicates = [HasP8Vector, IsLittleEndian, NoP9Vector] in {
@@ -4272,6 +4308,7 @@ let AddedComplexity = 400 in {
   }
 }
 
+<<<<<<< HEAD
 // Put this P9Altivec related definition here since it's possible to be 
 // selected to VSX instruction xvnegsp, avoid possible undef.
 let Predicates = [HasP9Altivec] in {
@@ -4290,3 +4327,5 @@ let Predicates = [HasP9Altivec] in {
   def : Pat<(v4i32 (PPCvabsd v4i32:$A, v4i32:$B, (i32 1))),
             (v4i32 (VABSDUW (XVNEGSP $A), (XVNEGSP $B)))>;
 }
+=======
+>>>>>>> release/7.x

@@ -418,10 +418,18 @@ public:
     return SourceRange(getLocation(), getLocation());
   }
 
+<<<<<<< HEAD
+=======
+  SourceLocation getLocStart() const LLVM_READONLY { return getBeginLoc(); }
+>>>>>>> release/7.x
   SourceLocation getBeginLoc() const LLVM_READONLY {
     return getSourceRange().getBegin();
   }
 
+<<<<<<< HEAD
+=======
+  SourceLocation getLocEnd() const LLVM_READONLY { return getEndLoc(); }
+>>>>>>> release/7.x
   SourceLocation getEndLoc() const LLVM_READONLY {
     return getSourceRange().getEnd();
   }

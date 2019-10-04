@@ -14,8 +14,14 @@ RUN:    | FileCheck %s --check-prefix=CHECK-NO-DEMANGLE
 Subtract ImageBase from all the offsets and run the test again with
 --relative-address.
 
+<<<<<<< HEAD
 RUN: %python -c 'import sys;print("\n".join([hex(int(x, 16) - 0x400000) for x in sys.stdin]))' < %t.input \
 RUN:    | llvm-symbolizer -obj="%p/Inputs/test.exe" -demangle=false --relative-address \
+=======
+RUN: grep '^ADDR:' %s | sed -s 's/ADDR: //' \
+RUN: 	| %python -c 'import sys;print("\n".join([hex(int(x, 16) - 0x400000) for x in sys.stdin]))' \
+RUN:	| llvm-symbolizer -obj="%p/Inputs/test.exe" -demangle=false --relative-address \
+>>>>>>> release/7.x
 RUN:    | FileCheck %s --check-prefix=CHECK-NO-DEMANGLE
 
 CHECK: foo(void)

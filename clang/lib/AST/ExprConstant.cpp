@@ -353,6 +353,7 @@ namespace {
       return false;
     }
 
+<<<<<<< HEAD
     /// Get the range of valid index adjustments in the form
     ///   {maximum value that can be subtracted from this pointer,
     ///    maximum value that can be added to this pointer}
@@ -372,6 +373,8 @@ namespace {
       return {ArrayIndex, ArraySize - ArrayIndex};
     }
 
+=======
+>>>>>>> release/7.x
     /// Check that this refers to a valid subobject.
     bool isValidSubobject() const {
       if (Invalid)
@@ -382,6 +385,7 @@ namespace {
     /// relevant diagnostic and set the designator as invalid.
     bool checkSubobject(EvalInfo &Info, const Expr *E, CheckSubobjectKind CSK);
 
+<<<<<<< HEAD
     /// Get the type of the designated object.
     QualType getType(ASTContext &Ctx) const {
       assert(!Invalid && "invalid designator has no subobject type");
@@ -390,6 +394,8 @@ namespace {
                  : Ctx.getRecordType(getAsBaseClass(Entries.back()));
     }
 
+=======
+>>>>>>> release/7.x
     /// Update this designator to refer to the first element within this array.
     void addArrayUnchecked(const ConstantArrayType *CAT) {
       Entries.push_back(PathEntry::ArrayIndex(0));
@@ -1913,54 +1919,6 @@ static bool IsGlobalLValue(APValue::LValueBase B) {
   }
 }
 
-static const ValueDecl *GetLValueBaseDecl(const LValue &LVal) {
-  return LVal.Base.dyn_cast<const ValueDecl*>();
-}
-
-static bool IsLiteralLValue(const LValue &Value) {
-  if (Value.getLValueCallIndex())
-    return false;
-  const Expr *E = Value.Base.dyn_cast<const Expr*>();
-  return E && !isa<MaterializeTemporaryExpr>(E);
-}
-
-static bool IsWeakLValue(const LValue &Value) {
-  const ValueDecl *Decl = GetLValueBaseDecl(Value);
-  return Decl && Decl->isWeak();
-}
-
-static bool isZeroSized(const LValue &Value) {
-  const ValueDecl *Decl = GetLValueBaseDecl(Value);
-  if (Decl && isa<VarDecl>(Decl)) {
-    QualType Ty = Decl->getType();
-    if (Ty->isArrayType())
-      return Ty->isIncompleteType() ||
-             Decl->getASTContext().getTypeSize(Ty) == 0;
-  }
-  return false;
-}
-
-static bool HasSameBase(const LValue &A, const LValue &B) {
-  if (!A.getLValueBase())
-    return !B.getLValueBase();
-  if (!B.getLValueBase())
-    return false;
-
-  if (A.getLValueBase().getOpaqueValue() !=
-      B.getLValueBase().getOpaqueValue()) {
-    const Decl *ADecl = GetLValueBaseDecl(A);
-    if (!ADecl)
-      return false;
-    const Decl *BDecl = GetLValueBaseDecl(B);
-    if (!BDecl || ADecl->getCanonicalDecl() != BDecl->getCanonicalDecl())
-      return false;
-  }
-
-  return IsGlobalLValue(A.getLValueBase()) ||
-         (A.getLValueCallIndex() == B.getLValueCallIndex() &&
-          A.getLValueVersion() == B.getLValueVersion());
-}
-
 static void NoteLValueLocation(EvalInfo &Info, APValue::LValueBase Base) {
   assert(Base && "no location for a null lvalue");
   const ValueDecl *VD = Base.dyn_cast<const ValueDecl*>();
@@ -2232,6 +2190,7 @@ static bool CheckEvaluationResult(CheckEvaluationResultKind CERK,
   return true;
 }
 
+<<<<<<< HEAD
 /// Check that this core constant expression value is a valid value for a
 /// constant expression. If not, report an appropriate diagnostic. Does not
 /// check that the expression is of literal type.
@@ -2267,6 +2226,33 @@ static bool CheckMemoryLeaks(EvalInfo &Info) {
         << unsigned(Info.HeapAllocs.size() - 1);
   }
   return true;
+=======
+static const ValueDecl *GetLValueBaseDecl(const LValue &LVal) {
+  return LVal.Base.dyn_cast<const ValueDecl*>();
+}
+
+static bool IsLiteralLValue(const LValue &Value) {
+  if (Value.getLValueCallIndex())
+    return false;
+  const Expr *E = Value.Base.dyn_cast<const Expr*>();
+  return E && !isa<MaterializeTemporaryExpr>(E);
+}
+
+static bool IsWeakLValue(const LValue &Value) {
+  const ValueDecl *Decl = GetLValueBaseDecl(Value);
+  return Decl && Decl->isWeak();
+}
+
+static bool isZeroSized(const LValue &Value) {
+  const ValueDecl *Decl = GetLValueBaseDecl(Value);
+  if (Decl && isa<VarDecl>(Decl)) {
+    QualType Ty = Decl->getType();
+    if (Ty->isArrayType())
+      return Ty->isIncompleteType() ||
+             Decl->getASTContext().getTypeSize(Ty) == 0;
+  }
+  return false;
+>>>>>>> release/7.x
 }
 
 static bool EvalPointerValueAsBool(const APValue &Value, bool &Result) {
@@ -8290,6 +8276,7 @@ bool PointerExprEvaluator::VisitBuiltinCallExpr(const CallExpr *E,
     return ZeroInitialization(E);
   }
 
+<<<<<<< HEAD
   case Builtin::BImemcpy:
   case Builtin::BImemmove:
   case Builtin::BIwmemcpy:
@@ -8434,6 +8421,8 @@ bool PointerExprEvaluator::VisitBuiltinCallExpr(const CallExpr *E,
     }
   }
 
+=======
+>>>>>>> release/7.x
   default:
     break;
   }
@@ -11046,6 +11035,27 @@ bool IntExprEvaluator::VisitBuiltinCallExpr(const CallExpr *E,
     return Success(DidOverflow, E);
   }
   }
+}
+
+static bool HasSameBase(const LValue &A, const LValue &B) {
+  if (!A.getLValueBase())
+    return !B.getLValueBase();
+  if (!B.getLValueBase())
+    return false;
+
+  if (A.getLValueBase().getOpaqueValue() !=
+      B.getLValueBase().getOpaqueValue()) {
+    const Decl *ADecl = GetLValueBaseDecl(A);
+    if (!ADecl)
+      return false;
+    const Decl *BDecl = GetLValueBaseDecl(B);
+    if (!BDecl || ADecl->getCanonicalDecl() != BDecl->getCanonicalDecl())
+      return false;
+  }
+
+  return IsGlobalLValue(A.getLValueBase()) ||
+         (A.getLValueCallIndex() == B.getLValueCallIndex() &&
+          A.getLValueVersion() == B.getLValueVersion());
 }
 
 /// Determine whether this is a pointer past the end of the complete

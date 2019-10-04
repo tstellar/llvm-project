@@ -63,9 +63,17 @@ protected:
 
 public:
   /// Returns the starting location of the clause.
+<<<<<<< HEAD
   SourceLocation getBeginLoc() const { return StartLoc; }
 
   /// Returns the ending location of the clause.
+=======
+  SourceLocation getLocStart() const LLVM_READONLY { return getBeginLoc(); }
+  SourceLocation getBeginLoc() const { return StartLoc; }
+
+  /// Returns the ending location of the clause.
+  SourceLocation getLocEnd() const LLVM_READONLY { return getEndLoc(); }
+>>>>>>> release/7.x
   SourceLocation getEndLoc() const { return EndLoc; }
 
   /// Sets the starting location of the clause.
@@ -1530,8 +1538,13 @@ public:
   /// Set loop counter for the specified loop.
   void setLoopCounter(unsigned NumLoop, Expr *Counter);
   /// Get loops counter for the specified loop.
+<<<<<<< HEAD
   Expr *getLoopCounter(unsigned NumLoop);
   const Expr *getLoopCounter(unsigned NumLoop) const;
+=======
+  Expr *getLoopCunter(unsigned NumLoop);
+  const Expr *getLoopCunter(unsigned NumLoop) const;
+>>>>>>> release/7.x
 
   child_range children() { return child_range(&NumForLoops, &NumForLoops + 1); }
 

@@ -902,7 +902,11 @@ SDValue R600TargetLowering::LowerImplicitParameter(SelectionDAG &DAG, EVT VT,
                                                    unsigned DwordOffset) const {
   unsigned ByteOffset = DwordOffset * 4;
   PointerType * PtrType = PointerType::get(VT.getTypeForEVT(*DAG.getContext()),
+<<<<<<< HEAD
                                       AMDGPUAS::PARAM_I_ADDRESS);
+=======
+                                      AMDGPUASI.PARAM_I_ADDRESS);
+>>>>>>> release/7.x
 
   // We shouldn't be using an offset wider than 16-bits for implicit parameters.
   assert(isInt<16>(ByteOffset));
@@ -1608,7 +1612,11 @@ SDValue R600TargetLowering::LowerFormalArguments(
     }
 
     PointerType *PtrTy = PointerType::get(VT.getTypeForEVT(*DAG.getContext()),
+<<<<<<< HEAD
                                           AMDGPUAS::PARAM_I_ADDRESS);
+=======
+                                          AMDGPUASI.PARAM_I_ADDRESS);
+>>>>>>> release/7.x
 
     // i64 isn't a legal type, so the register type used ends up as i32, which
     // isn't expected here. It attempts to create this sextload, but it ends up

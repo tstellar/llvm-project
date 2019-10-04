@@ -10,6 +10,16 @@ declare fp128 @llvm.copysign.f128(fp128, fp128)
 @val_double = global double zeroinitializer, align 8
 @val_fp128 = global fp128 zeroinitializer, align 16
 
+<<<<<<< HEAD
+=======
+; CHECK-LABEL: copysign0
+; CHECK: ldr [[REG:x[0-9]+]], [x8, :lo12:val_double]
+; CHECK: and [[ANDREG:x[0-9]+]], [[REG]], #0x8000000000000000
+; CHECK: lsr x[[LSRREGNUM:[0-9]+]], [[ANDREG]], #56
+; CHECK: bfxil w[[LSRREGNUM]], w{{[0-9]+}}, #0, #7
+; CHECK: strb w[[LSRREGNUM]],
+; CHECK: ldr q{{[0-9]+}},
+>>>>>>> release/7.x
 define fp128 @copysign0() {
 ; CHECK-LABEL: copysign0:
 ; CHECK:       // %bb.0: // %entry
@@ -33,6 +43,7 @@ entry:
   ret fp128 %call
 }
 
+<<<<<<< HEAD
 define fp128@copysign1() {
 ; CHECK-LABEL: copysign1:
 ; CHECK:       // %bb.0: // %entry
@@ -49,6 +60,17 @@ define fp128@copysign1() {
 ; CHECK-NEXT:    strb w8, [sp, #15]
 ; CHECK-NEXT:    ldr q0, [sp], #16
 ; CHECK-NEXT:    ret
+=======
+; CHECK-LABEL: copysign1
+; CHECK-DAG: ldr [[REG:q[0-9]+]], [x8, :lo12:val_fp128]
+; CHECK-DAG: ldr [[REG:w[0-9]+]], [x8, :lo12:val_float]
+; CHECK: and [[ANDREG:w[0-9]+]], [[REG]], #0x80000000
+; CHECK: lsr w[[LSRREGNUM:[0-9]+]], [[ANDREG]], #24
+; CHECK: bfxil w[[LSRREGNUM]], w{{[0-9]+}}, #0, #7
+; CHECK: strb w[[LSRREGNUM]],
+; CHECK: ldr q{{[0-9]+}},
+define fp128@copysign1() {
+>>>>>>> release/7.x
 entry:
   %v0 = load fp128, fp128* @val_fp128, align 16
   %v1 = load float, float* @val_float, align 4

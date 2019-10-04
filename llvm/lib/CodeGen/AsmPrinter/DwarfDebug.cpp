@@ -2675,7 +2675,16 @@ void DwarfDebug::emitDebugRanges() {
   if (CUMap.empty())
     return;
 
+<<<<<<< HEAD
   const auto &Holder = useSplitDwarf() ? SkeletonHolder : InfoHolder;
+=======
+  auto NoRangesPresent = [this]() {
+    return llvm::all_of(
+        CUMap, [](const decltype(CUMap)::value_type &Pair) {
+          return Pair.second->getRangeLists().empty();
+        });
+  };
+>>>>>>> release/7.x
 
   if (Holder.getRangeLists().empty())
     return;

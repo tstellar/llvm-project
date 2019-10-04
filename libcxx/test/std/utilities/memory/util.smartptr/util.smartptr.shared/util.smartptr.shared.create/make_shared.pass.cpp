@@ -24,6 +24,12 @@
 #define DELETE_FUNCTION
 #endif
 
+#if TEST_STD_VER >= 11
+#define DELETE_FUNCTION = delete
+#else
+#define DELETE_FUNCTION
+#endif
+
 struct A
 {
     static int count;

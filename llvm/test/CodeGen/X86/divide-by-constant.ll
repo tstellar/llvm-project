@@ -388,10 +388,17 @@ define { i64, i32 } @PR38622(i64) nounwind {
 ; X64-NEXT:    shrq $11, %rax
 ; X64-NEXT:    movabsq $4835703278458517, %rcx # imm = 0x112E0BE826D695
 ; X64-NEXT:    mulq %rcx
+<<<<<<< HEAD
 ; X64-NEXT:    movq %rdx, %rax
 ; X64-NEXT:    shrq $9, %rax
 ; X64-NEXT:    imull $-294967296, %eax, %ecx # imm = 0xEE6B2800
 ; X64-NEXT:    subl %ecx, %edi
+=======
+; X64-NEXT:    shrq $9, %rdx
+; X64-NEXT:    imull $-294967296, %edx, %eax # imm = 0xEE6B2800
+; X64-NEXT:    subl %eax, %edi
+; X64-NEXT:    movq %rdx, %rax
+>>>>>>> release/7.x
 ; X64-NEXT:    movl %edi, %edx
 ; X64-NEXT:    retq
   %2 = udiv i64 %0, 4000000000
@@ -441,12 +448,21 @@ define { i64, i32 } @PR38622_signed(i64) nounwind {
 ; X64-NEXT:    movabsq $1237940039285380275, %rcx # imm = 0x112E0BE826D694B3
 ; X64-NEXT:    movq %rdi, %rax
 ; X64-NEXT:    imulq %rcx
+<<<<<<< HEAD
 ; X64-NEXT:    movq %rdx, %rax
 ; X64-NEXT:    movq %rdx, %rcx
 ; X64-NEXT:    shrq $63, %rcx
 ; X64-NEXT:    sarq $28, %rax
 ; X64-NEXT:    addq %rcx, %rax
 ; X64-NEXT:    imull $-294967296, %eax, %ecx # imm = 0xEE6B2800
+=======
+; X64-NEXT:    movq %rdx, %rcx
+; X64-NEXT:    shrq $63, %rcx
+; X64-NEXT:    sarq $28, %rdx
+; X64-NEXT:    leaq (%rdx,%rcx), %rax
+; X64-NEXT:    addl %ecx, %edx
+; X64-NEXT:    imull $-294967296, %edx, %ecx # imm = 0xEE6B2800
+>>>>>>> release/7.x
 ; X64-NEXT:    subl %ecx, %edi
 ; X64-NEXT:    movl %edi, %edx
 ; X64-NEXT:    retq

@@ -352,8 +352,14 @@ public:
          (1 << TargetInfo::LongDouble));
 
     // x86-32 has atomics up to 8 bytes
+<<<<<<< HEAD
     MaxAtomicPromoteWidth = 64;
     MaxAtomicInlineWidth = 32;
+=======
+    // FIXME: Check that we actually have cmpxchg8b before setting
+    // MaxAtomicInlineWidth. (cmpxchg8b is an i586 instruction.)
+    MaxAtomicPromoteWidth = MaxAtomicInlineWidth = 64;
+>>>>>>> release/7.x
   }
 
   BuiltinVaListKind getBuiltinVaListKind() const override {

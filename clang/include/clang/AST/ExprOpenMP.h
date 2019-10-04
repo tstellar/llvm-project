@@ -100,9 +100,17 @@ public:
   /// Set length of the array section.
   void setLength(Expr *E) { SubExprs[LENGTH] = E; }
 
+<<<<<<< HEAD
   SourceLocation getBeginLoc() const LLVM_READONLY {
     return getBase()->getBeginLoc();
   }
+=======
+  SourceLocation getLocStart() const LLVM_READONLY { return getBeginLoc(); }
+  SourceLocation getBeginLoc() const LLVM_READONLY {
+    return getBase()->getLocStart();
+  }
+  SourceLocation getLocEnd() const LLVM_READONLY { return getEndLoc(); }
+>>>>>>> release/7.x
   SourceLocation getEndLoc() const LLVM_READONLY { return RBracketLoc; }
 
   SourceLocation getColonLoc() const { return ColonLoc; }

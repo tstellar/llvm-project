@@ -279,6 +279,7 @@ define amdgpu_vs float @load_addr_no_fold(i32 addrspace(6)* inreg noalias %p0) #
   ret float %r2
 }
 
+<<<<<<< HEAD
 ; CHECK-LABEL: {{^}}vgpr_arg_src:
 ; CHECK: v_readfirstlane_b32 s[[READLANE:[0-9]+]], v0
 ; CHECK: s_mov_b32 s[[ZERO:[0-9]+]]
@@ -290,6 +291,8 @@ main_body:
   ret float %tmp10
 }
 
+=======
+>>>>>>> release/7.x
 ; Function Attrs: nounwind readnone speculatable
 declare float @llvm.amdgcn.interp.mov(i32, i32, i32, i32) #6
 

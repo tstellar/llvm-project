@@ -1,5 +1,8 @@
 // RUN: %clang_cc1 -triple x86_64-linux-gnu -emit-llvm -o - %s | FileCheck %s --check-prefixes=CHECK,LINUX
+<<<<<<< HEAD
 // RUN: %clang_cc1 -triple x86_64-windows-pc -fms-compatibility -emit-llvm -o - %s | FileCheck %s --check-prefixes=CHECK,WINDOWS
+=======
+>>>>>>> release/7.x
 
 struct S {
   __attribute__((cpu_specific(atom)))
@@ -13,6 +16,7 @@ void foo() {
   s.Func();
 }
 
+<<<<<<< HEAD
 // LINUX: @_ZN1S4FuncEv = weak_odr alias void (%struct.S*), void (%struct.S*)* @_ZN1S4FuncEv.ifunc
 // LINUX: @_ZN1S4FuncEv.ifunc = weak_odr ifunc void (%struct.S*), void (%struct.S*)* ()* @_ZN1S4FuncEv.resolver
 // LINUX: define weak_odr void (%struct.S*)* @_ZN1S4FuncEv.resolver
@@ -26,3 +30,9 @@ void foo() {
 // WINDOWS: musttail call void @"?Func@S@@QEAAXXZ.O"(%struct.S* %0)
 // WINDOWS: declare dso_local void @"?Func@S@@QEAAXXZ.S"
 // WINDOWS: define linkonce_odr dso_local void @"?Func@S@@QEAAXXZ.O"
+=======
+// LINUX: define linkonce_odr void @_ZN1S4FuncEv.O
+// LINUX: define void (%struct.S*)* @_ZN1S4FuncEv.resolver
+// LINUX: ret void (%struct.S*)* @_ZN1S4FuncEv.S
+// LINUX: ret void (%struct.S*)* @_ZN1S4FuncEv.O
+>>>>>>> release/7.x

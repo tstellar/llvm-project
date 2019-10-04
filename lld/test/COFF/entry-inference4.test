@@ -14,6 +14,7 @@
 # RUN: not lld-link /subsystem:console /out:%t.exe %t.obj > %t.log 2>&1
 # RUN: FileCheck -check-prefix=WMAIN %s < %t.log
 
+<<<<<<< HEAD
 # RUN: sed 's/ENTRY1/wmain/;s/ENTRY2/main/' %s | yaml2obj > %t.obj
 # RUN: not lld-link /out:%t.exe %t.obj > %t.log 2>&1
 # RUN: FileCheck -check-prefix=MAINWMAIN %s < %t.log
@@ -30,6 +31,12 @@
 # WWINMAIN:        error: <root>: undefined symbol: wWinMainCRTStartup
 # WINMAINWWINMAIN: warning: found both wWinMain and WinMain; using latter
 # WINMAINWWINMAIN: error: <root>: undefined symbol: WinMainCRTStartup
+=======
+# MAIN:     error: <root>: undefined symbol: mainCRTStartup
+# WMAIN:    error: <root>: undefined symbol: wmainCRTStartup
+# WINMAIN:  error: <root>: undefined symbol: WinMainCRTStartup
+# WWINMAIN: error: <root>: undefined symbol: wWinMainCRTStartup
+>>>>>>> release/7.x
 
 --- !COFF
 header:

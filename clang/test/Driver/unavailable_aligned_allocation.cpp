@@ -54,10 +54,17 @@
 // Check that passing -faligned-allocation or -fno-aligned-allocation stops the
 // driver from passing -faligned-alloc-unavailable to cc1.
 //
+<<<<<<< HEAD
 // RUN: %clang -target x86_64-apple-macosx10.13 -faligned-allocation -c -### %s 2>&1 \
 // RUN:   | FileCheck %s -check-prefix=AVAILABLE
 //
 // RUN: %clang -target x86_64-apple-macosx10.13 -fno-aligned-allocation -c -### %s 2>&1 \
+=======
+// RUN: %clang -target x86_64-apple-macosx10.12 -faligned-allocation -c -### %s 2>&1 \
+// RUN:   | FileCheck %s -check-prefix=AVAILABLE
+//
+// RUN: %clang -target x86_64-apple-macosx10.12 -fno-aligned-allocation -c -### %s 2>&1 \
+>>>>>>> release/7.x
 // RUN:   | FileCheck %s -check-prefix=AVAILABLE
 
 // AVAILABLE-NOT: "-faligned-alloc-unavailable"

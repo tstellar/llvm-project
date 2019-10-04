@@ -1552,11 +1552,18 @@ void CodeGenFunction::EmitOMPPrivateLoopCounters(
     for (unsigned I = S.getCollapsedNumber(),
                   E = C->getLoopNumIterations().size();
          I < E; ++I) {
+<<<<<<< HEAD
       const auto *DRE = cast<DeclRefExpr>(C->getLoopCounter(I));
       const auto *VD = cast<VarDecl>(DRE->getDecl());
       // Override only those variables that can be captured to avoid re-emission
       // of the variables declared within the loops.
       if (DRE->refersToEnclosingVariableOrCapture()) {
+=======
+      const auto *DRE = cast<DeclRefExpr>(C->getLoopCunter(I));
+      const auto *VD = cast<VarDecl>(DRE->getDecl());
+      // Override only those variables that are really emitted already.
+      if (LocalDeclMap.count(VD)) {
+>>>>>>> release/7.x
         (void)LoopScope.addPrivate(VD, [this, DRE, VD]() {
           return CreateMemTemp(DRE->getType(), VD->getName());
         });
@@ -5128,7 +5135,11 @@ void CodeGenFunction::EmitSimpleOMPExecutableDirective(
                         E = C->getLoopNumIterations().size();
                I < E; ++I) {
             if (const auto *VD = dyn_cast<OMPCapturedExprDecl>(
+<<<<<<< HEAD
                     cast<DeclRefExpr>(C->getLoopCounter(I))->getDecl())) {
+=======
+                    cast<DeclRefExpr>(C->getLoopCunter(I))->getDecl())) {
+>>>>>>> release/7.x
               // Emit only those that were not explicitly referenced in clauses.
               if (!CGF.LocalDeclMap.count(VD))
                 CGF.EmitVarDecl(*VD);

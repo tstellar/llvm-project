@@ -19,7 +19,7 @@ if(NOT DEFINED LLVM_VERSION_MAJOR)
   set(LLVM_VERSION_MAJOR 10)
 endif()
 if(NOT DEFINED LLVM_VERSION_MINOR)
-  set(LLVM_VERSION_MINOR 0)
+  set(LLVM_VERSION_MINOR 1)
 endif()
 if(NOT DEFINED LLVM_VERSION_PATCH)
   set(LLVM_VERSION_PATCH 1)
@@ -1098,6 +1098,12 @@ if (LLVM_INCLUDE_BENCHMARKS)
   add_subdirectory(benchmarks)
 endif()
 
+<<<<<<< HEAD
 if (LLVM_INCLUDE_UTILS AND LLVM_INCLUDE_TOOLS)
   add_subdirectory(utils/llvm-locstats)
+=======
+# This allows us to deploy the Universal CRT DLLs by passing -DCMAKE_INSTALL_UCRT_LIBRARIES=ON to CMake
+if (MSVC AND CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_INSTALL_UCRT_LIBRARIES)
+  include(InstallRequiredSystemLibraries)
+>>>>>>> release/7.x
 endif()

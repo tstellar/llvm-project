@@ -2595,7 +2595,14 @@ KnownBits SelectionDAG::computeKnownBits(SDValue Op, const APInt &DemandedElts,
     if (SubIdx && SubIdx->getAPIntValue().ule(NumSrcElts - NumElts)) {
       // Offset the demanded elts by the subvector index.
       uint64_t Idx = SubIdx->getZExtValue();
+<<<<<<< HEAD
       DemandedSrc = DemandedElts.zextOrSelf(NumSrcElts).shl(Idx);
+=======
+      APInt DemandedSrc = DemandedElts.zextOrSelf(NumSrcElts).shl(Idx);
+      computeKnownBits(Src, Known, DemandedSrc, Depth + 1);
+    } else {
+      computeKnownBits(Src, Known, Depth + 1);
+>>>>>>> release/7.x
     }
     Known = computeKnownBits(Src, DemandedSrc, Depth + 1);
     break;
@@ -3825,7 +3832,12 @@ unsigned SelectionDAG::ComputeNumSignBits(SDValue Op, const APInt &DemandedElts,
     if (SubIdx && SubIdx->getAPIntValue().ule(NumSrcElts - NumElts)) {
       // Offset the demanded elts by the subvector index.
       uint64_t Idx = SubIdx->getZExtValue();
+<<<<<<< HEAD
       DemandedSrc = DemandedElts.zextOrSelf(NumSrcElts).shl(Idx);
+=======
+      APInt DemandedSrc = DemandedElts.zextOrSelf(NumSrcElts).shl(Idx);
+      return ComputeNumSignBits(Src, DemandedSrc, Depth + 1);
+>>>>>>> release/7.x
     }
     return ComputeNumSignBits(Src, DemandedSrc, Depth + 1);
   }

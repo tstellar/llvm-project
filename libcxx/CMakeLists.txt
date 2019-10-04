@@ -28,10 +28,14 @@ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR OR LIBCXX_STANDALONE_BUIL
 
   set(PACKAGE_NAME libcxx)
 <<<<<<< HEAD
+<<<<<<< HEAD
   set(PACKAGE_VERSION 10.0.0svn)
 =======
   set(PACKAGE_VERSION 8.0.1)
 >>>>>>> release/8.x
+=======
+  set(PACKAGE_VERSION 7.0.0)
+>>>>>>> release/7.x
   set(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
   set(PACKAGE_BUGREPORT "llvm-bugs@lists.llvm.org")
 
@@ -128,6 +132,12 @@ set(LIBCXX_ABI_NAMESPACE "" CACHE STRING "The inline ABI namespace used by libc+
 option(LIBCXX_ABI_UNSTABLE "Unstable ABI of libc++." OFF)
 option(LIBCXX_ABI_FORCE_ITANIUM "Ignore auto-detection and force use of the Itanium ABI.")
 option(LIBCXX_ABI_FORCE_MICROSOFT "Ignore auto-detection and force use of the Microsoft ABI.")
+<<<<<<< HEAD
+=======
+option(LIBCXX_HIDE_FROM_ABI_PER_TU_BY_DEFAULT "Enable per TU ABI insulation by default. To be used by vendors." OFF)
+set(LIBCXX_ABI_DEFINES "" CACHE STRING "A semicolon separated list of ABI macros to define in the site config header.")
+option(LIBCXX_USE_COMPILER_RT "Use compiler-rt instead of libgcc" OFF)
+>>>>>>> release/7.x
 
 
 set(LIBCXX_HAS_MERGED_TYPEINFO_NAMES_DEFAULT  "" CACHE STRING
@@ -776,6 +786,10 @@ config_define_if(LIBCXX_ABI_UNSTABLE _LIBCPP_ABI_UNSTABLE)
 config_define_if(LIBCXX_ABI_FORCE_ITANIUM _LIBCPP_ABI_FORCE_ITANIUM)
 config_define_if(LIBCXX_ABI_FORCE_MICROSOFT _LIBCPP_ABI_FORCE_MICROSOFT)
 config_define_if(LIBCXX_HIDE_FROM_ABI_PER_TU_BY_DEFAULT _LIBCPP_HIDE_FROM_ABI_PER_TU_BY_DEFAULT)
+<<<<<<< HEAD
+=======
+
+>>>>>>> release/7.x
 config_define_if_not(LIBCXX_ENABLE_GLOBAL_FILESYSTEM_NAMESPACE _LIBCPP_HAS_NO_GLOBAL_FILESYSTEM_NAMESPACE)
 config_define_if_not(LIBCXX_ENABLE_STDIN _LIBCPP_HAS_NO_STDIN)
 config_define_if_not(LIBCXX_ENABLE_STDOUT _LIBCPP_HAS_NO_STDOUT)

@@ -245,13 +245,33 @@ private:
                              llvm::COFF::COMDATType &selection,
                              bool &prevailing, DefinedRegular *leader);
 
+  void readAssociativeDefinition(
+      COFFSymbolRef COFFSym,
+      const llvm::object::coff_aux_section_definition *Def,
+      uint32_t ParentSection);
+
+  void recordPrevailingSymbolForMingw(
+      COFFSymbolRef COFFSym,
+      llvm::DenseMap<StringRef, uint32_t> &PrevailingSectionMap);
+
+  void maybeAssociateSEHForMingw(
+      COFFSymbolRef Sym, const llvm::object::coff_aux_section_definition *Def,
+      const llvm::DenseMap<StringRef, uint32_t> &PrevailingSectionMap);
+
   llvm::Optional<Symbol *>
   createDefined(COFFSymbolRef sym,
                 std::vector<const llvm::object::coff_aux_section_definition *>
+<<<<<<< HEAD
                     &comdatDefs,
                 bool &prevailingComdat);
   Symbol *createRegular(COFFSymbolRef sym);
   Symbol *createUndefined(COFFSymbolRef sym);
+=======
+                    &ComdatDefs,
+                bool &PrevailingComdat);
+  Symbol *createRegular(COFFSymbolRef Sym);
+  Symbol *createUndefined(COFFSymbolRef Sym);
+>>>>>>> release/7.x
 
   std::unique_ptr<COFFObjectFile> coffObj;
 

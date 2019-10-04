@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ====================================================
 Extra Clang Tools 10.0.0 (In-Progress) Release Notes
 ====================================================
@@ -7,6 +8,11 @@ Extra Clang Tools 10.0.0 (In-Progress) Release Notes
 Extra Clang Tools 8.0.0 Release Notes
 =====================================
 >>>>>>> release/8.x
+=======
+=====================================
+Extra Clang Tools 7.0.0 Release Notes
+=====================================
+>>>>>>> release/7.x
 
 .. contents::
    :local:
@@ -15,11 +21,14 @@ Extra Clang Tools 8.0.0 Release Notes
 Written by the `LLVM Team <https://llvm.org/>`_
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 .. warning::
 
    These are in-progress notes for the upcoming Extra Clang Tools 10 release.
    Release notes for previous releases can be found on
    `the Download Page <https://releases.llvm.org/download.html>`_.
+=======
+>>>>>>> release/7.x
 
 =======
 >>>>>>> release/8.x
@@ -29,18 +38,26 @@ Introduction
 This document contains the release notes for the Extra Clang Tools, part of the
 Clang release 10.0.0. Here we describe the status of the Extra Clang Tools in
 some detail, including major improvements from the previous release and new
+<<<<<<< HEAD
 feature work. All LLVM releases may be downloaded
 from the `LLVM releases web site <https://releases.llvm.org/>`_.
+=======
+feature work. All LLVM releases may be downloaded from the `LLVM releases web
+site <https://llvm.org/releases/>`_.
+>>>>>>> release/7.x
 
 For more information about Clang or LLVM, including information about
 the latest release, please see the `Clang Web Site <https://clang.llvm.org>`_ or
 the `LLVM Web Site <https://llvm.org>`_.
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 Note that if you are reading this file from a Subversion checkout or the
 main Clang web page, this document applies to the *next* release, not
 the current one. To see the release notes for a specific release, please
 see the `releases page <https://llvm.org/releases/>`_.
+=======
+>>>>>>> release/7.x
 
 What's New in Extra Clang Tools 10.0.0?
 =======================================
@@ -53,6 +70,7 @@ Some of the major new features and improvements to Extra Clang Tools are listed
 here. Generic improvements to Extra Clang Tools as a whole or to its underlying
 infrastructure are described first, followed by tool-specific sections.
 
+<<<<<<< HEAD
 
 Improvements to clangd
 ----------------------
@@ -67,6 +85,10 @@ Improvements to clangd
   also enables global code completion, which suggests symbols that are not
   imported in the current file and automatically inserts the missing
   ``#include`` directives.
+=======
+Improvements to clang-tidy
+--------------------------
+>>>>>>> release/7.x
 
 - clangd stores the symbol index on disk in a new compact binary serialization
   format.  It is 10x more compact than YAML and 40% more compact than gzipped
@@ -137,8 +159,15 @@ Improvements to clang-tidy
 - New :doc:`cppcoreguidelines-init-variables
   <clang-tidy/checks/cppcoreguidelines-init-variables>` check.
 
+<<<<<<< HEAD
 - New :doc:`darwin-dispatch-once-nonstatic
   <clang-tidy/checks/darwin-dispatch-once-nonstatic>` check.
+=======
+  Detects inappropriate seeding of C++ random generators and C ``srand()`` function.
+
+- New :doc:`cppcoreguidelines-avoid-goto
+  <clang-tidy/checks/cppcoreguidelines-avoid-goto>` check.
+>>>>>>> release/7.x
 
   Finds declarations of ``dispatch_once_t`` variables without static or global
   storage.
@@ -146,8 +175,12 @@ Improvements to clang-tidy
 - New :doc:`google-upgrade-googletest-case
   <clang-tidy/checks/google-upgrade-googletest-case>` check.
 
+<<<<<<< HEAD
   Finds uses of deprecated Googletest APIs with names containing ``case`` and
   replaces them with equivalent APIs with ``suite``.
+=======
+  Checks for narrowing conversions, e.g. ``int i = 0; i += 0.1;``.
+>>>>>>> release/7.x
 
 - New :doc:`linuxkernel-must-use-errs
   <clang-tidy/checks/linuxkernel-must-use-errs>` check.
@@ -155,14 +188,24 @@ Improvements to clang-tidy
   Checks Linux kernel code to see if it uses the results from the functions in
   ``linux/err.h``.
 
+<<<<<<< HEAD
 - New :doc:`llvm-prefer-register-over-unsigned
   <clang-tidy/checks/llvm-prefer-register-over-unsigned>` check.
+=======
+- New `fuchsia-restrict-system-includes
+  <https://clang.llvm.org/extra/clang-tidy/checks/fuchsia-restrict-system-includes.html>`_ check
+>>>>>>> release/7.x
 
   Finds historical use of ``unsigned`` to hold vregs and physregs and rewrites
   them to use ``Register``
 
+<<<<<<< HEAD
 - New :doc:`objc-missing-hash
   <clang-tidy/checks/objc-missing-hash>` check.
+=======
+- New `fuchsia-statically-constructed-objects
+  <https://clang.llvm.org/extra/clang-tidy/checks/fuchsia-statically-constructed-objects.html>`_ check
+>>>>>>> release/7.x
 
   Finds Objective-C implementations that implement ``-isEqual:`` without also
   appropriately implementing ``-hash``.
@@ -248,6 +291,7 @@ Improvements to include-fixer
   <clang-tidy/checks/modernize-avoid-c-arrays>` added.
 >>>>>>> release/8.x
 
+<<<<<<< HEAD
 The improvements are...
 
 Improvements to clang-include-fixer
@@ -278,3 +322,6 @@ instead.
   <clang-tidy/checks/readability-uppercase-literal-suffix>` check does not warn
   about literal suffixes inside macros anymore by default.
 >>>>>>> release/8.x
+=======
+- The 'google-runtime-member-string-references' check was removed.
+>>>>>>> release/7.x

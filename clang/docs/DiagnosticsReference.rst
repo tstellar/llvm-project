@@ -594,6 +594,28 @@ This diagnostic is enabled by default.
 +---------------------------------------------------------------------------------------------------------------------------------------+
 
 
+-Watimport-in-framework-header
+------------------------------
+This diagnostic is enabled by default.
+
+**Diagnostic text:**
+
++------------------------------------------------------------------------------------------------------------------------------------+
+|:warning:`warning:` |nbsp| :diagtext:`use of '@import' in framework header is discouraged, including this header requires -fmodules`|
++------------------------------------------------------------------------------------------------------------------------------------+
+
+
+-Watomic-alignment
+------------------
+This diagnostic is enabled by default.
+
+**Diagnostic text:**
+
++---------------------------------------------------------------------------------------------------------------------+
+|:warning:`warning:` |nbsp| :diagtext:`misaligned or large atomic operation may incur significant performance penalty`|
++---------------------------------------------------------------------------------------------------------------------+
+
+
 -Watomic-memory-ordering
 ------------------------
 This diagnostic is enabled by default.
@@ -713,10 +735,13 @@ This diagnostic is enabled by default.
 |                                                                              |+--------------------------------------+|
 +------------------------------------------------------------------------------+----------------------------------------+
 
+<<<<<<< HEAD
 +---------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`only 'unavailable' and 'deprecated' are supported for Swift availability`|
 +---------------------------------------------------------------------------------------------------------------+
 
+=======
+>>>>>>> release/7.x
 +------------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`unknown platform` |nbsp| :placeholder:`A` |nbsp| :diagtext:`in availability macro`|
 +------------------------------------------------------------------------------------------------------------------------+
@@ -1527,18 +1552,24 @@ Some of the diagnostics controlled by this flag are enabled by default.
 
 **Diagnostic text:**
 
+<<<<<<< HEAD
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`aggregate initialization of type` |nbsp| :placeholder:`A` |nbsp| :diagtext:`with user-declared constructors is incompatible with C++2a`|
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+=======
+>>>>>>> release/7.x
 +------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`'<=>' is a single token in C++2a; add a space to avoid a change in behavior`|
 +------------------------------------------------------------------------------------------------------------------+
 
+<<<<<<< HEAD
 +--------------------------------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`type of UTF-8 string literal will change from array of const char to array of const char8\_t in C++2a`|
 +--------------------------------------------------------------------------------------------------------------------------------------------+
 
+=======
+>>>>>>> release/7.x
 +-------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`'`:placeholder:`A`:diagtext:`' is a keyword in C++2a`|
 +-------------------------------------------------------------------------------------------+
@@ -1636,6 +1667,7 @@ Some of the diagnostics controlled by this flag are enabled by default.
 |:warning:`warning:` |nbsp| :diagtext:`explicit capture of 'this' with a capture default of '=' is incompatible with C++ standards before C++2a`|
 +-----------------------------------------------------------------------------------------------------------------------------------------------+
 
+<<<<<<< HEAD
 +--------------------------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`range-based for loop initialization statements are incompatible with C++ standards before C++2a`|
 +--------------------------------------------------------------------------------------------------------------------------------------+
@@ -1652,6 +1684,8 @@ Some of the diagnostics controlled by this flag are enabled by default.
 |                           |+--------------------------------+|                                                                             |
 +---------------------------+----------------------------------+-----------------------------------------------------------------------------+
 
+=======
+>>>>>>> release/7.x
 +-----------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`'<=>' operator is incompatible with C++ standards before C++2a`|
 +-----------------------------------------------------------------------------------------------------+
@@ -2473,10 +2507,13 @@ This diagnostic is enabled by default.
 |:warning:`warning:` |nbsp| :diagtext:`support for '`:placeholder:`A`:diagtext:`' without a corresponding /FI flag not implemented yet; flag ignored`|
 +----------------------------------------------------------------------------------------------------------------------------------------------------+
 
+<<<<<<< HEAD
 +-------------------------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`#pragma hdrstop filename not supported, /Fp can be used to specify precompiled header filename`|
 +-------------------------------------------------------------------------------------------------------------------------------------+
 
+=======
+>>>>>>> release/7.x
 +-----------------------------------------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`definition of macro` |nbsp| :placeholder:`A` |nbsp| :diagtext:`does not match definition in precompiled header`|
 +-----------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -2687,6 +2724,21 @@ Also controls `-Wbitfield-enum-conversion`_, `-Wbool-conversion`_, `-Wconstant-c
 |:warning:`warning:` |nbsp| :diagtext:`implicit conversion discards imaginary component:` |nbsp| :placeholder:`A` |nbsp| :diagtext:`to` |nbsp| :placeholder:`B`|
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+<<<<<<< HEAD
+=======
++----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|:warning:`warning:` |nbsp| :diagtext:`implicit conversion loses floating-point precision:` |nbsp| :placeholder:`A` |nbsp| :diagtext:`to` |nbsp| :placeholder:`B`|
++----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|:warning:`warning:` |nbsp| :diagtext:`implicit conversion when assigning computation result loses floating-point precision:` |nbsp| :placeholder:`A` |nbsp| :diagtext:`to` |nbsp| :placeholder:`B`|
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------+
+|:warning:`warning:` |nbsp| :diagtext:`implicit conversion loses integer precision:` |nbsp| :placeholder:`A` |nbsp| :diagtext:`to` |nbsp| :placeholder:`B`|
++---------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+>>>>>>> release/7.x
 +--------------------------------------------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`implicit conversion turns vector to scalar:` |nbsp| :placeholder:`A` |nbsp| :diagtext:`to` |nbsp| :placeholder:`B`|
 +--------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -2880,6 +2932,7 @@ This diagnostic is enabled by default.
 |                                                                                                                                     ||:diagtext:`parameter`||                        |
 |                                                                                                                                     |+---------------------+|                        |
 +-------------------------------------------------------------------------------------------------------------------------------------+-----------------------+------------------------+
+<<<<<<< HEAD
 
 +---------------------------+--------------------------------------------------------+--------+----------------------------------+--------------------------------------------------+----------------------+------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| |+------------------------------------------------------+| |nbsp| |+--------------------------------+|:diagtext:`member` |nbsp| :placeholder:`A` |nbsp| |+--------------------+| |nbsp| :diagtext:`a temporary object whose lifetime is shorter than the lifetime of the constructed object`|
@@ -2897,6 +2950,25 @@ This diagnostic is enabled by default.
 |                                                                                                                                               |+---------------------+|                        |
 +-----------------------------------------------------------------------------------------------------------------------------------------------+-----------------------+------------------------+
 
+=======
+
++---------------------------+--------------------------------------------------------+--------+----------------------------------+--------------------------------------------------+----------------------+------------------------------------------------------------------------------------------------------------+
+|:warning:`warning:` |nbsp| |+------------------------------------------------------+| |nbsp| |+--------------------------------+|:diagtext:`member` |nbsp| :placeholder:`A` |nbsp| |+--------------------+| |nbsp| :diagtext:`a temporary object whose lifetime is shorter than the lifetime of the constructed object`|
+|                           ||:diagtext:`reference`                                 ||        ||                                ||                                                  ||:diagtext:`binds to`||                                                                                                            |
+|                           |+------------------------------------------------------+|        |+--------------------------------+|                                                  |+--------------------+|                                                                                                            |
+|                           ||:diagtext:`backing array for 'std::initializer\_list'`||        ||:diagtext:`subobject of` |nbsp| ||                                                  ||:diagtext:`is`      ||                                                                                                            |
+|                           |+------------------------------------------------------+|        |+--------------------------------+|                                                  |+--------------------+|                                                                                                            |
++---------------------------+--------------------------------------------------------+--------+----------------------------------+--------------------------------------------------+----------------------+------------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------+-----------------------+------------------------+
+|:warning:`warning:` |nbsp| :diagtext:`initializing pointer member` |nbsp| :placeholder:`A` |nbsp| :diagtext:`with the stack address of` |nbsp| |+---------------------+| |nbsp| :placeholder:`B`|
+|                                                                                                                                               ||:diagtext:`variable` ||                        |
+|                                                                                                                                               |+---------------------+|                        |
+|                                                                                                                                               ||:diagtext:`parameter`||                        |
+|                                                                                                                                               |+---------------------+|                        |
++-----------------------------------------------------------------------------------------------------------------------------------------------+-----------------------+------------------------+
+
+>>>>>>> release/7.x
 +--------------------------------------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`temporary bound to reference member of allocated object will be destroyed at the end of the full-expression`|
 +--------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -2915,6 +2987,7 @@ This diagnostic is enabled by default.
 |                                                            ||:diagtext:`the allocated initializer list`                    ||                                                                       |
 |                                                            |+--------------------------------------------------------------+|                                                                       |
 +------------------------------------------------------------+----------------------------------------------------------------+-----------------------------------------------------------------------+
+<<<<<<< HEAD
 
 
 -Wdarwin-sdk-settings
@@ -2926,6 +2999,8 @@ This diagnostic is enabled by default.
 +----------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`SDK settings were ignored as 'SDKSettings.json' could not be parsed`|
 +----------------------------------------------------------------------------------------------------------+
+=======
+>>>>>>> release/7.x
 
 
 -Wdate-time
@@ -3576,6 +3651,10 @@ Some of the diagnostics controlled by this flag are enabled by default.
 +-----------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`duplicate '`:placeholder:`A`:diagtext:`' declaration specifier`|
 +-----------------------------------------------------------------------------------------------------+
+
++-------------------------------------------------------------------------------------------+
+|:warning:`warning:` |nbsp| :diagtext:`multiple identical address spaces specified for type`|
++-------------------------------------------------------------------------------------------+
 
 +-----------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`duplicate '`:placeholder:`A`:diagtext:`' declaration specifier`|
@@ -5070,6 +5149,7 @@ This diagnostic is enabled by default.
 |:warning:`warning:` |nbsp| :diagtext:`unknown attribute '`:placeholder:`A`:diagtext:`'`|
 +---------------------------------------------------------------------------------------+
 
+<<<<<<< HEAD
 +---------------------------------------------------------------------------------------------------------------+----------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`MSP430 'interrupt' attribute only applies to functions that have` |nbsp| |+--------------------------------+|
 |                                                                                                               ||:diagtext:`no parameters`       ||
@@ -5078,10 +5158,13 @@ This diagnostic is enabled by default.
 |                                                                                                               |+--------------------------------+|
 +---------------------------------------------------------------------------------------------------------------+----------------------------------+
 
+=======
+>>>>>>> release/7.x
 +-------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`'nocf\_check' attribute ignored; use -fcf-protection to enable the attribute`|
 +-------------------------------------------------------------------------------------------------------------------+
 
+<<<<<<< HEAD
 +---------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`'noderef' can only be used on an array or pointer type`|
 +---------------------------------------------------------------------------------------------+
@@ -5097,6 +5180,17 @@ This diagnostic is enabled by default.
 |                                                                                                ||:diagtext:`pointer/reference-to-OSObject-pointer`||                              |
 |                                                                                                |+-------------------------------------------------+|                              |
 +------------------------------------------------------------------------------------------------+---------------------------------------------------+------------------------------+
+=======
++------------------------------------------------------------------------------------------------+-----------------------------------+------------------------------+
+|:warning:`warning:` |nbsp| :placeholder:`A` |nbsp| :diagtext:`attribute only applies to` |nbsp| |+---------------------------------+| |nbsp| :diagtext:`parameters`|
+|                                                                                                ||:diagtext:`Objective-C object`   ||                              |
+|                                                                                                |+---------------------------------+|                              |
+|                                                                                                ||:diagtext:`pointer`              ||                              |
+|                                                                                                |+---------------------------------+|                              |
+|                                                                                                ||:diagtext:`pointer-to-CF-pointer`||                              |
+|                                                                                                |+---------------------------------+|                              |
++------------------------------------------------------------------------------------------------+-----------------------------------+------------------------------+
+>>>>>>> release/7.x
 
 +------------------------------------------------------------------------------------------------+------------------------+---------------------------------------+--------------------------------------+
 |:warning:`warning:` |nbsp| :placeholder:`A` |nbsp| :diagtext:`attribute only applies to` |nbsp| |+----------------------+| |nbsp| :diagtext:`that return` |nbsp| |+------------------------------------+|
@@ -5169,10 +5263,13 @@ This diagnostic is enabled by default.
 |                           ||:diagtext:`duplicate`  ||| |nbsp| :diagtext:`architecture`||                                                                                                               |
 |                           |+-----------------------+|+--------------------------------+|                                                                                                               |
 +---------------------------+-------------------------+----------------------------------+---------------------------------------------------------------------------------------------------------------+
+<<<<<<< HEAD
 
 +----------------------------------------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`'\_\_clang\_\_' is a predefined macro name, not an attribute scope specifier; did you mean '\_Clang' instead?`|
 +----------------------------------------------------------------------------------------------------------------------------------------------------+
+=======
+>>>>>>> release/7.x
 
 
 -Wignored-optimization-argument
@@ -8635,7 +8732,11 @@ This diagnostic is enabled by default.
 
 -Wpedantic
 ----------
+<<<<<<< HEAD
 Also controls `-Wc++11-extra-semi`_, `-Wc++11-long-long`_, `-Wc++14-binary-literal`_, `-Wc11-extensions`_, `-Wcomplex-component-init`_, `-Wdeclaration-after-statement`_, `-Wdollar-in-identifier-extension`_, `-Wembedded-directive`_, `-Wempty-translation-unit`_, `-Wfixed-enum-extension`_, `-Wflexible-array-extensions`_, `-Wfour-char-constants`_, `-Wgnu-anonymous-struct`_, `-Wgnu-auto-type`_, `-Wgnu-binary-literal`_, `-Wgnu-case-range`_, `-Wgnu-complex-integer`_, `-Wgnu-compound-literal-initializer`_, `-Wgnu-conditional-omitted-operand`_, `-Wgnu-empty-initializer`_, `-Wgnu-empty-struct`_, `-Wgnu-flexible-array-initializer`_, `-Wgnu-flexible-array-union-member`_, `-Wgnu-folding-constant`_, `-Wgnu-imaginary-constant`_, `-Wgnu-include-next`_, `-Wgnu-label-as-value`_, `-Wgnu-redeclared-enum`_, `-Wgnu-statement-expression`_, `-Wgnu-union-cast`_, `-Wgnu-zero-line-directive`_, `-Wgnu-zero-variadic-macro-arguments`_, `-Wimport-preprocessor-directive-pedantic`_, `-Wkeyword-macro`_, `-Wlanguage-extension-token`_, `-Wlong-long`_, `-Wmicrosoft-charize`_, `-Wmicrosoft-comment-paste`_, `-Wmicrosoft-cpp-macro`_, `-Wmicrosoft-end-of-file`_, `-Wmicrosoft-enum-value`_, `-Wmicrosoft-fixed-enum`_, `-Wmicrosoft-flexible-array`_, `-Wmicrosoft-redeclare-static`_, `-Wnested-anon-types`_, `-Wnullability-extension`_, `-Woverlength-strings`_, `-Wretained-language-linkage`_, `-Wundefined-internal-type`_, `-Wvla-extension`_, `-Wzero-length-array`_.
+=======
+Also controls `-Wc++11-extra-semi`_, `-Wc++11-long-long`_, `-Wc++14-binary-literal`_, `-Wc11-extensions`_, `-Wcomplex-component-init`_, `-Wdeclaration-after-statement`_, `-Wdollar-in-identifier-extension`_, `-Wembedded-directive`_, `-Wempty-translation-unit`_, `-Wflexible-array-extensions`_, `-Wfour-char-constants`_, `-Wgnu-anonymous-struct`_, `-Wgnu-auto-type`_, `-Wgnu-binary-literal`_, `-Wgnu-case-range`_, `-Wgnu-complex-integer`_, `-Wgnu-compound-literal-initializer`_, `-Wgnu-conditional-omitted-operand`_, `-Wgnu-empty-initializer`_, `-Wgnu-empty-struct`_, `-Wgnu-flexible-array-initializer`_, `-Wgnu-flexible-array-union-member`_, `-Wgnu-folding-constant`_, `-Wgnu-imaginary-constant`_, `-Wgnu-include-next`_, `-Wgnu-label-as-value`_, `-Wgnu-redeclared-enum`_, `-Wgnu-statement-expression`_, `-Wgnu-union-cast`_, `-Wgnu-zero-line-directive`_, `-Wgnu-zero-variadic-macro-arguments`_, `-Wimport-preprocessor-directive-pedantic`_, `-Wkeyword-macro`_, `-Wlanguage-extension-token`_, `-Wlong-long`_, `-Wmicrosoft-charize`_, `-Wmicrosoft-comment-paste`_, `-Wmicrosoft-cpp-macro`_, `-Wmicrosoft-end-of-file`_, `-Wmicrosoft-enum-value`_, `-Wmicrosoft-fixed-enum`_, `-Wmicrosoft-flexible-array`_, `-Wmicrosoft-redeclare-static`_, `-Wnested-anon-types`_, `-Wnullability-extension`_, `-Woverlength-strings`_, `-Wretained-language-linkage`_, `-Wundefined-internal-type`_, `-Wvla-extension`_, `-Wzero-length-array`_.
+>>>>>>> release/7.x
 
 **Diagnostic text:**
 
@@ -10003,6 +10104,7 @@ Controls `-Wshadow`_, `-Wshadow-field`_, `-Wshadow-field-in-constructor`_, `-Wsh
 --------------
 **Diagnostic text:**
 
+<<<<<<< HEAD
 +---------------------------+------------------------------------+--------------------------------+--------------------------------------------------+----------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| |+----------------------------------+| |nbsp| :placeholder:`A` |nbsp| |+------------------------------------------------+|:diagtext:`shadows member inherited from type` |nbsp| :placeholder:`C`|
 |                           ||:diagtext:`parameter`             ||                                ||                                                ||                                                                      |
@@ -10012,6 +10114,11 @@ Controls `-Wshadow`_, `-Wshadow-field`_, `-Wshadow-field-in-constructor`_, `-Wsh
 |                           |                                    |                                ||+----------------------------------------------+||                                                                      |
 |                           |                                    |                                |+------------------------------------------------+|                                                                      |
 +---------------------------+------------------------------------+--------------------------------+--------------------------------------------------+----------------------------------------------------------------------+
+=======
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|:warning:`warning:` |nbsp| :diagtext:`non-static data member` |nbsp| :placeholder:`A` |nbsp| :diagtext:`of` |nbsp| :placeholder:`B` |nbsp| :diagtext:`shadows member inherited from type` |nbsp| :placeholder:`C`|
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+>>>>>>> release/7.x
 
 
 -Wshadow-field-in-constructor
@@ -10401,9 +10508,15 @@ This diagnostic is enabled by default.
 
 **Diagnostic text:**
 
+<<<<<<< HEAD
 +-------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |:warning:`warning:` |nbsp| :diagtext:`include path for stdlibc++ headers not found; pass '-stdlib=libc++' on the command line to use the libc++ standard library instead`|
 +-------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+=======
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|:warning:`warning:` |nbsp| :diagtext:`include path for stdlibc++ headers not found; pass '-std=libc++' on the command line to use the libc++ standard library instead`|
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+>>>>>>> release/7.x
 
 
 -Wstrict-aliasing
