@@ -27,6 +27,22 @@ function(lldb_tablegen)
   endif()
 endfunction(lldb_tablegen)
 
+# Filter out clang libraries and add clang_shared when CLANG_LINK_CLANG_DYLIB=ON
+function(lldb_filter_link_libs link_libs)
+
+  set(link_libs_list ${${link_libs}})
+  list(LENGTH link_libs_list lib_count)
+  if (CLANG_LINK_CLANG_DYLIB AND lib_count GREATER 0)
+      list(FILTER link_libs_list EXCLUDE REGEX "^clang")
+      list(LENGTH link_libs_list filtered_lib_count)
+      if (filtered_lib_count LESS lib_count)
+        list(APPEND link_libs_list clang-cpp)
+      endif()
+  endif()
+  set(${link_libs} ${link_libs_list} PARENT_SCOPE)
+
+endfunction(lldb_filter_link_libs)
+
 function(add_lldb_library name)
   include_directories(BEFORE
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -84,6 +100,8 @@ function(add_lldb_library name)
     if(LLDB_NO_INSTALL_DEFAULT_RPATH)
       set(pass_NO_INSTALL_RPATH NO_INSTALL_RPATH)
     endif()
+
+    lldb_filter_link_libs(PARAM_LINK_LIBS)
 
     llvm_add_library(${name} ${libkind} ${srcs}
       LINK_LIBS ${PARAM_LINK_LIBS}
@@ -160,6 +178,8 @@ function(add_lldb_executable name)
     ${pass_NO_INSTALL_RPATH}
     ${ARG_UNPARSED_ARGUMENTS}
   )
+
+  lldb_filter_link_libs(ARG_LINK_LIBS)
 
   target_link_libraries(${name} PRIVATE ${ARG_LINK_LIBS})
   if(CLANG_LINK_CLANG_DYLIB)
