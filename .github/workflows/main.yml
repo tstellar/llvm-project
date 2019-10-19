@@ -10,6 +10,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
+    - name: Change to source directory
+      run: cd llvm-project
     - name: Create build directory
       run: mkdir build
     - name: Change to build directory
