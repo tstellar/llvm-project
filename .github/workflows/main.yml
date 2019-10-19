@@ -14,6 +14,8 @@ jobs:
       run: mkdir build
     - name: Change to build directory
       run: cd build
+    - name: ls
+      run: ls ..
     - name: Configure llvm
       run: cmake -G Ninja ../llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON
     - name: Build and test llvm
