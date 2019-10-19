@@ -12,11 +12,10 @@ jobs:
     - uses: actions/checkout@v1
     - name: Create build directory
       run: mkdir build
-    - name: Change to build directory
-      run: cd build
     - name: Configure llvm
+      working-directory: build
       run: cmake -G Ninja ../llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON
     - name: Build and test llvm
-      run: ninja check-all
+      run: ninja check-all -C build
       
       
