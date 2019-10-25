@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    types:  
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Create build directory
+      run: mkdir build
+    - name: Configure llvm
+      working-directory: build
+      run: cmake ../llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_ENABLE_BINDINGS=OFF
+#    - name: Debug check make targets
+#      run: make -C build help
+    - name: Build llvm
+      run: make -C build
+    - name: Build and test llvm
+      run: make -C build check-all
