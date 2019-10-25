@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    types:
+
+jobs:
+  abi-dump:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        name:
+          - build-baseline
+          - build-latest
+        include:
+          - name: build-baseline
+            ref: llvmorg-9.0.0
+          - name: build-latest
+            ref: ${{ github.sha }}
+    steps:
+    - name: Install Ninja
+      uses: tstellar/actions/install-ninja@master
+      with:
+        os: ${{ runner.os }}
+    - name: Install abi-compliance-checker
+      run: sudo apt-get install abi-dumper
+    - name: Download source code
+      uses: tstellar/actions/get-llvm-project-src@master
+      with:
+        ref: ${{ matrix.ref }}
+    - name: Configure
+      run: |
+        mkdir build
+        cd build
+        cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DLLVM_TARGETS_TO_BUILD="" -DLLVM_BUILD_LLVM_DYLIB=ON ../llvm
+    - name: Build
+      run: ninja -C build libLLVM-9.so 
+    - name: Dump ABI
+      run: abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers llvm/include -o ${{ matrix.ref }}.abi.tar.gz build/lib/libLLVM-9.so
+    - name: Upload ABI file
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ matrix.name }}
+        path: ${{ matrix.ref }}.abi.tar.gz
+
+  abi-compare:
+    runs-on: ubuntu-latest
+    needs:
+      - abi-dump
+    steps:
+      - name: Download baseline
+        uses: actions/download-artifact@v1
+        with:
+          name: build-baseline
+      - name: Download latest
+        uses: actions/download-artifact@v1
+        with:
+          name: build-latest
+      - name: Install abi-compliance-checker
+        run: sudo apt-get install abi-compliance-checker
+      - name: Compare ABI
+        run: abi-compliance-checker -l libLLVM-9.so -old build-baseline/*.tar.gz -new build-latest/*.tar.gz
+      - name: tar ABI comparison
+        if: always()
+        run:  tar -czf abi-compare-${{ github.sha }}.tar.gz compat_reports/
+      - name: Upload ABI Comparison
+        if: always()
+        uses: actions/upload-artifact@v1
+        with:
+          name: compat-report
+          path: abi-compare-${{ github.sha }}.tar.gz
+
+
+
