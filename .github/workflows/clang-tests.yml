@@ -9,6 +9,10 @@ on:
       - 'llvm/**'
       - '.github/workflows/**'
   pull_request:
+    types:
+      - opened
+    branches:
+      - 'release/**'
     paths:
       - 'clang/**'
       - 'llvm/**'
