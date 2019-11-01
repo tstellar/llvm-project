@@ -93,9 +93,7 @@ Special Notes for Library-only Distributions
 One of the most powerful features of LLVM is its library-first design mentality
 and the way you can compose a wide variety of tools using different portions of
 LLVM. Even in this situation using *BUILD_SHARED_LIBS* is not supported. If you
-want to distribute LLVM as a shared library for use in a tool, the recommended
-method is using *LLVM_BUILD_LLVM_DYLIB*, and you can use *LLVM_DYLIB_COMPONENTS*
-to configure which LLVM components are part of libLLVM.
+want to distribute LLVM as a shared library then distribute the libLLVM.so library.
 
 Options for Optimizing LLVM
 ===========================
@@ -151,8 +149,8 @@ both the least benefit to size and the least impact on performance.
 
 The most impactful way to reduce binary size is to dynamically link LLVM into
 all the tools. This reduces code size by decreasing duplication of common code
-between the LLVM-based tools. This can be done by setting the following two
-CMake options to ``On``: *LLVM_BUILD_LLVM_DYLIB* and *LLVM_LINK_LLVM_DYLIB*.
+between the LLVM-based tools. This can be done by setting the following
+CMake option to ``On``: *LLVM_LINK_LLVM_DYLIB*.
 
 .. warning::
   Distributions should never be built using the *BUILD_SHARED_LIBS* CMake
@@ -165,7 +163,7 @@ This section provides documentation of the CMake options that are intended to
 help construct distributions. This is not an exhaustive list, and many
 additional options are documented in the :doc:`CMake` page. Some key options
 that are already documented include: *LLVM_TARGETS_TO_BUILD*,
-*LLVM_ENABLE_PROJECTS*, *LLVM_BUILD_LLVM_DYLIB*, and *LLVM_LINK_LLVM_DYLIB*.
+*LLVM_ENABLE_PROJECTS*, and *LLVM_LINK_LLVM_DYLIB*.
 
 **LLVM_ENABLE_RUNTIMES**:STRING
   When building a distribution that includes LLVM runtime projects (i.e. libcxx,

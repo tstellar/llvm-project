@@ -56,6 +56,11 @@ Non-comprehensive list of changes in this release
   The fact that MemorySSA is now preserved by and available in a series of loop
   passes, also opens up opportunities for its use in those respective passes.
 
+
+* The LLVM_BUILD_LLVM_DYLIB option has been removed.  The libLLVM shared object
+  is now always built on all platforms except Windows, so this option is no longer
+  necessary.
+
 .. NOTE
    If you would like to document a larger change, then you can add a
    subsection about it right here. You can copy the following boilerplate
