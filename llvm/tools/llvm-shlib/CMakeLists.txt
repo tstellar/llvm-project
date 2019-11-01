@@ -1,6 +1,5 @@
-# This tool creates a shared library from the LLVM libraries. Generating this
-# library is enabled by setting LLVM_BUILD_LLVM_DYLIB=yes on the CMake
-# commandline. By default the shared library only exports the LLVM C API.
+# This tool creates a shared library from the LLVM libraries.
+# By default the shared library only exports the LLVM C API.
 
 set(SOURCES
   libllvm.cpp
@@ -10,11 +9,7 @@ if(LLVM_LINK_LLVM_DYLIB AND LLVM_DYLIB_EXPORTED_SYMBOL_FILE)
   message(WARNING "Using LLVM_LINK_LLVM_DYLIB with LLVM_DYLIB_EXPORTED_SYMBOL_FILE may not work. Use at your own risk.")
 endif()
 
-if(LLVM_BUILD_LLVM_DYLIB)
-  if(MSVC)
-    message(FATAL_ERROR "Generating libLLVM is not supported on MSVC")
-  endif()
-
+if(NOT MSVC)
   llvm_map_components_to_libnames(LIB_NAMES ${LLVM_DYLIB_COMPONENTS})
 
   # Exclude libLLVMTableGen for the following reasons:
@@ -70,10 +65,6 @@ endif()
 if(LLVM_BUILD_LLVM_C_DYLIB AND NOT MSVC)
   if(NOT APPLE)
     message(FATAL_ERROR "Generating libLLVM-c is only supported on Darwin")
-  endif()
-
-  if(NOT LLVM_BUILD_LLVM_DYLIB)
-    message(FATAL_ERROR "Generating libLLVM-c requires LLVM_BUILD_LLVM_C_DYLIB on Darwin")
   endif()
 
   # To get the export list for a single llvm library:

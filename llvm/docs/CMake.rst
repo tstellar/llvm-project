@@ -562,20 +562,9 @@ LLVM-specific variables
   $CMAKE_INSTALL_PREFIX/Toolchains containing an xctoolchain directory which can
   be used to override the default system tools.
 
-**LLVM_BUILD_LLVM_DYLIB**:BOOL
-  If enabled, the target for building the libLLVM shared library is added.
-  This library contains all of LLVM's components in a single shared library.
-  Defaults to OFF. This cannot be used in conjunction with BUILD_SHARED_LIBS.
-  Tools will only be linked to the libLLVM shared library if LLVM_LINK_LLVM_DYLIB
-  is also ON.
-  The components in the library can be customised by setting LLVM_DYLIB_COMPONENTS
-  to a list of the desired components.
-  This option is not available on Windows.
-
 **LLVM_LINK_LLVM_DYLIB**:BOOL
   If enabled, tools will be linked with the libLLVM shared library. Defaults
-  to OFF. Setting LLVM_LINK_LLVM_DYLIB to ON also sets LLVM_BUILD_LLVM_DYLIB
-  to ON.
+  to OFF.
   This option is not available on Windows.
 
 **BUILD_SHARED_LIBS**:BOOL
@@ -585,8 +574,8 @@ LLVM-specific variables
   mingw-w64, but not when building with the Microsoft toolchain.
 
   .. note:: BUILD_SHARED_LIBS is only recommended for use by LLVM developers.
-            If you want to build LLVM as a shared library, you should use the
-            ``LLVM_BUILD_LLVM_DYLIB`` option.
+            If you want to link against shared libraries, use libLLVM.so, which
+            is always available.
 
 **LLVM_OPTIMIZED_TABLEGEN**:BOOL
   If enabled and building a debug or asserts build the CMake build system will
