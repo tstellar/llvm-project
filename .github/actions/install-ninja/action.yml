@@ -1,0 +1,9 @@
+name: 'Install Ninja'
+description: 'Install ninja'
+inputs:
+  os:
+    description: 'Host OS'
+    required: true
+runs:
+  using: 'node12'
+  main: 'main.js'

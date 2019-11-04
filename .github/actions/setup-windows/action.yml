@@ -1,0 +1,10 @@
+name: 'Setup Windows'
+description: 'Setup Windows environment for building and running tests'
+inputs:
+  arch:
+    description: 'Host Arch'
+    required: true
+runs:
+  using: 'node12'
+  main: main.js
+  

@@ -9,17 +9,42 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os:
+                #          - ubuntu-latest
+          - windows-latest
+            #          - macOS-latest
+        include:
+          - os: windows-latest
+#            cmake-args: -DCMAKE_C_COMPILER="C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.23.28105\\bin\\Hostx64\\x64\\cl.exe" -DCMAKE_CXX_COMPILER="C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.23.28105\\bin\\Hostx64\\x64\\cl.exe"
+            cmake-args: -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl
     steps:
     - uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+        #- uses: ./.github/actions/windows-setup
+    - uses: ./.github/actions/install-ninja
+      with:
+        os: ${{ runner.os }}
+
+      # C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\vsdevcmd.bat
+      #    - name: find cl.exe
+      #      run: Get-ChildItem -Path . -Include "vsdevcmd.bat"  –Recurse
+      #      working-directory: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise
     - name: Create build directory
       run: mkdir build
+    - name: Setup Windows
+      if: startsWith(matrix.os, 'windows')
+      uses: ./.github/actions/setup-windows
+      with:
+        arch: amd64
+      #run: ./.github/actions/windows-setup/vs_setup.bat -arch=amd64
     - name: Configure llvm
       working-directory: build
-      run: cmake ../llvm -DCMAKE_BUILD_TYPE=Release -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_ENABLE_BINDINGS=OFF
-#    - name: Debug check make targets
-#      run: make -C build help
-    - name: Build llvm
-      run: make -C build
+      #"C:\Program Files\\ (x86)\Microsoft\\ Visual\\ Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x64"
+      #$env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.23.28105\bin\Hostx64\x64\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\SDK\ScopeCppSDK\SDK\bin\"
+      run: cmake ../llvm -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_ENABLE_BINDINGS=OFF ${{matrix.cmake-args}}
+      #    - name: Build llvm
+      #      run: '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe"'
+      #working-directory: build
     - name: Build and test llvm
-      run: make -C build check-all
+      run: ninja -C build check-all

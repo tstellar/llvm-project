@@ -1,0 +1,20 @@
+const { exec } = require('child_process');
+const path = require('path');
+
+if (process.argv.length != 2) {
+  console.error("usage: process.argv[0] process.argv[1]");
+  process.exit(1);
+}
+
+var arch = process.env.INPUT_ARCH.toLowerCase()
+var script = path.join(__dirname, 'vs_setup.bat')
+
+console.log(`${script}`)
+exec(`${script} -arch=${arch}`, (error, stdout, stderr) => {
+
+  console.log(`${stdout}`);
+  console.error(`${stderr}`);
+  if (error) {
+    process.exit(error);
+  }
+});
