@@ -38,7 +38,7 @@ jobs:
     - name: Configure llvm
       uses: tstellar/actions/configure-llvm-project@master
       with:
-        cmake_args: -G Ninja -DCMAKE_BUILD_TYPE=Release ../llvm -DLLVM_TARGETS_TO_BUILD=X86
+        cmake_args: -G Ninja -DCMAKE_BUILD_TYPE=Release ../llvm-project/llvm -DLLVM_TARGETS_TO_BUILD=X86
         os: ${{ runner.os }}
     - name: Build llvm
       run: ninja
