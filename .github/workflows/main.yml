@@ -44,12 +44,12 @@ jobs:
     - name: Run Test
       run: ./bin/llvm-lit -vva  test/MC/ARM/preserve-comments-arm.s
     - name: Upload Files
+      uses: actions/upload-artifact@v1
       with:
         name: file1
-        uses: actions/upload-artifact@v1
         path: test/MC/ARM/Output/preserve-comments-arm.s.tmp
     - name: Upload Files
+      uses: actions/upload-artifact@v1
       with:
         name: file2
-        uses: actions/upload-artifact@v1
         path: test/MC/ARM/Output/preserve-comments-arm.s.tmp2
