@@ -17,7 +17,16 @@ jobs:
       matrix:
         os:
           - windows-latest
+        crlf:
+          - true
+          - false
     steps:
+    - name: Dump git config
+      run: git config -l
+    - name: set crlf settings
+      run: git config --global core.autocrlf=${{ matrix.crlf }}
+    - name: Dump git config
+      run: git config -l
     - uses: actions/checkout@v1
       with:
         fetch-depth: 1
@@ -41,16 +50,19 @@ jobs:
         cmake_args: -G Ninja -DCMAKE_BUILD_TYPE=Release ../llvm-project/llvm -DLLVM_TARGETS_TO_BUILD=X86
         os: ${{ runner.os }}
     - name: Build llvm
-      run: ninja
+      run: ninja check-all
     - name: Run Test
+      if: failure()
       run: ./bin/llvm-lit -vva  test/MC/ARM/preserve-comments-arm.s
     - name: Upload Files
+      if: failure()
       uses: actions/upload-artifact@v1
       with:
         name: file1
-        path: test/MC/ARM/Output/preserve-comments-arm.s.tmp
+        path: build/test/MC/ARM/Output/preserve-comments-arm.s.tmp
     - name: Upload Files
+      if: failure()
       uses: actions/upload-artifact@v1
       with:
         name: file2
-        path: test/MC/ARM/Output/preserve-comments-arm.s.tmp2
+        path: build/test/MC/ARM/Output/preserve-comments-arm.s.tmp2
