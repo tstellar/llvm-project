@@ -16,12 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-latest
           - windows-latest
-          - macOS-latest
-        cmake_args:
-          - ""
-          - -DLLVM_LINK_LLVM_DYLIB=ON
     steps:
     - uses: actions/checkout@v1
       with:
@@ -35,8 +30,26 @@ jobs:
       uses: tstellar/actions/setup-windows@master
       with:
         arch: amd64
-    - name: Test LLVM
-      uses: tstellar/actions/build-test-llvm-project@master
+    - name: Create build directory
+      run: | 
+         mkdir build
+         cd build
+    - name: Configure llvm
+      uses: tstellar/actions/configure-llvm-project@master
       with:
-        cmake_args: -G Ninja -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmake_args }}
+        cmake-args: -G Ninja -DCMAKE_BUILD_TYPE=Release ../llvm-project/llvm -DLLVM_TARGETS_TO_BUILD=X86
         os: ${{ runner.os }}
+    - name: Build llvm
+      run: ninja
+    - name: Run Test
+      run: ./bin/llvm-lit -vva  test/MC/ARM/preserve-comments-arm.s
+    - name: Upload Files
+      with:
+        name: file1
+        uses: actions/upload-artifact@v1
+        path: test/MC/ARM/Output/preserve-comments-arm.s.tmp
+    - name: Upload Files
+      with:
+        name: file2
+        uses: actions/upload-artifact@v1
+        path: test/MC/ARM/Output/preserve-comments-arm.s.tmp2
