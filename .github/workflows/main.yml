@@ -24,7 +24,7 @@ jobs:
     - name: Dump git config
       run: git config -l
     - name: set crlf settings
-      run: git config --global core.autocrlf=${{ matrix.crlf }}
+      run: git config --global core.autocrlf ${{ matrix.crlf }}
     - name: Dump git config
       run: git config -l
     - uses: actions/checkout@v1
