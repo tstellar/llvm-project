@@ -34,6 +34,7 @@ jobs:
       run: | 
          mkdir build
          cd build
+         pwd
     - name: Configure llvm
       uses: tstellar/actions/configure-llvm-project@master
       with:
