@@ -24,7 +24,7 @@ jobs:
         arch: amd64
     - name: Fetch Source
       run: |
-        curl -O https://github.com/llvm/llvm-project/tarball/${GITHUB_SHA}/llvm-project.tar.gz
+        curl -s -L -O https://github.com/llvm/llvm-project/tarball/${GITHUB_SHA}/llvm-project.tar.gz
         tar --strip-components=1 -xzf llvm-project.tar.gz
     - name: Install Ninja
       uses: tstellar/actions/install-ninja@master
