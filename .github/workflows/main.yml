@@ -16,6 +16,7 @@ jobs:
           - macOS-latest
         cmake_args:
           - ""
+          - -DLLVM_LINK_LLVM_DYLIB=ON
     steps:
     - name: Setup Windows
       if: startsWith(matrix.os, 'windows')
