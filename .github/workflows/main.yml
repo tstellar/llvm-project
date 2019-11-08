@@ -22,13 +22,10 @@ jobs:
       uses: tstellar/actions/setup-windows@master
       with:
         arch: amd64
-    - name: pwd
-      run: pwd
     - name: Fetch Source
       run: |
-        mkdir llvm-project
         curl -O https://github.com/llvm/llvm-project/tarball/${GITHUB_SHA}/llvm-project.tar.gz
-        tar -C llvm-project --strip-components=1 -xzf llvm-project.tar.gz
+        tar --strip-components=1 -xzf llvm-project.tar.gz
     - name: Install Ninja
       uses: tstellar/actions/install-ninja@master
       with:
