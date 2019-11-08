@@ -22,15 +22,8 @@ jobs:
       uses: tstellar/actions/setup-windows@master
       with:
         arch: amd64
-    - uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
-        ref: ${{ github.sha }}
-
-        #    - name: Fetch Source
-        #      uses: actction
-        #        curl -s -L -O https://github.com/llvm/llvm-project/tarball/${GITHUB_SHA}/llvm-project.tar.gz
-        #        tar --strip-components=1 -xzf llvm-project.tar.gz
+    - name: Download source code
+      uses: tstellar/actions/get-llvm-project-src@master
     - name: Install Ninja
       uses: tstellar/actions/install-ninja@master
       with:
