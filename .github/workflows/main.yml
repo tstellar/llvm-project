@@ -17,6 +17,7 @@ jobs:
         cmake_args:
           - ""
           - -DLLVM_LINK_LLVM_DYLIB=ON
+          - -DBUILD_SHARED_LIBS=ON
     steps:
     - name: Setup Windows
       if: startsWith(matrix.os, 'windows')
