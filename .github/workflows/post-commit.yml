@@ -26,6 +26,8 @@ jobs:
         arch: amd64
     - name: Install Ninja
       uses: tstellar/actions/install-ninja@master
+      with:
+        os: ${{ runner.os }}
     - uses: actions/checkout@v1
       with:
         fetch-depth: 1
