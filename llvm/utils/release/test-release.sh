@@ -43,6 +43,7 @@ do_polly="yes"
 BuildDir="`pwd`"
 ExtraConfigureFlags=""
 ExportBranch=""
+conserve_disk_space="no"
 
 function usage() {
     echo "usage: `basename $0` -release X.Y.Z -rc NUM [OPTIONS]"
@@ -72,6 +73,7 @@ function usage() {
     echo " -lldb                Enable check-out & build lldb"
     echo " -no-lldb             Disable check-out & build lldb (default)"
     echo " -no-polly            Disable check-out & build Polly"
+    echo " -conserve-disk-space Try to reduce disk usage as much as possible"
 }
 
 while [ $# -gt 0 ]; do
@@ -165,6 +167,9 @@ while [ $# -gt 0 ]; do
             ;;
         -no-polly )
             do_polly="no"
+            ;;
+        -conserve-disk-space )
+            conserve_disk_space="yes"
             ;;
         -help | --help | -h | --h | -\? )
             usage
@@ -301,6 +306,9 @@ function export_sources() {
   echo "# Using git tag: $tag"
   curl -L -O https://github.com/llvm/llvm-project/archive/$tag/$TarballName
   tar -C $SrcDir --strip-components=1 -xzf $TarballName
+  if [ "$conserve_disk_space" = "yes" ]; then
+    rm $TarballName
+  fi
 
   if [ "$do_test_suite" = "yes" ]; then
     TestSuiteSrcDir=$BuildDir/llvm-test-suite
@@ -308,6 +316,9 @@ function export_sources() {
     mkdir -p $TestSuiteSrcDir
     curl -L -O https://github.com/llvm/test-suite/archive/$tag/$TestSuiteTarballName
     tar -C $TestSuiteSrcDir --strip-components=1 -xzf $TestSuiteTarballName
+    if [ "$conserve_disk_space" = "yes" ]; then
+      rm $TestSuiteTarballName
+    fi
   fi
 
   cd $BuildDir
@@ -539,6 +550,11 @@ for Flavor in $Flavors ; do
     build_llvmCore 2 $Flavor \
         $llvmCore_phase2_objdir $llvmCore_phase2_destdir
     clean_RPATH $llvmCore_phase2_destdir/usr/local
+
+    # Phase 1 build is no longer needed, so we can remove it.
+    if [ "$conserve_disk_space" = "yes" ]; then
+      rm -rf $BuildDir/Phase1/
+    fi
 
     ########################################################################
     # Phase 3: Build llvmCore with newly built clang from phase 2.
