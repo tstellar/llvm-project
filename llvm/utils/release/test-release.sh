@@ -211,7 +211,7 @@ if [ -z "$NumJobs" ]; then
 fi
 
 # Projects list
-projects="llvm cfe clang-tools-extra"
+projects="llvm clang clang-tools-extra"
 if [ $do_rt = "yes" ]; then
   projects="$projects compiler-rt"
 fi
@@ -288,60 +288,29 @@ fi
 
 check_program_exists ${MAKE}
 
-# Make sure that the URLs are valid.
-function check_valid_urls() {
-    for proj in $projects ; do
-        echo "# Validating $proj SVN URL"
-
-        if ! svn ls $Base_url/$proj/$ExportBranch > /dev/null 2>&1 ; then
-            echo "$proj does not have a $ExportBranch branch/tag!"
-            exit 1
-        fi
-    done
-}
-
 # Export sources to the build directory.
 function export_sources() {
-    check_valid_urls
+  tag="llvmorg-$Release"
+  if [ "$RC" != "final" ]; then
+    tag="$tag-$RC"
+  fi
 
-    for proj in $projects ; do
-        case $proj in
-        llvm)
-            projsrc=$proj.src
-            ;;
-        cfe)
-            projsrc=llvm.src/tools/clang
-            ;;
-        lld|lldb|polly)
-            projsrc=llvm.src/tools/$proj
-            ;;
-        clang-tools-extra)
-            projsrc=llvm.src/tools/clang/tools/extra
-            ;;
-        compiler-rt|libcxx|libcxxabi|libunwind|openmp)
-            projsrc=llvm.src/projects/$proj
-            ;;
-        test-suite)
-            projsrc=$proj.src
-            ;;
-        *)
-            echo "error: unknown project $proj"
-            exit 1
-            ;;
-        esac
+  SrcDir=$BuildDir/llvm-project
+  TarballName="llvm-project.tar.gz"
+  mkdir -p $SrcDir
+  echo "# Using git tag: $tag"
+  curl -L -O https://github.com/llvm/llvm-project/archive/$tag/$TarballName
+  tar -C $SrcDir --strip-components=1 -xzf $TarballName
 
-        if [ -d $projsrc ]; then
-          echo "# Reusing $proj $Release-$RC sources in $projsrc"
-          continue
-        fi
-        echo "# Exporting $proj $Release-$RC sources to $projsrc"
-        if ! svn export -q $Base_url/$proj/$ExportBranch $projsrc ; then
-            echo "error: failed to export $proj project"
-            exit 1
-        fi
-    done
+  if [ "$do_test_suite" = "yes" ]; then
+    TestSuiteSrcDir=$BuildDir/llvm-test-suite
+    TestSuiteTarballName="llvm-test-suite.tar.gz"
+    mkdir -p $TestSuiteSrcDir
+    curl -L -O https://github.com/llvm/test-suite/archive/$tag/$TestSuiteTarballName
+    tar -C $TestSuiteSrcDir --strip-components=1 -xzf $TestSuiteTarballName
+  fi
 
-    cd $BuildDir
+  cd $BuildDir
 }
 
 function configure_llvmCore() {
@@ -369,6 +338,7 @@ function configure_llvmCore() {
             ;;
     esac
 
+    project_list=${projects// /;}
     echo "# Using C compiler: $c_compiler"
     echo "# Using C++ compiler: $cxx_compiler"
 
@@ -378,12 +348,14 @@ function configure_llvmCore() {
     echo "#" env CC="$c_compiler" CXX="$cxx_compiler" \
         cmake -G "$generator" \
         -DCMAKE_BUILD_TYPE=$BuildType -DLLVM_ENABLE_ASSERTIONS=$Assertions \
-        $ExtraConfigureFlags $BuildDir/llvm.src \
+        -DLLVM_ENABLE_PROJECTS="$project_list" \
+        $ExtraConfigureFlags $BuildDir/llvm-project/llvm \
         2>&1 | tee $LogDir/llvm.configure-Phase$Phase-$Flavor.log
     env CC="$c_compiler" CXX="$cxx_compiler" \
         cmake -G "$generator" \
         -DCMAKE_BUILD_TYPE=$BuildType -DLLVM_ENABLE_ASSERTIONS=$Assertions \
-        $ExtraConfigureFlags $BuildDir/llvm.src \
+        -DLLVM_ENABLE_PROJECTS="$project_list" \
+        $ExtraConfigureFlags $BuildDir/llvm-project/llvm \
         2>&1 | tee $LogDir/llvm.configure-Phase$Phase-$Flavor.log
 
     cd $BuildDir
@@ -494,10 +466,10 @@ if [ $do_test_suite = "yes" ]; then
   SandboxDir="$BuildDir/sandbox"
   Lit=$SandboxDir/bin/lit
   TestSuiteBuildDir="$BuildDir/test-suite-build"
-  TestSuiteSrcDir="$BuildDir/test-suite.src"
+  TestSuiteSrcDir="$BuildDir/llvm-test-suite"
 
   virtualenv $SandboxDir
-  $SandboxDir/bin/python $BuildDir/llvm.src/utils/lit/setup.py install
+  $SandboxDir/bin/python $BuildDir/llvm-project/llvm/utils/lit/setup.py install
   mkdir -p $TestSuiteBuildDir
 fi
 
