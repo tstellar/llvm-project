@@ -790,11 +790,9 @@ public:
   MachineInstr::ExtraInfo *
   createMIExtraInfo(ArrayRef<MachineMemOperand *> MMOs,
                     MCSymbol *PreInstrSymbol = nullptr,
-                    MCSymbol *PostInstrSymbol = nullptr) {
-    return createMIExtraInfo(MMOs, PreInstrSymbol, PostInstrSymbol, nullptr);
-  }
+                    MCSymbol *PostInstrSymbol = nullptr);
 
-  MachineInstr::ExtraInfo *createMIExtraInfo(
+  MachineInstr::ExtraInfo *createMIExtraInfoWithMarker(
       ArrayRef<MachineMemOperand *> MMOs, MCSymbol *PreInstrSymbol,
       MCSymbol *PostInstrSymbol, MDNode *HeapAllocMarker);
 
