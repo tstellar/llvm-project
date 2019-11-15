@@ -42,7 +42,9 @@ jobs:
           - build-latest
         include:
           - name: build-baseline
-            ref: llvmorg-${{ env.release_major }}.0.0
+            # FIXME: Referencing the env context does not work here
+            # ref: llvmorg-${{ env.release_major }}.0.0
+            ref: llvmorg-9.0.0
           - name: build-latest
             ref: ${{ github.sha }}
     steps:
