@@ -216,17 +216,18 @@ if [ -z "$NumJobs" ]; then
 fi
 
 # Projects list
-projects="llvm clang clang-tools-extra"
+projects="clang-tools-extra"
+toolchain_projects="llvm clang"
 if [ $do_rt = "yes" ]; then
-  projects="$projects compiler-rt"
+  toolchain_projects="$toolchain_projects compiler-rt"
 fi
 if [ $do_libs = "yes" ]; then
-  projects="$projects libcxx"
+  toolchain_projects="$toolchain_projects libcxx"
   if [ $do_libcxxabi = "yes" ]; then
-    projects="$projects libcxxabi"
+    toolchain_projects="$toolchain_projects libcxxabi"
   fi
   if [ $do_libunwind = "yes" ]; then
-    projects="$projects libunwind"
+    toolchain_projects="$toolchain_projects libunwind"
   fi
 fi
 case $do_test_suite in
@@ -238,7 +239,7 @@ if [ $do_openmp = "yes" ]; then
   projects="$projects openmp"
 fi
 if [ $do_lld = "yes" ]; then
-  projects="$projects lld"
+  toolchain_projects="$toolchain_projects lld"
 fi
 if [ $do_lldb = "yes" ]; then
   projects="$projects lldb"
@@ -246,6 +247,8 @@ fi
 if [ $do_polly = "yes" ]; then
   projects="$projects polly"
 fi
+
+projects="$toolchain_project $projects"
 
 # Go to the build directory (may be different from CWD)
 BuildDir=$BuildDir/$RC
@@ -349,7 +352,11 @@ function configure_llvmCore() {
             ;;
     esac
 
-    project_list=${projects// /;}
+    if [ $Phase -eq 3 ]; then
+      project_list=${projects// /;}
+    else
+      project_list=${toolchain_projects// /;}
+    fi
     echo "# Using C compiler: $c_compiler"
     echo "# Using C++ compiler: $cxx_compiler"
 
@@ -579,8 +586,8 @@ for Flavor in $Flavors ; do
     if [ "$do_compare" = "yes" ]; then
         echo
         echo "# Comparing Phase 2 and Phase 3 files"
-        for p2 in `find $llvmCore_phase2_objdir -name '*.o'` ; do
-            p3=`echo $p2 | sed -e 's,Phase2,Phase3,'`
+        for p3 in `find $llvmCore_phase3_objdir -name '*.o'` ; do
+            p2=`echo $p3 | sed -e 's,Phase3,Phase2,'`
             # Substitute 'Phase2' for 'Phase3' in the Phase 2 object file in
             # case there are build paths in the debug info. Do the same sub-
             # stitution on both files in case the string occurrs naturally.
