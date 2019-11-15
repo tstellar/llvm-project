@@ -24,6 +24,8 @@ jobs:
       uses: tstellar/actions/setup-windows@master
       with:
         arch: amd64
+    - name: Install Ninja
+      uses: tstellar/actions/install-ninja@master
     - uses: actions/checkout@v1
       with:
         fetch-depth: 1
