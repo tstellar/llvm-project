@@ -50,7 +50,7 @@ jobs:
     - name: Install Ninja
       uses: tstellar/actions/install-ninja@master
     - name: Install abi-compliance-checker
-      run: sudo apt-get install abi-dumper
+      run: sudo apt-get install abi-dumper universal-ctags
     - name: Download source code
       uses: tstellar/actions/get-llvm-project-src@master
       with:
