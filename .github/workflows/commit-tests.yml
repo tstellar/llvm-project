@@ -48,17 +48,20 @@ jobs:
             # FIXME: Referencing the env context does not work here
             # ref: llvmorg-${{ env.release_major }}.0.0
             ref: llvmorg-9.0.0
+            repo: llvm/llvm-project
           - name: build-latest
             ref: ${{ github.sha }}
+            repo: ${{ env.GITHUB_REPOSITORY }}
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@master
     - name: Install abi-compliance-checker
       run: sudo apt-get install abi-dumper
     - name: Download source code
-      uses: llvm/actions/get-llvm-project-src@master
+      uses: tstellar/actions/get-llvm-project-src@src-repo
       with:
         ref: ${{ matrix.ref }}
+        repo: ${{ matrix.repo }}
     - name: Configure
       run: |
         mkdir build
