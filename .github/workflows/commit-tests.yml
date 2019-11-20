@@ -51,7 +51,7 @@ jobs:
             repo: llvm/llvm-project
           - name: build-latest
             ref: ${{ github.sha }}
-            repo: ${{ env.GITHUB_REPOSITORY }}
+            repo: ${{ github.repository }}
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@master
