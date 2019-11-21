@@ -156,7 +156,8 @@ bool StackProtector::ContainsProtectableArray(Type *Ty, bool &IsLarge,
   return NeedsProtector;
 }
 
-bool StackProtector::HasAddressTaken(const Instruction *AI) {
+bool StackProtector::HasAddressTaken(const Instruction *AI,
+                                SmallPtrSetImpl<const PHINode *> &VisitedPHIs) {
   for (const User *U : AI->users()) {
     if (const StoreInst *SI = dyn_cast<StoreInst>(U)) {
       if (AI == SI->getValueOperand())
@@ -171,19 +172,19 @@ bool StackProtector::HasAddressTaken(const Instruction *AI) {
     } else if (isa<InvokeInst>(U)) {
       return true;
     } else if (const SelectInst *SI = dyn_cast<SelectInst>(U)) {
-      if (HasAddressTaken(SI))
+      if (HasAddressTaken(SI, VisitedPHIs))
         return true;
     } else if (const PHINode *PN = dyn_cast<PHINode>(U)) {
       // Keep track of what PHI nodes we have already visited to ensure
       // they are only visited once.
       if (VisitedPHIs.insert(PN).second)
-        if (HasAddressTaken(PN))
+        if (HasAddressTaken(PN, VisitedPHIs))
           return true;
     } else if (const GetElementPtrInst *GEP = dyn_cast<GetElementPtrInst>(U)) {
-      if (HasAddressTaken(GEP))
+      if (HasAddressTaken(GEP, VisitedPHIs))
         return true;
     } else if (const BitCastInst *BI = dyn_cast<BitCastInst>(U)) {
-      if (HasAddressTaken(BI))
+      if (HasAddressTaken(BI, VisitedPHIs))
         return true;
     }
   }
@@ -244,6 +245,12 @@ bool StackProtector::RequiresStackProtector() {
   else if (!F->hasFnAttribute(Attribute::StackProtect))
     return false;
 
+  /// VisitedPHIs - The set of PHI nodes visited when determining
+  /// if a variable's reference has been taken.  This set
+  /// is maintained to ensure we don't visit the same PHI node multiple
+  /// times.
+  SmallPtrSet<const PHINode *, 16> VisitedPHIs;
+
   for (const BasicBlock &BB : *F) {
     for (const Instruction &I : BB) {
       if (const AllocaInst *AI = dyn_cast<AllocaInst>(&I)) {
@@ -297,7 +304,7 @@ bool StackProtector::RequiresStackProtector() {
           continue;
         }
 
-        if (Strong && HasAddressTaken(AI)) {
+        if (Strong && HasAddressTaken(AI, VisitedPHIs)) {
           ++NumAddrTaken;
           Layout.insert(std::make_pair(AI, MachineFrameInfo::SSPLK_AddrOf));
           ORE.emit([&]() {
