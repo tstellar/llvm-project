@@ -9,7 +9,7 @@ if(LLVM_LINK_LLVM_DYLIB AND LLVM_DYLIB_EXPORTED_SYMBOL_FILE)
   message(WARNING "Using LLVM_LINK_LLVM_DYLIB with LLVM_DYLIB_EXPORTED_SYMBOL_FILE may not work. Use at your own risk.")
 endif()
 
-if(NOT MSVC)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL Windows)
   llvm_map_components_to_libnames(LIB_NAMES ${LLVM_DYLIB_COMPONENTS})
 
   # Exclude libLLVMTableGen for the following reasons:
