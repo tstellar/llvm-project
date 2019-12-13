@@ -11,9 +11,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
+          - ubuntu-latest
           - macOS-latest
         cmake_args:
           - ""
+          - -DLLVM_LINK_LLVM_DYLIB=ON
     steps:
     - name: Setup Windows
       if: startsWith(matrix.os, 'windows')
@@ -27,12 +29,6 @@ jobs:
       uses: tstellar/actions/install-ninja@master
       with:
         os: ${{ runner.os }}
-    - name: Build Install libcxx
-      run: |
-          mkdir libcxx-build
-          cd libcxx-build
-          cmake ../llvm -DCMAKE_INSTALL_PREFIX=/Applications/Xcode_11.1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/ -DLLVM_ENABLE_PROJECTS="libcxx;libcxxabi"
-          ninja -v install-cxx-headers
     - name: Test LLVM
       uses: tstellar/actions/build-test-llvm-project@master
       with:
