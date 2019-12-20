@@ -183,6 +183,12 @@ template<typename T>
 
       template<class Other>
       struct rebind { typedef fuzzer_allocator<Other> other;  };
+
+      template< class U, class... Args >
+      void construct( U* p, Args&&... args ) {
+        std::allocator<T>::construct(p, std::forward<Args>(args)...);
+      }
+
   };
 
 template<typename T>
