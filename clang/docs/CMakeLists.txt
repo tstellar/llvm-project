@@ -90,15 +90,40 @@ if (LLVM_ENABLE_DOXYGEN)
 endif()
 endif()
 
+function (gen_rst_file output_file td_option source)
+  get_filename_component(TABLEGEN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${source}" DIRECTORY)
+  list(APPEND LLVM_TABLEGEN_FLAGS "-I${TABLEGEN_INCLUDE_DIR}")
+  clang_tablegen(${output_file} ${td_option} SOURCE ${source} TARGET "gen-${output_file}")
+  add_dependencies(docs-clang-html "gen-${output_file}")
+endfunction()
+
 if (LLVM_ENABLE_SPHINX)
   include(AddSphinxTarget)
   if (SPHINX_FOUND)
     if (${SPHINX_OUTPUT_HTML})
-      add_sphinx_target(html clang)
+      add_sphinx_target(html clang SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR})
+
+      # Copy rst files to build directory before generating the html
+      # documentation.  Some of the rst files are generated, so they
+      # only exist in the build directory.  Sphinx needs all files in
+      # the same directory in order to genrate the html, so we need to
+      # copy all the non-gnerated rst files from the source to the build
+      # directory before we run sphinx.
+      add_custom_target(copy-clang-rst-docs
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR})
+      add_dependencies(docs-clang-html copy-clang-rst-docs)
+
       add_custom_command(TARGET docs-clang-html POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
         "${CMAKE_CURRENT_SOURCE_DIR}/LibASTMatchersReference.html"
         "${CMAKE_CURRENT_BINARY_DIR}/html/LibASTMatchersReference.html")
+
+      # Generated files
+      gen_rst_file(AttributeReference.rst -gen-attr-docs ../include/clang/Basic/Attr.td)
+      gen_rst_file(DiagnosticsReference.rst -gen-diag-docs ../include/clang/Basic/Diagnostic.td)
+      gen_rst_file(ClangCommandLineReference.rst -gen-opt-docs ../include/clang/Driver/ClangOptionDocs.td)
     endif()
     if (${SPHINX_OUTPUT_MAN})
       add_sphinx_target(man clang)
