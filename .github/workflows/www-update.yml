@@ -8,8 +8,8 @@ jobs:
     name: Update clang.llvm.org
     runs-on: ubuntu-latest
     steps:
-      - name: Install Ninja
-        run: apt-get install ninja
+      - name: Install Dependencies
+        run: sudo apt-get install ninja
       - name: Download source code
         uses: llvm/actions/get-llvm-project-src@master
         with:
