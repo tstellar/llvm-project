@@ -28,7 +28,7 @@ jobs:
           WWW_TOKEN: ${{ secrets.WWW_TOKEN }}
 
       - name: Update local copy of clang-www
-        working-directory: ./clang-www
+        working-directory: ./clang-www 
         run: |
           git rm -r *
           cp -R ../clang/www/* .
