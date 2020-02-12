@@ -28,11 +28,12 @@ jobs:
           WWW_TOKEN: ${{ secrets.WWW_TOKEN }}
 
       - name: Update local copy of clang-www
+        working-directory: ./clang-www
         run: |
-          git -C clang-www rm -r *
-          cp -R clang/www/* clang-www
-          mkdir -p clang-www/docs
-          cp -R build/tools/clang/docs/html/* clang-www/docs
+          git rm -r *
+          cp -R ../clang/www/* .
+          mkdir -p docs
+          cp -R ../build/tools/clang/docs/html/* docs/
 
       - name: Push changes to clang-www repo
         working-directory: ./clang-www
