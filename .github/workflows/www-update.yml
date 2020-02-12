@@ -10,7 +10,9 @@ jobs:
     steps:
       - name: Download source code
         uses: llvm/actions/get-llvm-project-src@master
-
+        with:
+          ref: ${{ env.GTIHUB_SHA }}
+          repo: ${{ env.GITHUB_REPOSITORY }}
       - name: Build documentation
         run: |
           mkdir build
