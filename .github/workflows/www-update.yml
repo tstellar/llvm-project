@@ -11,8 +11,8 @@ jobs:
       - name: Download source code
         uses: llvm/actions/get-llvm-project-src@master
         with:
-          ref: ${{ env.GTIHUB_SHA }}
-          repo: ${{ env.GITHUB_REPOSITORY }}
+          ref: ${{ github.sha }}
+          repo: ${{ github.repository }}
       - name: Build documentation
         run: |
           mkdir build
