@@ -31,6 +31,7 @@ jobs:
         run: cp -R build/tools/clang/docs/html/* clang-www
 
       - name: Push changes to clang-www repo
+        working-directory: ./clang-www
         run: |
           git config --global user.name "llvmbot"
           git config --global user.email "llvmbot@llvm.org"
