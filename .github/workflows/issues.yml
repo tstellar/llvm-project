@@ -20,7 +20,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - run: |
+      - if: startswith(github.event.comment.body, 'cherry-pick:')
+        run: |
           git fetch origin remove-dylib-windows:remove-dylib-windows
       - name: Set up git
         run: |
