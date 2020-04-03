@@ -38,4 +38,10 @@ jobs:
         
       - name: Create pull request
         if: startswith(github.event.comment.body, 'cherry-pick:')
-        run: true
+        uses: tstellar/actions/create-pull-request@pull-request
+        with:
+          owner: tstellar
+          repo: llvm-project
+          title: Pull Request
+          head: master-${{ github.event.issue.number }}
+          base: release-automation
