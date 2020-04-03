@@ -18,6 +18,8 @@ jobs:
       - name: Checkout code
         if: startswith(github.event.comment.body, 'cherry-pick:')
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
         
       - name: Cherry-pick commit
         if: startswith(github.event.comment.body, 'cherry-pick:')
