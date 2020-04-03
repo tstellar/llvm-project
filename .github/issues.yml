@@ -1,0 +1,15 @@
+Name: Stable Backport Automation
+
+on:
+  issue_comment:
+    types:
+      - created
+      - edited
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo event
+        run: echo ${{ github.event.issue_comment.body }}
+
