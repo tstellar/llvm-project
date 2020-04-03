@@ -13,7 +13,7 @@ jobs:
       - name: Get commit
         if: startswith(github.event.comment.body, 'cherry-pick:')
         id: cherry-commit
-        run: echo ::set-output name=hash::`echo "${{ github.event.comment.body }}" | cut -d : -f 2 | tr -d ' '`
+        run: "echo ::set-output name=hash::`echo ${{ github.event.comment.body }} | cut -d : -f 2 | tr -d ' '`"
 
       - name: Checkout code
         if: startswith(github.event.comment.body, 'cherry-pick:')
