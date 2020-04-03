@@ -22,7 +22,11 @@ jobs:
           fetch-depth: 0
       - run: |
           git fetch origin remove-dylib-windows:remove-dylib-windows
-        
+      - name: Set up git
+        run: |
+          git config --global user.name "llvmbot"
+          git config --global user.email "llvmbot@llvm.org"
+
       - name: Cherry-pick commit
         if: startswith(github.event.comment.body, 'cherry-pick:')
         run: git cherry-pick ${{ steps.cherry-commit.outputs.hash }}
