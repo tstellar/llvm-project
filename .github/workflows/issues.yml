@@ -1,4 +1,4 @@
-Name: Stable Backport Automation
+name: Stable Backport Automation
 
 on:
   issue_comment:
