@@ -20,6 +20,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - run: |
+          git fetch origin remove-dylib-windows:remove-dylib-windows
         
       - name: Cherry-pick commit
         if: startswith(github.event.comment.body, 'cherry-pick:')
