@@ -20,12 +20,14 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          repository: llvm/llvm-project
+          ref: release/10.x
+
       - if: startswith(github.event.comment.body, 'cherry-pick:')
         run: |
-          git fetch origin release/10.x
-          git fetch origin remove-dylib-windows:remove-dylib-windows
+          git fetch origin master
           if ls-remote --exit-code -h ${{ github.repository }} master-${{ github.event.issue.number }}; then
-            git fetch origin master-${{ github.event.issue.number }}
+            git fetch ${{ github.repository }} master-${{ github.event.issue.number }}
           fi
       - name: Set up git
         run: |
