@@ -22,7 +22,11 @@ jobs:
           fetch-depth: 0
       - if: startswith(github.event.comment.body, 'cherry-pick:')
         run: |
+          git fetch origin release/10.x
           git fetch origin remove-dylib-windows:remove-dylib-windows
+          if ls-remote --exit-code -h ${{ github.repository }} master-${{ github.event.issue.number }}; then
+            git fetch origin master-${{ github.event.issue.number }}
+          fi
       - name: Set up git
         run: |
           git config --global user.name "llvmbot"
@@ -45,3 +49,5 @@ jobs:
           title: Pull Request
           head: master-${{ github.event.issue.number }}
           base: release-automation
+          
+          :  
