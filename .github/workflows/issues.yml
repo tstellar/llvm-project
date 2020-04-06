@@ -37,7 +37,13 @@ jobs:
       - name: Cherry-pick commit
         if: startswith(github.event.comment.body, 'cherry-pick:')
         run: git cherry-pick ${{ steps.cherry-commit.outputs.hash }}
-        
+
+      - name: Add cherry-pick failed comment
+        if: ! success()
+        uses: actions/github@v1.0.0
+        with:
+          args: comment "Cherry pick of ${{ steps.cherry-commit.outputs.hash }} failed
+
       - name: Push Code
         if: startswith(github.event.comment.body, 'cherry-pick:')
         run: git push https://${{ github.token }}@github.com/${{ github.repository }} HEAD:master-${{ github.event.issue.number }}
