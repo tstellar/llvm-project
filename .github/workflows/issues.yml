@@ -41,6 +41,8 @@ jobs:
       - name: Add cherry-pick failed comment
         if: failure()
         uses: actions/github@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           args: comment "Cherry pick of ${{ steps.cherry-commit.outputs.hash }} failed
 
