@@ -49,5 +49,3 @@ jobs:
           title: Pull Request
           head: master-${{ github.event.issue.number }}
           base: release-automation
-          
-          :  
