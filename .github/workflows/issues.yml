@@ -30,7 +30,7 @@ jobs:
         with:
           fetch-depth: 0
           repository: llvm/llvm-project
-          ref: steps.vars.outputs.pr-base-branch
+          ref: ${{ steps.vars.outputs.pr-base-branch }}
 
       - name: Fetch necessary branches
         if: startswith(github.event.comment.body, 'cherry-pick:')
@@ -69,7 +69,7 @@ jobs:
           owner: tstellar
           repo: llvm-project
           title: Pull Request
-          head: steps.vars.outptus.pr-head-branch
+          head: ${{ steps.vars.outptus.pr-head-branch }}
           base: release-automation
           
       - name: Add link to pull request
