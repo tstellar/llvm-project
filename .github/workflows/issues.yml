@@ -18,10 +18,18 @@ jobs:
     needs: check-comment
     steps:
       - name: Set job variables
+        env:
+          PR_HEAD_BRANCH: issue-${{ github.event.issue.number }}-pr
+          PR_BASE_BRANCH: release/10.x
         id: vars
         run: |
-          echo ::set-output name=head-branch::issue-${{ github.event.issue.number }}-pr
+          echo ::set-output name=pr-head-branch::$PR_HEAD_BRANCH
+          echo ::set-output name=pr-base-branch::$PR_BASE_BRANCH
           echo ::set-output name=cherry-pick-commit::`echo ${{ github.event.comment.body }} | cut -d : -f 2 | tr -d ' '`
+          if ls-remote --exit-code -h ${{ github.repository }} master-${{ github.event.issue.number }}; then
+            git fetch ${{ github.repository }} master-${{ github.event.issue.number }}
+          fi
+          
 
       - name: Checkout code
         if: startswith(github.event.comment.body, 'cherry-pick:')
