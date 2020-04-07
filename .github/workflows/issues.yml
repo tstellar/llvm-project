@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check comment
-        if: ! startswith(github.event.comment.body, 'cherry-pick:')
-        run: exit 1
+        run: echo ${{ github.event.comment.body }} | grep '^cherry-pick:'
      
   create-pull-request:
     runs-on: ubuntu-latest
