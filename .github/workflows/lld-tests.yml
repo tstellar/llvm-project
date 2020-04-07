@@ -6,6 +6,7 @@ on:
       - 'release/**'
     paths:
       - 'lld/**'
+      - '.github/workflows/**'
   pull_request:
     paths:
       - 'lld/**'

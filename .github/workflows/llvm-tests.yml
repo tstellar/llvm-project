@@ -9,6 +9,7 @@ on:
       - 'release/**'
     paths:
       - 'llvm/**'
+      - '.github/workflows/**'
   pull_request:
     paths:
       - 'llvm/**'

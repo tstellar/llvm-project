@@ -6,6 +6,7 @@ on:
       - 'release/**'
     paths:
       - 'clang/**'
+      - '.github/workflows/**'
   pull_request:
     paths:
       - 'clang/**'
