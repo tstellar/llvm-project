@@ -36,7 +36,7 @@ jobs:
         if: startswith(github.event.comment.body, 'cherry-pick:')
         run: |
           git fetch origin master
-          if ls-remote --exit-code -h ${{ github.repository }} ${{ steps.vars.outputs.pr-head-branch }}; then
+          if git ls-remote --exit-code -h ${{ github.repository }} ${{ steps.vars.outputs.pr-head-branch }}; then
             git fetch ${{ github.repository }} ${{ steps.var.outputs.pr-head-branch }}
             git checkout ${{ steps.var.outputs.pr-head-branch }}
           fi
