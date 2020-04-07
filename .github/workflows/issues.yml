@@ -77,4 +77,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          args: "comment pull-request: #${{ steps.pull_request.outputs.pull_id }}"
+          args: "comment pull-request: #${{ steps.pull_request.outputs.pull_number }}"
