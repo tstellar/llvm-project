@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Check comment
         if: startswith(github.event.comment.body, 'cherry-pick:')
-        run: exit 0
+        run: exit 1
      
   create-pull-request:
     runs-on: ubuntu-latest
