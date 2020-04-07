@@ -1,17 +1,21 @@
-name: Commit Tests
+name: LLVM Tests
 
 env:
-  release_major: 9
+  release_major: 10
 
 on:
   push:
     branches:
       - 'release/**'
+    paths:
+      - 'llvm/**'
   pull_request:
+    paths:
+      - 'llvm/**'
 
 jobs:
   build_llvm:
-    name: check-all llvm/clang/lld
+    name: llvm check-all
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -34,7 +38,7 @@ jobs:
     - name: Test LLVM
       uses: llvm/actions/build-test-llvm-project@master
       with:
-        cmake_args: -G Ninja -DLLVM_ENABLE_PROJECTS="clang;lld;" -DCMAKE_BUILD_TYPE=Release
+        cmake_args: -G Ninja -DCMAKE_BUILD_TYPE=Release
 
   abi-dump:
     runs-on: ubuntu-latest
@@ -47,7 +51,7 @@ jobs:
           - name: build-baseline
             # FIXME: Referencing the env context does not work here
             # ref: llvmorg-${{ env.release_major }}.0.0
-            ref: llvmorg-9.0.0
+            ref: llvmorg-10.0.0
             repo: llvm/llvm-project
           - name: build-latest
             ref: ${{ github.sha }}
