@@ -7,13 +7,22 @@ on:
       - edited
 
 jobs:
-  create-pull-request:
+  check-comment:
     runs-on: ubuntu-latest
     steps:
-      - name: Get commit
+      - name: Check comment
         if: startswith(github.event.comment.body, 'cherry-pick:')
-        id: cherry-commit
-        run: "echo ::set-output name=hash::`echo ${{ github.event.comment.body }} | cut -d : -f 2 | tr -d ' '`"
+        run: exit 0
+     
+  create-pull-request:
+    runs-on: ubuntu-latest
+    needs: check-comment
+    steps:
+      - name: Set job variables
+        id: vars
+        run: |
+          echo ::set-output name=head-branch::issue-${{ github.event.issue.number }}-pr
+          echo ::set-output name=cherry-pick-commit::`echo ${{ github.event.comment.body }} | cut -d : -f 2 | tr -d ' '`
 
       - name: Checkout code
         if: startswith(github.event.comment.body, 'cherry-pick:')
@@ -36,7 +45,7 @@ jobs:
 
       - name: Cherry-pick commit
         if: startswith(github.event.comment.body, 'cherry-pick:')
-        run: git cherry-pick ${{ steps.cherry-commit.outputs.hash }}
+        run: git cherry-pick ${{ steps.vars.outputs.cherry-pick-commit }}
 
       - name: Add cherry-pick failed comment
         if: failure()
@@ -44,7 +53,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          args: comment "Cherry pick of ${{ steps.cherry-commit.outputs.hash }} failed"
+          args: comment "Cherry pick of ${{ steps.vars.outputs.cherry-pick-commit }} failed"
 
       - name: Push Code
         if: startswith(github.event.comment.body, 'cherry-pick:')
