@@ -37,7 +37,7 @@ jobs:
         run: |
           git fetch origin master
           if git ls-remote --exit-code -h ${{ github.repository }} ${{ steps.vars.outputs.pr-head-branch }}; then
-            git fetch ${{ github.repository }} ${{ steps.vars.outputs.pr-head-branch }}
+            git fetch https://github.com/${{ github.repository }} ${{ steps.vars.outputs.pr-head-branch }}
             git checkout ${{ steps.vars.outputs.pr-head-branch }}
           fi
       - name: Set up git
