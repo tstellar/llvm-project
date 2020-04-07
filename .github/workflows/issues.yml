@@ -18,20 +18,11 @@ jobs:
     needs: check-comment
     steps:
       - name: Set job variables
-        env:
-          PR_HEAD_BRANCH: issue-${{ github.event.issue.number }}-pr
-          PR_BASE_BRANCH: release/10.x
         id: vars
         run: |
-          echo ::set-output name=pr-head-branch::$PR_HEAD_BRANCH
-          echo ::set-output name=pr-base-branch::$PR_BASE_BRANCH
+          echo ::set-output name=pr-head-branch::issue-${{ github.event.issue.number }}-pr
+          echo ::set-output name=pr-base-branch::release/10.x
           echo ::set-output name=cherry-pick-commit::`echo ${{ github.event.comment.body }} | cut -d : -f 2 | tr -d ' '`
-          if ls-remote --exit-code -h ${{ github.repository }} ${PR_HEAD_BRANCH); then
-            export CHERRY_PICK_BRANCH=$PR_HEAD_BRANCH
-          else
-            export CHERRY_PICK_BRANCH=$PR_BASE_BRANCH
-          fi
-          echo ::set-output name=cherry-pick-branch::$CHERRY_PICK_BRANCH
 
       - name: Checkout code
         if: startswith(github.event.comment.body, 'cherry-pick:')
@@ -39,13 +30,15 @@ jobs:
         with:
           fetch-depth: 0
           repository: llvm/llvm-project
-          ref: release/10.x
+          ref: steps.vars.outputs.pr-base-branch
 
-      - if: startswith(github.event.comment.body, 'cherry-pick:')
+      - name: Fetch necessary branches
+        if: startswith(github.event.comment.body, 'cherry-pick:')
         run: |
           git fetch origin master
-          if ls-remote --exit-code -h ${{ github.repository }} master-${{ github.event.issue.number }}; then
-            git fetch ${{ github.repository }} master-${{ github.event.issue.number }}
+          if ls-remote --exit-code -h ${{ github.repository }} ${{ steps.vars.outputs.pr-head-branch }}; then
+            git fetch ${{ github.repository }} ${{ steps.var.outputs.pr-head-branch }}
+            git checkout ${{ steps.var.outputs.pr-head-branch }}
           fi
       - name: Set up git
         run: |
