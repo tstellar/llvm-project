@@ -6,10 +6,12 @@ on:
       - 'release/**'
     paths:
       - 'clang/**'
+      - 'llvm/**'
       - '.github/workflows/**'
   pull_request:
     paths:
       - 'clang/**'
+      - 'llvm/**'
 
 jobs:
   build_clang:

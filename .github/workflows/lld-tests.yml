@@ -6,10 +6,12 @@ on:
       - 'release/**'
     paths:
       - 'lld/**'
+      - 'llvm/**'
       - '.github/workflows/**'
   pull_request:
     paths:
       - 'lld/**'
+      - 'llvm/**'
 
 jobs:
   build_lld:
