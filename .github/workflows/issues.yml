@@ -20,7 +20,7 @@ jobs:
       - name: Set job variables
         id: vars
         run: |
-          echo ::set-output name=pr-head-branch::release/issue-${{ github.event.issue.number }}-pr
+          echo ::set-output name=pr-head-branch::issue-${{ github.event.issue.number }}-pr
           echo ::set-output name=pr-base-branch::release/10.x
           echo ::set-output name=cherry-pick-commit::`echo ${{ github.event.comment.body }} | cut -d : -f 2 | tr -d ' '`
 
