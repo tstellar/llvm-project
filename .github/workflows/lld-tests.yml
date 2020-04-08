@@ -36,6 +36,7 @@ jobs:
       with:
         fetch-depth: 1
     - name: Test lld
-      uses: llvm/actions/build-test-llvm-project@master
+      uses: tstellar/actions/build-test-llvm-project@build-target
       with:
         cmake_args: -G Ninja  -DLLVM_ENABLE_PROJECTS="lld" -DCMAKE_BUILD_TYPE=Release
+        build_target: check-lld
