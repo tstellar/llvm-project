@@ -68,7 +68,7 @@ jobs:
         with:
           owner: tstellar
           repo: llvm-project
-          title: Pull Request
+          title: "Backport patches from issue #${{ github.event.issue.number }}"
           head: ${{ steps.vars.outputs.pr-head-branch }}
           base: release-automation
           
