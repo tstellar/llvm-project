@@ -47,7 +47,7 @@ jobs:
 
       - name: Cherry-pick commit
         if: startswith(github.event.comment.body, 'cherry-pick:')
-        run: git cherry-pick ${{ steps.vars.outputs.cherry-pick-commit }}
+        run: git cherry-pick -x ${{ steps.vars.outputs.cherry-pick-commit }}
 
       - name: Add cherry-pick failed comment
         if: failure()
