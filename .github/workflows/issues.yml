@@ -70,7 +70,7 @@ jobs:
           repo: llvm-project
           title: "Backport patches from issue #${{ github.event.issue.number }}"
           head: ${{ steps.vars.outputs.pr-head-branch }}
-          base: release-automation
+          base: ${{ steps.vars.outputs.pr-base-branch }}
           
       - name: Add link to pull request
         uses: actions/github@v1.0.0
