@@ -63,7 +63,7 @@ jobs:
     - name: Install abi-compliance-checker
       run: sudo apt-get install abi-dumper
     - name: Download source code
-      uses: llvm/actions/get-llvm-project-src@master
+      uses: tstellar/actions/get-llvm-project-src@context-fix
       with:
         ref: ${{ matrix.ref }}
         repo: ${{ matrix.repo }}
