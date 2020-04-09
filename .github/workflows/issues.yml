@@ -60,21 +60,27 @@ jobs:
       - name: Push Code
         if: startswith(github.event.comment.body, 'cherry-pick:')
         run: git push https://${{ github.token }}@github.com/${{ github.repository }} HEAD:${{ steps.vars.outputs.pr-head-branch }}
-        
-      - name: Create pull request
-        if: startswith(github.event.comment.body, 'cherry-pick:')
-        uses: tstellar/actions/create-pull-request@pull-request
-        id: pull_request
-        with:
-          owner: tstellar
-          repo: llvm-project
-          title: "Backport patches from issue #${{ github.event.issue.number }}"
-          head: ${{ steps.vars.outputs.pr-head-branch }}
-          base: ${{ steps.vars.outputs.pr-base-branch }}
-          
-      - name: Add link to pull request
+
+      - name: Add branch name to issue
         uses: actions/github@v1.0.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          args: "comment pull-request: #${{ steps.pull_request.outputs.pull_number }}"
+          args: "comment branch: #${{ steps.vars.outputs.pr-head-branch }}"
+#      - name: Create pull request
+#        if: startswith(github.event.comment.body, 'cherry-pick:')
+#        uses: tstellar/actions/create-pull-request@pull-request
+#        id: pull_request
+#        with:
+#          owner: tstellar
+#          repo: llvm-project
+#          title: "Backport patches from issue #${{ github.event.issue.number }}"
+#          head: ${{ steps.vars.outputs.pr-head-branch }}
+#          base: ${{ steps.vars.outputs.pr-base-branch }}
+          
+#      - name: Add link to pull request
+#        uses: actions/github@v1.0.0
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
+#        with:
+#          args: "comment pull-request: #${{ steps.pull_request.outputs.pull_number }}"
