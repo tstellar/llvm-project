@@ -61,9 +61,9 @@ jobs:
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@master
-    - name: Install abi-compliance-checker
+    - name: Install abi-compliance-checker and libabigail
       run: |
-        sudo apt-get install abi-dumper autoconf pkg-config
+        sudo apt-get install abi-dumper autoconf pkg-config abigail-tools
     - name: Install universal-ctags
       run: |
         git clone https://github.com/universal-ctags/ctags.git
@@ -85,11 +85,18 @@ jobs:
       run: ninja -C build libLLVM-${{ env.release_major }}.so
     - name: Dump ABI
       run: abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers llvm/include -o ${{ matrix.ref }}.abi.tar.gz build/lib/libLLVM-${{ env.release_major }}.so
+    - name: Dump ABI -libabigail
+      run: abidw --hd llvm/include/ --out-file ${{ matrix.ref }}.abigail build/lib/libLLVM-10.so
     - name: Upload ABI file
       uses: actions/upload-artifact@v1
       with:
         name: ${{ matrix.name }}
         path: ${{ matrix.ref }}.abi.tar.gz
+    - name: Upload libabigail ABI file
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ matrix.name }}-abigail
+        path: ${{ matrix.ref }}.abigail
 
   abi-compare:
     runs-on: ubuntu-latest
@@ -105,7 +112,7 @@ jobs:
         with:
           name: build-latest
       - name: Install abi-compliance-checker
-        run: sudo apt-get install abi-compliance-checker
+        run: sudo apt-get install abi-compliance-checker abigail-tools
       - name: Compare ABI
         run: abi-compliance-checker -l libLLVM-${{ env.release_major}}.so -old build-baseline/*.tar.gz -new build-latest/*.tar.gz
       - name: Upload ABI Comparison
@@ -114,3 +121,13 @@ jobs:
         with:
           name: compat-report-${{ github.sha }}
           path: compat_reports/
+      - name: Download baseline - libabigail
+        uses: actions/download-artifact@v1
+        with:
+          name: build-baseline-abigail
+      - name: Download latest - libabigail
+        uses: actions/download-artifact@v1
+        with:
+          name: build-latest-libabigail
+      - name: Compare ABI - libabigail
+        run: abidiff build-baseline-abigail/*.abigail build-latest-abigail/*.abigail
