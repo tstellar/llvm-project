@@ -40,7 +40,8 @@ public:
 
   void getAnalysisUsage(AnalysisUsage &AU) const override {
     AU.addRequired<MachineBranchProbabilityInfo>();
-    AU.addRequired<LazyMachineBlockFrequencyInfoPass>();
+    // Added in d9ae493937c7fff67cb0afba133c6f9872db784a
+    // AU.addRequired<LazyMachineBlockFrequencyInfoPass>();
     AU.addRequired<ProfileSummaryInfoWrapperPass>();
     MachineFunctionPass::getAnalysisUsage(AU);
   }

@@ -137,7 +137,8 @@ void MachineCombiner::getAnalysisUsage(AnalysisUsage &AU) const {
   AU.addPreserved<MachineLoopInfo>();
   AU.addRequired<MachineTraceMetrics>();
   AU.addPreserved<MachineTraceMetrics>();
-  AU.addRequired<LazyMachineBlockFrequencyInfoPass>();
+  // Added in d9ae493937c7fff67cb0afba133c6f9872db784a
+  // AU.addRequired<LazyMachineBlockFrequencyInfoPass>();
   AU.addRequired<ProfileSummaryInfoWrapperPass>();
   MachineFunctionPass::getAnalysisUsage(AU);
 }

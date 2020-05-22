@@ -337,7 +337,8 @@ void SelectionDAGISel::getAnalysisUsage(AnalysisUsage &AU) const {
   if (UseMBPI && OptLevel != CodeGenOpt::None)
     AU.addRequired<BranchProbabilityInfoWrapperPass>();
   AU.addRequired<ProfileSummaryInfoWrapperPass>();
-  LazyBlockFrequencyInfoPass::getLazyBFIAnalysisUsage(AU);
+  // Added in d9ae493937c7fff67cb0afba133c6f9872db784a
+  // LazyBlockFrequencyInfoPass::getLazyBFIAnalysisUsage(AU);
   MachineFunctionPass::getAnalysisUsage(AU);
 }
 

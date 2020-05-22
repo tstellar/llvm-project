@@ -818,7 +818,8 @@ private:
     AU.addRequired<TargetLibraryInfoWrapperPass>();
     AU.addRequired<TargetTransformInfoWrapperPass>();
     AU.addRequired<ProfileSummaryInfoWrapperPass>();
-    LazyBlockFrequencyInfoPass::getLazyBFIAnalysisUsage(AU);
+    // Added in d9ae493937c7fff67cb0afba133c6f9872db784a
+    // LazyBlockFrequencyInfoPass::getLazyBFIAnalysisUsage(AU);
     FunctionPass::getAnalysisUsage(AU);
   }
 

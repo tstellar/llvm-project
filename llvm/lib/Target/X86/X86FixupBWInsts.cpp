@@ -117,7 +117,8 @@ public:
     AU.addRequired<MachineLoopInfo>(); // Machine loop info is used to
                                        // guide some heuristics.
     AU.addRequired<ProfileSummaryInfoWrapperPass>();
-    AU.addRequired<LazyMachineBlockFrequencyInfoPass>();
+    // Added in d9ae493937c7fff67cb0afba133c6f9872db784a
+    // AU.addRequired<LazyMachineBlockFrequencyInfoPass>();
     MachineFunctionPass::getAnalysisUsage(AU);
   }
 
