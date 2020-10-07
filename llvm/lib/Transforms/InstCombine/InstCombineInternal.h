@@ -1061,6 +1061,8 @@ class Negator final {
   using Result = std::pair<ArrayRef<Instruction *> /*NewInstructions*/,
                            Value * /*NegatedRoot*/>;
 
+  std::array<Value *, 2> getSortedOperandsOfBinOp(Instruction *I);
+
   LLVM_NODISCARD Value *visitImpl(Value *V, unsigned Depth);
 
   LLVM_NODISCARD Value *negate(Value *V, unsigned Depth);
