@@ -60,7 +60,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "Cherry pick of ${steps.vars.outputs.cherry-pick-commit} failed"
+              body: "Cherry pick of ${{ steps.vars.outputs.cherry-pick-commit }} failed"
             })
 
       - name: Push Code
@@ -77,11 +77,11 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'branch: ${steps.vars.outputs.pr-head-branch}'
+              body: 'branch: ${{ steps.vars.outputs.pr-head-branch }}'
             })
           
           
-          "comment branch: ${{ steps.vars.outputs.pr-head-branch }}"
+ #         "comment branch: ${{ steps.vars.outputs.pr-head-branch }}"
 #      - name: Create pull request
 #        if: startswith(github.event.comment.body, 'cherry-pick:')
 #        uses: tstellar/actions/create-pull-request@pull-request
