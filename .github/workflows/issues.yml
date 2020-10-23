@@ -51,7 +51,7 @@ jobs:
 
       - name: Add cherry-pick failed comment
         if: failure()
-        uses: actions/github@v1.0.0
+        uses: actions/github-script@v3
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -62,7 +62,7 @@ jobs:
         run: git push https://${{ github.token }}@github.com/${{ github.repository }} HEAD:${{ steps.vars.outputs.pr-head-branch }}
 
       - name: Add branch name to issue
-        uses: actions/github@v1.0.0
+        uses: actions/github-script@v3
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
