@@ -25,12 +25,12 @@ jobs:
           release_version=`echo "${{ github.ref }}" | sed 's/refs\/tags\/llvmorg-//g'`
           echo "::set-output name=release_version::$release_version"
 
-      - name: Checkout LLVM
-        uses: actions/checkout@v1 
+ #     - name: Checkout LLVM
+ #       uses: actions/checkout@v1 
       
       - name: Create Release
         env:
-          RELEASE_VERSION: steps.validate-tag.outputs.release-version
+          RELEASE_VERSION: "${{ steps.validate-tag.outputs.release-version }}"
         run: |
            echo "./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release $RELEASE_VERSION create"
         
