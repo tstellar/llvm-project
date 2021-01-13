@@ -17,8 +17,9 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
       - name: Validate Tag
-        if: '${{ github.event.pusher }} != "tstellar"'
-        run: false
+        run: |
+          test "${{ github.actor }}" = "tstellar"
+          echo "${{ github.ref }}" | grep -e 'llvmorg-[0-9.]\+\(-rc[0-9]\)\?'$
 
         #    - name: Parse Tag
         #      run: 
