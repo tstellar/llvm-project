@@ -10,15 +10,15 @@ jobs:
   release_tasks:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate Tag
-        if: '${{ github.event.pusher }} != "tstellar"'
-        run: false
+
 
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-
+      - name: Validate Tag
+        if: '${{ github.event.pusher }} != "tstellar"'
+        run: false
 
         #    - name: Parse Tag
         #      run: 
