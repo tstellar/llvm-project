@@ -6,16 +6,17 @@ on:
       - 'llvmorg-[0-9.]*'
 
 jobs:
-  runs-on: ubuntu-latest
   release_tasks:
-    - name: Validate Tag
-      if: '${{ github.event.pusher }} != "tstellar"'
-      run: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Tag
+        if: '${{ github.event.pusher }} != "tstellar"'
+        run: false
 
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
 
         #    - name: Parse Tag
