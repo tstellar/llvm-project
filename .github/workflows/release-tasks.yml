@@ -23,7 +23,7 @@ jobs:
           test "${{ github.actor }}" = "tstellar"
           echo "${{ github.ref }}" | grep -e 'llvmorg-[0-9.]\+\(-rc[0-9]\)\?'$
           release_version=`echo "${{ github.ref }}" | sed 's/refs\/tags\/llvmorg-//g'`
-          echo "::set-output name=release_version::$release_version"
+          echo "::set-output name=release_version::`echo $release_version`"
 
  #     - name: Checkout LLVM
  #       uses: actions/checkout@v1 
