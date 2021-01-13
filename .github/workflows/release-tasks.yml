@@ -25,15 +25,40 @@ jobs:
           release_version=`echo "${{ github.ref }}" | sed 's/refs\/tags\/llvmorg-//g'`
           echo "::set-output name=release-version::$release_version"
 
- #     - name: Checkout LLVM
- #       uses: actions/checkout@v1 
+      - name: Checkout LLVM
+        uses: actions/checkout@v1 
       
       - name: Create Release
         env:
           RELEASE_VERSION: "${{ steps.validate-tag.outputs.release-version }}"
         run: |
            echo "./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release ${{ env.RELEASE_VERSION }} create"
-        
+      
+      - name: Build Documentation
+        run: |
+          apt-get install -y doxygen sphinx-doc python3-recommonmark
+          cmake -G Ninja llvm/-B docs-build \
+               -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;libcxx;polly;flang" \
+               -DCMAKE_BUILD_TYPE=Release \
+               -DLLVM_ENABLE_DOXYGEN=ON \
+               -DLLVM_ENABLE_SPHINX=ON \
+               -DLLVM_INCLUDE_DOCS=ON \
+               -DSPHINX_WARNINGS_AS_ERRORS=ON
+          ninja -C docs-build \
+               docs-clang-html \
+               docs-flang-html \
+               docs-libcxx-html \
+               docs-lld-html \
+               docs-llvm-html \
+               docs-polly-html \
+               doxygen-clang \
+               doxygen-clang-tools \
+               doxygen-flang \
+               doxygen-llvm \
+               doxygen-mlir \
+               doxygen-polly
+
+
         
       
 
