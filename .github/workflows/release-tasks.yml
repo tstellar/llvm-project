@@ -3,7 +3,8 @@ name: Release Task
 on:
   push:
     tags:
-      - 'llvmorg-[0-9\.]+*'
+      # The regex support here is limited, so just match everything that starts with llvmorg- and filter later.
+      - 'llvmorg-*'
 
 jobs:
   release_tasks:
