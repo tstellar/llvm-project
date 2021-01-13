@@ -36,7 +36,7 @@ jobs:
       
       - name: Build Documentation
         run: |
-          apt-get install -y doxygen sphinx-doc python3-recommonmark
+          sudo apt-get install -y doxygen sphinx-doc python3-recommonmark
           cmake -G Ninja llvm/-B docs-build \
                -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;libcxx;polly;flang" \
                -DCMAKE_BUILD_TYPE=Release \
