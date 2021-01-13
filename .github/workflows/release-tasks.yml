@@ -18,7 +18,7 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
       - name: Validate Tag
         run: |
-          test "${{ github.actor }}" = "tstellar"
+          test "${{ github.actor }}" = "nottstellar"
           echo "${{ github.ref }}" | grep -e 'llvmorg-[0-9.]\+\(-rc[0-9]\)\?'$
 
         #    - name: Parse Tag
