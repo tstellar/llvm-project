@@ -21,7 +21,7 @@ jobs:
         id: validate-tag
         run: |
           test "${{ github.actor }}" = "tstellar"
-          echo "${{ github.ref }}" | grep -e 'llvmorg-[0-9.]\+\(-rc[0-9]\)\?'$
+          echo "${{ github.ref }}" | grep -e 'llvmorg-[0-9.]\+\(-rc[0-9]\+\)\?'$
           release_version=`echo "${{ github.ref }}" | sed 's/refs\/tags\/llvmorg-//g'`
           echo "::set-output name=release_version::`echo $release_version`"
 
