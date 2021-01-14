@@ -38,7 +38,7 @@ jobs:
       
       - name: Build Documentation
         run: |
-          sudo apt-get install -y doxygen sphinx-common python3-recommonmark ninja-build graphviz
+          sudo apt-get install -y doxygen sphinx-common python3-recommonmark ninja-build graphviz texlive-font-utils
           cmake -G Ninja llvm/ -B docs-build \
                -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;libcxx;polly;flang" \
                -DCMAKE_BUILD_TYPE=Release \
