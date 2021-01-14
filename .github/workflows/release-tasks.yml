@@ -45,7 +45,7 @@ jobs:
                -DLLVM_ENABLE_DOXYGEN=ON \
                -DLLVM_ENABLE_SPHINX=ON \
                -DLLVM_INCLUDE_DOCS=ON \
-               -DSPHINX_WARNINGS_AS_ERRORS=ON
+               -DSPHINX_WARNINGS_AS_ERRORS=OFF
           ninja -C docs-build \
                docs-clang-html \
                docs-flang-html \
