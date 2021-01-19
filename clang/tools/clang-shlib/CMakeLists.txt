@@ -48,3 +48,7 @@ add_clang_library(clang-cpp
                   ${_OBJECTS}
                   LINK_LIBS
                   ${_DEPS})
+
+    set_target_properties(clang-cpp
+      PROPERTIES
+      SOVERSION ${LIBCLANG_LIBRARY_VERSION})
