@@ -1,8 +1,5 @@
 name: LLVM Tests
 
-env:
-  release_major: 11
-
 on:
   push:
     branches:
@@ -42,8 +39,40 @@ jobs:
       with:
         cmake_args: -G Ninja -DCMAKE_BUILD_TYPE=Release
 
-  abi-dump:
+  abi-dump-setup:
     runs-on: ubuntu-latest
+    outputs:
+      BASELINE_REF: ${{ steps.vars.outputs.BASELINE_REF }}
+      ABI_HEADERS: ${{ steps.vars.outputs.ABI_HEADERS }}
+      LLVM_VERSION_MAJOR: ${{ steps.version.outputs.LLVM_VERSION_MAJOR }}
+      LLVM_VERSION_MINOR: ${{ steps.version.outputs.LLVM_VERSION_MINOR }}
+      LLVM_VERSION_PATCH: ${{ steps.version.outputs.LLVM_VERSION_PATCH }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Get LLVM version
+        id: version
+        uses: tstellar/actions/get-llvm-version@get-version
+
+      - name: Setup Variables
+        id: vars
+        run: |
+          if [ ${{ steps.version.outputs.LLVM_VERSION_MINOR }} -ne 0 -o ${{ steps.version.outputs.LLVM_VERSION_PATCH }} -eq 0 ]; then
+            echo ::set-output name=BASELINE_REF::llvmorg-$(( ${{ steps.version.outputs.LLVM_VERSION_MAJOR }} - 1)).0.0
+            echo ::set-output name=ABI_HEADERS::llvm-c
+          else
+            echo ::set-output name=BASELINE_REF::llvmorg-${{ steps.version.outputs.LLVM_VERSION_MAJOR }}.0.0
+            echo ::set-output name=ABI_HEADERS::llvm
+          fi
+
+  abi-dump:
+    needs: abi-dump-setup
+    runs-on: ubuntu-latest
+    env:
+      release_major: ${{ needs.abi-dump-setup.outputs.LLVM_VERSION_MAJOR }}
     strategy:
       matrix:
         name:
@@ -51,9 +80,7 @@ jobs:
           - build-latest
         include:
           - name: build-baseline
-            # FIXME: Referencing the env context does not work here
-            # ref: llvmorg-${{ env.release_major }}.0.0
-            ref: llvmorg-11.0.0
+            ref: ${{ needs.abi-dump-setup.outputs.BASELINE_REF }}
             repo: llvm/llvm-project
           - name: build-latest
             ref: ${{ github.sha }}
@@ -78,13 +105,14 @@ jobs:
         repo: ${{ matrix.repo }}
     - name: Configure
       run: |
-        mkdir build
-        cd build
-        cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DLLVM_TARGETS_TO_BUILD="" -DLLVM_BUILD_LLVM_DYLIB=ON -DCMAKE_C_FLAGS_DEBUG="-g -Og" -DCMAKE_CXX_FLAGS_DEBUG="-g -Og" ../llvm
+        mkdir install
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DLLVM_TARGETS_TO_BUILD="" -DLLVM_BUILD_LLVM_DYLIB=ON -DCMAKE_C_FLAGS_DEBUG="-g -Og" -DCMAKE_CXX_FLAGS_DEBUG="-g -Og" -DCMAKE_INSTALL_PREFIX=`pwd`/install ../llvm
     - name: Build
-      run: ninja -C build libLLVM-${{ env.release_major }}.so
+      run: |
+        ninja -C build libLLVM-${{ env.release_major }}.so
+        ninja -C build install-llvm-headers
     - name: Dump ABI
-      run: abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers llvm/include -o ${{ matrix.ref }}.abi.tar.gz build/lib/libLLVM-${{ env.release_major }}.so
+      run: abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/llvm/include -o ${{ matrix.ref }}.abi.tar.gz build/lib/libLLVM-${{ env.release_major }}.so
     - name: Upload ABI file
       uses: actions/upload-artifact@v1
       with:
