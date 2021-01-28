@@ -65,7 +65,7 @@ jobs:
             echo ::set-output name=ABI_HEADERS::llvm-c
           else
             echo ::set-output name=BASELINE_REF::llvmorg-${{ steps.version.outputs.LLVM_VERSION_MAJOR }}.0.0
-            echo ::set-output name=ABI_HEADERS::llvm
+            echo ::set-output name=ABI_HEADERS::.
           fi
 
   abi-dump:
@@ -106,13 +106,13 @@ jobs:
     - name: Configure
       run: |
         mkdir install
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DLLVM_TARGETS_TO_BUILD="" -DLLVM_BUILD_LLVM_DYLIB=ON -DCMAKE_C_FLAGS_DEBUG="-g -Og" -DCMAKE_CXX_FLAGS_DEBUG="-g -Og" -DCMAKE_INSTALL_PREFIX=`pwd`/install ../llvm
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DLLVM_TARGETS_TO_BUILD="" -DLLVM_BUILD_LLVM_DYLIB=ON -DCMAKE_C_FLAGS_DEBUG="-g -Og" -DCMAKE_CXX_FLAGS_DEBUG="-g -Og" -DCMAKE_INSTALL_PREFIX=`pwd`/install llvm
     - name: Build
       run: |
         ninja -C build libLLVM-${{ env.release_major }}.so
         ninja -C build install-llvm-headers
     - name: Dump ABI
-      run: abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/llvm/include -o ${{ matrix.ref }}.abi.tar.gz build/lib/libLLVM-${{ env.release_major }}.so
+      run: abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/llvm/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o ${{ matrix.ref }}.abi.tar.gz build/lib/libLLVM-${{ env.release_major }}.so
     - name: Upload ABI file
       uses: actions/upload-artifact@v1
       with:
@@ -121,7 +121,10 @@ jobs:
 
   abi-compare:
     runs-on: ubuntu-latest
+    env:
+      release_major: ${{ needs.abi-dump-setup.outputs.LLVM_VERSION_MAJOR }}
     needs:
+      - abi-dump-setup
       - abi-dump
     steps:
       - name: Download baseline
