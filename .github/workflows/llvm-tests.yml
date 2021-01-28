@@ -90,7 +90,7 @@ jobs:
             repo: ${{ github.repository }}
     steps:
     - name: Install Ninja
-      uses: llvm/actions/install-ninja@master
+      uses: llvm/actions/install-ninja@main
     - name: Install abi-compliance-checker
       run: |
         sudo apt-get install abi-dumper autoconf pkg-config
@@ -102,7 +102,7 @@ jobs:
         ./configure
         sudo make install
     - name: Download source code
-      uses: llvm/actions/get-llvm-project-src@master
+      uses: llvm/actions/get-llvm-project-src@main
       with:
         ref: ${{ matrix.ref }}
         repo: ${{ matrix.repo }}
