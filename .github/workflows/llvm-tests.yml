@@ -45,7 +45,7 @@ jobs:
       BASELINE_REF: ${{ steps.vars.outputs.BASELINE_REF }}
       ABI_HEADERS: ${{ steps.vars.outputs.ABI_HEADERS }}
       BASELINE_VERSION_MAJOR: ${{ steps.vars.outputs.BASELINE_VERSION_MAJOR }}
-      LLLVM_VERSION_MAJOR: ${{ steps.version.outputs.LLVM_VERSION_MAJOR }}
+      LLVM_VERSION_MAJOR: ${{ steps.version.outputs.LLVM_VERSION_MAJOR }}
       LLVM_VERSION_MINOR: ${{ steps.version.outputs.LLVM_VERSION_MINOR }}
       LLVM_VERSION_PATCH: ${{ steps.version.outputs.LLVM_VERSION_PATCH }}
     steps:
