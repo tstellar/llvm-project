@@ -44,7 +44,8 @@ jobs:
     outputs:
       BASELINE_REF: ${{ steps.vars.outputs.BASELINE_REF }}
       ABI_HEADERS: ${{ steps.vars.outputs.ABI_HEADERS }}
-      LLVM_VERSION_MAJOR: ${{ steps.version.outputs.LLVM_VERSION_MAJOR }}
+      BASELINE_VERSION_MAJOR: ${{ steps.vars.outputs.BASELINE_VERSION_MAJOR }}
+      LLLVM_VERSION_MAJOR: ${{ steps.version.outputs.LLVM_VERSION_MAJOR }}
       LLVM_VERSION_MINOR: ${{ steps.version.outputs.LLVM_VERSION_MINOR }}
       LLVM_VERSION_PATCH: ${{ steps.version.outputs.LLVM_VERSION_PATCH }}
     steps:
@@ -61,10 +62,10 @@ jobs:
         id: vars
         run: |
           if [ ${{ steps.version.outputs.LLVM_VERSION_MINOR }} -ne 0 -o ${{ steps.version.outputs.LLVM_VERSION_PATCH }} -eq 0 ]; then
-            echo ::set-output name=BASELINE_REF::llvmorg-$(( ${{ steps.version.outputs.LLVM_VERSION_MAJOR }} - 1)).0.0
+            echo ::set-output name=BASELINE_VERSION_MAJOR::$(( ${{ steps.version.outputs.LLVM_VERSION_MAJOR }} - 1))
             echo ::set-output name=ABI_HEADERS::llvm-c
           else
-            echo ::set-output name=BASELINE_REF::llvmorg-${{ steps.version.outputs.LLVM_VERSION_MAJOR }}.0.0
+            echo ::set-output name=BASELINE_VERSION_MAJOR::${{ steps.version.outputs.LLVM_VERSION_MAJOR }}
             echo ::set-output name=ABI_HEADERS::.
           fi
 
@@ -80,9 +81,11 @@ jobs:
           - build-latest
         include:
           - name: build-baseline
-            ref: ${{ needs.abi-dump-setup.outputs.BASELINE_REF }}
+            release_major: ${{ needs.abi-dump-setup.outputs.BASELINE_VERSION_MAJOR }}
+            ref: llvmorg-${{ needs.abi-dump-setup.outputs.BASELINE_VERSION_MAJOR }}.0.0
             repo: llvm/llvm-project
           - name: build-latest
+            release_major: ${{ needs.abi-dump-setup.outputs.LLVM_VERSION_MAJOR }}
             ref: ${{ github.sha }}
             repo: ${{ github.repository }}
     steps:
@@ -109,10 +112,10 @@ jobs:
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DLLVM_TARGETS_TO_BUILD="" -DLLVM_BUILD_LLVM_DYLIB=ON -DCMAKE_C_FLAGS_DEBUG="-g -Og" -DCMAKE_CXX_FLAGS_DEBUG="-g -Og" -DCMAKE_INSTALL_PREFIX=`pwd`/install llvm
     - name: Build
       run: |
-        ninja -C build libLLVM-${{ env.release_major }}.so
+        ninja -C build libLLVM-${{ matrix.release_major }}.so
         ninja -C build install-llvm-headers
     - name: Dump ABI
-      run: abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/llvm/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o ${{ matrix.ref }}.abi.tar.gz build/lib/libLLVM-${{ env.release_major }}.so
+      run: abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/llvm/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o ${{ matrix.ref }}.abi.tar.gz build/lib/libLLVM.so
     - name: Upload ABI file
       uses: actions/upload-artifact@v1
       with:
@@ -121,8 +124,6 @@ jobs:
 
   abi-compare:
     runs-on: ubuntu-latest
-    env:
-      release_major: ${{ needs.abi-dump-setup.outputs.LLVM_VERSION_MAJOR }}
     needs:
       - abi-dump-setup
       - abi-dump
@@ -138,7 +139,7 @@ jobs:
       - name: Install abi-compliance-checker
         run: sudo apt-get install abi-compliance-checker
       - name: Compare ABI
-        run: abi-compliance-checker -l libLLVM-${{ env.release_major}}.so -old build-baseline/*.tar.gz -new build-latest/*.tar.gz
+        run: abi-compliance-checker -l libLLVM.so -old build-baseline/*.tar.gz -new build-latest/*.tar.gz
       - name: Upload ABI Comparison
         if: always()
         uses: actions/upload-artifact@v1
