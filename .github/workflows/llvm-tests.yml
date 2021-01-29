@@ -79,9 +79,11 @@ jobs:
           - build-latest
         include:
           - name: build-baseline
+            llvm_version_major: ${{ needs.abi-dump-setup.outputs.BASELINE_VERSION_MAJOR }}
             ref: llvmorg-${{ needs.abi-dump-setup.outputs.BASELINE_VERSION_MAJOR }}.0.0
             repo: llvm/llvm-project
           - name: build-latest
+            llvm_version_major: ${{ needs.abi-dump-setup.outputs.LLVM_VERSION_MAJOR }}
             ref: ${{ github.sha }}
             repo: ${{ github.repository }}
     steps:
@@ -113,7 +115,15 @@ jobs:
         ninja -C build install-LLVM
         ninja -C build install-llvm-headers
     - name: Dump ABI
-      run: abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o ${{ matrix.ref }}.abi.tar.gz ./install/lib/libLLVM.so
+      run: |
+        if [ "${{ needs.abi-dump-setup.outputs.ABI_HEADERS }}" = "llvm-c" ]; then
+          nm libLLVM-${{ matrix.llvm_version_major }}.so | awk "/T _LLVM/ || /T LLVM/ { print $3 }" | sort -u | sed -e "s/^_//g" | cut -d ' ' -f 3 > llvm-c.symbols
+          export EXTRA_ARGS="-symbols-list=llvm-c.symbols"
+        fi
+        abi-dumper $EXTRA_ARGS -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o ${{ matrix.ref }}.abi ./install/lib/libLLVM.so
+        # Remove symbol versioning from dumps, so we can compare across major versions.
+        sed -i 's/LLVM_${{ matrix.llvm_versoin_major }}/LLVM_NOVERSION/' ${{ matrix.ref }}.abi
+        tar -czf ${{ matrix.ref }}.abi.tar.gz ${{ matrix.ref }}.abi
     - name: Upload ABI file
       uses: actions/upload-artifact@v1
       with:
