@@ -117,9 +117,11 @@ jobs:
     - name: Dump ABI
       run: |
         if [ "${{ needs.abi-dump-setup.outputs.ABI_HEADERS }}" = "llvm-c" ]; then
-          nm ./install/lib/libLLVM.so | awk "/T _LLVM/ || /T LLVM/ { print $3 }" | sort -u | sed -e "s/^_//g" | cut -d ' ' -f 3 > llvm-c.symbols
-          export EXTRA_ARGS="-symbols-list llvm-c.symbols"
-          cat llvm-c.symbols
+          nm ./install/lib/libLLVM.so | awk "/T _LLVM/ || /T LLVM/ { print $3 }" | sort -u | sed -e "s/^_//g" | cut -d ' ' -f 3 > llvm.symbols
+          # Even though the -symbols-list option doesn't seem to filter out the symbols, I believe it speeds up processing, so I'm leaving it in.
+          export EXTRA_ARGS="-symbols-list llvm.symbols"
+        else
+          touch llvm.symbols
         fi
         abi-dumper $EXTRA_ARGS -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o ${{ matrix.ref }}.abi ./install/lib/libLLVM.so || test "${{ needs.abi-dump-setup.outputs.ABI_HEADERS }}" = "llvm-c"
         # Remove symbol versioning from dumps, so we can compare across major versions.
@@ -130,6 +132,14 @@ jobs:
       with:
         name: ${{ matrix.name }}
         path: ${{ matrix.ref }}.abi.tar.gz
+        
+    - name: Upload symbol list file
+      if: matrix.name == 'build-baseline'
+      uses: actions/upload-artifact@v1
+      with:
+        name: symbol-list
+        path: llvm.symbols
+      
 
   abi-compare:
     runs-on: ubuntu-latest
@@ -145,10 +155,20 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: build-latest
+      - name: Download symbol list
+        uses: actions/download-artifact@v1
+        with:
+          name: symbol-list
+        
       - name: Install abi-compliance-checker
         run: sudo apt-get install abi-compliance-checker
       - name: Compare ABI
-        run: abi-compliance-checker -l libLLVM.so -old build-baseline/*.tar.gz -new build-latest/*.tar.gz
+        run: |
+          if [ -s symbol-list/llvm.symbols ]; then
+            # This option doesn't seem to work with the ABI dumper, so passing it here.
+            export EXTRA_ARGS="-symbols-list symbol-list/llvm.symbols"
+          fi
+          abi-compliance-checker $EXTRA_ARGS -l libLLVM.so -old build-baseline/*.tar.gz -new build-latest/*.tar.gz
       - name: Upload ABI Comparison
         if: always()
         uses: actions/upload-artifact@v1
