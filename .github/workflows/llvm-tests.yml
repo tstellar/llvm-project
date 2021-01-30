@@ -119,10 +119,11 @@ jobs:
         if [ "${{ needs.abi-dump-setup.outputs.ABI_HEADERS }}" = "llvm-c" ]; then
           nm ./install/lib/libLLVM.so | awk "/T _LLVM/ || /T LLVM/ { print $3 }" | sort -u | sed -e "s/^_//g" | cut -d ' ' -f 3 > llvm-c.symbols
           export EXTRA_ARGS="-symbols-list llvm-c.symbols"
+          cat llvm-c.symbols
         fi
         abi-dumper $EXTRA_ARGS -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o ${{ matrix.ref }}.abi ./install/lib/libLLVM.so
         # Remove symbol versioning from dumps, so we can compare across major versions.
-        sed -i 's/LLVM_${{ matrix.llvm_versoin_major }}/LLVM_NOVERSION/' ${{ matrix.ref }}.abi
+        sed -i 's/LLVM_${{ matrix.llvm_version_major }}/LLVM_NOVERSION/' ${{ matrix.ref }}.abi
         tar -czf ${{ matrix.ref }}.abi.tar.gz ${{ matrix.ref }}.abi
     - name: Upload ABI file
       uses: actions/upload-artifact@v1
