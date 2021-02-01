@@ -48,6 +48,6 @@ jobs:
       # spirv targets require llvm-spirv, so skip building them until we figure out
       # how to install this tool.
       run: |
-        cmake -G Ninja -S ../libclc -B build -DLLVM_CONFIG=../build/bin/llvm-config -DLIBCLC_TARGETS_TO_ENABLE="amdgcn--;amdgcn--amdhsa;r600--;nvptx--;nvptx64--;nvptx--nvidiacl;nvptx64--nvidiacl"
+        cmake -G Ninja -S libclc -B build -DLLVM_CONFIG=build/bin/llvm-config -DLIBCLC_TARGETS_TO_ENABLE="amdgcn--;amdgcn--amdhsa;r600--;nvptx--;nvptx64--;nvptx--nvidiacl;nvptx64--nvidiacl"
         ninja -C build
         ninja -C build test
