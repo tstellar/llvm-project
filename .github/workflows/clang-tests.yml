@@ -118,18 +118,17 @@ jobs:
       run: ninja -C clang-abi-build/ ${{ needs.abi-dump-setup.outputs.ABI_LIBS }} install-clang-headers
     - name: Dump ABI
       run: |
-        for lib in ${{ needs.abi-dump-setup.outputs.ABI_LIBS }}; do
-          ABI_LIBS="$ABI_LIBS .build//lib/$lib"
+        parallel abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o {}-${{ matrix.ref }}.abi ./build/lib/{} ::: ${{ needs.abi-dump-setup.outputs.ABI_LIBS }}
+        for l in ${{ needs.abi-dump-setup.outputs.ABI_LIBS }}; do
+          # Remove symbol versioning from dumps, so we can compare across major versions.
+          parallel sed -i 's/LLVM_${{ matrix.llvm_version_major }}/LLVM_NOVERSION/' $l-${{ matrix.ref }}.abi
+          parallel tar -czf $l-${{ matrix.ref }}.abi.tar.gz $l-${{ matrix.ref }}.abi
         done
-        abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o ${{ matrix.ref }}.abi $ABI_LIBS
-        # Remove symbol versioning from dumps, so we can compare across major versions.
-        sed -i 's/LLVM_${{ matrix.llvm_version_major }}/LLVM_NOVERSION/' ${{ matrix.ref }}.abi
-        tar -czf ${{ matrix.ref }}.abi.tar.gz ${{ matrix.ref }}.abi
     - name: Upload ABI file
       uses: actions/upload-artifact@v1
       with:
         name: ${{ matrix.name }}
-        path: ${{ matrix.ref }}.abi.tar.gz
+        path: "*${{ matrix.ref }}.abi.tar.gz"
         
   abi-compare:
     runs-on: ubuntu-latest
@@ -150,7 +149,9 @@ jobs:
         run: sudo apt-get install abi-compliance-checker
       - name: Compare ABI
         run: |
-          abi-compliance-checker $EXTRA_ARGS -l libLLVM.so -old build-baseline/*.tar.gz -new build-latest/*.tar.gz || test "${{ needs.abi-dump-setup.outputs.ABI_HEADERS }}" = "llvm-c"
+          for l in ${{ needs.abi-dump-setup.outputs.ABI_LIBS }}; do
+            parallel abi-compliance-checker -l $l -old build-baseline/$l.abi.tar.gz -new build-latest/$l.abi.tar.gz
+          done
       - name: Upload ABI Comparison
         if: always()
         uses: actions/upload-artifact@v1
