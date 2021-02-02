@@ -122,8 +122,9 @@ jobs:
         for lib in ${{ needs.abi-dump-setup.outputs.ABI_LIBS }}; do
           # Remove symbol versioning from dumps, so we can compare across major versions.
           sed -i 's/LLVM_${{ matrix.llvm_version_major }}/LLVM_NOVERSION/' $lib-${{ matrix.ref }}.abi
-          tar -czf $lib-${{ matrix.ref }}.abi.tar.gz $lib-${{ matrix.ref }}.abi
+          tar -vczf $lib-${{ matrix.ref }}.abi.tar.gz $lib-${{ matrix.ref }}.abi
         done
+        ls
     - name: Upload ABI file
       uses: actions/upload-artifact@v1
       with:
