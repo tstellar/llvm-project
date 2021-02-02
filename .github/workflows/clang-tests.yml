@@ -28,16 +28,16 @@ jobs:
     steps:
     - name: Setup Windows
       if: startsWith(matrix.os, 'windows')
-      uses: llvm/actions/setup-windows@master
+      uses: llvm/actions/setup-windows@main
       with:
         arch: amd64
     - name: Install Ninja
-      uses: llvm/actions/install-ninja@master
+      uses: llvm/actions/install-ninja@main
     - uses: actions/checkout@v1
       with:
         fetch-depth: 1
     - name: Test clang
-      uses: llvm/actions/build-test-llvm-project@master
+      uses: llvm/actions/build-test-llvm-project@main
       with:
         cmake_args: -G Ninja  -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_BUILD_TYPE=Release
         build_target: check-clang
@@ -115,7 +115,7 @@ jobs:
         mkdir install
         cmake -B build -S llvm -G Ninja -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Debug -DLLVM_TARGETS_TO_BUILD="" -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_C_FLAGS_DEBUG="-g -Og" -DCMAKE_CXX_FLAGS_DEBUG="-g -Og" -DCMAKE_INSTALL_PREFIX=`pwd`/install llvm
     - name: Build
-      run: ninja -C clang-abi-build/ ${{ needs.abi-dump-setup.outputs.ABI_LIBS }} install-clang-headers
+      run: ninja -C build/ ${{ needs.abi-dump-setup.outputs.ABI_LIBS }} install-clang-headers
     - name: Dump ABI
       run: |
         parallel abi-dumper -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o {}-${{ matrix.ref }}.abi ./build/lib/{} ::: ${{ needs.abi-dump-setup.outputs.ABI_LIBS }}
