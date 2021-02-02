@@ -126,7 +126,7 @@ jobs:
         done
         ls
     - name: Upload ABI file
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: ${{ matrix.name }}
         path: "*${{ matrix.ref }}.abi.tar.gz"
@@ -155,7 +155,7 @@ jobs:
           done
       - name: Upload ABI Comparison
         if: always()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: compat-report-${{ github.sha }}
           path: compat_reports/
