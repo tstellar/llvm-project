@@ -26,8 +26,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-          # macOS build disabled due to: llvm.org/PR46190
-          #- macOS-latest
+          - macOS-latest
     steps:
     - name: Setup Windows
       if: startsWith(matrix.os, 'windows')
