@@ -34,32 +34,27 @@ jobs:
         id: version
         uses: llvm/actions/get-llvm-version@main
 
-      - name: Debug
-        run: |
-          git remote -v
-          git ls-remote origin
-          git ls-remote --refs -t origin 'llvmorg-11.[1-9].[0-9]-rc*'
-
       - name: Setup Variables
         id: vars
         run: |
           minor_version=0
+          remote_repo='https://github.com/llvm/llvm-project'
           if [ ${{ steps.version.outputs.LLVM_VERSION_MINOR }} -ne 0 -o ${{ steps.version.outputs.LLVM_VERSION_PATCH }} -eq 0 ]; then
             major_version=$(( ${{ steps.version.outputs.LLVM_VERSION_MAJOR }} - 1))
             baseline_ref="$major_version.0.0"
 
             # If there is a minor release, we want to use that as the base line.
-            #minor_ref=`git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9] | tail -n1 | grep -o 'llvmorg-.\+'`
-            git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9] | tail -n1 | grep -o 'llvmorg-.\+'
-            #if [ -n "$minor_ref" ]; then
-            #   baseline_ref=$minor_ref
-           #else
+            minor_ref=`git ls-remote --refs -t $remote_repo llvmorg-$major_version.[1-9].[0-9] | tail -n1 | grep -o 'llvmorg-.\+'`
+            git ls-remote --refs -t $remote_repo llvmorg-$major_version.[1-9].[0-9] | tail -n1 | grep -o 'llvmorg-.\+'
+            if [ -n "$minor_ref" ]; then
+               baseline_ref=$minor_ref
+            else
               # Check if we have a release candidate
-              #rc_ref=`git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9]-rc* | tail -n1 | grep -o 'llvmorg-.\+'`
-              #if [ -n "$rc_ref" ]; then
-                #baseline_ref=$rc_ref
-              #fi
-            #fi
+              rc_ref=`git ls-remote --refs -t $remote_repo llvmorg-$major_version.[1-9].[0-9]-rc* | tail -n1 | grep -o 'llvmorg-.\+'`
+              if [ -n "$rc_ref" ]; then
+                baseline_ref=$rc_ref
+              fi
+            fi
             echo ::set-output name=BASELINE_VERSION_MAJOR::$major_version
             echo ::set-output name=BASELINE_REF::$baseline_ref
             echo ::set-output name=ABI_HEADERS::clang-c
