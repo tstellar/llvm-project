@@ -44,7 +44,7 @@ jobs:
 
             # If there is a minor release, we want to use that as the base line.
             #minor_ref=`git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9] | tail -n1 | grep -o 'llvmorg-.\+'`
-            git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9]
+            git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9] | tail -n1
             #if [ -n "$minor_ref" ]; then
             #   baseline_ref=$minor_ref
            #else
