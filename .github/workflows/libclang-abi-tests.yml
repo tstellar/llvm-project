@@ -35,7 +35,10 @@ jobs:
         uses: llvm/actions/get-llvm-version@main
 
       - name: Debug
-        run: git ls-remote --refs -t origin 'llvmorg-11.[1-9].[0-9]-rc*'
+        run: |
+          git remote -v
+          git ls-remote origin
+          git ls-remote --refs -t origin 'llvmorg-11.[1-9].[0-9]-rc*'
 
       - name: Setup Variables
         id: vars
