@@ -39,8 +39,8 @@ jobs:
         run: |
           minor_version=0
           major_version=$(( ${{ steps.version.outputs.LLVM_VERSION_MAJOR }} - 1))
-          git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9] | tail -n1 | grep -o 'llvmorg-.\+'
-          git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9]-rc* | tail -n1 | grep -o 'llvmorg-.\+'
+          git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9]
+          git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9]-rc*
           if [ ${{ steps.version.outputs.LLVM_VERSION_MINOR }} -ne 0 -o ${{ steps.version.outputs.LLVM_VERSION_PATCH }} -eq 0 ]; then
             major_version=$(( ${{ steps.version.outputs.LLVM_VERSION_MAJOR }} - 1))
             baseline_ref="$major_version.0.0"
