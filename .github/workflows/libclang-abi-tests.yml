@@ -48,7 +48,7 @@ jobs:
               baseline_ref=$minor_ref
             else
               # Check if we have a release candidate
-              rc_ref=`git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9]-rc* | tail -n1 | grep -o 'llvmorg-.\+'
+              rc_ref=`git ls-remote --refs -t origin llvmorg-$major_version.[1-9].[0-9]-rc* | tail -n1 | grep -o 'llvmorg-.\+'`
               if [ -n "$rc_ref" ]; then
                 baseline_ref=$rc_ref
               fi
