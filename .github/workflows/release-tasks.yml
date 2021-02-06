@@ -24,7 +24,7 @@ jobs:
         echo "::set-output name=release-version::$release_version"
 
     - name: Install Dependencies
-      run: sudo apt-get install doxygen sphinx-common python3-recommonmark ninja-build graphviz texlive-font-utils python-github
+      run: sudo apt-get install doxygen python3-sphinx python3-recommonmark ninja-build graphviz texlive-font-utils python3-github
 
     - name: Checkout LLVM
       uses: actions/checkout@v1
