@@ -95,6 +95,7 @@ cmake -G Ninja $srcdir -B $builddir \
 
 ninja -C $builddir \
                docs-clang-html \
+	       docs-clang-tools-html \
                docs-flang-html \
                docs-libcxx-html \
                docs-lld-html \
