@@ -24,7 +24,9 @@ jobs:
         echo "::set-output name=release-version::$release_version"
 
     - name: Install Dependencies
-      run: sudo apt-get install doxygen python3-sphinx python3-recommonmark ninja-build graphviz texlive-font-utils python3-github python3-sphinx-markdown-tables
+      run: |
+        sudo apt-get install doxygen python3-sphinx python3-recommonmark ninja-build graphviz texlive-font-utils python3-github python3-sphinx-markdown-tables
+        pip install --user sphinx-markdown-tables
 
     - name: Checkout LLVM
       uses: actions/checkout@v1
