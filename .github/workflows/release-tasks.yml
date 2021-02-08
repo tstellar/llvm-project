@@ -26,7 +26,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get install doxygen python3-sphinx python3-recommonmark ninja-build graphviz texlive-font-utils python3-github
-        pip install --user sphinx-markdown-tables
+        pip3 install --user sphinx-markdown-tables
 
     - name: Checkout LLVM
       uses: actions/checkout@v1
