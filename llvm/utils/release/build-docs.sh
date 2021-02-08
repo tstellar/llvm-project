@@ -15,7 +15,8 @@
 #   * pip install sphinx-markdown-tables
 # * Ubuntu:
 #   * apt-get install doxygen sphinx-common python3-recommonmark \
-#             ninja-build graphviz texlive-font-utils
+#             ninja-build graphviz texlive-font-utils \
+#             python3-sphinx-markdown-tables
 #===------------------------------------------------------------------------===#
 
 set -ex
