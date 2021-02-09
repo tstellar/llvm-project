@@ -34,14 +34,29 @@ jobs:
         fetch-depth: 1
       
     - name: Create Release
-      env:
-        RELEASE_VERSION: "${{ steps.validate-tag.outputs.release-version }}"
       run: |
          echo "./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release ${{ steps.validate-tag.outputs.release-version }} create"
       
     - name: Build Documentation
       run: |
-        bash llvm/utils/release/build-docs.sh -srcdir llvm
+        bash llvm/utils/release/build-docs.sh -srcdir llvm -release ${{ steps.validate-tag.outputs.release-version }}
         echo "./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release ${{ steps.validate-tag.outputs.release-version }} upload --files *doxygen*.tar.xz"
         ls *doxygen*.tar.xz
+
+    - name: Clone www-releases
+      if: ! contains(${{ steps.validate-tag.outputs.release-version }}, 'rc')
+      uses: actions/checkout@v1
+      with:
+        repository: https://github.com/tstellar/www-releases
+        ref: main
+        fetch-depth: 0
+        path: www-releases
+    
+    - name: Upload Release Notes
+      if: ! contains(${{ steps.validate-tag.outputs.release-version }}, 'rc')
+      run: |
+        mkdir -p www-release/${{ steps.validate-tag.outputs.release-version }}
+        mv ./docs-build/html-export/* www-releases/${{ steps.validate-tag.outputs.release-version }}
+        git -C www-releases add www-releases/${{ steps.validate-tag.outputs.release-version }}
+        git -C push origin main:main
 
