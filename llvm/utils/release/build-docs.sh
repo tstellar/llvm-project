@@ -29,8 +29,7 @@ usage() {
   echo "done for -final releases."
   echo "usage: `basename $0`"
   echo " "
-  echo " -release <num> The release version to build (required if not passing"
-  echo "                -srcdir)"
+  echo " -release <num> The release version to build (required)."
   echo " -srcdir  <dir> Path to llvm source directory with CMakeLists.txt"
   echo "                (optional) default: ../../"
 }
