@@ -44,7 +44,7 @@ jobs:
         ls *doxygen*.tar.xz
 
     - name: Clone www-releases
-      if: !contains(${{ steps.validate-tag.outputs.release-version }}, 'rc')
+      if: ${{ !contains(steps.validate-tag.outputs.release-version, 'rc') }}
       uses: actions/checkout@v1
       with:
         repository: https://github.com/tstellar/www-releases
@@ -53,7 +53,7 @@ jobs:
         path: www-releases
     
     - name: Upload Release Notes
-      if: !contains(${{ steps.validate-tag.outputs.release-version }}, 'rc')
+      if: ${{ !contains(steps.validate-tag.outputs.release-version, 'rc') }}
       run: |
         mkdir -p www-release/${{ steps.validate-tag.outputs.release-version }}
         mv ./docs-build/html-export/* www-releases/${{ steps.validate-tag.outputs.release-version }}
