@@ -47,7 +47,7 @@ jobs:
       if: ${{ !contains(steps.validate-tag.outputs.release-version, 'rc') }}
       uses: actions/checkout@v1
       with:
-        repository: https://github.com/tstellar/www-releases
+        repository: tstellar/www-releases
         ref: main
         fetch-depth: 0
         path: www-releases
