@@ -55,8 +55,11 @@ jobs:
     - name: Upload Release Notes
       if: ${{ !contains(steps.validate-tag.outputs.release-version, 'rc') }}
       run: |
-        mkdir ${{ steps.validate-tag.outputs.release-version }}
-        mv ./docs-build/html-export/* ${{ steps.validate-tag.outputs.release-version }}
-        git add ${{ steps.validate-tag.outputs.release-version }}
-        git push origin main:main
+        pwd
+        ls -l
+        ls -l ..
+        mkdir ${{ github.workspace }}/www-releases/${{ steps.validate-tag.outputs.release-version }}
+        mv ./docs-build/html-export/* ${{ github.workspace }}/www-releases/${{ steps.validate-tag.outputs.release-version }}
+        git -C ${{ github.workspace }}/www-releases add ${{ steps.validate-tag.outputs.release-version }}
+        git -C ${{ github.workspace }}/www-releases push origin main:main
 
