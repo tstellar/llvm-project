@@ -58,8 +58,8 @@ jobs:
         pwd
         ls -l
         ls -l ..
-        mkdir ${{ github.workspace }}/www-releases/${{ steps.validate-tag.outputs.release-version }}
-        mv ./docs-build/html-export/* ${{ github.workspace }}/www-releases/${{ steps.validate-tag.outputs.release-version }}
-        git -C ${{ github.workspace }}/www-releases add ${{ steps.validate-tag.outputs.release-version }}
-        git -C ${{ github.workspace }}/www-releases push origin main:main
+        mkdir -p ../www-releases/${{ steps.validate-tag.outputs.release-version }}
+        mv ./docs-build/html-export/* ../www-releases/${{ steps.validate-tag.outputs.release-version }}
+        git -C ../www-releases add ${{ steps.validate-tag.outputs.release-version }}
+        git -C ../www-releases push origin main:main
 
