@@ -47,7 +47,7 @@ jobs:
       if: ${{ !contains(steps.validate-tag.outputs.release-version, 'rc') }}
       uses: actions/checkout@v1
       with:
-        repository: tstellar/www-releases
+        repository: ${{ github.repository_owner }}/www-releases
         ref: main
         fetch-depth: 0
         path: www-releases
@@ -61,5 +61,5 @@ jobs:
         mkdir -p ../www-releases/${{ steps.validate-tag.outputs.release-version }}
         mv ./docs-build/html-export/* ../www-releases/${{ steps.validate-tag.outputs.release-version }}
         git -C ../www-releases add ${{ steps.validate-tag.outputs.release-version }}
-        git -C ../www-releases push origin main:main
+      git -C ../www-releases push https://${{github.token}@github.com/%{{ github.repository_owner }}/www-releases main:main
 
