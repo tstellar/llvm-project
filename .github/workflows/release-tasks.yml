@@ -62,4 +62,4 @@ jobs:
         mv ./docs-build/html-export/* ../www-releases/${{ steps.validate-tag.outputs.release-version }}
         cd ../www-releases
         git add ${{ steps.validate-tag.outputs.release-version }}
-        git push https://${{ secret.WWW_RELEASES_TOKEN }}@github.com/${{ github.repository_owner }}/www-releases main:main
+        git push https://${{ secrets.WWW_RELEASES_TOKEN }}@github.com/${{ github.repository_owner }}/www-releases main:main
