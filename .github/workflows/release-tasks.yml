@@ -60,5 +60,6 @@ jobs:
         ls -l ..
         mkdir -p ../www-releases/${{ steps.validate-tag.outputs.release-version }}
         mv ./docs-build/html-export/* ../www-releases/${{ steps.validate-tag.outputs.release-version }}
-        git -C ../www-releases add ${{ steps.validate-tag.outputs.release-version }}
-        git -C ../www-releases push https://${{ github.token }}@github.com/${{ github.repository_owner }}/www-releases main:main
+        cd ../www-releases
+        git add ${{ steps.validate-tag.outputs.release-version }}
+        git push https://${{ github.token }}@github.com/${{ github.repository_owner }}/www-releases main:main
