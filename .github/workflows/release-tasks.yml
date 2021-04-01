@@ -62,5 +62,5 @@ jobs:
         mv ./docs-build/html-export/* ../www-releases/${{ steps.validate-tag.outputs.release-version }}
         cd ../www-releases
         git add ${{ steps.validate-tag.outputs.release-version }}
-        git commit -a -m "llvmbot <llvmbot@llvm.org>"
+        git commit -a -m "Add ${{ steps.validate-tag.outputs.release-version }} documentation" --author "llvmbot <llvmbot@llvm.org>"
         git push https://${{ secrets.WWW_RELEASES_TOKEN }}@github.com/${{ github.repository_owner }}/www-releases main:main
