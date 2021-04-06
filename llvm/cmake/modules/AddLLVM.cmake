@@ -494,7 +494,7 @@ function(llvm_add_library name)
     # Add target include directories from the main target.  This makes it
     # possible to call target_include_directories() with ${name} after
     # calling llvm_add_library() and still have it apply to the object library.
-    set_target_properties(obj.${name} PROPERTIES INCLUDE_DIRECTORIES "$<TARGET_PROPERTY:${name},INCLUDE_DIRECTORIES>")
+    set_target_properties(${obj_name} PROPERTIES INCLUDE_DIRECTORIES "$<TARGET_PROPERTY:${name},INCLUDE_DIRECTORIES>")
   endif()
 
   if(ARG_SHARED AND ARG_STATIC)
@@ -636,10 +636,9 @@ function(llvm_add_library name)
     # property has been set to an empty value.
     set_property(TARGET ${name} PROPERTY LLVM_LINK_COMPONENTS ${ARG_LINK_COMPONENTS} ${LLVM_LINK_COMPONENTS})
 
-    # These two properties are internal properties only used to make sure the
+    # This property is an internal property only used to make sure the
     # link step applied in LLVMBuildResolveComponentsLink uses the same
-    # properties as the target_link_libraries call below.
-    set_property(TARGET ${name} PROPERTY LLVM_LINK_LIBS ${ARG_LINK_LIBS})
+    # property as the target_link_libraries call below.
     set_property(TARGET ${name} PROPERTY LLVM_LIBTYPE ${libtype})
   endif()
 
