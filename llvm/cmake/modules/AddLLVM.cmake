@@ -490,6 +490,11 @@ function(llvm_add_library name)
       endforeach()
       target_link_libraries(${obj_name} ${ARG_LINK_LIBS})
     endif()
+
+    # Add target include directories from the main target.  This makes it
+    # possible to call target_include_directories() with ${name} after
+    # calling llvm_add_library() and still have it apply to the object library.
+    set_target_properties(obj.${name} PROPERTIES INCLUDE_DIRECTORIES "$<TARGET_PROPERTY:${name},INCLUDE_DIRECTORIES>")
   endif()
 
   if(ARG_SHARED AND ARG_STATIC)
