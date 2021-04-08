@@ -1,0 +1,179 @@
+name: re-build source-snapshot
+
+# PURPOSE:
+#
+#   We want to provide LLVM snapshot packagers and distributors with *daily*
+#   source tarballs that are easy to consume. Typically, packagers have to clone
+#   the whole LLVM monorepo themselves and run the "git archive" command to
+#   generate source tarballs for each LLVM component. Those tarballs are the
+#   input to the packaging system (e.g. DEB or RPM). With this workflow we can
+#   provide the daily source tarballs to the community similar to the source
+#   tarballs of regular releases. Everything a packager needs to know is the
+#   current date (YYYYMMDD) and go ahead and download the LLVM component of
+#   choice, i.e.:
+#
+#   https://github.com/{owner}/llvm-project/releases/download/source-snapshot/clang-tools-extra-20210417.src.tar.xz
+#
+#   Notice the absence of the LLVM version. To get it, a packager can download
+#
+#   https://github.com/{owner}/llvm-project/releases/download/source-snapshot/llvm-release-20210417.src.tar.xz
+#
+#   To get the git revision standalone:
+#
+#   https://github.com/{owner}/llvm-project/releases/download/source-snapshot/llvm-git-revision-20210417.src.tar.xz
+#
+#   The subtle benefit of this naming convention is that you don't need to know
+#   the LLVM version before downloading the source tarball. I mean, how could
+#   you know the LLVM version of a daily snapshot upfront? In fact, the source
+#   tarball for "clang-tools-extra" contains no version information whatsoever
+#   and yet it requires a special LLVM version which is why we provide the
+#   "llvm-release-<YYYYMMDD>.txt" files.
+#
+# WHAT:
+#
+#   At 4 in the morning, this workflow creates source tarballs of all LLVM
+#   components of the current "main" branch and uploads them as assets to a
+#   pre-release called "source-snapshot". (A pre-release won't show up on the
+#   github repositories front-page.) The assets that are three days or older
+#   will be deleted on each run. If the workflow runs twice a day, the old
+#   assets of the day will also be deleted. If the "source-snapshot" release
+#   doesn't exist, it will be created automatically.
+#
+# HOW:
+#
+#   This is wokflow consists of three jobs:
+#   1. The first job ("find") finds all assets (e.g. source tarballs) to be
+#      deleted.
+#   2. The second job ("delete") consumes the result of the first job and
+#      branches out into parallel jobs, where each job deletes one asset.
+#   3. The third and last job ("re-build-source-snapshot") re-builds the source
+#      tarballs of today and uploads them into the pre-release that gets created
+#      if it doesn't exist already.
+
+on:
+  # Uncomment to be able to trigger the workflow manually
+  # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#manual-events
+  workflow_dispatch: {}
+
+  schedule:
+    # Everyday at 04:00am
+    # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
+    - cron:  '0 4 * * *'
+
+jobs:
+
+  # In order to re-build source snapshots and upload them, we must first delete
+  # the old ones from today; otherwise there would be a conflict. As a measure
+  # of not storing old snapshots for too long we'll delete older ones here as
+  # well.
+  find:
+    name: find today's and 3 days or older source snapshots
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.assets.outputs.name_id_pairs }}
+    steps:
+      - name: find
+        id: assets
+        run: |
+          echo "::group::Find all source snapshot release assets"
+          curl \
+            -H "Accept: application/vnd.github.v3+json" \
+            -sL https://api.github.com/repos/${{ github.repository }}/releases/tags/source-snapshot \
+          | jq '.assets' | tee assets.json
+          echo "::endgroup::"
+
+          # This default "pairs" object ensures, the next job below ("delete")
+          # won't complain with this error: "Matrix vector 'cfg' does not
+          # contain any values".
+          pairs='[{"name":"stop","id":"stop"}]'
+
+          if [[ -s assets.json && "`cat assets.json`" != "null" ]]; then
+            echo "::group::Get assets from today or older than three days"
+            # TODO(kwk): Make this date configurable? 
+            jq \
+              --arg e $(date -d "-3 days" +%Y-%m-%dT%H:%S) \
+              'map(
+                select(
+                  (.created_at <= $e + "z")
+                  or 
+                  ((.created_at | fromdate | strftime("%Y%m%d")) == (now | strftime("%Y%m%d")))
+                )
+              )' < assets.json | tee remove_assets.json
+            echo "::endgroup::"
+
+            echo "::group::diff"
+            echo "[]" > empty.json
+            set +e
+            diff remove_assets.json empty.json | tee mydiff
+            set -e
+            echo "::endgroup::"
+
+            if [ -s mydiff ]; then
+              echo "::group::Assets to be removed"
+              jq '.[].name' -r  < remove_assets.json
+              echo "::endgroup::"
+              pairs=`jq '[.[] | {name:.name, id:.id} ]' -rc < remove_assets.json`
+            fi
+          fi
+          echo "::set-output name=name_id_pairs::$pairs"
+  
+  delete:
+    needs: find
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cfg:
+          - ${{ fromJson(needs.find.outputs.matrix) }}
+    steps:
+      - name: delete ${{ matrix.cfg.name }} (ID=${{ matrix.cfg.id }})
+        if: ${{ matrix.cfg.name != 'stop' && matrix.cfg.id != 'stop' }}
+        uses: octokit/request-action@v2.x
+        with:
+          # See https://docs.github.com/en/rest/reference/repos#delete-a-release-asset
+          route: DELETE /repos/{owner}/{repo}/releases/assets/{asset_id}
+          owner: ${{ github.repository_owner }}
+          repo: 'llvm-project'
+          asset_id: ${{ matrix.cfg.id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  re-build-source-snapshot:
+    needs: delete
+    name: re-build today's source snapshot
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout llvm/llvm-project repo
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.repository }}
+          ref: snapshot
+          token: ${{ github.token }}
+          fetch-depth: 1
+          submodules: true
+      
+      - name: setup upstream remote
+        run: git remote add upstream https://github.com/llvm/llvm-project.git
+          
+      - name: minimal fetch from upstream remote
+        run: git fetch --depth=1 --no-tags upstream main
+
+      - name: create source-snapshot tarballs
+        run: llvm/utils/release/export.sh --snapshot upstream/main
+      
+      - name: upload today's source snapshots and version file
+        uses: softprops/action-gh-release@v1
+        with:
+          name: source-snapshot
+          draft: false
+          prerelease: true
+          tag_name: source-snapshot
+          fail_on_unmatched_files: true
+          # TODO(kwk): Help wanted! If you know something better to match YYYYMMDD, please share it.
+          files: |
+            *-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].src.tar.xz
+            llvm-release-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].txt
+            llvm-rc-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].txt
+            llvm-git-revision-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
