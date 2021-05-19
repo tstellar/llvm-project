@@ -6,8 +6,8 @@ name: re-build source-snapshot
 #   source tarballs that are easy to consume. Typically, packagers have to clone
 #   the whole LLVM monorepo themselves and run the "git archive" command to
 #   generate source tarballs for each LLVM component. Those tarballs are the
-#   input to the packaging system (e.g. DEB or RPM). With this workflow we can
-#   provide the daily source tarballs to the community similar to the source
+#   input to the packaging system (e.g. DEB, RPM, etc.). With this workflow we
+#   can provide the daily source tarballs to the community similar to the source
 #   tarballs of regular releases. Everything a packager needs to know is the
 #   current date (YYYYMMDD) and go ahead and download the LLVM component of
 #   choice, i.e.:
@@ -31,10 +31,10 @@ name: re-build source-snapshot
 #
 # WHAT:
 #
-#   At 4 in the morning, this workflow creates source tarballs of all LLVM
+#   At 00:00 in the morning, this workflow creates source tarballs of all LLVM
 #   components of the current "main" branch and uploads them as assets to a
 #   pre-release called "source-snapshot". (A pre-release won't show up on the
-#   github repositories front-page.) The assets that are three days or older
+#   github repositories front-page.) The assets that are seven days or older
 #   will be deleted on each run. If the workflow runs twice a day, the old
 #   assets of the day will also be deleted. If the "source-snapshot" release
 #   doesn't exist, it will be created automatically.
@@ -56,9 +56,9 @@ on:
   workflow_dispatch: {}
 
   schedule:
-    # Everyday at 04:00am
+    # Everyday at 00:00am
     # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
-    - cron:  '0 4 * * *'
+    - cron:  '0 0 * * *'
 
 jobs:
 
@@ -67,7 +67,7 @@ jobs:
   # of not storing old snapshots for too long we'll delete older ones here as
   # well.
   find:
-    name: find today's and 3 days or older source snapshots
+    name: find today's and  older source snapshots
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.assets.outputs.name_id_pairs }}
@@ -91,7 +91,7 @@ jobs:
             echo "::group::Get assets from today or older than three days"
             # TODO(kwk): Make this date configurable? 
             jq \
-              --arg e $(date -d "-3 days" +%Y-%m-%dT%H:%S) \
+              --arg e $(date -d "-7 days" +%Y-%m-%dT%H:%S) \
               'map(
                 select(
                   (.created_at <= $e + "z")
