@@ -19,13 +19,7 @@ release=""
 rc=""
 yyyymmdd=$(date +'%Y%m%d')
 snapshot=""
-
-indent() {
-  local indentSize=2
-  local indent=1
-  if [ -n "$1" ]; then indent=$1; fi
-  pr -to $(($indent * $indentSize))
-}
+template='${PROJECT}-${RELEASE}${RC}.src.tar.xz'
 
 usage() {
 cat <<EOF
@@ -34,29 +28,27 @@ Export the Git sources and build tarballs from them.
 Usage: $(basename $0) [-release|--release <major>.<minor>.<patch>]
                       [-rc|--rc <num>]
                       [-final|--final]
-                      [-snapshot|--snapshot <git-ref>] 
+                      [-git-ref|--git-ref <git-ref>]
+                      [-template|--template <template>]
 
 Flags:
 
   -release  | --release <major>.<minor>.<patch>    The version number of the release
   -rc       | --rc <num>                           The release candidate number
   -final    | --final                              When provided, this option will disable the rc flag
-  -snapshot | --snapshot <git-ref>                 (optional) Use <git-ref> to determine the release and don't export the test-suite files
+  -git-ref  | --git-ref <git-ref>                  (optional) Use <git-ref> to determine the release and don't export the test-suite files
+  -template | --template <template>                (optional) Possible placeholders: \$PROJECT \$YYYYMMDD \$GIT_REF \$RELEASE \$RC.
+                                                   Defaults to '${template}'.
 
-These are the filenames (with <placeholders>) for the artifacts and hard
-links for each LLVM component created by this script: 
+The following list shows the filenames (with <placeholders>) for the artifacts
+that are being generated (given that you don't touch --template).
 
-$(\
-      echo "$projects " \
-      | sed 's/\([a-z-]\+\) /\1-<RELEASE><RC>.src.tar.xz \1-<YYYYMMDD>.src.tar.xz \n/g' \
-      | column -t -o " <- "\
-      | indent 2
-  )
+$(echo "$projects "| sed 's/\([a-z-]\+\) /  * \1-<RELEASE><RC>.src.tar.xz \n/g')
 
 Additional files being generated:
 
   * llvm-project-<RELEASE><RC>.src.tar.xz    (the complete LLVM source project)
-  * test-suite-<RELEASE><RC>.src.tar.xz      (only when not using --snapshot)
+  * test-suite-<RELEASE><RC>.src.tar.xz      (only when not using --git-ref)
 
 To ease the creation of snapshot builds, we also provide these files
 
@@ -67,19 +59,24 @@ To ease the creation of snapshot builds, we also provide these files
 Example values for the placeholders:
 
   * <RELEASE>  -> 13.0.0
-  * <YYYYMMDD> -> 20210414
-  * <RC>       -> rc4        (will be empty when using --snapshot)
+  * <YYYYMMDD> -> 20210414   (the date when executing this script)
+  * <RC>       -> rc4        (will be empty when using --git-ref)
+
+In order to generate snapshots of the upstream main branch you could do this for example:
+
+  $(basename $0) --git-ref upstream/main --template '\${PROJECT}-\${YYYYMMDD}.src.tar.xz'
+
 EOF
 }
 
-export_sources() {
-    tag="llvmorg-$release"
+template_file() {
+    export PROJECT=$1 YYYYMMDD=$yyyymmdd RC=$rc RELEASE=$release GIT_REF=$git_rev
+    basename $(echo $template | envsubst '$PROJECT $RELEASE $RC $YYYYMMDD $GIT_REF')
+    unset PROJECT YYYYMMDD RC RELEASE GIT_REF
+}
 
-    if [ "$rc" = "final" ]; then
-        rc=""
-    else
-        tag="$tag-$rc"
-    fi
+export_sources() {
+    local tag="llvmorg-$release"
 
     llvm_src_dir=$(readlink -f $(dirname "$(readlink -f "$0")")/../../..)
     [ -d $llvm_src_dir/.git ] || ( echo "No git repository at $llvm_src_dir" ; exit 1 )
@@ -112,8 +109,7 @@ export_sources() {
     echo "$rc" > $target_dir/llvm-rc-$yyyymmdd.txt
     echo "$git_rev" > $target_dir/llvm-git-revision-$yyyymmdd.txt
     
-    git archive --prefix=llvm-project-$release$rc.src/ $tree_id . | xz >$target_dir/llvm-project-$release$rc.src.tar.xz
-    [ -n "$snapshot" ] && ln -fv $target_dir/llvm-project-$release$rc.src.tar.xz $target_dir/llvm-project-$yyyymmdd.src.tar.xz
+    git archive --prefix=llvm-project-$release$rc.src/ $tree_id . | xz >$target_dir/$(template_file llvm-project)
     popd
 
     if [ -z "$snapshot" ]; then
@@ -132,8 +128,7 @@ export_sources() {
     for proj in $projects; do
         echo "Creating tarball for $proj ..."
         pushd $llvm_src_dir/$proj
-        git archive --prefix=$proj-$release$rc.src/ $tree_id . | xz >$target_dir/$proj-$release$rc.src.tar.xz
-        [ -n "$snapshot" ] && ln -fv $target_dir/$proj-$release$rc.src.tar.xz $target_dir/$proj-$yyyymmdd.src.tar.xz
+        git archive --prefix=$proj-$release$rc.src/ $tree_id . | xz >$target_dir/$(template_file $proj)
         popd
     done
 }
@@ -151,9 +146,13 @@ while [ $# -gt 0 ]; do
         -final | --final )
             rc="final"
             ;;
-        -snapshot | --snapshot )
+        -git-ref | --git-ref )
             shift
             snapshot="$1"
+            ;;
+        -template | --template )
+            shift
+            template="$1"
             ;;
         -h | -help | --help )
             usage

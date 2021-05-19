@@ -159,7 +159,7 @@ jobs:
         run: git fetch --depth=1 --no-tags upstream main
 
       - name: create source-snapshot tarballs
-        run: llvm/utils/release/export.sh --snapshot upstream/main
+        run: llvm/utils/release/export.sh --git-ref upstream/main --template '${PROJECT}-${YYYYMMDD}.src.tar.xz'
       
       - name: upload today's source snapshots and version file
         uses: softprops/action-gh-release@v1
