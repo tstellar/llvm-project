@@ -542,9 +542,14 @@ private:
 
     auto Iter = AdditionalUsers.find(I);
     if (Iter != AdditionalUsers.end()) {
+      // Copy additional users before notifying them of changes, because new
+      // users may be added, potentially invalidating the iterator.
+      SmallVector<Instruction *, 2> ToNotify;
       for (User *U : Iter->second)
         if (auto *UI = dyn_cast<Instruction>(U))
-          OperandChangedState(UI);
+          ToNotify.push_back(UI);
+      for (Instruction *UI : ToNotify)
+        OperandChangedState(UI);
     }
   }
   void handleCallOverdefined(CallBase &CB);
@@ -1448,8 +1453,7 @@ void SCCPSolver::Solve() {
 
     // Process the basic block work list.
     while (!BBWorkList.empty()) {
-      BasicBlock *BB = BBWorkList.back();
-      BBWorkList.pop_back();
+      BasicBlock *BB = BBWorkList.pop_back_val();
 
       LLVM_DEBUG(dbgs() << "\nPopped off BBWL: " << *BB << '\n');
 

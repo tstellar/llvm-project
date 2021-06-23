@@ -420,6 +420,9 @@ bool llvm::wouldInstructionBeTriviallyDead(Instruction *I,
     return true;
   }
 
+  if (!I->willReturn())
+    return false;
+
   if (!I->mayHaveSideEffects())
     return true;
 
@@ -915,6 +918,7 @@ static void gatherIncomingValuesToPhi(PHINode *PN,
 /// \param IncomingValues A map from block to value.
 static void replaceUndefValuesInPhi(PHINode *PN,
                                     const IncomingValueMap &IncomingValues) {
+  SmallVector<unsigned> TrueUndefOps;
   for (unsigned i = 0, e = PN->getNumIncomingValues(); i != e; ++i) {
     Value *V = PN->getIncomingValue(i);
 
@@ -922,9 +926,30 @@ static void replaceUndefValuesInPhi(PHINode *PN,
 
     BasicBlock *BB = PN->getIncomingBlock(i);
     IncomingValueMap::const_iterator It = IncomingValues.find(BB);
-    if (It == IncomingValues.end()) continue;
 
+    // Keep track of undef/poison incoming values. Those must match, so we fix
+    // them up below if needed.
+    // Note: this is conservatively correct, but we could try harder and group
+    // the undef values per incoming basic block.
+    if (It == IncomingValues.end()) {
+      TrueUndefOps.push_back(i);
+      continue;
+    }
+
+    // There is a defined value for this incoming block, so map this undef
+    // incoming value to the defined value.
     PN->setIncomingValue(i, It->second);
+  }
+
+  // If there are both undef and poison values incoming, then convert those
+  // values to undef. It is invalid to have different values for the same
+  // incoming block.
+  unsigned PoisonCount = count_if(TrueUndefOps, [&](unsigned i) {
+    return isa<PoisonValue>(PN->getIncomingValue(i));
+  });
+  if (PoisonCount != 0 && PoisonCount != TrueUndefOps.size()) {
+    for (unsigned i : TrueUndefOps)
+      PN->setIncomingValue(i, UndefValue::get(PN->getType()));
   }
 }
 
@@ -2286,6 +2311,7 @@ static bool markAliveBlocks(Function &F,
         }
       };
 
+      SmallMapVector<BasicBlock *, int, 8> NumPerSuccessorCases;
       // Set of unique CatchPads.
       SmallDenseMap<CatchPadInst *, detail::DenseSetEmpty, 4,
                     CatchPadDenseMapInfo, detail::DenseSetPair<CatchPadInst *>>
@@ -2295,14 +2321,22 @@ static bool markAliveBlocks(Function &F,
                                              E = CatchSwitch->handler_end();
            I != E; ++I) {
         BasicBlock *HandlerBB = *I;
+        ++NumPerSuccessorCases[HandlerBB];
         auto *CatchPad = cast<CatchPadInst>(HandlerBB->getFirstNonPHI());
         if (!HandlerSet.insert({CatchPad, Empty}).second) {
+          --NumPerSuccessorCases[HandlerBB];
           CatchSwitch->removeHandler(I);
           --I;
           --E;
           Changed = true;
         }
       }
+      std::vector<DominatorTree::UpdateType> Updates;
+      for (const std::pair<BasicBlock *, int> &I : NumPerSuccessorCases)
+        if (I.second == 0)
+          Updates.push_back({DominatorTree::Delete, BB, I.first});
+      if (DTU)
+        DTU->applyUpdates(Updates);
     }
 
     Changed |= ConstantFoldTerminator(BB, true, nullptr, DTU);

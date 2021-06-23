@@ -81,7 +81,9 @@ CXXRecordDecl::DefinitionData::DefinitionData(CXXRecordDecl *D)
       HasPublicFields(false), HasMutableFields(false), HasVariantMembers(false),
       HasOnlyCMembers(true), HasInClassInitializer(false),
       HasUninitializedReferenceMember(false), HasUninitializedFields(false),
-      HasInheritedConstructor(false), HasInheritedAssignment(false),
+      HasInheritedConstructor(false),
+      HasInheritedDefaultConstructor(false),
+      HasInheritedAssignment(false),
       NeedOverloadResolutionForCopyConstructor(false),
       NeedOverloadResolutionForMoveConstructor(false),
       NeedOverloadResolutionForCopyAssignment(false),
@@ -814,6 +816,8 @@ void CXXRecordDecl::addedMember(Decl *D) {
     //   constructor [...]
     if (Constructor->isConstexpr() && !Constructor->isCopyOrMoveConstructor())
       data().HasConstexprNonCopyMoveConstructor = true;
+    if (!isa<CXXConstructorDecl>(D) && Constructor->isDefaultConstructor())
+      data().HasInheritedDefaultConstructor = true;
   }
 
   // Handle destructors.
@@ -1587,6 +1591,20 @@ Decl *CXXRecordDecl::getLambdaContextDecl() const {
   assert(isLambda() && "Not a lambda closure type!");
   ExternalASTSource *Source = getParentASTContext().getExternalSource();
   return getLambdaData().ContextDecl.get(Source);
+}
+
+void CXXRecordDecl::setDeviceLambdaManglingNumber(unsigned Num) const {
+  assert(isLambda() && "Not a lambda closure type!");
+  if (Num)
+    getASTContext().DeviceLambdaManglingNumbers[this] = Num;
+}
+
+unsigned CXXRecordDecl::getDeviceLambdaManglingNumber() const {
+  assert(isLambda() && "Not a lambda closure type!");
+  auto I = getASTContext().DeviceLambdaManglingNumbers.find(this);
+  if (I != getASTContext().DeviceLambdaManglingNumbers.end())
+    return I->second;
+  return 0;
 }
 
 static CanQualType GetConversionType(ASTContext &Context, NamedDecl *Conv) {

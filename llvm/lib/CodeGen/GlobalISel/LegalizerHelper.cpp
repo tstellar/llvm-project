@@ -91,17 +91,14 @@ LegalizerHelper::LegalizerHelper(MachineFunction &MF,
                                  MachineIRBuilder &Builder)
     : MIRBuilder(Builder), Observer(Observer), MRI(MF.getRegInfo()),
       LI(*MF.getSubtarget().getLegalizerInfo()),
-      TLI(*MF.getSubtarget().getTargetLowering()) {
-  MIRBuilder.setChangeObserver(Observer);
-}
+      TLI(*MF.getSubtarget().getTargetLowering()) { }
 
 LegalizerHelper::LegalizerHelper(MachineFunction &MF, const LegalizerInfo &LI,
                                  GISelChangeObserver &Observer,
                                  MachineIRBuilder &B)
   : MIRBuilder(B), Observer(Observer), MRI(MF.getRegInfo()), LI(LI),
-    TLI(*MF.getSubtarget().getTargetLowering()) {
-  MIRBuilder.setChangeObserver(Observer);
-}
+    TLI(*MF.getSubtarget().getTargetLowering()) { }
+
 LegalizerHelper::LegalizeResult
 LegalizerHelper::legalizeInstrStep(MachineInstr &MI) {
   LLVM_DEBUG(dbgs() << "Legalizing: " << MI);
@@ -1066,6 +1063,11 @@ LegalizerHelper::LegalizeResult LegalizerHelper::narrowScalar(MachineInstr &MI,
     Observer.changedInstr(MI);
     return Legalized;
   case TargetOpcode::G_PHI: {
+    // FIXME: add support for when SizeOp0 isn't an exact multiple of
+    // NarrowSize.
+    if (SizeOp0 % NarrowSize != 0)
+      return UnableToLegalize;
+
     unsigned NumParts = SizeOp0 / NarrowSize;
     SmallVector<Register, 2> DstRegs(NumParts);
     SmallVector<SmallVector<Register, 2>, 2> SrcRegs(MI.getNumOperands() / 2);
@@ -1255,22 +1257,9 @@ LegalizerHelper::LegalizeResult LegalizerHelper::narrowScalar(MachineInstr &MI,
     Observer.changedInstr(MI);
     return Legalized;
   }
-  case TargetOpcode::G_FPTOUI: {
-    if (TypeIdx != 0)
-      return UnableToLegalize;
-    Observer.changingInstr(MI);
-    narrowScalarDst(MI, NarrowTy, 0, TargetOpcode::G_ZEXT);
-    Observer.changedInstr(MI);
-    return Legalized;
-  }
-  case TargetOpcode::G_FPTOSI: {
-    if (TypeIdx != 0)
-      return UnableToLegalize;
-    Observer.changingInstr(MI);
-    narrowScalarDst(MI, NarrowTy, 0, TargetOpcode::G_SEXT);
-    Observer.changedInstr(MI);
-    return Legalized;
-  }
+  case TargetOpcode::G_FPTOUI:
+  case TargetOpcode::G_FPTOSI:
+    return narrowScalarFPTOI(MI, TypeIdx, NarrowTy);
   case TargetOpcode::G_FPEXT:
     if (TypeIdx != 0)
       return UnableToLegalize;
@@ -1761,6 +1750,34 @@ LegalizerHelper::widenScalarInsert(MachineInstr &MI, unsigned TypeIdx,
 }
 
 LegalizerHelper::LegalizeResult
+LegalizerHelper::widenScalarAddoSubo(MachineInstr &MI, unsigned TypeIdx,
+                                     LLT WideTy) {
+  if (TypeIdx == 1)
+    return UnableToLegalize; // TODO
+  unsigned Op = MI.getOpcode();
+  unsigned Opcode = Op == TargetOpcode::G_UADDO || Op == TargetOpcode::G_SADDO
+                        ? TargetOpcode::G_ADD
+                        : TargetOpcode::G_SUB;
+  unsigned ExtOpcode =
+      Op == TargetOpcode::G_UADDO || Op == TargetOpcode::G_USUBO
+          ? TargetOpcode::G_ZEXT
+          : TargetOpcode::G_SEXT;
+  auto LHSExt = MIRBuilder.buildInstr(ExtOpcode, {WideTy}, {MI.getOperand(2)});
+  auto RHSExt = MIRBuilder.buildInstr(ExtOpcode, {WideTy}, {MI.getOperand(3)});
+  // Do the arithmetic in the larger type.
+  auto NewOp = MIRBuilder.buildInstr(Opcode, {WideTy}, {LHSExt, RHSExt});
+  LLT OrigTy = MRI.getType(MI.getOperand(0).getReg());
+  auto TruncOp = MIRBuilder.buildTrunc(OrigTy, NewOp);
+  auto ExtOp = MIRBuilder.buildInstr(ExtOpcode, {WideTy}, {TruncOp});
+  // There is no overflow if the ExtOp is the same as NewOp.
+  MIRBuilder.buildICmp(CmpInst::ICMP_NE, MI.getOperand(1), NewOp, ExtOp);
+  // Now trunc the NewOp to the original result.
+  MIRBuilder.buildTrunc(MI.getOperand(0), NewOp);
+  MI.eraseFromParent();
+  return Legalized;
+}
+
+LegalizerHelper::LegalizeResult
 LegalizerHelper::widenScalarAddSubShlSat(MachineInstr &MI, unsigned TypeIdx,
                                          LLT WideTy) {
   bool IsSigned = MI.getOpcode() == TargetOpcode::G_SADDSAT ||
@@ -1817,29 +1834,11 @@ LegalizerHelper::widenScalar(MachineInstr &MI, unsigned TypeIdx, LLT WideTy) {
     return widenScalarMergeValues(MI, TypeIdx, WideTy);
   case TargetOpcode::G_UNMERGE_VALUES:
     return widenScalarUnmergeValues(MI, TypeIdx, WideTy);
+  case TargetOpcode::G_SADDO:
+  case TargetOpcode::G_SSUBO:
   case TargetOpcode::G_UADDO:
-  case TargetOpcode::G_USUBO: {
-    if (TypeIdx == 1)
-      return UnableToLegalize; // TODO
-    auto LHSZext = MIRBuilder.buildZExt(WideTy, MI.getOperand(2));
-    auto RHSZext = MIRBuilder.buildZExt(WideTy, MI.getOperand(3));
-    unsigned Opcode = MI.getOpcode() == TargetOpcode::G_UADDO
-                          ? TargetOpcode::G_ADD
-                          : TargetOpcode::G_SUB;
-    // Do the arithmetic in the larger type.
-    auto NewOp = MIRBuilder.buildInstr(Opcode, {WideTy}, {LHSZext, RHSZext});
-    LLT OrigTy = MRI.getType(MI.getOperand(0).getReg());
-    APInt Mask =
-        APInt::getLowBitsSet(WideTy.getSizeInBits(), OrigTy.getSizeInBits());
-    auto AndOp = MIRBuilder.buildAnd(
-        WideTy, NewOp, MIRBuilder.buildConstant(WideTy, Mask));
-    // There is no overflow if the AndOp is the same as NewOp.
-    MIRBuilder.buildICmp(CmpInst::ICMP_NE, MI.getOperand(1), NewOp, AndOp);
-    // Now trunc the NewOp to the original result.
-    MIRBuilder.buildTrunc(MI.getOperand(0), NewOp);
-    MI.eraseFromParent();
-    return Legalized;
-  }
+  case TargetOpcode::G_USUBO:
+    return widenScalarAddoSubo(MI, TypeIdx, WideTy);
   case TargetOpcode::G_SADDSAT:
   case TargetOpcode::G_SSUBSAT:
   case TargetOpcode::G_SSHLSAT:
@@ -4481,6 +4480,31 @@ LegalizerHelper::narrowScalarMul(MachineInstr &MI, LLT NarrowTy) {
       IsMulHigh ? &DstTmpRegs[DstTmpParts / 2] : &DstTmpRegs[0], NumDstParts);
   MIRBuilder.buildMerge(DstReg, DstRegs);
   MI.eraseFromParent();
+  return Legalized;
+}
+
+LegalizerHelper::LegalizeResult
+LegalizerHelper::narrowScalarFPTOI(MachineInstr &MI, unsigned TypeIdx,
+                                   LLT NarrowTy) {
+  if (TypeIdx != 0)
+    return UnableToLegalize;
+
+  bool IsSigned = MI.getOpcode() == TargetOpcode::G_FPTOSI;
+
+  Register Src = MI.getOperand(1).getReg();
+  LLT SrcTy = MRI.getType(Src);
+
+  // If all finite floats fit into the narrowed integer type, we can just swap
+  // out the result type. This is practically only useful for conversions from
+  // half to at least 16-bits, so just handle the one case.
+  if (SrcTy.getScalarType() != LLT::scalar(16) ||
+      NarrowTy.getScalarSizeInBits() < (IsSigned ? 17 : 16))
+    return UnableToLegalize;
+
+  Observer.changingInstr(MI);
+  narrowScalarDst(MI, NarrowTy, 0,
+                  IsSigned ? TargetOpcode::G_SEXT : TargetOpcode::G_ZEXT);
+  Observer.changedInstr(MI);
   return Legalized;
 }
 

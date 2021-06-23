@@ -1851,7 +1851,7 @@ void SelectionDAGBuilder::visitRet(const ReturnInst &I) {
 
       bool NeedsRegBlock = TLI.functionArgumentNeedsConsecutiveRegisters(
           I.getOperand(0)->getType(), F->getCallingConv(),
-          /*IsVarArg*/ false);
+          /*IsVarArg*/ false, DL);
 
       ISD::NodeType ExtendKind = ISD::ANY_EXTEND;
       if (F->getAttributes().hasAttribute(AttributeList::ReturnIndex,
@@ -6466,10 +6466,13 @@ void SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I,
     // Drop the intrinsic, but forward the value
     setValue(&I, getValue(I.getOperand(0)));
     return;
+
   case Intrinsic::assume:
+  case Intrinsic::experimental_noalias_scope_decl:
   case Intrinsic::var_annotation:
   case Intrinsic::sideeffect:
-    // Discard annotate attributes, assumptions, and artificial side-effects.
+    // Discard annotate attributes, noalias scope declarations, assumptions, and
+    // artificial side-effects.
     return;
 
   case Intrinsic::codeview_annotation: {
@@ -6599,7 +6602,7 @@ void SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I,
     EVT OverflowVT = MVT::i1;
     if (ResultVT.isVector())
       OverflowVT = EVT::getVectorVT(
-          *Context, OverflowVT, ResultVT.getVectorNumElements());
+          *Context, OverflowVT, ResultVT.getVectorElementCount());
 
     SDVTList VTs = DAG.getVTList(ResultVT, OverflowVT);
     setValue(&I, DAG.getNode(Op, sdl, VTs, Op1, Op2));
@@ -6782,7 +6785,7 @@ void SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I,
     // specific calling convention, and only for x86_64.
     // FIXME: Support other platforms later.
     const auto &Triple = DAG.getTarget().getTargetTriple();
-    if (Triple.getArch() != Triple::x86_64 || !Triple.isOSLinux())
+    if (Triple.getArch() != Triple::x86_64)
       return;
 
     SDLoc DL = getCurSDLoc();
@@ -6813,7 +6816,7 @@ void SelectionDAGBuilder::visitIntrinsicCall(const CallInst &I,
     // specific calling convention, and only for x86_64.
     // FIXME: Support other platforms later.
     const auto &Triple = DAG.getTarget().getTargetTriple();
-    if (Triple.getArch() != Triple::x86_64 || !Triple.isOSLinux())
+    if (Triple.getArch() != Triple::x86_64)
       return;
 
     SDLoc DL = getCurSDLoc();
@@ -9226,7 +9229,7 @@ TargetLowering::LowerCallTo(TargetLowering::CallLoweringInfo &CLI) const {
     CLI.IsTailCall = false;
   } else {
     bool NeedsRegBlock = functionArgumentNeedsConsecutiveRegisters(
-        CLI.RetTy, CLI.CallConv, CLI.IsVarArg);
+        CLI.RetTy, CLI.CallConv, CLI.IsVarArg, DL);
     for (unsigned I = 0, E = RetTys.size(); I != E; ++I) {
       ISD::ArgFlagsTy Flags;
       if (NeedsRegBlock) {
@@ -9286,7 +9289,7 @@ TargetLowering::LowerCallTo(TargetLowering::CallLoweringInfo &CLI) const {
     if (Args[i].IsByVal)
       FinalType = cast<PointerType>(Args[i].Ty)->getElementType();
     bool NeedsRegBlock = functionArgumentNeedsConsecutiveRegisters(
-        FinalType, CLI.CallConv, CLI.IsVarArg);
+        FinalType, CLI.CallConv, CLI.IsVarArg, DL);
     for (unsigned Value = 0, NumValues = ValueVTs.size(); Value != NumValues;
          ++Value) {
       EVT VT = ValueVTs[Value];
@@ -9657,8 +9660,9 @@ findArgumentCopyElisionCandidates(const DataLayout &DL,
       // We will look through cast uses, so ignore them completely.
       if (I.isCast())
         continue;
-      // Ignore debug info intrinsics, they don't escape or store to allocas.
-      if (isa<DbgInfoIntrinsic>(I))
+      // Ignore debug info and pseudo op intrinsics, they don't escape or store
+      // to allocas.
+      if (I.isDebugOrPseudoInst())
         continue;
       // This is an unknown instruction. Assume it escapes or writes to all
       // static alloca operands.
@@ -9826,7 +9830,7 @@ void SelectionDAGISel::LowerArguments(const Function &F) {
     if (Arg.hasAttribute(Attribute::ByVal))
       FinalType = Arg.getParamByValType();
     bool NeedsRegBlock = TLI->functionArgumentNeedsConsecutiveRegisters(
-        FinalType, F.getCallingConv(), F.isVarArg());
+        FinalType, F.getCallingConv(), F.isVarArg(), DL);
     for (unsigned Value = 0, NumValues = ValueVTs.size();
          Value != NumValues; ++Value) {
       EVT VT = ValueVTs[Value];
@@ -10790,8 +10794,7 @@ void SelectionDAGBuilder::visitSwitch(const SwitchInst &SI) {
       {PeeledSwitchMBB, First, Last, nullptr, nullptr, DefaultProb});
 
   while (!WorkList.empty()) {
-    SwitchWorkListItem W = WorkList.back();
-    WorkList.pop_back();
+    SwitchWorkListItem W = WorkList.pop_back_val();
     unsigned NumClusters = W.LastCluster - W.FirstCluster + 1;
 
     if (NumClusters > 3 && TM.getOptLevel() != CodeGenOpt::None &&

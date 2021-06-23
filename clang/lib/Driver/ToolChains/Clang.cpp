@@ -45,10 +45,6 @@
 #include "llvm/Support/TargetParser.h"
 #include "llvm/Support/YAMLParser.h"
 
-#ifdef LLVM_ON_UNIX
-#include <unistd.h> // For getuid().
-#endif
-
 using namespace clang::driver;
 using namespace clang::driver::tools;
 using namespace clang;
@@ -660,6 +656,21 @@ static void addMacroPrefixMapArg(const Driver &D, const ArgList &Args,
   }
 }
 
+/// Add a CC1 and CC1AS option to specify the coverage file path prefix map.
+static void addProfilePrefixMapArg(const Driver &D, const ArgList &Args,
+                                   ArgStringList &CmdArgs) {
+  for (const Arg *A : Args.filtered(options::OPT_ffile_prefix_map_EQ,
+                                    options::OPT_fprofile_prefix_map_EQ)) {
+    StringRef Map = A->getValue();
+    if (Map.find('=') == StringRef::npos)
+      D.Diag(diag::err_drv_invalid_argument_to_option)
+          << Map << A->getOption().getName();
+    else
+      CmdArgs.push_back(Args.MakeArgString("-fprofile-prefix-map=" + Map));
+    A->claim();
+  }
+}
+
 /// Vectorize at all optimization levels greater than 1 except for -Oz.
 /// For -Oz the loop vectorizer is disabled, while the slp vectorizer is
 /// enabled.
@@ -766,9 +777,11 @@ static void addPGOAndCoverageFlags(const ToolChain &TC, Compilation &C,
     D.Diag(diag::err_drv_argument_not_allowed_with)
         << ProfileGenerateArg->getSpelling() << ProfileUseArg->getSpelling();
 
-  if (CSPGOGenerateArg && PGOGenerateArg)
+  if (CSPGOGenerateArg && PGOGenerateArg) {
     D.Diag(diag::err_drv_argument_not_allowed_with)
         << CSPGOGenerateArg->getSpelling() << PGOGenerateArg->getSpelling();
+    PGOGenerateArg = nullptr;
+  }
 
   if (ProfileGenerateArg) {
     if (ProfileGenerateArg->getOption().matches(
@@ -1362,6 +1375,7 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
   }
 
   addMacroPrefixMapArg(D, Args, CmdArgs);
+  addProfilePrefixMapArg(D, Args, CmdArgs);
 }
 
 // FIXME: Move to target hook.
@@ -2833,9 +2847,7 @@ static void RenderFloatingPointOptions(const ToolChain &TC, const Driver &D,
   if (TrappingMath) {
     // FP Exception Behavior is also set to strict
     assert(FPExceptionBehavior.equals("strict"));
-    CmdArgs.push_back("-ftrapping-math");
-  } else if (TrappingMathPresent)
-    CmdArgs.push_back("-fno-trapping-math");
+  }
 
   // The default is IEEE.
   if (DenormalFPMath != llvm::DenormalMode::getIEEE()) {
@@ -3728,9 +3740,10 @@ static DwarfFissionKind getDebugFissionKind(const Driver &D,
   return DwarfFissionKind::None;
 }
 
-static void RenderDebugOptions(const ToolChain &TC, const Driver &D,
+static void renderDebugOptions(const ToolChain &TC, const Driver &D,
                                const llvm::Triple &T, const ArgList &Args,
-                               bool EmitCodeView, ArgStringList &CmdArgs,
+                               bool EmitCodeView, bool IRInput,
+                               ArgStringList &CmdArgs,
                                codegenoptions::DebugInfoKind &DebugInfoKind,
                                DwarfFissionKind &DwarfFission) {
   if (Args.hasFlag(options::OPT_fdebug_info_for_profiling,
@@ -3754,7 +3767,10 @@ static void RenderDebugOptions(const ToolChain &TC, const Driver &D,
       Args.hasFlag(options::OPT_fsplit_dwarf_inlining,
                    options::OPT_fno_split_dwarf_inlining, false);
 
-  if (const Arg *A = Args.getLastArg(options::OPT_g_Group)) {
+  // Normally -gsplit-dwarf is only useful with -gN. For IR input, Clang does
+  // object file generation and no IR generation, -gN should not be needed. So
+  // allow -gsplit-dwarf with either -gN or IR input.
+  if (IRInput || Args.hasArg(options::OPT_g_Group)) {
     Arg *SplitDWARFArg;
     DwarfFission = getDebugFissionKind(D, Args, SplitDWARFArg);
     if (DwarfFission != DwarfFissionKind::None &&
@@ -3762,7 +3778,8 @@ static void RenderDebugOptions(const ToolChain &TC, const Driver &D,
       DwarfFission = DwarfFissionKind::None;
       SplitDWARFInlining = false;
     }
-
+  }
+  if (const Arg *A = Args.getLastArg(options::OPT_g_Group)) {
     DebugInfoKind = codegenoptions::LimitedDebugInfo;
 
     // If the last option explicitly specified a debug-info level, use it.
@@ -4652,21 +4669,15 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
     }
   }
 
-  if (Triple.isOSAIX() && Args.hasArg(options::OPT_maltivec)) {
-    if (Args.hasArg(options::OPT_mabi_EQ_vec_extabi)) {
-      CmdArgs.push_back("-mabi=vec-extabi");
-    } else {
-      D.Diag(diag::err_aix_default_altivec_abi);
-    }
-  }
-
   if (Arg *A = Args.getLastArg(options::OPT_mabi_EQ_vec_extabi,
                                options::OPT_mabi_EQ_vec_default)) {
     if (!Triple.isOSAIX())
       D.Diag(diag::err_drv_unsupported_opt_for_target)
           << A->getSpelling() << RawTriple.str();
-    if (!Args.hasArg(options::OPT_maltivec))
-      D.Diag(diag::err_aix_altivec);
+    if (A->getOption().getID() == options::OPT_mabi_EQ_vec_extabi)
+      CmdArgs.push_back("-mabi=vec-extabi");
+    else
+      D.Diag(diag::err_aix_default_altivec_abi);
   }
 
   if (Arg *A = Args.getLastArg(options::OPT_Wframe_larger_than_EQ)) {
@@ -4823,6 +4834,22 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
                     IsIntegratedAssemblerDefault))
     CmdArgs.push_back("-fno-verbose-asm");
 
+  // Parse 'none' or '$major.$minor'. Disallow -fbinutils-version=0 because we
+  // use that to indicate the MC default in the backend.
+  if (Arg *A = Args.getLastArg(options::OPT_fbinutils_version_EQ)) {
+    StringRef V = A->getValue();
+    unsigned Num;
+    if (V == "none")
+      A->render(Args, CmdArgs);
+    else if (!V.consumeInteger(10, Num) && Num > 0 &&
+             (V.empty() || (V.consume_front(".") &&
+                            !V.consumeInteger(10, Num) && V.empty())))
+      A->render(Args, CmdArgs);
+    else
+      D.Diag(diag::err_drv_invalid_argument_to_option)
+          << A->getValue() << A->getOption().getName();
+  }
+
   if (!TC.useIntegratedAs())
     CmdArgs.push_back("-no-integrated-as");
 
@@ -4950,8 +4977,9 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
     AddClangCLArgs(Args, InputType, CmdArgs, &DebugInfoKind, &EmitCodeView);
 
   DwarfFissionKind DwarfFission = DwarfFissionKind::None;
-  RenderDebugOptions(TC, D, RawTriple, Args, EmitCodeView, CmdArgs,
-                     DebugInfoKind, DwarfFission);
+  renderDebugOptions(TC, D, RawTriple, Args, EmitCodeView,
+                     types::isLLVMIR(InputType), CmdArgs, DebugInfoKind,
+                     DwarfFission);
 
   // Add the split debug info name to the command lines here so we
   // can propagate it to the backend.
@@ -5497,6 +5525,14 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   const XRayArgs &XRay = TC.getXRayArgs();
   XRay.addArgs(TC, Args, CmdArgs, InputType);
 
+  for (const auto &Filename :
+       Args.getAllArgValues(options::OPT_fprofile_list_EQ)) {
+    if (D.getVFS().exists(Filename))
+      CmdArgs.push_back(Args.MakeArgString("-fprofile-list=" + Filename));
+    else
+      D.Diag(clang::diag::err_drv_no_such_file) << Filename;
+  }
+
   if (Arg *A = Args.getLastArg(options::OPT_fpatchable_function_entry_EQ)) {
     StringRef S0 = A->getValue(), S = S0;
     unsigned Size, Offset = 0;
@@ -5583,6 +5619,9 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
                                options::OPT_fno_reroll_loops))
     if (A->getOption().matches(options::OPT_freroll_loops))
       CmdArgs.push_back("-freroll-loops");
+
+  Args.AddLastArg(CmdArgs, options::OPT_ffinite_loops,
+                  options::OPT_fno_finite_loops);
 
   Args.AddLastArg(CmdArgs, options::OPT_fwritable_strings);
   Args.AddLastArg(CmdArgs, options::OPT_funroll_loops,
@@ -6105,6 +6144,10 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
   if (Args.hasFlag(options::OPT_fapple_pragma_pack,
                    options::OPT_fno_apple_pragma_pack, false))
     CmdArgs.push_back("-fapple-pragma-pack");
+
+  if (Args.hasFlag(options::OPT_fxl_pragma_pack,
+                   options::OPT_fno_xl_pragma_pack, RawTriple.isOSAIX()))
+    CmdArgs.push_back("-fxl-pragma-pack");
 
   // Remarks can be enabled with any of the `-f.*optimization-record.*` flags.
   if (willEmitRemarks(Args) && checkRemarksOptions(D, Args, Triple))

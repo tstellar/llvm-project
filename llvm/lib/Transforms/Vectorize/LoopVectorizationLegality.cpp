@@ -925,10 +925,7 @@ bool LoopVectorizationLegality::blockNeedsPredication(BasicBlock *BB) {
 bool LoopVectorizationLegality::blockCanBePredicated(
     BasicBlock *BB, SmallPtrSetImpl<Value *> &SafePtrs,
     SmallPtrSetImpl<const Instruction *> &MaskedOp,
-    SmallPtrSetImpl<Instruction *> &ConditionalAssumes,
-    bool PreserveGuards) const {
-  const bool IsAnnotatedParallel = TheLoop->isAnnotatedParallel();
-
+    SmallPtrSetImpl<Instruction *> &ConditionalAssumes) const {
   for (Instruction &I : *BB) {
     // Check that we don't have a constant expression that can trap as operand.
     for (Value *Operand : I.operands()) {
@@ -944,17 +941,19 @@ bool LoopVectorizationLegality::blockCanBePredicated(
       continue;
     }
 
+    // Do not let llvm.experimental.noalias.scope.decl block the vectorization.
+    // TODO: there might be cases that it should block the vectorization. Let's
+    // ignore those for now.
+    if (isa<NoAliasScopeDeclInst>(&I))
+      continue;
+
     // We might be able to hoist the load.
     if (I.mayReadFromMemory()) {
       auto *LI = dyn_cast<LoadInst>(&I);
       if (!LI)
         return false;
       if (!SafePtrs.count(LI->getPointerOperand())) {
-        // !llvm.mem.parallel_loop_access implies if-conversion safety.
-        // Otherwise, record that the load needs (real or emulated) masking
-        // and let the cost model decide.
-        if (!IsAnnotatedParallel || PreserveGuards)
-          MaskedOp.insert(LI);
+        MaskedOp.insert(LI);
         continue;
       }
     }
@@ -1101,8 +1100,7 @@ bool LoopVectorizationLegality::canVectorizeLoopCFG(Loop *Lp,
   // TODO: This restriction can be relaxed in the near future, it's here solely
   // to allow separation of changes for review. We need to generalize the phi
   // update logic in a number of places.
-  BasicBlock *ExitBB = Lp->getUniqueExitBlock();
-  if (!ExitBB) {
+  if (!Lp->getUniqueExitBlock()) {
     reportVectorizationFailure("The loop must have a unique exit block",
         "loop control flow is not understood by vectorizer",
         "CFGNotUnderstood", ORE, TheLoop);
@@ -1110,24 +1108,7 @@ bool LoopVectorizationLegality::canVectorizeLoopCFG(Loop *Lp,
       Result = false;
     else
       return false;
-  } else {
-    // The existing code assumes that LCSSA implies that phis are single entry
-    // (which was true when we had at most a single exiting edge from the latch).
-    // In general, there's nothing which prevents an LCSSA phi in exit block from
-    // having two or more values if there are multiple exiting edges leading to
-    // the exit block.  (TODO: implement general case)
-    if (!llvm::empty(ExitBB->phis()) && !ExitBB->getSinglePredecessor()) {
-      reportVectorizationFailure("The loop must have no live-out values if "
-                                 "it has more than one exiting block",
-          "loop control flow is not understood by vectorizer",
-          "CFGNotUnderstood", ORE, TheLoop);
-      if (DoExtraAnalysis)
-        Result = false;
-      else
-        return false;
-    }
   }
-
   return Result;
 }
 
@@ -1288,8 +1269,7 @@ bool LoopVectorizationLegality::prepareToFoldTailByMasking() {
   // do not need predication such as the header block.
   for (BasicBlock *BB : TheLoop->blocks()) {
     if (!blockCanBePredicated(BB, SafePointers, TmpMaskedOp,
-                              TmpConditionalAssumes,
-                              /* MaskAllLoads= */ true)) {
+                              TmpConditionalAssumes)) {
       LLVM_DEBUG(dbgs() << "LV: Cannot fold tail by masking as requested.\n");
       return false;
     }

@@ -383,8 +383,34 @@ bool PPCTTIImpl::mightUseCTR(BasicBlock *BB, TargetLibraryInfo *LibInfo,
     return false;
   };
 
+  auto supportedHalfPrecisionOp = [](Instruction *Inst) {
+    switch (Inst->getOpcode()) {
+    default:
+      return false;
+    case Instruction::FPTrunc:
+    case Instruction::FPExt:
+    case Instruction::Load:
+    case Instruction::Store:
+    case Instruction::FPToUI:
+    case Instruction::UIToFP:
+    case Instruction::FPToSI:
+    case Instruction::SIToFP:
+      return true;
+    }
+  };
+
   for (BasicBlock::iterator J = BB->begin(), JE = BB->end();
        J != JE; ++J) {
+    // There are no direct operations on half precision so assume that
+    // anything with that type requires a call except for a few select
+    // operations with Power9.
+    if (Instruction *CurrInst = dyn_cast<Instruction>(J)) {
+      for (const auto &Op : CurrInst->operands()) {
+        if (Op->getType()->getScalarType()->isHalfTy() ||
+            CurrInst->getType()->getScalarType()->isHalfTy())
+          return !(ST->isISA3_0() && supportedHalfPrecisionOp(CurrInst));
+      }
+    }
     if (CallInst *CI = dyn_cast<CallInst>(J)) {
       // Inline ASM is okay, unless it clobbers the ctr register.
       if (InlineAsm *IA = dyn_cast<InlineAsm>(CI->getCalledOperand())) {
@@ -628,10 +654,6 @@ bool PPCTTIImpl::mightUseCTR(BasicBlock *BB, TargetLibraryInfo *LibInfo,
           CI->getDestTy()->getScalarType()->isPPC_FP128Ty() ||
           isLargeIntegerTy(!TM.isPPC64(), CI->getSrcTy()->getScalarType()) ||
           isLargeIntegerTy(!TM.isPPC64(), CI->getDestTy()->getScalarType()))
-        return true;
-      if (!ST->isISA3_0() &&
-          (CI->getSrcTy()->getScalarType()->isHalfTy() ||
-           CI->getDestTy()->getScalarType()->isHalfTy()))
         return true;
     } else if (isLargeIntegerTy(!TM.isPPC64(),
                                 J->getType()->getScalarType()) &&
@@ -1188,6 +1210,27 @@ int PPCTTIImpl::getInterleavedMemoryOpCost(
 unsigned PPCTTIImpl::getIntrinsicInstrCost(const IntrinsicCostAttributes &ICA,
                                            TTI::TargetCostKind CostKind) {
   return BaseT::getIntrinsicInstrCost(ICA, CostKind);
+}
+
+bool PPCTTIImpl::areFunctionArgsABICompatible(
+    const Function *Caller, const Function *Callee,
+    SmallPtrSetImpl<Argument *> &Args) const {
+
+  // We need to ensure that argument promotion does not
+  // attempt to promote pointers to MMA types (__vector_pair
+  // and __vector_quad) since these types explicitly cannot be
+  // passed as arguments. Both of these types are larger than
+  // the 128-bit Altivec vectors and have a scalar size of 1 bit.
+  if (!BaseT::areFunctionArgsABICompatible(Caller, Callee, Args))
+    return false;
+
+  return llvm::none_of(Args, [](Argument *A) {
+    auto *EltTy = cast<PointerType>(A->getType())->getElementType();
+    if (EltTy->isSized())
+      return (EltTy->isIntOrIntVectorTy(1) &&
+              EltTy->getPrimitiveSizeInBits() > 128);
+    return false;
+  });
 }
 
 bool PPCTTIImpl::canSaveCmp(Loop *L, BranchInst **BI, ScalarEvolution *SE,

@@ -56,7 +56,8 @@ bool PPCTargetInfo::handleTargetFeatures(std::vector<std::string> &Features,
       HasP10Vector = true;
     } else if (Feature == "+pcrelative-memops") {
       HasPCRelativeMemops = true;
-    } else if (Feature == "+spe") {
+    } else if (Feature == "+spe" || Feature == "+efpu2") {
+      HasStrictFP = false;
       HasSPE = true;
       LongDoubleWidth = LongDoubleAlign = 64;
       LongDoubleFormat = &llvm::APFloat::IEEEdouble();
@@ -318,9 +319,6 @@ bool PPCTargetInfo::initFeatureMap(
                         .Case("pwr9", true)
                         .Case("pwr8", true)
                         .Default(false);
-  Features["float128"] = llvm::StringSwitch<bool>(CPU)
-                        .Case("pwr9", true)
-                        .Default(false);
 
   Features["spe"] = llvm::StringSwitch<bool>(CPU)
                         .Case("8548", true)
@@ -402,6 +400,8 @@ bool PPCTargetInfo::hasFeature(StringRef Feature) const {
 void PPCTargetInfo::setFeatureEnabled(llvm::StringMap<bool> &Features,
                                       StringRef Name, bool Enabled) const {
   if (Enabled) {
+    if (Name == "efpu2")
+      Features["spe"] = true;
     // If we're enabling any of the vsx based features then enable vsx and
     // altivec. We'll diagnose any problems later.
     bool FeatureHasVSX = llvm::StringSwitch<bool>(Name)
@@ -425,6 +425,8 @@ void PPCTargetInfo::setFeatureEnabled(llvm::StringMap<bool> &Features,
     else
       Features[Name] = true;
   } else {
+    if (Name == "spe")
+      Features["efpu2"] = false;
     // If we're disabling altivec or vsx go ahead and disable all of the vsx
     // features.
     if ((Name == "altivec") || (Name == "vsx"))

@@ -2294,6 +2294,29 @@ static void AddOrdinaryNameResults(Sema::ParserCompletionContext CCC, Scope *S,
       Builder.AddChunk(CodeCompletionString::CK_VerticalSpace);
       Builder.AddChunk(CodeCompletionString::CK_RightBrace);
       Results.AddResult(Result(Builder.TakeString()));
+
+      if (SemaRef.getLangOpts().CPlusPlus11 || SemaRef.getLangOpts().ObjC) {
+        // for ( range_declaration (:|in) range_expression ) { statements }
+        Builder.AddTypedTextChunk("for");
+        Builder.AddChunk(CodeCompletionString::CK_HorizontalSpace);
+        Builder.AddChunk(CodeCompletionString::CK_LeftParen);
+        Builder.AddPlaceholderChunk("range-declaration");
+        Builder.AddChunk(CodeCompletionString::CK_HorizontalSpace);
+        if (SemaRef.getLangOpts().ObjC)
+          Builder.AddTextChunk("in");
+        else
+          Builder.AddChunk(CodeCompletionString::CK_Colon);
+        Builder.AddChunk(CodeCompletionString::CK_HorizontalSpace);
+        Builder.AddPlaceholderChunk("range-expression");
+        Builder.AddChunk(CodeCompletionString::CK_RightParen);
+        Builder.AddChunk(CodeCompletionString::CK_HorizontalSpace);
+        Builder.AddChunk(CodeCompletionString::CK_LeftBrace);
+        Builder.AddChunk(CodeCompletionString::CK_VerticalSpace);
+        Builder.AddPlaceholderChunk("statements");
+        Builder.AddChunk(CodeCompletionString::CK_VerticalSpace);
+        Builder.AddChunk(CodeCompletionString::CK_RightBrace);
+        Results.AddResult(Result(Builder.TakeString()));
+      }
     }
 
     if (S->getContinueParent()) {
@@ -3506,9 +3529,11 @@ CodeCompletionString *CodeCompletionResult::createCodeCompletionStringForDecl(
         Result.AddTypedTextChunk("");
     }
     unsigned Idx = 0;
+    // The extra Idx < Sel.getNumArgs() check is needed due to legacy C-style
+    // method parameters.
     for (ObjCMethodDecl::param_const_iterator P = Method->param_begin(),
                                               PEnd = Method->param_end();
-         P != PEnd; (void)++P, ++Idx) {
+         P != PEnd && Idx < Sel.getNumArgs(); (void)++P, ++Idx) {
       if (Idx > 0) {
         std::string Keyword;
         if (Idx > StartParameter)
@@ -5133,6 +5158,20 @@ private:
 
   llvm::DenseMap<const IdentifierInfo *, Member> Results;
 };
+
+// If \p Base is ParenListExpr, assume a chain of comma operators and pick the
+// last expr. We expect other ParenListExprs to be resolved to e.g. constructor
+// calls before here. (So the ParenListExpr should be nonempty, but check just
+// in case)
+Expr *unwrapParenList(Expr *Base) {
+  if (auto *PLE = llvm::dyn_cast_or_null<ParenListExpr>(Base)) {
+    if (PLE->getNumExprs() == 0)
+      return nullptr;
+    Base = PLE->getExpr(PLE->getNumExprs() - 1);
+  }
+  return Base;
+}
+
 } // namespace
 
 void Sema::CodeCompleteMemberReferenceExpr(Scope *S, Expr *Base,
@@ -5140,6 +5179,8 @@ void Sema::CodeCompleteMemberReferenceExpr(Scope *S, Expr *Base,
                                            SourceLocation OpLoc, bool IsArrow,
                                            bool IsBaseExprStatement,
                                            QualType PreferredType) {
+  Base = unwrapParenList(Base);
+  OtherOpBase = unwrapParenList(OtherOpBase);
   if (!Base || !CodeCompleter)
     return;
 
@@ -5572,12 +5613,13 @@ ProduceSignatureHelp(Sema &SemaRef, Scope *S,
 QualType Sema::ProduceCallSignatureHelp(Scope *S, Expr *Fn,
                                         ArrayRef<Expr *> Args,
                                         SourceLocation OpenParLoc) {
-  if (!CodeCompleter)
+  Fn = unwrapParenList(Fn);
+  if (!CodeCompleter || !Fn)
     return QualType();
 
   // FIXME: Provide support for variadic template functions.
   // Ignore type-dependent call expressions entirely.
-  if (!Fn || Fn->isTypeDependent() || anyNullArguments(Args))
+  if (Fn->isTypeDependent() || anyNullArguments(Args))
     return QualType();
   // In presence of dependent args we surface all possible signatures using the
   // non-dependent args in the prefix. Afterwards we do a post filtering to make

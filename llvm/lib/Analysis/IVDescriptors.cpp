@@ -243,11 +243,14 @@ bool RecurrenceDescriptor::AddReductionVar(PHINode *Phi, RecurKind Kind,
   if (RecurrenceType->isFloatingPointTy()) {
     if (!isFloatingPointRecurrenceKind(Kind))
       return false;
-  } else {
+  } else if (RecurrenceType->isIntegerTy()) {
     if (!isIntegerRecurrenceKind(Kind))
       return false;
     if (isArithmeticRecurrenceKind(Kind))
       Start = lookThroughAnd(Phi, RecurrenceType, VisitedInsts, CastInsts);
+  } else {
+    // Pointer min/max may exist, but it is not supported as a reduction op.
+    return false;
   }
 
   Worklist.push_back(Start);
@@ -273,8 +276,7 @@ bool RecurrenceDescriptor::AddReductionVar(PHINode *Phi, RecurKind Kind,
   //      * An instruction type other than PHI or the reduction operation.
   //      * A PHI in the header other than the initial PHI.
   while (!Worklist.empty()) {
-    Instruction *Cur = Worklist.back();
-    Worklist.pop_back();
+    Instruction *Cur = Worklist.pop_back_val();
 
     // No Users.
     // If the instruction has no users then this is a broken chain and can't be

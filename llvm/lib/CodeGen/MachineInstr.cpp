@@ -708,8 +708,6 @@ bool MachineInstr::isCandidateForCallSiteEntry(QueryType Type) const {
   if (!isCall(Type))
     return false;
   switch (getOpcode()) {
-  case TargetOpcode::PATCHABLE_EVENT_CALL:
-  case TargetOpcode::PATCHABLE_TYPED_EVENT_CALL:
   case TargetOpcode::PATCHPOINT:
   case TargetOpcode::STACKMAP:
   case TargetOpcode::STATEPOINT:
@@ -1464,7 +1462,8 @@ bool MachineInstr::hasUnmodeledSideEffects() const {
 }
 
 bool MachineInstr::isLoadFoldBarrier() const {
-  return mayStore() || isCall() || hasUnmodeledSideEffects();
+  return mayStore() || isCall() ||
+         (hasUnmodeledSideEffects() && !isPseudoProbe());
 }
 
 /// allDefsAreDead - Return true if all the defs of this instruction are dead.

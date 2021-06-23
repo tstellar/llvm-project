@@ -128,10 +128,22 @@ public:
   // "none":        Disable sections/labels for basic blocks.
   std::string BBSections;
 
+  // If set, override the default value of MCAsmInfo::BinutilsVersion. If
+  // DisableIntegratedAS is specified, the assembly output will consider GNU as
+  // support. "none" means that all ELF features can be used, regardless of
+  // binutils support.
+  std::string BinutilsVersion;
+
   enum class FramePointerKind {
     None,        // Omit all frame pointers.
     NonLeaf,     // Keep non-leaf frame pointers.
     All,         // Keep all frame pointers.
+  };
+
+  enum FiniteLoopsKind {
+    Language, // Not specified, use language standard.
+    Always,   // All loops are assumed to be finite.
+    Never,    // No loop is assumed to be finite.
   };
 
   /// The code model to use (-mcmodel).
@@ -169,6 +181,7 @@ public:
   std::string RecordCommandLine;
 
   std::map<std::string, std::string> DebugPrefixMap;
+  std::map<std::string, std::string> ProfilePrefixMap;
 
   /// The ABI to use for passing floating point arguments.
   std::string FloatABI;

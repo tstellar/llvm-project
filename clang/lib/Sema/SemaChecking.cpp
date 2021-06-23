@@ -1943,7 +1943,8 @@ Sema::CheckBuiltinFunctionCall(FunctionDecl *FDecl, unsigned BuiltinID,
     // -Wframe-address warning if non-zero passed to builtin
     // return/frame address.
     Expr::EvalResult Result;
-    if (TheCall->getArg(0)->EvaluateAsInt(Result, getASTContext()) &&
+    if (!TheCall->getArg(0)->isValueDependent() &&
+        TheCall->getArg(0)->EvaluateAsInt(Result, getASTContext()) &&
         Result.Val.getInt() != 0)
       Diag(TheCall->getBeginLoc(), diag::warn_frame_address)
           << ((BuiltinID == Builtin::BI__builtin_return_address)
@@ -2622,7 +2623,10 @@ static bool isValidBPFPreserveEnumValueArg(Expr *Arg) {
     return false;
 
   const auto *CE = dyn_cast<CStyleCastExpr>(UO->getSubExpr());
-  if (!CE || CE->getCastKind() != CK_IntegralToPointer)
+  if (!CE)
+    return false;
+  if (CE->getCastKind() != CK_IntegralToPointer &&
+      CE->getCastKind() != CK_NullToPointer)
     return false;
 
   // The integer must be from an EnumConstantDecl.

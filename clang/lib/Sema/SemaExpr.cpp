@@ -373,7 +373,7 @@ bool Sema::DiagnoseUseOfDecl(NamedDecl *D, ArrayRef<SourceLocation> Locs,
   }
 
   if (LangOpts.SYCLIsDevice || (LangOpts.OpenMP && LangOpts.OpenMPIsDevice)) {
-    if (const auto *VD = dyn_cast<ValueDecl>(D))
+    if (auto *VD = dyn_cast<ValueDecl>(D))
       checkDeviceDecl(VD, Loc);
 
     if (!Context.getTargetInfo().isTLSSupported())
@@ -2851,8 +2851,7 @@ ExprResult Sema::BuildIvarRefExpr(Scope *S, SourceLocation Loc,
   // turn this into Self->ivar, just return a BareIVarExpr or something.
   IdentifierInfo &II = Context.Idents.get("self");
   UnqualifiedId SelfName;
-  SelfName.setIdentifier(&II, SourceLocation());
-  SelfName.setKind(UnqualifiedIdKind::IK_ImplicitSelfParam);
+  SelfName.setImplicitSelfParam(&II);
   CXXScopeSpec SelfScopeSpec;
   SourceLocation TemplateKWLoc;
   ExprResult SelfExpr =

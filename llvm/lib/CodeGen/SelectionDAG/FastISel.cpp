@@ -261,12 +261,16 @@ bool FastISel::hasTrivialKill(const Value *V) {
     if (GEP->hasAllZeroIndices() && !hasTrivialKill(GEP->getOperand(0)))
       return false;
 
+  // Casts and extractvalues may be trivially coalesced by fast-isel.
+  if (I->getOpcode() == Instruction::BitCast ||
+      I->getOpcode() == Instruction::PtrToInt ||
+      I->getOpcode() == Instruction::IntToPtr ||
+      I->getOpcode() == Instruction::ExtractValue)
+    return false;
+
   // Only instructions with a single use in the same basic block are considered
   // to have trivial kills.
   return I->hasOneUse() &&
-         !(I->getOpcode() == Instruction::BitCast ||
-           I->getOpcode() == Instruction::PtrToInt ||
-           I->getOpcode() == Instruction::IntToPtr) &&
          cast<Instruction>(*I->user_begin())->getParent() == I->getParent();
 }
 
@@ -1083,7 +1087,7 @@ bool FastISel::lowerCallTo(CallLoweringInfo &CLI) {
     if (Arg.IsByVal)
       FinalType = cast<PointerType>(Arg.Ty)->getElementType();
     bool NeedsRegBlock = TLI.functionArgumentNeedsConsecutiveRegisters(
-        FinalType, CLI.CallConv, CLI.IsVarArg);
+        FinalType, CLI.CallConv, CLI.IsVarArg, DL);
 
     ISD::ArgFlagsTy Flags;
     if (Arg.IsZExt)
@@ -1252,6 +1256,8 @@ bool FastISel::selectIntrinsicCall(const IntrinsicInst *II) {
   case Intrinsic::sideeffect:
   // Neither does the assume intrinsic; it's also OK not to codegen its operand.
   case Intrinsic::assume:
+  // Neither does the llvm.experimental.noalias.scope.decl intrinsic
+  case Intrinsic::experimental_noalias_scope_decl:
     return true;
   case Intrinsic::dbg_declare: {
     const DbgDeclareInst *DI = cast<DbgDeclareInst>(II);

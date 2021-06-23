@@ -321,6 +321,12 @@ bool PPCAsmPrinter::PrintAsmMemoryOperand(const MachineInstr *MI, unsigned OpNo,
       O << "0, ";
       printOperand(MI, OpNo, O);
       return false;
+    case 'I':
+      // Write 'i' if an integer constant, otherwise nothing.  Used to print
+      // addi vs add, etc.
+      if (MI->getOperand(OpNo).isImm())
+        O << "i";
+      return false;
     case 'U': // Print 'u' for update form.
     case 'X': // Print 'x' for indexed form.
       // FIXME: Currently for PowerPC memory operands are always loaded
@@ -2201,7 +2207,7 @@ bool PPCAIXAsmPrinter::doInitialization(Module &M) {
       // the sinit and sterm function names.
       if (FormatIndicatorAndUniqueModId.empty()) {
         std::string UniqueModuleId = getUniqueModuleId(&M);
-        if (UniqueModuleId.compare("") != 0)
+        if (UniqueModuleId != "")
           // TODO: Use source file full path to generate the unique module id
           // and add a format indicator as a part of function name in case we
           // will support more than one format.

@@ -987,6 +987,9 @@ namespace llvm {
     shouldExpandBuildVectorWithShuffles(EVT VT,
                                         unsigned DefinedValues) const override;
 
+    // Keep the zero-extensions for arguments to libcalls.
+    bool shouldKeepZExtForFP16Conv() const override { return true; }
+
     /// createFastISel - This method returns a target-specific FastISel object,
     /// or null if the target does not support "fast" instruction selection.
     FastISel *createFastISel(FunctionLoweringInfo &FuncInfo,
@@ -995,7 +998,8 @@ namespace llvm {
     /// Returns true if an argument of type Ty needs to be passed in a
     /// contiguous block of registers in calling convention CallConv.
     bool functionArgumentNeedsConsecutiveRegisters(
-      Type *Ty, CallingConv::ID CallConv, bool isVarArg) const override {
+        Type *Ty, CallingConv::ID CallConv, bool isVarArg,
+        const DataLayout &DL) const override {
       // We support any array type as "consecutive" block in the parameter
       // save area.  The element type defines the alignment requirement and
       // whether the argument should go in GPRs, FPRs, or VRs if available.
@@ -1125,6 +1129,7 @@ namespace llvm {
     SDValue LowerSETCC(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerINIT_TRAMPOLINE(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerADJUST_TRAMPOLINE(SDValue Op, SelectionDAG &DAG) const;
+    SDValue LowerINLINEASM(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerVASTART(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerVAARG(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerVACOPY(SDValue Op, SelectionDAG &DAG) const;
