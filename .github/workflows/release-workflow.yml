@@ -22,8 +22,8 @@ jobs:
       - name: Fetch LLVM sources
         uses: actions/checkout@v2
         with:
-          depth: 0
-          branch: ${{ steps.vars.outputs.release-branch }}
+          fetch-depth: 0
+          ref: ${{ steps.vars.outputs.release-branch }}
 
       - name: Backport Commits
         id: backport
@@ -35,7 +35,7 @@ jobs:
           for c in ${{ steps.vars.outputs.commits }}; do
             if ! git cherry-pick -x $c; then
               echo ::set-output name=failed-commit::$c
-              break
+              exit 1
             fi
           done
 
