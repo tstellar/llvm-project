@@ -22,6 +22,8 @@ jobs:
       - name: Fetch LLVM sources
         uses: actions/checkout@v2
         with:
+          repository: llvm/llvm-project
+          ref: ${{ steps.vars.outputs.release-branch }}
           fetch-depth: 0
 
       - name: Backport Commits
@@ -31,9 +33,6 @@ jobs:
           git config --global user.name "llvmbot"
           git config --global user.email "llvmbot@llvm.org"
           
-          # Checkout the release branch.
-          git checkout ${{ steps.vars.outputs.release-branch }}
-
           for c in ${{ steps.vars.outputs.commits }}; do
             if ! git cherry-pick -x $c; then
               echo ::set-output name=failed-commit::$c
@@ -41,7 +40,7 @@ jobs:
             fi
           done
 
-      - name: Cherry-pick failed 
+      - name: Cherry-Pick Failed 
         if: failure()
         uses: actions/github-script@v3
         with:
@@ -60,7 +59,7 @@ jobs:
               labels: ['CherryPickConflict']
             })
 
-      - name: cherry-pick success
+      - name: Cherry-Pick Success
         uses: actions/github-script@v3
         with:
           script: |
