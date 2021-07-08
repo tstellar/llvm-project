@@ -68,7 +68,7 @@ jobs:
       - name: Create branch
         id: branch
         run: |
-          branch_name=issue${{context.issue.number}}
+          branch_name=issue${{ github.event.issue.number }}
           git push https://${{ github.token }}@gtihub.com/${{ github.repository }} HEAD:$branch_name
           echo ::set-output name=name::$branch_name
 
