@@ -57,7 +57,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ['NeedsManualCherryPick']
+              labels: ['CherryPickConflict']
             })
 
       - name: cherry-pick success
@@ -68,7 +68,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ['AutoCherryPick']
+              labels: ['CherryPickClean']
             }
             
       - name: Create branch
