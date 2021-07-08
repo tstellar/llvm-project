@@ -1,0 +1,84 @@
+name: Release Workflow
+
+on:
+  issue_comment:
+    types:
+      - created
+      - edited
+
+jobs:
+  backport:
+    runs-on: ubuntu-latest
+    if: startswith(github.event.comment.body, '/cherry-pick')
+
+    steps:
+      - name: Set Job Variables
+        id: vars
+        run: |
+          commits=`echo ${{ github.event.comment.body }} | sed 's~/cherry-pick ~~g'`
+          echo ::set-output name=commits::$commits
+
+      - name: Fetch LLVM sources
+        uses: actions/checkout@v2
+
+      - name: Backport Commits
+        id: backport
+        run: |
+          # Setup git
+          git config --global user.name "llvmbot"
+          git config --global user.email "llvmbot@llvm.org"
+
+          for c in ${{ steps.vars.outputs.commits }}; do
+            if ! git cherry-pick -x $c; then
+              echo ::set-output name=failed-commit::$c
+              break
+            fi
+          done
+
+      - name: Cherry-pick failed 
+        if: failure()
+        uses: actions/github-script@v3
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Failed to cherry-pick: ${{ steps.vars.outputs.pr-head-branch }}'
+            })
+
+            github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['ManualCherryPick']
+            })
+
+      - name: cherry-pick success
+        uses: actions/github-script@v3
+        with:
+          script: |
+            github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['AutoCherryPick']
+            }
+            
+      - name: Create branch
+        id: branch
+        run: |
+          branch_name=issue${{context.issue.number}}
+          git push https://${{ github.token }}@gtihub.com/${{ github.repository }} HEAD:$branch_name
+          echo ::set-output name=name::$branch_name
+
+      - name: Add branch name to issue
+        uses: actions/github-script@v3
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '/branch ${{ steps.branch.outputs.name }}'
+            })
