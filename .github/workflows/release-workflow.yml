@@ -17,7 +17,7 @@ jobs:
         run: |
           commits=`echo ${{ github.event.comment.body }} | sed 's~/cherry-pick ~~g'`
           echo ::set-output name=commits::$commits
-          echo ::set-output name=release-branch::release/12.x
+          echo ::set-output name=release-branch::release/13.x
 
       - name: Fetch LLVM sources
         uses: actions/checkout@v2
