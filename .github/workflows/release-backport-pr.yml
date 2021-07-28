@@ -1,0 +1,24 @@
+name: Release Backport - Pull Request
+
+on:
+  issue_comment:
+    types:
+      - created:
+      - edited:
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    if: startswith(github.event.comment.body, '/branch')
+
+    steps:
+      - name: Verify Action
+        uses: actoins/github-script@v3
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Failed to cherry-pick: ${{ steps.backport.outputs.failed-commit }}'
+            })
