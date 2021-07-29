@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Verify Action
-        uses: actoins/github-script@v3
+        uses: actions/github-script@v3
         with:
           script: |
             github.issues.createComment({
