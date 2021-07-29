@@ -1,0 +1,27 @@
+name: Release Workflow - Close Issue
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  update-linked-issue:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
+
+    steps:
+      - name: Install PyGithub
+        run: pip install PyGithub
+
+      - name: Update Isssue
+        shell: python
+        run: |
+          import github
+          import re
+          context = github.Github('${{ github.token }}')
+          repo = context.get_repo('${{ github.repository}}')
+          pull = repo.get_pull(${{ github.event.pull_request.number }})
+          m = re.match('resolves #([0-9]+)', pull.body)
+          if m:
+            issue = repo.get_issue(int(m.group(1)))
+            issue.edit(state='closed')
