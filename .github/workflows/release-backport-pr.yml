@@ -10,7 +10,7 @@ on:
       branch:
         description: 'The base branch of the pull request with the format: org/repo/branch'
         required: true
-      issue-number:
+      issue_number:
         description: 'The issue number for the comment that dispatched this workflow.'
         required: true
 
@@ -27,7 +27,7 @@ jobs:
           if [ -z "$full_branch" ]; then
               full_branch=`echo ${{ github.event.comment.body }} | sed 's~/branch ~~g'`
           fi
-          issue_number="${{ github.event.inputs.issue-number }}"
+          issue_number="${{ github.event.inputs.issue_number }}"
           if [ -z "$issue" ]; then
              issue_number="${{ github.event.issue.number }}"
           fi
@@ -37,7 +37,7 @@ jobs:
           echo ::set-output name=owner::$owner
           echo ::set-output name=repo::$repo
           echo ::set-output name=branch::$branch
-          echo ::set-output name=issue-number::$issue-number
+          echo ::set-output name=issue_number::$issue_number
 
       - name: Install PyGithub
         run: pip install PyGithub
@@ -49,7 +49,7 @@ jobs:
           context = github.Github('${{ github.token }}')
           repo = context.get_repo('${{ github.repository}}')
           pull = repo.create_pull(base='release/13.x', head = '${{ steps.vars.outputs.owner }}:${{ steps.vars.outputs.branch }}')
-          issue = repo.get_issue(${{ steps.vars.outputs.issue-number }})
+          issue = repo.get_issue(${{ steps.vars.outputs.issue_number }})
           issue.create_comment('/pull-request {}'.format(pull.html_url))
 
       - name: Pull Failed
@@ -59,7 +59,7 @@ jobs:
           import github
           context = github.Github('${{ github.token }}')
           repo = context.get_repo('${{ github.repository}}')
-          issue = repo.get_issue(${{ steps.vars.outputs.issue-number }})
+          issue = repo.get_issue(${{ steps.vars.outputs.issue_number }})
           issue.create_comment('Pull Request failed')
           
 
