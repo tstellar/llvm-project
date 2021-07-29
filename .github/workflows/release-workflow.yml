@@ -87,3 +87,18 @@ jobs:
               repo: context.repo.repo,
               body: '/branch https://github.com/${{ github.repository }}/${{ steps.branch.outputs.name }}'
             })
+
+      - name: Create Pull Request
+        uses: actions/github-script@v3
+        with:
+          script: |
+            github.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: "release-backport-pr.yml",
+              ref: '${{ steps.branch.outputs.name }}',
+              inputs: {
+                branch: 'https://github.com/${{ github.repository }}/${{ steps.branch.outputs.name }}'
+              }
+            })
+

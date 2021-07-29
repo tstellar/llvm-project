@@ -5,31 +5,61 @@ on:
     types:
       - created
       - edited
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'The base branch of the pull request with the format: org/repo/branch'
+        required: true
+      issue-number:
+        description: 'The issue number for the comment that dispatched this workflow.'
+        required: true
 
 jobs:
   create-pull-request:
     runs-on: ubuntu-latest
-    if: startswith(github.event.comment.body, '/branch')
+    if: startswith(github.event.comment.body, '/branch') || github.event.inputs.branch
 
     steps:
-      - name: Verify Action
-        uses: actions/github-script@v3
-        with:
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Failed to cherry-pick: ${{ steps.backport.outputs.failed-commit }}'
-            })
+      - name: Set Job Variables
+        id: vars
+        run: |
+          full_branch="${{ github.event.inputs.branch }}"
+          if [ -z "$full_branch" ]; then
+              full_branch=`echo ${{ github.event.comment.body }} | sed 's~/branch ~~g'`
+          fi
+          issue_number="${{ github.event.inputs.issue-number }}"
+          if [ -z "$issue" ]; then
+             issue_number="${{ github.event.issue.number }}"
+          fi
+          owner=$(dirname $(dirname $full_branch))
+          repo=$(basename $(dirname $full_branch))
+          branch=$(basename $(basename $full_branch))
+          echo ::set-output name=owner::$owner
+          echo ::set-output name=repo::$repo
+          echo ::set-output name=branch::$branch
+          echo ::set-output name=issue-number::$issue-number
 
-      - name: Dispatch workflow
-        uses: actions/github-script@v3
-        with:
-          script: |
-            github.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: "release-workflow.yml",
-              ref: 'main'
-            })
+      - name: Install PyGithub
+        run: pip install PyGithub
+
+      - name: Create Pull Request
+        shell: python
+        run: |
+          import github
+          context = github.Github('${{ github.token }}')
+          repo = context.get_repo('${{ github.repository}}')
+          pull = repo.create_pull(base='release/13.x', head = '${{ steps.vars.outputs.owner }}:${{ steps.vars.outputs.branch }}')
+          issue = repo.get_issue(${{ steps.vars.outputs.issue-number }})
+          issue.create_comment('/pull-request {}'.format(pull.html_url))
+
+      - name: Pull Failed
+        if: failed()
+        shell: python
+        run: |
+          import github
+          context = github.Github('${{ github.token }}')
+          repo = context.get_repo('${{ github.repository}}')
+          issue = repo.get_issue(${{ steps.vars.outputs.issue-number }})
+          issue.create_comment('Pull Request failed')
+          
+
