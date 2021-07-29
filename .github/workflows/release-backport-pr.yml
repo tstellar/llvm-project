@@ -30,5 +30,6 @@ jobs:
             github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: "release-workflow.yml"
+              workflow_id: "release-workflow.yml",
               ref: main
+            })
