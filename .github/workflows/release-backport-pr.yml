@@ -48,7 +48,7 @@ jobs:
           import github
           context = github.Github('${{ github.token }}')
           repo = context.get_repo('${{ github.repository}}')
-          pull = repo.create_pull(title='PR for issue#${{ steps.vars.outputs.issue_number }}', body='issue#${{ steps.vars.outptus.issue_number }}', base='release/13.x', head = '${{ steps.vars.outputs.owner }}:${{ steps.vars.outputs.branch }}')
+          pull = repo.create_pull(title='PR for #${{ steps.vars.outputs.issue_number }}', body='#${{ steps.vars.outptus.issue_number }}', base='release/13.x', head = '${{ steps.vars.outputs.owner }}:${{ steps.vars.outputs.branch }}')
           issue = repo.get_issue(${{ steps.vars.outputs.issue_number }})
           issue.create_comment('/pull-request {}'.format(pull.html_url))
 
