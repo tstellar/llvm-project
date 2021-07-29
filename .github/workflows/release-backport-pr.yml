@@ -53,7 +53,7 @@ jobs:
           issue.create_comment('/pull-request {}'.format(pull.html_url))
 
       - name: Pull Failed
-        if: failed()
+        if: failure()
         shell: python
         run: |
           import github
