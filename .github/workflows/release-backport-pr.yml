@@ -31,5 +31,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: "release-workflow.yml",
-              ref: main
+              ref: 'main'
             })
