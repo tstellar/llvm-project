@@ -46,7 +46,7 @@ jobs:
         shell: python
         run: |
           import github
-          context = github.Github('${{ github.token }}')
+          context = github.Github('${{ secrets.PR_CREATE_SECRET }}')
           repo = context.get_repo('${{ github.repository}}')
           pull = repo.create_pull(title='PR for #${{ steps.vars.outputs.issue_number }}', body='#${{ steps.vars.outputs.issue_number }}', base='release/13.x', head = '${{ steps.vars.outputs.owner }}:${{ steps.vars.outputs.branch }}')
           issue = repo.get_issue(${{ steps.vars.outputs.issue_number }})
