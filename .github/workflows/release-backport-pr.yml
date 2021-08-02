@@ -28,7 +28,7 @@ jobs:
               full_branch=`echo ${{ github.event.comment.body }} | sed 's~/branch ~~g'`
           fi
           issue_number="${{ github.event.inputs.issue_number }}"
-          if [ -z "$issue" ]; then
+          if [ -z "$issue_number" ]; then
              issue_number="${{ github.event.issue.number }}"
           fi
           owner=$(dirname $(dirname $full_branch))
