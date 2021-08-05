@@ -93,10 +93,17 @@ jobs:
         with:
           github-token: ${{ secrets.WORKFLOW_DISPATCH_SECRET }}
           script: |
+
+            workflow = github.actions.getWorkflow({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'release-workflow-create-pr.yml'
+            }) 
+
             github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: "Release Workflow - Create Pull Request",
+              workflow_id: workflow.id,
               ref: '${{ steps.branch.outputs.name }}',
               inputs: {
                 branch: '${{ github.repository }}/${{ steps.branch.outputs.name }}',
