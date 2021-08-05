@@ -91,6 +91,7 @@ jobs:
       - name: Create Pull Request
         uses: actions/github-script@v3
         with:
+          github-token: ${{ secrets.PR_CREATE_SECRET }}
           script: |
             github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
