@@ -98,8 +98,8 @@ jobs:
               workflow_id: "Release Workflow - Create Pull Request",
               ref: '${{ steps.branch.outputs.name }}',
               inputs: {
-                branch: '${{ github.repository }}/${{ steps.branch.outputs.name }}'
-                issue: '${{ github.event.issue.number }}'
+                branch: '${{ github.repository }}/${{ steps.branch.outputs.name }}',
+                issue: context.issue.number
               }
             })
 
