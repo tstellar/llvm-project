@@ -95,7 +95,7 @@ jobs:
             github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: "Release Backport - Pull Request",
+              workflow_id: "Release Workflow - Create Pull Request",
               ref: '${{ steps.branch.outputs.name }}',
               inputs: {
                 branch: '${{ github.repository }}/${{ steps.branch.outputs.name }}'

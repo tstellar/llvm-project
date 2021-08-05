@@ -1,4 +1,4 @@
-name: Release Backport - Pull Request
+name: Release Workflow - Create Pull Request
 
 on:
   issue_comment:
