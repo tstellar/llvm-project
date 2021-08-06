@@ -108,7 +108,7 @@ jobs:
               ref: '${{ steps.branch.outputs.name }}',
               inputs: {
                 branch: '${{ github.repository }}/${{ steps.branch.outputs.name }}',
-                issue: context.issue.number
+                issue: context.issue.number.toString()
               }
             })
 
