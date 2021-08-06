@@ -7,7 +7,8 @@ on:
       - edited
 
 jobs:
-  backport:
+  release_workflow:
+    name: Release Workflow
     runs-on: ubuntu-latest
     if: startswith(github.event.comment.body, '/cherry-pick')
 
@@ -93,18 +94,10 @@ jobs:
         with:
           github-token: ${{ secrets.WORKFLOW_DISPATCH_SECRET }}
           script: |
-
-            const workflow = await github.actions.getWorkflow({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'release-workflow-create-pr.yml'
-            }) 
-
-             console.log(workflow)
             github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: workflow.data.id,
+              workflow_id: 'release-workflow-create-pr.yml',
               ref: 'release-automation',
               inputs: {
                 branch: '${{ github.repository }}/${{ steps.branch.outputs.name }}',
