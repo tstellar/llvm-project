@@ -94,7 +94,7 @@ jobs:
           github-token: ${{ secrets.WORKFLOW_DISPATCH_SECRET }}
           script: |
 
-            workflow = github.actions.getWorkflow({
+            const workflow = await github.actions.getWorkflow({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'release-workflow-create-pr.yml'
