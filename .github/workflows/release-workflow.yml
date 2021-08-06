@@ -108,7 +108,7 @@ jobs:
               ref: 'release-automation',
               inputs: {
                 branch: '${{ github.repository }}/${{ steps.branch.outputs.name }}',
-                issue: context.issue.number.toString()
+                issue_number: context.issue.number.toString()
               }
             })
 
