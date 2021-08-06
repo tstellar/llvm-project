@@ -100,6 +100,7 @@ jobs:
               workflow_id: 'release-workflow-create-pr.yml'
             }) 
 
+             console.log(workflow)
             github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
