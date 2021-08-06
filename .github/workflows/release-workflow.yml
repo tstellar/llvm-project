@@ -104,7 +104,7 @@ jobs:
             github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: workflow.id,
+              workflow_id: workflow.data.id,
               ref: '${{ steps.branch.outputs.name }}',
               inputs: {
                 branch: '${{ github.repository }}/${{ steps.branch.outputs.name }}',
