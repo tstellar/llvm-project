@@ -1,14 +1,6 @@
 name: lldb Tests
 
 on:
-  push:
-    branches:
-      - 'release/**'
-    paths:
-      - 'clang/**'
-      - 'llvm/**'
-      - 'lldb/**'
-      - '.github/workflows/lldb-tests.yml'
   pull_request:
     paths:
       - 'clang/**'
