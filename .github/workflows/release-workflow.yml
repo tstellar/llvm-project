@@ -71,6 +71,13 @@ jobs:
               repo: context.repo.repo,
               labels: ['CherryPickClean']
             })
+
+            github.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['CherryPickConflict']
+            })
             
       - name: Create branch
         id: branch
