@@ -46,11 +46,12 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
+            actions_url='https://github.com/' + process.env.GITHUB_REPOSITORY + '/actions/runs/' + process.env.GITHUB_RUN_ID 
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Failed to cherry-pick: ${{ steps.backport.outputs.failed-commit }}'
+              body: 'Failed to cherry-pick: ${{ steps.backport.outputs.failed-commit }}\n' + actions_url
             })
 
             github.issues.addLabels({
