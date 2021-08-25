@@ -81,8 +81,11 @@ export_sources() {
     llvm_src_dir=$(readlink -f $(dirname "$(readlink -f "$0")")/../../..)
     [ -d $llvm_src_dir/.git ] || ( echo "No git repository at $llvm_src_dir" ; exit 1 )
 
-    # Determine the release by fetching the version from LLVM's CMakeLists.txt.
-    [ -n "$snapshot" ] && release=$(grep -ioP 'set\(\s*LLVM_VERSION_(MAJOR|MINOR|PATCH)\s\K[0-9]+' $llvm_src_dir/llvm/CMakeLists.txt | paste -sd '.')
+    # Determine the release by fetching the version from LLVM's CMakeLists.txt
+    # in the specified git ref.
+    if [ -n "$snapshot" ]; then
+        release=$(git show $snapshot:$llvm_src_dir/llvm/CMakeLists.txt | grep -ioP 'set\(\s*LLVM_VERSION_(MAJOR|MINOR|PATCH)\s\K[0-9]+' | paste -sd '.')
+    fi
     
     tag="llvmorg-$release"
 
