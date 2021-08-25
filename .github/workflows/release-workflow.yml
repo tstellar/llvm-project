@@ -51,7 +51,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Failed to cherry-pick: ${{ steps.backport.outputs.failed-commit }}\n' + actions_url
+              body: 'Failed to cherry-pick: ${{ steps.backport.outputs.failed-commit }}\n\n' + actions_url
             })
 
             github.issues.addLabels({
