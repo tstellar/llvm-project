@@ -55,10 +55,10 @@ on:
   # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#manual-events
   workflow_dispatch: {}
 
-  schedule:
-    # Everyday at 00:00am
-    # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
-    - cron:  '0 0 * * *'
+  # schedule:
+  #   # Everyday at 00:00am
+  #   # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
+  #   - cron:  '0 0 * * *'
 
 jobs:
 
@@ -151,15 +151,31 @@ jobs:
           token: ${{ github.token }}
           fetch-depth: 1
           submodules: true
-      
+
       - name: setup upstream remote
         run: git remote add upstream https://github.com/llvm/llvm-project.git
+
+      - name: install PyGithub
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub
+
+      - name: determine last stable commit
+        id: stable-commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sha=`python .github/workflows/get-good-commit.py --token ${{ secrets.GITHUB_TOKEN }} --start-ref main --ensure-checks clang-x86_64-debian-fast llvm-clang-x86_64-expensive-checks-debian`
+          echo -n "::set-output name=sha::$sha"
           
       - name: minimal fetch from upstream remote
-        run: git fetch --depth=1 --no-tags upstream main
+        run: git fetch --depth=1 --no-tags upstream ${{ steps.stable-commit.outputs.sha }} 
 
       - name: create source-snapshot tarballs
-        run: llvm/utils/release/export.sh --git-ref upstream/main --template '${PROJECT}-${YYYYMMDD}.src.tar.xz'
+        run: llvm/utils/release/export.sh --git-ref ${{ steps.stable-commit.outputs.sha }}  --template '${PROJECT}-${YYYYMMDD}.src.tar.xz'
       
       - name: upload today's source snapshots and version file
         uses: softprops/action-gh-release@v1
