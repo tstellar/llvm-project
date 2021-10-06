@@ -1969,6 +1969,18 @@ static llvm::StringRef getGCCToolchainDir(const ArgList &Args,
   return GCC_INSTALL_PREFIX;
 }
 
+/// This function takes a 'clang' triple and converts it to an equivalent gcc
+/// triple.
+static const char *ConvertToGccTriple(StringRef CandidateTriple) {
+  return llvm::StringSwitch<const char *>(CandidateTriple)
+      .Case("aarch64-redhat-linux-gnu", "aarch64-redhat-linux")
+      .Case("i686-redhat-linux-gnu", "i686-redhat-linux")
+      .Case("ppc64le-redhat-linux-gnu", "ppc64le-redhat-linux")
+      .Case("s390x-redhat-linux-gnu", "s390x-redhat-linux")
+      .Case("x86_64-redhat-linux-gnu", "x86_64-redhat-linux")
+      .Default(NULL);
+}
+
 /// Initialize a GCCInstallationDetector from the driver.
 ///
 /// This performs all of the autodetection and sets up the various paths.
@@ -1989,6 +2001,16 @@ void Generic_GCC::GCCInstallationDetector::init(
   // The compatible GCC triples for this particular architecture.
   SmallVector<StringRef, 16> CandidateTripleAliases;
   SmallVector<StringRef, 16> CandidateBiarchTripleAliases;
+
+  // In some cases gcc uses a slightly different triple than clang for the
+  // same target.  Convert the clang triple to the gcc equivalent and use that
+  // to search for the gcc install.
+  const char *ConvertedTriple = ConvertToGccTriple(TargetTriple.str());
+  if (ConvertedTriple) {
+    CandidateTripleAliases.push_back(ConvertedTriple);
+    CandidateBiarchTripleAliases.push_back(ConvertedTriple);
+  }
+
   CollectLibDirsAndTriples(TargetTriple, BiarchVariantTriple, CandidateLibDirs,
                            CandidateTripleAliases, CandidateBiarchLibDirs,
                            CandidateBiarchTripleAliases);
