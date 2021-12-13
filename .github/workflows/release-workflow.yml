@@ -58,27 +58,9 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ['CherryPickConflict']
+              labels: ['release:cherry-pick-failed']
             })
 
-      - name: Cherry-Pick Success
-        uses: actions/github-script@v3
-        with:
-          script: |
-            github.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['CherryPickClean']
-            })
-
-            github.issues.removeLabel({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['CherryPickConflict']
-            })
-            
       - name: Create branch
         id: branch
         run: |
