@@ -16,7 +16,7 @@ jobs:
         run:  |
           curl -O -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_SHA/llvm/utils/git/github-automation.py
           chmod a+x github-automation.py
-          pip install PyGithub
+          pip install PyGithub GitPython
 
       - name: Create Pull Request
         run: |
