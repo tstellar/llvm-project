@@ -66,7 +66,7 @@ class ReleaseWorkflow:
         return 'https://{}@github.com/{}'.format(self.branch_repo_token, self.branch_repo_name)
 
     def get_branch_name(self):
-        return 'issue'.format(self.get_issue_number())
+        return 'issue{}'.format(self.get_issue_number())
 
     def get_release_branch_for_issue(self):
         issue = self.get_issue()
@@ -99,7 +99,7 @@ class ReleaseWorkflow:
         print('cherry-picking', commits)
         local_repo = Repo(self.args.local_source_dir)
         for c in commits:
-            if not local_repo.git.cherry_pick(c):
+            if not local_repo.git.cherry_pick('-x', c):
                 self.issue_notify_cherry_pick_failure(c)
                 return False
 
