@@ -7,91 +7,50 @@ on:
       - edited
 
 jobs:
-  release_workflow:
-    name: Release Workflow
+  backport-commits:
+    name: Backport Commits
     runs-on: ubuntu-latest
     if: startswith(github.event.comment.body, '/cherry-pick')
 
     steps:
-      - name: Set Job Variables
-        id: vars
-        run: |
-          commits=`echo ${{ github.event.comment.body }} | sed 's~/cherry-pick ~~g'`
-          echo ::set-output name=commits::$commits
-          echo ::set-output name=release-branch::release/13.x
-
       - name: Fetch LLVM sources
         uses: actions/checkout@v2
         with:
           repository: llvm/llvm-project
-          ref: ${{ steps.vars.outputs.release-branch }}
           fetch-depth: 0
 
+      - name: Setup Environment
+        run: |
+          pip install PyGithub
+          branch=`./llvm/utils/git/github-automation.py release-workflow print-release-branch`
+          git checkout $branch
+          ./llvm/utils/git/github-automation.py setup-llvmbot-git
+
       - name: Backport Commits
-        id: backport
         run: |
-          # Setup git
-          git config --global user.name "llvmbot"
-          git config --global user.email "llvmbot@llvm.org"
-          
-          for c in ${{ steps.vars.outputs.commits }}; do
-            if ! git cherry-pick -x $c; then
-              echo ::set-output name=failed-commit::$c
-              exit 1
-            fi
-          done
+          ./llvm/utils/git/github-automation.py
+          --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
+          release-workflow \
+          --issue-number ${{ github.event.issue.number }} \
+          auto
 
-      - name: Cherry-Pick Failed 
-        if: failure()
-        uses: actions/github-script@v3
-        with:
-          script: |
-            actions_url='https://github.com/' + process.env.GITHUB_REPOSITORY + '/actions/runs/' + process.env.GITHUB_RUN_ID 
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Failed to cherry-pick: ${{ steps.backport.outputs.failed-commit }}\n\n' + actions_url
-            })
+  create-pull-request:
+    name: Create Pull Request
+    runs-on: ubuntu-latest
+    if: startswith(github.event.comment.body, '/branch')
 
-            github.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['release:cherry-pick-failed']
-            })
-
-      - name: Create branch
-        id: branch
-        run: |
-          branch_name=issue${{ github.event.issue.number }}
-          git push https://${{ github.token }}@github.com/${{ github.repository }} HEAD:$branch_name
-          echo ::set-output name=name::$branch_name
-
-      - name: Add branch name to issue
-        uses: actions/github-script@v3
-        with:
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '/branch ${{ github.repository }}/${{ steps.branch.outputs.name }}'
-            })
+    steps:
+      - name: Setup Environment
+        run:  |
+          curl -O -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_SHA/llvm/utils/git/github-automation.py
+          chmod a+x github-automation.py
+          pip install PyGithub
 
       - name: Create Pull Request
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ secrets.WORKFLOW_DISPATCH_SECRET }}
-          script: |
-            github.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'release-workflow-create-pr.yml',
-              ref: 'release-automation',
-              inputs: {
-                branch: '${{ github.repository }}/${{ steps.branch.outputs.name }}',
-                issue_number: context.issue.number.toString()
-              }
-            })
+        run: |
+          ./github-automation.py \
+          --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
+          release-automation \
+          --issue-number ${{ github.event.issue.number }} \
+          auto
 
