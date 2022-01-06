@@ -22,6 +22,11 @@ jobs:
       - name: Setup Environment
         run: |
           pip install PyGithub
+          #FIXME: TEMP
+          curl -O -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_SHA/llvm/utils/git/github-automation.py
+          chmod a+x github-automation.py
+          mv github-automation.py llvm/utils/git/
+          #FIXME
           branch=`./llvm/utils/git/github-automation.py release-workflow print-release-branch`
           git checkout $branch
           ./llvm/utils/git/github-automation.py setup-llvmbot-git
