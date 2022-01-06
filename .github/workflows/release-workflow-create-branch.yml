@@ -33,24 +33,3 @@ jobs:
           release-workflow \
           --issue-number ${{ github.event.issue.number }} \
           auto
-
-  create-pull-request:
-    name: Create Pull Request
-    runs-on: ubuntu-latest
-    if: startswith(github.event.comment.body, '/branch')
-
-    steps:
-      - name: Setup Environment
-        run:  |
-          curl -O -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_SHA/llvm/utils/git/github-automation.py
-          chmod a+x github-automation.py
-          pip install PyGithub
-
-      - name: Create Pull Request
-        run: |
-          ./github-automation.py \
-          --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
-          release-automation \
-          --issue-number ${{ github.event.issue.number }} \
-          auto
-
