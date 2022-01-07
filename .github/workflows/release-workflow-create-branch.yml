@@ -37,5 +37,6 @@ jobs:
           ./llvm/utils/git/github-automation.py
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
           release-workflow \
+          --branch-repo tstellar/llvm-project \
           --issue-number ${{ github.event.issue.number }} \
           auto
