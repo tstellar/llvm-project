@@ -108,7 +108,7 @@ class ReleaseWorkflow:
 
     def create_branch(self, commits):
         print('cherry-picking', commits)
-        local_repo = Repo(self.args.local_source_dir)
+        local_repo = Repo(self.args.llvm_project_dir)
         for c in commits:
             if not local_repo.git.cherry_pick('-x', c):
                 self.issue_notify_cherry_pick_failure(c)
