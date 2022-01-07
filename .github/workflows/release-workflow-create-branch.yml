@@ -27,7 +27,7 @@ jobs:
           chmod a+x github-automation.py
           mv github-automation.py llvm/utils/git/
           #FIXME
-          branch=`./llvm/utils/git/github-automation.py release-workflow --issue-number $${ github.event.issue.number }} print-release-branch`
+          branch=`./llvm/utils/git/github-automation.py release-workflow --issue-number ${{ github.event.issue.number }} print-release-branch`
           git checkout $branch
           ./llvm/utils/git/github-automation.py setup-llvmbot-git
 
