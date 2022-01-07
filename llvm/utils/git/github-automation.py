@@ -156,14 +156,14 @@ class ReleaseWorkflow:
 
             if command == 'branch':
                 m = re.match('([^/]+)/([^/]+)/(.+)', args)
-                if not m:
-                    return False
-                owner = m.group(1)
-                branch = m.group(3)
-                print(owner, branch)
-                self.create_pull_request(owner, branch)
-                return True
-        
+                if m:
+                    owner = m.group(1)
+                    branch = m.group(3)
+                    self.create_pull_request(owner, branch)
+                    return True
+
+        print("Do not understand imput")
+        print(sys.stdin)
         return False
 
 parser = argparse.ArgumentParser()
@@ -195,6 +195,7 @@ elif args.command == 'release-workflow':
     if args.sub_command == 'print-release-branch':
         release_workflow.print_release_branch()
     else:
-        release_workflow.execute_command()
+        if not release_workflow.execute_command()
+            sys.exit(1)
 elif args.command == 'setup-llvmbot-git':
     setup_llvmbot_git()
