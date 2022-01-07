@@ -22,7 +22,7 @@ jobs:
         run: |
           ./github-automation.py \
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
-          release-automation \
+          release-workflow \
           --issue-number ${{ github.event.issue.number }} \
           auto
 
