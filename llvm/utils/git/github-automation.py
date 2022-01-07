@@ -195,7 +195,7 @@ elif args.command == 'release-workflow':
     if args.sub_command == 'print-release-branch':
         release_workflow.print_release_branch()
     else:
-        if not release_workflow.execute_command()
+        if not release_workflow.execute_command():
             sys.exit(1)
 elif args.command == 'setup-llvmbot-git':
     setup_llvmbot_git()
