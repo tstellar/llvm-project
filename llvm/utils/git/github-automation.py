@@ -162,8 +162,8 @@ class ReleaseWorkflow:
                     self.create_pull_request(owner, branch)
                     return True
 
-        print("Do not understand imput")
-        print(sys.stdin)
+        print("Do not understand input:")
+        print(sys.stdin.readlines())
         return False
 
 parser = argparse.ArgumentParser()

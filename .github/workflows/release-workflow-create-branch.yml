@@ -33,6 +33,7 @@ jobs:
 
       - name: Backport Commits
         run: |
+          printf "${{ github.event.comment.body }}" |
           ./llvm/utils/git/github-automation.py
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
           release-workflow \
