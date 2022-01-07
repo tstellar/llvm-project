@@ -50,7 +50,6 @@ class ReleaseWorkflow:
         if args.branch_repo_token:
             self.branch_repo_token = args.branch_repo_token
         else:
-            print("assigning branch repo token to {}".format(self.token))
             self.branch_repo_token = self.token
 
         self.repo_name = args.repo
@@ -127,7 +126,6 @@ class ReleaseWorkflow:
         repo = github.Github(self.token).get_repo(self.branch_repo_name)
         issue_ref = '{}#{}'.format(self.repo_name, self.get_issue_number())
         pull = None
-        print ('{}:{}'.format(owner, branch))
         try:
             pull = repo.create_pull(title='PR for {}'.format(issue_ref),
                                     body='resolves {}'.format(issue_ref),
@@ -144,7 +142,6 @@ class ReleaseWorkflow:
         for line in sys.stdin:
             line.rstrip()
             m = re.search("/([a-z-]+)\s(.+)", line)
-            print(m)
             if not m:
                 continue
             command = m.group(1)
@@ -185,7 +182,6 @@ release_workflow_parser.add_argument('sub_command', type=str, choices=['print-re
 llvmbot_git_config_parser = subparsers.add_parser('setup-llvmbot-git')
 
 args = parser.parse_args()
-print(args)
 
 if args.command == 'issue-subscriber':
     issue_subscriber = IssueSubscriber(args.token, args.repo, args.issue_number, args.label_name)
