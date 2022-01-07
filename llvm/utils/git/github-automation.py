@@ -122,15 +122,16 @@ class ReleaseWorkflow:
 
         self.issue_notify_branch()
 
-    def create_pull_request(self, branch):
+    def create_pull_request(self, owner, branch):
         repo = github.Github(self.token).get_repo(self.branch_repo_name)
         issue_ref = '{}#{}'.format(self.repo_name, self.get_issue_number())
         pull = None
+        print ('{}:{}'.format(owner, branch))
         try:
             pull = repo.create_pull(title='PR for {}'.format(issue_ref),
                                     body='resolves {}'.format(issue_ref),
                                     base=self.get_release_branch_for_issue(),
-                                    head='{}:{}'.format(repo.owner.login, self.get_branch_name()),
+                                    head='{}:{}'.format(owner, branch),
                                     maintainer_can_modify=False)
         except Exception as e:
             self.issue_notify_pull_request_failure(branch)
@@ -153,7 +154,12 @@ class ReleaseWorkflow:
                 return True
 
             if command == 'branch':
-                self.create_pull_request(args)
+                m = re.match('([^/]+)/([^/]+)/(.+)', args)
+                if not m:
+                    return False
+                owner = m.group(1)
+                branch = m.group(3)
+                self.create_pull_request(owner, branch)
                 return True
         
         return False
