@@ -122,6 +122,7 @@ class ReleaseWorkflow:
 
         self.issue_notify_branch()
 
+
     def create_pull_request(self, owner, branch):
         repo = github.Github(self.token).get_repo(self.branch_repo_name)
         issue_ref = '{}#{}'.format(self.repo_name, self.get_issue_number())
@@ -159,6 +160,7 @@ class ReleaseWorkflow:
                     return False
                 owner = m.group(1)
                 branch = m.group(3)
+                print(owner, branch)
                 self.create_pull_request(owner, branch)
                 return True
         
