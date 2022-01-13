@@ -5,3 +5,5 @@ body:
     attributes:
       value: |
         Describe the issue
+  - type: textarea
+    id: description
