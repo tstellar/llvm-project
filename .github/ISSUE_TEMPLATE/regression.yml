@@ -1,6 +1,5 @@
 name: Regression
 description: A bug report about a regression (i.e. something that used to work, but no longer does)
-title: "[Regression]: "
 labels: ["regression"]
 
 body:
