@@ -1,2 +1,7 @@
 name: Bug Report
 description: A Regular Bug Report
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the issue
