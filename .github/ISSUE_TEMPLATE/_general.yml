@@ -7,3 +7,5 @@ body:
         Describe the issue
   - type: textarea
     id: description
+    attributes:
+      label: ""
