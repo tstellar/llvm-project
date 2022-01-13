@@ -1,4 +1,5 @@
 name: Bug Report
+description: Bug Report
 body:
   - type: textarea
     id: description
