@@ -1,1 +1,6 @@
 name: Bug Report
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the issue
