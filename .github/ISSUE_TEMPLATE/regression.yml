@@ -9,7 +9,7 @@ body:
     attributes:
       label: Working Version
       description: This can be a version number (e.g. 13.0.0) or a git hash (d7b669b3a30)
-      placeholder: 13.0.0
+      placeholder:
     validations:
       required: true
   - type: input
@@ -17,33 +17,28 @@ body:
     attributes:
       label: Not Working Version
       description: This can be a version number (e.g. 13.0.0) or a git hash (d7b669b3a30)
-      placeholder: 13.0.0
+      placeholder:
     validations:
       required: true
   - type: input
     id: cmake
     attributes:
       label: CMake Args
-      description: Arguments passed to CMake when building
-      placeholder: -DCMAKE_BUILD_TYPE=Release
+      description: If known, which cmake arguments were used for your build of LLVM.
+      placeholder:
     validations:
       required: false
   - type: input
     id: os
     attributes:
       label: Operating System
-      placeholder: Linux
+      placeholder:
     validations:
       required: false
-  - type: markdown
-    attributes:
-      value: |
-        Describe the issue...
   - type: textarea
     id: description
     attributes:
       label: Describe the issue
-      description: Details about the failure
     validations:
       required: true
 
