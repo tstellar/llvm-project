@@ -20,18 +20,23 @@ body:
     validations:
       required: true
   - type: input
-    id: cmake
-    attributes:
-      label: CMake Args
-      description: If known, which cmake arguments were used for your build of LLVM.
-      placeholder:
-    validations:
-      required: false
-  - type: input
     id: os
     attributes:
       label: Operating System
       placeholder:
+    validations:
+      required: false
+  - type: input
+    id: cmake
+    attributes:
+      label: CMake Args
+      description: If known, which cmake arguments were used for your build of LLVM.
+    validations:
+      required: false
+  - type: input
+    id: command
+    attributes:
+      label: Command to reproduce the failure
     validations:
       required: false
   - type: textarea
