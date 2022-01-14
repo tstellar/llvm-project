@@ -1,0 +1,19 @@
+name: Bug Report
+description: A Regular Bug Report
+body:
+  - type: dropdown
+    id: subproject
+    attributes:
+      label: Sub-Project
+      options:
+        - Clang
+        - LLVM
+        - LLD
+        - MLIR
+        - Other
+    validations:
+      requried: true
+  - type: textarea
+    id: description
+    attributes:
+      label: "Describe the issue"
