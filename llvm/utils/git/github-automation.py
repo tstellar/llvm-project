@@ -37,6 +37,10 @@ class IssueSubscriber:
         return False
 
 def setup_llvmbot_git(git_dir = '.'):
+    """
+    Configure the git repo in `git_dir` with the llvmbot account so
+    commits are attributed to llvmbot.
+    """
     repo = Repo(git_dir)
     with repo.config_writer() as config:
         config.set_value('user', 'name', 'llvmbot')
@@ -44,19 +48,52 @@ def setup_llvmbot_git(git_dir = '.'):
 
 class ReleaseWorkflow:
 
-    def __init__(self, args):
-        self.args = args
-        self.token = args.token
-        if args.branch_repo_token:
-            self.branch_repo_token = args.branch_repo_token
+    """
+    This class implements the sub-commands for the release-workflow command.
+    The current sub-commands are:
+        * create-branch
+        * create-pull-request
+
+    The execute_command method will automatically choose the correct sub-command
+    based on the text in stdin.
+    """
+
+    def __init__(self, token:str, repo:str, issue_number:int,
+                       branch_repo_name:str, branch_repo_token:str,
+                       llvm_project_dir:str):
+        self._token = token
+        self._repo_name = repo
+        self._issue_number = issue_number
+        self._branch_repo_name = args.branch_repo
+        if branch_repo_token:
+            self._branch_repo_token = branch_repo_token
         else:
-            self.branch_repo_token = self.token
+            self._branch_repo_token = self.token
+        self._llvm_project_dir = llvm_project_dir
+    
+    @property
+    def token(self) -> str:
+        return self._token
 
-        self.repo_name = args.repo
-        self.branch_repo_name = args.branch_repo
+    @property
+    def repo_name(self) -> str:
+        return self._repo_name
 
-    def get_issue_number(self):
-        return self.args.issue_number
+    @property
+    def issue_number(self) -> int:
+        return self._issue_number
+    
+    @property
+    def branch_repo_name(self) -> str:
+        return self._branch_repo_name
+
+    @property
+    def branch_repo_token(self) -> str:
+        return self._branch_repo_token
+
+    @property
+    def llvm_project_dir(self) -> str:
+        return self._llvm_project_dir
 
     def get_issue(self):
         repo = github.Github(self.token).get_repo(self.repo_name)
@@ -92,7 +129,7 @@ class ReleaseWorkflow:
             return 'https://github.com/{}/actions/runs/{}'.format(os.getenv('GITHUB_REPOSITORY'), os.getenv('GITHUB_RUN_ID'))
         return ""
 
-    def issue_notify_cherry_pick_failure(self, commit):
+    def issue_notify_cherry_pick_failure(self, commit:str):
         message = "Failed to cherry-pick: {} ".format(commit)
         message += self.get_action_url()
         issue = self.get_issue()
@@ -106,15 +143,27 @@ class ReleaseWorkflow:
         issue.create_comment(message)
 
 
-    def create_branch(self, commits):
+    def create_branch(self, commits:list):
+        """
+        This function attempts to backport `commits` into the branch associated
+        with `self.issue_number`.
+
+        If this is successful, then the branch is pushed to `self.branch_repo_name`, if not,
+        a comment is added to the issue saying that the cherry-pick failed.
+        
+        :param list commits: List of commits to cherry-pick.
+
+        """
         print('cherry-picking', commits)
-        local_repo = Repo(self.args.llvm_project_dir)
+        branch_name = self.get_branch_name()
+        local_repo = Repo(self.llvm_project_dir)
+        local_repo.checkout(branch_name)
+
         for c in commits:
             if not local_repo.git.cherry_pick('-x', c):
                 self.issue_notify_cherry_pick_failure(c)
                 return False
 
-        branch_name = self.get_branch_name()
         push_url = self.get_push_url()
         print('Pushing to {} {}'.format(push_url, branch_name))
         local_repo.git.push(push_url, 'HEAD:{}'.format(branch_name))
@@ -122,7 +171,11 @@ class ReleaseWorkflow:
         self.issue_notify_branch()
 
 
-    def create_pull_request(self, owner, branch):
+    def create_pull_request(self, owner:str, branch:str):
+        """
+        Create a pull request in `self.branch_repo_name` requesting to merge `branch'
+        into the branch associated with `self.issue_number`.
+        """
         repo = github.Github(self.token).get_repo(self.branch_repo_name)
         issue_ref = '{}#{}'.format(self.repo_name, self.get_issue_number())
         pull = None
@@ -138,7 +191,13 @@ class ReleaseWorkflow:
         self.issue_notify_pull_request(pull)
         
 
-    def execute_command(self):
+    def execute_command(self) -> bool:
+        """
+        This function reads lines from STDIN and executes the first command
+        that it finds.  The 2 supported commands are:
+        /cherry-pick commit0 <commit1> <commit2> <...>
+        /branch <owner>/<repo>/<branch>
+        """
         for line in sys.stdin:
             line.rstrip()
             m = re.search("/([a-z-]+)\s(.+)", line)
@@ -164,8 +223,9 @@ class ReleaseWorkflow:
         return False
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--token', type=str, required=True)
-parser.add_argument('--repo', type=str, default=os.getenv('GITHUB_REPOSITORY', 'llvm/llvm-project'))
+parser.add_argument('--token', type=str, required=True, help='GitHub authentiation token')
+parser.add_argument('--repo', type=str, default=os.getenv('GITHUB_REPOSITORY', 'llvm/llvm-project'),
+                    help='The GitHub repository that we are working with in the form of <owner>/<repo> (e.g. llvm/llvm-project)')
 subparsers = parser.add_subparsers(dest='command')
 
 issue_subscriber_parser = subparsers.add_parser('issue-subscriber')
@@ -173,13 +233,16 @@ issue_subscriber_parser.add_argument('--label-name', type=str, required=True)
 issue_subscriber_parser.add_argument('--issue-number', type=int, required=True)
 
 release_workflow_parser = subparsers.add_parser('release-workflow')
-release_workflow_parser.add_argument('--llvm-project-dir', type=str, default='.')
-release_workflow_parser.add_argument('--issue-number', type=int, required=True)
-release_workflow_parser.add_argument('--branch-repo-token', type=str)
-release_workflow_parser.add_argument('--branch-repo', type=str, default='llvmbot/llvm-project')
-release_workflow_parser.add_argument('sub_command', type=str, choices=['print-release-branch', 'auto'])
+release_workflow_parser.add_argument('--llvm-project-dir', type=str, default='.', help='directory containing the llvm-project checout')
+release_workflow_parser.add_argument('--issue-number', type=int, required=True, help='The issue number to update')
+release_workflow_parser.add_argument('--branch-repo-token', type=str,
+                                     help='GitHub authentication token to use for the repository where new branches will be pushed. Defaults to TOKEN.')
+release_workflow_parser.add_argument('--branch-repo', type=str, default='llvmbot/llvm-project',
+                                     help='The name of the repo where new branches will be pushed (e.g. llvm/llvm-project)')
+release_workflow_parser.add_argument('sub_command', type=str, choices=['print-release-branch', 'auto'],
+                                     help='Print to stdout the name of the release branch ISSUE_NUMBER should be backported to')
 
-llvmbot_git_config_parser = subparsers.add_parser('setup-llvmbot-git')
+llvmbot_git_config_parser = subparsers.add_parser('setup-llvmbot-git', help='Set the default user and email for the git repo in LLVM_PROJECT_DIR to llvmbot')
 
 args = parser.parse_args()
 
@@ -187,7 +250,9 @@ if args.command == 'issue-subscriber':
     issue_subscriber = IssueSubscriber(args.token, args.repo, args.issue_number, args.label_name)
     issue_subscriber.run()
 elif args.command == 'release-workflow':
-    release_workflow = ReleaseWorkflow(args)
+    release_workflow = ReleaseWorkflow(args.token, args.repo. args.issue_number,
+                                       args.branch_repo_name, args.branch_repo_token,
+                                       args.llvm_project_dir)
     if args.sub_command == 'print-release-branch':
         release_workflow.print_release_branch()
     else:

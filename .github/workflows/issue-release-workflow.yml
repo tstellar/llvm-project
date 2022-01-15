@@ -1,0 +1,63 @@
+name: Issue Release Workflow
+
+on:
+  issue_comment:
+    types:
+      - created
+      - edited
+
+jobs:
+  backport-commits:
+    name: Backport Commits
+    runs-on: ubuntu-latest
+    if: >-
+        (github.repository == 'llvm/llvm-project') &&
+        startswith(github.event.comment.body, '/cherry-pick')
+
+    steps:
+      - name: Fetch LLVM sources
+        uses: actions/checkout@v2
+        with:
+          repository: llvm/llvm-project
+          fetch-depth: 0
+
+      - name: Setup Environment
+        run: |
+          pip install PyGithub GitPython
+          ./llvm/utils/git/github-automation.py --token ${{ github.token }} setup-llvmbot-git
+
+      - name: Backport Commits
+        run: |
+          printf "${{ github.event.comment.body }}" |
+          ./llvm/utils/git/github-automation.py \
+          --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
+          release-workflow \
+          --issue-number ${{ github.event.issue.number }} \
+          auto
+
+jobs:
+  create-pull-request:
+    name: Create Pull Request
+    runs-on: ubuntu-latest
+    if: >-
+        (github.repository == 'llvm/llvm-project') &&
+        startswith(github.event.comment.body, '/branch')
+
+    steps:
+      - name: Fetch LLVM sources
+        uses: actions/checkout@v2
+        with:
+          repository: llvm/llvm-project
+
+      - name: Setup Environment
+        run:  |
+          pip install PyGithub GitPython
+
+      - name: Create Pull Request
+        run: |
+          printf "${{ github.event.comment.body }}" |
+          ./github-automation.py \
+          --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
+          release-workflow \
+          --issue-number ${{ github.event.issue.number }} \
+          auto
