@@ -27,7 +27,7 @@ jobs:
           chmod a+x github-automation.py
           #FIXME
 
-          branch=`./llvm/utils/git/github-automation.py --token ${{ github.token }} release-workflow --issue-number ${{ github.event.issue.number }} print-release-branch`
+          branch=`./github-automation.py --token ${{ github.token }} release-workflow --issue-number ${{ github.event.issue.number }} print-release-branch`
           git checkout $branch
           ./github-automation.py --token ${{ github.token }} setup-llvmbot-git
 
