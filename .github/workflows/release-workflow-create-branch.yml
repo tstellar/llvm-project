@@ -22,14 +22,19 @@ jobs:
       - name: Setup Environment
         run: |
           pip install PyGithub GitPython
+          #FIXME: TEMP
+          curl -O -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_SHA/llvm/utils/git/github-automation.py
+          chmod a+x github-automation.py
+          #FIXME
+
           branch=`./llvm/utils/git/github-automation.py --token ${{ github.token }} release-workflow --issue-number ${{ github.event.issue.number }} print-release-branch`
           git checkout $branch
-          ./llvm/utils/git/github-automation.py --token ${{ github.token }} setup-llvmbot-git
+          ./github-automation.py --token ${{ github.token }} setup-llvmbot-git
 
       - name: Backport Commits
         run: |
           printf "${{ github.event.comment.body }}" |
-          ./llvm/utils/git/github-automation.py \
+          ./github-automation.py \
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
           release-workflow \
           --branch-repo tstellar/llvm-project \
