@@ -768,8 +768,7 @@ class VectorType;
                           CCValAssign &VA, CCValAssign &NextVA,
                           SDValue &StackPtr,
                           SmallVectorImpl<SDValue> &MemOpChains,
-                          bool IsTailCall,
-                          int SPDiff) const;
+                          ISD::ArgFlagsTy Flags) const;
     SDValue GetF64FormalArgument(CCValAssign &VA, CCValAssign &NextVA,
                                  SDValue &Root, SelectionDAG &DAG,
                                  const SDLoc &dl) const;
@@ -778,10 +777,10 @@ class VectorType;
                                             bool isVarArg) const;
     CCAssignFn *CCAssignFnForNode(CallingConv::ID CC, bool Return,
                                   bool isVarArg) const;
-    std::pair<SDValue, MachinePointerInfo>
-    computeAddrForCallArg(const SDLoc &dl, SelectionDAG &DAG,
-                          const CCValAssign &VA, SDValue StackPtr,
-                          bool IsTailCall, int SPDiff) const;
+    SDValue LowerMemOpCallTo(SDValue Chain, SDValue StackPtr, SDValue Arg,
+                             const SDLoc &dl, SelectionDAG &DAG,
+                             const CCValAssign &VA,
+                             ISD::ArgFlagsTy Flags) const;
     SDValue LowerEH_SJLJ_SETJMP(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerEH_SJLJ_LONGJMP(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerEH_SJLJ_SETUP_DISPATCH(SDValue Op, SelectionDAG &DAG) const;
