@@ -11,8 +11,7 @@ jobs:
     name: Backport Commits
     runs-on: ubuntu-latest
     if: >-
-        (github.repository == 'llvm/llvm-project') &&
-        startswith(github.event.comment.body, '/cherry-pick')
+        startswith(github.event.comment.body, '/cherry-pick'
 
     steps:
       - name: Fetch LLVM sources
@@ -30,6 +29,7 @@ jobs:
         run: |
           printf "${{ github.event.comment.body }}" |
           ./llvm/utils/git/github-automation.py \
+          --repo $GITHUB_REPOSITORY \
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
           release-workflow \
           --issue-number ${{ github.event.issue.number }} \
@@ -40,8 +40,7 @@ jobs:
     name: Create Pull Request
     runs-on: ubuntu-latest
     if: >-
-        (github.repository == 'llvm/llvm-project') &&
-        startswith(github.event.comment.body, '/branch')
+        startswith(github.event.comment.body, '/branch'
 
     steps:
       - name: Fetch LLVM sources
@@ -57,6 +56,7 @@ jobs:
         run: |
           printf "${{ github.event.comment.body }}" |
           ./github-automation.py \
+          --repo $GITHUB_REPOSITORY \
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
           release-workflow \
           --issue-number ${{ github.event.issue.number }} \
