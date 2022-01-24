@@ -35,7 +35,6 @@ jobs:
           --issue-number ${{ github.event.issue.number }} \
           auto
 
-jobs:
   create-pull-request:
     name: Create Pull Request
     runs-on: ubuntu-latest
