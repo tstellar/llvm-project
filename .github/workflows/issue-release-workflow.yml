@@ -23,12 +23,16 @@ jobs:
       - name: Setup Environment
         run: |
           pip install PyGithub GitPython
-          ./llvm/utils/git/github-automation.py --token ${{ github.token }} setup-llvmbot-git
+          #FIXME: TEMP
+          curl -O -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_SHA/llvm/utils/git/github-automation.py
+          chmod a+x github-automation.py
+          #FIXME
+          .github-automation.py --token ${{ github.token }} setup-llvmbot-git
 
       - name: Backport Commits
         run: |
           printf "${{ github.event.comment.body }}" |
-          ./llvm/utils/git/github-automation.py \
+          ./github-automation.py \
           --repo $GITHUB_REPOSITORY \
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
           release-workflow \
@@ -54,7 +58,7 @@ jobs:
       - name: Create Pull Request
         run: |
           printf "${{ github.event.comment.body }}" |
-          ./github-automation.py \
+          ./llvm/utils/git/github-automation.py \
           --repo $GITHUB_REPOSITORY \
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
           release-workflow \
