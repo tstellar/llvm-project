@@ -64,7 +64,7 @@ class ReleaseWorkflow:
         self._token = token
         self._repo_name = repo
         self._issue_number = issue_number
-        self._branch_repo_name = args.branch_repo
+        self._branch_repo_name = branch_repo_name
         if branch_repo_token:
             self._branch_repo_token = branch_repo_token
         else:
@@ -250,7 +250,7 @@ if args.command == 'issue-subscriber':
     issue_subscriber = IssueSubscriber(args.token, args.repo, args.issue_number, args.label_name)
     issue_subscriber.run()
 elif args.command == 'release-workflow':
-    release_workflow = ReleaseWorkflow(args.token, args.repo. args.issue_number,
+    release_workflow = ReleaseWorkflow(args.token, args.repo, args.issue_number,
                                        args.branch_repo_name, args.branch_repo_token,
                                        args.llvm_project_dir)
     if args.sub_command == 'print-release-branch':
