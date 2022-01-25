@@ -37,6 +37,7 @@ jobs:
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
           release-workflow \
           --issue-number ${{ github.event.issue.number }} \
+          --branch-repo $GITHUB_REPOSITORY \
           auto
 
   create-pull-request:
@@ -63,4 +64,5 @@ jobs:
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
           release-workflow \
           --issue-number ${{ github.event.issue.number }} \
+          --branch-repo $GITHUB_REPOSITORY \
           auto
