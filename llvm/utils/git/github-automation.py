@@ -157,7 +157,7 @@ class ReleaseWorkflow:
         print('cherry-picking', commits)
         branch_name = self.get_branch_name()
         local_repo = Repo(self.llvm_project_dir)
-        local_repo.git.checkout(branch_name)
+        local_repo.git.checkout(self.get_release_branch_for_issue())
 
         for c in commits:
             if not local_repo.git.cherry_pick('-x', c):
