@@ -49,8 +49,6 @@ jobs:
     steps:
       - name: Fetch LLVM sources
         uses: actions/checkout@v2
-        with:
-          repository: llvm/llvm-project
 
       - name: Setup Environment
         run:  |
