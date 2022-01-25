@@ -251,7 +251,7 @@ if args.command == 'issue-subscriber':
     issue_subscriber.run()
 elif args.command == 'release-workflow':
     release_workflow = ReleaseWorkflow(args.token, args.repo, args.issue_number,
-                                       args.branch_repo_name, args.branch_repo_token,
+                                       args.branch_repo, args.branch_repo_token,
                                        args.llvm_project_dir)
     if args.sub_command == 'print-release-branch':
         release_workflow.print_release_branch()
