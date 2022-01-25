@@ -97,14 +97,14 @@ class ReleaseWorkflow:
 
     def get_issue(self):
         repo = github.Github(self.token).get_repo(self.repo_name)
-        issue = repo.get_issue(self.get_issue_number())
+        issue = repo.get_issue(self.issue_number)
         return issue
 
     def get_push_url(self):
         return 'https://{}@github.com/{}'.format(self.branch_repo_token, self.branch_repo_name)
 
     def get_branch_name(self):
-        return 'issue{}'.format(self.get_issue_number())
+        return 'issue{}'.format(self.issue_number)
 
     def get_release_branch_for_issue(self):
         issue = self.get_issue()
@@ -177,7 +177,7 @@ class ReleaseWorkflow:
         into the branch associated with `self.issue_number`.
         """
         repo = github.Github(self.token).get_repo(self.branch_repo_name)
-        issue_ref = '{}#{}'.format(self.repo_name, self.get_issue_number())
+        issue_ref = '{}#{}'.format(self.repo_name, self.issue_number)
         pull = None
         try:
             pull = repo.create_pull(title='PR for {}'.format(issue_ref),
