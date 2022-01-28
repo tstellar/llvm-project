@@ -143,7 +143,7 @@ class ReleaseWorkflow:
         issue.create_comment(message)
 
 
-    def create_branch(self, commits:list):
+    def create_branch(self, commits:list[str]) -> bool:
         """
         This function attempts to backport `commits` into the branch associated
         with `self.issue_number`.
@@ -169,12 +169,18 @@ class ReleaseWorkflow:
         local_repo.git.push(push_url, 'HEAD:{}'.format(branch_name))
 
         self.issue_notify_branch()
+        return True
 
 
     def create_pull_request(self, owner:str, branch:str):
         """
-        Create a pull request in `self.branch_repo_name` requesting to merge `branch'
-        into the branch associated with `self.issue_number`.
+        reate a pull request in `self.branch_repo_name`.  The base branch of the
+        pull request will be choosen based on the the milestone attached to
+        the issue represented by `self.issue_number`  For example if the milestone
+        is Release 13.0.1, then the base branch will be release/13.x. `branch`
+        will be used as the compare branch.
+        https://docs.github.com/en/get-started/quickstart/github-glossary#base-branch
+        https://docs.github.com/en/get-started/quickstart/github-glossary#compare-branch
         """
         repo = github.Github(self.token).get_repo(self.branch_repo_name)
         issue_ref = '{}#{}'.format(self.repo_name, self.issue_number)
@@ -189,6 +195,7 @@ class ReleaseWorkflow:
             self.issue_notify_pull_request_failure(branch)
             raise e
         self.issue_notify_pull_request(pull)
+        return True
         
 
     def execute_command(self) -> bool:
@@ -207,16 +214,14 @@ class ReleaseWorkflow:
             args = m.group(2)
 
             if command == 'cherry-pick':
-                self.create_branch(args.split())
-                return True
+                return self.create_branch(args.split())
 
             if command == 'branch':
                 m = re.match('([^/]+)/([^/]+)/(.+)', args)
                 if m:
                     owner = m.group(1)
                     branch = m.group(3)
-                    self.create_pull_request(owner, branch)
-                    return True
+                    return self.create_pull_request(owner, branch)
 
         print("Do not understand input:")
         print(sys.stdin.readlines())

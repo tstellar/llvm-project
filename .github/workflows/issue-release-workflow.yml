@@ -22,7 +22,7 @@ jobs:
 
       - name: Setup Environment
         run: |
-          pip install PyGithub GitPython
+          pip install -r requirements.txt
           #FIXME: TEMP
           curl -O -L https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_SHA/llvm/utils/git/github-automation.py
           chmod a+x github-automation.py
@@ -52,7 +52,7 @@ jobs:
 
       - name: Setup Environment
         run:  |
-          pip install PyGithub GitPython
+          pip install -r requirements.txt
 
       - name: Create Pull Request
         run: |
