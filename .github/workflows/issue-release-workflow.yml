@@ -11,7 +11,7 @@ jobs:
     name: Backport Commits
     runs-on: ubuntu-latest
     if: >-
-        startswith(github.event.comment.body, '/cherry-pick')
+        contains(github.event.comment.body, '/cherry-pick')
 
     steps:
       - name: Fetch LLVM sources
@@ -45,7 +45,7 @@ jobs:
     name: Create Pull Request
     runs-on: ubuntu-latest
     if: >-
-        startswith(github.event.comment.body, '/branch')
+        contains(github.event.comment.body, '/branch')
 
     steps:
       - name: Fetch LLVM sources
