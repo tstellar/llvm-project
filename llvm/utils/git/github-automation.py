@@ -133,7 +133,7 @@ class ReleaseWorkflow:
         message = "Failed to cherry-pick: {} ".format(commit)
         action_url = self.get_action_url()
         if action_url:
-            mesage += "\n\n" + action_url
+            message += "\n\n" + action_url
         issue = self.get_issue()
         issue.create_comment(message)
         issue.add_to_labels('release:cherry-pick-failed')
