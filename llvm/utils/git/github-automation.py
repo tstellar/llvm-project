@@ -160,9 +160,11 @@ class ReleaseWorkflow:
         local_repo.git.checkout(self.get_release_branch_for_issue())
 
         for c in commits:
-            if not local_repo.git.cherry_pick('-x', c):
+            try:
+                local_repo.git.cherry_pick('-x', c)
+            except Exception as e:
                 self.issue_notify_cherry_pick_failure(c)
-                return False
+                raise e
 
         push_url = self.get_push_url()
         print('Pushing to {} {}'.format(push_url, branch_name))
