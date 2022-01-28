@@ -143,7 +143,7 @@ class ReleaseWorkflow:
         issue.create_comment(message)
 
 
-    def create_branch(self, commits:list[str]) -> bool:
+    def create_branch(self, commits:list) -> bool:
         """
         This function attempts to backport `commits` into the branch associated
         with `self.issue_number`.
