@@ -5,6 +5,9 @@ on:
     types:
       - created
       - edited
+  issues:
+    types:
+      - closed
 
 jobs:
   backport-commits:
@@ -12,7 +15,8 @@ jobs:
     runs-on: ubuntu-20.04
     if: >-
         !startswith(github.event.comment.body, '<!--IGNORE-->') &&
-        contains(github.event.comment.body, '/cherry-pick')
+        contains(github.event.comment.body, '/cherry-pick') &&
+        github.event_name == 'issue_comment'
     steps:
       - name: Fetch LLVM sources
         uses: actions/checkout@v2
@@ -46,7 +50,8 @@ jobs:
     runs-on: ubuntu-20.04
     if: >-
         !startswith(github.event.comment.body, '<!--IGNORE-->') &&
-        contains(github.event.comment.body, '/branch')
+        contains(github.event.comment.body, '/branch') &&
+        github.event_name == 'issue_comment'
 
     steps:
       - name: Fetch LLVM sources
@@ -66,3 +71,26 @@ jobs:
           --issue-number ${{ github.event.issue.number }} \
           --branch-repo $GITHUB_REPOSITORY \
           auto
+
+  request-backport:
+    name: Request Backport
+    runs-on: ubuntu-20.04
+    if: >-
+      (github.repository == 'llvm/llvm-project') &&
+      github.event_name == 'issues'
+
+    steps:
+      - name: Fetch LLVM sources
+        uses: actions/checkout@v2
+
+      - name: Setup Environment
+        run: |
+          pip install -r ./llvm/utils/git/requirements.txt
+
+      - name: Create Issue
+        run: |
+          ./llvm/utils/git/github-automation.py \
+          --token ${{ secrets.RELEASE_WORKFLOW_ISSUE_EDIT_SECRET }} \
+          request-cherry-pick \
+          --issue-number ${{ github.event.issue.number }}
+
