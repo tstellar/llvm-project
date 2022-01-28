@@ -18,6 +18,29 @@ import sys
 import time
 from typing import *
 
+def run_graphql_query(query: str, variables: dict, token: str) -> dict:
+    """
+    This function submits a graphql query and returns the results as a
+    dictionary.
+    """
+
+    headers = {
+        'Authorization' : 'bearer {}'.format(token),
+        # See
+        # https://github.blog/2021-11-16-graphql-global-id-migration-update/
+        'X-Github-Next-Global-ID': '1'
+    }
+    request = requests.post(
+        url = 'https://api.github.com/graphql',
+        json = {"query" : query, "variables" : variables },
+        headers = headers)
+
+    if request.status_code == 200:
+        return request.json()['data']
+    else:
+        raise Exception(
+            "Failed to run graphql query\nquery: {}\nerror: {}".format(query, request.json()))
+
 class IssueSubscriber:
 
     @property
@@ -409,6 +432,57 @@ class ReleaseWorkflow:
         print(sys.stdin.readlines())
         return False
 
+
+    def request_cherry_pick(self) -> bool:
+        """
+        Request a cherry-pick of the commits that fixed `issue` by creating a new
+        issue and attaching it to the release milestone.
+        """
+
+        query = """
+            query ($owner: String!, $name: String!, $issue_number: Int!){
+                repository(owner: $owner, name: $name) {
+                    issue(number: $issue_number) {
+                        timelineItems (itemTypes: [CLOSED_EVENT], last: 1) {
+                            edges {
+                                node {
+                                    __typename
+                                    ... on ClosedEvent {
+                                        closer {
+                                            ... on Commit {
+                                                oid
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }"""
+
+        variables = {
+            "owner" : self.repo.owner.login,
+            "name" : self.repo.name,
+            "issue_number" : self.issue_number
+        }
+
+        data = run_graphql_query(query, variables, self.token)
+        event = data['repository']['issue']['timelineItems']['edges']
+        commits = []
+        for e in event:
+            commits.append(e['node']['closer']['oid'])
+        # Find the most recent release milestone
+        milestone = None
+        for m in self.repo.get_milestones(state='open'):
+            if re.search('branch: release', m.description):
+                milestone = m
+                break
+
+        self.issue.edit(milestone = milestone)
+        self.issue.create_comment("/cherry-pick {}".format(" ".join(commits)))
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--token', type=str, required=True, help='GitHub authentiation token')
 parser.add_argument('--repo', type=str, default=os.getenv('GITHUB_REPOSITORY', 'llvm/llvm-project'),
@@ -427,7 +501,7 @@ release_workflow_parser.add_argument('--branch-repo-token', type=str,
                                      help='GitHub authentication token to use for the repository where new branches will be pushed. Defaults to TOKEN.')
 release_workflow_parser.add_argument('--branch-repo', type=str, default='llvm/llvm-project-release-prs',
                                      help='The name of the repo where new branches will be pushed (e.g. llvm/llvm-project)')
-release_workflow_parser.add_argument('sub_command', type=str, choices=['print-release-branch', 'auto'],
+release_workflow_parser.add_argument('sub_command', type=str, choices=['print-release-branch', 'auto', 'request-cherry-pick'],
                                      help='Print to stdout the name of the release branch ISSUE_NUMBER should be backported to')
 
 llvmbot_git_config_parser = subparsers.add_parser('setup-llvmbot-git', help='Set the default user and email for the git repo in LLVM_PROJECT_DIR to llvmbot')
@@ -441,6 +515,9 @@ elif args.command == 'release-workflow':
     release_workflow = ReleaseWorkflow(args.token, args.repo, args.issue_number,
                                        args.branch_repo, args.branch_repo_token,
                                        args.llvm_project_dir, args.phab_token)
+    if args.sub_command == 'request-cherry-pick':
+        release_workflow.request_cherry_pick()
+        sys.exit(0)
     if not release_workflow.release_branch_for_issue:
         release_workflow.issue_notify_no_milestone(sys.stdin.readlines())
         sys.exit(1)

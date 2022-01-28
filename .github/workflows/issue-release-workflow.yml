@@ -22,16 +22,44 @@ on:
   issues:
     types:
       - opened
+      - closed
 
 env:
   COMMENT_BODY: ${{ github.event.action == 'opened' && github.event.issue.body || github.event.comment.body  }}
 
 jobs:
+  request-backport:
+    name: Request Backport
+    runs-on: ubuntu-20.04
+    if: >-
+        (github.repository == 'llvm/llvm-project') &&
+        github.event.action == 'closed'
+
+    steps:
+      - name: Fetch LLVM sources
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Setup Environment
+        run: |
+          pip install -r ./llvm/utils/git/requirements.txt
+
+      - name: Create Backport
+        run: |
+          ./llvm/utils/git/github-automation.py \
+          --repo $GITHUB_REPOSITORY \
+          --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
+          release-workflow \
+          --issue-number ${{ github.event.issue.number }} \
+          request-cherry-pick
+
   backport-commits:
     name: Backport Commits
     runs-on: ubuntu-20.04
     if: >-
       (github.repository == 'llvm/llvm-project') &&
+      github.event.action != 'closed' &&
       !startswith(github.event.comment.body, '<!--IGNORE-->') &&
       contains(github.event.action == 'opened' && github.event.issue.body || github.event.comment.body, '/cherry-pick')
     steps:
@@ -66,6 +94,7 @@ jobs:
     runs-on: ubuntu-20.04
     if: >-
       (github.repository == 'llvm/llvm-project') &&
+      github.event.action != 'closed' &&
       !startswith(github.event.comment.body, '<!--IGNORE-->') &&
       contains(github.event.comment.body, '/branch')
 
