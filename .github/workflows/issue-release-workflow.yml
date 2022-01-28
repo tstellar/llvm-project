@@ -9,7 +9,7 @@ on:
 jobs:
   backport-commits:
     name: Backport Commits
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: >-
         contains(github.event.comment.body, '/cherry-pick')
 
@@ -43,7 +43,7 @@ jobs:
 
   create-pull-request:
     name: Create Pull Request
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: >-
         contains(github.event.comment.body, '/branch')
 

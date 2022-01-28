@@ -14,6 +14,7 @@ import github
 import os
 import re
 import sys
+from typing import *
 
 class IssueSubscriber:
 
@@ -145,7 +146,7 @@ class ReleaseWorkflow:
         issue.create_comment(message)
 
 
-    def create_branch(self, commits:list) -> bool:
+    def create_branch(self, commits:List[str]) -> bool:
         """
         This function attempts to backport `commits` into the branch associated
         with `self.issue_number`.
