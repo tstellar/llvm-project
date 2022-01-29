@@ -135,7 +135,7 @@ class ReleaseWorkflow:
         action_url = self.get_action_url()
         if action_url:
             message += action_url + "\n\n"
-        message += "Please manually backport the fix and push it to your github fork.  Once this is done, please add a comment like this: /branch <user>/<repo>/<branch>"
+        message += "Please manually backport the fix and push it to your github fork.  Once this is done, please add a comment like this:\n\n`/branch <user>/<repo>/<branch>`"
         issue = self.get_issue()
         issue.create_comment(message)
         issue.add_to_labels('release:cherry-pick-failed')
