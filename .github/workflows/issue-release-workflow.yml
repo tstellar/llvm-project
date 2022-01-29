@@ -10,10 +10,9 @@ jobs:
   backport-commits:
     name: Backport Commits
     runs-on: ubuntu-20.04
-    if: >- "
+    if: >-
         !startswith(github.event.comment.body, '<!--IGNORE-->' &&
         contains(github.event.comment.body, '/cherry-pick')
-      "
     steps:
       - name: Fetch LLVM sources
         uses: actions/checkout@v2
@@ -45,10 +44,9 @@ jobs:
   create-pull-request:
     name: Create Pull Request
     runs-on: ubuntu-20.04
-    if: >- "
+    if: >-
         !startswith(github.event.comment.body, '<!--IGNORE-->' &&
         contains(github.event.comment.body, '/branch')
-      "
 
     steps:
       - name: Fetch LLVM sources
