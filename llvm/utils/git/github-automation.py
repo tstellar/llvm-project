@@ -257,7 +257,7 @@ def create_cherry_pick_request_from_closed_issue(issue:int, token:str):
 
     query = """
         query {
-            repository(owner: "llvm", name: "llvm-project") {
+            repository(owner: "tstellar", name: "llvm-project") {
                 issue(number:""" f"""{issue}""" """) {
                     timelineItems (itemTypes: [CLOSED_EVENT], last: 1) {
                         edges {
