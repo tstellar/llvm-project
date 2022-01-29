@@ -131,10 +131,11 @@ class ReleaseWorkflow:
         return ""
 
     def issue_notify_cherry_pick_failure(self, commit:str):
-        message = "Failed to cherry-pick: {} ".format(commit)
+        message = "Failed to cherry-pick:\n\n{} ".format(commit)
         action_url = self.get_action_url()
         if action_url:
-            message += "\n\n" + action_url
+            message += action_url + "\n\n"
+        message += "Please manually backport the fix and push it to your github fork.  Once this is done, please add a comment like this: /branch <user>/<repo>/<branch>"
         issue = self.get_issue()
         issue.create_comment(message)
         issue.add_to_labels('release:cherry-pick-failed')
