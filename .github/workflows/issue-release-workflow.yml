@@ -76,7 +76,6 @@ jobs:
     name: Request Backport
     runs-on: ubuntu-20.04
     if: >-
-      (github.repository == 'llvm/llvm-project') &&
       github.event_name == 'issues'
 
     steps:
