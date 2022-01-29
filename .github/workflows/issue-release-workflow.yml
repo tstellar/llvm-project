@@ -32,7 +32,7 @@ jobs:
 
       - name: Backport Commits
         run: |
-          printf "${{ github.event.comment.body }}" |
+          printf '${{ github.event.comment.body }}' |
           ./github-automation.py \
           --repo $GITHUB_REPOSITORY \
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
@@ -57,7 +57,7 @@ jobs:
 
       - name: Create Pull Request
         run: |
-          printf "${{ github.event.comment.body }}" |
+          printf '${{ github.event.comment.body }}' |
           ./llvm/utils/git/github-automation.py \
           --repo $GITHUB_REPOSITORY \
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
