@@ -19,6 +19,9 @@ on:
       - created
       - edited
 
+env:
+  COMMENT_BODY: ${{ github.event.comment.body }}
+
 jobs:
   backport-commits:
     name: Backport Commits
@@ -45,7 +48,7 @@ jobs:
 
       - name: Backport Commits
         run: |
-          printf '${{ github.event.comment.body }}' |
+          printf "$COMMENT_BODY" |
           ./github-automation.py \
           --repo $GITHUB_REPOSITORY \
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
@@ -71,7 +74,7 @@ jobs:
 
       - name: Create Pull Request
         run: |
-          printf '${{ github.event.comment.body }}' |
+          printf "$COMMENT_BODY" |
           ./llvm/utils/git/github-automation.py \
           --repo $GITHUB_REPOSITORY \
           --token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
