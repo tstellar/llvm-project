@@ -9,11 +9,11 @@
 # ==-------------------------------------------------------------------------==#
 
 import argparse
-from git import Repo
+from git import Repo # type: ignore
 import github
 import os
 import re
-import requests
+import requests # type: ignore
 import sys
 from typing import *
 
@@ -77,7 +77,7 @@ class ReleaseWorkflow:
 
     def __init__(self, token:str, repo:str, issue_number:int,
                        branch_repo_name:str, branch_repo_token:str,
-                       llvm_project_dir:str):
+                       llvm_project_dir:str) -> None:
         self._token = token
         self._repo_name = repo
         self._issue_number = issue_number
@@ -112,55 +112,63 @@ class ReleaseWorkflow:
     def llvm_project_dir(self) -> str:
         return self._llvm_project_dir
 
-    def get_issue(self):
-        repo = github.Github(self.token).get_repo(self.repo_name)
-        issue = repo.get_issue(self.issue_number)
-        return issue
+    @property
+    def __repo(self) -> github.Repository.Repository:
+        return github.Github(self.token).get_repo(self.repo_name)
 
-    def get_push_url(self):
+    @property
+    def issue(self) -> github.Issue.Issue:
+        return self.__repo.get_issue(self.issue_number)
+
+    @property
+    def push_url(self) -> str:
         return 'https://{}@github.com/{}'.format(self.branch_repo_token, self.branch_repo_name)
 
-    def get_branch_name(self):
+    @property
+    def branch_name(self) -> str:
         return 'issue{}'.format(self.issue_number)
 
-    def get_release_branch_for_issue(self):
-        issue = self.get_issue()
-        m = re.search('branch: (.+)',issue.milestone.description)
+    @property
+    def release_branch_for_issue(self) -> Optional[str]:
+        issue = self.issue
+        milestone = issue.milestone
+        if milestone is None:
+            return None
+        m = re.search('branch: (.+)',milestone.description)
         if m:
             return m.group(1)
         return None 
 
-    def print_release_branch(self):
-        print(self.get_release_branch_for_issue())
+    def print_release_branch(self) -> None:
+        print(self.release_branch_for_issue)
 
-    def issue_notify_branch(self):
-        issue = self.get_issue()
-        issue.create_comment('/branch {}/{}'.format(self.branch_repo_name, self.get_branch_name()))
+    def issue_notify_branch(self) -> None:
+        self.issue.create_comment('/branch {}/{}'.format(self.branch_repo_name, self.branch_name))
 
-    def issue_notify_pull_request(self, pull):
-        issue = self.get_issue()
-        issue.create_comment('/pull-request {}#{}'.format(self.branch_repo_name, pull.number))
+    def issue_notify_pull_request(self, pull:github.PullRequest.PullRequest) -> None:
+        self.issue.create_comment('/pull-request {}#{}'.format(self.branch_repo_name, pull.number))
 
-    def get_action_url(self):
+    @property
+    def action_url(self) -> str:
         if os.getenv('CI'):
             return 'https://github.com/{}/actions/runs/{}'.format(os.getenv('GITHUB_REPOSITORY'), os.getenv('GITHUB_RUN_ID'))
         return ""
 
-    def issue_notify_cherry_pick_failure(self, commit:str):
+    def issue_notify_cherry_pick_failure(self, commit:str) -> github.IssueComment.IssueComment:
         message = "<!--IGNORE-->\nFailed to cherry-pick: {}\n\n".format(commit)
-        action_url = self.get_action_url()
+        action_url = self.action_url
         if action_url:
             message += action_url + "\n\n"
         message += "Please manually backport the fix and push it to your github fork.  Once this is done, please add a comment like this:\n\n`/branch <user>/<repo>/<branch>`"
-        issue = self.get_issue()
-        issue.create_comment(message)
+        issue = self.issue
+        comment = issue.create_comment(message)
         issue.add_to_labels('release:cherry-pick-failed')
+        return comment
 
-    def issue_notify_pull_request_failure(self, branch):
+    def issue_notify_pull_request_failure(self, branch:str) -> github.IssueComment.IssueComment:
         message = "Failed to create pull request for {} ".format(branch)
-        message += self.get_action_url()
-        issue = self.get_issue()
-        issue.create_comment(message)
+        message += self.action_url
+        return self.issue.create_comment(message)
 
 
     def create_branch(self, commits:List[str]) -> bool:
@@ -175,9 +183,9 @@ class ReleaseWorkflow:
 
         """
         print('cherry-picking', commits)
-        branch_name = self.get_branch_name()
+        branch_name = self.branch_name
         local_repo = Repo(self.llvm_project_dir)
-        local_repo.git.checkout(self.get_release_branch_for_issue())
+        local_repo.git.checkout(self.release_branch_for_issue)
 
         for c in commits:
             try:
@@ -186,7 +194,7 @@ class ReleaseWorkflow:
                 self.issue_notify_cherry_pick_failure(c)
                 raise e
 
-        push_url = self.get_push_url()
+        push_url = self.push_url
         print('Pushing to {} {}'.format(push_url, branch_name))
         local_repo.git.push(push_url, 'HEAD:{}'.format(branch_name))
 
@@ -207,16 +215,25 @@ class ReleaseWorkflow:
         repo = github.Github(self.token).get_repo(self.branch_repo_name)
         issue_ref = '{}#{}'.format(self.repo_name, self.issue_number)
         pull = None
+        release_branch_for_issue = self.release_branch_for_issue
+        if release_branch_for_issue is None:
+            return False
         try:
             pull = repo.create_pull(title='PR for {}'.format(issue_ref),
                                     body='resolves {}'.format(issue_ref),
-                                    base=self.get_release_branch_for_issue(),
+                                    base=release_branch_for_issue,
                                     head='{}:{}'.format(owner, branch),
                                     maintainer_can_modify=False)
         except Exception as e:
             self.issue_notify_pull_request_failure(branch)
             raise e
+        
+        if pull is None:
+            return False
+        
         self.issue_notify_pull_request(pull)
+        
+        # TODO(tstellar): Do you really want to always return True?
         return True
         
 
@@ -303,11 +320,15 @@ def create_cherry_pick_request_from_closed_issue(issue:int, token:str):
     print(authors, committers, assignees, commits)
     repo = github.Github(token).get_repo('tstellar/llvm-project')
     # Find the most recent release milestone
-    milestone = None
+    milestone : Optional[github.Milestone.Milestone] = None
     for m in repo.get_milestones(state='open'):
         if re.search('branch: release', m.description):
             milestone = m
             break
+
+    if milestone is None:
+        # TODO(tstellar): what do do?
+        raise BaseException("Expected milestone")
 
     gh_issue = repo.create_issue(title='Cherry-pick fixes for #{}: {}'.format(issue, title),
                                  assignees=assignees,
