@@ -299,7 +299,7 @@ def create_cherry_pick_request_from_closed_issue(issue:int, token:str):
         commits.append(closer['oid'])
     assignees = list(set(authors + committers))
     print(authors, committers, assignees, commits)
-    repo = github.Github(token).get_repo('tstellar/llvm-project')
+    repo = github.Github(token).get_repo('llvm/llvm-project')
     # Find the most recent release milestone
     milestone = None
     for m in repo.get_milestones(state='open'):
