@@ -1,3 +1,16 @@
+# This contains the workflow definitions that allow users to test backports
+# to the release branch using comments on issues.
+# 
+# /cherry-pick <commit> <...>
+#
+# This comment will attempt to cherry-pick COMMIT to the release branch and
+# if successful push the result to a branch on github.
+#
+# /branch <owner>/<repo>/<branch>
+#
+# This comment will create a pull request from BRANCH to the latest release
+# branch.
+
 name: Issue Release Workflow
 
 on:
