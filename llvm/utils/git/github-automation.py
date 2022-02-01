@@ -259,7 +259,6 @@ def create_cherry_pick_request_from_closed_issue(issue:int, token:str):
         query {
             repository(owner: "tstellar", name: "llvm-project") {
                 issue(number:""" f"""{issue}""" """) {
-                    title
                     timelineItems (itemTypes: [CLOSED_EVENT], last: 1) {
                         edges {
                             node {
@@ -289,7 +288,6 @@ def create_cherry_pick_request_from_closed_issue(issue:int, token:str):
         }"""
 
     data = run_graphql_query(query, token)
-    title = data['repository']['issue']['title']
     event = data['repository']['issue']['timelineItems']['edges']
     authors = []
     committers = []
@@ -309,7 +307,7 @@ def create_cherry_pick_request_from_closed_issue(issue:int, token:str):
             milestone = m
             break
 
-    gh_issue = repo.create_issue(title='Cherry-pick fixes for #{}: {}'.format(issue, title),
+    gh_issue = repo.create_issue(title='Cherry-pick fixes for issue#{}'.format(issue),
                                  assignees=assignees,
                                  milestone=milestone)
     gh_issue.create_comment('{} What do you think about backporting {}?\n\n/cherry-pick {}'.format(' '.join(['@' + login for login in assignees]), 'this' if len(commits) == 1 else 'these', ' '.join(commits)))
