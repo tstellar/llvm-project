@@ -1,0 +1,62 @@
+name: Release Task
+
+on:
+  push:
+    tags:
+      # The regex support here is limited, so just match everything that starts with llvmorg- and filter later.
+      - 'llvmorg-*'
+
+jobs:
+  release-tasks:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get install doxygen python3-sphinx python3-recommonmark ninja-build graphviz texlive-font-utils python3-github
+        pip3 install --user sphinx-markdown-tables
+
+    - name: Checkout LLVM
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+
+    # This step will only succeed if the tag name is valid, so it safe to
+    # assume a valid tag name in all steps after this one.
+    - name: Create Release
+      run: |
+         ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --tag ${{ github.ref_name }} create
+    
+    - name: Get Release Name
+      id: release
+      run: |
+        name=`echo "${{ github.ref_name }}" | sed 's/llvmorg-//g'`
+        echo "::set-output name=name::$name"
+      
+    - name: Build Documentation
+      env:
+        RELEASE: "${{ steps.release.output.name }}"
+      run: |
+        bash llvm/utils/release/build-docs.sh -srcdir llvm -release $RELEASE
+        ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release $RELEASE upload --files *doxygen*.tar.xz
+
+    - name: Clone www-releases
+      if: ${{ !contains(steps.release.outputs.name, 'rc') }}
+      uses: actions/checkout@v1
+      with:
+        repository: ${{ github.repository_owner }}/www-releases
+        ref: main
+        fetch-depth: 0
+        path: www-releases
+
+    - name: Upload Release Notes
+      env:
+        RELEASE: "${{ steps.release.output.name }}"
+      run: |
+        ./github-automation.py --token ${{ github.token }} setup-llvmbot-git
+        mkdir -p ../www-releases/$RELEASE
+        mv ./docs-build/html-export/* ../www-releases/$RELEASE
+        cd ../www-releases
+        git add $RELEASE
+        git commit -a -m "Add $RELEASE documentation"
+        git push https://${{ secrets.WWW_RELEASES_TOKEN }}@github.com/${{ github.repository_owner }}/www-releases main:main
