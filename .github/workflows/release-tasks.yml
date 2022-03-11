@@ -51,6 +51,7 @@ jobs:
       env:
         RELEASE: "${{ steps.release.outputs.name }}"
       run: |
+        pip3 install -r ./llvm/utils/git/requirements.txt
         llvm/utils/git/github-automation.py --token ${{ github.token }} setup-llvmbot-git
         mkdir -p ../www-releases/$RELEASE
         mv ./docs-build/html-export/* ../www-releases/$RELEASE
