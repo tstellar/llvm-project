@@ -59,6 +59,7 @@ def upload_files(repo, release, files):
         print('Uploading {}'.format(f))
         release.upload_asset(f)
         print("Done")
+    
 
 
 parser = argparse.ArgumentParser()
@@ -76,7 +77,7 @@ parser.add_argument('--files', nargs='+', type=str)
 args = parser.parse_args()
 
 github = github.Github(args.token)
-llvm_repo = github.get_organization('tstellar').get_repo('llvm-project')
+llvm_repo = github.get_repo('tstellar/llvm-project')
 
 if args.tag and args.release:
     print("--tag and --release are not allowed together")
