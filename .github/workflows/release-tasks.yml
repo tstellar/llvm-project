@@ -35,7 +35,7 @@ jobs:
       env:
         RELEASE: "${{ steps.release.outputs.name }}"
       run: |
-        bash llvm/utils/release/build-docs.sh -srcdir llvm -release $RELEASE
+        bash llvm/utils/release/build-docs.sh -srcdir llvm
         ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release $RELEASE upload --files *doxygen*.tar.xz
 
     - name: Clone www-releases
