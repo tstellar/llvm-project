@@ -13,7 +13,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        sudo apt-get install doxygen python3-sphinx python3-recommonmark ninja-build graphviz texlive-font-utils python3-github
+        sudo apt-get install -y doxygen python3-sphinx python3-recommonmark ninja-build graphviz texlive-font-utils python3-github
         pip3 install --user sphinx-markdown-tables
 
     - name: Checkout LLVM
@@ -23,7 +23,7 @@ jobs:
     # assume a valid tag name in all steps after this one.
     - name: Create Release
       run: |
-         ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --tag ${{ github.ref_name }} create
+         llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --tag ${{ github.ref_name }} create
 
     - name: Get Release Name
       id: release
@@ -36,7 +36,7 @@ jobs:
         RELEASE: "${{ steps.release.outputs.name }}"
       run: |
         bash llvm/utils/release/build-docs.sh -srcdir llvm
-        ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release $RELEASE upload --files *doxygen*.tar.xz
+        llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release $RELEASE upload --files *doxygen*.tar.xz
 
     - name: Clone www-releases
       #if: ${{ !contains(steps.release.outputs.name, 'rc') }}
@@ -51,7 +51,7 @@ jobs:
       env:
         RELEASE: "${{ steps.release.outputs.name }}"
       run: |
-        ./github-automation.py --token ${{ github.token }} setup-llvmbot-git
+        llvm/utils/git/github-automation.py --token ${{ github.token }} setup-llvmbot-git
         mkdir -p ../www-releases/$RELEASE
         mv ./docs-build/html-export/* ../www-releases/$RELEASE
         cd ../www-releases
