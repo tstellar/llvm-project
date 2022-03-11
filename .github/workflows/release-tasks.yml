@@ -33,13 +33,13 @@ jobs:
 
     - name: Build Documentation
       env:
-        RELEASE: "${{ steps.release.output.name }}"
+        RELEASE: "${{ steps.release.outputs.name }}"
       run: |
         bash llvm/utils/release/build-docs.sh -srcdir llvm -release $RELEASE
         ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release $RELEASE upload --files *doxygen*.tar.xz
 
     - name: Clone www-releases
-      if: ${{ !contains(steps.release.outputs.name, 'rc') }}
+      #if: ${{ !contains(steps.release.outputs.name, 'rc') }}
       uses: actions/checkout@v2
       with:
         repository: ${{ github.repository_owner }}/www-releases
@@ -49,7 +49,7 @@ jobs:
 
     - name: Upload Release Notes
       env:
-        RELEASE: "${{ steps.release.output.name }}"
+        RELEASE: "${{ steps.release.outputs.name }}"
       run: |
         ./github-automation.py --token ${{ github.token }} setup-llvmbot-git
         mkdir -p ../www-releases/$RELEASE
