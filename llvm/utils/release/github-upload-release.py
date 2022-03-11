@@ -30,6 +30,13 @@
 
 import argparse
 import github
+import re
+
+def tag_to_release(tag):
+    m = re.match("^llvmorg-([0-9]+\.[0-9]+\.[0-9]+)(-rc[0-9]+)?$", tag)
+    if not m:
+        raise Exception("Invalid tag: {}".format(tag))
+    return "".join(m.groups(""))
 
 def create_release(repo, release, tag = None, name = None, message = None):
     if not tag:
@@ -52,7 +59,6 @@ def upload_files(repo, release, files):
         print('Uploading {}'.format(f))
         release.upload_asset(f)
         print("Done")
-    
 
 
 parser = argparse.ArgumentParser()
@@ -61,6 +67,7 @@ parser.add_argument('command', type=str, choices=['create', 'upload'])
 # All args
 parser.add_argument('--token', type=str)
 parser.add_argument('--release', type=str)
+parser.add_argument('--tag', type=str)
 
 # Upload args
 parser.add_argument('--files', nargs='+', type=str)
@@ -71,7 +78,20 @@ args = parser.parse_args()
 github = github.Github(args.token)
 llvm_repo = github.get_organization('llvm').get_repo('llvm-project')
 
+if args.tag and args.release:
+    print("--tag and --release are not allowed together")
+    sys.exit(1)
+
+if not args.tag and not args.release:
+    print("Must specify either --tag or --release")
+    sys.exit(1)
+
+if args.release:
+    release = args.release
+else:
+    release = tag_to_release(args.tag)
+
 if args.command == 'create':
-    create_release(llvm_repo, args.release)
+    create_release(llvm_repo, release, tag = args.tag)
 if args.command == 'upload':
-    upload_files(llvm_repo, args.release, args.files)
+    upload_files(llvm_repo, release, args.files)
