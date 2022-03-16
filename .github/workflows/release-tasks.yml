@@ -55,7 +55,7 @@ jobs:
         mkdir -p ../www-releases/$RELEASE
         mv ./docs-build/html-export/* ../www-releases/$RELEASE
         cd ../www-releases
-        llvm-project/llvm/utils/git/github-automation.py --token ${{ github.token }} setup-llvmbot-git
+        ../llvm-project/llvm/utils/git/github-automation.py --token ${{ github.token }} setup-llvmbot-git
         git add $RELEASE
         git commit -a -m "Add $RELEASE documentation"
         git push https://${{ secrets.WWW_RELEASES_TOKEN }}@github.com/${{ github.repository_owner }}/www-releases main:main
