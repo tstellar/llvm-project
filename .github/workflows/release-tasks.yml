@@ -52,10 +52,10 @@ jobs:
         RELEASE: "${{ steps.release.outputs.name }}"
       run: |
         pip3 install -r ./llvm/utils/git/requirements.txt
-        mkdir -p ../www-releases/$RELEASE
-        mv ./docs-build/html-export/* ../www-releases/$RELEASE
-        cd ../www-releases
-        ../llvm-project/llvm/utils/git/github-automation.py --token ${{ github.token }} setup-llvmbot-git
+        mkdir -p www-releases/$RELEASE
+        mv ./docs-build/html-export/* www-releases/$RELEASE
+        cd www-releases
+        ../llvm/utils/git/github-automation.py --token ${{ github.token }} setup-llvmbot-git
         git add $RELEASE
         git commit -a -m "Add $RELEASE documentation"
         git push https://${{ secrets.WWW_RELEASES_TOKEN }}@github.com/${{ github.repository_owner }}/www-releases main:main
