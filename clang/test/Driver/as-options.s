@@ -122,7 +122,7 @@
 // RUN:   FileCheck --check-prefix=DEBUG %s
 // RUN: %clang --target=aarch64-linux-gnu -fno-integrated-as -g0 -g %s -### 2>&1 | \
 // RUN:   FileCheck --check-prefix=DEBUG %s
-// DEBUG: "-g" "-gdwarf-5"
+// DEBUG: "-g" "-gdwarf-4"
 // RUN: %clang --target=aarch64-linux-gnu -fno-integrated-as -g -g0 %s -### 2>&1 | \
 // RUN:   FileCheck --check-prefix=NODEBUG %s
 // RUN: %clang --target=aarch64-linux-gnu -fno-integrated-as -gdwarf-5 -g0 %s -### 2>&1 | \
@@ -141,7 +141,7 @@
 // RUN: %clang --target=aarch64-linux-gnu -fno-integrated-as -gdwarf-2 %s -### 2>&1 | \
 // RUN:   FileCheck --check-prefix=GDWARF2 %s
 // RUN: %clang --target=aarch64-linux-gnu -fno-integrated-as -gdwarf %s -### 2>&1 | \
-// RUN:   FileCheck --check-prefix=GDWARF5 %s
+// RUN:   FileCheck --check-prefix=GDWARF4 %s
 
 // RUN: %clang --target=aarch64-linux-gnu -fno-integrated-as -gdwarf-5 %s -### 2>&1 | \
 // RUN:   FileCheck --check-prefix=GDWARF5 %s

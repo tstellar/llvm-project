@@ -571,7 +571,7 @@
 // RUN: %clang_cl -gdwarf /Z7 /c -### -- %s 2>&1 | FileCheck -check-prefix=Z7_gdwarf %s
 // Z7_gdwarf-NOT: "-gcodeview"
 // Z7_gdwarf: "-debug-info-kind=constructor"
-// Z7_gdwarf: "-dwarf-version=
+// Z7_gdwarf: "-dwarf-version=4
 
 // RUN: %clang_cl /ZH:MD5 /c -### -- %s 2>&1 | FileCheck -check-prefix=ZH_MD5 %s
 // ZH_MD5: "-gsrc-hash=md5"

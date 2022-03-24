@@ -428,9 +428,7 @@ ToolChain::getDefaultUnwindTableLevel(const ArgList &Args) const {
 }
 
 unsigned ToolChain::GetDefaultDwarfVersion() const {
-  // TODO: Remove the RISC-V special case when R_RISCV_SET_ULEB128 linker
-  // support becomes more widely available.
-  return getTriple().isRISCV() ? 4 : 5;
+  return 4;
 }
 
 Tool *ToolChain::getClang() const {
