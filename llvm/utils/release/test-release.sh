@@ -42,6 +42,7 @@ do_lldb="yes"
 do_polly="yes"
 do_mlir="yes"
 do_flang="yes"
+do_silent_log="no"
 BuildDir="`pwd`"
 ExtraConfigureFlags=""
 ExportBranch=""
@@ -76,6 +77,7 @@ function usage() {
     echo " -no-polly            Disable check-out & build Polly"
     echo " -no-mlir             Disable check-out & build MLIR"
     echo " -no-flang            Disable check-out & build Flang"
+    echo " -silent-log          Don't output build logs to stdout"
 }
 
 while [ $# -gt 0 ]; do
@@ -176,6 +178,9 @@ while [ $# -gt 0 ]; do
             ;;
         -no-flang )
             do_flang="no"
+            ;;
+        -silent-log )
+            do_silent_log="yes"
             ;;
         -help | --help | -h | --h | -\? )
             usage
@@ -413,16 +418,22 @@ function build_llvmCore() {
       Verbose="-v"
     fi
 
+    redir="/dev/stdout"
+    if [ $do_silent_log == "yes" ]; then
+      echo "# Silencing build logs because of -silent-log flag..."
+      redir="/dev/null"
+    fi
+
     cd $ObjDir
     echo "# Compiling llvm $Release-$RC $Flavor"
     echo "# ${MAKE} -j $NumJobs $Verbose"
     ${MAKE} -j $NumJobs $Verbose \
-        2>&1 | tee $LogDir/llvm.make-Phase$Phase-$Flavor.log
+        2>&1 | tee $LogDir/llvm.make-Phase$Phase-$Flavor.log > $redir
 
     echo "# Installing llvm $Release-$RC $Flavor"
     echo "# ${MAKE} install"
     DESTDIR="${DestDir}" ${MAKE} install \
-        2>&1 | tee $LogDir/llvm.install-Phase$Phase-$Flavor.log
+        2>&1 | tee $LogDir/llvm.install-Phase$Phase-$Flavor.log > $redir
     cd $BuildDir
 }
 
