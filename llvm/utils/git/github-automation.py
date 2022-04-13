@@ -482,6 +482,17 @@ class ReleaseWorkflow:
         self.issue.edit(milestone = milestone)
         self.issue.create_comment("/cherry-pick {}".format(" ".join(commits)))
 
+def create_release_milestone(release:str, token:str):
+    #Validate release name
+    m = re.search('^([0-9]+)\.[0-9]+\.[0-9]+$', release)
+    if not m:
+        raise Exception("Invalide release: {}".format(release))
+
+    major_version = m.group(1)
+    title = "LLVM {} Release".format(release)
+    description = "branch: release/14.x".format(major_version)
+    github.Github(token).get_repo('llvm/llvm-project').create_milestone(title, description = description)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--token', type=str, required=True, help='GitHub authentiation token')
@@ -503,6 +514,10 @@ release_workflow_parser.add_argument('--branch-repo', type=str, default='llvm/ll
                                      help='The name of the repo where new branches will be pushed (e.g. llvm/llvm-project)')
 release_workflow_parser.add_argument('sub_command', type=str, choices=['print-release-branch', 'auto', 'request-cherry-pick'],
                                      help='Print to stdout the name of the release branch ISSUE_NUMBER should be backported to')
+
+create_release_milestone_parser = subparsers.add_parser('create-release-milestone')
+create_release_milestone_parser.add_argument('release', type=str,
+                                             help='Release name (e.g. 14.0.0)')
 
 llvmbot_git_config_parser = subparsers.add_parser('setup-llvmbot-git', help='Set the default user and email for the git repo in LLVM_PROJECT_DIR to llvmbot')
 
@@ -528,3 +543,5 @@ elif args.command == 'release-workflow':
             sys.exit(1)
 elif args.command == 'setup-llvmbot-git':
     setup_llvmbot_git()
+elif args.command == 'create-release-milestone':
+    create_release_milestone(args.release, args.token)
