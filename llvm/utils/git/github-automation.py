@@ -482,17 +482,64 @@ class ReleaseWorkflow:
         self.issue.edit(milestone = milestone)
         self.issue.create_comment("/cherry-pick {}".format(" ".join(commits)))
 
-def create_release_milestone(release:str, token:str):
-    #Validate release name
-    m = re.search('^([0-9]+)\.[0-9]+\.[0-9]+$', release)
+def validate_release_string(release:str) -> tuple:
+    m = re.search('^([0-9]+)\.([0-9]+)\.([0-9]+)$', release)
     if not m:
+        return None
+    return (m.group(1), m.group(2), m.group(3))
+
+def milestone_title_from_release(release:str) -> str:
+    return "LLVM {} Release".format(release)
+
+def create_release_milestone(release:str, token:str):
+    version = validate_release_string(release)
+    if not version:
         raise Exception("Invalide release: {}".format(release))
 
-    major_version = m.group(1)
-    title = "LLVM {} Release".format(release)
+    major_version = version[0]
+    title = milestone_title_from_release(release)
     description = "branch: release/14.x".format(major_version)
     github.Github(token).get_repo('llvm/llvm-project').create_milestone(title, description = description)
 
+def get_milestone(repo:github.Repository.Repository, milestone_title:str) -> github.Milestone.Milestone:
+    for m in repo.get_milestones():
+        if m.title == milestone_title:
+            return m
+    return None
+
+def get_release_status_project(github_ctx:github.Github):
+    for p in github_ctx.get_organization('llvm').get_projects():
+        print(p)
+        if p.id == 3:
+            return p
+    return None
+
+def move_issues(old_release:str, new_release:str, token:str):
+    old_version = validate_release_string(old_release)
+    if not old_version:
+        raise Exception("Invalid release: {}".format(old_release))
+    new_version = validate_release_string(new_release)
+    if not new_version:
+        raise Exception("Invalid release: {}".format(new_release))
+
+    github_ctx = github.Github(token)
+    repo = github_ctx.get_repo('llvm/llvm-project')
+
+    old_milestone = get_milestone(repo, milestone_title_from_release(old_release))
+    new_milestone = get_milestone(repo, milestone_title_from_release(new_release))
+
+
+    project = get_release_status_project(github_ctx)
+
+    #for column in project.get_columns():
+    #    print (column.name)
+    #    for card in column.get_cards():
+    #        issue = card.get_content()
+    #        # issue.edit(milestone = new_milestone)
+    #        print(issue)
+
+    for i in repo.get_issues(state='open', milestone = old_milestone):
+        i.edit(milestone = new_milestone)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--token', type=str, required=True, help='GitHub authentiation token')
@@ -519,6 +566,10 @@ create_release_milestone_parser = subparsers.add_parser('create-release-mileston
 create_release_milestone_parser.add_argument('release', type=str,
                                              help='Release name (e.g. 14.0.0)')
 
+move_issues_parser = subparsers.add_parser('move-issues')
+move_issues_parser.add_argument('old', type=str, help='Release name (e.g. 14.0.0)')
+move_issues_parser.add_argument('new', type=str, help='Release name (e.g. 14.0.0)')
+
 llvmbot_git_config_parser = subparsers.add_parser('setup-llvmbot-git', help='Set the default user and email for the git repo in LLVM_PROJECT_DIR to llvmbot')
 
 args = parser.parse_args()
@@ -544,4 +595,8 @@ elif args.command == 'release-workflow':
 elif args.command == 'setup-llvmbot-git':
     setup_llvmbot_git()
 elif args.command == 'create-release-milestone':
+    print(args)
     create_release_milestone(args.release, args.token)
+elif args.command == 'move-issues':
+    print(args)
+    move_issues(args.old, args.new, args.token)
