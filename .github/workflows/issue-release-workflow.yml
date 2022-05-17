@@ -32,7 +32,6 @@ jobs:
     name: Request Backport
     runs-on: ubuntu-20.04
     if: >-
-        (github.repository == 'llvm/llvm-project') &&
         github.event.action == 'closed'
 
     steps:
@@ -58,7 +57,6 @@ jobs:
     name: Backport Commits
     runs-on: ubuntu-20.04
     if: >-
-      (github.repository == 'llvm/llvm-project') &&
       github.event.action != 'closed' &&
       !startswith(github.event.comment.body, '<!--IGNORE-->') &&
       contains(github.event.action == 'opened' && github.event.issue.body || github.event.comment.body, '/cherry-pick')
@@ -66,7 +64,7 @@ jobs:
       - name: Fetch LLVM sources
         uses: actions/checkout@v2
         with:
-          repository: llvm/llvm-project
+          repository: tstellar/llvm-project
           # GitHub stores the token used for checkout and uses it for pushes
           # too, but we want to use a different token for pushing, so we need
           # to disable persist-credentials here.
@@ -93,7 +91,6 @@ jobs:
     name: Create Pull Request
     runs-on: ubuntu-20.04
     if: >-
-      (github.repository == 'llvm/llvm-project') &&
       github.event.action != 'closed' &&
       !startswith(github.event.comment.body, '<!--IGNORE-->') &&
       contains(github.event.comment.body, '/branch')
