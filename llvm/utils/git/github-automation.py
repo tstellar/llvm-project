@@ -17,6 +17,21 @@ import requests
 import sys
 from typing import *
 
+def run_graphql_query(query: str, token: str) -> dict:
+    headers = {
+        'Authorization' : 'bearer {}'.format(token),
+    }
+    request = requests.post(
+        url = 'https://api.github.com/graphql',
+        json = {"query" : query },
+        headers = headers)
+
+    if request.status_code == 200:
+        return request.json()['data']
+    else:
+        raise Exception(
+            "Failed to run graphql query\nquery: {}\nerror: {}".format(query, request.json()))
+
 class IssueSubscriber:
 
     @property
@@ -387,6 +402,76 @@ class ReleaseWorkflow:
         print(sys.stdin.readlines())
         return False
 
+def create_cherry_pick_request_from_closed_issue(issue:int, repo_name:str, token:str):
+    """
+    Request a cherry-pick of the commits that fixed `issue` by creating a new
+    issue and attaching it to the release milestone.
+    """
+
+    [owner, name] = repo_name.split('/')
+
+    query = """
+        query {
+            repository(owner: """ f'"{owner}"'', name: 'f'"{name}"'""") {
+                issue(number: """f'{issue}'""") {
+                    title
+                    timelineItems (itemTypes: [CLOSED_EVENT], last: 1) {
+                        edges {
+                            node {
+                                __typename
+                                ... on ClosedEvent {
+                                    closer {
+                                        ... on Commit {
+                                            author {
+                                                user {
+                                                    login
+                                                }
+                                            }
+                                            committer {
+                                                user {
+                                                    login
+                                                }
+                                            }
+                                            oid
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }"""
+
+    data = run_graphql_query(query, token)
+    title = data['repository']['issue']['title']
+    event = data['repository']['issue']['timelineItems']['edges']
+    authors = []
+    committers = []
+    commits = []
+    for e in event:
+        closer = e['node']['closer']
+        authors.append(closer['author']['user']['login'])
+        committers.append(closer['committer']['user']['login'])
+        commits.append(closer['oid'])
+    assignees = list(set(authors + committers))
+    print(authors, committers, assignees, commits)
+    repo = github.Github(token).get_repo(repo_name)
+    # Find the most recent release milestone
+    milestone = None
+    for m in repo.get_milestones(state='open'):
+        if re.search('branch: release', m.description):
+            milestone = m
+            break
+
+    message = '{} What do you think about backporting {}?\n\n/cherry-pick {}'.format(' '.join(['@' + login for login in assignees]), 'this' if len(commits) == 1 else 'these', ' '.join(commits))
+    gh_issue = repo.create_issue(title='Cherry-pick fixes for #{}: {}'.format(issue, title),
+                                 assignees=assignees,
+                                 milestone=milestone,
+                                 body=message)
+
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--token', type=str, required=True, help='GitHub authentiation token')
 parser.add_argument('--repo', type=str, default=os.getenv('GITHUB_REPOSITORY', 'llvm/llvm-project'),
@@ -405,8 +490,12 @@ release_workflow_parser.add_argument('--branch-repo-token', type=str,
                                      help='GitHub authentication token to use for the repository where new branches will be pushed. Defaults to TOKEN.')
 release_workflow_parser.add_argument('--branch-repo', type=str, default='llvm/llvm-project-release-prs',
                                      help='The name of the repo where new branches will be pushed (e.g. llvm/llvm-project)')
-release_workflow_parser.add_argument('sub_command', type=str, choices=['print-release-branch', 'auto'],
+release_workflow_parser.add_argument('sub_command', type=str, choices=['print-release-branch', 'auto', 'request-cherry-pick'],
                                      help='Print to stdout the name of the release branch ISSUE_NUMBER should be backported to')
+
+request_cherry_pick_parser = subparsers.add_parser('request-cherry-pick')
+request_cherry_pick_parser.add_argument('--issue-number', type=int,
+                                        help='Backport the commits that fixed ISSUE_NUMBER')
 
 llvmbot_git_config_parser = subparsers.add_parser('setup-llvmbot-git', help='Set the default user and email for the git repo in LLVM_PROJECT_DIR to llvmbot')
 
@@ -429,3 +518,8 @@ elif args.command == 'release-workflow':
             sys.exit(1)
 elif args.command == 'setup-llvmbot-git':
     setup_llvmbot_git()
+elif args.command == 'request-cherry-pick':
+    if args.issue_number:
+        create_cherry_pick_request_from_closed_issue(args.issue_number, args.repo, args.token)
+    else:
+        raise Exception("Not implemented")
