@@ -32,7 +32,6 @@ jobs:
     name: Request Backport
     runs-on: ubuntu-20.04
     if: >-
-        (github.repository == 'llvm/llvm-project') &&
         github.event.action == 'closed'
 
     steps:
@@ -54,7 +53,6 @@ jobs:
     name: Backport Commits
     runs-on: ubuntu-20.04
     if: >-
-      (github.repository == 'llvm/llvm-project') &&
       github.event.action != 'closed' &&
       !startswith(github.event.comment.body, '<!--IGNORE-->') &&
       contains(github.event.action == 'opened' && github.event.issue.body || github.event.comment.body, '/cherry-pick')
@@ -89,7 +87,6 @@ jobs:
     name: Create Pull Request
     runs-on: ubuntu-20.04
     if: >-
-      (github.repository == 'llvm/llvm-project') &&
       github.event.action != 'closed' &&
       !startswith(github.event.comment.body, '<!--IGNORE-->') &&
       contains(github.event.comment.body, '/branch')
