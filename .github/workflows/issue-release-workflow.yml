@@ -80,6 +80,7 @@ jobs:
           release-workflow \
           --issue-number ${{ github.event.issue.number }} \
           --phab-token ${{ secrets.RELEASE_WORKFLOW_PHAB_TOKEN }} \
+          --branch-repo tstellar/llvm-project
           auto
 
   create-pull-request:
