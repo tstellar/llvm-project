@@ -15,19 +15,24 @@ jobs:
       id: validate-tag
       run: |
         test "${{ github.actor }}" = "tstellar"
-        echo "${{ github.ref }}" | grep -e 'llvmorg-[0-9.]\+\(-rc[0-9]\+\)\?'$
-        release_version=`echo "${{ github.ref }}" | sed 's/refs\/tags\/llvmorg-//g'`
+        echo "${{ github.ref_name }}" | grep -e '^llvmorg-[0-9]\+\.[0-9]\+\.[0-9]\(-rc[0-9]\+\)\?$'
+        release_version=`echo "${{ github.ref_name }}" | sed 's/llvmorg-//g'`
         echo "::set-output name=release-version::$release_version"
 
     - name: Install Dependencies
       run: |
-        sudo apt-get install doxygen python3-sphinx python3-recommonmark ninja-build graphviz texlive-font-utils python3-github
+        sudo apt-get install -y \
+            doxygen \
+            graphviz \
+            python3-github
+            python3-recommonmark \
+            python3-sphinx \
+            ninja-build \
+            texlive-font-utils
         pip3 install --user sphinx-markdown-tables
 
     - name: Checkout LLVM
-      uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
+      uses: actions/checkout@v3
 
     - name: Create Release
       run: |
@@ -40,7 +45,7 @@ jobs:
 
     - name: Clone www-releases
       if: ${{ !contains(steps.validate-tag.outputs.release-version, 'rc') }}
-      uses: actions/checkout@v1
+      uses: actions/checkout@v3
       with:
         repository: ${{ github.repository_owner }}/www-releases
         ref: main
