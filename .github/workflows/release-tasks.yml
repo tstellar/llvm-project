@@ -40,7 +40,7 @@ jobs:
       
     - name: Build Documentation
       run: |
-        bash llvm/utils/release/build-docs.sh -srcdir llvm -release ${{ steps.validate-tag.outputs.release-version }}
+        bash llvm/utils/release/build-docs.sh -srcdir llvm 
         ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release ${{ steps.validate-tag.outputs.release-version }} upload --files *doxygen*.tar.xz
 
     - name: Clone www-releases
