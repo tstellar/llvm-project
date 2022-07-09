@@ -87,6 +87,8 @@ if [ -n "$release" ]; then
   curl -L https://github.com/llvm/llvm-project/archive/$git_ref.tar.gz | tar --strip-components=1 -xzf -
   popd
   srcdir="./llvm-project/llvm"
+else
+  release=`git describe --tag | sed 's/llvmorg-//g'`
 fi
 
 cmake -G Ninja $srcdir -B $builddir \
