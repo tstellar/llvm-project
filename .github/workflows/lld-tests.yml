@@ -26,6 +26,7 @@ concurrency:
 
 jobs:
   check_lld:
+    if: github.repository_owner == 'llvm'
     name: Test lld
     uses: llvm/llvm-project/.github/workflows/llvm-project-tests.yml@release/14.x
     with:

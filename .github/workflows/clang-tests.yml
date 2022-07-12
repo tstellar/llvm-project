@@ -26,6 +26,7 @@ concurrency:
 
 jobs:
   check_clang:
+    if: github.repository_owner == 'llvm'
     name: Test clang,lldb,libclc
     uses: llvm/llvm-project/.github/workflows/llvm-project-tests.yml@release/14.x
     with:
