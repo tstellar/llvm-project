@@ -10,6 +10,8 @@ on:
       - '.github/workflows/llvm-project-tests.yml'
       - '!llvm/**'
   pull_request:
+    branches:
+      - 'release/**'
     paths:
       - 'clang/**'
       - '.github/workflows/clang-tests.yml'

@@ -8,6 +8,8 @@ on:
       - 'clang/**'
       - '.github/workflows/libclang-abi-tests.yml'
   pull_request:
+    branches:
+      - 'release/**'
     paths:
       - 'clang/**'
       - '.github/workflows/libclang-abi-tests.yml'

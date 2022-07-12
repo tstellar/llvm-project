@@ -11,6 +11,8 @@ on:
       - '!clang/**'
       - '!llvm/**'
   pull_request:
+    branches:
+      - 'release/**'
     paths:
       - 'libclc/**'
       - '.github/workflows/libclc-tests.yml'

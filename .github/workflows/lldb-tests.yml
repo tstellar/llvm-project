@@ -11,6 +11,8 @@ on:
       - '!clang/**'
       - '!llvm/**'
   pull_request:
+    branches:
+      - 'release/**'
     paths:
       - 'lldb/**'
       - '.github/workflows/lldb-tests.yml'
