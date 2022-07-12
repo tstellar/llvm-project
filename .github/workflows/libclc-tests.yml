@@ -30,7 +30,7 @@ jobs:
   check_libclc:
     if: github.repository_owner == 'llvm'
     name: Test libclc
-    uses: llvm/llvm-project/.github/workflows/llvm-project-tests.yml@release/14.x
+    uses: llvm/llvm-project/.github/workflows/llvm-project-tests.yml
     with:
       build_target: ''
       projects: clang;libclc
