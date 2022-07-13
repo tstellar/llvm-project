@@ -39,6 +39,7 @@ jobs:
       - name: Debug pkg-config
         run: |
           env
+          /usr/local/bin/pkg-config --help
           /usr/local/bin/pkg-config --version
           /usr/local/bin/pkg-config --libs libedit
           /usr/local/bin/pkg-config --dump-personality libedit
