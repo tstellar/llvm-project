@@ -38,6 +38,7 @@ jobs:
     steps:
       - name: Debug pkg-config
         run: |
+          env
           find /Library/Developer/CommandLineTools/SDKs/  -iname '*.pc'
           find  /Applications/Xcode_12.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -iname '*.pc'
       - name: Setup Windows
