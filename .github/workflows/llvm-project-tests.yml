@@ -39,7 +39,8 @@ jobs:
       - name: Debug pkg-config
         run: |
           env
-          pkg-config --dump-personality libedit
+          /usr/local/bin/pkg-config --version
+          /usr/local/bin/pkg-config --dump-personality libedit
           find /Library/Developer/CommandLineTools/SDKs/  -iname '*.pc'
           find  /Applications/Xcode_12.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -iname '*.pc'
       - name: Setup Windows
@@ -51,7 +52,7 @@ jobs:
         uses: llvm/actions/install-ninja@main
       - name: Debug pkg-config
         run: |
-          pkg-config libedit --path
+          /usr/local/bin/pkg-config libedit --path
           find /Library/Developer/CommandLineTools/SDKs/  -iname '*.pc'
           find  /Applications/Xcode_12.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -iname '*.pc'
       - uses: actions/checkout@v1
