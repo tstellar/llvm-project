@@ -36,6 +36,9 @@ jobs:
           # Use a specific version of macOS to ensure the CPLUS_INCLUDE_PATH workaround works.
           - macOS-10.15
     steps:
+      - name: Debug pkg-config
+        run: |
+          find / -iname '*.pc'
       - name: Setup Windows
         if: startsWith(matrix.os, 'windows')
         uses: llvm/actions/setup-windows@main
