@@ -40,6 +40,7 @@ jobs:
         run: |
           env
           /usr/local/bin/pkg-config --version
+          /usr/local/bin/pkg-config --libs libedit
           /usr/local/bin/pkg-config --dump-personality libedit
           find /Library/Developer/CommandLineTools/SDKs/  -iname '*.pc'
           find  /Applications/Xcode_12.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -iname '*.pc'
