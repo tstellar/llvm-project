@@ -38,7 +38,8 @@ jobs:
     steps:
       - name: Debug pkg-config
         run: |
-          find / -iname '*.pc'
+          find /Library/Developer/CommandLineTools/SDKs/  -iname '*.pc'
+          find  /Applications/Xcode_12.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -iname '*.pc'
       - name: Setup Windows
         if: startsWith(matrix.os, 'windows')
         uses: llvm/actions/setup-windows@main
@@ -46,6 +47,10 @@ jobs:
           arch: amd64
       - name: Install Ninja
         uses: llvm/actions/install-ninja@main
+      - name: Debug pkg-config
+        run: |
+          find /Library/Developer/CommandLineTools/SDKs/  -iname '*.pc'
+          find  /Applications/Xcode_12.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -iname '*.pc'
       - uses: actions/checkout@v1
         with:
           fetch-depth: 250
