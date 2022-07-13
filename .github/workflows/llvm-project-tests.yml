@@ -49,12 +49,8 @@ jobs:
       - name: Build and Test
         uses: llvm/actions/build-test-llvm-project@main
         with:
-          cmake_args: '-GNinja --trace-expand -DLLVM_ENABLE_PROJECTS="${{ inputs.projects }}" -DCMAKE_BUILD_TYPE=Release -DLLDB_INCLUDE_TESTS=OFF'
+          cmake_args: '-GNinja -DLLVM_ENABLE_PROJECTS="${{ inputs.projects }}" -DCMAKE_BUILD_TYPE=Release -DLLDB_INCLUDE_TESTS=OFF'
           build_target:  '${{ inputs.build_target }}'
-
-      - name: Debug
-        if: always()
-        run: pwd && cat CMakeCache.txt
 
       - name: Build and Test libclc
         if: "!startsWith(matrix.os, 'windows') && contains(inputs.projects, 'libclc')"
