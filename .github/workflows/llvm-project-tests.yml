@@ -49,7 +49,8 @@ jobs:
       - name: Build and Test
         uses: llvm/actions/build-test-llvm-project@main
         with:
-          cmake_args: '-GNinja -DLLVM_ENABLE_PROJECTS="${{ inputs.projects }}" -DCMAKE_BUILD_TYPE=Release -DLLDB_INCLUDE_TESTS=OFF'
+          # CMAKE_OSX_DEPLOYMENT_TARGET needed to workaround llvm.org/PR46190, https://github.com/actions/virtual-environments/issues/2274
+          cmake_args: '-GNinja -DLLVM_ENABLE_PROJECTS="${{ inputs.projects }}" -DCMAKE_BUILD_TYPE=Release -DLLDB_INCLUDE_TESTS=OFF -DCMAKE_OSX_DEPLOYMENT_TARGET=11.1'
           build_target:  '${{ inputs.build_target }}'
 
       - name: Build and Test libclc
