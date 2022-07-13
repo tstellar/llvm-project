@@ -38,6 +38,7 @@ jobs:
     steps:
       - name: Debug pkg-config
         run: |
+          pkg-config libedit --path
           env
           find /Library/Developer/CommandLineTools/SDKs/  -iname '*.pc'
           find  /Applications/Xcode_12.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -iname '*.pc'
@@ -50,6 +51,7 @@ jobs:
         uses: llvm/actions/install-ninja@main
       - name: Debug pkg-config
         run: |
+          pkg-config libedit --path
           find /Library/Developer/CommandLineTools/SDKs/  -iname '*.pc'
           find  /Applications/Xcode_12.4.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -iname '*.pc'
       - uses: actions/checkout@v1
