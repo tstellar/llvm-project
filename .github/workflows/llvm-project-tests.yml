@@ -27,9 +27,15 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - windows-2016
+          - ubuntu-latest
+          # Use windows-2019 due to:
+          # https://developercommunity.visualstudio.com/t/Prev-Issue---with-__assume-isnan-/1597317
           - windows-2019
-          - windows-2022
+          # We're using a specific version of macOS due to:
+          # https://github.com/actions/virtual-environments/issues/5900
+          # We need addtional testing to see if our workaround works for
+          # new macOS builds.
+          - macOS-10.15
     steps:
       - name: Setup Windows
         if: startsWith(matrix.os, 'windows')
