@@ -3,14 +3,12 @@ name: libclang ABI Tests
 on:
   workflow_dispatch:
   push:
-    ignore-forks: true
     branches:
       - 'release/**'
     paths:
       - 'clang/**'
       - '.github/workflows/libclang-abi-tests.yml'
   pull_request:
-    ignore-forks: true
     branches:
       - 'release/**'
     paths:

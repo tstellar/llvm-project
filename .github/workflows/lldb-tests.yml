@@ -3,7 +3,6 @@ name: lldb Tests
 on:
   workflow_dispatch:
   push:
-    ignore-forks: true
     branches:
       - 'release/**'
     paths:
@@ -13,7 +12,6 @@ on:
       - '!clang/**'
       - '!llvm/**'
   pull_request:
-    ignore-forks: true
     branches:
       - 'release/**'
     paths:
