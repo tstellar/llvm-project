@@ -1,6 +1,7 @@
 name: Clang Tests
 
 on:
+  workflow_dispatch:
   push:
     ignore-forks: true
     branches:
