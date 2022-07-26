@@ -29,29 +29,11 @@ concurrency:
 jobs:
   check_all:
     if: github.repository_owner == 'llvm'
-    name: Test llvm,clang,libclc
+    name: Test llvm,clang,lld,lldb,libclc
     uses: ./.github/workflows/llvm-project-tests.yml
     with:
       build_target: check-all
-      projects: clang;libclc
-
-  # These need to be separate from the check_all job, becuase there is not enough disk
-  # space to build all these projects on Windows.
-  build_lldb:
-    if: github.repository_owner == 'llvm'
-    name: Build lldb
-    uses: ./.github/workflows/llvm-project-tests.yml
-    with:
-      build_target: ''
-      projects: clang;lldb
-
-  check_lld:
-    if: github.repository_owner == 'llvm'
-    name: Test lld
-    uses: ./.github/workflows/llvm-project-tests.yml
-    with:
-      build_target: check-lld
-      projects: lld
+      projects: clang;lld;lldb;libclc
 
   abi-dump-setup:
     if: github.repository_owner == 'llvm'
@@ -87,7 +69,7 @@ jobs:
   abi-dump:
     if: github.repository_owner == 'llvm'
     needs: abi-dump-setup
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04-llvm
     strategy:
       matrix:
         name:
