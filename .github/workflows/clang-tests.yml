@@ -2,14 +2,17 @@ name: Clang Tests
 
 on:
   push:
+    ignore-forks: true
     branches:
       - 'release/**'
+    
     paths:
       - 'clang/**'
       - '.github/workflows/clang-tests.yml'
       - '.github/workflows/llvm-project-tests.yml'
       - '!llvm/**'
   pull_request:
+    ignore-forks: true
     branches:
       - 'release/**'
     paths:
