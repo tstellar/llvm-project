@@ -34,14 +34,14 @@ jobs:
     - name: Checkout LLVM
       uses: actions/checkout@v3
 
-    - name: Create Release
-      run: |
-         ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release ${{ steps.validate-tag.outputs.release-version }} create
+        #    - name: Create Release
+        #      run: |
+        #         ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release ${{ steps.validate-tag.outputs.release-version }} create
 
     - name: Build Documentation
       run: |
         ./llvm/utils/release/build-docs.sh -srcdir llvm
-        ./llvm/utils/release/github-upload-release.py --token ${{ github.token }} --release ${{ steps.validate-tag.outputs.release-version }} upload --files *doxygen*.tar.xz
+        #./llvm/utils/release/github-upload-release.py --token ${{ github.token }} --release ${{ steps.validate-tag.outputs.release-version }} upload --files *doxygen*.tar.xz
 
     - name: Clone www-releases
       if: ${{ !contains(steps.validate-tag.outputs.release-version, 'rc') }}
