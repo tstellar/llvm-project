@@ -98,7 +98,7 @@ cmake -G Ninja $srcdir -B $builddir \
                -DLLVM_DOXYGEN_SVG=ON \
                -DSPHINX_WARNINGS_AS_ERRORS=OFF
 
-ninja -C $builddir \
+ninja -v -C $builddir \
                docs-clang-html \
                docs-clang-tools-html \
                docs-flang-html \
