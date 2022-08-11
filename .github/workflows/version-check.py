@@ -19,8 +19,11 @@ else:
     # If the previous tag is llvmorg-X-init, then we should be at version X.0.0.
     m = re.match('llvmorg-([0-9]+)-init', tag)
     if not m:
-        print("error: Tag is not valid: ", tag)
-        sys.exit(1)
+        # Check if this is an rc tag.
+        m = re.match('llvmorg-([0-9]+)\.0\.0-rc[0-9]+')
+        if not m:
+            print("error: Tag is not valid: ", tag)
+            sys.exit(1)
     expected_major = m.group(1)
     expected_minor = 0
     expected_patch = 0
