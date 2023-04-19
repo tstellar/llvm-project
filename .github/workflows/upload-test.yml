@@ -53,6 +53,11 @@ jobs:
         fi
         bash .github/workflows/set-release-binary-outputs.sh "${{ github.actor }}" "$tag" "$upload"
 
+  test:
+    needs: prepare
+    runs-on: ubuntu-22.04
+    steps:
+
     - name: Upload binaries
       if: ${{ always() && needs.prepare.outputs.upload == 'true' }}
       run: |
