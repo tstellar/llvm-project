@@ -1,0 +1,70 @@
+name: Test Release Binaries
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: 'Upload binaries to the release page'
+        required: true
+        default: true
+        type: boolean
+      tag:
+        description: 'Tag to build'
+        required: true
+        type: string
+
+permissions:
+  contents: read # Default everything to read-only
+
+jobs:
+  prepare:
+    name: Prepare to build binaries
+    runs-on: ubuntu-22.04
+    if: github.repository == 'llvm/llvm-project'
+    outputs:
+      release-version: ${{ steps.validate-tag.outputs.release-version }}
+      release: ${{ steps.validate-tag.outputs.release }}
+      build-dir: ${{ steps.validate-tag.outputs.build-dir }}
+      rc-flags: ${{ steps.validate-tag.outputs.rc-flags }}
+      ref: ${{ steps.validate-tag.outputs.ref }}
+
+    steps:
+    - name: Checkout LLVM
+      uses: actions/checkout@v3
+
+    - name: Validate and parse tag
+      id: validate-tag
+      # In order for the test-release.sh script to run correctly, the LLVM
+      # source needs to be at the following location relative to the build dir:
+      # | X.Y.Z-rcN | ./rcN/llvm-project
+      # | X.Y.Z     | ./final/llvm-project
+      #
+      # We also need to set divergent flags based on the release version:
+      # | X.Y.Z-rcN | -rc N -test-asserts
+      # | X.Y.Z     | -final
+      run: |
+        tag="llvmorg-16.0.2"
+        trimmed=`echo ${{ inputs.tag }} | xargs`
+        [[ "$trimmed" != "" ]] && tag="$trimmed"
+        if [ -n "" ]; then
+          upload=""
+        else
+          upload="true"
+        fi
+        bash .github/workflows/set-release-binary-outputs.sh "${{ github.actor }}" "$tag" "$upload"
+
+    - name: Upload binaries
+      if: ${{ always() && needs.prepare.outputs.upload == 'true' }}
+      run: |
+        echo "always() && needs.prepare.outputs.upload == 'true'"
+    
+    - name: Upload binaries test
+      if: always() && needs.prepare.outputs.upload == 'true'
+      run: |
+        echo "always() && needs.prepare.outputs.upload == 'true' without dolarsign"
+    
+    - name: Upload binaries test 3
+      if: always() && needs.prepare.outputs.upload
+      run: |
+        echo "always() && needs.prepare.outputs.upload"
