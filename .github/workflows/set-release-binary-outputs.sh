@@ -32,3 +32,10 @@ echo "build-dir=$build_dir" >> $GITHUB_OUTPUT
 echo "rc-flags=$rc_flags" >> $GITHUB_OUTPUT
 echo "upload=$upload" >> $GITHUB_OUTPUT
 echo "ref=$tag" >> $GITHUB_OUTPUT
+
+echo "release-version=$release_version"
+echo "release=$release"
+echo "build-dir=$build_dir"
+echo "rc-flags=$rc_flags"
+echo "upload=$upload"
+echo "ref=$tag"
