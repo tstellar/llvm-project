@@ -13,6 +13,7 @@
 #ifndef LLVM_TEXTAPI_PACKEDVERSION_H
 #define LLVM_TEXTAPI_PACKEDVERSION_H
 
+#include "llvm/Support/Compiler.h"
 #include <cstdint>
 #include <string>
 #include <utility>
