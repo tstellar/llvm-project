@@ -19,6 +19,7 @@
 #include "llvm/IR/DebugLoc.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/Support/Allocator.h"
+#include "llvm/Support/Compiler.h"
 #include <forward_list>
 #include <map>
 #include <optional>

@@ -13,6 +13,7 @@
 #include <type_traits>
 #include <utility>
 
+#include "llvm/Support/Compiler.h"
 #include "llvm/Support/MathExtras.h"
 
 /// LLVM_MARK_AS_BITMASK_ENUM lets you opt in an individual enum type so you can

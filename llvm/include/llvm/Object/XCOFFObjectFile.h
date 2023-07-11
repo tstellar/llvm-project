@@ -17,6 +17,7 @@
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/BinaryFormat/XCOFF.h"
 #include "llvm/Object/ObjectFile.h"
+#include "llvm/Support/Compiler.h"
 #include "llvm/Support/Endian.h"
 #include <limits>
 
