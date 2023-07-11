@@ -11,6 +11,7 @@
 
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/DWARFLinkerParallel/StringPool.h"
+#include "llvm/Support/Compiler.h"
 
 namespace llvm {
 namespace dwarflinker_parallel {

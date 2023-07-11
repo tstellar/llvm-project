@@ -15,6 +15,7 @@
 
 #include "llvm/ADT/ArrayRef.h"
 #include "llvm/ADT/StringMap.h"
+#include "llvm/Support/Compiler.h"
 
 namespace llvm {
 template <typename T> class SmallVectorImpl;

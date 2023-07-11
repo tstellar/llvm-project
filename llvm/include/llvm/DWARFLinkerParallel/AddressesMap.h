@@ -12,6 +12,7 @@
 #include "llvm/ADT/AddressRanges.h"
 #include "llvm/DebugInfo/DWARF/DWARFDie.h"
 #include "llvm/DebugInfo/DWARF/DWARFExpression.h"
+#include "llvm/Support/Compiler.h"
 #include <cstdint>
 
 namespace llvm {

@@ -22,6 +22,7 @@
 
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/ADT/STLExtras.h"
+#include "llvm/Support/Compiler.h"
 #include <cassert>
 
 namespace llvm {

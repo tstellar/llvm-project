@@ -18,6 +18,7 @@
 #include "llvm/ADT/GenericSSAContext.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/ModuleSlotTracker.h"
+#include "llvm/Support/Compiler.h"
 #include "llvm/Support/Printable.h"
 
 #include <memory>

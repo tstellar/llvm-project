@@ -16,6 +16,7 @@
 #define LLVM_CODEGEN_MACHINESSACONTEXT_H
 
 #include "llvm/CodeGen/MachineBasicBlock.h"
+#include "llvm/Support/Compiler.h"
 #include "llvm/Support/Printable.h"
 
 namespace llvm {
