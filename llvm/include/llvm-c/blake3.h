@@ -17,6 +17,7 @@
 #ifndef LLVM_C_BLAKE3_H
 #define LLVM_C_BLAKE3_H
 
+#include "llvm/Support/Compiler.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -33,7 +34,7 @@ extern "C" {
 
 // This struct is a private implementation detail. It has to be here because
 // it's part of llvm_blake3_hasher below.
-typedef struct LLVM_ABI {
+typedef struct {
   uint32_t cv[8];
   uint64_t chunk_counter;
   uint8_t buf[LLVM_BLAKE3_BLOCK_LEN];
@@ -42,7 +43,7 @@ typedef struct LLVM_ABI {
   uint8_t flags;
 } llvm_blake3_chunk_state;
 
-typedef struct LLVM_ABI {
+typedef struct {
   uint32_t key[8];
   llvm_blake3_chunk_state chunk;
   uint8_t cv_stack_len;

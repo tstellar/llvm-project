@@ -9,6 +9,8 @@
 #ifndef LLVM_TEXTAPI_TEXTAPIWRITER_H
 #define LLVM_TEXTAPI_TEXTAPIWRITER_H
 
+#include "llvm/Support/Compiler.h"
+
 namespace llvm {
 
 class Error;

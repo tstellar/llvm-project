@@ -10,6 +10,7 @@
 #define LLVM_MC_DXCONTAINERPSVINFO_H
 
 #include "llvm/BinaryFormat/DXContainer.h"
+#include "llvm/Support/Compiler.h"
 #include "llvm/TargetParser/Triple.h"
 
 #include <numeric>

@@ -10,6 +10,7 @@
 #define LLVM_TRANSFORMS_UTILS_INSTRUCTIONNAMER_H
 
 #include "llvm/IR/PassManager.h"
+#include "llvm/Support/Compiler.h"
 
 namespace llvm {
 struct LLVM_ABI InstructionNamerPass : PassInfoMixin<InstructionNamerPass> {
