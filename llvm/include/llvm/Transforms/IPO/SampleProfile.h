@@ -23,6 +23,13 @@ namespace llvm {
 
 class Module;
 
+extern cl::opt<int> SampleHotCallSiteThreshold;
+extern cl::opt<int> SampleColdCallSiteThreshold;
+extern cl::opt<int> ProfileInlineGrowthLimit;
+extern cl::opt<int> ProfileInlineLimitMin;
+extern cl::opt<int> ProfileInlineLimitMax;
+extern cl::opt<bool> SortProfiledSCC;
+
 namespace vfs {
 class FileSystem;
 } // namespace vfs
