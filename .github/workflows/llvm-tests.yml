@@ -6,10 +6,6 @@ permissions:
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'llvm/**'
-      - '.github/workflows/llvm-tests.yml'
-      - '.github/workflows/llvm-project-tests.yml'
 
 concurrency:
   # Skip intermediate builds: always.
