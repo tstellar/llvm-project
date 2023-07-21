@@ -24,7 +24,7 @@
 #endif
 
 namespace llvm {
-HANDLE
+LLVM_ABI HANDLE
 llvm_execute_on_thread_impl(unsigned(__stdcall *ThreadFunc)(void *), void *Arg,
                             std::optional<unsigned> StackSizeInBytes) {
   HANDLE hThread = (HANDLE)::_beginthreadex(NULL, StackSizeInBytes.value_or(0),
@@ -37,21 +37,21 @@ llvm_execute_on_thread_impl(unsigned(__stdcall *ThreadFunc)(void *), void *Arg,
   return hThread;
 }
 
-void llvm_thread_join_impl(HANDLE hThread) {
+LLVM_ABI void llvm_thread_join_impl(HANDLE hThread) {
   if (::WaitForSingleObject(hThread, INFINITE) == WAIT_FAILED) {
     ReportLastErrorFatal("WaitForSingleObject failed");
   }
 }
 
-void llvm_thread_detach_impl(HANDLE hThread) {
+LLVM_ABI void llvm_thread_detach_impl(HANDLE hThread) {
   if (::CloseHandle(hThread) == FALSE) {
     ReportLastErrorFatal("CloseHandle failed");
   }
 }
 
-DWORD llvm_thread_get_id_impl(HANDLE hThread) { return ::GetThreadId(hThread); }
+LLVM_ABI DWORD llvm_thread_get_id_impl(HANDLE hThread) { return ::GetThreadId(hThread); }
 
-DWORD llvm_thread_get_current_id_impl() { return ::GetCurrentThreadId(); }
+LLVM_ABI DWORD llvm_thread_get_current_id_impl() { return ::GetCurrentThreadId(); }
 
 } // namespace llvm
 
