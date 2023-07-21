@@ -22,7 +22,7 @@
 namespace llvm {
 
 template <typename Derived, typename InsertedThunksTy = bool>
-class ThunkInserter {
+class LLVM_ABI ThunkInserter {
   Derived &getDerived() { return *static_cast<Derived *>(this); }
 
 protected:

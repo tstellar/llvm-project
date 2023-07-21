@@ -66,7 +66,7 @@ inline bool operator<(const DataRefImpl &a, const DataRefImpl &b) {
   return std::memcmp(&a, &b, sizeof(DataRefImpl)) < 0;
 }
 
-template <class content_type> class content_iterator {
+template <class content_type> class LLVM_ABI content_iterator {
   content_type Current;
 
 public:
@@ -100,7 +100,7 @@ class SymbolicFile;
 
 /// This is a value type class that represents a single symbol in the list of
 /// symbols in the object file.
-class BasicSymbolRef {
+class LLVM_ABI BasicSymbolRef {
   DataRefImpl SymbolPimpl;
   const SymbolicFile *OwningObject = nullptr;
 
@@ -142,7 +142,7 @@ public:
 
 using basic_symbol_iterator = content_iterator<BasicSymbolRef>;
 
-class SymbolicFile : public Binary {
+class LLVM_ABI SymbolicFile : public Binary {
 public:
   SymbolicFile(unsigned int Type, MemoryBufferRef Source);
   ~SymbolicFile() override;

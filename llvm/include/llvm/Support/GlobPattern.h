@@ -26,7 +26,7 @@ namespace llvm {
 template <typename T> class ArrayRef;
 class StringRef;
 
-class GlobPattern {
+class LLVM_ABI GlobPattern {
 public:
   static Expected<GlobPattern> create(StringRef Pat);
   bool match(StringRef S) const;

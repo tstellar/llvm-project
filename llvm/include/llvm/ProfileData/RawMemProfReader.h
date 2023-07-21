@@ -35,7 +35,7 @@ namespace memprof {
 // each program counter address in the callstack.
 using CallStackMap = llvm::DenseMap<uint64_t, llvm::SmallVector<uint64_t>>;
 
-class RawMemProfReader {
+class LLVM_ABI RawMemProfReader {
 public:
   RawMemProfReader(const RawMemProfReader &) = delete;
   RawMemProfReader &operator=(const RawMemProfReader &) = delete;

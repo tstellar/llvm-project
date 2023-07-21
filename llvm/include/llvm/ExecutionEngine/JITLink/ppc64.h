@@ -42,9 +42,9 @@ enum EdgeKind_ppc64 : Edge::Kind {
   RequestPLTCallStubSaveTOC,
 };
 
-extern const char NullPointerContent[8];
-extern const char PointerJumpStubContent_big[20];
-extern const char PointerJumpStubContent_little[20];
+LLVM_ABI extern const char NullPointerContent[8];
+LLVM_ABI extern const char PointerJumpStubContent_big[20];
+LLVM_ABI extern const char PointerJumpStubContent_little[20];
 
 inline Symbol &createAnonymousPointer(LinkGraph &G, Section &PointerSection,
                                       Symbol *InitialTarget = nullptr,
@@ -89,7 +89,7 @@ createAnonymousPointerJumpStub(LinkGraph &G, Section &StubSection,
 }
 
 template <support::endianness Endianness>
-class TOCTableManager : public TableManager<TOCTableManager<Endianness>> {
+class LLVM_ABI TOCTableManager : public TableManager<TOCTableManager<Endianness>> {
 public:
   // FIXME: `llvm-jitlink -check` relies this name to be $__GOT.
   static StringRef getSectionName() { return "$__GOT"; }
@@ -128,7 +128,7 @@ private:
 };
 
 template <support::endianness Endianness>
-class PLTTableManager : public TableManager<PLTTableManager<Endianness>> {
+class LLVM_ABI PLTTableManager : public TableManager<PLTTableManager<Endianness>> {
 public:
   PLTTableManager(TOCTableManager<Endianness> &TOC) : TOC(TOC) {}
 
@@ -173,7 +173,7 @@ private:
 
 /// Returns a string name for the given ppc64 edge. For debugging purposes
 /// only.
-const char *getEdgeKindName(Edge::Kind K);
+LLVM_ABI const char *getEdgeKindName(Edge::Kind K);
 
 inline static uint16_t ha16(uint64_t x) { return (x + 0x8000) >> 16; }
 

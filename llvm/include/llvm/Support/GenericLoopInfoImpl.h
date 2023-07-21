@@ -507,7 +507,7 @@ static void discoverAndMapSubloop(LoopT *L, ArrayRef<BlockT *> Backedges,
 }
 
 /// Populate all loop data in a stable order during a single forward DFS.
-template <class BlockT, class LoopT> class PopulateLoopsDFS {
+template <class BlockT, class LoopT> class LLVM_ABI PopulateLoopsDFS {
   typedef GraphTraits<BlockT *> BlockTraits;
   typedef typename BlockTraits::ChildIteratorType SuccIterTy;
 

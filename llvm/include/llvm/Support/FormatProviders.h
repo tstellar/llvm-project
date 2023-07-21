@@ -27,38 +27,38 @@
 namespace llvm {
 namespace detail {
 template <typename T>
-struct use_integral_formatter
+struct LLVM_ABI use_integral_formatter
     : public std::integral_constant<
           bool, is_one_of<T, uint8_t, int16_t, uint16_t, int32_t, uint32_t,
                           int64_t, uint64_t, int, unsigned, long, unsigned long,
                           long long, unsigned long long>::value> {};
 
 template <typename T>
-struct use_char_formatter
+struct LLVM_ABI use_char_formatter
     : public std::integral_constant<bool, std::is_same_v<T, char>> {};
 
 template <typename T>
-struct is_cstring
+struct LLVM_ABI is_cstring
     : public std::integral_constant<bool,
                                     is_one_of<T, char *, const char *>::value> {
 };
 
 template <typename T>
-struct use_string_formatter
+struct LLVM_ABI use_string_formatter
     : public std::integral_constant<bool,
                                     std::is_convertible_v<T, llvm::StringRef>> {
 };
 
 template <typename T>
-struct use_pointer_formatter
+struct LLVM_ABI use_pointer_formatter
     : public std::integral_constant<bool, std::is_pointer_v<T> &&
                                               !is_cstring<T>::value> {};
 
 template <typename T>
-struct use_double_formatter
+struct LLVM_ABI use_double_formatter
     : public std::integral_constant<bool, std::is_floating_point_v<T>> {};
 
-class HelperFunctions {
+class LLVM_ABI HelperFunctions {
 protected:
   static std::optional<size_t> parseNumericPrecision(StringRef Str) {
     size_t Prec;
@@ -124,7 +124,7 @@ protected:
 ///
 
 template <typename T>
-struct format_provider<
+struct LLVM_ABI format_provider<
     T, std::enable_if_t<detail::use_integral_formatter<T>::value>>
     : public detail::HelperFunctions {
 private:
@@ -173,7 +173,7 @@ public:
 /// The default precision is the number of nibbles in a machine word, and in all
 /// cases indicates the minimum number of nibbles to print.
 template <typename T>
-struct format_provider<
+struct LLVM_ABI format_provider<
     T, std::enable_if_t<detail::use_pointer_formatter<T>::value>>
     : public detail::HelperFunctions {
 private:
@@ -198,7 +198,7 @@ public:
 /// printed up to the null terminator.
 
 template <typename T>
-struct format_provider<
+struct LLVM_ABI format_provider<
     T, std::enable_if_t<detail::use_string_formatter<T>::value>> {
   static void format(const T &V, llvm::raw_ostream &Stream, StringRef Style) {
     size_t N = StringRef::npos;
@@ -214,7 +214,7 @@ struct format_provider<
 ///
 /// This follows the same rules as the string formatter.
 
-template <> struct format_provider<Twine> {
+template <> struct LLVM_ABI format_provider<Twine> {
   static void format(const Twine &V, llvm::raw_ostream &Stream,
                      StringRef Style) {
     format_provider<std::string>::format(V.str(), Stream, Style);
@@ -231,7 +231,7 @@ template <> struct format_provider<Twine> {
 /// character.  Otherwise, it is treated as an integer options string.
 ///
 template <typename T>
-struct format_provider<T,
+struct LLVM_ABI format_provider<T,
                        std::enable_if_t<detail::use_char_formatter<T>::value>> {
   static void format(const char &V, llvm::raw_ostream &Stream,
                      StringRef Style) {
@@ -260,7 +260,7 @@ struct format_provider<T,
 ///   |    t    |     true / false     |
 ///   | (empty) |   Equivalent to 't'  |
 ///   ==================================
-template <> struct format_provider<bool> {
+template <> struct LLVM_ABI format_provider<bool> {
   static void format(const bool &B, llvm::raw_ostream &Stream,
                      StringRef Style) {
     Stream << StringSwitch<const char *>(Style)
@@ -297,7 +297,7 @@ template <> struct format_provider<bool> {
 /// else.
 
 template <typename T>
-struct format_provider<T,
+struct LLVM_ABI format_provider<T,
                        std::enable_if_t<detail::use_double_formatter<T>::value>>
     : public detail::HelperFunctions {
   static void format(const T &V, llvm::raw_ostream &Stream, StringRef Style) {
@@ -326,7 +326,7 @@ template <typename IterT>
 using IterValue = typename std::iterator_traits<IterT>::value_type;
 
 template <typename IterT>
-struct range_item_has_provider
+struct LLVM_ABI range_item_has_provider
     : public std::integral_constant<
           bool, !uses_missing_provider<IterValue<IterT>>::value> {};
 }
@@ -354,7 +354,7 @@ struct range_item_has_provider
 /// provider can be found for T will result in a compile error.
 ///
 
-template <typename IterT> class format_provider<llvm::iterator_range<IterT>> {
+template <typename IterT> class LLVM_ABI format_provider<llvm::iterator_range<IterT>> {
   using value = typename std::iterator_traits<IterT>::value_type;
 
   static StringRef consumeOneOption(StringRef &Style, char Indicator,

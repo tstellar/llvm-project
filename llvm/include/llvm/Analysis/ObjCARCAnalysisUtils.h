@@ -36,7 +36,7 @@ class AAResults;
 namespace objcarc {
 
 /// A handy option to enable/disable all ARC Optimizations.
-extern bool EnableARCOpts;
+LLVM_ABI extern bool EnableARCOpts;
 
 /// Test if the given module looks interesting to run ARC optimization
 /// on.
@@ -166,7 +166,7 @@ inline bool IsPotentialRetainableObjPtr(const Value *Op) {
   return true;
 }
 
-bool IsPotentialRetainableObjPtr(const Value *Op, AAResults &AA);
+LLVM_ABI bool IsPotentialRetainableObjPtr(const Value *Op, AAResults &AA);
 
 /// Helper for GetARCInstKind. Determines what kind of construct CS
 /// is.
@@ -225,7 +225,7 @@ enum class ARCMDKindID {
 };
 
 /// A cache of MDKinds used by various ARC optimizations.
-class ARCMDKindCache {
+class LLVM_ABI ARCMDKindCache {
   Module *M;
 
   /// The Metadata Kind for clang.imprecise_release metadata.

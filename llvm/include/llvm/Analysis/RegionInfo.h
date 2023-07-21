@@ -72,7 +72,7 @@ class raw_ostream;
 // (i.e. BasicBlocks or MachineBasicBlocks). This is only to avoid needing to
 // pass around an unreasonable number of template parameters.
 template <class FuncT_>
-struct RegionTraits {
+struct LLVM_ABI RegionTraits {
   // FuncT
   // BlockT
   // RegionT
@@ -82,7 +82,7 @@ struct RegionTraits {
 };
 
 template <>
-struct RegionTraits<Function> {
+struct LLVM_ABI RegionTraits<Function> {
   using FuncT = Function;
   using BlockT = BasicBlock;
   using RegionT = Region;
@@ -109,12 +109,12 @@ struct RegionTraits<Function> {
 /// selected for SubRegions just one RegionNode containing the subregion is
 /// returned.
 template <class GraphType>
-class FlatIt {};
+class LLVM_ABI FlatIt {};
 
 /// A RegionNode represents a subregion or a BasicBlock that is part of a
 /// Region.
 template <class Tr>
-class RegionNodeBase {
+class LLVM_ABI RegionNodeBase {
   friend class RegionBase<Tr>;
 
 public:
@@ -251,7 +251,7 @@ public:
 /// The first call returns a textual representation of the program structure
 /// tree, the second one creates a graphical representation using graphviz.
 template <class Tr>
-class RegionBase : public RegionNodeBase<Tr> {
+class LLVM_ABI RegionBase : public RegionNodeBase<Tr> {
   friend class RegionInfoBase<Tr>;
 
   using FuncT = typename Tr::FuncT;
@@ -671,7 +671,7 @@ inline raw_ostream &operator<<(raw_ostream &OS, const RegionNodeBase<Tr> &Node);
 /// are connected using the parent relation. This builds a Program Structure
 /// Tree.
 template <class Tr>
-class RegionInfoBase {
+class LLVM_ABI RegionInfoBase {
   friend class RegionInfo;
   friend class MachineRegionInfo;
 
@@ -876,7 +876,7 @@ public:
   void verifyAnalysis() const;
 };
 
-class RegionNode : public RegionNodeBase<RegionTraits<Function>> {
+class LLVM_ABI RegionNode : public RegionNodeBase<RegionTraits<Function>> {
 public:
   inline RegionNode(Region *Parent, BasicBlock *Entry, bool isSubRegion = false)
       : RegionNodeBase<RegionTraits<Function>>(Parent, Entry, isSubRegion) {}
@@ -886,7 +886,7 @@ public:
   }
 };
 
-class Region : public RegionBase<RegionTraits<Function>> {
+class LLVM_ABI Region : public RegionBase<RegionTraits<Function>> {
 public:
   Region(BasicBlock *Entry, BasicBlock *Exit, RegionInfo *RI, DominatorTree *DT,
          Region *Parent = nullptr);
@@ -897,7 +897,7 @@ public:
   }
 };
 
-class RegionInfo : public RegionInfoBase<RegionTraits<Function>> {
+class LLVM_ABI RegionInfo : public RegionInfoBase<RegionTraits<Function>> {
 public:
   using Base = RegionInfoBase<RegionTraits<Function>>;
 
@@ -939,7 +939,7 @@ public:
 #endif
 };
 
-class RegionInfoPass : public FunctionPass {
+class LLVM_ABI RegionInfoPass : public FunctionPass {
   RegionInfo RI;
 
 public:
@@ -964,7 +964,7 @@ public:
 };
 
 /// Analysis pass that exposes the \c RegionInfo for a function.
-class RegionInfoAnalysis : public AnalysisInfoMixin<RegionInfoAnalysis> {
+class LLVM_ABI RegionInfoAnalysis : public AnalysisInfoMixin<RegionInfoAnalysis> {
   friend AnalysisInfoMixin<RegionInfoAnalysis>;
 
   static AnalysisKey Key;
@@ -976,7 +976,7 @@ public:
 };
 
 /// Printer pass for the \c RegionInfo.
-class RegionInfoPrinterPass : public PassInfoMixin<RegionInfoPrinterPass> {
+class LLVM_ABI RegionInfoPrinterPass : public PassInfoMixin<RegionInfoPrinterPass> {
   raw_ostream &OS;
 
 public:
@@ -986,7 +986,7 @@ public:
 };
 
 /// Verifier pass for the \c RegionInfo.
-struct RegionInfoVerifierPass : PassInfoMixin<RegionInfoVerifierPass> {
+struct LLVM_ABI RegionInfoVerifierPass : PassInfoMixin<RegionInfoVerifierPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 

@@ -37,11 +37,11 @@ namespace llvm {
 
 namespace DOT {  // Private functions...
 
-std::string EscapeString(const std::string &Label);
+LLVM_ABI std::string EscapeString(const std::string &Label);
 
 /// Get a color string for this node number. Simply round-robin selects
 /// from a reasonable number of colors.
-StringRef getColorString(unsigned NodeNumber);
+LLVM_ABI StringRef getColorString(unsigned NodeNumber);
 
 } // end namespace DOT
 
@@ -57,11 +57,11 @@ enum Name {
 
 } // end namespace GraphProgram
 
-bool DisplayGraph(StringRef Filename, bool wait = true,
+LLVM_ABI bool DisplayGraph(StringRef Filename, bool wait = true,
                   GraphProgram::Name program = GraphProgram::DOT);
 
 template<typename GraphType>
-class GraphWriter {
+class LLVM_ABI GraphWriter {
   raw_ostream &O;
   const GraphType &G;
   bool RenderUsingHTML = false;
@@ -368,7 +368,7 @@ raw_ostream &WriteGraph(raw_ostream &O, const GraphType &G,
   return O;
 }
 
-std::string createGraphFilename(const Twine &Name, int &FD);
+LLVM_ABI std::string createGraphFilename(const Twine &Name, int &FD);
 
 /// Writes graph into a provided @c Filename.
 /// If @c Filename is empty, generates a random one.

@@ -25,7 +25,7 @@ class LPMUpdater;
 
 /// Options to disable Loop Idiom Recognize, which can be shared with other
 /// passes.
-struct DisableLIRP {
+struct LLVM_ABI DisableLIRP {
   /// When true, the entire pass is disabled.
   static bool All;
 
@@ -37,7 +37,7 @@ struct DisableLIRP {
 };
 
 /// Performs Loop Idiom Recognize Pass.
-class LoopIdiomRecognizePass : public PassInfoMixin<LoopIdiomRecognizePass> {
+class LLVM_ABI LoopIdiomRecognizePass : public PassInfoMixin<LoopIdiomRecognizePass> {
 public:
   PreservedAnalyses run(Loop &L, LoopAnalysisManager &AM,
                         LoopStandardAnalysisResults &AR, LPMUpdater &U);

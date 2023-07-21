@@ -20,7 +20,7 @@ template <typename T> struct VarStreamArrayExtractor;
 namespace pdb {
 struct ModuleInfoHeader;
 struct SectionContrib;
-class DbiModuleDescriptor {
+class LLVM_ABI DbiModuleDescriptor {
   friend class DbiStreamBuilder;
 
 public:
@@ -55,7 +55,7 @@ private:
 
 } // end namespace pdb
 
-template <> struct VarStreamArrayExtractor<pdb::DbiModuleDescriptor> {
+template <> struct LLVM_ABI VarStreamArrayExtractor<pdb::DbiModuleDescriptor> {
   Error operator()(BinaryStreamRef Stream, uint32_t &Length,
                    pdb::DbiModuleDescriptor &Info) {
     if (auto EC = pdb::DbiModuleDescriptor::initialize(Stream, Info))

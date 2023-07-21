@@ -23,7 +23,7 @@ namespace llvm {
 ///
 template <class AllocatorType, class T, size_t Size = sizeof(T),
           size_t Align = alignof(T)>
-class RecyclingAllocator {
+class LLVM_ABI RecyclingAllocator {
 private:
   /// Base - Implementation details.
   ///

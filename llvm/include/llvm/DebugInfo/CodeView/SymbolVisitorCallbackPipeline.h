@@ -17,7 +17,7 @@
 namespace llvm {
 namespace codeview {
 
-class SymbolVisitorCallbackPipeline : public SymbolVisitorCallbacks {
+class LLVM_ABI SymbolVisitorCallbackPipeline : public SymbolVisitorCallbacks {
 public:
   SymbolVisitorCallbackPipeline() = default;
 

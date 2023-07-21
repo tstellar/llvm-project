@@ -35,7 +35,7 @@ class Use;
 class Value;
 
 /// Eliminate dead arguments (and return values) from functions.
-class DeadArgumentEliminationPass
+class LLVM_ABI DeadArgumentEliminationPass
     : public PassInfoMixin<DeadArgumentEliminationPass> {
 public:
   /// Struct that represents (part of) either a return value or a function

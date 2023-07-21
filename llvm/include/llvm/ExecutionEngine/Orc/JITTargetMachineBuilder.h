@@ -31,7 +31,7 @@ class raw_ostream;
 namespace orc {
 
 /// A utility class for building TargetMachines for JITs.
-class JITTargetMachineBuilder {
+class LLVM_ABI JITTargetMachineBuilder {
 #ifndef NDEBUG
   friend class JITTargetMachineBuilderPrinter;
 #endif

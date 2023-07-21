@@ -43,7 +43,7 @@ inline Triple::EnvironmentType getShaderStage(uint32_t Kind) {
   return static_cast<Triple::EnvironmentType>(Triple::Pixel + Kind);
 }
 
-struct Hash {
+struct LLVM_ABI Hash {
   uint8_t Digest[16];
 };
 
@@ -53,7 +53,7 @@ enum class HashFlags : uint32_t {
                       // taking into account source information (-Zss)
 };
 
-struct ShaderHash {
+struct LLVM_ABI ShaderHash {
   uint32_t Flags; // dxbc::HashFlags
   uint8_t Digest[16];
 
@@ -62,7 +62,7 @@ struct ShaderHash {
   void swapBytes() { sys::swapByteOrder(Flags); }
 };
 
-struct ContainerVersion {
+struct LLVM_ABI ContainerVersion {
   uint16_t Major;
   uint16_t Minor;
 
@@ -72,7 +72,7 @@ struct ContainerVersion {
   }
 };
 
-struct Header {
+struct LLVM_ABI Header {
   uint8_t Magic[4]; // "DXBC"
   Hash FileHash;
   ContainerVersion Version;
@@ -89,7 +89,7 @@ struct Header {
 };
 
 /// Use this type to describe the size and type of a DXIL container part.
-struct PartHeader {
+struct LLVM_ABI PartHeader {
   uint8_t Name[4];
   uint32_t Size;
 
@@ -100,7 +100,7 @@ struct PartHeader {
   // Structure is followed directly by part data: uint8_t PartData[PartSize].
 };
 
-struct BitcodeHeader {
+struct LLVM_ABI BitcodeHeader {
   uint8_t Magic[4];     // ACSII "DXIL".
   uint8_t MajorVersion; // DXIL version.
   uint8_t MinorVersion; // DXIL version.
@@ -117,7 +117,7 @@ struct BitcodeHeader {
   }
 };
 
-struct ProgramHeader {
+struct LLVM_ABI ProgramHeader {
   uint8_t MinorVersion : 4;
   uint8_t MajorVersion : 4;
   uint8_t Unused;
@@ -147,9 +147,9 @@ enum class FeatureFlags : uint64_t {
 static_assert((uint64_t)FeatureFlags::NextUnusedBit <= 1ull << 63,
               "Shader flag bits exceed enum size.");
 
-PartType parsePartType(StringRef S);
+LLVM_ABI PartType parsePartType(StringRef S);
 
-struct VertexPSVInfo {
+struct LLVM_ABI VertexPSVInfo {
   uint8_t OutputPositionPresent;
   uint8_t Unused[3];
 
@@ -158,7 +158,7 @@ struct VertexPSVInfo {
   }
 };
 
-struct HullPSVInfo {
+struct LLVM_ABI HullPSVInfo {
   uint32_t InputControlPointCount;
   uint32_t OutputControlPointCount;
   uint32_t TessellatorDomain;
@@ -172,7 +172,7 @@ struct HullPSVInfo {
   }
 };
 
-struct DomainPSVInfo {
+struct LLVM_ABI DomainPSVInfo {
   uint32_t InputControlPointCount;
   uint8_t OutputPositionPresent;
   uint8_t Unused[3];
@@ -184,7 +184,7 @@ struct DomainPSVInfo {
   }
 };
 
-struct GeometryPSVInfo {
+struct LLVM_ABI GeometryPSVInfo {
   uint32_t InputPrimitive;
   uint32_t OutputTopology;
   uint32_t OutputStreamMask;
@@ -198,7 +198,7 @@ struct GeometryPSVInfo {
   }
 };
 
-struct PixelPSVInfo {
+struct LLVM_ABI PixelPSVInfo {
   uint8_t DepthOutput;
   uint8_t SampleFrequency;
   uint8_t Unused[2];
@@ -208,7 +208,7 @@ struct PixelPSVInfo {
   }
 };
 
-struct MeshPSVInfo {
+struct LLVM_ABI MeshPSVInfo {
   uint32_t GroupSharedBytesUsed;
   uint32_t GroupSharedBytesDependentOnViewID;
   uint32_t PayloadSizeInBytes;
@@ -224,7 +224,7 @@ struct MeshPSVInfo {
   }
 };
 
-struct AmplificationPSVInfo {
+struct LLVM_ABI AmplificationPSVInfo {
   uint32_t PayloadSizeInBytes;
 
   void swapBytes() { sys::swapByteOrder(PayloadSizeInBytes); }
@@ -274,7 +274,7 @@ static_assert(sizeof(PipelinePSVInfo) == 4 * sizeof(uint32_t),
 namespace PSV {
 
 namespace v0 {
-struct RuntimeInfo {
+struct LLVM_ABI RuntimeInfo {
   PipelinePSVInfo StageInfo;
   uint32_t MinimumWaveLaneCount; // minimum lane count required, 0 if unused
   uint32_t MaximumWaveLaneCount; // maximum lane count required,
@@ -288,7 +288,7 @@ struct RuntimeInfo {
   void swapBytes(Triple::EnvironmentType Stage) { StageInfo.swapBytes(Stage); }
 };
 
-struct ResourceBindInfo {
+struct LLVM_ABI ResourceBindInfo {
   uint32_t Type;
   uint32_t Space;
   uint32_t LowerBound;
@@ -306,7 +306,7 @@ struct ResourceBindInfo {
 
 namespace v1 {
 
-struct MeshRuntimeInfo {
+struct LLVM_ABI MeshRuntimeInfo {
   uint8_t SigPrimVectors; // Primitive output for MS
   uint8_t MeshOutputTopology;
 };
@@ -318,7 +318,7 @@ union GeometryExtraInfo {
                                       // MeshInfo::SigPrimVectors)
   MeshRuntimeInfo MeshInfo;
 };
-struct RuntimeInfo : public v0::RuntimeInfo {
+struct LLVM_ABI RuntimeInfo : public v0::RuntimeInfo {
   uint8_t ShaderStage; // PSVShaderKind
   uint8_t UsesViewID;
   GeometryExtraInfo GeomData;
@@ -346,7 +346,7 @@ struct RuntimeInfo : public v0::RuntimeInfo {
 } // namespace v1
 
 namespace v2 {
-struct RuntimeInfo : public v1::RuntimeInfo {
+struct LLVM_ABI RuntimeInfo : public v1::RuntimeInfo {
   uint32_t NumThreadsX;
   uint32_t NumThreadsY;
   uint32_t NumThreadsZ;
@@ -362,7 +362,7 @@ struct RuntimeInfo : public v1::RuntimeInfo {
   }
 };
 
-struct ResourceBindInfo : public v0::ResourceBindInfo {
+struct LLVM_ABI ResourceBindInfo : public v0::ResourceBindInfo {
   uint32_t Kind;
   uint32_t Flags;
 

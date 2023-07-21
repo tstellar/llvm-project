@@ -76,7 +76,7 @@ class LiveIntervals;
 
 /// Represents a schedule for a single-block loop. For every instruction we
 /// maintain a Cycle and Stage.
-class ModuloSchedule {
+class LLVM_ABI ModuloSchedule {
 private:
   /// The block containing the loop instructions.
   MachineLoop *Loop;
@@ -157,7 +157,7 @@ public:
 
 /// The ModuloScheduleExpander takes a ModuloSchedule and expands it in-place,
 /// rewriting the old loop and inserting prologs and epilogs as required.
-class ModuloScheduleExpander {
+class LLVM_ABI ModuloScheduleExpander {
 public:
   using InstrChangesTy = DenseMap<MachineInstr *, std::pair<unsigned, int64_t>>;
 
@@ -279,7 +279,7 @@ public:
 
 /// A reimplementation of ModuloScheduleExpander. It works by generating a
 /// standalone kernel loop and peeling out the prologs and epilogs.
-class PeelingModuloScheduleExpander {
+class LLVM_ABI PeelingModuloScheduleExpander {
 public:
   PeelingModuloScheduleExpander(MachineFunction &MF, ModuloSchedule &S,
                                 LiveIntervals *LIS)
@@ -375,7 +375,7 @@ protected:
 /// The post-instr symbol is a way of annotating an instruction that can be
 /// roundtripped in MIR. The syntax is:
 ///   MYINST %0, post-instr-symbol <mcsymbol Stage-1_Cycle-5>
-class ModuloScheduleTestAnnotater {
+class LLVM_ABI ModuloScheduleTestAnnotater {
   MachineFunction &MF;
   ModuloSchedule &S;
 

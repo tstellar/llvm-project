@@ -36,7 +36,7 @@ class TargetRegisterClass;
 class TargetRegisterInfo;
 
 /// Holds all the information related to register banks.
-class RegisterBankInfo {
+class LLVM_ABI RegisterBankInfo {
 public:
   /// Helper struct that represents how a value is partially mapped
   /// into a register.
@@ -785,7 +785,7 @@ operator<<(raw_ostream &OS, const RegisterBankInfo::OperandsMapper &OpdMapper) {
 
 /// Hashing function for PartialMapping.
 /// It is required for the hashing of ValueMapping.
-hash_code hash_value(const RegisterBankInfo::PartialMapping &PartMapping);
+LLVM_ABI hash_code hash_value(const RegisterBankInfo::PartialMapping &PartMapping);
 
 } // end namespace llvm
 

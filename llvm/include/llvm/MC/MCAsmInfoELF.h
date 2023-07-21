@@ -13,7 +13,7 @@
 
 namespace llvm {
 
-class MCAsmInfoELF : public MCAsmInfo {
+class LLVM_ABI MCAsmInfoELF : public MCAsmInfo {
   virtual void anchor();
   MCSection *getNonexecutableStackSection(MCContext &Ctx) const final;
 

@@ -28,7 +28,7 @@ namespace xray {
 class RecordVisitor;
 class RecordInitializer;
 
-class Record {
+class LLVM_ABI Record {
 public:
   enum class RecordKind {
     RK_Metadata,
@@ -68,7 +68,7 @@ public:
   virtual ~Record() = default;
 };
 
-class MetadataRecord : public Record {
+class LLVM_ABI MetadataRecord : public Record {
 public:
   enum class MetadataType : unsigned {
     Unknown,
@@ -107,7 +107,7 @@ public:
 // What follows are specific Metadata record types which encapsulate the
 // information associated with specific metadata record types in an FDR mode
 // log.
-class BufferExtents : public MetadataRecord {
+class LLVM_ABI BufferExtents : public MetadataRecord {
   uint64_t Size = 0;
   friend class RecordInitializer;
 
@@ -130,7 +130,7 @@ public:
   }
 };
 
-class WallclockRecord : public MetadataRecord {
+class LLVM_ABI WallclockRecord : public MetadataRecord {
   uint64_t Seconds = 0;
   uint32_t Nanos = 0;
   friend class RecordInitializer;
@@ -155,7 +155,7 @@ public:
   }
 };
 
-class NewCPUIDRecord : public MetadataRecord {
+class LLVM_ABI NewCPUIDRecord : public MetadataRecord {
   uint16_t CPUId = 0;
   uint64_t TSC = 0;
   friend class RecordInitializer;
@@ -181,7 +181,7 @@ public:
   }
 };
 
-class TSCWrapRecord : public MetadataRecord {
+class LLVM_ABI TSCWrapRecord : public MetadataRecord {
   uint64_t BaseTSC = 0;
   friend class RecordInitializer;
 
@@ -203,7 +203,7 @@ public:
   }
 };
 
-class CustomEventRecord : public MetadataRecord {
+class LLVM_ABI CustomEventRecord : public MetadataRecord {
   int32_t Size = 0;
   uint64_t TSC = 0;
   uint16_t CPU = 0;
@@ -232,7 +232,7 @@ public:
   }
 };
 
-class CustomEventRecordV5 : public MetadataRecord {
+class LLVM_ABI CustomEventRecordV5 : public MetadataRecord {
   int32_t Size = 0;
   int32_t Delta = 0;
   std::string Data{};
@@ -259,7 +259,7 @@ public:
   }
 };
 
-class TypedEventRecord : public MetadataRecord {
+class LLVM_ABI TypedEventRecord : public MetadataRecord {
   int32_t Size = 0;
   int32_t Delta = 0;
   uint16_t EventType = 0;
@@ -288,7 +288,7 @@ public:
   }
 };
 
-class CallArgRecord : public MetadataRecord {
+class LLVM_ABI CallArgRecord : public MetadataRecord {
   uint64_t Arg = 0;
   friend class RecordInitializer;
 
@@ -310,7 +310,7 @@ public:
   }
 };
 
-class PIDRecord : public MetadataRecord {
+class LLVM_ABI PIDRecord : public MetadataRecord {
   int32_t PID = 0;
   friend class RecordInitializer;
 
@@ -333,7 +333,7 @@ public:
   }
 };
 
-class NewBufferRecord : public MetadataRecord {
+class LLVM_ABI NewBufferRecord : public MetadataRecord {
   int32_t TID = 0;
   friend class RecordInitializer;
 
@@ -356,7 +356,7 @@ public:
   }
 };
 
-class EndBufferRecord : public MetadataRecord {
+class LLVM_ABI EndBufferRecord : public MetadataRecord {
 public:
   EndBufferRecord()
       : MetadataRecord(RecordKind::RK_Metadata_EndOfBuffer,
@@ -369,7 +369,7 @@ public:
   }
 };
 
-class FunctionRecord : public Record {
+class LLVM_ABI FunctionRecord : public Record {
   RecordTypes Kind;
   int32_t FuncId = 0;
   uint32_t Delta = 0;
@@ -396,7 +396,7 @@ public:
   }
 };
 
-class RecordVisitor {
+class LLVM_ABI RecordVisitor {
 public:
   virtual ~RecordVisitor() = default;
 
@@ -415,7 +415,7 @@ public:
   virtual Error visit(TypedEventRecord &) = 0;
 };
 
-class RecordInitializer : public RecordVisitor {
+class LLVM_ABI RecordInitializer : public RecordVisitor {
   DataExtractor &E;
   uint64_t &OffsetPtr;
   uint16_t Version;

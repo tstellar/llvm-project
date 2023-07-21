@@ -23,41 +23,41 @@ namespace llvm {
   //
   /// createLazyValueInfoPass - This creates an instance of the LazyValueInfo
   /// pass.
-  FunctionPass *createLazyValueInfoPass();
+  LLVM_ABI FunctionPass *createLazyValueInfoPass();
 
   //===--------------------------------------------------------------------===//
   //
   // createDependenceAnalysisWrapperPass - This creates an instance of the
   // DependenceAnalysisWrapper pass.
   //
-  FunctionPass *createDependenceAnalysisWrapperPass();
+  LLVM_ABI FunctionPass *createDependenceAnalysisWrapperPass();
 
   //===--------------------------------------------------------------------===//
   //
   // createCostModelAnalysisPass - This creates an instance of the
   // CostModelAnalysis pass.
   //
-  FunctionPass *createCostModelAnalysisPass();
+  LLVM_ABI FunctionPass *createCostModelAnalysisPass();
 
   //===--------------------------------------------------------------------===//
   //
   // createDelinearizationPass - This pass implements attempts to restore
   // multidimensional array indices from linearized expressions.
   //
-  FunctionPass *createDelinearizationPass();
+  LLVM_ABI FunctionPass *createDelinearizationPass();
 
   //===--------------------------------------------------------------------===//
   //
   // Minor pass prototypes, allowing us to expose them through bugpoint and
   // analyze.
-  FunctionPass *createInstCountPass();
+  LLVM_ABI FunctionPass *createInstCountPass();
 
   //===--------------------------------------------------------------------===//
   //
   // createRegionInfoPass - This pass finds all single entry single exit regions
   // in a function and builds the region hierarchy.
   //
-  FunctionPass *createRegionInfoPass();
+  LLVM_ABI FunctionPass *createRegionInfoPass();
 }
 
 #endif

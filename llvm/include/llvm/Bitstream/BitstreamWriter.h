@@ -27,7 +27,7 @@
 
 namespace llvm {
 
-class BitstreamWriter {
+class LLVM_ABI BitstreamWriter {
   /// Out - The buffer that keeps unflushed bytes.
   SmallVectorImpl<char> &Out;
 

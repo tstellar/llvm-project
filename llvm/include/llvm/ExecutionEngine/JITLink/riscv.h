@@ -218,7 +218,7 @@ enum EdgeKind_riscv : Edge::Kind {
 
 /// Returns a string name for the given riscv edge. For debugging purposes
 /// only
-const char *getEdgeKindName(Edge::Kind K);
+LLVM_ABI const char *getEdgeKindName(Edge::Kind K);
 } // namespace riscv
 } // namespace jitlink
 } // namespace llvm

@@ -32,7 +32,7 @@ class Module;
 ///   module.
 /// - Internal symbols defined in module-level inline asm should be visible to
 ///   each partition.
-void SplitModule(
+LLVM_ABI void SplitModule(
     Module &M, unsigned N,
     function_ref<void(std::unique_ptr<Module> MPart)> ModuleCallback,
     bool PreserveLocals = false);

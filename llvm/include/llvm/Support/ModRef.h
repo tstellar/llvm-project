@@ -53,7 +53,7 @@ enum class ModRefInfo : uint8_t {
 }
 
 /// Debug print ModRefInfo.
-raw_ostream &operator<<(raw_ostream &OS, ModRefInfo MR);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, ModRefInfo MR);
 
 /// The locations at which a function might access memory.
 enum class IRMemLocation {
@@ -69,7 +69,7 @@ enum class IRMemLocation {
   Last = Other,
 };
 
-template <typename LocationEnum> class MemoryEffectsBase {
+template <typename LocationEnum> class LLVM_ABI MemoryEffectsBase {
 public:
   using Location = LocationEnum;
 
@@ -268,7 +268,7 @@ public:
 using MemoryEffects = MemoryEffectsBase<IRMemLocation>;
 
 /// Debug print MemoryEffects.
-raw_ostream &operator<<(raw_ostream &OS, MemoryEffects RMRB);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, MemoryEffects RMRB);
 
 // Legacy alias.
 using FunctionModRefBehavior = MemoryEffects;

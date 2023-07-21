@@ -28,7 +28,7 @@ class MCStreamer;
 class MCSymbol;
 class MCSymbolRefExpr;
 
-struct ConstantPoolEntry {
+struct LLVM_ABI ConstantPoolEntry {
   ConstantPoolEntry(MCSymbol *L, const MCExpr *Val, unsigned Sz, SMLoc Loc_)
     : Label(L), Value(Val), Size(Sz), Loc(Loc_) {}
 
@@ -40,7 +40,7 @@ struct ConstantPoolEntry {
 
 // A class to keep track of assembler-generated constant pools that are use to
 // implement the ldr-pseudo.
-class ConstantPool {
+class LLVM_ABI ConstantPool {
   using EntryVecTy = SmallVector<ConstantPoolEntry, 4>;
   EntryVecTy Entries;
   std::map<int64_t, const MCSymbolRefExpr *> CachedConstantEntries;
@@ -67,7 +67,7 @@ public:
   void clearCache();
 };
 
-class AssemblerConstantPools {
+class LLVM_ABI AssemblerConstantPools {
   // Map type used to keep track of per-Section constant pools used by the
   // ldr-pseudo opcode. The map associates a section to its constant pool. The
   // constant pool is a vector of (label, value) pairs. When the ldr

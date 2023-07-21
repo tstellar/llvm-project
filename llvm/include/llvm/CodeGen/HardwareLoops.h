@@ -18,7 +18,7 @@
 
 namespace llvm {
 
-struct HardwareLoopOptions {
+struct LLVM_ABI HardwareLoopOptions {
   std::optional<unsigned> Decrement;
   std::optional<unsigned> Bitwidth;
   std::optional<bool> Force;
@@ -61,7 +61,7 @@ struct HardwareLoopOptions {
   }
 };
 
-class HardwareLoopsPass : public PassInfoMixin<HardwareLoopsPass> {
+class LLVM_ABI HardwareLoopsPass : public PassInfoMixin<HardwareLoopsPass> {
   HardwareLoopOptions Opts;
 
 public:

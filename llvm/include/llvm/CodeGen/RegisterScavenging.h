@@ -31,7 +31,7 @@ class TargetInstrInfo;
 class TargetRegisterClass;
 class TargetRegisterInfo;
 
-class RegScavenger {
+class LLVM_ABI RegScavenger {
   const TargetRegisterInfo *TRI = nullptr;
   const TargetInstrInfo *TII = nullptr;
   MachineRegisterInfo *MRI = nullptr;
@@ -212,7 +212,7 @@ private:
 
 /// Replaces all frame index virtual registers with physical registers. Uses the
 /// register scavenger to find an appropriate register to use.
-void scavengeFrameVirtualRegs(MachineFunction &MF, RegScavenger &RS);
+LLVM_ABI void scavengeFrameVirtualRegs(MachineFunction &MF, RegScavenger &RS);
 
 } // end namespace llvm
 

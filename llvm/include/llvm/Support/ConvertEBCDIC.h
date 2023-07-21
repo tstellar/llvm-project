@@ -19,10 +19,11 @@
 
 namespace llvm {
 namespace ConverterEBCDIC {
-std::error_code convertToEBCDIC(StringRef Source,
+LLVM_ABI std::error_code convertToEBCDIC(StringRef Source,
                                 SmallVectorImpl<char> &Result);
 
-void convertToUTF8(StringRef Source, SmallVectorImpl<char> &Result);
+LLVM_ABI void convertToUTF8(StringRef Source,
+                                    SmallVectorImpl<char> &Result);
 
 } // namespace ConverterEBCDIC
 } // namespace llvm

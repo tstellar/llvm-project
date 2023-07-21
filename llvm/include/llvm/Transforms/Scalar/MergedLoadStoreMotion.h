@@ -28,7 +28,7 @@
 
 namespace llvm {
 class Function;
-struct MergedLoadStoreMotionOptions {
+struct LLVM_ABI MergedLoadStoreMotionOptions {
   bool SplitFooterBB;
   MergedLoadStoreMotionOptions(bool SplitFooterBB = false)
       : SplitFooterBB(SplitFooterBB) {}
@@ -39,7 +39,7 @@ struct MergedLoadStoreMotionOptions {
   }
 };
 
-class MergedLoadStoreMotionPass
+class LLVM_ABI MergedLoadStoreMotionPass
     : public PassInfoMixin<MergedLoadStoreMotionPass> {
   MergedLoadStoreMotionOptions Options;
 

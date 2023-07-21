@@ -23,7 +23,7 @@
 namespace llvm {
 namespace ARMBuildAttrs {
 
-const TagNameMap &getARMAttributeTags();
+LLVM_ABI const TagNameMap &getARMAttributeTags();
 
 enum SpecialAttr {
   // This is for the .cpu asm attr. It translates into one or more

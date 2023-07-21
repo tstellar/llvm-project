@@ -38,7 +38,7 @@ enum class PseudoProbeAttributes {
 constexpr static uint64_t PseudoProbeFullDistributionFactor =
     std::numeric_limits<uint64_t>::max();
 
-struct PseudoProbeDwarfDiscriminator {
+struct LLVM_ABI PseudoProbeDwarfDiscriminator {
 public:
   // The following APIs encodes/decodes per-probe information to/from a
   // 32-bit integer which is organized as:
@@ -78,7 +78,7 @@ public:
   constexpr static uint8_t FullDistributionFactor = 100;
 };
 
-class PseudoProbeDescriptor {
+class LLVM_ABI PseudoProbeDescriptor {
   uint64_t FunctionGUID;
   uint64_t FunctionHash;
 
@@ -89,7 +89,7 @@ public:
   uint64_t getFunctionHash() const { return FunctionHash; }
 };
 
-struct PseudoProbe {
+struct LLVM_ABI PseudoProbe {
   uint32_t Id;
   uint32_t Type;
   uint32_t Attr;
@@ -108,9 +108,9 @@ static inline bool hasDiscriminator(uint32_t Flags) {
   return Flags & (uint32_t)PseudoProbeAttributes::HasDiscriminator;
 }
 
-std::optional<PseudoProbe> extractProbe(const Instruction &Inst);
+LLVM_ABI std::optional<PseudoProbe> extractProbe(const Instruction &Inst);
 
-void setProbeDistributionFactor(Instruction &Inst, float Factor);
+LLVM_ABI void setProbeDistributionFactor(Instruction &Inst, float Factor);
 } // end namespace llvm
 
 #endif // LLVM_IR_PSEUDOPROBE_H

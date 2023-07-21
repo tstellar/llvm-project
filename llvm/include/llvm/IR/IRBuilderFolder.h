@@ -21,7 +21,7 @@
 namespace llvm {
 
 /// IRBuilderFolder - Interface for constant folding in IRBuilder.
-class IRBuilderFolder {
+class LLVM_ABI IRBuilderFolder {
 public:
   virtual ~IRBuilderFolder();
 

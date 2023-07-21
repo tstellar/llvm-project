@@ -23,7 +23,7 @@ class BinaryStreamWriter;
 namespace codeview {
 class TypeIndex;
 struct CVMemberRecord;
-class TypeRecordMapping : public TypeVisitorCallbacks {
+class LLVM_ABI TypeRecordMapping : public TypeVisitorCallbacks {
 public:
   explicit TypeRecordMapping(BinaryStreamReader &Reader) : IO(Reader) {}
   explicit TypeRecordMapping(BinaryStreamWriter &Writer) : IO(Writer) {}

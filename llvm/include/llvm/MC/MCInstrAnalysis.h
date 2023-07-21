@@ -26,7 +26,7 @@ namespace llvm {
 class MCRegisterInfo;
 class Triple;
 
-class MCInstrAnalysis {
+class LLVM_ABI MCInstrAnalysis {
 protected:
   friend class Target;
 

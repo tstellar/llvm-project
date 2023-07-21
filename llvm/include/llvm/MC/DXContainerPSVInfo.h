@@ -27,7 +27,7 @@ namespace mcdxbc {
 // This structure is used to represent the extracted data in an inspectable and
 // modifiable format, and can be used to serialize the data back into valid PSV
 // RuntimeInfo.
-struct PSVRuntimeInfo {
+struct LLVM_ABI PSVRuntimeInfo {
   dxbc::PSV::v2::RuntimeInfo BaseData;
   std::vector<dxbc::PSV::v2::ResourceBindInfo> Resources;
 

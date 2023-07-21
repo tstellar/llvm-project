@@ -45,7 +45,7 @@ using FuncProbeFactorMap = StringMap<ProbeFactorMap>;
 // violation of updating probe factors. In principle, the sum of distribution
 // factor for a probe should be identical before and after a pass. For a
 // function pass, the factor sum for a probe would be typically 100%.
-class PseudoProbeVerifier {
+class LLVM_ABI PseudoProbeVerifier {
 public:
   void registerCallbacks(PassInstrumentationCallbacks &PIC);
 
@@ -71,7 +71,7 @@ private:
 /// Sample profile pseudo prober.
 ///
 /// Insert pseudo probes for block sampling and value sampling.
-class SampleProfileProber {
+class LLVM_ABI SampleProfileProber {
 public:
   // Give an empty module id when the prober is not used for instrumentation.
   SampleProfileProber(Function &F, const std::string &CurModuleUniqueId);
@@ -105,7 +105,7 @@ private:
   uint32_t LastProbeId;
 };
 
-class SampleProfileProbePass : public PassInfoMixin<SampleProfileProbePass> {
+class LLVM_ABI SampleProfileProbePass : public PassInfoMixin<SampleProfileProbePass> {
   TargetMachine *TM;
 
 public:
@@ -125,7 +125,7 @@ public:
 // pass updates distribution factors for each pseudo probe at the end of the
 // prelink pipeline, to reflect an estimated portion of the real execution
 // count.
-class PseudoProbeUpdatePass : public PassInfoMixin<PseudoProbeUpdatePass> {
+class LLVM_ABI PseudoProbeUpdatePass : public PassInfoMixin<PseudoProbeUpdatePass> {
   void runOnFunction(Function &F, FunctionAnalysisManager &FAM);
 
 public:

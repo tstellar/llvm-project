@@ -30,7 +30,7 @@ namespace codeview {
 
 class DebugStringTableSubsection;
 
-struct FileChecksumEntry {
+struct LLVM_ABI FileChecksumEntry {
   uint32_t FileNameOffset;    // Byte offset of filename in global stringtable.
   FileChecksumKind Kind;      // The type of checksum.
   ArrayRef<uint8_t> Checksum; // The bytes of the checksum.
@@ -38,7 +38,7 @@ struct FileChecksumEntry {
 
 } // end namespace codeview
 
-template <> struct VarStreamArrayExtractor<codeview::FileChecksumEntry> {
+template <> struct LLVM_ABI VarStreamArrayExtractor<codeview::FileChecksumEntry> {
 public:
   using ContextType = void;
 
@@ -48,7 +48,7 @@ public:
 
 namespace codeview {
 
-class DebugChecksumsSubsectionRef final : public DebugSubsectionRef {
+class LLVM_ABI DebugChecksumsSubsectionRef final : public DebugSubsectionRef {
   using FileChecksumArray = VarStreamArray<codeview::FileChecksumEntry>;
   using Iterator = FileChecksumArray::Iterator;
 
@@ -74,7 +74,7 @@ private:
   FileChecksumArray Checksums;
 };
 
-class DebugChecksumsSubsection final : public DebugSubsection {
+class LLVM_ABI DebugChecksumsSubsection final : public DebugSubsection {
 public:
   explicit DebugChecksumsSubsection(DebugStringTableSubsection &Strings);
 

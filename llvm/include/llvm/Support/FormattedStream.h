@@ -27,7 +27,7 @@ namespace llvm {
 /// doesn't attempt to handle everything Unicode can do (combining characters,
 /// right-to-left markers, etc), but should cover the cases likely to appear in
 /// source code or diagnostic messages.
-class formatted_raw_ostream : public raw_ostream {
+class LLVM_ABI formatted_raw_ostream : public raw_ostream {
   /// TheStream - The real stream we output to. We set it to be
   /// unbuffered, since we're already doing our own buffering.
   ///
@@ -169,15 +169,15 @@ private:
 
 /// fouts() - This returns a reference to a formatted_raw_ostream for
 /// standard output.  Use it like: fouts() << "foo" << "bar";
-formatted_raw_ostream &fouts();
+LLVM_ABI formatted_raw_ostream &fouts();
 
 /// ferrs() - This returns a reference to a formatted_raw_ostream for
 /// standard error.  Use it like: ferrs() << "foo" << "bar";
-formatted_raw_ostream &ferrs();
+LLVM_ABI formatted_raw_ostream &ferrs();
 
 /// fdbgs() - This returns a reference to a formatted_raw_ostream for
 /// debug output.  Use it like: fdbgs() << "foo" << "bar";
-formatted_raw_ostream &fdbgs();
+LLVM_ABI formatted_raw_ostream &fdbgs();
 
 } // end llvm namespace
 

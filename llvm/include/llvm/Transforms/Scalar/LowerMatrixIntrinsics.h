@@ -16,7 +16,7 @@
 #include "llvm/IR/PassManager.h"
 
 namespace llvm {
-class LowerMatrixIntrinsicsPass
+class LLVM_ABI LowerMatrixIntrinsicsPass
     : public PassInfoMixin<LowerMatrixIntrinsicsPass> {
   bool Minimal;
 

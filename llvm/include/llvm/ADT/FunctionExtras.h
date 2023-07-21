@@ -76,7 +76,7 @@ using EnableIfCallable = std::enable_if_t<std::disjunction<
                             std::declval<Params>()...)),
                         Ret>>::value>;
 
-template <typename ReturnT, typename... ParamTs> class UniqueFunctionBase {
+template <typename ReturnT, typename... ParamTs> class LLVM_ABI UniqueFunctionBase {
 protected:
   static constexpr size_t InlineStorageSize = sizeof(void *) * 3;
 
@@ -359,7 +359,7 @@ typename UniqueFunctionBase<R, P...>::TrivialCallback
 } // namespace detail
 
 template <typename R, typename... P>
-class unique_function<R(P...)> : public detail::UniqueFunctionBase<R, P...> {
+class LLVM_ABI unique_function<R(P...)> : public detail::UniqueFunctionBase<R, P...> {
   using Base = detail::UniqueFunctionBase<R, P...>;
 
 public:
@@ -384,7 +384,7 @@ public:
 };
 
 template <typename R, typename... P>
-class unique_function<R(P...) const>
+class LLVM_ABI unique_function<R(P...) const>
     : public detail::UniqueFunctionBase<R, P...> {
   using Base = detail::UniqueFunctionBase<R, P...>;
 

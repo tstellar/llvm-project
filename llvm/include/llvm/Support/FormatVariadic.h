@@ -45,7 +45,7 @@ namespace llvm {
 
 enum class ReplacementType { Empty, Format, Literal };
 
-struct ReplacementItem {
+struct LLVM_ABI ReplacementItem {
   ReplacementItem() = default;
   explicit ReplacementItem(StringRef Literal)
       : Type(ReplacementType::Literal), Spec(Literal) {}
@@ -63,7 +63,7 @@ struct ReplacementItem {
   StringRef Options;
 };
 
-class formatv_object_base {
+class LLVM_ABI formatv_object_base {
 protected:
   StringRef Fmt;
   ArrayRef<detail::format_adapter *> Adapters;
@@ -125,7 +125,7 @@ public:
   operator std::string() const { return str(); }
 };
 
-template <typename Tuple> class formatv_object : public formatv_object_base {
+template <typename Tuple> class LLVM_ABI formatv_object : public formatv_object_base {
   // Storage for the parameter adapters.  Since the base class erases the type
   // of the parameters, we have to own the storage for the parameters here, and
   // have the base class store type-erased pointers into this tuple.

@@ -13,21 +13,21 @@
 
 namespace llvm {
 
-class MCAsmInfoCOFF : public MCAsmInfo {
+class LLVM_ABI MCAsmInfoCOFF : public MCAsmInfo {
   virtual void anchor();
 
 protected:
   explicit MCAsmInfoCOFF();
 };
 
-class MCAsmInfoMicrosoft : public MCAsmInfoCOFF {
+class LLVM_ABI MCAsmInfoMicrosoft : public MCAsmInfoCOFF {
   void anchor() override;
 
 protected:
   explicit MCAsmInfoMicrosoft();
 };
 
-class MCAsmInfoGNUCOFF : public MCAsmInfoCOFF {
+class LLVM_ABI MCAsmInfoGNUCOFF : public MCAsmInfoCOFF {
   void anchor() override;
 
 protected:

@@ -21,7 +21,7 @@
 
 namespace llvm {
 
-template <typename T> struct EnumEntry {
+template <typename T> struct LLVM_ABI EnumEntry {
   StringRef Name;
   // While Name suffices in most of the cases, in certain cases
   // GNU style and LLVM style of ELFDumper do not
@@ -37,7 +37,7 @@ template <typename T> struct EnumEntry {
   constexpr EnumEntry(StringRef N, T V) : Name(N), AltName(N), Value(V) {}
 };
 
-struct HexNumber {
+struct LLVM_ABI HexNumber {
   // To avoid sign-extension we have to explicitly cast to the appropriate
   // unsigned type. The overloads are here so that every type that is implicitly
   // convertible to an integer (including enums and endian helpers) can be used
@@ -57,7 +57,7 @@ struct HexNumber {
   uint64_t Value;
 };
 
-struct FlagEntry {
+struct LLVM_ABI FlagEntry {
   FlagEntry(StringRef Name, char Value)
       : Name(Name), Value(static_cast<unsigned char>(Value)) {}
   FlagEntry(StringRef Name, signed char Value)
@@ -80,7 +80,7 @@ struct FlagEntry {
   uint64_t Value;
 };
 
-raw_ostream &operator<<(raw_ostream &OS, const HexNumber &Value);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const HexNumber &Value);
 
 template <class T> std::string to_string(const T &Value) {
   std::string number;
@@ -97,7 +97,7 @@ std::string enumToString(T Value, ArrayRef<EnumEntry<TEnum>> EnumValues) {
   return utohexstr(Value, true);
 }
 
-class ScopedPrinter {
+class LLVM_ABI ScopedPrinter {
 public:
   enum class ScopedPrinterKind {
     Base,
@@ -541,7 +541,7 @@ ScopedPrinter::printHex<support::ulittle16_t>(StringRef Label,
 
 struct DelimitedScope;
 
-class JSONScopedPrinter : public ScopedPrinter {
+class LLVM_ABI JSONScopedPrinter : public ScopedPrinter {
 private:
   enum class Scope {
     Array,
@@ -838,7 +838,7 @@ private:
   }
 };
 
-struct DelimitedScope {
+struct LLVM_ABI DelimitedScope {
   DelimitedScope(ScopedPrinter &W) : W(&W) {}
   DelimitedScope() : W(nullptr) {}
   virtual ~DelimitedScope() = default;
@@ -846,7 +846,7 @@ struct DelimitedScope {
   ScopedPrinter *W;
 };
 
-struct DictScope : DelimitedScope {
+struct LLVM_ABI DictScope : DelimitedScope {
   explicit DictScope() = default;
   explicit DictScope(ScopedPrinter &W) : DelimitedScope(W) { W.objectBegin(); }
 
@@ -865,7 +865,7 @@ struct DictScope : DelimitedScope {
   }
 };
 
-struct ListScope : DelimitedScope {
+struct LLVM_ABI ListScope : DelimitedScope {
   explicit ListScope() = default;
   explicit ListScope(ScopedPrinter &W) : DelimitedScope(W) { W.arrayBegin(); }
 

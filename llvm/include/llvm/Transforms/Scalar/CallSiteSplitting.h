@@ -15,7 +15,7 @@ namespace llvm {
 
 class Function;
 
-struct CallSiteSplittingPass : PassInfoMixin<CallSiteSplittingPass> {
+struct LLVM_ABI CallSiteSplittingPass : PassInfoMixin<CallSiteSplittingPass> {
   /// Run the pass over the function.
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

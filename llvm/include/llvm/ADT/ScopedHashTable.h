@@ -43,7 +43,7 @@ template <typename K, typename V, typename KInfo = DenseMapInfo<K>,
 class ScopedHashTable;
 
 template <typename K, typename V>
-class ScopedHashTableVal {
+class LLVM_ABI ScopedHashTableVal {
   ScopedHashTableVal *NextInScope;
   ScopedHashTableVal *NextForKey;
   K Key;
@@ -82,7 +82,7 @@ public:
 
 template <typename K, typename V, typename KInfo = DenseMapInfo<K>,
           typename AllocatorTy = MallocAllocator>
-class ScopedHashTableScope {
+class LLVM_ABI ScopedHashTableScope {
   /// HT - The hashtable that we are active for.
   ScopedHashTable<K, V, KInfo, AllocatorTy> &HT;
 
@@ -115,7 +115,7 @@ private:
 };
 
 template <typename K, typename V, typename KInfo = DenseMapInfo<K>>
-class ScopedHashTableIterator {
+class LLVM_ABI ScopedHashTableIterator {
   ScopedHashTableVal<K, V> *Node;
 
 public:
@@ -147,7 +147,7 @@ public:
 };
 
 template <typename K, typename V, typename KInfo, typename AllocatorTy>
-class ScopedHashTable : detail::AllocatorHolder<AllocatorTy> {
+class LLVM_ABI ScopedHashTable : detail::AllocatorHolder<AllocatorTy> {
   using AllocTy = detail::AllocatorHolder<AllocatorTy>;
 
 public:

@@ -194,7 +194,7 @@ using LVInternalKindSet = std::set<LVInternalKind>;
 // members that in very few cases point to a command option (see associated
 // comment). Other cases for 'bool' refers to internal values derivated from
 // the command options.
-class LVOptions {
+class LLVM_ABI LVOptions {
   class LVAttribute {
   public:
     LVAttributeKindSet Kinds; // --attribute=<Kind>
@@ -445,7 +445,7 @@ public:
 inline LVOptions &options() { return (*LVOptions::getOptions()); }
 inline void setOptions(LVOptions *Options) { LVOptions::setOptions(Options); }
 
-class LVPatterns final {
+class LLVM_ABI LVPatterns final {
   // Pattern Mode.
   enum class LVMatchMode {
     None = 0, // No given pattern.

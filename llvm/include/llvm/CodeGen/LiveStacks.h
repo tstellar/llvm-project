@@ -32,7 +32,7 @@ class raw_ostream;
 class TargetRegisterClass;
 class TargetRegisterInfo;
 
-class LiveStacks : public MachineFunctionPass {
+class LLVM_ABI LiveStacks : public MachineFunctionPass {
   const TargetRegisterInfo *TRI = nullptr;
 
   /// Special pool allocator for VNInfo's (LiveInterval val#).

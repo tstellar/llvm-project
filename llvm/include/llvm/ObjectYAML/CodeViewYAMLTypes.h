@@ -38,11 +38,11 @@ struct MemberRecordBase;
 
 } // end namespace detail
 
-struct MemberRecord {
+struct LLVM_ABI MemberRecord {
   std::shared_ptr<detail::MemberRecordBase> Member;
 };
 
-struct LeafRecord {
+struct LLVM_ABI LeafRecord {
   std::shared_ptr<detail::LeafRecordBase> Leaf;
 
   codeview::CVType
@@ -50,9 +50,9 @@ struct LeafRecord {
   static Expected<LeafRecord> fromCodeViewRecord(codeview::CVType Type);
 };
 
-std::vector<LeafRecord> fromDebugT(ArrayRef<uint8_t> DebugTorP,
+LLVM_ABI std::vector<LeafRecord> fromDebugT(ArrayRef<uint8_t> DebugTorP,
                                    StringRef SectionName);
-ArrayRef<uint8_t> toDebugT(ArrayRef<LeafRecord>, BumpPtrAllocator &Alloc,
+LLVM_ABI ArrayRef<uint8_t> toDebugT(ArrayRef<LeafRecord>, BumpPtrAllocator &Alloc,
                            StringRef SectionName);
 
 } // end namespace CodeViewYAML

@@ -21,7 +21,7 @@ class BinaryStreamReader;
 class BinaryStreamWriter;
 
 namespace codeview {
-class DebugFrameDataSubsectionRef final : public DebugSubsectionRef {
+class LLVM_ABI DebugFrameDataSubsectionRef final : public DebugSubsectionRef {
 public:
   DebugFrameDataSubsectionRef()
       : DebugSubsectionRef(DebugSubsectionKind::FrameData) {}
@@ -42,7 +42,7 @@ private:
   FixedStreamArray<FrameData> Frames;
 };
 
-class DebugFrameDataSubsection final : public DebugSubsection {
+class LLVM_ABI DebugFrameDataSubsection final : public DebugSubsection {
 public:
   DebugFrameDataSubsection(bool IncludeRelocPtr)
       : DebugSubsection(DebugSubsectionKind::FrameData),

@@ -135,7 +135,7 @@ constexpr char RuntimeHandle[] = "RuntimeHandle";
 } // end namespace Key
 
 /// In-memory representation of kernel attributes metadata.
-struct Metadata final {
+struct LLVM_ABI Metadata final {
   /// 'reqd_work_group_size' attribute. Optional.
   std::vector<uint32_t> mReqdWorkGroupSize = std::vector<uint32_t>();
   /// 'work_group_size_hint' attribute. Optional.
@@ -202,7 +202,7 @@ constexpr char IsPipe[] = "IsPipe";
 } // end namespace Key
 
 /// In-memory representation of kernel argument metadata.
-struct Metadata final {
+struct LLVM_ABI Metadata final {
   /// Name. Optional.
   std::string mName = std::string();
   /// Type name. Optional.
@@ -271,7 +271,7 @@ constexpr char NumSpilledVGPRs[] = "NumSpilledVGPRs";
 } // end namespace Key
 
 /// In-memory representation of kernel code properties metadata.
-struct Metadata final {
+struct LLVM_ABI Metadata final {
   /// Size in bytes of the kernarg segment memory. Kernarg segment memory
   /// holds the values of the arguments to the kernel. Required.
   uint64_t mKernargSegmentSize = 0;
@@ -343,7 +343,7 @@ constexpr char WavefrontPrivateSegmentOffsetSGPR[] =
 } // end namespace Key
 
 /// In-memory representation of kernel debug properties metadata.
-struct Metadata final {
+struct LLVM_ABI Metadata final {
   /// Debugger ABI version. Optional.
   std::vector<uint32_t> mDebuggerABIVersion = std::vector<uint32_t>();
   /// Consecutive number of VGPRs reserved for debugger use. Must be 0 if
@@ -399,7 +399,7 @@ constexpr char DebugProps[] = "DebugProps";
 } // end namespace Key
 
 /// In-memory representation of kernel metadata.
-struct Metadata final {
+struct LLVM_ABI Metadata final {
   /// Kernel source name. Required.
   std::string mName = std::string();
   /// Kernel descriptor name. Required.
@@ -433,7 +433,7 @@ constexpr char Kernels[] = "Kernels";
 } // end namespace Key
 
 /// In-memory representation of HSA metadata.
-struct Metadata final {
+struct LLVM_ABI Metadata final {
   /// HSA metadata version. Required.
   std::vector<uint32_t> mVersion = std::vector<uint32_t>();
   /// Printf metadata. Optional.
@@ -446,10 +446,10 @@ struct Metadata final {
 };
 
 /// Converts \p String to \p HSAMetadata.
-std::error_code fromString(StringRef String, Metadata &HSAMetadata);
+LLVM_ABI std::error_code fromString(StringRef String, Metadata &HSAMetadata);
 
 /// Converts \p HSAMetadata to \p String.
-std::error_code toString(Metadata HSAMetadata, std::string &String);
+LLVM_ABI std::error_code toString(Metadata HSAMetadata, std::string &String);
 
 //===----------------------------------------------------------------------===//
 // HSA metadata for v3 code object.

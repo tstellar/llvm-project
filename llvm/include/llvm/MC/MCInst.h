@@ -33,7 +33,7 @@ class raw_ostream;
 
 /// Instances of this class represent operands of the MCInst class.
 /// This is a simple discriminated union.
-class MCOperand {
+class LLVM_ABI MCOperand {
   enum MachineOperandType : unsigned char {
     kInvalid,      ///< Uninitialized.
     kRegister,     ///< Register operand.
@@ -181,7 +181,7 @@ public:
 
 /// Instances of this class represent a single low-level machine
 /// instruction.
-class MCInst {
+class LLVM_ABI MCInst {
   unsigned Opcode = 0;
   // These flags could be used to pass some info from one target subcomponent
   // to another, for example, from disassembler to asm printer. The values of

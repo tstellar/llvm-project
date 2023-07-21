@@ -23,7 +23,7 @@ namespace llvm {
 namespace orc {
 
 /// Manages mapping, content transfer and protections for JIT memory
-class MemoryMapper {
+class LLVM_ABI MemoryMapper {
 public:
   /// Represents a single allocation containing multiple segments and
   /// initialization and deinitialization actions
@@ -79,7 +79,7 @@ public:
   virtual ~MemoryMapper();
 };
 
-class InProcessMemoryMapper : public MemoryMapper {
+class LLVM_ABI InProcessMemoryMapper : public MemoryMapper {
 public:
   InProcessMemoryMapper(size_t PageSize);
 
@@ -121,7 +121,7 @@ private:
   size_t PageSize;
 };
 
-class SharedMemoryMapper final : public MemoryMapper {
+class LLVM_ABI SharedMemoryMapper final : public MemoryMapper {
 public:
   struct SymbolAddrs {
     ExecutorAddr Instance;

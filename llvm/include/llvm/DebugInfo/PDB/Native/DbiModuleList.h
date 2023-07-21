@@ -28,7 +28,7 @@ namespace pdb {
 class DbiModuleList;
 struct FileInfoSubstreamHeader;
 
-class DbiModuleSourceFilesIterator
+class LLVM_ABI DbiModuleSourceFilesIterator
     : public iterator_facade_base<DbiModuleSourceFilesIterator,
                                   std::random_access_iterator_tag, StringRef> {
   using BaseType = typename DbiModuleSourceFilesIterator::iterator_facade_base;
@@ -64,7 +64,7 @@ private:
   uint16_t Filei{0};
 };
 
-class DbiModuleList {
+class LLVM_ABI DbiModuleList {
   friend DbiModuleSourceFilesIterator;
 
 public:

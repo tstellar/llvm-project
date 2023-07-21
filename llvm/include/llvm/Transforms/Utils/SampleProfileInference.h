@@ -23,7 +23,7 @@ namespace llvm {
 struct FlowJump;
 
 /// A wrapper of a binary basic block.
-struct FlowBlock {
+struct LLVM_ABI FlowBlock {
   uint64_t Index;
   uint64_t Weight{0};
   bool HasUnknownWeight{true};
@@ -40,7 +40,7 @@ struct FlowBlock {
 };
 
 /// A wrapper of a jump between two basic blocks.
-struct FlowJump {
+struct LLVM_ABI FlowJump {
   uint64_t Source;
   uint64_t Target;
   uint64_t Weight{0};
@@ -50,7 +50,7 @@ struct FlowJump {
 };
 
 /// A wrapper of binary function with basic blocks and jumps.
-struct FlowFunction {
+struct LLVM_ABI FlowFunction {
   /// Basic blocks in the function.
   std::vector<FlowBlock> Blocks;
   /// Jumps between the basic blocks.
@@ -62,7 +62,7 @@ struct FlowFunction {
 /// Various thresholds and options controlling the behavior of the profile
 /// inference algorithm. Default values are tuned for several large-scale
 /// applications, and can be modified via corresponding command-line flags.
-struct ProfiParams {
+struct LLVM_ABI ProfiParams {
   /// Evenly distribute flow when there are multiple equally likely options.
   bool EvenFlowDistribution{false};
 
@@ -112,11 +112,11 @@ struct ProfiParams {
   const int64_t CostUnlikely = ((int64_t)1) << 30;
 };
 
-void applyFlowInference(const ProfiParams &Params, FlowFunction &Func);
-void applyFlowInference(FlowFunction &Func);
+LLVM_ABI void applyFlowInference(const ProfiParams &Params, FlowFunction &Func);
+LLVM_ABI void applyFlowInference(FlowFunction &Func);
 
 /// Sample profile inference pass.
-template <typename FT> class SampleProfileInference {
+template <typename FT> class LLVM_ABI SampleProfileInference {
 public:
   using NodeRef = typename GraphTraits<FT *>::NodeRef;
   using BasicBlockT = typename std::remove_pointer<NodeRef>::type;

@@ -18,7 +18,7 @@
 
 namespace llvm {
 
-class MCAsmInfoDarwin : public MCAsmInfo {
+class LLVM_ABI MCAsmInfoDarwin : public MCAsmInfo {
 public:
   explicit MCAsmInfoDarwin();
 

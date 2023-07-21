@@ -110,7 +110,7 @@ class Value;
 /// estimated as PH_TAKEN_WEIGHT/(PH_TAKEN_WEIGHT + PH_NONTAKEN_WEIGHT). If
 /// no local heuristic has been matched then branch is left with no explicit
 /// probability set and assumed to have default probability.
-class BranchProbabilityInfo {
+class LLVM_ABI BranchProbabilityInfo {
 public:
   BranchProbabilityInfo() = default;
 
@@ -413,7 +413,7 @@ private:
 };
 
 /// Analysis pass which computes \c BranchProbabilityInfo.
-class BranchProbabilityAnalysis
+class LLVM_ABI BranchProbabilityAnalysis
     : public AnalysisInfoMixin<BranchProbabilityAnalysis> {
   friend AnalysisInfoMixin<BranchProbabilityAnalysis>;
 
@@ -428,7 +428,7 @@ public:
 };
 
 /// Printer pass for the \c BranchProbabilityAnalysis results.
-class BranchProbabilityPrinterPass
+class LLVM_ABI BranchProbabilityPrinterPass
     : public PassInfoMixin<BranchProbabilityPrinterPass> {
   raw_ostream &OS;
 
@@ -439,7 +439,7 @@ public:
 };
 
 /// Legacy analysis pass which computes \c BranchProbabilityInfo.
-class BranchProbabilityInfoWrapperPass : public FunctionPass {
+class LLVM_ABI BranchProbabilityInfoWrapperPass : public FunctionPass {
   BranchProbabilityInfo BPI;
 
 public:

@@ -60,7 +60,7 @@ namespace yaml {
 /// } // end namespace yaml
 /// } // end namespace llvm
 /// \endcode
-class BinaryRef {
+class LLVM_ABI BinaryRef {
   friend bool operator==(const BinaryRef &LHS, const BinaryRef &RHS);
 
   /// Either raw binary data, or a string of hex bytes (must always
@@ -103,7 +103,7 @@ inline bool operator==(const BinaryRef &LHS, const BinaryRef &RHS) {
   return LHS.DataIsHexString == RHS.DataIsHexString && LHS.Data == RHS.Data;
 }
 
-template <> struct ScalarTraits<BinaryRef> {
+template <> struct LLVM_ABI ScalarTraits<BinaryRef> {
   static void output(const BinaryRef &, void *, raw_ostream &);
   static StringRef input(StringRef, void *, BinaryRef &);
   static QuotingType mustQuote(StringRef S) { return needsQuotes(S); }

@@ -42,7 +42,7 @@ class VirtRegMap;
 
   /// Calculate auxiliary information for a virtual register such as its
   /// spill weight and allocation hint.
-  class VirtRegAuxInfo {
+  class LLVM_ABI VirtRegAuxInfo {
     MachineFunction &MF;
     LiveIntervals &LIS;
     const VirtRegMap &VRM;

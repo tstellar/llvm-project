@@ -15,13 +15,13 @@ namespace llvm {
 class Pass;
 class Function;
 
-class LoadStoreVectorizerPass : public PassInfoMixin<LoadStoreVectorizerPass> {
+class LLVM_ABI LoadStoreVectorizerPass : public PassInfoMixin<LoadStoreVectorizerPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 
 /// Create a legacy pass manager instance of the LoadStoreVectorizer pass
-Pass *createLoadStoreVectorizerPass();
+LLVM_ABI Pass *createLoadStoreVectorizerPass();
 
 }
 

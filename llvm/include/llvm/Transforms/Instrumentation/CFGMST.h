@@ -36,7 +36,7 @@ namespace llvm {
 ///
 /// Implements a Union-find algorithm to compute Minimum Spanning Tree
 /// for a given CFG.
-template <class Edge, class BBInfo> class CFGMST {
+template <class Edge, class BBInfo> class LLVM_ABI CFGMST {
 public:
   Function &F;
 

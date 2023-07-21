@@ -31,7 +31,7 @@ class raw_ostream;
 ///
 /// When computed using bottom-up DFS, this metric assumes that the DAG is a
 /// forest of trees with roots at the bottom of the schedule branching upward.
-struct ILPValue {
+struct LLVM_ABI ILPValue {
   unsigned InstrCount;
   /// Length may either correspond to depth or height, depending on direction,
   /// and cycles or nodes depending on context.
@@ -62,7 +62,7 @@ struct ILPValue {
 };
 
 /// Compute the values of each DAG node for various metrics during DFS.
-class SchedDFSResult {
+class LLVM_ABI SchedDFSResult {
   friend class SchedDFSImpl;
 
   static const unsigned InvalidSubtreeID = ~0u;
@@ -186,7 +186,7 @@ public:
   void scheduleTree(unsigned SubtreeID);
 };
 
-raw_ostream &operator<<(raw_ostream &OS, const ILPValue &Val);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const ILPValue &Val);
 
 } // end namespace llvm
 

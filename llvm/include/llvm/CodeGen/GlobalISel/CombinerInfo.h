@@ -23,7 +23,7 @@ class MachineIRBuilder;
 
 // Contains information relevant to enabling/disabling various combines for a
 // pass.
-class CombinerInfo {
+class LLVM_ABI CombinerInfo {
 public:
   CombinerInfo(bool AllowIllegalOps, bool ShouldLegalizeIllegal,
                const LegalizerInfo *LInfo, bool OptEnabled, bool OptSize,

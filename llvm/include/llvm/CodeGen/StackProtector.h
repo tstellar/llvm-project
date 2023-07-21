@@ -31,7 +31,7 @@ class Module;
 class TargetLoweringBase;
 class TargetMachine;
 
-class StackProtector : public FunctionPass {
+class LLVM_ABI StackProtector : public FunctionPass {
 private:
   static constexpr unsigned DefaultSSPBufferSize = 8;
 

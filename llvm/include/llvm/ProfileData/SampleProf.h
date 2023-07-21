@@ -41,7 +41,7 @@ namespace llvm {
 class DILocation;
 class raw_ostream;
 
-const std::error_category &sampleprof_category();
+LLVM_ABI const std::error_category &sampleprof_category();
 
 enum class sampleprof_error {
   success = 0,
@@ -80,7 +80,7 @@ inline sampleprof_error MergeResult(sampleprof_error &Accumulator,
 namespace std {
 
 template <>
-struct is_error_code_enum<llvm::sampleprof_error> : std::true_type {};
+struct LLVM_ABI is_error_code_enum<llvm::sampleprof_error> : std::true_type {};
 
 } // end namespace std
 
@@ -162,7 +162,7 @@ static inline std::string getSecName(SecType Type) {
 
 // Entry type of section header table used by SampleProfileExtBinaryBaseReader
 // and SampleProfileExtBinaryBaseWriter.
-struct SecHdrTableEntry {
+struct LLVM_ABI SecHdrTableEntry {
   SecType Type;
   uint64_t Flags;
   uint64_t Offset;
@@ -286,7 +286,7 @@ static inline bool hasSecFlag(const SecHdrTableEntry &Entry, SecFlagType Flag) {
 /// The discriminator value is useful to distinguish instructions
 /// that are on the same line but belong to different basic blocks
 /// (e.g., the two post-increment instructions in "if (p) x++; else y++;").
-struct LineLocation {
+struct LLVM_ABI LineLocation {
   LineLocation(uint32_t L, uint32_t D) : LineOffset(L), Discriminator(D) {}
 
   void print(raw_ostream &OS) const;
@@ -309,14 +309,14 @@ struct LineLocation {
   uint32_t Discriminator;
 };
 
-struct LineLocationHash {
+struct LLVM_ABI LineLocationHash {
   uint64_t operator()(const LineLocation &Loc) const {
     return std::hash<std::uint64_t>{}((((uint64_t)Loc.LineOffset) << 32) |
                                       Loc.Discriminator);
   }
 };
 
-raw_ostream &operator<<(raw_ostream &OS, const LineLocation &Loc);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const LineLocation &Loc);
 
 /// Representation of a single sample record.
 ///
@@ -328,7 +328,7 @@ raw_ostream &operator<<(raw_ostream &OS, const LineLocation &Loc);
 /// direct calls, this will be the exact function being invoked. For
 /// indirect calls (function pointers, virtual table dispatch), this
 /// will be a list of one or more functions.
-class SampleRecord {
+class LLVM_ABI SampleRecord {
 public:
   using CallTarget = std::pair<StringRef, uint64_t>;
   struct CallTargetComparator {
@@ -446,7 +446,7 @@ private:
   CallTargetMap CallTargets;
 };
 
-raw_ostream &operator<<(raw_ostream &OS, const SampleRecord &Sample);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const SampleRecord &Sample);
 
 // State of context associated with FunctionSamples
 enum ContextStateMask {
@@ -467,7 +467,7 @@ enum ContextAttributeMask {
 };
 
 // Represents a context frame with function name and line location
-struct SampleContextFrame {
+struct LLVM_ABI SampleContextFrame {
   StringRef FuncName;
   LineLocation Location;
 
@@ -504,7 +504,7 @@ static inline hash_code hash_value(const SampleContextFrame &arg) {
 using SampleContextFrameVector = SmallVector<SampleContextFrame, 1>;
 using SampleContextFrames = ArrayRef<SampleContextFrame>;
 
-struct SampleContextFrameHash {
+struct LLVM_ABI SampleContextFrameHash {
   uint64_t operator()(const SampleContextFrameVector &S) const {
     return hash_combine_range(S.begin(), S.end());
   }
@@ -520,7 +520,7 @@ struct SampleContextFrameHash {
 // For a base CS profile without calling context, the context vector should only
 // contain the leaf frame name.
 // For a non-CS profile, the context vector should be empty.
-class SampleContext {
+class LLVM_ABI SampleContext {
 public:
   SampleContext() : State(UnknownContext), Attributes(ContextNone) {}
 
@@ -731,7 +731,7 @@ using LocToLocMap =
 /// This data structure contains all the collected samples for the body
 /// of a function. Each sample corresponds to a LineLocation instance
 /// within the body of the function.
-class FunctionSamples {
+class LLVM_ABI FunctionSamples {
 public:
   FunctionSamples() = default;
 
@@ -1269,21 +1269,21 @@ private:
   const LocToLocMap *IRToProfileLocationMap = nullptr;
 };
 
-raw_ostream &operator<<(raw_ostream &OS, const FunctionSamples &FS);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const FunctionSamples &FS);
 
 using SampleProfileMap =
     std::unordered_map<SampleContext, FunctionSamples, SampleContext::Hash>;
 
 using NameFunctionSamples = std::pair<SampleContext, const FunctionSamples *>;
 
-void sortFuncProfiles(const SampleProfileMap &ProfileMap,
+LLVM_ABI void sortFuncProfiles(const SampleProfileMap &ProfileMap,
                       std::vector<NameFunctionSamples> &SortedProfiles);
 
 /// Sort a LocationT->SampleT map by LocationT.
 ///
 /// It produces a sorted list of <LocationT, SampleT> records by ascending
 /// order of LocationT.
-template <class LocationT, class SampleT> class SampleSorter {
+template <class LocationT, class SampleT> class LLVM_ABI SampleSorter {
 public:
   using SamplesWithLoc = std::pair<const LocationT, SampleT>;
   using SamplesWithLocList = SmallVector<const SamplesWithLoc *, 20>;
@@ -1305,7 +1305,7 @@ private:
 /// SampleContextTrimmer impelements helper functions to trim, merge cold
 /// context profiles. It also supports context profile canonicalization to make
 /// sure ProfileMap's key is consistent with FunctionSample's name/context.
-class SampleContextTrimmer {
+class LLVM_ABI SampleContextTrimmer {
 public:
   SampleContextTrimmer(SampleProfileMap &Profiles) : ProfileMap(Profiles){};
   // Trim and merge cold context profile when requested. TrimBaseProfileOnly
@@ -1331,7 +1331,7 @@ private:
 ///
 /// It supports full context-sensitive profile to nested profile conversion,
 /// nested profile to flatten profile conversion, etc.
-class ProfileConverter {
+class LLVM_ABI ProfileConverter {
 public:
   ProfileConverter(SampleProfileMap &Profiles);
   // Convert a full context-sensitive flat sample profile into a nested sample
@@ -1444,7 +1444,7 @@ private:
 /// in the binary used to generate the profile. It is useful to
 /// to discriminate a function being so cold as not to shown up
 /// in the profile and a function newly added.
-class ProfileSymbolList {
+class LLVM_ABI ProfileSymbolList {
 public:
   /// copy indicates whether we need to copy the underlying memory
   /// for the input Name.
@@ -1485,7 +1485,7 @@ private:
 
 using namespace sampleprof;
 // Provide DenseMapInfo for SampleContext.
-template <> struct DenseMapInfo<SampleContext> {
+template <> struct LLVM_ABI DenseMapInfo<SampleContext> {
   static inline SampleContext getEmptyKey() { return SampleContext(); }
 
   static inline SampleContext getTombstoneKey() { return SampleContext("@"); }

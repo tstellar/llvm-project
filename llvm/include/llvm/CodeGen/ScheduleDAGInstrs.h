@@ -50,7 +50,7 @@ namespace llvm {
   class Value;
 
   /// An individual mapping from virtual register number to SUnit.
-  struct VReg2SUnit {
+  struct LLVM_ABI VReg2SUnit {
     unsigned VirtReg;
     LaneBitmask LaneMask;
     SUnit *SU;
@@ -64,7 +64,7 @@ namespace llvm {
   };
 
   /// Mapping from virtual register to SUnit including an operand index.
-  struct VReg2SUnitOperIdx : public VReg2SUnit {
+  struct LLVM_ABI VReg2SUnitOperIdx : public VReg2SUnit {
     unsigned OperandIndex;
 
     VReg2SUnitOperIdx(unsigned VReg, LaneBitmask LaneMask,
@@ -74,7 +74,7 @@ namespace llvm {
 
   /// Record a physical register access.
   /// For non-data-dependent uses, OpIdx == -1.
-  struct PhysRegSUOper {
+  struct LLVM_ABI PhysRegSUOper {
     SUnit *SU;
     int OpIdx;
     unsigned Reg;
@@ -106,7 +106,7 @@ namespace llvm {
 
   using ValueType = PointerUnion<const Value *, const PseudoSourceValue *>;
 
-  struct UnderlyingObject : PointerIntPair<ValueType, 1, bool> {
+  struct LLVM_ABI UnderlyingObject : PointerIntPair<ValueType, 1, bool> {
     UnderlyingObject(ValueType V, bool MayAlias)
         : PointerIntPair<ValueType, 1, bool>(V, MayAlias) {}
 
@@ -117,7 +117,7 @@ namespace llvm {
   using UnderlyingObjectsVector = SmallVector<UnderlyingObject, 4>;
 
   /// A ScheduleDAG for scheduling lists of MachineInstr.
-  class ScheduleDAGInstrs : public ScheduleDAG {
+  class LLVM_ABI ScheduleDAGInstrs : public ScheduleDAG {
   protected:
     const MachineLoopInfo *MLI = nullptr;
     const MachineFrameInfo &MFI;

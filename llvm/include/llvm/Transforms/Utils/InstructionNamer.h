@@ -12,7 +12,7 @@
 #include "llvm/IR/PassManager.h"
 
 namespace llvm {
-struct InstructionNamerPass : PassInfoMixin<InstructionNamerPass> {
+struct LLVM_ABI InstructionNamerPass : PassInfoMixin<InstructionNamerPass> {
   PreservedAnalyses run(Function &, FunctionAnalysisManager &);
 };
 } // namespace llvm

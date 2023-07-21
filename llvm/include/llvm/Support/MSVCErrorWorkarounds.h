@@ -24,7 +24,7 @@ namespace llvm {
 
 // A default-constructible llvm::Error that is suitable for use with MSVC's
 // std::future implementation which requires default constructible types.
-class MSVCPError : public Error {
+class LLVM_ABI MSVCPError : public Error {
 public:
   MSVCPError() { (void)!!*this; }
 
@@ -40,7 +40,7 @@ public:
 
 // A default-constructible llvm::Expected that is suitable for use with MSVC's
 // std::future implementation, which requires default constructible types.
-template <typename T> class MSVCPExpected : public Expected<T> {
+template <typename T> class LLVM_ABI MSVCPExpected : public Expected<T> {
 public:
   MSVCPExpected()
       : Expected<T>(make_error<StringError>("", inconvertibleErrorCode())) {

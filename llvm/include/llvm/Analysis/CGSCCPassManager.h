@@ -145,7 +145,7 @@ using CGSCCPassManager =
 
 /// An explicit specialization of the require analysis template pass.
 template <typename AnalysisT>
-struct RequireAnalysisPass<AnalysisT, LazyCallGraph::SCC, CGSCCAnalysisManager,
+struct LLVM_ABI RequireAnalysisPass<AnalysisT, LazyCallGraph::SCC, CGSCCAnalysisManager,
                            LazyCallGraph &, CGSCCUpdateResult &>
     : PassInfoMixin<RequireAnalysisPass<AnalysisT, LazyCallGraph::SCC,
                                         CGSCCAnalysisManager, LazyCallGraph &,
@@ -229,7 +229,7 @@ using ModuleAnalysisManagerCGSCCProxy =
 ///
 /// Passes which do not change the call graph structure in any way can just
 /// ignore this argument to their run method.
-struct CGSCCUpdateResult {
+struct LLVM_ABI CGSCCUpdateResult {
   /// Worklist of the RefSCCs queued for processing.
   ///
   /// When a pass refines the graph and creates new RefSCCs or causes them to
@@ -326,7 +326,7 @@ struct CGSCCUpdateResult {
 /// \c CGSCCAnalysisManagerModuleProxy analysis prior to running the CGSCC
 /// pass over the module to enable a \c FunctionAnalysisManager to be used
 /// within this run safely.
-class ModuleToPostOrderCGSCCPassAdaptor
+class LLVM_ABI ModuleToPostOrderCGSCCPassAdaptor
     : public PassInfoMixin<ModuleToPostOrderCGSCCPassAdaptor> {
 public:
   using PassConceptT =
@@ -389,7 +389,7 @@ createModuleToPostOrderCGSCCPassAdaptor(CGSCCPassT &&Pass) {
 /// invalidation logic. Instead, this layer is only responsible for SCC-local
 /// invalidation events. We work with the module's FunctionAnalysisManager to
 /// invalidate function analyses.
-class FunctionAnalysisManagerCGSCCProxy
+class LLVM_ABI FunctionAnalysisManagerCGSCCProxy
     : public AnalysisInfoMixin<FunctionAnalysisManagerCGSCCProxy> {
 public:
   class Result {
@@ -432,7 +432,7 @@ using CGSCCAnalysisManagerFunctionProxy =
 /// routine provides a helper that updates the call graph in those ways
 /// including returning whether any changes were made and populating a CG
 /// update result struct for the overall CGSCC walk.
-LazyCallGraph::SCC &updateCGAndAnalysisManagerForFunctionPass(
+LLVM_ABI LazyCallGraph::SCC &updateCGAndAnalysisManagerForFunctionPass(
     LazyCallGraph &G, LazyCallGraph::SCC &C, LazyCallGraph::Node &N,
     CGSCCAnalysisManager &AM, CGSCCUpdateResult &UR,
     FunctionAnalysisManager &FAM);
@@ -443,7 +443,7 @@ LazyCallGraph::SCC &updateCGAndAnalysisManagerForFunctionPass(
 /// routine provides a helper that updates the call graph in those ways
 /// including returning whether any changes were made and populating a CG
 /// update result struct for the overall CGSCC walk.
-LazyCallGraph::SCC &updateCGAndAnalysisManagerForCGSCCPass(
+LLVM_ABI LazyCallGraph::SCC &updateCGAndAnalysisManagerForCGSCCPass(
     LazyCallGraph &G, LazyCallGraph::SCC &C, LazyCallGraph::Node &N,
     CGSCCAnalysisManager &AM, CGSCCUpdateResult &UR,
     FunctionAnalysisManager &FAM);
@@ -456,7 +456,7 @@ LazyCallGraph::SCC &updateCGAndAnalysisManagerForCGSCCPass(
 /// \c FunctionAnalysisManagerCGSCCProxy analysis prior to running the function
 /// pass over the SCC to enable a \c FunctionAnalysisManager to be used
 /// within this run safely.
-class CGSCCToFunctionPassAdaptor
+class LLVM_ABI CGSCCToFunctionPassAdaptor
     : public PassInfoMixin<CGSCCToFunctionPassAdaptor> {
 public:
   using PassConceptT = detail::PassConcept<Function, FunctionAnalysisManager>;
@@ -533,7 +533,7 @@ createCGSCCToFunctionPassAdaptor(FunctionPassT &&Pass,
 // function pass (manager) on a function multiple times if SCC mutations cause a
 // function to be visited multiple times and the function is not modified by
 // other SCC passes.
-class ShouldNotRunFunctionPassesAnalysis
+class LLVM_ABI ShouldNotRunFunctionPassesAnalysis
     : public AnalysisInfoMixin<ShouldNotRunFunctionPassesAnalysis> {
 public:
   static AnalysisKey Key;
@@ -556,7 +556,7 @@ public:
 /// This repetition has the potential to be very large however, as each one
 /// might refine a single call site. As a consequence, in practice we use an
 /// upper bound on the number of repetitions to limit things.
-class DevirtSCCRepeatedPass : public PassInfoMixin<DevirtSCCRepeatedPass> {
+class LLVM_ABI DevirtSCCRepeatedPass : public PassInfoMixin<DevirtSCCRepeatedPass> {
 public:
   using PassConceptT =
       detail::PassConcept<LazyCallGraph::SCC, CGSCCAnalysisManager,

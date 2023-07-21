@@ -81,11 +81,11 @@ constexpr bool is_uint_64_bit_v =
 
 /// Returns true if \p S is valid UTF-8, which is required for use as JSON.
 /// If it returns false, \p Offset is set to a byte offset near the first error.
-bool isUTF8(llvm::StringRef S, size_t *ErrOffset = nullptr);
+LLVM_ABI bool isUTF8(llvm::StringRef S, size_t *ErrOffset = nullptr);
 /// Replaces invalid UTF-8 sequences in \p S with the replacement character
 /// (U+FFFD). The returned string is valid UTF-8.
 /// This is much slower than isUTF8, so test that first.
-std::string fixUTF8(llvm::StringRef S);
+LLVM_ABI std::string fixUTF8(llvm::StringRef S);
 
 class Array;
 class ObjectKey;
@@ -94,7 +94,7 @@ template <typename T> Value toJSON(const std::optional<T> &Opt);
 
 /// An Object is a JSON object, which maps strings to heterogenous JSON values.
 /// It simulates DenseMap<ObjectKey, Value>. ObjectKey is a maybe-owned string.
-class Object {
+class LLVM_ABI Object {
   using Storage = DenseMap<ObjectKey, Value, llvm::DenseMapInfo<StringRef>>;
   Storage M;
 
@@ -153,14 +153,14 @@ public:
   const json::Array *getArray(StringRef K) const;
   json::Array *getArray(StringRef K);
 };
-bool operator==(const Object &LHS, const Object &RHS);
+LLVM_ABI bool operator==(const Object &LHS, const Object &RHS);
 inline bool operator!=(const Object &LHS, const Object &RHS) {
   return !(LHS == RHS);
 }
 
 /// An Array is a JSON array, which contains heterogeneous JSON values.
 /// It simulates std::vector<Value>.
-class Array {
+class LLVM_ABI Array {
   std::vector<Value> V;
 
 public:
@@ -284,7 +284,7 @@ inline bool operator!=(const Array &L, const Array &R) { return !(L == R); }
 /// And parsed:
 ///   Expected<Value> E = json::parse("[1, 2, null]");
 ///   assert(E && E->kind() == Value::Array);
-class Value {
+class LLVM_ABI Value {
 public:
   enum Kind {
     Null,
@@ -513,7 +513,7 @@ private:
   friend bool operator==(const Value &, const Value &);
 };
 
-bool operator==(const Value &, const Value &);
+LLVM_ABI bool operator==(const Value &, const Value &);
 inline bool operator!=(const Value &L, const Value &R) { return !(L == R); }
 
 // Array Methods
@@ -562,7 +562,7 @@ inline bool operator==(const Array &L, const Array &R) { return L.V == R.V; }
 ///   - only strings are allowed
 ///   - it's optimized for the string literal case (Owned == nullptr)
 /// Like Value, strings must be UTF-8. See isUTF8 documentation for details.
-class ObjectKey {
+class LLVM_ABI ObjectKey {
 public:
   ObjectKey(const char *S) : ObjectKey(StringRef(S)) {}
   ObjectKey(std::string S) : Owned(new std::string(std::move(S))) {
@@ -637,7 +637,7 @@ inline bool Object::erase(StringRef K) {
 /// A "cursor" marking a position within a Value.
 /// The Value is a tree, and this is the path from the root to the current node.
 /// This is used to associate errors with particular subobjects.
-class Path {
+class LLVM_ABI Path {
 public:
   class Root;
 
@@ -824,7 +824,7 @@ template <typename T> Value toJSON(const std::optional<T> &Opt) {
 ///         O.mapOptional("optional_field", R.OptionalField);
 ///   }
 /// \endcode
-class ObjectMapper {
+class LLVM_ABI ObjectMapper {
 public:
   /// If O is not an object, this mapper is invalid and an error is reported.
   ObjectMapper(const Value &E, Path P) : O(E.getAsObject()), P(P) {
@@ -875,9 +875,9 @@ private:
 /// Parses the provided JSON source, or returns a ParseError.
 /// The returned Value is self-contained and owns its strings (they do not refer
 /// to the original source).
-llvm::Expected<Value> parse(llvm::StringRef JSON);
+LLVM_ABI llvm::Expected<Value> parse(llvm::StringRef JSON);
 
-class ParseError : public llvm::ErrorInfo<ParseError> {
+class LLVM_ABI ParseError : public llvm::ErrorInfo<ParseError> {
   const char *Msg;
   unsigned Line, Column, Offset;
 
@@ -961,7 +961,7 @@ Expected<T> parse(const llvm::StringRef &JSON, const char *RootName = "") {
 /// This can be mismatched begin()/end() pairs, trying to emit attributes inside
 /// an array, and so on.
 /// With asserts disabled, this is undefined behavior.
-class OStream {
+class LLVM_ABI OStream {
  public:
   using Block = llvm::function_ref<void()>;
   // If IndentSize is nonzero, output is pretty-printed.
@@ -1080,7 +1080,7 @@ inline llvm::raw_ostream &operator<<(llvm::raw_ostream &OS, const Value &V) {
 /// Allow printing json::Value with formatv().
 /// The default style is basic/compact formatting, like operator<<.
 /// A format string like formatv("{0:2}", Value) pretty-prints with indent 2.
-template <> struct format_provider<llvm::json::Value> {
+template <> struct LLVM_ABI format_provider<llvm::json::Value> {
   static void format(const llvm::json::Value &, raw_ostream &, StringRef);
 };
 } // namespace llvm

@@ -28,14 +28,14 @@ class Document;
 class MapDocNode;
 
 /// The kind of a DocNode and its owning Document.
-struct KindAndDocument {
+struct LLVM_ABI KindAndDocument {
   Document *Doc;
   Type Kind;
 };
 
 /// A node in a MsgPack Document. This is a simple copyable and
 /// passable-by-value type that does not own any memory.
-class DocNode {
+class LLVM_ABI DocNode {
   friend Document;
 
 public:
@@ -222,7 +222,7 @@ private:
 };
 
 /// A DocNode that is a map.
-class MapDocNode : public DocNode {
+class LLVM_ABI MapDocNode : public DocNode {
 public:
   MapDocNode() = default;
   MapDocNode(DocNode &N) : DocNode(N) { assert(getKind() == Type::Map); }
@@ -252,7 +252,7 @@ public:
 };
 
 /// A DocNode that is an array.
-class ArrayDocNode : public DocNode {
+class LLVM_ABI ArrayDocNode : public DocNode {
 public:
   ArrayDocNode() = default;
   ArrayDocNode(DocNode &N) : DocNode(N) { assert(getKind() == Type::Array); }
@@ -275,7 +275,7 @@ public:
 /// Simple in-memory representation of a document of msgpack objects with
 /// ability to find and create array and map elements.  Does not currently cope
 /// with any extension types.
-class Document {
+class LLVM_ABI Document {
   // Maps, arrays and strings used by nodes in the document. No attempt is made
   // to free unused ones.
   std::vector<std::unique_ptr<DocNode::MapTy>> Maps;

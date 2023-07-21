@@ -31,12 +31,12 @@ namespace symbolize {
 
 class SourceCode;
 
-struct Request {
+struct LLVM_ABI Request {
   StringRef ModuleName;
   std::optional<uint64_t> Address;
 };
 
-class DIPrinter {
+class LLVM_ABI DIPrinter {
 public:
   DIPrinter() = default;
   virtual ~DIPrinter() = default;
@@ -57,7 +57,7 @@ public:
   virtual void listEnd() = 0;
 };
 
-struct PrinterConfig {
+struct LLVM_ABI PrinterConfig {
   bool PrintAddress;
   bool PrintFunctions;
   bool Pretty;
@@ -67,7 +67,7 @@ struct PrinterConfig {
 
 using ErrorHandler = function_ref<void(const ErrorInfoBase &, StringRef)>;
 
-class PlainPrinterBase : public DIPrinter {
+class LLVM_ABI PlainPrinterBase : public DIPrinter {
 protected:
   raw_ostream &OS;
   ErrorHandler ErrHandler;
@@ -104,7 +104,7 @@ public:
   void listEnd() override {}
 };
 
-class LLVMPrinter : public PlainPrinterBase {
+class LLVM_ABI LLVMPrinter : public PlainPrinterBase {
 private:
   void printSimpleLocation(StringRef Filename, const DILineInfo &Info) override;
   void printStartAddress(const DILineInfo &Info) override;
@@ -115,7 +115,7 @@ public:
       : PlainPrinterBase(OS, EH, Config) {}
 };
 
-class GNUPrinter : public PlainPrinterBase {
+class LLVM_ABI GNUPrinter : public PlainPrinterBase {
 private:
   void printSimpleLocation(StringRef Filename, const DILineInfo &Info) override;
 
@@ -125,7 +125,7 @@ public:
 
 };
 
-class JSONPrinter : public DIPrinter {
+class LLVM_ABI JSONPrinter : public DIPrinter {
 private:
   raw_ostream &OS;
   PrinterConfig Config;

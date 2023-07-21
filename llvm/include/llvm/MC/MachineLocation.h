@@ -19,7 +19,7 @@
 
 namespace llvm {
 
-class MachineLocation {
+class LLVM_ABI MachineLocation {
 private:
   bool IsRegister = false;              ///< True if location is a register.
   unsigned Register = 0;                ///< gcc/gdb register number.

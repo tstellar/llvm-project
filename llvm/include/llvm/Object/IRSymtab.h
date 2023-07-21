@@ -52,7 +52,7 @@ namespace storage {
 using Word = support::ulittle32_t;
 
 /// A reference to a string in the string table.
-struct Str {
+struct LLVM_ABI Str {
   Word Offset, Size;
 
   StringRef get(StringRef Strtab) const {
@@ -61,7 +61,7 @@ struct Str {
 };
 
 /// A reference to a range of objects in the symbol table.
-template <typename T> struct Range {
+template <typename T> struct LLVM_ABI Range {
   Word Offset, Size;
 
   ArrayRef<T> get(StringRef Symtab) const {
@@ -71,7 +71,7 @@ template <typename T> struct Range {
 
 /// Describes the range of a particular module's symbols within the symbol
 /// table.
-struct Module {
+struct LLVM_ABI Module {
   Word Begin, End;
 
   /// The index of the first Uncommon for this Module.
@@ -79,7 +79,7 @@ struct Module {
 };
 
 /// This is equivalent to an IR comdat.
-struct Comdat {
+struct LLVM_ABI Comdat {
   Str Name;
 
   // llvm::Comdat::SelectionKind
@@ -88,7 +88,7 @@ struct Comdat {
 
 /// Contains the information needed by linkers for symbol resolution, as well as
 /// by the LTO implementation itself.
-struct Symbol {
+struct LLVM_ABI Symbol {
   /// The mangled symbol name.
   Str Name;
 
@@ -119,7 +119,7 @@ struct Symbol {
 
 /// This data structure contains rarely used symbol fields and is optionally
 /// referenced by a Symbol.
-struct Uncommon {
+struct LLVM_ABI Uncommon {
   Word CommonSize, CommonAlign;
 
   /// COFF-specific: the name of the symbol that a weak external resolves to
@@ -131,7 +131,7 @@ struct Uncommon {
 };
 
 
-struct Header {
+struct LLVM_ABI Header {
   /// Version number of the symtab format. This number should be incremented
   /// when the format changes, but it does not need to be incremented if a
   /// change to LLVM would cause it to create a different symbol table.
@@ -162,12 +162,12 @@ struct Header {
 
 /// Fills in Symtab and StrtabBuilder with a valid symbol and string table for
 /// Mods.
-Error build(ArrayRef<Module *> Mods, SmallVector<char, 0> &Symtab,
+LLVM_ABI Error build(ArrayRef<Module *> Mods, SmallVector<char, 0> &Symtab,
             StringTableBuilder &StrtabBuilder, BumpPtrAllocator &Alloc);
 
 /// This represents a symbol that has been read from a storage::Symbol and
 /// possibly a storage::Uncommon.
-struct Symbol {
+struct LLVM_ABI Symbol {
   // Copied from storage::Symbol.
   StringRef Name, IRName;
   int ComdatIndex;
@@ -233,7 +233,7 @@ struct Symbol {
 
 /// This class can be used to read a Symtab and Strtab produced by
 /// irsymtab::build.
-class Reader {
+class LLVM_ABI Reader {
   StringRef Symtab, Strtab;
 
   ArrayRef<storage::Module> Modules;
@@ -366,13 +366,13 @@ inline Reader::symbol_range Reader::module_symbols(unsigned I) const {
 
 /// The contents of the irsymtab in a bitcode file. Any underlying data for the
 /// irsymtab are owned by Symtab and Strtab.
-struct FileContents {
+struct LLVM_ABI FileContents {
   SmallVector<char, 0> Symtab, Strtab;
   Reader TheReader;
 };
 
 /// Reads the contents of a bitcode file, creating its irsymtab if necessary.
-Expected<FileContents> readBitcode(const BitcodeFileContents &BFC);
+LLVM_ABI Expected<FileContents> readBitcode(const BitcodeFileContents &BFC);
 
 } // end namespace irsymtab
 } // end namespace llvm

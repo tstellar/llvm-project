@@ -12,7 +12,7 @@
 #include "llvm/MC/MCAsmInfo.h"
 
 namespace llvm {
-class MCAsmInfoWasm : public MCAsmInfo {
+class LLVM_ABI MCAsmInfoWasm : public MCAsmInfo {
   virtual void anchor();
 
 protected:

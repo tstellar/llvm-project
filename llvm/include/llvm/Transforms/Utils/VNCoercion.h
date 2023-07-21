@@ -34,7 +34,7 @@ class DataLayout;
 namespace VNCoercion {
 /// Return true if CoerceAvailableValueToLoadType would succeed if it was
 /// called.
-bool canCoerceMustAliasedValueToLoad(Value *StoredVal, Type *LoadTy,
+LLVM_ABI bool canCoerceMustAliasedValueToLoad(Value *StoredVal, Type *LoadTy,
                                      const DataLayout &DL);
 
 /// If we saw a store of a value to memory, and then a load from a must-aliased
@@ -43,7 +43,7 @@ bool canCoerceMustAliasedValueToLoad(Value *StoredVal, Type *LoadTy,
 /// IRBuilder used to insert new instructions.
 ///
 /// If we can't do it, return null.
-Value *coerceAvailableValueToLoadType(Value *StoredVal, Type *LoadedTy,
+LLVM_ABI Value *coerceAvailableValueToLoadType(Value *StoredVal, Type *LoadedTy,
                                       IRBuilderBase &IRB, const DataLayout &DL);
 
 /// This function determines whether a value for the pointer LoadPtr can be
@@ -51,7 +51,7 @@ Value *coerceAvailableValueToLoadType(Value *StoredVal, Type *LoadedTy,
 ///
 /// On success, it returns the offset into DepSI that extraction would start.
 /// On failure, it returns -1.
-int analyzeLoadFromClobberingStore(Type *LoadTy, Value *LoadPtr,
+LLVM_ABI int analyzeLoadFromClobberingStore(Type *LoadTy, Value *LoadPtr,
                                    StoreInst *DepSI, const DataLayout &DL);
 
 /// This function determines whether a value for the pointer LoadPtr can be
@@ -59,7 +59,7 @@ int analyzeLoadFromClobberingStore(Type *LoadTy, Value *LoadPtr,
 ///
 /// On success, it returns the offset into DepLI that extraction would start.
 /// On failure, it returns -1.
-int analyzeLoadFromClobberingLoad(Type *LoadTy, Value *LoadPtr, LoadInst *DepLI,
+LLVM_ABI int analyzeLoadFromClobberingLoad(Type *LoadTy, Value *LoadPtr, LoadInst *DepLI,
                                   const DataLayout &DL);
 
 /// This function determines whether a value for the pointer LoadPtr can be
@@ -67,30 +67,30 @@ int analyzeLoadFromClobberingLoad(Type *LoadTy, Value *LoadPtr, LoadInst *DepLI,
 ///
 /// On success, it returns the offset into DepMI that extraction would start.
 /// On failure, it returns -1.
-int analyzeLoadFromClobberingMemInst(Type *LoadTy, Value *LoadPtr,
+LLVM_ABI int analyzeLoadFromClobberingMemInst(Type *LoadTy, Value *LoadPtr,
                                      MemIntrinsic *DepMI, const DataLayout &DL);
 
 /// If analyzeLoadFromClobberingStore/Load returned an offset, this function
 /// can be used to actually perform the extraction of the bits from the store.
 /// It inserts instructions to do so at InsertPt, and returns the extracted
 /// value.
-Value *getValueForLoad(Value *SrcVal, unsigned Offset, Type *LoadTy,
+LLVM_ABI Value *getValueForLoad(Value *SrcVal, unsigned Offset, Type *LoadTy,
                             Instruction *InsertPt, const DataLayout &DL);
 // This is the same as getValueForLoad, except it performs no insertion.
 // It only allows constant inputs.
-Constant *getConstantValueForLoad(Constant *SrcVal, unsigned Offset,
+LLVM_ABI Constant *getConstantValueForLoad(Constant *SrcVal, unsigned Offset,
                                   Type *LoadTy, const DataLayout &DL);
 
 /// If analyzeLoadFromClobberingMemInst returned an offset, this function can be
 /// used to actually perform the extraction of the bits from the memory
 /// intrinsic.  It inserts instructions to do so at InsertPt, and returns the
 /// extracted value.
-Value *getMemInstValueForLoad(MemIntrinsic *SrcInst, unsigned Offset,
+LLVM_ABI Value *getMemInstValueForLoad(MemIntrinsic *SrcInst, unsigned Offset,
                               Type *LoadTy, Instruction *InsertPt,
                               const DataLayout &DL);
 // This is the same as getStoreValueForLoad, except it performs no insertion.
 // It returns nullptr if it cannot produce a constant.
-Constant *getConstantMemInstValueForLoad(MemIntrinsic *SrcInst, unsigned Offset,
+LLVM_ABI Constant *getConstantMemInstValueForLoad(MemIntrinsic *SrcInst, unsigned Offset,
                                          Type *LoadTy, const DataLayout &DL);
 }
 }

@@ -37,7 +37,7 @@
 #include "llvm/Support/SuffixTreeNode.h"
 
 namespace llvm {
-class SuffixTree {
+class LLVM_ABI SuffixTree {
 public:
   /// Each element is an integer representing an instruction in the module.
   ArrayRef<unsigned> Str;

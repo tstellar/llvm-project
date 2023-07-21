@@ -42,7 +42,7 @@ class raw_ostream;
   /// SlotIndexes pass. It should not be used directly. See the
   /// SlotIndex & SlotIndexes classes for the public interface to this
   /// information.
-  class IndexListEntry : public ilist_node<IndexListEntry> {
+  class LLVM_ABI IndexListEntry : public ilist_node<IndexListEntry> {
     MachineInstr *mi;
     unsigned index;
 
@@ -75,11 +75,11 @@ class raw_ostream;
   };
 
   template <>
-  struct ilist_alloc_traits<IndexListEntry>
+  struct LLVM_ABI ilist_alloc_traits<IndexListEntry>
       : public ilist_noalloc_traits<IndexListEntry> {};
 
   /// SlotIndex - An opaque wrapper around machine indexes.
-  class SlotIndex {
+  class LLVM_ABI SlotIndex {
     friend class SlotIndexes;
 
     enum Slot {
@@ -316,7 +316,7 @@ class raw_ostream;
   /// SlotIndexes pass.
   ///
   /// This pass assigns indexes to each instruction.
-  class SlotIndexes : public MachineFunctionPass {
+  class LLVM_ABI SlotIndexes : public MachineFunctionPass {
   private:
     // IndexListEntry allocator.
     BumpPtrAllocator ileAllocator;
@@ -644,7 +644,7 @@ class raw_ostream;
 
   // Specialize IntervalMapInfo for half-open slot index intervals.
   template <>
-  struct IntervalMapInfo<SlotIndex> : IntervalMapHalfOpenInfo<SlotIndex> {
+  struct LLVM_ABI IntervalMapInfo<SlotIndex> : IntervalMapHalfOpenInfo<SlotIndex> {
   };
 
 } // end namespace llvm

@@ -21,7 +21,7 @@ namespace llvm {
 class Function;
 class TargetMachine;
 
-class TypePromotionPass : public PassInfoMixin<TypePromotionPass> {
+class LLVM_ABI TypePromotionPass : public PassInfoMixin<TypePromotionPass> {
 private:
   const TargetMachine *TM;
 

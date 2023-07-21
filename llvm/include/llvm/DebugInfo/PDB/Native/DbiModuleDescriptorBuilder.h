@@ -35,7 +35,7 @@ namespace pdb {
 // Represents merged or unmerged symbols. Merged symbols can be written to the
 // output file as is, but unmerged symbols must be rewritten first. In either
 // case, the size must be known up front.
-struct SymbolListWrapper {
+struct LLVM_ABI SymbolListWrapper {
   explicit SymbolListWrapper(ArrayRef<uint8_t> Syms)
       : SymPtr(const_cast<uint8_t *>(Syms.data())), SymSize(Syms.size()),
         NeedsToBeMerged(false) {}
@@ -55,12 +55,12 @@ struct SymbolListWrapper {
 
 /// Represents a string table reference at some offset in the module symbol
 /// stream.
-struct StringTableFixup {
+struct LLVM_ABI StringTableFixup {
   uint32_t StrTabOffset = 0;
   uint32_t SymOffsetOfReference = 0;
 };
 
-class DbiModuleDescriptorBuilder {
+class LLVM_ABI DbiModuleDescriptorBuilder {
   friend class DbiStreamBuilder;
 
 public:

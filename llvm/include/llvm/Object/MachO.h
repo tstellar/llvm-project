@@ -41,7 +41,7 @@ namespace object {
 
 /// DiceRef - This is a value type class that represents a single
 /// data in code entry in the table in a Mach-O object file.
-class DiceRef {
+class LLVM_ABI DiceRef {
   DataRefImpl DicePimpl;
   const ObjectFile *OwningObject = nullptr;
 
@@ -70,7 +70,7 @@ using dice_iterator = content_iterator<DiceRef>;
 ///      for (const llvm::object::ExportEntry &AnExport : Obj->exports(&Err)) {
 ///      }
 ///      if (Err) { report error ...
-class ExportEntry {
+class LLVM_ABI ExportEntry {
 public:
   ExportEntry(Error *Err, const MachOObjectFile *O, ArrayRef<uint8_t> Trie);
 
@@ -129,7 +129,7 @@ using export_iterator = content_iterator<ExportEntry>;
 // can be checked and translated.  Only the SegIndex/SegOffset pairs from
 // checked entries are to be used with the segmentName(), sectionName() and
 // address() methods below.
-class BindRebaseSegInfo {
+class LLVM_ABI BindRebaseSegInfo {
 public:
   BindRebaseSegInfo(const MachOObjectFile *Obj);
 
@@ -165,7 +165,7 @@ private:
 ///    for (const llvm::object::MachORebaseEntry &Entry : Obj->rebaseTable(&Err)) {
 ///    }
 ///    if (Err) { report error ...
-class MachORebaseEntry {
+class LLVM_ABI MachORebaseEntry {
 public:
   MachORebaseEntry(Error *Err, const MachOObjectFile *O,
                    ArrayRef<uint8_t> opcodes, bool is64Bit);
@@ -209,7 +209,7 @@ using rebase_iterator = content_iterator<MachORebaseEntry>;
 ///    for (const llvm::object::MachOBindEntry &Entry : Obj->bindTable(&Err)) {
 ///    }
 ///    if (Err) { report error ...
-class MachOBindEntry {
+class LLVM_ABI MachOBindEntry {
 public:
   enum class Kind { Regular, Lazy, Weak };
 
@@ -272,7 +272,7 @@ using bind_iterator = content_iterator<MachOBindEntry>;
 ///   LibOrdinal == BIND_SPECIAL_DYLIB_WEAK_LOOKUP
 ///     This symbol may be coalesced with other libraries vending the same
 ///     symbol. E.g., C++'s "operator new". This is called a "weak bind."
-struct ChainedFixupTarget {
+struct LLVM_ABI ChainedFixupTarget {
 public:
   ChainedFixupTarget(int LibOrdinal, uint32_t NameOffset, StringRef Symbol,
                      uint64_t Addend, bool WeakImport)
@@ -296,7 +296,7 @@ private:
   bool WeakImport;
 };
 
-struct ChainedFixupsSegment {
+struct LLVM_ABI ChainedFixupsSegment {
   ChainedFixupsSegment(uint8_t SegIdx, uint32_t Offset,
                        const MachO::dyld_chained_starts_in_segment &Header,
                        std::vector<uint16_t> &&PageStarts)
@@ -319,7 +319,7 @@ struct ChainedFixupsSegment {
 ///                            rebase, where rebases are mixed in with other
 ///                            bind opcodes.
 ///   MachOChainedFixupEntry - for pointer chains embedded in data pages.
-class MachOAbstractFixupEntry {
+class LLVM_ABI MachOAbstractFixupEntry {
 public:
   MachOAbstractFixupEntry(Error *Err, const MachOObjectFile *O);
 
@@ -375,7 +375,7 @@ private:
   uint64_t TextAddress;
 };
 
-class MachOChainedFixupEntry : public MachOAbstractFixupEntry {
+class LLVM_ABI MachOChainedFixupEntry : public MachOAbstractFixupEntry {
 public:
   enum class FixupKind { Bind, Rebase };
 
@@ -403,7 +403,7 @@ private:
 };
 using fixup_iterator = content_iterator<MachOChainedFixupEntry>;
 
-class MachOObjectFile : public ObjectFile {
+class LLVM_ABI MachOObjectFile : public ObjectFile {
 public:
   struct LoadCommandInfo {
     const char *Ptr;      // Where in memory the load command is.

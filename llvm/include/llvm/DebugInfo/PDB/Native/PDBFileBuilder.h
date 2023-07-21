@@ -36,7 +36,7 @@ class InfoStreamBuilder;
 class GSIStreamBuilder;
 class TpiStreamBuilder;
 
-class PDBFileBuilder {
+class LLVM_ABI PDBFileBuilder {
 public:
   explicit PDBFileBuilder(BumpPtrAllocator &Allocator);
   ~PDBFileBuilder();

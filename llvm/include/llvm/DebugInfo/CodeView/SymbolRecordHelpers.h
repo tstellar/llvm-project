@@ -50,10 +50,10 @@ inline bool symbolEndsScope(SymbolKind Kind) {
 
 /// Given a symbol P for which symbolOpensScope(P) == true, return the
 /// corresponding end offset.
-uint32_t getScopeEndOffset(const CVSymbol &Symbol);
-uint32_t getScopeParentOffset(const CVSymbol &Symbol);
+LLVM_ABI uint32_t getScopeEndOffset(const CVSymbol &Symbol);
+LLVM_ABI uint32_t getScopeParentOffset(const CVSymbol &Symbol);
 
-CVSymbolArray limitSymbolArrayToScope(const CVSymbolArray &Symbols,
+LLVM_ABI CVSymbolArray limitSymbolArrayToScope(const CVSymbolArray &Symbols,
                                       uint32_t ScopeBegin);
 
 } // namespace codeview

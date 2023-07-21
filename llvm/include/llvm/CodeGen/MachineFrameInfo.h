@@ -31,7 +31,7 @@ class AllocaInst;
 /// callee saved register is in the current frame.
 /// Callee saved reg can also be saved to a different register rather than
 /// on the stack by setting DstReg instead of FrameIdx.
-class CalleeSavedInfo {
+class LLVM_ABI CalleeSavedInfo {
   Register Reg;
   union {
     int FrameIdx;
@@ -103,7 +103,7 @@ public:
 /// the program.
 ///
 /// Abstract Stack Frame Information
-class MachineFrameInfo {
+class LLVM_ABI MachineFrameInfo {
 public:
   /// Stack Smashing Protection (SSP) rules require that vulnerable stack
   /// allocations are located close the stack protector.

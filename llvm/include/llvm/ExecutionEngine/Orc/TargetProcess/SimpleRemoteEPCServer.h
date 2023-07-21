@@ -33,7 +33,7 @@ namespace llvm {
 namespace orc {
 
 /// A simple EPC server implementation.
-class SimpleRemoteEPCServer : public SimpleRemoteEPCTransportClient {
+class LLVM_ABI SimpleRemoteEPCServer : public SimpleRemoteEPCTransportClient {
 public:
   using ReportErrorFunction = unique_function<void(Error)>;
 

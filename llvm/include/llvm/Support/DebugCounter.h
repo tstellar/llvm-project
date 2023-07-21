@@ -53,7 +53,7 @@ namespace llvm {
 
 class raw_ostream;
 
-class DebugCounter {
+class LLVM_ABI DebugCounter {
 public:
   /// Returns a reference to the singleton instance.
   static DebugCounter &instance();

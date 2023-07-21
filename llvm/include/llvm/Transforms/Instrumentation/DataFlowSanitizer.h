@@ -15,7 +15,7 @@
 namespace llvm {
 class Module;
 
-class DataFlowSanitizerPass : public PassInfoMixin<DataFlowSanitizerPass> {
+class LLVM_ABI DataFlowSanitizerPass : public PassInfoMixin<DataFlowSanitizerPass> {
 private:
   std::vector<std::string> ABIListFiles;
 

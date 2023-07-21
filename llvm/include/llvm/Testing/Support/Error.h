@@ -17,7 +17,7 @@
 
 namespace llvm {
 namespace detail {
-ErrorHolder TakeError(Error Err);
+LLVM_ABI ErrorHolder TakeError(Error Err);
 
 template <typename T> ExpectedHolder<T> TakeExpected(Expected<T> &Exp) {
   return {TakeError(Exp.takeError()), Exp};
@@ -28,7 +28,7 @@ template <typename T> ExpectedHolder<T> TakeExpected(Expected<T> &&Exp) {
 }
 
 template <typename T>
-class ValueMatchesMono
+class LLVM_ABI ValueMatchesMono
     : public testing::MatcherInterface<const ExpectedHolder<T> &> {
 public:
   explicit ValueMatchesMono(const testing::Matcher<T> &Matcher)
@@ -66,7 +66,7 @@ private:
 };
 
 template<typename M>
-class ValueMatchesPoly {
+class LLVM_ABI ValueMatchesPoly {
 public:
   explicit ValueMatchesPoly(const M &Matcher) : Matcher(Matcher) {}
 
@@ -81,7 +81,7 @@ private:
 };
 
 template <typename InfoT>
-class ErrorMatchesMono : public testing::MatcherInterface<const ErrorHolder &> {
+class LLVM_ABI ErrorMatchesMono : public testing::MatcherInterface<const ErrorHolder &> {
 public:
   explicit ErrorMatchesMono(std::optional<testing::Matcher<InfoT &>> Matcher)
       : Matcher(std::move(Matcher)) {}
@@ -128,7 +128,7 @@ private:
   std::optional<testing::Matcher<InfoT &>> Matcher;
 };
 
-class ErrorMessageMatches
+class LLVM_ABI ErrorMessageMatches
     : public testing::MatcherInterface<const ErrorHolder &> {
 public:
   explicit ErrorMessageMatches(

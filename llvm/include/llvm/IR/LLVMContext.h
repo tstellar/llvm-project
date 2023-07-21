@@ -64,7 +64,7 @@ enum {
 /// infrastructure, including the type and constant uniquing tables.
 /// LLVMContext itself provides no locking guarantees, so you should be careful
 /// to have one context per thread.
-class LLVMContext {
+class LLVM_ABI LLVMContext {
 public:
   LLVMContextImpl *const pImpl;
   LLVMContext();

@@ -21,7 +21,7 @@
 namespace llvm {
 namespace codeview {
 class SymbolVisitorDelegate;
-class SymbolDeserializer : public SymbolVisitorCallbacks {
+class LLVM_ABI SymbolDeserializer : public SymbolVisitorCallbacks {
   struct MappingInfo {
     MappingInfo(ArrayRef<uint8_t> RecordData, CodeViewContainer Container)
         : Stream(RecordData, llvm::support::little), Reader(Stream),

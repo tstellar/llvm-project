@@ -37,7 +37,7 @@ class MachineInstr;
 /// using an encoding that makes it compatible with TinyPtrVector.
 /// The 0th LSB is forced zero (and will be used for pointer union tagging),
 /// The 1st LSB is forced one (to make sure the value is non-zero).
-class ReachingDef {
+class LLVM_ABI ReachingDef {
   uintptr_t Encoded;
   friend struct PointerLikeTypeTraits<ReachingDef>;
   explicit ReachingDef(uintptr_t Encoded) : Encoded(Encoded) {}
@@ -49,7 +49,7 @@ public:
 };
 
 template<>
-struct PointerLikeTypeTraits<ReachingDef> {
+struct LLVM_ABI PointerLikeTypeTraits<ReachingDef> {
   static constexpr int NumLowBitsAvailable = 1;
 
   static inline void *getAsVoidPointer(const ReachingDef &RD) {
@@ -66,7 +66,7 @@ struct PointerLikeTypeTraits<ReachingDef> {
 };
 
 /// This class provides the reaching def analysis.
-class ReachingDefAnalysis : public MachineFunctionPass {
+class LLVM_ABI ReachingDefAnalysis : public MachineFunctionPass {
 private:
   MachineFunction *MF = nullptr;
   const TargetRegisterInfo *TRI = nullptr;

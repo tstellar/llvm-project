@@ -34,7 +34,7 @@ enum CurStreamTypeType {
   LLVMBitstreamRemarks
 };
 
-struct BCDumpOptions {
+struct LLVM_ABI BCDumpOptions {
   /// The stream.
   raw_ostream &OS;
   /// Print per-code histogram.
@@ -49,7 +49,7 @@ struct BCDumpOptions {
   BCDumpOptions(raw_ostream &OS) : OS(OS) {}
 };
 
-class BitcodeAnalyzer {
+class LLVM_ABI BitcodeAnalyzer {
   BitstreamCursor Stream;
   BitstreamBlockInfo BlockInfo;
   CurStreamTypeType CurStreamType;

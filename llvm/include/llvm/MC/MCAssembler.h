@@ -55,14 +55,14 @@ class MCSection;
 class MCValue;
 
 // FIXME: This really doesn't belong here. See comments below.
-struct IndirectSymbolData {
+struct LLVM_ABI IndirectSymbolData {
   MCSymbol *Symbol;
   MCSection *Section;
 };
 
 // FIXME: Ditto this. Purely so the Streamer and the ObjectWriter can talk
 // to one another.
-struct DataRegionData {
+struct LLVM_ABI DataRegionData {
   // This enum should be kept in sync w/ the mach-o definition in
   // llvm/Object/MachOFormat.h.
   enum KindTy { Data = 1, JumpTable8, JumpTable16, JumpTable32 } Kind;
@@ -70,7 +70,7 @@ struct DataRegionData {
   MCSymbol *End;
 };
 
-class MCAssembler {
+class LLVM_ABI MCAssembler {
   friend class MCAsmLayout;
 
 public:
@@ -496,7 +496,7 @@ public:
 /// Compute the amount of padding required before the fragment \p F to
 /// obey bundling restrictions, where \p FOffset is the fragment's offset in
 /// its section and \p FSize is the fragment's size.
-uint64_t computeBundlePadding(const MCAssembler &Assembler,
+LLVM_ABI uint64_t computeBundlePadding(const MCAssembler &Assembler,
                               const MCEncodedFragment *F, uint64_t FOffset,
                               uint64_t FSize);
 

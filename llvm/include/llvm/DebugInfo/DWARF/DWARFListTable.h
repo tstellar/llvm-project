@@ -23,7 +23,7 @@ namespace llvm {
 
 /// A base class for DWARF list entries, such as range or location list
 /// entries.
-struct DWARFListEntryBase {
+struct LLVM_ABI DWARFListEntryBase {
   /// The offset at which the entry is located in the section.
   uint64_t Offset;
   /// The DWARF encoding (DW_RLE_* or DW_LLE_*).
@@ -34,7 +34,7 @@ struct DWARFListEntryBase {
 
 /// A base class for lists of entries that are extracted from a particular
 /// section, such as range lists or location lists.
-template <typename ListEntryType> class DWARFListType {
+template <typename ListEntryType> class LLVM_ABI DWARFListType {
   using EntryType = ListEntryType;
   using ListEntries = std::vector<EntryType>;
 
@@ -52,7 +52,7 @@ public:
 
 /// A class representing the header of a list table such as the range list
 /// table in the .debug_rnglists section.
-class DWARFListTableHeader {
+class LLVM_ABI DWARFListTableHeader {
   struct Header {
     /// The total length of the entries for this table, not including the length
     /// field itself.
@@ -144,7 +144,7 @@ public:
 /// followed by an array of offsets into a DWARF section, followed by zero or
 /// more list entries. The list entries are kept in a map where the keys are
 /// the lists' section offsets.
-template <typename DWARFListType> class DWARFListTableBase {
+template <typename DWARFListType> class LLVM_ABI DWARFListTableBase {
   DWARFListTableHeader Header;
   /// A mapping between file offsets and lists. It is used to find a particular
   /// list based on an offset (obtained from DW_AT_ranges, for example).

@@ -26,7 +26,7 @@
 
 namespace llvm {
 
-class UnreachableBlockElimPass
+class LLVM_ABI UnreachableBlockElimPass
     : public PassInfoMixin<UnreachableBlockElimPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);

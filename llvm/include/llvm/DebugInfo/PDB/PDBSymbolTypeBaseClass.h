@@ -20,7 +20,7 @@ namespace pdb {
 
 class PDBSymDumper;
 
-class PDBSymbolTypeBaseClass : public PDBSymbol {
+class LLVM_ABI PDBSymbolTypeBaseClass : public PDBSymbol {
   DECLARE_PDB_SYMBOL_CONCRETE_TYPE(PDB_SymType::BaseClass)
 public:
   void dump(PDBSymDumper &Dumper) const override;

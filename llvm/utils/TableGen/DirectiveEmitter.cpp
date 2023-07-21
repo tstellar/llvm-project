@@ -251,7 +251,7 @@ static void GenerateGetName(const std::vector<Record *> &Records,
                             const DirectiveLanguage &DirLang,
                             StringRef Prefix) {
   OS << "\n";
-  OS << "llvm::StringRef llvm::" << DirLang.getCppNamespace() << "::get"
+  OS << "LLVM_ABI llvm::StringRef llvm::" << DirLang.getCppNamespace() << "::get"
      << DirLang.getName() << Enum << "Name(" << Enum << " Kind) {\n";
   OS << "  switch (Kind) {\n";
   for (const auto &R : Records) {
@@ -287,7 +287,7 @@ static void GenerateGetKind(const std::vector<Record *> &Records,
   BaseRecord DefaultRec{(*DefaultIt)};
 
   OS << "\n";
-  OS << Enum << " llvm::" << DirLang.getCppNamespace() << "::get"
+  OS << "LLVM_ABI " << Enum << " llvm::" << DirLang.getCppNamespace() << "::get"
      << DirLang.getName() << Enum << "Kind(llvm::StringRef Str) {\n";
   OS << "  return llvm::StringSwitch<" << Enum << ">(Str)\n";
 
@@ -333,7 +333,7 @@ static void GenerateGetKindClauseVal(const DirectiveLanguage &DirLang,
     }
 
     OS << "\n";
-    OS << EnumName << " llvm::" << DirLang.getCppNamespace() << "::get"
+    OS << "LLVM_ABI " << EnumName << " llvm::" << DirLang.getCppNamespace() << "::get"
        << EnumName << "(llvm::StringRef Str) {\n";
     OS << "  return llvm::StringSwitch<" << EnumName << ">(Str)\n";
     for (const auto &CV : ClauseVals) {
@@ -385,7 +385,7 @@ GenerateCaseForVersionedClauses(const std::vector<Record *> &Clauses,
 static void GenerateIsAllowedClause(const DirectiveLanguage &DirLang,
                                     raw_ostream &OS) {
   OS << "\n";
-  OS << "bool llvm::" << DirLang.getCppNamespace()
+  OS << "LLVM_ABI bool llvm::" << DirLang.getCppNamespace()
      << "::isAllowedClauseForDirective("
      << "Directive D, Clause C, unsigned Version) {\n";
   OS << "  assert(unsigned(D) <= llvm::" << DirLang.getCppNamespace()

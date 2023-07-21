@@ -83,7 +83,7 @@ template <typename Range> auto unique(Range &&R) {
 ///    Each node is visited after all its predecessors, except if that
 ///    predecessor is the cycle header.
 ///
-template <typename ContextT> class ModifiedPostOrder {
+template <typename ContextT> class LLVM_ABI ModifiedPostOrder {
 public:
   using BlockT = typename ContextT::BlockT;
   using FunctionT = typename ContextT::FunctionT;
@@ -256,7 +256,7 @@ template <typename> class DivergencePropagator;
 //     Matthew S. Hecht and Jeffrey D. Ullman.
 //     SIAM Journal on Computing, 4(4):519–532, December 1975.
 //
-template <typename ContextT> class GenericSyncDependenceAnalysis {
+template <typename ContextT> class LLVM_ABI GenericSyncDependenceAnalysis {
 public:
   using BlockT = typename ContextT::BlockT;
   using DominatorTreeT = typename ContextT::DominatorTreeT;
@@ -324,7 +324,7 @@ private:
 /// This analysis propagates divergence in a data-parallel context
 /// from sources of divergence to all users. It can be instantiated
 /// for an IR that provides a suitable SSAContext.
-template <typename ContextT> class GenericUniformityAnalysisImpl {
+template <typename ContextT> class LLVM_ABI GenericUniformityAnalysisImpl {
 public:
   using BlockT = typename ContextT::BlockT;
   using FunctionT = typename ContextT::FunctionT;
@@ -479,7 +479,7 @@ void GenericUniformityAnalysisImplDeleter<ImplT>::operator()(ImplT *Impl) {
 }
 
 /// Compute divergence starting with a divergent branch.
-template <typename ContextT> class DivergencePropagator {
+template <typename ContextT> class LLVM_ABI DivergencePropagator {
 public:
   using BlockT = typename ContextT::BlockT;
   using DominatorTreeT = typename ContextT::DominatorTreeT;

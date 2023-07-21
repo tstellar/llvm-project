@@ -31,7 +31,7 @@ namespace llvm {
   class TargetInstrInfo;
   class TargetLowering;
 
-class SwiftErrorValueTracking {
+class LLVM_ABI SwiftErrorValueTracking {
   // Some useful objects to reduce the number of function arguments needed.
   MachineFunction *MF;
   const Function *Fn;

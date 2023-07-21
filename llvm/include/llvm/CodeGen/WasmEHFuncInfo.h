@@ -29,7 +29,7 @@ enum Tag { CPP_EXCEPTION = 0, C_LONGJMP = 1 };
 
 using BBOrMBB = PointerUnion<const BasicBlock *, MachineBasicBlock *>;
 
-struct WasmEHFuncInfo {
+struct LLVM_ABI WasmEHFuncInfo {
   // When there is an entry <A, B>, if an exception is not caught by A, it
   // should next unwind to the EH pad B.
   DenseMap<BBOrMBB, BBOrMBB> SrcToUnwindDest;
@@ -85,7 +85,7 @@ struct WasmEHFuncInfo {
 };
 
 // Analyze the IR in the given function to build WasmEHFuncInfo.
-void calculateWasmEHInfo(const Function *F, WasmEHFuncInfo &EHInfo);
+LLVM_ABI void calculateWasmEHInfo(const Function *F, WasmEHFuncInfo &EHInfo);
 
 } // namespace llvm
 

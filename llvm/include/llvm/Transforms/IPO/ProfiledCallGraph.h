@@ -23,7 +23,7 @@ namespace sampleprof {
 
 struct ProfiledCallGraphNode;
 
-struct ProfiledCallGraphEdge {
+struct LLVM_ABI ProfiledCallGraphEdge {
   ProfiledCallGraphEdge(ProfiledCallGraphNode *Source,
                         ProfiledCallGraphNode *Target, uint64_t Weight)
       : Source(Source), Target(Target), Weight(Weight) {}
@@ -36,7 +36,7 @@ struct ProfiledCallGraphEdge {
   operator ProfiledCallGraphNode *() const { return Target; }
 };
 
-struct ProfiledCallGraphNode {
+struct LLVM_ABI ProfiledCallGraphNode {
 
   // Sort edges by callee names only since all edges to be compared are from
   // same caller. Edge weights are not considered either because for the same
@@ -59,7 +59,7 @@ struct ProfiledCallGraphNode {
   edges Edges;
 };
 
-class ProfiledCallGraph {
+class LLVM_ABI ProfiledCallGraph {
 public:
   using iterator = ProfiledCallGraphNode::iterator;
 
@@ -211,7 +211,7 @@ private:
 
 } // end namespace sampleprof
 
-template <> struct GraphTraits<ProfiledCallGraphNode *> {
+template <> struct LLVM_ABI GraphTraits<ProfiledCallGraphNode *> {
   using NodeType = ProfiledCallGraphNode;
   using NodeRef = ProfiledCallGraphNode *;
   using EdgeType = NodeType::edge;
@@ -223,7 +223,7 @@ template <> struct GraphTraits<ProfiledCallGraphNode *> {
 };
 
 template <>
-struct GraphTraits<ProfiledCallGraph *>
+struct LLVM_ABI GraphTraits<ProfiledCallGraph *>
     : public GraphTraits<ProfiledCallGraphNode *> {
   static NodeRef getEntryNode(ProfiledCallGraph *PCG) {
     return PCG->getEntryNode();

@@ -91,7 +91,7 @@ enum class ThinOrFullLTOPhase {
 /// interprocedural optimization or you do not fit into any of the more
 /// constrained passes described below.
 ///
-class Pass {
+class LLVM_ABI Pass {
   AnalysisResolver *Resolver = nullptr;  // Used to resolve analysis
   const void *PassID;
   PassKind Kind;
@@ -248,7 +248,7 @@ public:
 /// interprocedural optimizations and analyses.  ModulePasses may do anything
 /// they want to the program.
 ///
-class ModulePass : public Pass {
+class LLVM_ABI ModulePass : public Pass {
 public:
   explicit ModulePass(char &pid) : Pass(PT_Module, pid) {}
 
@@ -279,7 +279,7 @@ protected:
 /// not need to be run.  This is useful for things like target information and
 /// "basic" versions of AnalysisGroups.
 ///
-class ImmutablePass : public ModulePass {
+class LLVM_ABI ImmutablePass : public ModulePass {
 public:
   explicit ImmutablePass(char &pid) : ModulePass(pid) {}
 
@@ -308,7 +308,7 @@ public:
 ///  2. Optimizing a function does not cause the addition or removal of any
 ///     functions in the module
 ///
-class FunctionPass : public Pass {
+class LLVM_ABI FunctionPass : public Pass {
 public:
   explicit FunctionPass(char &pid) : Pass(PT_Function, pid) {}
 
@@ -335,13 +335,13 @@ protected:
 /// If the user specifies the -time-passes argument on an LLVM tool command line
 /// then the value of this boolean will be true, otherwise false.
 /// This is the storage for the -time-passes option.
-extern bool TimePassesIsEnabled;
+LLVM_ABI extern bool TimePassesIsEnabled;
 /// If TimePassesPerRun is true, there would be one line of report for
 /// each pass invocation.
 /// If TimePassesPerRun is false, there would be only one line of
 /// report for each pass (even there are more than one pass objects).
 /// (For new pass manager only)
-extern bool TimePassesPerRun;
+LLVM_ABI extern bool TimePassesPerRun;
 
 } // end namespace llvm
 

@@ -25,7 +25,7 @@ class raw_ostream;
 
 /// PostDominatorTree Class - Concrete subclass of DominatorTree that is used to
 /// compute the post-dominator tree.
-class PostDominatorTree : public PostDomTreeBase<BasicBlock> {
+class LLVM_ABI PostDominatorTree : public PostDomTreeBase<BasicBlock> {
 public:
   using Base = PostDomTreeBase<BasicBlock>;
 
@@ -44,7 +44,7 @@ public:
 };
 
 /// Analysis pass which computes a \c PostDominatorTree.
-class PostDominatorTreeAnalysis
+class LLVM_ABI PostDominatorTreeAnalysis
     : public AnalysisInfoMixin<PostDominatorTreeAnalysis> {
   friend AnalysisInfoMixin<PostDominatorTreeAnalysis>;
 
@@ -60,7 +60,7 @@ public:
 };
 
 /// Printer pass for the \c PostDominatorTree.
-class PostDominatorTreePrinterPass
+class LLVM_ABI PostDominatorTreePrinterPass
     : public PassInfoMixin<PostDominatorTreePrinterPass> {
   raw_ostream &OS;
 
@@ -70,7 +70,7 @@ public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 
-struct PostDominatorTreeWrapperPass : public FunctionPass {
+struct LLVM_ABI PostDominatorTreeWrapperPass : public FunctionPass {
   static char ID; // Pass identification, replacement for typeid
 
   PostDominatorTree DT;
@@ -93,9 +93,9 @@ struct PostDominatorTreeWrapperPass : public FunctionPass {
   void print(raw_ostream &OS, const Module*) const override;
 };
 
-FunctionPass* createPostDomTree();
+LLVM_ABI FunctionPass* createPostDomTree();
 
-template <> struct GraphTraits<PostDominatorTree*>
+template <> struct LLVM_ABI GraphTraits<PostDominatorTree*>
   : public GraphTraits<DomTreeNode*> {
   static NodeRef getEntryNode(PostDominatorTree *DT) {
     return DT->getRootNode();

@@ -36,7 +36,7 @@ class Module;
 template <typename ValueSubClass> class SymbolTableListTraits;
 class DIGlobalVariableExpression;
 
-class GlobalVariable : public GlobalObject, public ilist_node<GlobalVariable> {
+class LLVM_ABI GlobalVariable : public GlobalObject, public ilist_node<GlobalVariable> {
   friend class SymbolTableListTraits<GlobalVariable>;
 
   AttributeSet Attrs;
@@ -253,7 +253,7 @@ public:
 };
 
 template <>
-struct OperandTraits<GlobalVariable> :
+struct LLVM_ABI OperandTraits<GlobalVariable> :
   public OptionalOperandTraits<GlobalVariable> {
 };
 

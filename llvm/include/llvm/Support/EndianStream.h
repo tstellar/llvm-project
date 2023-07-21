@@ -56,7 +56,7 @@ inline void write(SmallVectorImpl<char> &Out, value_type V, endianness E) {
 }
 
 /// Adapter to write values to a stream in a particular byte order.
-struct Writer {
+struct LLVM_ABI Writer {
   raw_ostream &OS;
   endianness Endian;
   Writer(raw_ostream &OS, endianness Endian) : OS(OS), Endian(Endian) {}

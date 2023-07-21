@@ -38,7 +38,7 @@ template <typename T> class ArrayRef;
 ///
 /// It currently only supports single-exit loops and assumes that the loop
 /// already has a preheader.
-class LoopVersioning {
+class LLVM_ABI LoopVersioning {
 public:
   /// Expects LoopAccessInfo, Loop, LoopInfo, DominatorTree as input.
   /// It uses runtime check provided by the user. If \p UseLAIChecks is true,
@@ -147,7 +147,7 @@ private:
 /// Expose LoopVersioning as a pass.  Currently this is only used for
 /// unit-testing.  It adds all memchecks necessary to remove all may-aliasing
 /// array accesses from the loop.
-class LoopVersioningPass : public PassInfoMixin<LoopVersioningPass> {
+class LLVM_ABI LoopVersioningPass : public PassInfoMixin<LoopVersioningPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &FAM);
 };

@@ -57,7 +57,7 @@ class raw_ostream;
 /// LoopSafetyInfo needs to be recomputed. If a meaningful modifications to the
 /// loop were made and the info wasn't recomputed properly, the behavior of all
 /// methods except for computeLoopSafetyInfo is undefined.
-class LoopSafetyInfo {
+class LLVM_ABI LoopSafetyInfo {
   // Used to update funclet bundle operands.
   DenseMap<BasicBlock *, ColorVector> BlockColors;
 
@@ -107,7 +107,7 @@ public:
 /// Simple and conservative implementation of LoopSafetyInfo that can give
 /// false-positive answers to its queries in order to avoid complicated
 /// analysis.
-class SimpleLoopSafetyInfo: public LoopSafetyInfo {
+class LLVM_ABI SimpleLoopSafetyInfo: public LoopSafetyInfo {
   bool MayThrow = false;       // The current loop contains an instruction which
                                // may throw.
   bool HeaderMayThrow = false; // Same as previous, but specific to loop header
@@ -129,7 +129,7 @@ public:
 /// that should be invalidated by calling the methods insertInstructionTo and
 /// removeInstruction whenever we modify a basic block's contents by adding or
 /// removing instructions.
-class ICFLoopSafetyInfo: public LoopSafetyInfo {
+class LLVM_ABI ICFLoopSafetyInfo: public LoopSafetyInfo {
   bool MayThrow = false;       // The current loop contains an instruction which
                                // may throw.
   // Contains information about implicit control flow in this loop's blocks.
@@ -169,7 +169,7 @@ public:
   void removeInstruction(const Instruction *Inst);
 };
 
-bool mayContainIrreducibleControl(const Function &F, const LoopInfo *LI);
+LLVM_ABI bool mayContainIrreducibleControl(const Function &F, const LoopInfo *LI);
 
 struct MustBeExecutedContextExplorer;
 
@@ -269,7 +269,7 @@ enum class ExplorationDirection {
 /// derived by the explorer depending on the available CFG analyses (see
 /// MustBeExecutedContextExplorer). Also note that we, depending on the options,
 /// the visit set can contain instructions from other functions.
-struct MustBeExecutedIterator {
+struct LLVM_ABI MustBeExecutedIterator {
   /// Type declarations that make his class an input iterator.
   ///{
   typedef const Instruction *value_type;
@@ -383,7 +383,7 @@ private:
 /// executed context. There is little information sharing between iterators as
 /// the expected use case involves few iterators for "far apart" instructions.
 /// If that changes, we should consider caching more intermediate results.
-struct MustBeExecutedContextExplorer {
+struct LLVM_ABI MustBeExecutedContextExplorer {
 
   /// In the description of the parameters we use PP to denote a program point
   /// for which the must be executed context is explored, or put differently,
@@ -541,7 +541,7 @@ private:
   MustBeExecutedIterator EndIterator;
 };
 
-class MustExecutePrinterPass : public PassInfoMixin<MustExecutePrinterPass> {
+class LLVM_ABI MustExecutePrinterPass : public PassInfoMixin<MustExecutePrinterPass> {
   raw_ostream &OS;
 
 public:
@@ -549,7 +549,7 @@ public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 
-class MustBeExecutedContextPrinterPass
+class LLVM_ABI MustBeExecutedContextPrinterPass
     : public PassInfoMixin<MustBeExecutedContextPrinterPass> {
   raw_ostream &OS;
 

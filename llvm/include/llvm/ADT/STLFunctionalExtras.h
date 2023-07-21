@@ -16,6 +16,7 @@
 #define LLVM_ADT_STLFUNCTIONALEXTRAS_H
 
 #include "llvm/ADT/STLForwardCompat.h"
+#include "llvm/Support/Compiler.h"
 
 #include <cstdint>
 #include <type_traits>
@@ -36,7 +37,7 @@ namespace llvm {
 template<typename Fn> class function_ref;
 
 template<typename Ret, typename ...Params>
-class function_ref<Ret(Params...)> {
+class LLVM_ABI function_ref<Ret(Params...)> {
   Ret (*callback)(intptr_t callable, Params ...params) = nullptr;
   intptr_t callable;
 

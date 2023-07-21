@@ -21,7 +21,7 @@ namespace llvm {
 class Function;
 class TargetMachine;
 
-struct ComplexDeinterleavingPass
+struct LLVM_ABI ComplexDeinterleavingPass
     : public PassInfoMixin<ComplexDeinterleavingPass> {
 private:
   TargetMachine *TM;

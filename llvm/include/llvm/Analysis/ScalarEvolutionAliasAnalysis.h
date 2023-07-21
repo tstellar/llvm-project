@@ -24,7 +24,7 @@ class SCEV;
 
 /// A simple alias analysis implementation that uses ScalarEvolution to answer
 /// queries.
-class SCEVAAResult : public AAResultBase {
+class LLVM_ABI SCEVAAResult : public AAResultBase {
   ScalarEvolution &SE;
 
 public:
@@ -42,7 +42,7 @@ private:
 };
 
 /// Analysis pass providing a never-invalidated alias analysis result.
-class SCEVAA : public AnalysisInfoMixin<SCEVAA> {
+class LLVM_ABI SCEVAA : public AnalysisInfoMixin<SCEVAA> {
   friend AnalysisInfoMixin<SCEVAA>;
   static AnalysisKey Key;
 
@@ -53,7 +53,7 @@ public:
 };
 
 /// Legacy wrapper pass to provide the SCEVAAResult object.
-class SCEVAAWrapperPass : public FunctionPass {
+class LLVM_ABI SCEVAAWrapperPass : public FunctionPass {
   std::unique_ptr<SCEVAAResult> Result;
 
 public:
@@ -69,7 +69,7 @@ public:
 };
 
 /// Creates an instance of \c SCEVAAWrapperPass.
-FunctionPass *createSCEVAAWrapperPass();
+LLVM_ABI FunctionPass *createSCEVAAWrapperPass();
 
 }
 

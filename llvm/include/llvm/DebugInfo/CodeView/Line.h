@@ -17,7 +17,7 @@ namespace codeview {
 
 using llvm::support::ulittle32_t;
 
-class LineInfo {
+class LLVM_ABI LineInfo {
 public:
   enum : uint32_t {
     AlwaysStepIntoLineNumber = 0xfeefee,
@@ -59,7 +59,7 @@ private:
   uint32_t LineData;
 };
 
-class ColumnInfo {
+class LLVM_ABI ColumnInfo {
 private:
   static const uint32_t StartColumnMask = 0x0000ffffu;
   static const uint32_t EndColumnMask = 0xffff0000u;
@@ -87,7 +87,7 @@ private:
   uint32_t ColumnData;
 };
 
-class Line {
+class LLVM_ABI Line {
 private:
   int32_t CodeOffset;
   LineInfo LineInf;

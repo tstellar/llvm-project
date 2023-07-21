@@ -74,13 +74,13 @@ enum LegacyLegalizeAction : std::uint8_t {
   NotFound,
 };
 } // end namespace LegacyLegalizeActions
-raw_ostream &operator<<(raw_ostream &OS,
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS,
                         LegacyLegalizeActions::LegacyLegalizeAction Action);
 
 /// Legalization is decided based on an instruction's opcode, which type slot
 /// we're considering, and what the existing type is. These aspects are gathered
 /// together for convenience in the InstrAspect class.
-struct InstrAspect {
+struct LLVM_ABI InstrAspect {
   unsigned Opcode;
   unsigned Idx = 0;
   LLT Type;
@@ -97,7 +97,7 @@ struct InstrAspect {
 /// The result of a query. It either indicates a final answer of Legal or
 /// Unsupported or describes an action that must be taken to make an operation
 /// more legal.
-struct LegacyLegalizeActionStep {
+struct LLVM_ABI LegacyLegalizeActionStep {
   /// The action to take or the final answer.
   LegacyLegalizeActions::LegacyLegalizeAction Action;
   /// If describing an action, the type index to change. Otherwise zero.
@@ -116,7 +116,7 @@ struct LegacyLegalizeActionStep {
 };
 
 
-class LegacyLegalizerInfo {
+class LLVM_ABI LegacyLegalizerInfo {
 public:
   using SizeAndAction =
       std::pair<uint16_t, LegacyLegalizeActions::LegacyLegalizeAction>;

@@ -32,7 +32,7 @@
 // InitLLVM calls llvm_shutdown() on destruction, which cleans up
 // ManagedStatic objects.
 namespace llvm {
-class InitLLVM {
+class LLVM_ABI InitLLVM {
 public:
   InitLLVM(int &Argc, const char **&Argv,
            bool InstallPipeSignalExitHandler = true);

@@ -14,7 +14,7 @@
 
 namespace llvm {
 
-extern cl::opt<std::string> BBSectionsColdTextPrefix;
+LLVM_ABI extern cl::opt<std::string> BBSectionsColdTextPrefix;
 
 class MachineFunction;
 class MachineBasicBlock;
@@ -22,10 +22,10 @@ class MachineBasicBlock;
 using MachineBasicBlockComparator =
     function_ref<bool(const MachineBasicBlock &, const MachineBasicBlock &)>;
 
-void sortBasicBlocksAndUpdateBranches(MachineFunction &MF,
+LLVM_ABI void sortBasicBlocksAndUpdateBranches(MachineFunction &MF,
                                       MachineBasicBlockComparator MBBCmp);
 
-void avoidZeroOffsetLandingPad(MachineFunction &MF);
+LLVM_ABI void avoidZeroOffsetLandingPad(MachineFunction &MF);
 
 } // end namespace llvm
 

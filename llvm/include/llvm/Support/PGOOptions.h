@@ -24,7 +24,7 @@ class FileSystem;
 } // namespace vfs
 
 /// A struct capturing PGO tunables.
-struct PGOOptions {
+struct LLVM_ABI PGOOptions {
   enum PGOAction { NoAction, IRInstr, IRUse, SampleUse };
   enum CSPGOAction { NoCSAction, CSIRInstr, CSIRUse };
   PGOOptions(std::string ProfileFile, std::string CSProfileGenFile,

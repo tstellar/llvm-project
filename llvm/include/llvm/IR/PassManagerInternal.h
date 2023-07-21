@@ -35,7 +35,7 @@ namespace detail {
 /// Template for the abstract base class used to dispatch
 /// polymorphically over pass objects.
 template <typename IRUnitT, typename AnalysisManagerT, typename... ExtraArgTs>
-struct PassConcept {
+struct LLVM_ABI PassConcept {
   // Boiler plate necessary for the container of derived classes.
   virtual ~PassConcept() = default;
 
@@ -67,7 +67,7 @@ struct PassConcept {
 /// be a copyable object.
 template <typename IRUnitT, typename PassT, typename PreservedAnalysesT,
           typename AnalysisManagerT, typename... ExtraArgTs>
-struct PassModel : PassConcept<IRUnitT, AnalysisManagerT, ExtraArgTs...> {
+struct LLVM_ABI PassModel : PassConcept<IRUnitT, AnalysisManagerT, ExtraArgTs...> {
   explicit PassModel(PassT Pass) : Pass(std::move(Pass)) {}
   // We have to explicitly define all the special member functions because MSVC
   // refuses to generate them.
@@ -121,7 +121,7 @@ struct PassModel : PassConcept<IRUnitT, AnalysisManagerT, ExtraArgTs...> {
 /// This concept is parameterized over the IR unit that this result pertains
 /// to.
 template <typename IRUnitT, typename PreservedAnalysesT, typename InvalidatorT>
-struct AnalysisResultConcept {
+struct LLVM_ABI AnalysisResultConcept {
   virtual ~AnalysisResultConcept() = default;
 
   /// Method to try and mark a result as invalid.
@@ -145,7 +145,7 @@ struct AnalysisResultConcept {
 
 /// SFINAE metafunction for computing whether \c ResultT provides an
 /// \c invalidate member function.
-template <typename IRUnitT, typename ResultT> class ResultHasInvalidateMethod {
+template <typename IRUnitT, typename ResultT> class LLVM_ABI ResultHasInvalidateMethod {
   using EnabledType = char;
   struct DisabledType {
     char a, b;
@@ -195,7 +195,7 @@ struct AnalysisResultModel;
 /// invalidate functionality.
 template <typename IRUnitT, typename PassT, typename ResultT,
           typename PreservedAnalysesT, typename InvalidatorT>
-struct AnalysisResultModel<IRUnitT, PassT, ResultT, PreservedAnalysesT,
+struct LLVM_ABI AnalysisResultModel<IRUnitT, PassT, ResultT, PreservedAnalysesT,
                            InvalidatorT, false>
     : AnalysisResultConcept<IRUnitT, PreservedAnalysesT, InvalidatorT> {
   explicit AnalysisResultModel(ResultT Result) : Result(std::move(Result)) {}
@@ -234,7 +234,7 @@ struct AnalysisResultModel<IRUnitT, PassT, ResultT, PreservedAnalysesT,
 /// handling to \c ResultT.
 template <typename IRUnitT, typename PassT, typename ResultT,
           typename PreservedAnalysesT, typename InvalidatorT>
-struct AnalysisResultModel<IRUnitT, PassT, ResultT, PreservedAnalysesT,
+struct LLVM_ABI AnalysisResultModel<IRUnitT, PassT, ResultT, PreservedAnalysesT,
                            InvalidatorT, true>
     : AnalysisResultConcept<IRUnitT, PreservedAnalysesT, InvalidatorT> {
   explicit AnalysisResultModel(ResultT Result) : Result(std::move(Result)) {}
@@ -269,7 +269,7 @@ struct AnalysisResultModel<IRUnitT, PassT, ResultT, PreservedAnalysesT,
 /// produce an analysis result.
 template <typename IRUnitT, typename PreservedAnalysesT, typename InvalidatorT,
           typename... ExtraArgTs>
-struct AnalysisPassConcept {
+struct LLVM_ABI AnalysisPassConcept {
   virtual ~AnalysisPassConcept() = default;
 
   /// Method to run this analysis over a unit of IR.
@@ -291,7 +291,7 @@ struct AnalysisPassConcept {
 /// and produce an object which can be wrapped in a \c AnalysisResultModel.
 template <typename IRUnitT, typename PassT, typename PreservedAnalysesT,
           typename InvalidatorT, typename... ExtraArgTs>
-struct AnalysisPassModel : AnalysisPassConcept<IRUnitT, PreservedAnalysesT,
+struct LLVM_ABI AnalysisPassModel : AnalysisPassConcept<IRUnitT, PreservedAnalysesT,
                                                InvalidatorT, ExtraArgTs...> {
   explicit AnalysisPassModel(PassT Pass) : Pass(std::move(Pass)) {}
   // We have to explicitly define all the special member functions because MSVC

@@ -21,7 +21,7 @@ namespace llvm {
 class raw_ostream;
 
 /// Utility for building string tables with deduplicated suffixes.
-class StringTableBuilder {
+class LLVM_ABI StringTableBuilder {
 public:
   enum Kind {
     ELF,

@@ -38,7 +38,7 @@ namespace llvm {
 /// something like \a BumpPtrList.)
 ///
 /// \see ilist_noalloc_traits
-template <typename NodeTy> struct ilist_alloc_traits {
+template <typename NodeTy> struct LLVM_ABI ilist_alloc_traits {
   static void deleteNode(NodeTy *V) { delete V; }
 };
 
@@ -54,7 +54,7 @@ template <typename NodeTy> struct ilist_alloc_traits {
 /// template <>
 /// struct ilist_alloc_traits<MyType> : ilist_noalloc_traits<MyType> {};
 /// \endcode
-template <typename NodeTy> struct ilist_noalloc_traits {
+template <typename NodeTy> struct LLVM_ABI ilist_noalloc_traits {
   static void deleteNode(NodeTy *V) {}
 };
 
@@ -62,7 +62,7 @@ template <typename NodeTy> struct ilist_noalloc_traits {
 ///
 /// Specialize this for to use callbacks for when nodes change their list
 /// membership.
-template <typename NodeTy> struct ilist_callback_traits {
+template <typename NodeTy> struct LLVM_ABI ilist_callback_traits {
   void addNodeToList(NodeTy *) {}
   void removeNodeFromList(NodeTy *) {}
 
@@ -80,17 +80,17 @@ template <typename NodeTy> struct ilist_callback_traits {
 ///
 /// TODO: Remove this layer of indirection.  It's not necessary.
 template <typename NodeTy>
-struct ilist_node_traits : ilist_alloc_traits<NodeTy>,
+struct LLVM_ABI ilist_node_traits : ilist_alloc_traits<NodeTy>,
                            ilist_callback_traits<NodeTy> {};
 
 /// Template traits for intrusive list.
 ///
 /// Customize callbacks and allocation semantics.
 template <typename NodeTy>
-struct ilist_traits : public ilist_node_traits<NodeTy> {};
+struct LLVM_ABI ilist_traits : public ilist_node_traits<NodeTy> {};
 
 /// Const traits should never be instantiated.
-template <typename Ty> struct ilist_traits<const Ty> {};
+template <typename Ty> struct LLVM_ABI ilist_traits<const Ty> {};
 
 //===----------------------------------------------------------------------===//
 //
@@ -107,7 +107,7 @@ template <typename Ty> struct ilist_traits<const Ty> {};
 /// ilist_sentinel, which holds pointers to the first and last nodes in the
 /// list.
 template <class IntrusiveListT, class TraitsT>
-class iplist_impl : public TraitsT, IntrusiveListT {
+class LLVM_ABI iplist_impl : public TraitsT, IntrusiveListT {
   typedef IntrusiveListT base_list_type;
 
 public:
@@ -324,7 +324,7 @@ public:
 /// The \p Options parameters are the same as those for \a simple_ilist.  See
 /// there for a description of what's available.
 template <class T, class... Options>
-class iplist
+class LLVM_ABI iplist
     : public iplist_impl<simple_ilist<T, Options...>, ilist_traits<T>> {
   using iplist_impl_type = typename iplist::iplist_impl;
 

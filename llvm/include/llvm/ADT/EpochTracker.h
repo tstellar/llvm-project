@@ -85,7 +85,7 @@ public:
 #define LLVM_DEBUGEPOCHBASE_HANDLEBASE_EMPTYBASE
 #endif // _MSC_VER
 
-class DebugEpochBase {
+class LLVM_ABI DebugEpochBase {
 public:
   void incrementEpoch() {}
 

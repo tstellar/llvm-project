@@ -23,14 +23,14 @@ namespace jitlink {
 /// Note: The graph does not take ownership of the underlying buffer, nor copy
 /// its contents. The caller is responsible for ensuring that the object buffer
 /// outlives the graph.
-Expected<std::unique_ptr<LinkGraph>>
+LLVM_ABI Expected<std::unique_ptr<LinkGraph>>
 createLinkGraphFromELFObject(MemoryBufferRef ObjectBuffer);
 
 /// Link the given graph.
 ///
 /// Uses conservative defaults for GOT and stub handling based on the target
 /// platform.
-void link_ELF(std::unique_ptr<LinkGraph> G,
+LLVM_ABI void link_ELF(std::unique_ptr<LinkGraph> G,
               std::unique_ptr<JITLinkContext> Ctx);
 
 } // end namespace jitlink

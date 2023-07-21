@@ -31,7 +31,7 @@ class DataLayout;
 class Type;
 
 /// TargetFolder - Create constants with target dependent folding.
-class TargetFolder final : public IRBuilderFolder {
+class LLVM_ABI TargetFolder final : public IRBuilderFolder {
   const DataLayout &DL;
 
   /// Fold - Fold the constant using target specific information.

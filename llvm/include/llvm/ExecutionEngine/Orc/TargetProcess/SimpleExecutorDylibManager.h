@@ -32,7 +32,7 @@ namespace orc {
 namespace rt_bootstrap {
 
 /// Simple page-based allocator.
-class SimpleExecutorDylibManager : public ExecutorBootstrapService {
+class LLVM_ABI SimpleExecutorDylibManager : public ExecutorBootstrapService {
 public:
   virtual ~SimpleExecutorDylibManager();
 

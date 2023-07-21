@@ -53,7 +53,7 @@ class MCSymbol;
 
 /// GCPoint - Metadata for a collector-safe point in machine code.
 ///
-struct GCPoint {
+struct LLVM_ABI GCPoint {
   MCSymbol *Label;    ///< A label.
   DebugLoc Loc;
 
@@ -63,7 +63,7 @@ struct GCPoint {
 
 /// GCRoot - Metadata for a pointer to an object managed by the garbage
 /// collector.
-struct GCRoot {
+struct LLVM_ABI GCRoot {
   int Num;                  ///< Usually a frame index.
   int StackOffset = -1;     ///< Offset from the stack pointer.
   const Constant *Metadata; ///< Metadata straight from the call
@@ -74,7 +74,7 @@ struct GCRoot {
 
 /// Garbage collection metadata for a single function.  Currently, this
 /// information only applies to GCStrategies which use GCRoot.
-class GCFunctionInfo {
+class LLVM_ABI GCFunctionInfo {
 public:
   using iterator = std::vector<GCPoint>::iterator;
   using roots_iterator = std::vector<GCRoot>::iterator;
@@ -149,7 +149,7 @@ public:
 /// An analysis pass which caches information about the entire Module.
 /// Records both the function level information used by GCRoots and a
 /// cache of the 'active' gc strategy objects for the current Module.
-class GCModuleInfo : public ImmutablePass {
+class LLVM_ABI GCModuleInfo : public ImmutablePass {
   /// An owning list of all GCStrategies which have been created
   SmallVector<std::unique_ptr<GCStrategy>, 1> GCStrategyList;
   /// A helper map to speedup lookups into the above list

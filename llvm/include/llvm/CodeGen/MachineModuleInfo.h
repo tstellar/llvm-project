@@ -53,7 +53,7 @@ class Module;
 /// accessed/created with MachineModuleInfo::getObjFileInfo and destroyed when
 /// the MachineModuleInfo is destroyed.
 ///
-class MachineModuleInfoImpl {
+class LLVM_ABI MachineModuleInfoImpl {
 public:
   using StubValueTy = PointerIntPair<MCSymbol *, 1, bool>;
   using SymbolListTy = std::vector<std::pair<MCSymbol *, StubValueTy>>;
@@ -71,7 +71,7 @@ protected:
 /// made by different debugging and exception handling schemes and reformated
 /// for specific use.
 ///
-class MachineModuleInfo {
+class LLVM_ABI MachineModuleInfo {
   friend class MachineModuleInfoWrapperPass;
   friend class MachineModuleAnalysis;
 
@@ -200,7 +200,7 @@ public:
   }
 }; // End class MachineModuleInfo
 
-class MachineModuleInfoWrapperPass : public ImmutablePass {
+class LLVM_ABI MachineModuleInfoWrapperPass : public ImmutablePass {
   MachineModuleInfo MMI;
 
 public:
@@ -219,7 +219,7 @@ public:
 };
 
 /// An analysis that produces \c MachineInfo for a module.
-class MachineModuleAnalysis : public AnalysisInfoMixin<MachineModuleAnalysis> {
+class LLVM_ABI MachineModuleAnalysis : public AnalysisInfoMixin<MachineModuleAnalysis> {
   friend AnalysisInfoMixin<MachineModuleAnalysis>;
   static AnalysisKey Key;
 

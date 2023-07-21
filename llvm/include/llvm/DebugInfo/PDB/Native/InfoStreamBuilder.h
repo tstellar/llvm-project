@@ -24,7 +24,7 @@ struct MSFLayout;
 namespace pdb {
 class NamedStreamMap;
 
-class InfoStreamBuilder {
+class LLVM_ABI InfoStreamBuilder {
 public:
   InfoStreamBuilder(msf::MSFBuilder &Msf, NamedStreamMap &NamedStreams);
   InfoStreamBuilder(const InfoStreamBuilder &) = delete;

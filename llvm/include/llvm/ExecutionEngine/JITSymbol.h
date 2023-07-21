@@ -71,7 +71,7 @@ template <typename T> JITTargetAddress pointerToJITTargetAddress(T *Ptr) {
 }
 
 /// Flags for symbols in the JIT.
-class JITSymbolFlags {
+class LLVM_ABI JITSymbolFlags {
 public:
   using UnderlyingType = uint8_t;
   using TargetFlagsType = uint8_t;
@@ -208,7 +208,7 @@ inline JITSymbolFlags operator|(const JITSymbolFlags &LHS,
 
 /// ARM-specific JIT symbol flags.
 /// FIXME: This should be moved into a target-specific header.
-class ARMJITSymbolFlags {
+class LLVM_ABI ARMJITSymbolFlags {
 public:
   ARMJITSymbolFlags() = default;
 
@@ -226,7 +226,7 @@ private:
 };
 
 /// Represents a symbol that has been evaluated to an address already.
-class JITEvaluatedSymbol {
+class LLVM_ABI JITEvaluatedSymbol {
 public:
   JITEvaluatedSymbol() = default;
 
@@ -262,7 +262,7 @@ private:
 };
 
 /// Represents a symbol in the JIT.
-class JITSymbol {
+class LLVM_ABI JITSymbol {
 public:
   using GetAddressFtor = unique_function<Expected<JITTargetAddress>()>;
 
@@ -368,7 +368,7 @@ private:
 /// Symbol queries are done in bulk (i.e. you request resolution of a set of
 /// symbols, rather than a single one) to reduce IPC overhead in the case of
 /// remote JITing, and expose opportunities for parallel compilation.
-class JITSymbolResolver {
+class LLVM_ABI JITSymbolResolver {
 public:
   using LookupSet = std::set<StringRef>;
   using LookupResult = std::map<StringRef, JITEvaluatedSymbol>;
@@ -398,7 +398,7 @@ private:
 };
 
 /// Legacy symbol resolution interface.
-class LegacyJITSymbolResolver : public JITSymbolResolver {
+class LLVM_ABI LegacyJITSymbolResolver : public JITSymbolResolver {
 public:
   /// Performs lookup by, for each symbol, first calling
   ///        findSymbolInLogicalDylib and if that fails calling

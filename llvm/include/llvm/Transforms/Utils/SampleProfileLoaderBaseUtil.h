@@ -25,14 +25,14 @@ using namespace sampleprof;
 class ProfileSummaryInfo;
 class Module;
 
-extern cl::opt<unsigned> SampleProfileMaxPropagateIterations;
-extern cl::opt<unsigned> SampleProfileRecordCoverage;
-extern cl::opt<unsigned> SampleProfileSampleCoverage;
-extern cl::opt<bool> NoWarnSampleUnused;
+LLVM_ABI extern cl::opt<unsigned> SampleProfileMaxPropagateIterations;
+LLVM_ABI extern cl::opt<unsigned> SampleProfileRecordCoverage;
+LLVM_ABI extern cl::opt<unsigned> SampleProfileSampleCoverage;
+LLVM_ABI extern cl::opt<bool> NoWarnSampleUnused;
 
 namespace sampleprofutil {
 
-class SampleCoverageTracker {
+class LLVM_ABI SampleCoverageTracker {
 public:
   bool markSamplesUsed(const FunctionSamples *FS, uint32_t LineOffset,
                        uint32_t Discriminator, uint64_t Samples);
@@ -86,11 +86,11 @@ private:
 };
 
 /// Return true if the given callsite is hot wrt to hot cutoff threshold.
-bool callsiteIsHot(const FunctionSamples *CallsiteFS, ProfileSummaryInfo *PSI,
+LLVM_ABI bool callsiteIsHot(const FunctionSamples *CallsiteFS, ProfileSummaryInfo *PSI,
                    bool ProfAccForSymsInList);
 
 /// Create a global variable to flag FSDiscriminators are used.
-void createFSDiscriminatorVariable(Module *M);
+LLVM_ABI void createFSDiscriminatorVariable(Module *M);
 
 } // end of namespace sampleprofutil
 } // end of namespace llvm

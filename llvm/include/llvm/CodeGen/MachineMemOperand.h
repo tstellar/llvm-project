@@ -35,7 +35,7 @@ class TargetInstrInfo;
 /// This class contains a discriminated union of information about pointers in
 /// memory operands, relating them back to LLVM IR or to virtual locations (such
 /// as frame indices) that are exposed during codegen.
-struct MachinePointerInfo {
+struct LLVM_ABI MachinePointerInfo {
   /// This is the IR pointer value for the access, or it is null if unknown.
   PointerUnion<const Value *, const PseudoSourceValue *> V;
 
@@ -123,7 +123,7 @@ struct MachinePointerInfo {
 /// objects can be used to represent loads and stores to memory locations
 /// that aren't explicit in the regular LLVM IR.
 ///
-class MachineMemOperand {
+class LLVM_ABI MachineMemOperand {
 public:
   /// Flags values. These may be or'd together.
   enum Flags : uint16_t {

@@ -16,7 +16,7 @@
 #include "llvm/Support/raw_ostream.h"
 
 namespace llvm {
-template <typename T> class FormatAdapter : public detail::format_adapter {
+template <typename T> class LLVM_ABI FormatAdapter : public detail::format_adapter {
 protected:
   explicit FormatAdapter(T &&Item) : Item(std::forward<T>(Item)) {}
 
@@ -24,7 +24,7 @@ protected:
 };
 
 namespace detail {
-template <typename T> class AlignAdapter final : public FormatAdapter<T> {
+template <typename T> class LLVM_ABI AlignAdapter final : public FormatAdapter<T> {
   AlignStyle Where;
   size_t Amount;
   char Fill;
@@ -40,7 +40,7 @@ public:
   }
 };
 
-template <typename T> class PadAdapter final : public FormatAdapter<T> {
+template <typename T> class LLVM_ABI PadAdapter final : public FormatAdapter<T> {
   size_t Left;
   size_t Right;
 
@@ -56,7 +56,7 @@ public:
   }
 };
 
-template <typename T> class RepeatAdapter final : public FormatAdapter<T> {
+template <typename T> class LLVM_ABI RepeatAdapter final : public FormatAdapter<T> {
   size_t Count;
 
 public:
@@ -71,7 +71,7 @@ public:
   }
 };
 
-class ErrorAdapter : public FormatAdapter<Error> {
+class LLVM_ABI ErrorAdapter : public FormatAdapter<Error> {
 public:
   ErrorAdapter(Error &&Item) : FormatAdapter(std::move(Item)) {}
   ErrorAdapter(ErrorAdapter &&) = default;

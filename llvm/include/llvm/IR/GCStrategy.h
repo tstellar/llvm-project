@@ -60,7 +60,7 @@ class Type;
 /// be abstractly described.  GCStrategy objects must be looked up through
 /// the Function.  The objects themselves are owned by the Context and must
 /// be immutable.
-class GCStrategy {
+class LLVM_ABI GCStrategy {
 private:
   friend class GCModuleInfo;
 
@@ -142,7 +142,7 @@ public:
 using GCRegistry = Registry<GCStrategy>;
 
 /// Lookup the GCStrategy object associated with the given gc name.
-std::unique_ptr<GCStrategy> getGCStrategy(const StringRef Name);
+LLVM_ABI std::unique_ptr<GCStrategy> getGCStrategy(const StringRef Name);
 
 } // end namespace llvm
 

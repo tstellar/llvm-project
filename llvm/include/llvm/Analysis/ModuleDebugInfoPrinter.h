@@ -15,7 +15,7 @@
 namespace llvm {
 class raw_ostream;
 
-class ModuleDebugInfoPrinterPass
+class LLVM_ABI ModuleDebugInfoPrinterPass
     : public PassInfoMixin<ModuleDebugInfoPrinterPass> {
   DebugInfoFinder Finder;
   raw_ostream &OS;

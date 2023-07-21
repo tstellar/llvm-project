@@ -27,7 +27,7 @@ class Triple;
 /// Describes a possible vectorization of a function.
 /// Function 'VectorFnName' is equivalent to 'ScalarFnName' vectorized
 /// by a factor 'VectorizationFactor'.
-struct VecDesc {
+struct LLVM_ABI VecDesc {
   StringRef ScalarFnName;
   StringRef VectorFnName;
   ElementCount VectorizationFactor;
@@ -48,7 +48,7 @@ struct VecDesc {
 /// make it available. However, it is somewhat expensive to compute and only
 /// depends on the triple. So users typically interact with the \c
 /// TargetLibraryInfo wrapper below.
-class TargetLibraryInfoImpl {
+class LLVM_ABI TargetLibraryInfoImpl {
   friend class TargetLibraryInfo;
 
   unsigned char AvailableArray[(NumLibFuncs+3)/4];
@@ -234,7 +234,7 @@ public:
 ///
 /// This both allows optimizations to handle them specially and frontends to
 /// disable such optimizations through -fno-builtin etc.
-class TargetLibraryInfo {
+class LLVM_ABI TargetLibraryInfo {
   friend class TargetLibraryAnalysis;
   friend class TargetLibraryInfoWrapperPass;
 
@@ -542,7 +542,7 @@ public:
 ///
 /// Note that this pass's result cannot be invalidated, it is immutable for the
 /// life of the module.
-class TargetLibraryAnalysis : public AnalysisInfoMixin<TargetLibraryAnalysis> {
+class LLVM_ABI TargetLibraryAnalysis : public AnalysisInfoMixin<TargetLibraryAnalysis> {
 public:
   typedef TargetLibraryInfo Result;
 
@@ -567,7 +567,7 @@ private:
   std::optional<TargetLibraryInfoImpl> BaselineInfoImpl;
 };
 
-class TargetLibraryInfoWrapperPass : public ImmutablePass {
+class LLVM_ABI TargetLibraryInfoWrapperPass : public ImmutablePass {
   TargetLibraryAnalysis TLA;
   std::optional<TargetLibraryInfo> TLI;
 

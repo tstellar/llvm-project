@@ -35,7 +35,7 @@ namespace llvm {
 //===----------------------------------------------------------------------===//
 /// C++ class which implements the opaque lto_module_t type.
 ///
-struct LTOModule {
+struct LLVM_ABI LTOModule {
 private:
   struct NameAndAttributes {
     StringRef name;

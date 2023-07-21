@@ -30,7 +30,7 @@ namespace llvm {
   ///
   /// To avoid extra includes, \a DebugLoc doubles the \a DILocation API with a
   /// one based on relatively opaque \a MDNode pointers.
-  class DebugLoc {
+  class LLVM_ABI DebugLoc {
     TrackingMDNodeRef Loc;
 
   public:

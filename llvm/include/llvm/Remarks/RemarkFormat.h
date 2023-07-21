@@ -25,10 +25,10 @@ constexpr StringLiteral Magic("REMARKS");
 enum class Format { Unknown, YAML, YAMLStrTab, Bitstream };
 
 /// Parse and validate a string for the remark format.
-Expected<Format> parseFormat(StringRef FormatStr);
+LLVM_ABI Expected<Format> parseFormat(StringRef FormatStr);
 
 /// Parse and validate a magic number to a remark format.
-Expected<Format> magicToFormat(StringRef Magic);
+LLVM_ABI Expected<Format> magicToFormat(StringRef Magic);
 
 } // end namespace remarks
 } // end namespace llvm

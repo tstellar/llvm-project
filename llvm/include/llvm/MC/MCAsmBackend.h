@@ -39,7 +39,7 @@ class StringRef;
 class raw_ostream;
 
 /// Generic interface to target specific assembler backends.
-class MCAsmBackend {
+class LLVM_ABI MCAsmBackend {
 protected: // Can only create subclasses.
   MCAsmBackend(support::endianness Endian,
                unsigned RelaxFixupKind = MaxFixupKind);

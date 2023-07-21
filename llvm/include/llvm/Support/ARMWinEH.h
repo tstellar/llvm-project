@@ -100,7 +100,7 @@ enum class ReturnType {
 // to fully inspect the contents of the data structure which is particularly
 // useful for scenarios such as llvm-readobj to aid in testing.
 
-class RuntimeFunction {
+class LLVM_ABI RuntimeFunction {
 public:
   const support::ulittle32_t BeginAddress;
   const support::ulittle32_t UnwindData;
@@ -205,7 +205,7 @@ inline uint16_t StackAdjustment(const RuntimeFunction &RF) {
 
 /// SavedRegisterMask - Utility function to calculate the set of saved general
 /// purpose (r0-r15) and VFP (d0-d31) registers.
-std::pair<uint16_t, uint32_t> SavedRegisterMask(const RuntimeFunction &RF,
+LLVM_ABI std::pair<uint16_t, uint32_t> SavedRegisterMask(const RuntimeFunction &RF,
                                                 bool Prologue = true);
 
 /// RuntimeFunctionARM64 - An entry in the table of procedure data (.pdata)
@@ -221,7 +221,7 @@ std::pair<uint16_t, uint32_t> SavedRegisterMask(const RuntimeFunction &RF,
 /// See https://docs.microsoft.com/en-us/cpp/build/arm64-exception-handling
 /// for the full reference for this struct.
 
-class RuntimeFunctionARM64 {
+class LLVM_ABI RuntimeFunctionARM64 {
 public:
   const support::ulittle32_t BeginAddress;
   const support::ulittle32_t UnwindData;
@@ -393,7 +393,7 @@ public:
 /// variable length data associated with the exception handler.
 ///
 
-struct EpilogueScope {
+struct LLVM_ABI EpilogueScope {
   const support::ulittle32_t ES;
 
   EpilogueScope(const support::ulittle32_t Data) : ES(Data) {}
@@ -427,9 +427,9 @@ struct EpilogueScope {
 };
 
 struct ExceptionDataRecord;
-inline size_t HeaderWords(const ExceptionDataRecord &XR);
+LLVM_ABI inline size_t HeaderWords(const ExceptionDataRecord &XR);
 
-struct ExceptionDataRecord {
+struct LLVM_ABI ExceptionDataRecord {
   const support::ulittle32_t *Data;
   bool isAArch64;
 

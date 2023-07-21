@@ -17,7 +17,7 @@
 namespace llvm {
 namespace codeview {
 
-class SymbolDumpDelegate : public SymbolVisitorDelegate {
+class LLVM_ABI SymbolDumpDelegate : public SymbolVisitorDelegate {
 public:
   ~SymbolDumpDelegate() override = default;
 

@@ -27,7 +27,7 @@ class MachineRegion;
 class MachineRegionNode;
 class MachineRegionInfo;
 
-template <> struct RegionTraits<MachineFunction> {
+template <> struct LLVM_ABI RegionTraits<MachineFunction> {
   using FuncT = MachineFunction;
   using BlockT = MachineBasicBlock;
   using RegionT = MachineRegion;
@@ -46,7 +46,7 @@ template <> struct RegionTraits<MachineFunction> {
   }
 };
 
-class MachineRegionNode : public RegionNodeBase<RegionTraits<MachineFunction>> {
+class LLVM_ABI MachineRegionNode : public RegionNodeBase<RegionTraits<MachineFunction>> {
 public:
   inline MachineRegionNode(MachineRegion *Parent, MachineBasicBlock *Entry,
                            bool isSubRegion = false)
@@ -58,7 +58,7 @@ public:
   }
 };
 
-class MachineRegion : public RegionBase<RegionTraits<MachineFunction>> {
+class LLVM_ABI MachineRegion : public RegionBase<RegionTraits<MachineFunction>> {
 public:
   MachineRegion(MachineBasicBlock *Entry, MachineBasicBlock *Exit,
                 MachineRegionInfo *RI, MachineDominatorTree *DT,
@@ -70,7 +70,7 @@ public:
   }
 };
 
-class MachineRegionInfo : public RegionInfoBase<RegionTraits<MachineFunction>> {
+class LLVM_ABI MachineRegionInfo : public RegionInfoBase<RegionTraits<MachineFunction>> {
 public:
   explicit MachineRegionInfo();
   ~MachineRegionInfo() override;
@@ -82,7 +82,7 @@ public:
                    MachinePostDominatorTree *PDT, MachineDominanceFrontier *DF);
 };
 
-class MachineRegionInfoPass : public MachineFunctionPass {
+class LLVM_ABI MachineRegionInfoPass : public MachineFunctionPass {
   MachineRegionInfo RI;
 
 public:
@@ -134,7 +134,7 @@ RegionGraphTraits(MachineRegion, MachineRegionNode);
 RegionGraphTraits(const MachineRegion, const MachineRegionNode);
 
 template <>
-struct GraphTraits<MachineRegionInfo *>
+struct LLVM_ABI GraphTraits<MachineRegionInfo *>
     : public GraphTraits<FlatIt<MachineRegionNode *>> {
   using nodes_iterator = df_iterator<NodeRef, df_iterator_default_set<NodeRef>,
                                      false, GraphTraits<FlatIt<NodeRef>>>;
@@ -154,7 +154,7 @@ struct GraphTraits<MachineRegionInfo *>
 };
 
 template <>
-struct GraphTraits<MachineRegionInfoPass *>
+struct LLVM_ABI GraphTraits<MachineRegionInfoPass *>
     : public GraphTraits<MachineRegionInfo *> {
   using nodes_iterator = df_iterator<NodeRef, df_iterator_default_set<NodeRef>,
                                      false, GraphTraits<FlatIt<NodeRef>>>;

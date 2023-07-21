@@ -37,13 +37,13 @@ class MCSymbol;
 
 using MBBOrBasicBlock = PointerUnion<const BasicBlock *, MachineBasicBlock *>;
 
-struct CxxUnwindMapEntry {
+struct LLVM_ABI CxxUnwindMapEntry {
   int ToState;
   MBBOrBasicBlock Cleanup;
 };
 
 /// Similar to CxxUnwindMapEntry, but supports SEH filters.
-struct SEHUnwindMapEntry {
+struct LLVM_ABI SEHUnwindMapEntry {
   /// If unwinding continues through this handler, transition to the handler at
   /// this state. This indexes into SEHUnwindMap.
   int ToState = -1;
@@ -57,7 +57,7 @@ struct SEHUnwindMapEntry {
   MBBOrBasicBlock Handler;
 };
 
-struct WinEHHandlerType {
+struct LLVM_ABI WinEHHandlerType {
   int Adjectives;
   /// The CatchObj starts out life as an LLVM alloca and is eventually turned
   /// frame index.
@@ -69,7 +69,7 @@ struct WinEHHandlerType {
   MBBOrBasicBlock Handler;
 };
 
-struct WinEHTryBlockMapEntry {
+struct LLVM_ABI WinEHTryBlockMapEntry {
   int TryLow = -1;
   int TryHigh = -1;
   int CatchHigh = -1;
@@ -78,7 +78,7 @@ struct WinEHTryBlockMapEntry {
 
 enum class ClrHandlerType { Catch, Finally, Fault, Filter };
 
-struct ClrEHUnwindMapEntry {
+struct LLVM_ABI ClrEHUnwindMapEntry {
   MBBOrBasicBlock Handler;
   uint32_t TypeToken;
   int HandlerParentState; ///< Outer handler enclosing this entry's handler
@@ -87,7 +87,7 @@ struct ClrEHUnwindMapEntry {
   ClrHandlerType HandlerType;
 };
 
-struct WinEHFuncInfo {
+struct LLVM_ABI WinEHFuncInfo {
   DenseMap<const Instruction *, int> EHPadStateMap;
   DenseMap<const FuncletPadInst *, int> FuncletBaseStateMap;
   DenseMap<const InvokeInst *, int> InvokeStateMap;
@@ -118,18 +118,18 @@ struct WinEHFuncInfo {
 /// Analyze the IR in ParentFn and it's handlers to build WinEHFuncInfo, which
 /// describes the state numbers and tables used by __CxxFrameHandler3. This
 /// analysis assumes that WinEHPrepare has already been run.
-void calculateWinCXXEHStateNumbers(const Function *ParentFn,
+LLVM_ABI void calculateWinCXXEHStateNumbers(const Function *ParentFn,
                                    WinEHFuncInfo &FuncInfo);
 
-void calculateSEHStateNumbers(const Function *ParentFn,
+LLVM_ABI void calculateSEHStateNumbers(const Function *ParentFn,
                               WinEHFuncInfo &FuncInfo);
 
-void calculateClrEHStateNumbers(const Function *Fn, WinEHFuncInfo &FuncInfo);
+LLVM_ABI void calculateClrEHStateNumbers(const Function *Fn, WinEHFuncInfo &FuncInfo);
 
 // For AsynchEH (VC++ option -EHa)
-void calculateCXXStateForAsynchEH(const BasicBlock *BB, int State,
+LLVM_ABI void calculateCXXStateForAsynchEH(const BasicBlock *BB, int State,
                                   WinEHFuncInfo &FuncInfo);
-void calculateSEHStateForAsynchEH(const BasicBlock *BB, int State,
+LLVM_ABI void calculateSEHStateForAsynchEH(const BasicBlock *BB, int State,
                                   WinEHFuncInfo &FuncInfo);
 
 } // end namespace llvm

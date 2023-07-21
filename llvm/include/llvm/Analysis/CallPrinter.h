@@ -21,19 +21,19 @@ namespace llvm {
 class ModulePass;
 
 /// Pass for printing the call graph to a dot file
-class CallGraphDOTPrinterPass : public PassInfoMixin<CallGraphDOTPrinterPass> {
+class LLVM_ABI CallGraphDOTPrinterPass : public PassInfoMixin<CallGraphDOTPrinterPass> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
 };
 
 /// Pass for viewing the call graph
-class CallGraphViewerPass : public PassInfoMixin<CallGraphViewerPass> {
+class LLVM_ABI CallGraphViewerPass : public PassInfoMixin<CallGraphViewerPass> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
 };
 
-ModulePass *createCallGraphViewerPass();
-ModulePass *createCallGraphDOTPrinterPass();
+LLVM_ABI ModulePass *createCallGraphViewerPass();
+LLVM_ABI ModulePass *createCallGraphDOTPrinterPass();
 
 } // end namespace llvm
 

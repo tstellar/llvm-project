@@ -21,7 +21,7 @@ class raw_ostream;
 
 // FIXME: We should have pretty printers per language. Currently we print
 // everything as if it was C++ and fall back to the TAG type name.
-struct DWARFTypePrinter {
+struct LLVM_ABI DWARFTypePrinter {
   raw_ostream &OS;
   bool Word = true;
   bool EndedWithTemplate = false;

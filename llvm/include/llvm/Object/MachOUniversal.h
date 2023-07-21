@@ -27,7 +27,7 @@ namespace object {
 class Archive;
 class IRObjectFile;
 
-class MachOUniversalBinary : public Binary {
+class LLVM_ABI MachOUniversalBinary : public Binary {
   virtual void anchor();
 
   uint32_t Magic;

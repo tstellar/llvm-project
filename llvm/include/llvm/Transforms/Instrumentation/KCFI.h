@@ -17,7 +17,7 @@
 #include "llvm/IR/PassManager.h"
 
 namespace llvm {
-class KCFIPass : public PassInfoMixin<KCFIPass> {
+class LLVM_ABI KCFIPass : public PassInfoMixin<KCFIPass> {
 public:
   static bool isRequired() { return true; }
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);

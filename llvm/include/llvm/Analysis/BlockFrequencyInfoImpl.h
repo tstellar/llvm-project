@@ -52,11 +52,11 @@
 #define DEBUG_TYPE "block-freq"
 
 namespace llvm {
-extern llvm::cl::opt<bool> CheckBFIUnknownBlockQueries;
+LLVM_ABI extern llvm::cl::opt<bool> CheckBFIUnknownBlockQueries;
 
-extern llvm::cl::opt<bool> UseIterativeBFIInference;
-extern llvm::cl::opt<unsigned> IterativeBFIMaxIterationsPerBlock;
-extern llvm::cl::opt<double> IterativeBFIPrecision;
+LLVM_ABI extern llvm::cl::opt<bool> UseIterativeBFIInference;
+LLVM_ABI extern llvm::cl::opt<unsigned> IterativeBFIMaxIterationsPerBlock;
+LLVM_ABI extern llvm::cl::opt<double> IterativeBFIPrecision;
 
 class BranchProbabilityInfo;
 class Function;
@@ -89,7 +89,7 @@ template <class BT> struct BlockEdgesAdder;
 /// quite, maximum precision).
 ///
 /// Masses can be scaled by \a BranchProbability at maximum precision.
-class BlockMass {
+class LLVM_ABI BlockMass {
   uint64_t Mass = 0;
 
 public:
@@ -177,7 +177,7 @@ inline raw_ostream &operator<<(raw_ostream &OS, BlockMass X) {
 ///
 /// Nevertheless, the majority of the overall algorithm documentation lives with
 /// BlockFrequencyInfoImpl.  See there for details.
-class BlockFrequencyInfoImplBase {
+class LLVM_ABI BlockFrequencyInfoImplBase {
 public:
   using Scaled64 = ScaledNumber<uint64_t>;
   using BlockMass = bfi_detail::BlockMass;
@@ -545,8 +545,8 @@ public:
 
 namespace bfi_detail {
 
-template <class BlockT> struct TypeMap {};
-template <> struct TypeMap<BasicBlock> {
+template <class BlockT> struct LLVM_ABI TypeMap {};
+template <> struct LLVM_ABI TypeMap<BasicBlock> {
   using BlockT = BasicBlock;
   using BlockKeyT = AssertingVH<const BasicBlock>;
   using FunctionT = Function;
@@ -554,7 +554,7 @@ template <> struct TypeMap<BasicBlock> {
   using LoopT = Loop;
   using LoopInfoT = LoopInfo;
 };
-template <> struct TypeMap<MachineBasicBlock> {
+template <> struct LLVM_ABI TypeMap<MachineBasicBlock> {
   using BlockT = MachineBasicBlock;
   using BlockKeyT = const MachineBasicBlock *;
   using FunctionT = MachineFunction;
@@ -600,7 +600,7 @@ template <> inline std::string getBlockName(const BasicBlock *BB) {
 /// \a GraphTraits (so that \a analyzeIrreducible() can use \a scc_iterator),
 /// and it explicitly lists predecessors and successors.  The initialization
 /// that relies on \c MachineBasicBlock is defined in the header.
-struct IrreducibleGraph {
+struct LLVM_ABI IrreducibleGraph {
   using BFIBase = BlockFrequencyInfoImplBase;
 
   BFIBase &BFI;
@@ -846,7 +846,7 @@ void IrreducibleGraph::addEdges(const BlockNode &Node,
 ///         used for computing loop scale) is the sum of all iterations.
 ///         (Running this until fixed point would "solve" the geometric
 ///         series by simulation.)
-template <class BT> class BlockFrequencyInfoImpl : BlockFrequencyInfoImplBase {
+template <class BT> class LLVM_ABI BlockFrequencyInfoImpl : BlockFrequencyInfoImplBase {
   // This is part of a workaround for a GCC 4.7 crash on lambdas.
   friend struct bfi_detail::BlockEdgesAdder<BT>;
 
@@ -1080,7 +1080,7 @@ public:
 namespace bfi_detail {
 
 template <class BFIImplT>
-class BFICallbackVH<BasicBlock, BFIImplT> : public CallbackVH {
+class LLVM_ABI BFICallbackVH<BasicBlock, BFIImplT> : public CallbackVH {
   BFIImplT *BFIImpl;
 
 public:
@@ -1099,7 +1099,7 @@ public:
 /// Dummy implementation since MachineBasicBlocks aren't Values, so ValueHandles
 /// don't apply to them.
 template <class BFIImplT>
-class BFICallbackVH<MachineBasicBlock, BFIImplT> {
+class LLVM_ABI BFICallbackVH<MachineBasicBlock, BFIImplT> {
 public:
   BFICallbackVH() = default;
   BFICallbackVH(const MachineBasicBlock *, BFIImplT *) {}
@@ -1643,7 +1643,7 @@ BlockFrequencyInfoImplBase::Scaled64 BlockFrequencyInfoImpl<BT>::discrepancy(
 /// \note This should be a lambda, but that crashes GCC 4.7.
 namespace bfi_detail {
 
-template <class BT> struct BlockEdgesAdder {
+template <class BT> struct LLVM_ABI BlockEdgesAdder {
   using BlockT = BT;
   using LoopData = BlockFrequencyInfoImplBase::LoopData;
   using Successor = GraphTraits<const BlockT *>;
@@ -1806,7 +1806,7 @@ void BlockFrequencyInfoImpl<BT>::verifyMatch(
 enum GVDAGType { GVDT_None, GVDT_Fraction, GVDT_Integer, GVDT_Count };
 
 template <class BlockFrequencyInfoT, class BranchProbabilityInfoT>
-struct BFIDOTGraphTraitsBase : public DefaultDOTGraphTraits {
+struct LLVM_ABI BFIDOTGraphTraitsBase : public DefaultDOTGraphTraits {
   using GTraits = GraphTraits<BlockFrequencyInfoT *>;
   using NodeRef = typename GTraits::NodeRef;
   using EdgeIter = typename GTraits::ChildIteratorType;

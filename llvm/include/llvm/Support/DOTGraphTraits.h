@@ -25,7 +25,7 @@ namespace llvm {
 /// override all methods here it should inherit so that it can get the default
 /// implementations.
 ///
-struct DefaultDOTGraphTraits {
+struct LLVM_ABI DefaultDOTGraphTraits {
 private:
   bool IsSimple;
 
@@ -163,7 +163,7 @@ public:
 /// from DefaultDOTGraphTraits if you don't need to override everything.
 ///
 template <typename Ty>
-struct DOTGraphTraits : public DefaultDOTGraphTraits {
+struct LLVM_ABI DOTGraphTraits : public DefaultDOTGraphTraits {
   DOTGraphTraits (bool simple=false) : DefaultDOTGraphTraits (simple) {}
 };
 

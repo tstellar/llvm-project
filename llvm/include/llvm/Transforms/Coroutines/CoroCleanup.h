@@ -20,7 +20,7 @@ namespace llvm {
 
 class Module;
 
-struct CoroCleanupPass : PassInfoMixin<CoroCleanupPass> {
+struct LLVM_ABI CoroCleanupPass : PassInfoMixin<CoroCleanupPass> {
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM);
   static bool isRequired() { return true; }
 };

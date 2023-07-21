@@ -26,7 +26,7 @@ namespace yaml {
 
 class IO;
 
-struct YamlObjectFile {
+struct LLVM_ABI YamlObjectFile {
   std::unique_ptr<ArchYAML::Archive> Arch;
   std::unique_ptr<ELFYAML::Object> Elf;
   std::unique_ptr<COFFYAML::Object> Coff;
@@ -39,7 +39,7 @@ struct YamlObjectFile {
   std::unique_ptr<DXContainerYAML::Object> DXContainer;
 };
 
-template <> struct MappingTraits<YamlObjectFile> {
+template <> struct LLVM_ABI MappingTraits<YamlObjectFile> {
   static void mapping(IO &IO, YamlObjectFile &ObjectFile);
 };
 

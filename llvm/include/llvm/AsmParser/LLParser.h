@@ -49,7 +49,7 @@ namespace llvm {
   /// There are several cases where we have to parse the value but where the
   /// type can depend on later context.  This may either be a numeric reference
   /// or a symbolic (%var) reference.  This is just a discriminated union.
-  struct ValID {
+  struct LLVM_ABI ValID {
     enum {
       t_LocalID, t_GlobalID,           // ID in UIntVal.
       t_LocalName, t_GlobalName,       // Name in StrVal.
@@ -92,7 +92,7 @@ namespace llvm {
     }
   };
 
-  class LLParser {
+  class LLVM_ABI LLParser {
   public:
     typedef LLLexer::LocTy LocTy;
   private:

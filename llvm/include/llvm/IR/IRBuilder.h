@@ -58,7 +58,7 @@ class Use;
 /// IRBuilder and needs to be inserted.
 ///
 /// By default, this inserts the instruction at the insertion point.
-class IRBuilderDefaultInserter {
+class LLVM_ABI IRBuilderDefaultInserter {
 public:
   virtual ~IRBuilderDefaultInserter();
 
@@ -73,7 +73,7 @@ public:
 
 /// Provides an 'InsertHelper' that calls a user-provided callback after
 /// performing the default insertion.
-class IRBuilderCallbackInserter : public IRBuilderDefaultInserter {
+class LLVM_ABI IRBuilderCallbackInserter : public IRBuilderDefaultInserter {
   std::function<void(Instruction *)> Callback;
 
 public:
@@ -91,7 +91,7 @@ public:
 };
 
 /// Common base class shared among various IRBuilders.
-class IRBuilderBase {
+class LLVM_ABI IRBuilderBase {
   /// Pairs of (metadata kind, MDNode *) that should be added to all newly
   /// created instructions, like !dbg metadata.
   SmallVector<std::pair<unsigned, MDNode *>, 2> MetadataToCopy;
@@ -2594,7 +2594,7 @@ public:
 /// every newly created insertion.
 template <typename FolderTy = ConstantFolder,
           typename InserterTy = IRBuilderDefaultInserter>
-class IRBuilder : public IRBuilderBase {
+class LLVM_ABI IRBuilder : public IRBuilderBase {
 private:
   FolderTy Folder;
   InserterTy Inserter;

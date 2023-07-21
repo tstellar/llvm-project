@@ -17,7 +17,7 @@
 
 namespace llvm {
 // New pass manager boilerplate.
-class WarnMissedTransformationsPass
+class LLVM_ABI WarnMissedTransformationsPass
     : public PassInfoMixin<WarnMissedTransformationsPass> {
 public:
   explicit WarnMissedTransformationsPass() = default;

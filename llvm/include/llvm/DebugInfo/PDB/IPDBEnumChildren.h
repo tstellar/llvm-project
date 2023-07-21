@@ -17,7 +17,7 @@
 namespace llvm {
 namespace pdb {
 
-template <typename ChildType> class IPDBEnumChildren {
+template <typename ChildType> class LLVM_ABI IPDBEnumChildren {
 public:
   using ChildTypePtr = std::unique_ptr<ChildType>;
   using MyType = IPDBEnumChildren<ChildType>;
@@ -31,7 +31,7 @@ public:
 };
 
 template <typename ChildType>
-class NullEnumerator : public IPDBEnumChildren<ChildType> {
+class LLVM_ABI NullEnumerator : public IPDBEnumChildren<ChildType> {
   uint32_t getChildCount() const override { return 0; }
   std::unique_ptr<ChildType> getChildAtIndex(uint32_t Index) const override {
     return nullptr;

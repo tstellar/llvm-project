@@ -25,7 +25,7 @@ class LVReader;
 using LVPassEntry = std::tuple<LVReader *, LVElement *, LVComparePass>;
 using LVPassTable = std::vector<LVPassEntry>;
 
-class LVCompare final {
+class LLVM_ABI LVCompare final {
   raw_ostream &OS;
   LVScopes ScopeStack;
 

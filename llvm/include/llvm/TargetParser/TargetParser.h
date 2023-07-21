@@ -109,7 +109,7 @@ enum GPUKind : uint32_t {
 };
 
 /// Instruction set architecture version.
-struct IsaVersion {
+struct LLVM_ABI IsaVersion {
   unsigned Major;
   unsigned Minor;
   unsigned Stepping;
@@ -142,25 +142,25 @@ enum ArchFeatureKind : uint32_t {
   FEATURE_WGP = 1 << 9,
 };
 
-StringRef getArchNameAMDGCN(GPUKind AK);
-StringRef getArchNameR600(GPUKind AK);
-StringRef getCanonicalArchName(const Triple &T, StringRef Arch);
-GPUKind parseArchAMDGCN(StringRef CPU);
-GPUKind parseArchR600(StringRef CPU);
-unsigned getArchAttrAMDGCN(GPUKind AK);
-unsigned getArchAttrR600(GPUKind AK);
+LLVM_ABI StringRef getArchNameAMDGCN(GPUKind AK);
+LLVM_ABI StringRef getArchNameR600(GPUKind AK);
+LLVM_ABI StringRef getCanonicalArchName(const Triple &T, StringRef Arch);
+LLVM_ABI GPUKind parseArchAMDGCN(StringRef CPU);
+LLVM_ABI GPUKind parseArchR600(StringRef CPU);
+LLVM_ABI unsigned getArchAttrAMDGCN(GPUKind AK);
+LLVM_ABI unsigned getArchAttrR600(GPUKind AK);
 
-void fillValidArchListAMDGCN(SmallVectorImpl<StringRef> &Values);
-void fillValidArchListR600(SmallVectorImpl<StringRef> &Values);
+LLVM_ABI void fillValidArchListAMDGCN(SmallVectorImpl<StringRef> &Values);
+LLVM_ABI void fillValidArchListR600(SmallVectorImpl<StringRef> &Values);
 
-IsaVersion getIsaVersion(StringRef GPU);
+LLVM_ABI IsaVersion getIsaVersion(StringRef GPU);
 
 /// Fills Features map with default values for given target GPU
-void fillAMDGPUFeatureMap(StringRef GPU, const Triple &T,
+LLVM_ABI void fillAMDGPUFeatureMap(StringRef GPU, const Triple &T,
                           StringMap<bool> &Features);
 
 /// Inserts wave size feature for given GPU into features map
-bool insertWaveSizeFeature(StringRef GPU, const Triple &T,
+LLVM_ABI bool insertWaveSizeFeature(StringRef GPU, const Triple &T,
                            StringMap<bool> &Features, std::string &ErrorMsg);
 
 } // namespace AMDGPU

@@ -23,7 +23,7 @@ class StringRef;
 class raw_ostream;
 
 /// This represents a section on wasm.
-class MCSectionWasm final : public MCSection {
+class LLVM_ABI MCSectionWasm final : public MCSection {
   unsigned UniqueID;
 
   const MCSymbolWasm *Group;

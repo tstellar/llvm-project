@@ -30,7 +30,7 @@ class raw_ostream;
 
 /// MachineBlockFrequencyInfo pass uses BlockFrequencyInfoImpl implementation
 /// to estimate machine basic block frequencies.
-class MachineBlockFrequencyInfo : public MachineFunctionPass {
+class LLVM_ABI MachineBlockFrequencyInfo : public MachineFunctionPass {
   using ImplType = BlockFrequencyInfoImpl<MachineBasicBlock>;
   std::unique_ptr<ImplType> MBFI;
 

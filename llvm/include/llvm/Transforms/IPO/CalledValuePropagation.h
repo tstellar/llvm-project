@@ -23,7 +23,7 @@
 
 namespace llvm {
 
-class CalledValuePropagationPass
+class LLVM_ABI CalledValuePropagationPass
     : public PassInfoMixin<CalledValuePropagationPass> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &);

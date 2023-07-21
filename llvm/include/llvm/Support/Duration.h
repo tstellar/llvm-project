@@ -17,7 +17,7 @@
 #include <chrono>
 
 namespace llvm {
-class Duration {
+class LLVM_ABI Duration {
   std::chrono::milliseconds Value;
   public:
   Duration(std::chrono::milliseconds Value) : Value(Value) {}

@@ -37,7 +37,7 @@
 
 namespace llvm {
 
-extern cl::opt<bool> UseSegmentSetForPhysRegs;
+LLVM_ABI extern cl::opt<bool> UseSegmentSetForPhysRegs;
 
 class BitVector;
 class LiveIntervalCalc;
@@ -50,7 +50,7 @@ class raw_ostream;
 class TargetInstrInfo;
 class VirtRegMap;
 
-  class LiveIntervals : public MachineFunctionPass {
+  class LLVM_ABI LiveIntervals : public MachineFunctionPass {
     MachineFunction *MF = nullptr;
     MachineRegisterInfo *MRI = nullptr;
     const TargetRegisterInfo *TRI = nullptr;

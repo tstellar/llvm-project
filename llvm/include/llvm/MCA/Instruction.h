@@ -35,7 +35,7 @@ constexpr int UNKNOWN_CYCLES = -512;
 
 /// A representation of an mca::Instruction operand
 /// for use in mca::CustomBehaviour.
-class MCAOperand {
+class LLVM_ABI MCAOperand {
   // This class is mostly copied from MCOperand within
   // MCInst.h except that we don't keep track of
   // expressions or sub-instructions.
@@ -132,7 +132,7 @@ public:
 };
 
 /// A register write descriptor.
-struct WriteDescriptor {
+struct LLVM_ABI WriteDescriptor {
   // Operand index. The index is negative for implicit writes only.
   // For implicit writes, the actual operand index is computed performing
   // a bitwise not of the OpIndex.
@@ -160,7 +160,7 @@ struct WriteDescriptor {
 };
 
 /// A register read descriptor.
-struct ReadDescriptor {
+struct LLVM_ABI ReadDescriptor {
   // A MCOperand index. This is used by the Dispatch logic to identify register
   // reads. Implicit reads have negative indices. The actual operand index of an
   // implicit read is the bitwise not of field OpIndex.
@@ -182,7 +182,7 @@ class ReadState;
 /// A critical data dependency descriptor.
 ///
 /// Field RegID is set to the invalid register for memory dependencies.
-struct CriticalDependency {
+struct LLVM_ABI CriticalDependency {
   unsigned IID;
   MCPhysReg RegID;
   unsigned Cycles;
@@ -194,7 +194,7 @@ struct CriticalDependency {
 /// this class. A WriteState object tracks the dependent users of a
 /// register write. It also tracks how many cycles are left before the write
 /// back stage.
-class WriteState {
+class LLVM_ABI WriteState {
   const WriteDescriptor *WD;
   // On instruction issue, this field is set equal to the write latency.
   // Before instruction issue, this field defaults to -512, a special
@@ -323,7 +323,7 @@ public:
 ///
 /// A read may be dependent on more than one write. This occurs when some
 /// writes only partially update the register associated to this read.
-class ReadState {
+class LLVM_ABI ReadState {
   const ReadDescriptor *RD;
   // Physical register identified associated to this read.
   MCPhysReg RegisterID;
@@ -386,7 +386,7 @@ public:
 /// A sequence of cycles.
 ///
 /// This class can be used as a building block to construct ranges of cycles.
-class CycleSegment {
+class LLVM_ABI CycleSegment {
   unsigned Begin; // Inclusive.
   unsigned End;   // Exclusive.
   bool Reserved;  // Resources associated to this segment must be reserved.
@@ -433,7 +433,7 @@ public:
 ///
 /// This class describes how many resource units of a specific resource kind
 /// (and how many cycles) are "used" by an instruction.
-struct ResourceUsage {
+struct LLVM_ABI ResourceUsage {
   CycleSegment CS;
   unsigned NumUnits;
   ResourceUsage(CycleSegment Cycles, unsigned Units = 1)
@@ -444,7 +444,7 @@ struct ResourceUsage {
 };
 
 /// An instruction descriptor
-struct InstrDesc {
+struct LLVM_ABI InstrDesc {
   SmallVector<WriteDescriptor, 2> Writes; // Implicit writes are at the end.
   SmallVector<ReadDescriptor, 4> Reads;   // Implicit reads are at the end.
 
@@ -493,7 +493,7 @@ struct InstrDesc {
 ///
 /// This class tracks data dependencies as well as generic properties
 /// of the instruction.
-class InstructionBase {
+class LLVM_ABI InstructionBase {
   const InstrDesc &Desc;
 
   // This field is set for instructions that are candidates for move
@@ -597,7 +597,7 @@ public:
 ///
 /// This class is used to monitor changes to the internal state of instructions
 /// that are sent to the various components of the simulated hardware pipeline.
-class Instruction : public InstructionBase {
+class LLVM_ABI Instruction : public InstructionBase {
   enum InstrStage {
     IS_INVALID,    // Instruction in an invalid state.
     IS_DISPATCHED, // Instruction dispatched but operands are not ready.
@@ -717,7 +717,7 @@ public:
 /// An InstRef contains both a SourceMgr index and Instruction pair.  The index
 /// is used as a unique identifier for the instruction.  MCA will make use of
 /// this index as a key throughout MCA.
-class InstRef {
+class LLVM_ABI InstRef {
   std::pair<unsigned, Instruction *> Data;
 
 public:

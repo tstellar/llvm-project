@@ -30,7 +30,7 @@ class MemoryBuffer;
 /// character.
 ///
 /// Note that this iterator requires the buffer to be nul terminated.
-class line_iterator {
+class LLVM_ABI line_iterator {
   std::optional<MemoryBufferRef> Buffer;
   char CommentMarker = '\0';
   bool SkipBlanks = true;

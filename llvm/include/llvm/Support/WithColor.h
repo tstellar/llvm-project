@@ -20,7 +20,7 @@ namespace cl {
 class OptionCategory;
 }
 
-extern cl::OptionCategory &getColorCategory();
+LLVM_ABI extern cl::OptionCategory &getColorCategory();
 
 // Symbolic names for various syntax elements.
 enum class HighlightColor {
@@ -50,7 +50,7 @@ enum class ColorMode {
 
 /// An RAII object that temporarily switches an output stream to a specific
 /// color.
-class WithColor {
+class LLVM_ABI WithColor {
 public:
   using AutoDetectFunctionType = bool (*)(const raw_ostream &OS);
 

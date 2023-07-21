@@ -23,7 +23,7 @@ class BinaryStreamReader;
 
 namespace codeview {
 
-class DebugSymbolRVASubsectionRef final : public DebugSubsectionRef {
+class LLVM_ABI DebugSymbolRVASubsectionRef final : public DebugSubsectionRef {
 public:
   using ArrayType = FixedStreamArray<support::ulittle32_t>;
 
@@ -42,7 +42,7 @@ private:
   ArrayType RVAs;
 };
 
-class DebugSymbolRVASubsection final : public DebugSubsection {
+class LLVM_ABI DebugSymbolRVASubsection final : public DebugSubsection {
 public:
   DebugSymbolRVASubsection();
 

@@ -62,7 +62,7 @@ using BBUpdates = ArrayRef<llvm::cfg::Update<BasicBlock *>>;
 using BBDomTreeGraphDiff = GraphDiff<BasicBlock *, false>;
 using BBPostDomTreeGraphDiff = GraphDiff<BasicBlock *, true>;
 
-extern template void Calculate<BBDomTree>(BBDomTree &DT);
+extern template LLVM_ABI void Calculate<BBDomTree>(BBDomTree &DT);
 extern template void CalculateWithUpdates<BBDomTree>(BBDomTree &DT,
                                                      BBUpdates U);
 
@@ -95,7 +95,7 @@ extern template bool Verify<BBPostDomTree>(const BBPostDomTree &DT,
 
 using DomTreeNode = DomTreeNodeBase<BasicBlock>;
 
-class BasicBlockEdge {
+class LLVM_ABI BasicBlockEdge {
   const BasicBlock *Start;
   const BasicBlock *End;
 
@@ -121,7 +121,7 @@ public:
   bool isSingleEdge() const;
 };
 
-template <> struct DenseMapInfo<BasicBlockEdge> {
+template <> struct LLVM_ABI DenseMapInfo<BasicBlockEdge> {
   using BBInfo = DenseMapInfo<const BasicBlock *>;
 
   static unsigned getHashValue(const BasicBlockEdge *V);
@@ -163,7 +163,7 @@ template <> struct DenseMapInfo<BasicBlockEdge> {
 /// the dominator tree is initially constructed may still exist in the tree,
 /// even if the tree is properly updated. Calling code should not rely on the
 /// preceding statements; this is stated only to assist human understanding.
-class DominatorTree : public DominatorTreeBase<BasicBlock, false> {
+class LLVM_ABI DominatorTree : public DominatorTreeBase<BasicBlock, false> {
  public:
   using Base = DominatorTreeBase<BasicBlock, false>;
 
@@ -236,7 +236,7 @@ class DominatorTree : public DominatorTreeBase<BasicBlock, false> {
 // DominatorTree GraphTraits specializations so the DominatorTree can be
 // iterable by generic graph iterators.
 
-template <class Node, class ChildIterator> struct DomTreeGraphTraitsBase {
+template <class Node, class ChildIterator> struct LLVM_ABI DomTreeGraphTraitsBase {
   using NodeRef = Node *;
   using ChildIteratorType = ChildIterator;
   using nodes_iterator = df_iterator<Node *, df_iterator_default_set<Node*>>;
@@ -253,16 +253,16 @@ template <class Node, class ChildIterator> struct DomTreeGraphTraitsBase {
 };
 
 template <>
-struct GraphTraits<DomTreeNode *>
+struct LLVM_ABI GraphTraits<DomTreeNode *>
     : public DomTreeGraphTraitsBase<DomTreeNode, DomTreeNode::const_iterator> {
 };
 
 template <>
-struct GraphTraits<const DomTreeNode *>
+struct LLVM_ABI GraphTraits<const DomTreeNode *>
     : public DomTreeGraphTraitsBase<const DomTreeNode,
                                     DomTreeNode::const_iterator> {};
 
-template <> struct GraphTraits<DominatorTree*>
+template <> struct LLVM_ABI GraphTraits<DominatorTree*>
   : public GraphTraits<DomTreeNode*> {
   static NodeRef getEntryNode(DominatorTree *DT) { return DT->getRootNode(); }
 
@@ -276,7 +276,7 @@ template <> struct GraphTraits<DominatorTree*>
 };
 
 /// Analysis pass which computes a \c DominatorTree.
-class DominatorTreeAnalysis : public AnalysisInfoMixin<DominatorTreeAnalysis> {
+class LLVM_ABI DominatorTreeAnalysis : public AnalysisInfoMixin<DominatorTreeAnalysis> {
   friend AnalysisInfoMixin<DominatorTreeAnalysis>;
   static AnalysisKey Key;
 
@@ -289,7 +289,7 @@ public:
 };
 
 /// Printer pass for the \c DominatorTree.
-class DominatorTreePrinterPass
+class LLVM_ABI DominatorTreePrinterPass
     : public PassInfoMixin<DominatorTreePrinterPass> {
   raw_ostream &OS;
 
@@ -300,7 +300,7 @@ public:
 };
 
 /// Verifier pass for the \c DominatorTree.
-struct DominatorTreeVerifierPass : PassInfoMixin<DominatorTreeVerifierPass> {
+struct LLVM_ABI DominatorTreeVerifierPass : PassInfoMixin<DominatorTreeVerifierPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 
@@ -308,10 +308,10 @@ struct DominatorTreeVerifierPass : PassInfoMixin<DominatorTreeVerifierPass> {
 ///
 /// This check is expensive and is disabled by default.  `-verify-dom-info`
 /// allows selectively enabling the check without needing to recompile.
-extern bool VerifyDomInfo;
+LLVM_ABI extern bool VerifyDomInfo;
 
 /// Legacy analysis pass which computes a \c DominatorTree.
-class DominatorTreeWrapperPass : public FunctionPass {
+class LLVM_ABI DominatorTreeWrapperPass : public FunctionPass {
   DominatorTree DT;
 
 public:

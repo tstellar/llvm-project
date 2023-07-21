@@ -26,7 +26,7 @@ class raw_ostream;
 
 namespace MachO {
 
-class ArchitectureSet {
+class LLVM_ABI ArchitectureSet {
 private:
   using ArchSetType = uint32_t;
 
@@ -163,7 +163,7 @@ inline ArchitectureSet operator|(const Architecture &lhs,
   return ArchitectureSet(lhs) | ArchitectureSet(rhs);
 }
 
-raw_ostream &operator<<(raw_ostream &OS, ArchitectureSet Set);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, ArchitectureSet Set);
 
 } // end namespace MachO.
 } // end namespace llvm.

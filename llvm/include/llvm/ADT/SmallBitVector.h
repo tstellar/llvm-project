@@ -32,7 +32,7 @@ namespace llvm {
 /// is directly used as a plain collection of bits when possible, or as a
 /// pointer to a larger heap-allocated array when necessary. This allows normal
 /// "small" cases to be fast without losing generality for large inputs.
-class SmallBitVector {
+class LLVM_ABI SmallBitVector {
   // TODO: In "large" mode, a pointer to a BitVector is used, leading to an
   // unnecessary level of indirection. It would be more efficient to use a
   // pointer to memory containing size, allocation size, and the array of bits.
@@ -727,7 +727,7 @@ operator^(const SmallBitVector &LHS, const SmallBitVector &RHS) {
   return Result;
 }
 
-template <> struct DenseMapInfo<SmallBitVector> {
+template <> struct LLVM_ABI DenseMapInfo<SmallBitVector> {
   static inline SmallBitVector getEmptyKey() { return SmallBitVector(); }
   static inline SmallBitVector getTombstoneKey() {
     SmallBitVector V;

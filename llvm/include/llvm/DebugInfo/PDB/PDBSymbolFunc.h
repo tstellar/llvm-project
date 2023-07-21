@@ -23,7 +23,7 @@ class PDBSymbolData;
 class PDBSymbolTypeFunctionSig;
 template <typename ChildType> class IPDBEnumChildren;
 
-class PDBSymbolFunc : public PDBSymbol {
+class LLVM_ABI PDBSymbolFunc : public PDBSymbol {
   DECLARE_PDB_SYMBOL_CONCRETE_TYPE(PDB_SymType::Function)
 public:
   void dump(PDBSymDumper &Dumper) const override;

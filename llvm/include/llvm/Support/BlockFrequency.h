@@ -13,6 +13,7 @@
 #ifndef LLVM_SUPPORT_BLOCKFREQUENCY_H
 #define LLVM_SUPPORT_BLOCKFREQUENCY_H
 
+#include "llvm/Support/Compiler.h"
 #include <cassert>
 #include <cstdint>
 
@@ -21,7 +22,7 @@ namespace llvm {
 class BranchProbability;
 
 // This class represents Block Frequency as a 64-bit value.
-class BlockFrequency {
+class LLVM_ABI BlockFrequency {
   uint64_t Frequency;
 
 public:

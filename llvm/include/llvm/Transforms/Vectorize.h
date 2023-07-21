@@ -22,7 +22,7 @@ class Pass;
 // LoadStoreVectorizer - Create vector loads and stores, but leave scalar
 // operations.
 //
-Pass *createLoadStoreVectorizerPass();
+LLVM_ABI Pass *createLoadStoreVectorizerPass();
 
 } // End llvm namespace
 

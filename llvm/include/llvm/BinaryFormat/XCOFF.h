@@ -346,18 +346,18 @@ enum SymbolAuxType : uint8_t {
   AUX_SECT = 250    ///< Identifies a SECT auxiliary entry.
 };                  // 64-bit XCOFF file only.
 
-StringRef getMappingClassString(XCOFF::StorageMappingClass SMC);
-StringRef getRelocationTypeString(XCOFF::RelocationType Type);
-Expected<SmallString<32>> parseParmsType(uint32_t Value, unsigned FixedParmsNum,
+LLVM_ABI StringRef getMappingClassString(XCOFF::StorageMappingClass SMC);
+LLVM_ABI StringRef getRelocationTypeString(XCOFF::RelocationType Type);
+LLVM_ABI Expected<SmallString<32>> parseParmsType(uint32_t Value, unsigned FixedParmsNum,
                                          unsigned FloatingParmsNum);
-Expected<SmallString<32>> parseParmsTypeWithVecInfo(uint32_t Value,
+LLVM_ABI Expected<SmallString<32>> parseParmsTypeWithVecInfo(uint32_t Value,
                                                     unsigned FixedParmsNum,
                                                     unsigned FloatingParmsNum,
                                                     unsigned VectorParmsNum);
-Expected<SmallString<32>> parseVectorParmsType(uint32_t Value,
+LLVM_ABI Expected<SmallString<32>> parseVectorParmsType(uint32_t Value,
                                                unsigned ParmsNum);
 
-struct TracebackTable {
+struct LLVM_ABI TracebackTable {
   enum LanguageID : uint8_t {
     C,
     Fortran,
@@ -464,10 +464,10 @@ enum ExtendedTBTableFlag : uint8_t {
   TB_LONGTBTABLE2 = 0x01 ///< Additional tbtable extension exists.
 };
 
-StringRef getNameForTracebackTableLanguageId(TracebackTable::LanguageID LangId);
-SmallString<32> getExtendedTBTableFlagString(uint8_t Flag);
+LLVM_ABI StringRef getNameForTracebackTableLanguageId(TracebackTable::LanguageID LangId);
+LLVM_ABI SmallString<32> getExtendedTBTableFlagString(uint8_t Flag);
 
-struct CsectProperties {
+struct LLVM_ABI CsectProperties {
   CsectProperties(StorageMappingClass SMC, SymbolType ST)
       : MappingClass(SMC), Type(ST) {}
   StorageMappingClass MappingClass;

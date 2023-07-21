@@ -12,7 +12,7 @@
 #include <system_error>
 
 namespace llvm {
-std::error_code mapWindowsError(unsigned EV);
+LLVM_ABI std::error_code mapWindowsError(unsigned EV);
 }
 
 #endif

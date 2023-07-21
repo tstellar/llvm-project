@@ -37,7 +37,7 @@ class MachineFunction;
 class TargetRegisterInfo;
 class VirtRegMap;
 
-class LiveRegMatrix : public MachineFunctionPass {
+class LLVM_ABI LiveRegMatrix : public MachineFunctionPass {
   const TargetRegisterInfo *TRI = nullptr;
   LiveIntervals *LIS = nullptr;
   VirtRegMap *VRM = nullptr;

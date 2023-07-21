@@ -26,7 +26,7 @@ class StringRef;
 class raw_ostream;
 
 /// Convert `Bytes' to a hex string and output to `OS'
-void dumpBytes(ArrayRef<uint8_t> Bytes, raw_ostream &OS);
+LLVM_ABI void dumpBytes(ArrayRef<uint8_t> Bytes, raw_ostream &OS);
 
 namespace HexStyle {
 
@@ -41,7 +41,7 @@ struct AliasMatchingData;
 
 /// This is an instance of a target assembly language printer that
 /// converts an MCInst to valid target assembly syntax.
-class MCInstPrinter {
+class LLVM_ABI MCInstPrinter {
 protected:
   /// A stream that comments can be emitted to if desired.  Each comment
   /// must end with a newline.  This will be null if verbose assembly emission
@@ -143,7 +143,7 @@ public:
 };
 
 /// Map from opcode to pattern list by binary search.
-struct PatternsForOpcode {
+struct LLVM_ABI PatternsForOpcode {
   uint32_t Opcode;
   uint16_t PatternStart;
   uint16_t NumPatterns;
@@ -151,14 +151,14 @@ struct PatternsForOpcode {
 
 /// Data for each alias pattern. Includes feature bits, string, number of
 /// operands, and a variadic list of conditions to check.
-struct AliasPattern {
+struct LLVM_ABI AliasPattern {
   uint32_t AsmStrOffset;
   uint32_t AliasCondStart;
   uint8_t NumOperands;
   uint8_t NumConds;
 };
 
-struct AliasPatternCond {
+struct LLVM_ABI AliasPatternCond {
   enum CondKind : uint8_t {
     K_Feature,       // Match only if a feature is enabled.
     K_NegFeature,    // Match only if a feature is disabled.
@@ -178,7 +178,7 @@ struct AliasPatternCond {
 };
 
 /// Tablegenerated data structures needed to match alias patterns.
-struct AliasMatchingData {
+struct LLVM_ABI AliasMatchingData {
   ArrayRef<PatternsForOpcode> OpToPatterns;
   ArrayRef<AliasPattern> Patterns;
   ArrayRef<AliasPatternCond> PatternConds;

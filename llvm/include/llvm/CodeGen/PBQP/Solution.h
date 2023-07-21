@@ -23,7 +23,7 @@ namespace PBQP {
   /// Represents a solution to a PBQP problem.
   ///
   /// To get the selection for each node in the problem use the getSelection method.
-  class Solution {
+  class LLVM_ABI Solution {
   private:
     using SelectionsMap = std::map<GraphBase::NodeId, unsigned>;
     SelectionsMap selections;

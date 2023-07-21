@@ -29,7 +29,7 @@ namespace orc {
 namespace rt_bootstrap {
 
 /// Simple page-based allocator.
-class SimpleExecutorMemoryManager : public ExecutorBootstrapService {
+class LLVM_ABI SimpleExecutorMemoryManager : public ExecutorBootstrapService {
 public:
   virtual ~SimpleExecutorMemoryManager();
 

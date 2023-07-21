@@ -24,7 +24,7 @@ namespace llvm {
 /// This class is templated on the type of the call graph and designed to work
 /// with the traditional per-module callgraph and the summary callgraphs used in
 /// ThinLTO. This contains only static methods and alias templates.
-template <typename CallGraphType> class SyntheticCountsUtils {
+template <typename CallGraphType> class LLVM_ABI SyntheticCountsUtils {
 public:
   using Scaled64 = ScaledNumber<uint64_t>;
   using CGT = GraphTraits<CallGraphType>;

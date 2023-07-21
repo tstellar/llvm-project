@@ -36,7 +36,7 @@ class ProfileSummaryInfo;
 class TargetRegisterInfo;
 
 /// Utility class to perform tail duplication.
-class TailDuplicator {
+class LLVM_ABI TailDuplicator {
   const TargetInstrInfo *TII;
   const TargetRegisterInfo *TRI;
   const MachineBranchProbabilityInfo *MBPI;

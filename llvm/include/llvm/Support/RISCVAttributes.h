@@ -22,7 +22,7 @@
 namespace llvm {
 namespace RISCVAttrs {
 
-const TagNameMap &getRISCVAttributeTags();
+LLVM_ABI const TagNameMap &getRISCVAttributeTags();
 
 enum AttrType : unsigned {
   // Attribute types in ELF/.riscv.attributes.

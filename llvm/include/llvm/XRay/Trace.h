@@ -43,7 +43,7 @@ namespace xray {
 ///     // Handle the error here.
 ///   }
 ///
-class Trace {
+class LLVM_ABI Trace {
   XRayFileHeader FileHeader;
   using RecordVector = std::vector<XRayRecord>;
   RecordVector Records;
@@ -68,11 +68,11 @@ public:
 
 /// This function will attempt to load XRay trace records from the provided
 /// |Filename|.
-Expected<Trace> loadTraceFile(StringRef Filename, bool Sort = false);
+LLVM_ABI Expected<Trace> loadTraceFile(StringRef Filename, bool Sort = false);
 
 /// This function will attempt to load XRay trace records from the provided
 /// DataExtractor.
-Expected<Trace> loadTrace(const DataExtractor &Extractor, bool Sort = false);
+LLVM_ABI Expected<Trace> loadTrace(const DataExtractor &Extractor, bool Sort = false);
 
 } // namespace xray
 } // namespace llvm

@@ -30,7 +30,7 @@ class BaseClassLayout;
 class ClassLayout;
 class UDTLayoutBase;
 
-class LayoutItemBase {
+class LLVM_ABI LayoutItemBase {
 public:
   LayoutItemBase(const UDTLayoutBase *Parent, const PDBSymbol *Symbol,
                  const std::string &Name, uint32_t OffsetInParent,
@@ -68,7 +68,7 @@ protected:
   bool IsElided = false;
 };
 
-class VBPtrLayoutItem : public LayoutItemBase {
+class LLVM_ABI VBPtrLayoutItem : public LayoutItemBase {
 public:
   VBPtrLayoutItem(const UDTLayoutBase &Parent,
                   std::unique_ptr<PDBSymbolTypeBuiltin> Sym, uint32_t Offset,
@@ -80,7 +80,7 @@ private:
   std::unique_ptr<PDBSymbolTypeBuiltin> Type;
 };
 
-class DataMemberLayoutItem : public LayoutItemBase {
+class LLVM_ABI DataMemberLayoutItem : public LayoutItemBase {
 public:
   DataMemberLayoutItem(const UDTLayoutBase &Parent,
                        std::unique_ptr<PDBSymbolData> DataMember);
@@ -94,7 +94,7 @@ private:
   std::unique_ptr<ClassLayout> UdtLayout;
 };
 
-class VTableLayoutItem : public LayoutItemBase {
+class LLVM_ABI VTableLayoutItem : public LayoutItemBase {
 public:
   VTableLayoutItem(const UDTLayoutBase &Parent,
                    std::unique_ptr<PDBSymbolTypeVTable> VTable);
@@ -106,7 +106,7 @@ private:
   std::unique_ptr<PDBSymbolTypeVTable> VTable;
 };
 
-class UDTLayoutBase : public LayoutItemBase {
+class LLVM_ABI UDTLayoutBase : public LayoutItemBase {
   template <typename T> using UniquePtrVector = std::vector<std::unique_ptr<T>>;
 
 public:
@@ -144,7 +144,7 @@ protected:
   VBPtrLayoutItem *VBPtr = nullptr;
 };
 
-class BaseClassLayout : public UDTLayoutBase {
+class LLVM_ABI BaseClassLayout : public UDTLayoutBase {
 public:
   BaseClassLayout(const UDTLayoutBase &Parent, uint32_t OffsetInParent,
                   bool Elide, std::unique_ptr<PDBSymbolTypeBaseClass> Base);
@@ -158,7 +158,7 @@ private:
   bool IsVirtualBase;
 };
 
-class ClassLayout : public UDTLayoutBase {
+class LLVM_ABI ClassLayout : public UDTLayoutBase {
 public:
   explicit ClassLayout(const PDBSymbolTypeUDT &UDT);
   explicit ClassLayout(std::unique_ptr<PDBSymbolTypeUDT> UDT);

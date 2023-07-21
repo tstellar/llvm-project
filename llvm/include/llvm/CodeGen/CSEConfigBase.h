@@ -14,7 +14,7 @@ namespace llvm {
 // CSEInfo analysis. We define it here because TargetPassConfig can't depend on
 // the GlobalISel library, and so we use this in the interface between them
 // so that the derived classes in GISel can reference generic opcodes.
-class CSEConfigBase {
+class LLVM_ABI CSEConfigBase {
 public:
   virtual ~CSEConfigBase() = default;
   // Hook for defining which Generic instructions should be CSEd.

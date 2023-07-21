@@ -19,7 +19,7 @@ namespace llvm {
 class raw_ostream;
 class DataExtractor;
 
-class DWARFGdbIndex {
+class LLVM_ABI DWARFGdbIndex {
   uint32_t Version;
 
   uint32_t CuListOffset;

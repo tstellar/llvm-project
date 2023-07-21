@@ -21,15 +21,15 @@ class Value;
 
 /// Returns true iff \p U has semantics of a guard expressed in a form of call
 /// of llvm.experimental.guard intrinsic.
-bool isGuard(const User *U);
+LLVM_ABI bool isGuard(const User *U);
 
 /// Returns true iff \p U is a widenable branch (that is, parseWidenableBranch
 /// returns true).
-bool isWidenableBranch(const User *U);
+LLVM_ABI bool isWidenableBranch(const User *U);
 
 /// Returns true iff \p U has semantics of a guard expressed in a form of a
 /// widenable conditional branch to deopt block.
-bool isGuardAsWidenableBranch(const User *U);
+LLVM_ABI bool isGuardAsWidenableBranch(const User *U);
 
 /// If U is widenable branch looking like:
 ///   %cond = ...
@@ -40,13 +40,13 @@ bool isGuardAsWidenableBranch(const User *U);
 /// %if_true_bb, if_false_bb are returned in
 /// the parameters (Condition, WidenableCondition, IfTrueBB and IfFalseFF)
 /// respectively. If \p U does not match this pattern, return false.
-bool parseWidenableBranch(const User *U, Value *&Condition,
+LLVM_ABI bool parseWidenableBranch(const User *U, Value *&Condition,
                           Value *&WidenableCondition, BasicBlock *&IfTrueBB,
                           BasicBlock *&IfFalseBB);
 
 /// Analgous to the above, but return the Uses so that that they can be
 /// modified. Unlike previous version, Condition is optional and may be null.
-bool parseWidenableBranch(User *U, Use *&Cond, Use *&WC, BasicBlock *&IfTrueBB,
+LLVM_ABI bool parseWidenableBranch(User *U, Use *&Cond, Use *&WC, BasicBlock *&IfTrueBB,
                           BasicBlock *&IfFalseBB);
   
 } // llvm

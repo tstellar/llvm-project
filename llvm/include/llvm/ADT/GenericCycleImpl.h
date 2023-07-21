@@ -105,7 +105,7 @@ auto GenericCycle<ContextT>::getCyclePredecessor() const -> BlockT * {
 }
 
 /// \brief Helper class for computing cycle information.
-template <typename ContextT> class GenericCycleInfoCompute {
+template <typename ContextT> class LLVM_ABI GenericCycleInfoCompute {
   using BlockT = typename ContextT::BlockT;
   using CycleInfoT = GenericCycleInfo<ContextT>;
   using CycleT = typename CycleInfoT::CycleT;

@@ -43,7 +43,7 @@ namespace sys {
 #endif
 
   /// This struct encapsulates information about a process.
-  struct ProcessInfo {
+  struct LLVM_ABI ProcessInfo {
     enum : procid_t { InvalidPid = 0 };
 
     procid_t Pid;      /// The process identifier.
@@ -56,7 +56,7 @@ namespace sys {
   };
 
   /// This struct encapsulates information about a process execution.
-  struct ProcessStatistics {
+  struct LLVM_ABI ProcessStatistics {
     std::chrono::microseconds TotalTime;
     std::chrono::microseconds UserTime;
     uint64_t PeakMemory = 0; ///< Maximum resident set size in KiB.
@@ -75,20 +75,20 @@ namespace sys {
   ///
   /// \returns The fully qualified path to the first \p Name in \p Paths if it
   ///   exists. \p Name if \p Name has slashes in it. Otherwise an error.
-  ErrorOr<std::string>
+  LLVM_ABI ErrorOr<std::string>
   findProgramByName(StringRef Name, ArrayRef<StringRef> Paths = {});
 
   // These functions change the specified standard stream (stdin or stdout) mode
   // based on the Flags. They return errc::success if the specified stream was
   // changed. Otherwise, a platform dependent error is returned.
-  std::error_code ChangeStdinMode(fs::OpenFlags Flags);
-  std::error_code ChangeStdoutMode(fs::OpenFlags Flags);
+  LLVM_ABI std::error_code ChangeStdinMode(fs::OpenFlags Flags);
+  LLVM_ABI std::error_code ChangeStdoutMode(fs::OpenFlags Flags);
 
   // These functions change the specified standard stream (stdin or stdout) to
   // binary mode. They return errc::success if the specified stream
   // was changed. Otherwise a platform dependent error is returned.
-  std::error_code ChangeStdinToBinary();
-  std::error_code ChangeStdoutToBinary();
+  LLVM_ABI std::error_code ChangeStdinToBinary();
+  LLVM_ABI std::error_code ChangeStdoutToBinary();
 
   /// This function executes the program using the arguments provided.  The
   /// invoked program will inherit the stdin, stdout, and stderr file
@@ -101,7 +101,7 @@ namespace sys {
   /// A zero or positive value indicates the result code of the program.
   /// -1 indicates failure to execute
   /// -2 indicates a crash during execution or timeout
-  int ExecuteAndWait(
+  LLVM_ABI int ExecuteAndWait(
       StringRef Program, ///< Path of the program to be executed. It is
       ///< presumed this is the result of the findProgramByName method.
       ArrayRef<StringRef> Args, ///< An array of strings that are passed to the
@@ -146,7 +146,7 @@ namespace sys {
   /// \note On Microsoft Windows systems, users will need to either call
   /// \see Wait until the process finished execution or win32 CloseHandle() API
   /// on ProcessInfo.ProcessHandle to avoid memory leaks.
-  ProcessInfo ExecuteNoWait(StringRef Program, ArrayRef<StringRef> Args,
+  LLVM_ABI ProcessInfo ExecuteNoWait(StringRef Program, ArrayRef<StringRef> Args,
                             std::optional<ArrayRef<StringRef>> Env,
                             ArrayRef<std::optional<StringRef>> Redirects = {},
                             unsigned MemoryLimit = 0,
@@ -156,12 +156,12 @@ namespace sys {
 
   /// Return true if the given arguments fit within system-specific
   /// argument length limits.
-  bool commandLineFitsWithinSystemLimits(StringRef Program,
+  LLVM_ABI bool commandLineFitsWithinSystemLimits(StringRef Program,
                                          ArrayRef<StringRef> Args);
 
   /// Return true if the given arguments fit within system-specific
   /// argument length limits.
-  bool commandLineFitsWithinSystemLimits(StringRef Program,
+  LLVM_ABI bool commandLineFitsWithinSystemLimits(StringRef Program,
                                          ArrayRef<const char *> Args);
 
   /// File encoding options when writing contents that a non-UTF8 tool will
@@ -194,7 +194,7 @@ namespace sys {
   /// should be changed as soon as binutils fix this to support UTF16 on mingw.
   ///
   /// \returns non-zero error_code if failed
-  std::error_code
+  LLVM_ABI std::error_code
   writeFileWithEncoding(StringRef FileName, StringRef Contents,
                         WindowsEncodingMethod Encoding = WEM_UTF8);
 
@@ -205,7 +205,7 @@ namespace sys {
   /// \li 0 if the child process has not changed state.
   /// \note Users of this function should always check the ReturnCode member of
   /// the \see ProcessInfo returned from this function.
-  ProcessInfo
+  LLVM_ABI ProcessInfo
   Wait(const ProcessInfo &PI, ///< The child process that should be waited on.
        std::optional<unsigned> SecondsToWait, ///< If std::nullopt, waits until
        ///< child has terminated.
@@ -229,7 +229,7 @@ namespace sys {
   );
 
   /// Print a command argument, and optionally quote it.
-  void printArg(llvm::raw_ostream &OS, StringRef Arg, bool Quote);
+  LLVM_ABI void printArg(llvm::raw_ostream &OS, StringRef Arg, bool Quote);
 
 #if defined(_WIN32)
   /// Given a list of command line arguments, quote and escape them as necessary

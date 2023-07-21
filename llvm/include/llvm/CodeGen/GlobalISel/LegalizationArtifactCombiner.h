@@ -30,7 +30,7 @@
 #define DEBUG_TYPE "legalizer"
 
 namespace llvm {
-class LegalizationArtifactCombiner {
+class LLVM_ABI LegalizationArtifactCombiner {
   MachineIRBuilder &Builder;
   MachineRegisterInfo &MRI;
   const LegalizerInfo &LI;

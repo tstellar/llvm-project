@@ -27,11 +27,12 @@ namespace llvm {
 
 namespace detail {
 
-struct DenseSetEmpty {};
+struct LLVM_ABI DenseSetEmpty {};
 
 // Use the empty base class trick so we can create a DenseMap where the buckets
 // contain only a single item.
-template <typename KeyT> class DenseSetPair : public DenseSetEmpty {
+template <typename KeyT>
+class LLVM_ABI DenseSetPair : public DenseSetEmpty {
   KeyT key;
 
 public:
@@ -51,7 +52,7 @@ public:
 /// or the equivalent SmallDenseMap type.  ValueInfoT must implement the
 /// DenseMapInfo "concept".
 template <typename ValueT, typename MapTy, typename ValueInfoT>
-class DenseSetImpl {
+class LLVM_ABI DenseSetImpl {
   static_assert(sizeof(typename MapTy::value_type) == sizeof(ValueT),
                 "DenseMap buckets unexpectedly large!");
   MapTy TheMap;
@@ -265,7 +266,7 @@ bool operator!=(const DenseSetImpl<ValueT, MapTy, ValueInfoT> &LHS,
 
 /// Implements a dense probed hash-table based set.
 template <typename ValueT, typename ValueInfoT = DenseMapInfo<ValueT>>
-class DenseSet : public detail::DenseSetImpl<
+class LLVM_ABI DenseSet : public detail::DenseSetImpl<
                      ValueT, DenseMap<ValueT, detail::DenseSetEmpty, ValueInfoT,
                                       detail::DenseSetPair<ValueT>>,
                      ValueInfoT> {
@@ -283,7 +284,7 @@ public:
 /// stored inline.
 template <typename ValueT, unsigned InlineBuckets = 4,
           typename ValueInfoT = DenseMapInfo<ValueT>>
-class SmallDenseSet
+class LLVM_ABI SmallDenseSet
     : public detail::DenseSetImpl<
           ValueT, SmallDenseMap<ValueT, detail::DenseSetEmpty, InlineBuckets,
                                 ValueInfoT, detail::DenseSetPair<ValueT>>,

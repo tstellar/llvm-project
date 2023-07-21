@@ -26,7 +26,7 @@ namespace coverage {
 
 /// Writer of the filenames section for the instrumentation
 /// based code coverage.
-class CoverageFilenamesSectionWriter {
+class LLVM_ABI CoverageFilenamesSectionWriter {
   ArrayRef<std::string> Filenames;
 
 public:
@@ -38,7 +38,7 @@ public:
 };
 
 /// Writer for instrumentation based coverage mapping data.
-class CoverageMappingWriter {
+class LLVM_ABI CoverageMappingWriter {
   ArrayRef<unsigned> VirtualFileMapping;
   ArrayRef<CounterExpression> Expressions;
   MutableArrayRef<CounterMappingRegion> MappingRegions;

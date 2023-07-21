@@ -22,13 +22,13 @@ namespace llvm {
   class Function;
   class RegionInfo;
 
-  FunctionPass *createRegionViewerPass();
-  FunctionPass *createRegionOnlyViewerPass();
-  FunctionPass *createRegionPrinterPass();
-  FunctionPass *createRegionOnlyPrinterPass();
+  LLVM_ABI FunctionPass *createRegionViewerPass();
+  LLVM_ABI FunctionPass *createRegionOnlyViewerPass();
+  LLVM_ABI FunctionPass *createRegionPrinterPass();
+  LLVM_ABI FunctionPass *createRegionOnlyPrinterPass();
 
   template <>
-  struct DOTGraphTraits<RegionNode *> : public DefaultDOTGraphTraits {
+  struct LLVM_ABI DOTGraphTraits<RegionNode *> : public DefaultDOTGraphTraits {
     DOTGraphTraits(bool isSimple = false) : DefaultDOTGraphTraits(isSimple) {}
 
     std::string getNodeLabel(RegionNode *Node, RegionNode *Graph);

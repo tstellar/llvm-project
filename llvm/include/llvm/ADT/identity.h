@@ -15,11 +15,12 @@
 #ifndef LLVM_ADT_IDENTITY_H
 #define LLVM_ADT_IDENTITY_H
 
+#include "llvm/Support/Compiler.h"
 
 namespace llvm {
 
 // Similar to `std::identity` from C++20.
-template <class Ty> struct identity {
+template <class Ty> struct LLVM_ABI identity {
   using is_transparent = void;
   using argument_type = Ty;
 

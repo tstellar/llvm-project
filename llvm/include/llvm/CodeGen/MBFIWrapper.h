@@ -24,7 +24,7 @@ namespace llvm {
 class MachineBasicBlock;
 class MachineBlockFrequencyInfo;
 
-class MBFIWrapper {
+class LLVM_ABI MBFIWrapper {
  public:
   MBFIWrapper(const MachineBlockFrequencyInfo &I) : MBFI(I) {}
 

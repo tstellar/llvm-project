@@ -15,7 +15,7 @@
 namespace llvm {
 namespace yaml {
 
-template <> struct ScalarEnumerationTraits<TypeTestResolution::Kind> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<TypeTestResolution::Kind> {
   static void enumeration(IO &io, TypeTestResolution::Kind &value) {
     io.enumCase(value, "Unknown", TypeTestResolution::Unknown);
     io.enumCase(value, "Unsat", TypeTestResolution::Unsat);
@@ -26,7 +26,7 @@ template <> struct ScalarEnumerationTraits<TypeTestResolution::Kind> {
   }
 };
 
-template <> struct MappingTraits<TypeTestResolution> {
+template <> struct LLVM_ABI MappingTraits<TypeTestResolution> {
   static void mapping(IO &io, TypeTestResolution &res) {
     io.mapOptional("Kind", res.TheKind);
     io.mapOptional("SizeM1BitWidth", res.SizeM1BitWidth);
@@ -38,7 +38,7 @@ template <> struct MappingTraits<TypeTestResolution> {
 };
 
 template <>
-struct ScalarEnumerationTraits<WholeProgramDevirtResolution::ByArg::Kind> {
+struct LLVM_ABI ScalarEnumerationTraits<WholeProgramDevirtResolution::ByArg::Kind> {
   static void enumeration(IO &io,
                           WholeProgramDevirtResolution::ByArg::Kind &value) {
     io.enumCase(value, "Indir", WholeProgramDevirtResolution::ByArg::Indir);
@@ -51,7 +51,7 @@ struct ScalarEnumerationTraits<WholeProgramDevirtResolution::ByArg::Kind> {
   }
 };
 
-template <> struct MappingTraits<WholeProgramDevirtResolution::ByArg> {
+template <> struct LLVM_ABI MappingTraits<WholeProgramDevirtResolution::ByArg> {
   static void mapping(IO &io, WholeProgramDevirtResolution::ByArg &res) {
     io.mapOptional("Kind", res.TheKind);
     io.mapOptional("Info", res.Info);
@@ -61,7 +61,7 @@ template <> struct MappingTraits<WholeProgramDevirtResolution::ByArg> {
 };
 
 template <>
-struct CustomMappingTraits<
+struct LLVM_ABI CustomMappingTraits<
     std::map<std::vector<uint64_t>, WholeProgramDevirtResolution::ByArg>> {
   static void inputOne(
       IO &io, StringRef Key,
@@ -94,7 +94,7 @@ struct CustomMappingTraits<
   }
 };
 
-template <> struct ScalarEnumerationTraits<WholeProgramDevirtResolution::Kind> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<WholeProgramDevirtResolution::Kind> {
   static void enumeration(IO &io, WholeProgramDevirtResolution::Kind &value) {
     io.enumCase(value, "Indir", WholeProgramDevirtResolution::Indir);
     io.enumCase(value, "SingleImpl", WholeProgramDevirtResolution::SingleImpl);
@@ -103,7 +103,7 @@ template <> struct ScalarEnumerationTraits<WholeProgramDevirtResolution::Kind> {
   }
 };
 
-template <> struct MappingTraits<WholeProgramDevirtResolution> {
+template <> struct LLVM_ABI MappingTraits<WholeProgramDevirtResolution> {
   static void mapping(IO &io, WholeProgramDevirtResolution &res) {
     io.mapOptional("Kind", res.TheKind);
     io.mapOptional("SingleImplName", res.SingleImplName);
@@ -112,7 +112,7 @@ template <> struct MappingTraits<WholeProgramDevirtResolution> {
 };
 
 template <>
-struct CustomMappingTraits<std::map<uint64_t, WholeProgramDevirtResolution>> {
+struct LLVM_ABI CustomMappingTraits<std::map<uint64_t, WholeProgramDevirtResolution>> {
   static void inputOne(IO &io, StringRef Key,
                        std::map<uint64_t, WholeProgramDevirtResolution> &V) {
     uint64_t KeyInt;
@@ -128,14 +128,14 @@ struct CustomMappingTraits<std::map<uint64_t, WholeProgramDevirtResolution>> {
   }
 };
 
-template <> struct MappingTraits<TypeIdSummary> {
+template <> struct LLVM_ABI MappingTraits<TypeIdSummary> {
   static void mapping(IO &io, TypeIdSummary& summary) {
     io.mapOptional("TTRes", summary.TTRes);
     io.mapOptional("WPDRes", summary.WPDRes);
   }
 };
 
-struct FunctionSummaryYaml {
+struct LLVM_ABI FunctionSummaryYaml {
   unsigned Linkage, Visibility;
   bool NotEligibleToImport, Live, IsLocal, CanAutoHide;
   std::vector<uint64_t> Refs;
@@ -152,14 +152,14 @@ struct FunctionSummaryYaml {
 namespace llvm {
 namespace yaml {
 
-template <> struct MappingTraits<FunctionSummary::VFuncId> {
+template <> struct LLVM_ABI MappingTraits<FunctionSummary::VFuncId> {
   static void mapping(IO &io, FunctionSummary::VFuncId& id) {
     io.mapOptional("GUID", id.GUID);
     io.mapOptional("Offset", id.Offset);
   }
 };
 
-template <> struct MappingTraits<FunctionSummary::ConstVCall> {
+template <> struct LLVM_ABI MappingTraits<FunctionSummary::ConstVCall> {
   static void mapping(IO &io, FunctionSummary::ConstVCall& id) {
     io.mapOptional("VFunc", id.VFunc);
     io.mapOptional("Args", id.Args);
@@ -175,7 +175,7 @@ LLVM_YAML_IS_SEQUENCE_VECTOR(FunctionSummary::ConstVCall)
 namespace llvm {
 namespace yaml {
 
-template <> struct MappingTraits<FunctionSummaryYaml> {
+template <> struct LLVM_ABI MappingTraits<FunctionSummaryYaml> {
   static void mapping(IO &io, FunctionSummaryYaml& summary) {
     io.mapOptional("Linkage", summary.Linkage);
     io.mapOptional("Visibility", summary.Visibility);
@@ -203,7 +203,7 @@ namespace llvm {
 namespace yaml {
 
 // FIXME: Add YAML mappings for the rest of the module summary.
-template <> struct CustomMappingTraits<GlobalValueSummaryMapTy> {
+template <> struct LLVM_ABI CustomMappingTraits<GlobalValueSummaryMapTy> {
   static void inputOne(IO &io, StringRef Key, GlobalValueSummaryMapTy &V) {
     std::vector<FunctionSummaryYaml> FSums;
     io.mapRequired(Key.str().c_str(), FSums);
@@ -264,7 +264,7 @@ template <> struct CustomMappingTraits<GlobalValueSummaryMapTy> {
   }
 };
 
-template <> struct CustomMappingTraits<TypeIdSummaryMapTy> {
+template <> struct LLVM_ABI CustomMappingTraits<TypeIdSummaryMapTy> {
   static void inputOne(IO &io, StringRef Key, TypeIdSummaryMapTy &V) {
     TypeIdSummary TId;
     io.mapRequired(Key.str().c_str(), TId);
@@ -276,7 +276,7 @@ template <> struct CustomMappingTraits<TypeIdSummaryMapTy> {
   }
 };
 
-template <> struct MappingTraits<ModuleSummaryIndex> {
+template <> struct LLVM_ABI MappingTraits<ModuleSummaryIndex> {
   static void mapping(IO &io, ModuleSummaryIndex& index) {
     io.mapOptional("GlobalValueMap", index.GlobalValueMap);
     io.mapOptional("TypeIdMap", index.TypeIdMap);

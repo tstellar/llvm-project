@@ -27,7 +27,7 @@ class TargetRegisterInfo;
 /// a function. Meta instructions are given the same ordinal as the preceding
 /// non-meta instruction. Class state is invalid if MF is modified after
 /// calling initialize.
-class InstructionOrdering {
+class LLVM_ABI InstructionOrdering {
 public:
   void initialize(const MachineFunction &MF);
   void clear() { InstNumberMap.clear(); }
@@ -43,7 +43,7 @@ private:
 
 /// For each user variable, keep a list of instruction ranges where this
 /// variable is accessible. The variables are listed in order of appearance.
-class DbgValueHistoryMap {
+class LLVM_ABI DbgValueHistoryMap {
 public:
   /// Index in the entry vector.
   typedef size_t EntryIndex;
@@ -129,7 +129,7 @@ public:
 /// For each inlined instance of a source-level label, keep the corresponding
 /// DBG_LABEL instruction. The DBG_LABEL instruction could be used to generate
 /// a temporary (assembler) label before it.
-class DbgLabelInstrMap {
+class LLVM_ABI DbgLabelInstrMap {
 public:
   using InlinedEntity = std::pair<const DINode *, const DILocation *>;
   using InstrMap = MapVector<InlinedEntity, const MachineInstr *>;
@@ -146,7 +146,7 @@ public:
   InstrMap::const_iterator end() const { return LabelInstr.end(); }
 };
 
-void calculateDbgEntityHistory(const MachineFunction *MF,
+LLVM_ABI void calculateDbgEntityHistory(const MachineFunction *MF,
                                const TargetRegisterInfo *TRI,
                                DbgValueHistoryMap &DbgValues,
                                DbgLabelInstrMap &DbgLabels);

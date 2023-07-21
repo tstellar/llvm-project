@@ -23,7 +23,7 @@ class GISelCSEInfo;
 class TargetPassConfig;
 class MachineFunction;
 
-class Combiner {
+class LLVM_ABI Combiner {
 public:
   Combiner(CombinerInfo &CombinerInfo, const TargetPassConfig *TPC);
 

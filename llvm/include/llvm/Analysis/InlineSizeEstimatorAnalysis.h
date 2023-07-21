@@ -16,7 +16,7 @@ namespace llvm {
 class Function;
 
 class TFModelEvaluator;
-class InlineSizeEstimatorAnalysis
+class LLVM_ABI InlineSizeEstimatorAnalysis
     : public AnalysisInfoMixin<InlineSizeEstimatorAnalysis> {
 public:
   InlineSizeEstimatorAnalysis();
@@ -32,7 +32,7 @@ private:
   std::unique_ptr<TFModelEvaluator> Evaluator;
 };
 
-class InlineSizeEstimatorAnalysisPrinterPass
+class LLVM_ABI InlineSizeEstimatorAnalysisPrinterPass
     : public PassInfoMixin<InlineSizeEstimatorAnalysisPrinterPass> {
   raw_ostream &OS;
 

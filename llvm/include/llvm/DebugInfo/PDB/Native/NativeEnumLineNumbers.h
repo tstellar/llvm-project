@@ -17,7 +17,7 @@
 namespace llvm {
 namespace pdb {
 
-class NativeEnumLineNumbers : public IPDBEnumChildren<IPDBLineNumber> {
+class LLVM_ABI NativeEnumLineNumbers : public IPDBEnumChildren<IPDBLineNumber> {
 public:
   explicit NativeEnumLineNumbers(std::vector<NativeLineNumber> LineNums);
 

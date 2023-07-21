@@ -20,7 +20,7 @@ class DebugChecksumsSubsectionRef;
 class DebugStringTableSubsection;
 class DebugStringTableSubsectionRef;
 
-class StringsAndChecksumsRef {
+class LLVM_ABI StringsAndChecksumsRef {
 public:
   // If no subsections are known about initially, we find as much as we can.
   StringsAndChecksumsRef();
@@ -80,7 +80,7 @@ private:
   const DebugChecksumsSubsectionRef *Checksums = nullptr;
 };
 
-class StringsAndChecksums {
+class LLVM_ABI StringsAndChecksums {
 public:
   using StringsPtr = std::shared_ptr<DebugStringTableSubsection>;
   using ChecksumsPtr = std::shared_ptr<DebugChecksumsSubsection>;

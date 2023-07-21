@@ -29,7 +29,7 @@ class StringRef;
 
 namespace object {
 
-class Binary {
+class LLVM_ABI Binary {
 private:
   unsigned int TypeID;
 
@@ -189,11 +189,11 @@ DEFINE_ISA_CONVERSION_FUNCTIONS(Binary, LLVMBinaryRef)
 /// Create a Binary from Source, autodetecting the file type.
 ///
 /// @param Source The data to create the Binary from.
-Expected<std::unique_ptr<Binary>> createBinary(MemoryBufferRef Source,
+LLVM_ABI Expected<std::unique_ptr<Binary>> createBinary(MemoryBufferRef Source,
                                                LLVMContext *Context = nullptr,
                                                bool InitContent = true);
 
-template <typename T> class OwningBinary {
+template <typename T> class LLVM_ABI OwningBinary {
   std::unique_ptr<T> Bin;
   std::unique_ptr<MemoryBuffer> Buf;
 
@@ -241,7 +241,7 @@ template <typename T> const T* OwningBinary<T>::getBinary() const {
   return Bin.get();
 }
 
-Expected<OwningBinary<Binary>> createBinary(StringRef Path,
+LLVM_ABI Expected<OwningBinary<Binary>> createBinary(StringRef Path,
                                             LLVMContext *Context = nullptr,
                                             bool InitContent = true);
 

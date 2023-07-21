@@ -61,7 +61,7 @@ enum {
   RelocationSize = 10
 };
 
-struct header {
+struct LLVM_ABI header {
   uint16_t Machine;
   int32_t NumberOfSections;
   uint32_t TimeDateStamp;
@@ -71,7 +71,7 @@ struct header {
   uint16_t Characteristics;
 };
 
-struct BigObjHeader {
+struct LLVM_ABI BigObjHeader {
   enum : uint16_t { MinBigObjectVersion = 2 };
 
   uint16_t Sig1; ///< Must be IMAGE_FILE_MACHINE_UNKNOWN (0).
@@ -194,7 +194,7 @@ enum ResourceTypeID : unsigned {
   RID_Manifest = 24,
 };
 
-struct symbol {
+struct LLVM_ABI symbol {
   char Name[NameSize];
   uint32_t Value;
   int32_t SectionNumber;
@@ -277,7 +277,7 @@ enum SymbolComplexType : unsigned {
 
 enum AuxSymbolType { IMAGE_AUX_SYMBOL_TYPE_TOKEN_DEF = 1 };
 
-struct section {
+struct LLVM_ABI section {
   char Name[NameSize];
   uint32_t VirtualSize;
   uint32_t VirtualAddress;
@@ -332,7 +332,7 @@ enum SectionCharacteristics : uint32_t {
   IMAGE_SCN_MEM_WRITE = 0x80000000
 };
 
-struct relocation {
+struct LLVM_ABI relocation {
   uint32_t VirtualAddress;
   uint32_t SymbolTableIndex;
   uint16_t Type;
@@ -424,7 +424,7 @@ enum COMDATType : uint8_t {
 };
 
 // Auxiliary Symbol Formats
-struct AuxiliaryFunctionDefinition {
+struct LLVM_ABI AuxiliaryFunctionDefinition {
   uint32_t TagIndex;
   uint32_t TotalSize;
   uint32_t PointerToLinenumber;
@@ -432,7 +432,7 @@ struct AuxiliaryFunctionDefinition {
   char unused[2];
 };
 
-struct AuxiliarybfAndefSymbol {
+struct LLVM_ABI AuxiliarybfAndefSymbol {
   uint8_t unused1[4];
   uint16_t Linenumber;
   uint8_t unused2[6];
@@ -440,7 +440,7 @@ struct AuxiliarybfAndefSymbol {
   uint8_t unused3[2];
 };
 
-struct AuxiliaryWeakExternal {
+struct LLVM_ABI AuxiliaryWeakExternal {
   uint32_t TagIndex;
   uint32_t Characteristics;
   uint8_t unused[10];
@@ -453,7 +453,7 @@ enum WeakExternalCharacteristics : unsigned {
   IMAGE_WEAK_EXTERN_ANTI_DEPENDENCY = 4
 };
 
-struct AuxiliarySectionDefinition {
+struct LLVM_ABI AuxiliarySectionDefinition {
   uint32_t Length;
   uint16_t NumberOfRelocations;
   uint16_t NumberOfLinenumbers;
@@ -463,7 +463,7 @@ struct AuxiliarySectionDefinition {
   char unused;
 };
 
-struct AuxiliaryCLRToken {
+struct LLVM_ABI AuxiliaryCLRToken {
   uint8_t AuxType;
   uint8_t unused1;
   uint32_t SymbolTableIndex;
@@ -480,7 +480,7 @@ union Auxiliary {
 /// The Import Directory Table.
 ///
 /// There is a single array of these and one entry per imported DLL.
-struct ImportDirectoryTableEntry {
+struct LLVM_ABI ImportDirectoryTableEntry {
   uint32_t ImportLookupTableRVA;
   uint32_t TimeDateStamp;
   uint32_t ForwarderChain;
@@ -496,7 +496,7 @@ struct ImportDirectoryTableEntry {
 ///
 /// This also happens to be the same format used by the Import Address Table
 /// when it is initially written out to the image.
-struct ImportLookupTableEntry32 {
+struct LLVM_ABI ImportLookupTableEntry32 {
   uint32_t data;
 
   /// Is this entry specified by ordinal, or name?
@@ -525,7 +525,7 @@ struct ImportLookupTableEntry32 {
 };
 
 /// The DOS compatible header at the front of all PEs.
-struct DOSHeader {
+struct LLVM_ABI DOSHeader {
   uint16_t Magic;
   uint16_t UsedBytesInTheLastPage;
   uint16_t FileSizeInPages;
@@ -547,7 +547,7 @@ struct DOSHeader {
   uint32_t AddressOfNewExeHeader;
 };
 
-struct PE32Header {
+struct LLVM_ABI PE32Header {
   enum { PE32 = 0x10b, PE32_PLUS = 0x20b };
 
   uint16_t Magic;
@@ -584,7 +584,7 @@ struct PE32Header {
   uint32_t NumberOfRvaAndSize;
 };
 
-struct DataDirectory {
+struct LLVM_ABI DataDirectory {
   uint32_t RelativeVirtualAddress;
   uint32_t Size;
 };
@@ -760,7 +760,7 @@ enum class GuardFlags : uint32_t {
   CF_FUNCTION_TABLE_SIZE_19BYTES = 0xF0000000,
 };
 
-struct ImportHeader {
+struct LLVM_ABI ImportHeader {
   uint16_t Sig1; ///< Must be IMAGE_FILE_MACHINE_UNKNOWN (0).
   uint16_t Sig2; ///< Must be 0xFFFF.
   uint16_t Version;
@@ -805,7 +805,7 @@ inline bool isReservedSectionNumber(int32_t SectionNumber) {
 
 /// Encode section name based on string table offset.
 /// The size of Out must be at least COFF::NameSize.
-bool encodeSectionName(char *Out, uint64_t Offset);
+LLVM_ABI bool encodeSectionName(char *Out, uint64_t Offset);
 
 } // End namespace COFF.
 } // End namespace llvm.

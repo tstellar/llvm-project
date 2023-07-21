@@ -62,7 +62,7 @@ const char AsmRewritePrecedence [] = {
 
 // Represent the various parts which make up an intel expression,
 // used for emitting compound intel expressions
-struct IntelExpr {
+struct LLVM_ABI IntelExpr {
   bool NeedBracs = false;
   int64_t Imm = 0;
   StringRef BaseReg;
@@ -92,7 +92,7 @@ struct IntelExpr {
   }
 };
 
-struct AsmRewrite {
+struct LLVM_ABI AsmRewrite {
   AsmRewriteKind Kind;
   SMLoc Loc;
   unsigned Len;
@@ -114,7 +114,7 @@ public:
     : AsmRewrite(AOK_IntelExpr, loc, len) { IntelExp = exp; }
 };
 
-struct ParseInstructionInfo {
+struct LLVM_ABI ParseInstructionInfo {
   SmallVectorImpl<AsmRewrite> *AsmRewrites = nullptr;
 
   ParseInstructionInfo() = default;
@@ -129,7 +129,7 @@ enum OperandMatchResultTy {
 };
 
 /// Ternary parse status returned by various parse* methods.
-class ParseStatus {
+class LLVM_ABI ParseStatus {
   enum class StatusTy { Success, Failure, NoMatch } Status;
 
 public:
@@ -197,7 +197,7 @@ enum class DiagnosticPredicateTy {
 // below which collects *all* possible diagnostics. This alternative
 // is optional and fully backward compatible with existing
 // PredicateMethods that return a 'bool' (match or no match).
-struct DiagnosticPredicate {
+struct LLVM_ABI DiagnosticPredicate {
   DiagnosticPredicateTy Type;
 
   explicit DiagnosticPredicate(bool Match)
@@ -218,7 +218,7 @@ struct DiagnosticPredicate {
 // the programmer intended to use, so we want to report an error which mentions
 // each of these "near-miss" encodings. This struct contains information about
 // one such encoding, and why it did not match the parsed instruction.
-class NearMissInfo {
+class LLVM_ABI NearMissInfo {
 public:
   enum NearMissKind {
     NoNearMiss,
@@ -347,7 +347,7 @@ private:
 };
 
 /// MCTargetAsmParser - Generic interface to target specific assembly parsers.
-class MCTargetAsmParser : public MCAsmParserExtension {
+class LLVM_ABI MCTargetAsmParser : public MCAsmParserExtension {
 public:
   enum MatchResultTy {
     Match_InvalidOperand,

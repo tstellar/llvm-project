@@ -28,19 +28,19 @@ class SCEV;
 /// Compute the array dimensions Sizes from the set of Terms extracted from
 /// the memory access function of this SCEVAddRecExpr (second step of
 /// delinearization).
-void findArrayDimensions(ScalarEvolution &SE,
+LLVM_ABI void findArrayDimensions(ScalarEvolution &SE,
                          SmallVectorImpl<const SCEV *> &Terms,
                          SmallVectorImpl<const SCEV *> &Sizes,
                          const SCEV *ElementSize);
 
 /// Collect parametric terms occurring in step expressions (first step of
 /// delinearization).
-void collectParametricTerms(ScalarEvolution &SE, const SCEV *Expr,
+LLVM_ABI void collectParametricTerms(ScalarEvolution &SE, const SCEV *Expr,
                             SmallVectorImpl<const SCEV *> &Terms);
 
 /// Return in Subscripts the access functions for each dimension in Sizes
 /// (third step of delinearization).
-void computeAccessFunctions(ScalarEvolution &SE, const SCEV *Expr,
+LLVM_ABI void computeAccessFunctions(ScalarEvolution &SE, const SCEV *Expr,
                             SmallVectorImpl<const SCEV *> &Subscripts,
                             SmallVectorImpl<const SCEV *> &Sizes);
 /// Split this SCEVAddRecExpr into two vectors of SCEVs representing the
@@ -107,7 +107,7 @@ void computeAccessFunctions(ScalarEvolution &SE, const SCEV *Expr,
 /// The subscript of the outermost dimension is the Quotient: [j+k].
 ///
 /// Overall, we have: A[][n][m], and the access function: A[j+k][2i][5i].
-void delinearize(ScalarEvolution &SE, const SCEV *Expr,
+LLVM_ABI void delinearize(ScalarEvolution &SE, const SCEV *Expr,
                  SmallVectorImpl<const SCEV *> &Subscripts,
                  SmallVectorImpl<const SCEV *> &Sizes, const SCEV *ElementSize);
 
@@ -120,7 +120,7 @@ void delinearize(ScalarEvolution &SE, const SCEV *Expr,
 /// either equal length or the size list is one element shorter in case there
 /// is no known size available for the outermost array dimension. Returns true
 /// if successful and false otherwise.
-bool getIndexExpressionsFromGEP(ScalarEvolution &SE,
+LLVM_ABI bool getIndexExpressionsFromGEP(ScalarEvolution &SE,
                                 const GetElementPtrInst *GEP,
                                 SmallVectorImpl<const SCEV *> &Subscripts,
                                 SmallVectorImpl<int> &Sizes);
@@ -131,12 +131,12 @@ bool getIndexExpressionsFromGEP(ScalarEvolution &SE,
 /// otherwise. \p Inst is the load/store instruction whose pointer operand is
 /// the one we want to delinearize. \p AccessFn is its corresponding SCEV
 /// expression w.r.t. the surrounding loop.
-bool tryDelinearizeFixedSizeImpl(ScalarEvolution *SE, Instruction *Inst,
+LLVM_ABI bool tryDelinearizeFixedSizeImpl(ScalarEvolution *SE, Instruction *Inst,
                                  const SCEV *AccessFn,
                                  SmallVectorImpl<const SCEV *> &Subscripts,
                                  SmallVectorImpl<int> &Sizes);
 
-struct DelinearizationPrinterPass
+struct LLVM_ABI DelinearizationPrinterPass
     : public PassInfoMixin<DelinearizationPrinterPass> {
   explicit DelinearizationPrinterPass(raw_ostream &OS);
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);

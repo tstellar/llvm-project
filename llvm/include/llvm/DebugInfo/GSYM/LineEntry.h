@@ -19,7 +19,7 @@ namespace gsym {
 /// address, file and line of the line table row for a given address. The
 /// size of a line table entry is calculated by looking at the next entry
 /// in the FunctionInfo's vector of entries.
-struct LineEntry {
+struct LLVM_ABI LineEntry {
   uint64_t Addr; ///< Start address of this line entry.
   uint32_t File; ///< 1 based index of file in FileTable
   uint32_t Line; ///< Source line number.

@@ -29,7 +29,7 @@ class SelectionDAG;
 /// (load (i64 add (i64 copyfromreg %c)
 ///                (i64 signextend (i32 add (i32 signextend (i8 load %index))
 ///                                         (i32 1)))))
-class BaseIndexOffset {
+class LLVM_ABI BaseIndexOffset {
 private:
   SDValue Base;
   SDValue Index;

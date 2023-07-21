@@ -19,7 +19,7 @@ namespace llvm {
 
 class Function;
 
-struct InstCountPass : PassInfoMixin<InstCountPass> {
+struct LLVM_ABI InstCountPass : PassInfoMixin<InstCountPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &);
 };
 

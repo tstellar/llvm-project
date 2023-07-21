@@ -18,7 +18,7 @@
 #include "llvm/Support/MSP430Attributes.h"
 
 namespace llvm {
-class MSP430AttributeParser : public ELFAttributeParser {
+class LLVM_ABI MSP430AttributeParser : public ELFAttributeParser {
   struct DisplayHandler {
     MSP430Attrs::AttrType Attribute;
     Error (MSP430AttributeParser::*Routine)(MSP430Attrs::AttrType);

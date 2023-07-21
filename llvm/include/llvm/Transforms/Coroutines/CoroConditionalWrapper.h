@@ -17,7 +17,7 @@ class Module;
 
 // Only runs passes in the contained pass manager if the module contains any
 // coroutine intrinsic declarations.
-struct CoroConditionalWrapper : PassInfoMixin<CoroConditionalWrapper> {
+struct LLVM_ABI CoroConditionalWrapper : PassInfoMixin<CoroConditionalWrapper> {
   CoroConditionalWrapper(ModulePassManager &&);
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
   static bool isRequired() { return true; }

@@ -32,7 +32,7 @@ class Type;
 
 /// Abstract base class for all machine specific constantpool value subclasses.
 ///
-class MachineConstantPoolValue {
+class LLVM_ABI MachineConstantPoolValue {
   virtual void anchor();
 
   Type *Ty;
@@ -64,7 +64,7 @@ inline raw_ostream &operator<<(raw_ostream &OS,
 /// It contains a pointer to the value and an offset from the start of
 /// the constant pool.
 /// An entry in a MachineConstantPool
-class MachineConstantPoolEntry {
+class LLVM_ABI MachineConstantPoolEntry {
 public:
   /// The constant itself.
   union {
@@ -114,7 +114,7 @@ public:
 /// code, these virtual address references are converted to refer to the
 /// address of the function constant pool values.
 /// The machine constant pool.
-class MachineConstantPool {
+class LLVM_ABI MachineConstantPool {
   Align PoolAlignment; ///< The alignment for the pool.
   std::vector<MachineConstantPoolEntry> Constants; ///< The pool of constants.
   /// MachineConstantPoolValues that use an existing MachineConstantPoolEntry.

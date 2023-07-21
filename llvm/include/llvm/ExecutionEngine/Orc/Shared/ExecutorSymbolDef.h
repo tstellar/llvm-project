@@ -20,7 +20,7 @@ namespace llvm {
 namespace orc {
 
 /// Represents a defining location for a JIT symbol.
-class ExecutorSymbolDef {
+class LLVM_ABI ExecutorSymbolDef {
 public:
   ExecutorSymbolDef() = default;
   ExecutorSymbolDef(ExecutorAddr Addr, JITSymbolFlags Flags)

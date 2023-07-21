@@ -28,7 +28,7 @@ class Value;
 
 /// TypeFinder - Walk over a module, identifying all of the types that are
 /// used by the module.
-class TypeFinder {
+class LLVM_ABI TypeFinder {
   // To avoid walking constant expressions multiple times and other IR
   // objects, we keep several helper maps.
   DenseSet<const Value*> VisitedConstants;

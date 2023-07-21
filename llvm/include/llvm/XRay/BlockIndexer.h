@@ -23,7 +23,7 @@ namespace xray {
 
 // The BlockIndexer will gather all related records associated with a
 // process+thread and group them by 'Block'.
-class BlockIndexer : public RecordVisitor {
+class LLVM_ABI BlockIndexer : public RecordVisitor {
 public:
   struct Block {
     uint64_t ProcessID;

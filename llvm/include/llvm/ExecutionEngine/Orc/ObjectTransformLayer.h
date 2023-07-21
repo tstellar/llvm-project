@@ -21,7 +21,7 @@
 namespace llvm {
 namespace orc {
 
-class ObjectTransformLayer
+class LLVM_ABI ObjectTransformLayer
     : public RTTIExtends<ObjectTransformLayer, ObjectLayer> {
 public:
   static char ID;

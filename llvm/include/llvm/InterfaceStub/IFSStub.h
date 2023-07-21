@@ -49,7 +49,7 @@ enum class IFSBitWidthType {
   Unknown = 256,
 };
 
-struct IFSSymbol {
+struct LLVM_ABI IFSSymbol {
   IFSSymbol() = default;
   explicit IFSSymbol(std::string SymbolName) : Name(std::move(SymbolName)) {}
   std::string Name;
@@ -61,7 +61,7 @@ struct IFSSymbol {
   bool operator<(const IFSSymbol &RHS) const { return Name < RHS.Name; }
 };
 
-struct IFSTarget {
+struct LLVM_ABI IFSTarget {
   std::optional<std::string> Triple;
   std::optional<std::string> ObjectFormat;
   std::optional<IFSArch> Arch;
@@ -86,7 +86,7 @@ inline bool operator!=(const IFSTarget &Lhs, const IFSTarget &Rhs) {
 
 // A cumulative representation of InterFace stubs.
 // Both textual and binary stubs will read into and write from this object.
-struct IFSStub {
+struct LLVM_ABI IFSStub {
   // TODO: Add support for symbol versioning.
   VersionTuple IfsVersion;
   std::optional<std::string> SoName;
@@ -105,7 +105,7 @@ struct IFSStub {
 // which prevents us using 'Target:' field with different definitions.
 // This class makes it possible to map a second traits so the same data
 // structure can be used for 2 different yaml schema.
-struct IFSStubTriple : IFSStub {
+struct LLVM_ABI IFSStubTriple : IFSStub {
   IFSStubTriple() = default;
   IFSStubTriple(const IFSStub &Stub);
   IFSStubTriple(const IFSStubTriple &Stub);
@@ -116,33 +116,33 @@ struct IFSStubTriple : IFSStub {
 /// Currently, ELFCLASS32 and ELFCLASS64 are supported.
 ///
 /// @param BitWidth IFS bit width type.
-uint8_t convertIFSBitWidthToELF(IFSBitWidthType BitWidth);
+LLVM_ABI uint8_t convertIFSBitWidthToELF(IFSBitWidthType BitWidth);
 
 /// This function convert endianness type from IFS enum to ELF format
 /// Currently, ELFDATA2LSB and ELFDATA2MSB are supported.
 ///
 /// @param Endianness IFS endianness type.
-uint8_t convertIFSEndiannessToELF(IFSEndiannessType Endianness);
+LLVM_ABI uint8_t convertIFSEndiannessToELF(IFSEndiannessType Endianness);
 
 /// This function convert symbol type from IFS enum to ELF format
 /// Currently, STT_NOTYPE, STT_OBJECT, STT_FUNC, and STT_TLS are supported.
 ///
 /// @param SymbolType IFS symbol type.
-uint8_t convertIFSSymbolTypeToELF(IFSSymbolType SymbolType);
+LLVM_ABI uint8_t convertIFSSymbolTypeToELF(IFSSymbolType SymbolType);
 
 /// This function extracts ELF bit width from e_ident[EI_CLASS] of an ELF file
 /// Currently, ELFCLASS32 and ELFCLASS64 are supported.
 /// Other endianness types are mapped to IFSBitWidthType::Unknown.
 ///
 /// @param BitWidth e_ident[EI_CLASS] value to extract bit width from.
-IFSBitWidthType convertELFBitWidthToIFS(uint8_t BitWidth);
+LLVM_ABI IFSBitWidthType convertELFBitWidthToIFS(uint8_t BitWidth);
 
 /// This function extracts ELF endianness from e_ident[EI_DATA] of an ELF file
 /// Currently, ELFDATA2LSB and ELFDATA2MSB are supported.
 /// Other endianness types are mapped to IFSEndiannessType::Unknown.
 ///
 /// @param Endianness e_ident[EI_DATA] value to extract endianness type from.
-IFSEndiannessType convertELFEndiannessToIFS(uint8_t Endianness);
+LLVM_ABI IFSEndiannessType convertELFEndiannessToIFS(uint8_t Endianness);
 
 /// This function extracts symbol type from a symbol's st_info member and
 /// maps it to an IFSSymbolType enum.
@@ -150,7 +150,7 @@ IFSEndiannessType convertELFEndiannessToIFS(uint8_t Endianness);
 /// Other symbol types are mapped to IFSSymbolType::Unknown.
 ///
 /// @param SymbolType Binary symbol st_info to extract symbol type from.
-IFSSymbolType convertELFSymbolTypeToIFS(uint8_t SymbolType);
+LLVM_ABI IFSSymbolType convertELFSymbolTypeToIFS(uint8_t SymbolType);
 } // namespace ifs
 } // end namespace llvm
 

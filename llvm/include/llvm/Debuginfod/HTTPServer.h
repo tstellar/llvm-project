@@ -34,7 +34,7 @@ struct HTTPResponse;
 struct StreamingHTTPResponse;
 class HTTPServer;
 
-class HTTPServerRequest {
+class LLVM_ABI HTTPServerRequest {
   friend HTTPServer;
 
 #ifdef LLVM_ENABLE_HTTPLIB
@@ -55,7 +55,7 @@ public:
   void setResponse(HTTPResponse Response);
 };
 
-struct HTTPResponse {
+struct LLVM_ABI HTTPResponse {
   unsigned Code;
   const char *ContentType;
   StringRef Body;
@@ -70,7 +70,7 @@ typedef std::function<StringRef(size_t /*Offset*/, size_t /*Length*/)>
     HTTPContentProvider;
 
 /// Wraps the content provider with HTTP Status code and headers.
-struct StreamingHTTPResponse {
+struct LLVM_ABI StreamingHTTPResponse {
   unsigned Code;
   const char *ContentType;
   size_t ContentLength;
@@ -82,11 +82,11 @@ struct StreamingHTTPResponse {
 
 /// Sets the response to stream the file at FilePath, if available, and
 /// otherwise an HTTP 404 error response.
-bool streamFile(HTTPServerRequest &Request, StringRef FilePath);
+LLVM_ABI bool streamFile(HTTPServerRequest &Request, StringRef FilePath);
 
 /// An HTTP server which can listen on a single TCP/IP port for HTTP
 /// requests and delgate them to the appropriate registered handler.
-class HTTPServer {
+class LLVM_ABI HTTPServer {
 #ifdef LLVM_ENABLE_HTTPLIB
   std::unique_ptr<httplib::Server> Server;
   unsigned Port = 0;

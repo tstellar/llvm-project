@@ -31,7 +31,7 @@
 namespace llvm {
 
 template <class BlockT>
-class DFCalculateWorkObject {
+class LLVM_ABI DFCalculateWorkObject {
 public:
   using DomTreeNodeT = DomTreeNodeBase<BlockT>;
 

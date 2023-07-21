@@ -34,7 +34,7 @@ template <typename Pattern>
 }
 
 // TODO: Extend for N use.
-template <typename SubPatternT> struct OneUse_match {
+template <typename SubPatternT> struct LLVM_ABI OneUse_match {
   SubPatternT SubPat;
   OneUse_match(const SubPatternT &SP) : SubPat(SP) {}
 
@@ -48,7 +48,7 @@ inline OneUse_match<SubPat> m_OneUse(const SubPat &SP) {
   return SP;
 }
 
-template <typename SubPatternT> struct OneNonDBGUse_match {
+template <typename SubPatternT> struct LLVM_ABI OneNonDBGUse_match {
   SubPatternT SubPat;
   OneNonDBGUse_match(const SubPatternT &SP) : SubPat(SP) {}
 
@@ -78,7 +78,7 @@ inline std::optional<int64_t> matchConstant(Register Reg,
   return getIConstantVRegSExtVal(Reg, MRI);
 }
 
-template <typename ConstT> struct ConstantMatch {
+template <typename ConstT> struct LLVM_ABI ConstantMatch {
   ConstT &CR;
   ConstantMatch(ConstT &C) : CR(C) {}
   bool match(const MachineRegisterInfo &MRI, Register Reg) {
@@ -113,7 +113,7 @@ matchConstantSplat(Register Reg, const MachineRegisterInfo &MRI) {
   return getIConstantSplatSExtVal(Reg, MRI);
 }
 
-template <typename ConstT> struct ICstOrSplatMatch {
+template <typename ConstT> struct LLVM_ABI ICstOrSplatMatch {
   ConstT &CR;
   ICstOrSplatMatch(ConstT &C) : CR(C) {}
   bool match(const MachineRegisterInfo &MRI, Register Reg) {
@@ -139,7 +139,7 @@ inline ICstOrSplatMatch<int64_t> m_ICstOrSplat(int64_t &Cst) {
   return ICstOrSplatMatch<int64_t>(Cst);
 }
 
-struct GCstAndRegMatch {
+struct LLVM_ABI GCstAndRegMatch {
   std::optional<ValueAndVReg> &ValReg;
   GCstAndRegMatch(std::optional<ValueAndVReg> &ValReg) : ValReg(ValReg) {}
   bool match(const MachineRegisterInfo &MRI, Register Reg) {
@@ -152,7 +152,7 @@ inline GCstAndRegMatch m_GCst(std::optional<ValueAndVReg> &ValReg) {
   return GCstAndRegMatch(ValReg);
 }
 
-struct GFCstAndRegMatch {
+struct LLVM_ABI GFCstAndRegMatch {
   std::optional<FPValueAndVReg> &FPValReg;
   GFCstAndRegMatch(std::optional<FPValueAndVReg> &FPValReg)
       : FPValReg(FPValReg) {}
@@ -166,7 +166,7 @@ inline GFCstAndRegMatch m_GFCst(std::optional<FPValueAndVReg> &FPValReg) {
   return GFCstAndRegMatch(FPValReg);
 }
 
-struct GFCstOrSplatGFCstMatch {
+struct LLVM_ABI GFCstOrSplatGFCstMatch {
   std::optional<FPValueAndVReg> &FPValReg;
   GFCstOrSplatGFCstMatch(std::optional<FPValueAndVReg> &FPValReg)
       : FPValReg(FPValReg) {}
@@ -182,7 +182,7 @@ m_GFCstOrSplat(std::optional<FPValueAndVReg> &FPValReg) {
 }
 
 /// Matcher for a specific constant value.
-struct SpecificConstantMatch {
+struct LLVM_ABI SpecificConstantMatch {
   int64_t RequestedVal;
   SpecificConstantMatch(int64_t RequestedVal) : RequestedVal(RequestedVal) {}
   bool match(const MachineRegisterInfo &MRI, Register Reg) {
@@ -197,7 +197,7 @@ inline SpecificConstantMatch m_SpecificICst(int64_t RequestedValue) {
 }
 
 /// Matcher for a specific constant splat.
-struct SpecificConstantSplatMatch {
+struct LLVM_ABI SpecificConstantSplatMatch {
   int64_t RequestedVal;
   SpecificConstantSplatMatch(int64_t RequestedVal)
       : RequestedVal(RequestedVal) {}
@@ -213,7 +213,7 @@ inline SpecificConstantSplatMatch m_SpecificICstSplat(int64_t RequestedValue) {
 }
 
 /// Matcher for a specific constant or constant splat.
-struct SpecificConstantOrSplatMatch {
+struct LLVM_ABI SpecificConstantOrSplatMatch {
   int64_t RequestedVal;
   SpecificConstantOrSplatMatch(int64_t RequestedVal)
       : RequestedVal(RequestedVal) {}
@@ -242,7 +242,7 @@ inline SpecificConstantMatch m_AllOnesInt() {
 ///}
 
 /// Matcher for a specific register.
-struct SpecificRegisterMatch {
+struct LLVM_ABI SpecificRegisterMatch {
   Register RequestedReg;
   SpecificRegisterMatch(Register RequestedReg) : RequestedReg(RequestedReg) {}
   bool match(const MachineRegisterInfo &MRI, Register Reg) {
@@ -260,7 +260,7 @@ inline SpecificRegisterMatch m_SpecificReg(Register RequestedReg) {
 // We might want to support taking in some MachineOperands and call getReg on
 // that.
 
-struct operand_type_match {
+struct LLVM_ABI operand_type_match {
   bool match(const MachineRegisterInfo &MRI, Register Reg) { return true; }
   bool match(const MachineRegisterInfo &MRI, MachineOperand *MO) {
     return MO->isReg();
@@ -270,7 +270,7 @@ struct operand_type_match {
 inline operand_type_match m_Reg() { return operand_type_match(); }
 
 /// Matching combinators.
-template <typename... Preds> struct And {
+template <typename... Preds> struct LLVM_ABI And {
   template <typename MatchSrc>
   bool match(const MachineRegisterInfo &MRI, MatchSrc &&src) {
     return true;
@@ -278,7 +278,7 @@ template <typename... Preds> struct And {
 };
 
 template <typename Pred, typename... Preds>
-struct And<Pred, Preds...> : And<Preds...> {
+struct LLVM_ABI And<Pred, Preds...> : And<Preds...> {
   Pred P;
   And(Pred &&p, Preds &&... preds)
       : And<Preds...>(std::forward<Preds>(preds)...), P(std::forward<Pred>(p)) {
@@ -289,7 +289,7 @@ struct And<Pred, Preds...> : And<Preds...> {
   }
 };
 
-template <typename... Preds> struct Or {
+template <typename... Preds> struct LLVM_ABI Or {
   template <typename MatchSrc>
   bool match(const MachineRegisterInfo &MRI, MatchSrc &&src) {
     return false;
@@ -297,7 +297,7 @@ template <typename... Preds> struct Or {
 };
 
 template <typename Pred, typename... Preds>
-struct Or<Pred, Preds...> : Or<Preds...> {
+struct LLVM_ABI Or<Pred, Preds...> : Or<Preds...> {
   Pred P;
   Or(Pred &&p, Preds &&... preds)
       : Or<Preds...>(std::forward<Preds>(preds)...), P(std::forward<Pred>(p)) {}
@@ -315,14 +315,14 @@ template <typename... Preds> Or<Preds...> m_any_of(Preds &&... preds) {
   return Or<Preds...>(std::forward<Preds>(preds)...);
 }
 
-template <typename BindTy> struct bind_helper {
+template <typename BindTy> struct LLVM_ABI bind_helper {
   static bool bind(const MachineRegisterInfo &MRI, BindTy &VR, BindTy &V) {
     VR = V;
     return true;
   }
 };
 
-template <> struct bind_helper<MachineInstr *> {
+template <> struct LLVM_ABI bind_helper<MachineInstr *> {
   static bool bind(const MachineRegisterInfo &MRI, MachineInstr *&MI,
                    Register Reg) {
     MI = MRI.getVRegDef(Reg);
@@ -337,7 +337,7 @@ template <> struct bind_helper<MachineInstr *> {
   }
 };
 
-template <> struct bind_helper<LLT> {
+template <> struct LLVM_ABI bind_helper<LLT> {
   static bool bind(const MachineRegisterInfo &MRI, LLT Ty, Register Reg) {
     Ty = MRI.getType(Reg);
     if (Ty.isValid())
@@ -346,7 +346,7 @@ template <> struct bind_helper<LLT> {
   }
 };
 
-template <> struct bind_helper<const ConstantFP *> {
+template <> struct LLVM_ABI bind_helper<const ConstantFP *> {
   static bool bind(const MachineRegisterInfo &MRI, const ConstantFP *&F,
                    Register Reg) {
     F = getConstantFPVRegVal(Reg, MRI);
@@ -356,7 +356,7 @@ template <> struct bind_helper<const ConstantFP *> {
   }
 };
 
-template <typename Class> struct bind_ty {
+template <typename Class> struct LLVM_ABI bind_ty {
   Class &VR;
 
   bind_ty(Class &V) : VR(V) {}
@@ -372,7 +372,7 @@ inline bind_ty<LLT> m_Type(LLT Ty) { return Ty; }
 inline bind_ty<CmpInst::Predicate> m_Pred(CmpInst::Predicate &P) { return P; }
 inline operand_type_match m_Pred() { return operand_type_match(); }
 
-struct ImplicitDefMatch {
+struct LLVM_ABI ImplicitDefMatch {
   bool match(const MachineRegisterInfo &MRI, Register Reg) {
     MachineInstr *TmpMI;
     if (mi_match(Reg, MRI, m_MInstr(TmpMI)))
@@ -389,7 +389,7 @@ inline bind_ty<const ConstantFP *> m_GFCst(const ConstantFP *&C) { return C; }
 // General helper for all the binary generic MI such as G_ADD/G_SUB etc
 template <typename LHS_P, typename RHS_P, unsigned Opcode,
           bool Commutable = false>
-struct BinaryOp_match {
+struct LLVM_ABI BinaryOp_match {
   LHS_P L;
   RHS_P R;
 
@@ -411,7 +411,7 @@ struct BinaryOp_match {
 
 // Helper for (commutative) binary generic MI that checks Opcode.
 template <typename LHS_P, typename RHS_P, bool Commutable = false>
-struct BinaryOpc_match {
+struct LLVM_ABI BinaryOpc_match {
   unsigned Opc;
   LHS_P L;
   RHS_P R;
@@ -550,7 +550,7 @@ m_GSMin(const LHS &L, const RHS &R) {
 }
 
 // Helper for unary instructions (G_[ZSA]EXT/G_TRUNC) etc
-template <typename SrcTy, unsigned Opcode> struct UnaryOp_match {
+template <typename SrcTy, unsigned Opcode> struct LLVM_ABI UnaryOp_match {
   SrcTy L;
 
   UnaryOp_match(const SrcTy &LHS) : L(LHS) {}
@@ -640,7 +640,7 @@ inline UnaryOp_match<SrcTy, TargetOpcode::G_FSQRT> m_GFSqrt(const SrcTy &Src) {
 // TODO: Allow checking a specific predicate.
 template <typename Pred_P, typename LHS_P, typename RHS_P, unsigned Opcode,
           bool Commutable = false>
-struct CompareOp_match {
+struct LLVM_ABI CompareOp_match {
   Pred_P P;
   LHS_P L;
   RHS_P R;
@@ -712,7 +712,7 @@ m_c_GFCmp(const Pred &P, const LHS &L, const RHS &R) {
 }
 
 // Helper for checking if a Reg is of specific type.
-struct CheckType {
+struct LLVM_ABI CheckType {
   LLT Ty;
   CheckType(const LLT Ty) : Ty(Ty) {}
 
@@ -724,7 +724,7 @@ struct CheckType {
 inline CheckType m_SpecificType(LLT Ty) { return Ty; }
 
 template <typename Src0Ty, typename Src1Ty, typename Src2Ty, unsigned Opcode>
-struct TernaryOp_match {
+struct LLVM_ABI TernaryOp_match {
   Src0Ty Src0;
   Src1Ty Src1;
   Src2Ty Src2;

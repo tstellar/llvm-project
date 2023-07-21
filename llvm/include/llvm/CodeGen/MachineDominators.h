@@ -48,7 +48,7 @@ using MachineDomTreeNode = DomTreeNodeBase<MachineBasicBlock>;
 /// DominatorTree Class - Concrete subclass of DominatorTreeBase that is used to
 /// compute a normal dominator tree.
 ///
-class MachineDominatorTree : public MachineFunctionPass {
+class LLVM_ABI MachineDominatorTree : public MachineFunctionPass {
   /// Helper structure used to hold all the basic blocks
   /// involved in the split of a critical edge.
   struct CriticalEdge {
@@ -257,7 +257,7 @@ public:
 ///
 
 template <class Node, class ChildIterator>
-struct MachineDomTreeGraphTraitsBase {
+struct LLVM_ABI MachineDomTreeGraphTraitsBase {
   using NodeRef = Node *;
   using ChildIteratorType = ChildIterator;
 
@@ -269,18 +269,18 @@ struct MachineDomTreeGraphTraitsBase {
 template <class T> struct GraphTraits;
 
 template <>
-struct GraphTraits<MachineDomTreeNode *>
+struct LLVM_ABI GraphTraits<MachineDomTreeNode *>
     : public MachineDomTreeGraphTraitsBase<MachineDomTreeNode,
                                            MachineDomTreeNode::const_iterator> {
 };
 
 template <>
-struct GraphTraits<const MachineDomTreeNode *>
+struct LLVM_ABI GraphTraits<const MachineDomTreeNode *>
     : public MachineDomTreeGraphTraitsBase<const MachineDomTreeNode,
                                            MachineDomTreeNode::const_iterator> {
 };
 
-template <> struct GraphTraits<MachineDominatorTree*>
+template <> struct LLVM_ABI GraphTraits<MachineDominatorTree*>
   : public GraphTraits<MachineDomTreeNode *> {
   static NodeRef getEntryNode(MachineDominatorTree *DT) {
     return DT->getRootNode();
