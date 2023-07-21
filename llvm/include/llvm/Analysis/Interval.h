@@ -33,7 +33,7 @@ class raw_ostream;
 /// in the interval has all of its predecessors in the interval (except for the
 /// header)
 ///
-class Interval {
+class LLVM_ABI Interval {
   /// HeaderNode - The header BasicBlock, which dominates all BasicBlocks in this
   /// interval.  Also, any loops in this interval must go through the HeaderNode.
   ///
@@ -113,7 +113,7 @@ inline Interval::pred_iterator pred_end(Interval *I)   {
   return I->Predecessors.end();
 }
 
-template <> struct GraphTraits<Interval*> {
+template <> struct LLVM_ABI GraphTraits<Interval*> {
   using NodeRef = Interval *;
   using ChildIteratorType = Interval::succ_iterator;
 
@@ -124,7 +124,7 @@ template <> struct GraphTraits<Interval*> {
   static ChildIteratorType child_end(NodeRef N) { return succ_end(N); }
 };
 
-template <> struct GraphTraits<Inverse<Interval*>> {
+template <> struct LLVM_ABI GraphTraits<Inverse<Interval*>> {
   using NodeRef = Interval *;
   using ChildIteratorType = Interval::pred_iterator;
 

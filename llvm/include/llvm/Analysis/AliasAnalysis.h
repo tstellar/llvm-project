@@ -79,7 +79,7 @@ template <typename> class SmallPtrSetImpl;
 ///
 /// See docs/AliasAnalysis.html for more information on the specific meanings
 /// of these values.
-class AliasResult {
+class LLVM_ABI AliasResult {
 private:
   static const int OffsetBits = 23;
   static const int AliasBits = 8;
@@ -147,10 +147,10 @@ static_assert(sizeof(AliasResult) == 4,
               "AliasResult size is intended to be 4 bytes!");
 
 /// << operator for AliasResult.
-raw_ostream &operator<<(raw_ostream &OS, AliasResult AR);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, AliasResult AR);
 
 /// Virtual base class for providers of capture information.
-struct CaptureInfo {
+struct LLVM_ABI CaptureInfo {
   virtual ~CaptureInfo() = 0;
   virtual bool isNotCapturedBeforeOrAt(const Value *Object,
                                        const Instruction *I) = 0;
@@ -159,7 +159,7 @@ struct CaptureInfo {
 /// Context-free CaptureInfo provider, which computes and caches whether an
 /// object is captured in the function at all, but does not distinguish whether
 /// it was captured before or after the context instruction.
-class SimpleCaptureInfo final : public CaptureInfo {
+class LLVM_ABI SimpleCaptureInfo final : public CaptureInfo {
   SmallDenseMap<const Value *, bool, 8> IsCapturedCache;
 
 public:
@@ -170,7 +170,7 @@ public:
 /// Context-sensitive CaptureInfo provider, which computes and caches the
 /// earliest common dominator closure of all captures. It provides a good
 /// approximation to a precise "captures before" analysis.
-class EarliestEscapeInfo final : public CaptureInfo {
+class LLVM_ABI EarliestEscapeInfo final : public CaptureInfo {
   DominatorTree &DT;
   const LoopInfo &LI;
 
@@ -200,7 +200,7 @@ public:
 /// Cache key for BasicAA results. It only includes the pointer and size from
 /// MemoryLocation, as BasicAA is AATags independent. Additionally, it includes
 /// the value of MayBeCrossIteration, which may affect BasicAA results.
-struct AACacheLoc {
+struct LLVM_ABI AACacheLoc {
   using PtrTy = PointerIntPair<const Value *, 1, bool>;
   PtrTy Ptr;
   LocationSize Size;
@@ -210,7 +210,7 @@ struct AACacheLoc {
       : Ptr(Ptr, MayBeCrossIteration), Size(Size) {}
 };
 
-template <> struct DenseMapInfo<AACacheLoc> {
+template <> struct LLVM_ABI DenseMapInfo<AACacheLoc> {
   static inline AACacheLoc getEmptyKey() {
     return {DenseMapInfo<AACacheLoc::PtrTy>::getEmptyKey(),
             DenseMapInfo<LocationSize>::getEmptyKey()};
@@ -238,7 +238,7 @@ class AAResults;
 /// where safe (due to the IR not changing), use a `BatchAAResults` wrapper.
 /// The information stored in an `AAQueryInfo` is currently limitted to the
 /// caches used by BasicAA, but can further be extended to fit other AA needs.
-class AAQueryInfo {
+class LLVM_ABI AAQueryInfo {
 public:
   using LocPair = std::pair<AACacheLoc, AACacheLoc>;
   struct CacheEntry {
@@ -290,7 +290,7 @@ public:
 };
 
 /// AAQueryInfo that uses SimpleCaptureInfo.
-class SimpleAAQueryInfo : public AAQueryInfo {
+class LLVM_ABI SimpleAAQueryInfo : public AAQueryInfo {
   SimpleCaptureInfo CI;
 
 public:
@@ -299,7 +299,7 @@ public:
 
 class BatchAAResults;
 
-class AAResults {
+class LLVM_ABI AAResults {
 public:
   // Make these results default constructable and movable. We have to spell
   // these out because MSVC won't synthesize them.
@@ -617,7 +617,7 @@ private:
 /// esentially making AA work in "batch mode". The internal state cannot be
 /// cleared, so to go "out-of-batch-mode", the user must either use AAResults,
 /// or create a new BatchAAResults.
-class BatchAAResults {
+class LLVM_ABI BatchAAResults {
   AAResults &AA;
   AAQueryInfo AAQI;
   SimpleCaptureInfo SimpleCI;
@@ -799,7 +799,7 @@ public:
 /// Implementors of an alias analysis should derive from this class, and then
 /// override specific methods that they wish to customize. There is no need to
 /// use virtual anywhere.
-class AAResultBase {
+class LLVM_ABI AAResultBase {
 protected:
   explicit AAResultBase() = default;
 
@@ -843,7 +843,7 @@ public:
 };
 
 /// Return true if this pointer is returned by a noalias function.
-bool isNoAliasCall(const Value *V);
+LLVM_ABI bool isNoAliasCall(const Value *V);
 
 /// Return true if this pointer refers to a distinct and identifiable object.
 /// This returns true for:
@@ -852,25 +852,25 @@ bool isNoAliasCall(const Value *V);
 ///    ByVal and NoAlias Arguments
 ///    NoAlias returns (e.g. calls to malloc)
 ///
-bool isIdentifiedObject(const Value *V);
+LLVM_ABI bool isIdentifiedObject(const Value *V);
 
 /// Return true if V is umabigously identified at the function-level.
 /// Different IdentifiedFunctionLocals can't alias.
 /// Further, an IdentifiedFunctionLocal can not alias with any function
 /// arguments other than itself, which is not necessarily true for
 /// IdentifiedObjects.
-bool isIdentifiedFunctionLocal(const Value *V);
+LLVM_ABI bool isIdentifiedFunctionLocal(const Value *V);
 
 /// Returns true if the pointer is one which would have been considered an
 /// escape by isNonEscapingLocalObject.
-bool isEscapeSource(const Value *V);
+LLVM_ABI bool isEscapeSource(const Value *V);
 
 /// Return true if Object memory is not visible after an unwind, in the sense
 /// that program semantics cannot depend on Object containing any particular
 /// value on unwind. If the RequiresNoCaptureBeforeUnwind out parameter is set
 /// to true, then the memory is only not visible if the object has not been
 /// captured prior to the unwind. Otherwise it is not visible even if captured.
-bool isNotVisibleOnUnwind(const Value *Object,
+LLVM_ABI bool isNotVisibleOnUnwind(const Value *Object,
                           bool &RequiresNoCaptureBeforeUnwind);
 
 /// A manager for alias analyses.
@@ -890,7 +890,7 @@ bool isNotVisibleOnUnwind(const Value *Object,
 /// aggregated AA results end up being invalidated. This removes the need to
 /// explicitly preserve the results of `AAManager`. Note that analyses should no
 /// longer be registered once the `AAManager` is run.
-class AAManager : public AnalysisInfoMixin<AAManager> {
+class LLVM_ABI AAManager : public AnalysisInfoMixin<AAManager> {
 public:
   using Result = AAResults;
 
@@ -938,7 +938,7 @@ private:
 
 /// A wrapper pass to provide the legacy pass manager access to a suitably
 /// prepared AAResults object.
-class AAResultsWrapperPass : public FunctionPass {
+class LLVM_ABI AAResultsWrapperPass : public FunctionPass {
   std::unique_ptr<AAResults> AAR;
 
 public:
@@ -956,7 +956,7 @@ public:
 
 /// A wrapper pass for external alias analyses. This just squirrels away the
 /// callback used to run any analyses and register their results.
-struct ExternalAAWrapperPass : ImmutablePass {
+struct LLVM_ABI ExternalAAWrapperPass : ImmutablePass {
   using CallbackT = std::function<void(Pass &, Function &, AAResults &)>;
 
   CallbackT CB;
@@ -979,7 +979,7 @@ struct ExternalAAWrapperPass : ImmutablePass {
 /// object, and will receive a reference to the function wrapper pass, the
 /// function, and the AAResults object to populate. This should be used when
 /// setting up a custom pass pipeline to inject a hook into the AA results.
-ImmutablePass *createExternalAAWrapperPass(
+LLVM_ABI ImmutablePass *createExternalAAWrapperPass(
     std::function<void(Pass &, Function &, AAResults &)> Callback);
 
 } // end namespace llvm

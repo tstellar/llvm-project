@@ -22,7 +22,7 @@ class PDBSymbolExe;
 
 /// IPDBSession defines an interface used to provide a context for querying
 /// debug information from a debug data source (for example, a PDB).
-class IPDBSession {
+class LLVM_ABI IPDBSession {
 public:
   virtual ~IPDBSession();
 

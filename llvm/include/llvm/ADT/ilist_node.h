@@ -37,7 +37,7 @@ template <class OptionsT> class ilist_sentinel;
 /// This is a wrapper around \a ilist_node_base whose main purpose is to
 /// provide type safety: you can't insert nodes of \a ilist_node_impl into the
 /// wrong \a simple_ilist or \a iplist.
-template <class OptionsT> class ilist_node_impl : OptionsT::node_base_type {
+template <class OptionsT> class LLVM_ABI ilist_node_impl : OptionsT::node_base_type {
   using value_type = typename OptionsT::value_type;
   using node_base_type = typename OptionsT::node_base_type;
   using list_base_type = typename OptionsT::list_base_type;
@@ -146,7 +146,7 @@ public:
 ///
 /// See \a is_valid_option for steps on adding a new option.
 template <class T, class... Options>
-class ilist_node
+class LLVM_ABI ilist_node
     : public ilist_node_impl<
           typename ilist_detail::compute_node_options<T, Options...>::type> {
   static_assert(ilist_detail::check_options<Options...>::value,
@@ -161,7 +161,7 @@ namespace ilist_detail {
 /// should friend this class if they inherit privately from ilist_node.
 ///
 /// Using this class outside of the ilist implementation is unsupported.
-struct NodeAccess {
+struct LLVM_ABI NodeAccess {
 protected:
   template <class OptionsT>
   static ilist_node_impl<OptionsT> *getNodePtr(typename OptionsT::pointer N) {
@@ -208,7 +208,7 @@ protected:
   }
 };
 
-template <class OptionsT> struct SpecificNodeAccess : NodeAccess {
+template <class OptionsT> struct LLVM_ABI SpecificNodeAccess : NodeAccess {
 protected:
   using pointer = typename OptionsT::pointer;
   using const_pointer = typename OptionsT::const_pointer;
@@ -234,7 +234,7 @@ protected:
 } // end namespace ilist_detail
 
 template <class OptionsT>
-class ilist_sentinel : public ilist_node_impl<OptionsT> {
+class LLVM_ABI ilist_sentinel : public ilist_node_impl<OptionsT> {
 public:
   ilist_sentinel() {
     this->initializeSentinel();
@@ -254,7 +254,7 @@ public:
 /// Requires \c NodeTy to have \a getParent() to find the parent node, and the
 /// \c ParentTy to have \a getSublistAccess() to get a reference to the list.
 template <typename NodeTy, typename ParentTy, class... Options>
-class ilist_node_with_parent : public ilist_node<NodeTy, Options...> {
+class LLVM_ABI ilist_node_with_parent : public ilist_node<NodeTy, Options...> {
 protected:
   ilist_node_with_parent() = default;
 

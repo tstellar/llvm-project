@@ -34,7 +34,7 @@ class TargetLibraryInfo;
 /// instruction.  Changes to global variables are stored in a mapping that can
 /// be iterated over after the evaluation is complete.  Once an evaluation call
 /// fails, the evaluation object should not be reused.
-class Evaluator {
+class LLVM_ABI Evaluator {
   struct MutableAggregate;
 
   /// The evaluator represents values either as a Constant*, or as a

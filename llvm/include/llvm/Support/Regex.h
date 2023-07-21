@@ -25,7 +25,7 @@ namespace llvm {
   class StringRef;
   template<typename T> class SmallVectorImpl;
 
-  class Regex {
+  class LLVM_ABI Regex {
   public:
     enum RegexFlags : unsigned {
       NoFlags = 0,

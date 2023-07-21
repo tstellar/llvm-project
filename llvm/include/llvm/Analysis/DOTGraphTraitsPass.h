@@ -23,7 +23,7 @@ namespace llvm {
 ///
 /// This assumes that 'GraphT' is 'AnalysisT::Result *', and pass it through
 template <typename Result, typename GraphT = Result *>
-struct DefaultAnalysisGraphTraits {
+struct LLVM_ABI DefaultAnalysisGraphTraits {
   static GraphT getGraph(Result R) { return &R; }
 };
 
@@ -40,7 +40,7 @@ template <typename AnalysisT, bool IsSimple,
           typename GraphT = typename AnalysisT::Result *,
           typename AnalysisGraphTraitsT =
               DefaultAnalysisGraphTraits<typename AnalysisT::Result &, GraphT>>
-struct DOTGraphTraitsViewer
+struct LLVM_ABI DOTGraphTraitsViewer
     : PassInfoMixin<DOTGraphTraitsViewer<AnalysisT, IsSimple, GraphT,
                                          AnalysisGraphTraitsT>> {
   DOTGraphTraitsViewer(StringRef GraphName) : Name(GraphName) {}
@@ -106,7 +106,7 @@ template <typename AnalysisT, bool IsSimple,
           typename GraphT = typename AnalysisT::Result *,
           typename AnalysisGraphTraitsT =
               DefaultAnalysisGraphTraits<typename AnalysisT::Result &, GraphT>>
-struct DOTGraphTraitsPrinter
+struct LLVM_ABI DOTGraphTraitsPrinter
     : PassInfoMixin<DOTGraphTraitsPrinter<AnalysisT, IsSimple, GraphT,
                                           AnalysisGraphTraitsT>> {
   DOTGraphTraitsPrinter(StringRef GraphName) : Name(GraphName) {}
@@ -154,14 +154,14 @@ private:
 ///
 /// This assumes that 'GraphT' is 'AnalysisT *' and so just passes it through.
 template <typename AnalysisT, typename GraphT = AnalysisT *>
-struct LegacyDefaultAnalysisGraphTraits {
+struct LLVM_ABI LegacyDefaultAnalysisGraphTraits {
   static GraphT getGraph(AnalysisT *A) { return A; }
 };
 
 template <typename AnalysisT, bool IsSimple, typename GraphT = AnalysisT *,
           typename AnalysisGraphTraitsT =
               LegacyDefaultAnalysisGraphTraits<AnalysisT, GraphT>>
-class DOTGraphTraitsViewerWrapperPass : public FunctionPass {
+class LLVM_ABI DOTGraphTraitsViewerWrapperPass : public FunctionPass {
 public:
   DOTGraphTraitsViewerWrapperPass(StringRef GraphName, char &ID)
       : FunctionPass(ID), Name(GraphName) {}
@@ -200,7 +200,7 @@ private:
 template <typename AnalysisT, bool IsSimple, typename GraphT = AnalysisT *,
           typename AnalysisGraphTraitsT =
               LegacyDefaultAnalysisGraphTraits<AnalysisT, GraphT>>
-class DOTGraphTraitsPrinterWrapperPass : public FunctionPass {
+class LLVM_ABI DOTGraphTraitsPrinterWrapperPass : public FunctionPass {
 public:
   DOTGraphTraitsPrinterWrapperPass(StringRef GraphName, char &ID)
       : FunctionPass(ID), Name(GraphName) {}
@@ -239,7 +239,7 @@ private:
 template <typename AnalysisT, bool IsSimple, typename GraphT = AnalysisT *,
           typename AnalysisGraphTraitsT =
               LegacyDefaultAnalysisGraphTraits<AnalysisT, GraphT>>
-class DOTGraphTraitsModuleViewerWrapperPass : public ModulePass {
+class LLVM_ABI DOTGraphTraitsModuleViewerWrapperPass : public ModulePass {
 public:
   DOTGraphTraitsModuleViewerWrapperPass(StringRef GraphName, char &ID)
       : ModulePass(ID), Name(GraphName) {}
@@ -265,7 +265,7 @@ private:
 template <typename AnalysisT, bool IsSimple, typename GraphT = AnalysisT *,
           typename AnalysisGraphTraitsT =
               LegacyDefaultAnalysisGraphTraits<AnalysisT, GraphT>>
-class DOTGraphTraitsModulePrinterWrapperPass : public ModulePass {
+class LLVM_ABI DOTGraphTraitsModulePrinterWrapperPass : public ModulePass {
 public:
   DOTGraphTraitsModulePrinterWrapperPass(StringRef GraphName, char &ID)
       : ModulePass(ID), Name(GraphName) {}

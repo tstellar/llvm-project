@@ -22,14 +22,14 @@ namespace llvm {
   class LatencyPriorityQueue;
 
   /// Sorting functions for the Available queue.
-  struct latency_sort {
+  struct LLVM_ABI latency_sort {
     LatencyPriorityQueue *PQ;
     explicit latency_sort(LatencyPriorityQueue *pq) : PQ(pq) {}
 
     bool operator()(const SUnit* LHS, const SUnit* RHS) const;
   };
 
-  class LatencyPriorityQueue : public SchedulingPriorityQueue {
+  class LLVM_ABI LatencyPriorityQueue : public SchedulingPriorityQueue {
     // SUnits - The SUnits for the current graph.
     std::vector<SUnit> *SUnits = nullptr;
 

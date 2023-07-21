@@ -19,7 +19,7 @@ namespace llvm {
 
 class MemoryBuffer;
 
-class MemoryBufferRef {
+class LLVM_ABI MemoryBufferRef {
   StringRef Buffer;
   StringRef Identifier;
 

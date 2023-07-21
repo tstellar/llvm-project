@@ -41,7 +41,7 @@ template <typename ContextT> class GenericCycleInfo;
 template <typename ContextT> class GenericCycleInfoCompute;
 
 /// A possibly irreducible generalization of a \ref Loop.
-template <typename ContextT> class GenericCycle {
+template <typename ContextT> class LLVM_ABI GenericCycle {
 public:
   using BlockT = typename ContextT::BlockT;
   using FunctionT = typename ContextT::FunctionT;
@@ -219,7 +219,7 @@ public:
 };
 
 /// \brief Cycle information for a function.
-template <typename ContextT> class GenericCycleInfo {
+template <typename ContextT> class LLVM_ABI GenericCycleInfo {
 public:
   using BlockT = typename ContextT::BlockT;
   using CycleT = GenericCycle<ContextT>;
@@ -305,7 +305,7 @@ public:
 };
 
 /// \brief GraphTraits for iterating over a sub-tree of the CycleT tree.
-template <typename CycleRefT, typename ChildIteratorT> struct CycleGraphTraits {
+template <typename CycleRefT, typename ChildIteratorT> struct LLVM_ABI CycleGraphTraits {
   using NodeRef = CycleRefT;
 
   using nodes_iterator = ChildIteratorT;
@@ -340,11 +340,11 @@ template <typename CycleRefT, typename ChildIteratorT> struct CycleGraphTraits {
 };
 
 template <typename BlockT>
-struct GraphTraits<const GenericCycle<BlockT> *>
+struct LLVM_ABI GraphTraits<const GenericCycle<BlockT> *>
     : CycleGraphTraits<const GenericCycle<BlockT> *,
                        typename GenericCycle<BlockT>::const_child_iterator> {};
 template <typename BlockT>
-struct GraphTraits<GenericCycle<BlockT> *>
+struct LLVM_ABI GraphTraits<GenericCycle<BlockT> *>
     : CycleGraphTraits<GenericCycle<BlockT> *,
                        typename GenericCycle<BlockT>::const_child_iterator> {};
 

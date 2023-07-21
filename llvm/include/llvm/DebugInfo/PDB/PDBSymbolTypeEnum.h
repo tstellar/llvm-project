@@ -21,7 +21,7 @@ namespace pdb {
 class PDBSymDumper;
 class PDBSymbolTypeBuiltin;
 
-class PDBSymbolTypeEnum : public PDBSymbol {
+class LLVM_ABI PDBSymbolTypeEnum : public PDBSymbol {
   DECLARE_PDB_SYMBOL_CONCRETE_TYPE(PDB_SymType::Enum)
 public:
   void dump(PDBSymDumper &Dumper) const override;

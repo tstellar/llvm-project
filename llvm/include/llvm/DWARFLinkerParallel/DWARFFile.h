@@ -23,7 +23,7 @@ namespace dwarflinker_parallel {
 /// and it's address map.
 ///
 /// May be used asynchroniously for reading.
-class DWARFFile {
+class LLVM_ABI DWARFFile {
 public:
   using UnloadCallbackTy = std::function<void(StringRef FileName)>;
 

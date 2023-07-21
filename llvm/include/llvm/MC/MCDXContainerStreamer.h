@@ -25,7 +25,7 @@ namespace llvm {
 class MCInst;
 class raw_ostream;
 
-class MCDXContainerStreamer : public MCObjectStreamer {
+class LLVM_ABI MCDXContainerStreamer : public MCObjectStreamer {
 public:
   MCDXContainerStreamer(MCContext &Context, std::unique_ptr<MCAsmBackend> TAB,
                         std::unique_ptr<MCObjectWriter> OW,

@@ -13,12 +13,12 @@
 
 namespace llvm {
 
-struct DWARFSection {
+struct LLVM_ABI DWARFSection {
   StringRef Data;
   uint64_t Address = 0;
 };
 
-struct SectionName {
+struct LLVM_ABI SectionName {
   StringRef Name;
   bool IsNameUnique;
 };

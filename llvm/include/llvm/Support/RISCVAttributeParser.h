@@ -13,7 +13,7 @@
 #include "llvm/Support/RISCVAttributes.h"
 
 namespace llvm {
-class RISCVAttributeParser : public ELFAttributeParser {
+class LLVM_ABI RISCVAttributeParser : public ELFAttributeParser {
   struct DisplayHandler {
     RISCVAttrs::AttrType attribute;
     Error (RISCVAttributeParser::*routine)(unsigned);

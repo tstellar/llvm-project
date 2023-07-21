@@ -71,7 +71,7 @@ class TargetRegisterInfo;
 // Associate each regunit with an instruction operand. Depending on the
 // direction instructions are scanned, it could be the operand that defined the
 // regunit, or the highest operand to read the regunit.
-struct LiveRegUnit {
+struct LLVM_ABI LiveRegUnit {
   unsigned RegUnit;
   unsigned Cycle = 0;
   const MachineInstr *MI = nullptr;
@@ -93,7 +93,7 @@ enum class MachineTraceStrategy {
   TS_NumStrategies
 };
 
-class MachineTraceMetrics : public MachineFunctionPass {
+class LLVM_ABI MachineTraceMetrics : public MachineFunctionPass {
   const MachineFunction *MF = nullptr;
   const TargetInstrInfo *TII = nullptr;
   const TargetRegisterInfo *TRI = nullptr;

@@ -13,7 +13,7 @@
 
 namespace llvm {
 
-struct PoisonCheckingPass : public PassInfoMixin<PoisonCheckingPass> {
+struct LLVM_ABI PoisonCheckingPass : public PassInfoMixin<PoisonCheckingPass> {
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

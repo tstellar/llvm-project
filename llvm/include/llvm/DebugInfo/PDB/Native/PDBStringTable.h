@@ -23,7 +23,7 @@ namespace pdb {
 
 struct PDBStringTableHeader;
 
-class PDBStringTable {
+class LLVM_ABI PDBStringTable {
 public:
   Error reload(BinaryStreamReader &Reader);
 

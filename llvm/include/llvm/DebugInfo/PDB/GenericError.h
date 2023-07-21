@@ -27,19 +27,19 @@ enum class pdb_error_code {
 
 namespace std {
 template <>
-struct is_error_code_enum<llvm::pdb::pdb_error_code> : std::true_type {};
+struct LLVM_ABI is_error_code_enum<llvm::pdb::pdb_error_code> : std::true_type {};
 } // namespace std
 
 namespace llvm {
 namespace pdb {
-const std::error_category &PDBErrCategory();
+LLVM_ABI const std::error_category &PDBErrCategory();
 
 inline std::error_code make_error_code(pdb_error_code E) {
   return std::error_code(static_cast<int>(E), PDBErrCategory());
 }
 
 /// Base class for errors originating when parsing raw PDB files
-class PDBError : public ErrorInfo<PDBError, StringError> {
+class LLVM_ABI PDBError : public ErrorInfo<PDBError, StringError> {
 public:
   using ErrorInfo<PDBError, StringError>::ErrorInfo; // inherit constructors
   PDBError(const Twine &S) : ErrorInfo(S, pdb_error_code::unspecified) {}

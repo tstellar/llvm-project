@@ -34,7 +34,7 @@ enum PGOViewCountsType { PGOVCT_None, PGOVCT_Graph, PGOVCT_Text };
 
 /// BlockFrequencyInfo pass uses BlockFrequencyInfoImpl implementation to
 /// estimate IR basic block frequencies.
-class BlockFrequencyInfo {
+class LLVM_ABI BlockFrequencyInfo {
   using ImplType = BlockFrequencyInfoImpl<BasicBlock>;
 
   std::unique_ptr<ImplType> BFI;
@@ -109,7 +109,7 @@ public:
 };
 
 /// Analysis pass which computes \c BlockFrequencyInfo.
-class BlockFrequencyAnalysis
+class LLVM_ABI BlockFrequencyAnalysis
     : public AnalysisInfoMixin<BlockFrequencyAnalysis> {
   friend AnalysisInfoMixin<BlockFrequencyAnalysis>;
 
@@ -124,7 +124,7 @@ public:
 };
 
 /// Printer pass for the \c BlockFrequencyInfo results.
-class BlockFrequencyPrinterPass
+class LLVM_ABI BlockFrequencyPrinterPass
     : public PassInfoMixin<BlockFrequencyPrinterPass> {
   raw_ostream &OS;
 
@@ -135,7 +135,7 @@ public:
 };
 
 /// Legacy analysis pass which computes \c BlockFrequencyInfo.
-class BlockFrequencyInfoWrapperPass : public FunctionPass {
+class LLVM_ABI BlockFrequencyInfoWrapperPass : public FunctionPass {
   BlockFrequencyInfo BFI;
 
 public:

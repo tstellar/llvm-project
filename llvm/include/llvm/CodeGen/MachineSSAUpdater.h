@@ -31,7 +31,7 @@ template<typename T> class SSAUpdaterTraits;
 /// registers defined in multiple blocks.  This is used when code duplication
 /// or another unstructured transformation wants to rewrite a set of uses of one
 /// vreg with uses of a set of vregs.
-class MachineSSAUpdater {
+class LLVM_ABI MachineSSAUpdater {
   friend class SSAUpdaterTraits<MachineSSAUpdater>;
 
 private:

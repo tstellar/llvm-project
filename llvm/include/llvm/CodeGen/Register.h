@@ -16,7 +16,7 @@ namespace llvm {
 
 /// Wrapper class representing virtual and physical registers. Should be passed
 /// by value.
-class Register {
+class LLVM_ABI Register {
   unsigned Reg;
 
 public:
@@ -147,7 +147,7 @@ public:
 };
 
 // Provide DenseMapInfo for Register
-template <> struct DenseMapInfo<Register> {
+template <> struct LLVM_ABI DenseMapInfo<Register> {
   static inline unsigned getEmptyKey() {
     return DenseMapInfo<unsigned>::getEmptyKey();
   }

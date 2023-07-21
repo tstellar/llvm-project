@@ -49,7 +49,7 @@ class ObjectLayer;
 ///
 ///   The easiest way to get hold of instances of this class is to use the
 /// getConstructors/getDestructors functions.
-class CtorDtorIterator {
+class LLVM_ABI CtorDtorIterator {
 public:
   /// Accessor for an element of the global_ctors/global_dtors array.
   ///
@@ -91,15 +91,15 @@ private:
 
 /// Create an iterator range over the entries of the llvm.global_ctors
 ///        array.
-iterator_range<CtorDtorIterator> getConstructors(const Module &M);
+LLVM_ABI iterator_range<CtorDtorIterator> getConstructors(const Module &M);
 
 /// Create an iterator range over the entries of the llvm.global_ctors
 ///        array.
-iterator_range<CtorDtorIterator> getDestructors(const Module &M);
+LLVM_ABI iterator_range<CtorDtorIterator> getDestructors(const Module &M);
 
 /// This iterator provides a convenient way to iterate over GlobalValues that
 /// have initialization effects.
-class StaticInitGVIterator {
+class LLVM_ABI StaticInitGVIterator {
 public:
   StaticInitGVIterator() = default;
 
@@ -144,7 +144,7 @@ inline iterator_range<StaticInitGVIterator> getStaticInitGVs(Module &M) {
   return make_range(StaticInitGVIterator(M), StaticInitGVIterator());
 }
 
-class CtorDtorRunner {
+class LLVM_ABI CtorDtorRunner {
 public:
   CtorDtorRunner(JITDylib &JD) : JD(JD) {}
   void add(iterator_range<CtorDtorIterator> CtorDtors);
@@ -173,7 +173,7 @@ private:
 /// the client determines that destructors should be run (generally at JIT
 /// teardown or after a return from main), the runDestructors method should be
 /// called.
-class LocalCXXRuntimeOverridesBase {
+class LLVM_ABI LocalCXXRuntimeOverridesBase {
 public:
   /// Run any destructors recorded by the overriden __cxa_atexit function
   /// (CXAAtExitOverride).
@@ -188,13 +188,13 @@ protected:
                                void *DSOHandle);
 };
 
-class LocalCXXRuntimeOverrides : public LocalCXXRuntimeOverridesBase {
+class LLVM_ABI LocalCXXRuntimeOverrides : public LocalCXXRuntimeOverridesBase {
 public:
   Error enable(JITDylib &JD, MangleAndInterner &Mangler);
 };
 
 /// An interface for Itanium __cxa_atexit interposer implementations.
-class ItaniumCXAAtExitSupport {
+class LLVM_ABI ItaniumCXAAtExitSupport {
 public:
   struct AtExitRecord {
     void (*F)(void *);
@@ -214,7 +214,7 @@ private:
 /// If an instance of this class is attached to a JITDylib as a fallback
 /// definition generator, then any symbol found in the given DynamicLibrary that
 /// passes the 'Allow' predicate will be added to the JITDylib.
-class DynamicLibrarySearchGenerator : public DefinitionGenerator {
+class LLVM_ABI DynamicLibrarySearchGenerator : public DefinitionGenerator {
 public:
   using SymbolPredicate = std::function<bool(const SymbolStringPtr &)>;
 
@@ -257,7 +257,7 @@ private:
 /// If an instance of this class is attached to a JITDylib as a fallback
 /// definition generator, then any symbol found in the archive will result in
 /// the containing object being added to the JITDylib.
-class StaticLibraryDefinitionGenerator : public DefinitionGenerator {
+class LLVM_ABI StaticLibraryDefinitionGenerator : public DefinitionGenerator {
 public:
   // Interface builder function for objects loaded from this archive.
   using GetObjectFileInterface =
@@ -328,7 +328,7 @@ private:
 /// definition generator, PLT stubs and dllimport __imp_ symbols will be
 /// generated for external symbols found outside the given jitdylib. Currently
 /// only supports x86_64 architecture.
-class DLLImportDefinitionGenerator : public DefinitionGenerator {
+class LLVM_ABI DLLImportDefinitionGenerator : public DefinitionGenerator {
 public:
   /// Creates a DLLImportDefinitionGenerator instance.
   static std::unique_ptr<DLLImportDefinitionGenerator>

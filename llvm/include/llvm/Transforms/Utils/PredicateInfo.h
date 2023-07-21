@@ -72,14 +72,14 @@ enum PredicateType { PT_Branch, PT_Assume, PT_Switch };
 
 /// Constraint for a predicate of the form "cmp Pred Op, OtherOp", where Op
 /// is the value the constraint applies to (the ssa.copy result).
-struct PredicateConstraint {
+struct LLVM_ABI PredicateConstraint {
   CmpInst::Predicate Predicate;
   Value *OtherOp;
 };
 
 // Base class for all predicate information we provide.
 // All of our predicate information has at least a comparison.
-class PredicateBase : public ilist_node<PredicateBase> {
+class LLVM_ABI PredicateBase : public ilist_node<PredicateBase> {
 public:
   PredicateType Type;
   // The original operand before we renamed it.
@@ -113,7 +113,7 @@ protected:
 // Provides predicate information for assumes.  Since assumes are always true,
 // we simply provide the assume instruction, so you can tell your relative
 // position to it.
-class PredicateAssume : public PredicateBase {
+class LLVM_ABI PredicateAssume : public PredicateBase {
 public:
   IntrinsicInst *AssumeInst;
   PredicateAssume(Value *Op, IntrinsicInst *AssumeInst, Value *Condition)
@@ -127,7 +127,7 @@ public:
 // Mixin class for edge predicates.  The FROM block is the block where the
 // predicate originates, and the TO block is the block where the predicate is
 // valid.
-class PredicateWithEdge : public PredicateBase {
+class LLVM_ABI PredicateWithEdge : public PredicateBase {
 public:
   BasicBlock *From;
   BasicBlock *To;
@@ -143,7 +143,7 @@ protected:
 };
 
 // Provides predicate information for branches.
-class PredicateBranch : public PredicateWithEdge {
+class LLVM_ABI PredicateBranch : public PredicateWithEdge {
 public:
   // If true, SplitBB is the true successor, otherwise it's the false successor.
   bool TrueEdge;
@@ -157,7 +157,7 @@ public:
   }
 };
 
-class PredicateSwitch : public PredicateWithEdge {
+class LLVM_ABI PredicateSwitch : public PredicateWithEdge {
 public:
   Value *CaseValue;
   // This is the switch instruction.
@@ -175,7 +175,7 @@ public:
 
 /// Encapsulates PredicateInfo, including all data associated with memory
 /// accesses.
-class PredicateInfo {
+class LLVM_ABI PredicateInfo {
 public:
   PredicateInfo(Function &, DominatorTree &, AssumptionCache &);
   ~PredicateInfo();
@@ -212,7 +212,7 @@ private:
 // This pass does eager building and then printing of PredicateInfo. It is used
 // by
 // the tests to be able to build, dump, and verify PredicateInfo.
-class PredicateInfoPrinterLegacyPass : public FunctionPass {
+class LLVM_ABI PredicateInfoPrinterLegacyPass : public FunctionPass {
 public:
   PredicateInfoPrinterLegacyPass();
 
@@ -222,7 +222,7 @@ public:
 };
 
 /// Printer pass for \c PredicateInfo.
-class PredicateInfoPrinterPass
+class LLVM_ABI PredicateInfoPrinterPass
     : public PassInfoMixin<PredicateInfoPrinterPass> {
   raw_ostream &OS;
 
@@ -232,7 +232,7 @@ public:
 };
 
 /// Verifier pass for \c PredicateInfo.
-struct PredicateInfoVerifierPass : PassInfoMixin<PredicateInfoVerifierPass> {
+struct LLVM_ABI PredicateInfoVerifierPass : PassInfoMixin<PredicateInfoVerifierPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 

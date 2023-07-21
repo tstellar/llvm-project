@@ -29,7 +29,7 @@ class BitstreamWriter;
 class Module;
 class raw_ostream;
 
-  class BitcodeWriter {
+  class LLVM_ABI BitcodeWriter {
     SmallVectorImpl<char> &Buffer;
     std::unique_ptr<BitstreamWriter> Stream;
 
@@ -126,7 +126,7 @@ class raw_ostream;
   /// Can be used to produce the same module hash for a minimized bitcode
   /// used just for the thin link as in the regular full bitcode that will
   /// be used in the backend.
-  void WriteBitcodeToFile(const Module &M, raw_ostream &Out,
+  LLVM_ABI void WriteBitcodeToFile(const Module &M, raw_ostream &Out,
                           bool ShouldPreserveUseListOrder = false,
                           const ModuleSummaryIndex *Index = nullptr,
                           bool GenerateHash = false,
@@ -139,7 +139,7 @@ class raw_ostream;
   ///
   /// ModHash is for use in ThinLTO incremental build, generated while the IR
   /// bitcode file writing.
-  void writeThinLinkBitcodeToFile(const Module &M, raw_ostream &Out,
+  LLVM_ABI void writeThinLinkBitcodeToFile(const Module &M, raw_ostream &Out,
                                   const ModuleSummaryIndex &Index,
                                   const ModuleHash &ModHash);
 
@@ -148,7 +148,7 @@ class raw_ostream;
   /// writing the combined index file for ThinLTO. When writing a subset of the
   /// index for a distributed backend, provide the \p ModuleToSummariesForIndex
   /// map.
-  void writeIndexToFile(const ModuleSummaryIndex &Index, raw_ostream &Out,
+  LLVM_ABI void writeIndexToFile(const ModuleSummaryIndex &Index, raw_ostream &Out,
                         const std::map<std::string, GVSummaryMapTy>
                             *ModuleToSummariesForIndex = nullptr);
 
@@ -161,7 +161,7 @@ class raw_ostream;
   /// If EmbedCmdline is set, the command line is also exported in
   /// the corresponding section (__LLVM,_cmdline / .llvmcmd) - even if CmdArgs
   /// were empty.
-  void embedBitcodeInModule(Module &M, MemoryBufferRef Buf, bool EmbedBitcode,
+  LLVM_ABI void embedBitcodeInModule(Module &M, MemoryBufferRef Buf, bool EmbedBitcode,
                             bool EmbedCmdline,
                             const std::vector<uint8_t> &CmdArgs);
 

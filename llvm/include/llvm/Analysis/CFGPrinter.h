@@ -32,31 +32,31 @@
 
 namespace llvm {
 template <class GraphType> struct GraphTraits;
-class CFGViewerPass : public PassInfoMixin<CFGViewerPass> {
+class LLVM_ABI CFGViewerPass : public PassInfoMixin<CFGViewerPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
   static bool isRequired() { return true; }
 };
 
-class CFGOnlyViewerPass : public PassInfoMixin<CFGOnlyViewerPass> {
+class LLVM_ABI CFGOnlyViewerPass : public PassInfoMixin<CFGOnlyViewerPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
   static bool isRequired() { return true; }
 };
 
-class CFGPrinterPass : public PassInfoMixin<CFGPrinterPass> {
+class LLVM_ABI CFGPrinterPass : public PassInfoMixin<CFGPrinterPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
   static bool isRequired() { return true; }
 };
 
-class CFGOnlyPrinterPass : public PassInfoMixin<CFGOnlyPrinterPass> {
+class LLVM_ABI CFGOnlyPrinterPass : public PassInfoMixin<CFGOnlyPrinterPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
   static bool isRequired() { return true; }
 };
 
-class DOTFuncInfo {
+class LLVM_ABI DOTFuncInfo {
 private:
   const Function *F;
   const BlockFrequencyInfo *BFI;
@@ -103,7 +103,7 @@ public:
 };
 
 template <>
-struct GraphTraits<DOTFuncInfo *> : public GraphTraits<const BasicBlock *> {
+struct LLVM_ABI GraphTraits<DOTFuncInfo *> : public GraphTraits<const BasicBlock *> {
   static NodeRef getEntryNode(DOTFuncInfo *CFGInfo) {
     return &(CFGInfo->getFunction()->getEntryBlock());
   }
@@ -186,7 +186,7 @@ std::string CompleteNodeLabelString(
 }
 
 template <>
-struct DOTGraphTraits<DOTFuncInfo *> : public DefaultDOTGraphTraits {
+struct LLVM_ABI DOTGraphTraits<DOTFuncInfo *> : public DefaultDOTGraphTraits {
 
   // Cache for is hidden property
   DenseMap<const BasicBlock *, bool> isOnDeoptOrUnreachablePath;
@@ -318,8 +318,8 @@ struct DOTGraphTraits<DOTFuncInfo *> : public DefaultDOTGraphTraits {
 
 namespace llvm {
 class FunctionPass;
-FunctionPass *createCFGPrinterLegacyPassPass();
-FunctionPass *createCFGOnlyPrinterLegacyPassPass();
+LLVM_ABI FunctionPass *createCFGPrinterLegacyPassPass();
+LLVM_ABI FunctionPass *createCFGOnlyPrinterLegacyPassPass();
 } // End llvm namespace
 
 #endif

@@ -24,7 +24,7 @@ class DominatorTree;
 class Function;
 class LoopInfo;
 
-class FunctionPropertiesInfo {
+class LLVM_ABI FunctionPropertiesInfo {
   friend class FunctionPropertiesUpdater;
   void updateForBB(const BasicBlock &BB, int64_t Direction);
   void updateAggregateStats(const Function &F, const LoopInfo &LI);
@@ -84,7 +84,7 @@ public:
 };
 
 // Analysis pass
-class FunctionPropertiesAnalysis
+class LLVM_ABI FunctionPropertiesAnalysis
     : public AnalysisInfoMixin<FunctionPropertiesAnalysis> {
 
 public:
@@ -96,7 +96,7 @@ public:
 };
 
 /// Printer pass for the FunctionPropertiesAnalysis results.
-class FunctionPropertiesPrinterPass
+class LLVM_ABI FunctionPropertiesPrinterPass
     : public PassInfoMixin<FunctionPropertiesPrinterPass> {
   raw_ostream &OS;
 
@@ -112,7 +112,7 @@ public:
 /// a few BBs of the Caller (maybe the entry BB and definitely the callsite BB)
 /// and potentially affect exception handling BBs in the case of invoke
 /// inlining.
-class FunctionPropertiesUpdater {
+class LLVM_ABI FunctionPropertiesUpdater {
 public:
   FunctionPropertiesUpdater(FunctionPropertiesInfo &FPI, CallBase &CB);
 

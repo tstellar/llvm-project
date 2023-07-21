@@ -16,7 +16,7 @@
 #include "llvm/CodeGen/GlobalISel/GISelChangeObserver.h"
 
 namespace llvm {
-class LostDebugLocObserver : public GISelChangeObserver {
+class LLVM_ABI LostDebugLocObserver : public GISelChangeObserver {
   StringRef DebugType;
   SmallSet<DebugLoc, 4> LostDebugLocs;
   SmallPtrSet<MachineInstr *, 4> PotentialMIsForDebugLocs;

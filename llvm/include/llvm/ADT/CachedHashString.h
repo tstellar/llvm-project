@@ -26,7 +26,7 @@
 namespace llvm {
 
 /// A container which contains a StringRef plus a precomputed hash.
-class CachedHashStringRef {
+class LLVM_ABI CachedHashStringRef {
   const char *P;
   uint32_t Size;
   uint32_t Hash;
@@ -47,7 +47,7 @@ public:
   uint32_t hash() const { return Hash; }
 };
 
-template <> struct DenseMapInfo<CachedHashStringRef> {
+template <> struct LLVM_ABI DenseMapInfo<CachedHashStringRef> {
   static CachedHashStringRef getEmptyKey() {
     return CachedHashStringRef(DenseMapInfo<StringRef>::getEmptyKey(), 0);
   }
@@ -69,7 +69,7 @@ template <> struct DenseMapInfo<CachedHashStringRef> {
 /// A container which contains a string, which it owns, plus a precomputed hash.
 ///
 /// We do not null-terminate the string.
-class CachedHashString {
+class LLVM_ABI CachedHashString {
   friend struct DenseMapInfo<CachedHashString>;
 
   char *P;
@@ -150,7 +150,7 @@ public:
   }
 };
 
-template <> struct DenseMapInfo<CachedHashString> {
+template <> struct LLVM_ABI DenseMapInfo<CachedHashString> {
   static CachedHashString getEmptyKey() {
     return CachedHashString(CachedHashString::ConstructEmptyOrTombstoneTy(),
                             CachedHashString::getEmptyKeyPtr());

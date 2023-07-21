@@ -15,7 +15,7 @@
 namespace llvm {
 namespace codeview {
 
-class TypeVisitorCallbacks {
+class LLVM_ABI TypeVisitorCallbacks {
 public:
   virtual ~TypeVisitorCallbacks() = default;
 

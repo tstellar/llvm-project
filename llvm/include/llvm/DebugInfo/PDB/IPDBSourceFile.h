@@ -20,7 +20,7 @@ namespace pdb {
 
 /// IPDBSourceFile defines an interface used to represent source files whose
 /// information are stored in the PDB.
-class IPDBSourceFile {
+class LLVM_ABI IPDBSourceFile {
 public:
   virtual ~IPDBSourceFile();
 

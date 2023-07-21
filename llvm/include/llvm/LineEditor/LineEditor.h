@@ -19,7 +19,7 @@
 
 namespace llvm {
 
-class LineEditor {
+class LLVM_ABI LineEditor {
 public:
   /// Create a LineEditor object.
   ///

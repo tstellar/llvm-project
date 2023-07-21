@@ -24,7 +24,7 @@ namespace llvm {
 /// allocation.
 template <uintptr_t N, typename PointerArgT,
           typename TraitsArgT = PointerLikeTypeTraits<PointerArgT>>
-struct PointerSumTypeMember {
+struct LLVM_ABI PointerSumTypeMember {
   enum { Tag = N };
   using PointerT = PointerArgT;
   using TraitsT = TraitsArgT;
@@ -67,7 +67,7 @@ template <typename TagT, typename... MemberTs> struct PointerSumTypeHelper;
 ///
 /// There is no support for constructing or accessing with a dynamic tag as
 /// that would fundamentally violate the type safety provided by the sum type.
-template <typename TagT, typename... MemberTs> class PointerSumType {
+template <typename TagT, typename... MemberTs> class LLVM_ABI PointerSumType {
   using HelperT = detail::PointerSumTypeHelper<TagT, MemberTs...>;
 
   // We keep both the raw value and the min tag value's pointer in a union. When
@@ -203,7 +203,7 @@ namespace detail {
 /// compile-time lookup of the member from a particular tag value, along with
 /// useful constants and compile time checking infrastructure..
 template <typename TagT, typename... MemberTs>
-struct PointerSumTypeHelper : MemberTs... {
+struct LLVM_ABI PointerSumTypeHelper : MemberTs... {
   // First we use a trick to allow quickly looking up information about
   // a particular member of the sum type. This works because we arranged to
   // have this type derive from all of the member type templates. We can select
@@ -263,7 +263,7 @@ struct PointerSumTypeHelper : MemberTs... {
 
 // Teach DenseMap how to use PointerSumTypes as keys.
 template <typename TagT, typename... MemberTs>
-struct DenseMapInfo<PointerSumType<TagT, MemberTs...>> {
+struct LLVM_ABI DenseMapInfo<PointerSumType<TagT, MemberTs...>> {
   using SumType = PointerSumType<TagT, MemberTs...>;
   using HelperT = detail::PointerSumTypeHelper<TagT, MemberTs...>;
   enum { SomeTag = HelperT::MinTag };

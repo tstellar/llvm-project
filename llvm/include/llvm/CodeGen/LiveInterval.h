@@ -50,7 +50,7 @@ namespace llvm {
   /// This class holds information about a machine level values, including
   /// definition and use points.
   ///
-  class VNInfo {
+  class LLVM_ABI VNInfo {
   public:
     using Allocator = BumpPtrAllocator;
 
@@ -87,7 +87,7 @@ namespace llvm {
   /// Result of a LiveRange query. This class hides the implementation details
   /// of live ranges, and it should be used as the primary interface for
   /// examining live ranges around instructions.
-  class LiveQueryResult {
+  class LLVM_ABI LiveQueryResult {
     VNInfo *const EarlyVal;
     VNInfo *const LateVal;
     const SlotIndex EndPoint;
@@ -154,7 +154,7 @@ namespace llvm {
   /// The Segments are organized in a static single assignment form: At places
   /// where a new value is defined or different values reach a CFG join a new
   /// segment with a new value number is used.
-  class LiveRange {
+  class LLVM_ABI LiveRange {
   public:
     /// This represents a simple continuous liveness interval for a value.
     /// The start point is inclusive, the end point exclusive. These intervals
@@ -683,7 +683,7 @@ namespace llvm {
 
   /// LiveInterval - This class represents the liveness of a register,
   /// or stack slot.
-  class LiveInterval : public LiveRange {
+  class LLVM_ABI LiveInterval : public LiveRange {
   public:
     using super = LiveRange;
 
@@ -913,7 +913,7 @@ namespace llvm {
     return OS;
   }
 
-  raw_ostream &operator<<(raw_ostream &OS, const LiveRange::Segment &S);
+  LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const LiveRange::Segment &S);
 
   inline bool operator<(SlotIndex V, const LiveRange::Segment &S) {
     return V < S.start;
@@ -931,7 +931,7 @@ namespace llvm {
   /// many segments in order.
   ///
   /// The LiveRange will be in an invalid state until flush() is called.
-  class LiveRangeUpdater {
+  class LLVM_ABI LiveRangeUpdater {
     LiveRange *LR;
     SlotIndex LastStart;
     LiveRange::iterator WriteI;
@@ -995,7 +995,7 @@ namespace llvm {
   ///     ConEQ.Distribute(LIS);
   /// }
 
-  class ConnectedVNInfoEqClasses {
+  class LLVM_ABI ConnectedVNInfoEqClasses {
     LiveIntervals &LIS;
     IntEqClasses EqClass;
 

@@ -44,7 +44,7 @@ namespace llvm {
 /// You can specialize this template for your own custom value types to avoid
 /// having to specify a second template argument to VarStreamArray (documented
 /// below).
-template <typename T> struct VarStreamArrayExtractor {
+template <typename T> struct LLVM_ABI VarStreamArrayExtractor {
   // Method intentionally deleted.  You must provide an explicit specialization
   // with the following method implemented.
   Error operator()(BinaryStreamRef Stream, uint32_t &Len,
@@ -89,7 +89,7 @@ template <typename ValueType, typename Extractor> class VarStreamArrayIterator;
 
 template <typename ValueType,
           typename Extractor = VarStreamArrayExtractor<ValueType>>
-class VarStreamArray {
+class LLVM_ABI VarStreamArray {
   friend class VarStreamArrayIterator<ValueType, Extractor>;
 
 public:
@@ -153,7 +153,7 @@ private:
 };
 
 template <typename ValueType, typename Extractor>
-class VarStreamArrayIterator
+class LLVM_ABI VarStreamArrayIterator
     : public iterator_facade_base<VarStreamArrayIterator<ValueType, Extractor>,
                                   std::forward_iterator_tag, const ValueType> {
   typedef VarStreamArrayIterator<ValueType, Extractor> IterType;
@@ -256,7 +256,7 @@ template <typename T> class FixedStreamArrayIterator;
 /// cost associated with building or copying a FixedStreamArray, as the
 /// memory for each element is not read from the backing stream until that
 /// element is iterated.
-template <typename T> class FixedStreamArray {
+template <typename T> class LLVM_ABI FixedStreamArray {
   friend class FixedStreamArrayIterator<T>;
 
 public:
@@ -317,7 +317,7 @@ private:
 };
 
 template <typename T>
-class FixedStreamArrayIterator
+class LLVM_ABI FixedStreamArrayIterator
     : public iterator_facade_base<FixedStreamArrayIterator<T>,
                                   std::random_access_iterator_tag, const T> {
 

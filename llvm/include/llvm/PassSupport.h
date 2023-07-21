@@ -106,7 +106,7 @@ Pass *callDefaultCtor() {
 ///
 /// This statement will cause your pass to be created by calling the default
 /// constructor exposed by the pass.
-template <typename passName> struct RegisterPass : public PassInfo {
+template <typename passName> struct LLVM_ABI RegisterPass : public PassInfo {
   // Register Pass using default constructor...
   RegisterPass(StringRef PassArg, StringRef Name, bool CFGOnly = false,
                bool is_analysis = false)
@@ -135,14 +135,14 @@ template <typename passName> struct RegisterPass : public PassInfo {
 /// The actual interface may also be registered as well (by not specifying the
 /// second template argument).  The interface should be registered to associate
 /// a nice name with the interface.
-class RegisterAGBase : public PassInfo {
+class LLVM_ABI RegisterAGBase : public PassInfo {
 public:
   RegisterAGBase(StringRef Name, const void *InterfaceID,
                  const void *PassID = nullptr, bool isDefault = false);
 };
 
 template <typename Interface, bool Default = false>
-struct RegisterAnalysisGroup : public RegisterAGBase {
+struct LLVM_ABI RegisterAnalysisGroup : public RegisterAGBase {
   explicit RegisterAnalysisGroup(PassInfo &RPB)
       : RegisterAGBase(RPB.getPassName(), &Interface::ID, RPB.getTypeInfo(),
                        Default) {}
@@ -212,7 +212,7 @@ struct RegisterAnalysisGroup : public RegisterAGBase {
 /// at runtime (which can be because of the RegisterPass constructors being run
 /// as the program starts up, or may be because a shared object just got
 /// loaded).
-struct PassRegistrationListener {
+struct LLVM_ABI PassRegistrationListener {
   PassRegistrationListener() = default;
   virtual ~PassRegistrationListener() = default;
 

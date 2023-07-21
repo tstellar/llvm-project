@@ -23,7 +23,7 @@
 namespace llvm {
 namespace PBQP {
 
-  class GraphBase {
+  class LLVM_ABI GraphBase {
   public:
     using NodeId = unsigned;
     using EdgeId = unsigned;
@@ -43,7 +43,7 @@ namespace PBQP {
   /// Instances of this class describe PBQP problems.
   ///
   template <typename SolverT>
-  class Graph : public GraphBase {
+  class LLVM_ABI Graph : public GraphBase {
   private:
     using CostAllocator = typename SolverT::CostAllocator;
 

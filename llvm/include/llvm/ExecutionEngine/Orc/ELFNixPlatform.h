@@ -26,12 +26,12 @@
 namespace llvm {
 namespace orc {
 
-struct ELFPerObjectSectionsToRegister {
+struct LLVM_ABI ELFPerObjectSectionsToRegister {
   ExecutorAddrRange EHFrameSection;
   ExecutorAddrRange ThreadDataSection;
 };
 
-struct ELFNixJITDylibInitializers {
+struct LLVM_ABI ELFNixJITDylibInitializers {
   using SectionList = std::vector<ExecutorAddrRange>;
 
   ELFNixJITDylibInitializers(std::string Name, ExecutorAddr DSOHandleAddress)
@@ -43,7 +43,7 @@ struct ELFNixJITDylibInitializers {
   StringMap<SectionList> InitSections;
 };
 
-class ELFNixJITDylibDeinitializers {};
+class LLVM_ABI ELFNixJITDylibDeinitializers {};
 
 using ELFNixJITDylibInitializerSequence =
     std::vector<ELFNixJITDylibInitializers>;
@@ -52,7 +52,7 @@ using ELFNixJITDylibDeinitializerSequence =
     std::vector<ELFNixJITDylibDeinitializers>;
 
 /// Mediates between ELFNix initialization and ExecutionSession state.
-class ELFNixPlatform : public Platform {
+class LLVM_ABI ELFNixPlatform : public Platform {
 public:
   /// Try to create a ELFNixPlatform instance, adding the ORC runtime to the
   /// given JITDylib.
@@ -251,7 +251,7 @@ using SPSELFPerObjectSectionsToRegister =
     SPSTuple<SPSExecutorAddrRange, SPSExecutorAddrRange>;
 
 template <>
-class SPSSerializationTraits<SPSELFPerObjectSectionsToRegister,
+class LLVM_ABI SPSSerializationTraits<SPSELFPerObjectSectionsToRegister,
                              ELFPerObjectSectionsToRegister> {
 
 public:
@@ -284,7 +284,7 @@ using SPSELFNixJITDylibInitializerSequence =
 
 /// Serialization traits for ELFNixJITDylibInitializers.
 template <>
-class SPSSerializationTraits<SPSELFNixJITDylibInitializers,
+class LLVM_ABI SPSSerializationTraits<SPSELFNixJITDylibInitializers,
                              ELFNixJITDylibInitializers> {
 public:
   static size_t size(const ELFNixJITDylibInitializers &MOJDIs) {
@@ -311,7 +311,7 @@ using SPSELFJITDylibDeinitializerSequence =
     SPSSequence<SPSELFJITDylibDeinitializers>;
 
 template <>
-class SPSSerializationTraits<SPSELFJITDylibDeinitializers,
+class LLVM_ABI SPSSerializationTraits<SPSELFJITDylibDeinitializers,
                              ELFNixJITDylibDeinitializers> {
 public:
   static size_t size(const ELFNixJITDylibDeinitializers &MOJDDs) { return 0; }

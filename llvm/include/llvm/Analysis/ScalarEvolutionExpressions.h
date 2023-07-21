@@ -58,7 +58,7 @@ enum SCEVTypes : unsigned short {
 };
 
 /// This class represents a constant integer value.
-class SCEVConstant : public SCEV {
+class LLVM_ABI SCEVConstant : public SCEV {
   friend class ScalarEvolution;
 
   ConstantInt *V;
@@ -78,7 +78,7 @@ public:
 
 /// This class represents the value of vscale, as used when defining the length
 /// of a scalable vector or returned by the llvm.vscale() intrinsic.
-class SCEVVScale : public SCEV {
+class LLVM_ABI SCEVVScale : public SCEV {
   friend class ScalarEvolution;
 
   SCEVVScale(const FoldingSetNodeIDRef ID, Type *ty)
@@ -101,7 +101,7 @@ inline unsigned short computeExpressionSize(ArrayRef<const SCEV *> Args) {
 }
 
 /// This is the base class for unary cast operator classes.
-class SCEVCastExpr : public SCEV {
+class LLVM_ABI SCEVCastExpr : public SCEV {
 protected:
   const SCEV *Op;
   Type *Ty;
@@ -128,7 +128,7 @@ public:
 
 /// This class represents a cast from a pointer to a pointer-sized integer
 /// value.
-class SCEVPtrToIntExpr : public SCEVCastExpr {
+class LLVM_ABI SCEVPtrToIntExpr : public SCEVCastExpr {
   friend class ScalarEvolution;
 
   SCEVPtrToIntExpr(const FoldingSetNodeIDRef ID, const SCEV *Op, Type *ITy);
@@ -139,7 +139,7 @@ public:
 };
 
 /// This is the base class for unary integral cast operator classes.
-class SCEVIntegralCastExpr : public SCEVCastExpr {
+class LLVM_ABI SCEVIntegralCastExpr : public SCEVCastExpr {
 protected:
   SCEVIntegralCastExpr(const FoldingSetNodeIDRef ID, SCEVTypes SCEVTy,
                        const SCEV *op, Type *ty);
@@ -154,7 +154,7 @@ public:
 
 /// This class represents a truncation of an integer value to a
 /// smaller integer value.
-class SCEVTruncateExpr : public SCEVIntegralCastExpr {
+class LLVM_ABI SCEVTruncateExpr : public SCEVIntegralCastExpr {
   friend class ScalarEvolution;
 
   SCEVTruncateExpr(const FoldingSetNodeIDRef ID, const SCEV *op, Type *ty);
@@ -166,7 +166,7 @@ public:
 
 /// This class represents a zero extension of a small integer value
 /// to a larger integer value.
-class SCEVZeroExtendExpr : public SCEVIntegralCastExpr {
+class LLVM_ABI SCEVZeroExtendExpr : public SCEVIntegralCastExpr {
   friend class ScalarEvolution;
 
   SCEVZeroExtendExpr(const FoldingSetNodeIDRef ID, const SCEV *op, Type *ty);
@@ -180,7 +180,7 @@ public:
 
 /// This class represents a sign extension of a small integer value
 /// to a larger integer value.
-class SCEVSignExtendExpr : public SCEVIntegralCastExpr {
+class LLVM_ABI SCEVSignExtendExpr : public SCEVIntegralCastExpr {
   friend class ScalarEvolution;
 
   SCEVSignExtendExpr(const FoldingSetNodeIDRef ID, const SCEV *op, Type *ty);
@@ -194,7 +194,7 @@ public:
 
 /// This node is a base class providing common functionality for
 /// n'ary operators.
-class SCEVNAryExpr : public SCEV {
+class LLVM_ABI SCEVNAryExpr : public SCEV {
 protected:
   // Since SCEVs are immutable, ScalarEvolution allocates operand
   // arrays with its SCEVAllocator, so this class just needs a simple
@@ -245,7 +245,7 @@ public:
 };
 
 /// This node is the base class for n'ary commutative operators.
-class SCEVCommutativeExpr : public SCEVNAryExpr {
+class LLVM_ABI SCEVCommutativeExpr : public SCEVNAryExpr {
 protected:
   SCEVCommutativeExpr(const FoldingSetNodeIDRef ID, enum SCEVTypes T,
                       const SCEV *const *O, size_t N)
@@ -264,7 +264,7 @@ public:
 };
 
 /// This node represents an addition of some number of SCEVs.
-class SCEVAddExpr : public SCEVCommutativeExpr {
+class LLVM_ABI SCEVAddExpr : public SCEVCommutativeExpr {
   friend class ScalarEvolution;
 
   Type *Ty;
@@ -288,7 +288,7 @@ public:
 };
 
 /// This node represents multiplication of some number of SCEVs.
-class SCEVMulExpr : public SCEVCommutativeExpr {
+class LLVM_ABI SCEVMulExpr : public SCEVCommutativeExpr {
   friend class ScalarEvolution;
 
   SCEVMulExpr(const FoldingSetNodeIDRef ID, const SCEV *const *O, size_t N)
@@ -302,7 +302,7 @@ public:
 };
 
 /// This class represents a binary unsigned division operation.
-class SCEVUDivExpr : public SCEV {
+class LLVM_ABI SCEVUDivExpr : public SCEV {
   friend class ScalarEvolution;
 
   std::array<const SCEV *, 2> Operands;
@@ -345,7 +345,7 @@ public:
 ///
 /// All operands of an AddRec are required to be loop invariant.
 ///
-class SCEVAddRecExpr : public SCEVNAryExpr {
+class LLVM_ABI SCEVAddRecExpr : public SCEVNAryExpr {
   friend class ScalarEvolution;
 
   const Loop *L;
@@ -422,7 +422,7 @@ public:
 };
 
 /// This node is the base class min/max selections.
-class SCEVMinMaxExpr : public SCEVCommutativeExpr {
+class LLVM_ABI SCEVMinMaxExpr : public SCEVCommutativeExpr {
   friend class ScalarEvolution;
 
   static bool isMinMaxType(enum SCEVTypes T) {
@@ -462,7 +462,7 @@ public:
 };
 
 /// This class represents a signed maximum selection.
-class SCEVSMaxExpr : public SCEVMinMaxExpr {
+class LLVM_ABI SCEVSMaxExpr : public SCEVMinMaxExpr {
   friend class ScalarEvolution;
 
   SCEVSMaxExpr(const FoldingSetNodeIDRef ID, const SCEV *const *O, size_t N)
@@ -474,7 +474,7 @@ public:
 };
 
 /// This class represents an unsigned maximum selection.
-class SCEVUMaxExpr : public SCEVMinMaxExpr {
+class LLVM_ABI SCEVUMaxExpr : public SCEVMinMaxExpr {
   friend class ScalarEvolution;
 
   SCEVUMaxExpr(const FoldingSetNodeIDRef ID, const SCEV *const *O, size_t N)
@@ -486,7 +486,7 @@ public:
 };
 
 /// This class represents a signed minimum selection.
-class SCEVSMinExpr : public SCEVMinMaxExpr {
+class LLVM_ABI SCEVSMinExpr : public SCEVMinMaxExpr {
   friend class ScalarEvolution;
 
   SCEVSMinExpr(const FoldingSetNodeIDRef ID, const SCEV *const *O, size_t N)
@@ -498,7 +498,7 @@ public:
 };
 
 /// This class represents an unsigned minimum selection.
-class SCEVUMinExpr : public SCEVMinMaxExpr {
+class LLVM_ABI SCEVUMinExpr : public SCEVMinMaxExpr {
   friend class ScalarEvolution;
 
   SCEVUMinExpr(const FoldingSetNodeIDRef ID, const SCEV *const *O, size_t N)
@@ -514,7 +514,7 @@ public:
 /// are early-returning upon reaching saturation point.
 /// I.e. given `0 umin_seq poison`, the result will be `0`,
 /// while the result of `0 umin poison` is `poison`.
-class SCEVSequentialMinMaxExpr : public SCEVNAryExpr {
+class LLVM_ABI SCEVSequentialMinMaxExpr : public SCEVNAryExpr {
   friend class ScalarEvolution;
 
   static bool isSequentialMinMaxType(enum SCEVTypes T) {
@@ -557,7 +557,7 @@ public:
 };
 
 /// This class represents a sequential/in-order unsigned minimum selection.
-class SCEVSequentialUMinExpr : public SCEVSequentialMinMaxExpr {
+class LLVM_ABI SCEVSequentialUMinExpr : public SCEVSequentialMinMaxExpr {
   friend class ScalarEvolution;
 
   SCEVSequentialUMinExpr(const FoldingSetNodeIDRef ID, const SCEV *const *O,
@@ -574,7 +574,7 @@ public:
 /// This means that we are dealing with an entirely unknown SCEV
 /// value, and only represent it as its LLVM Value.  This is the
 /// "bottom" value for the analysis.
-class SCEVUnknown final : public SCEV, private CallbackVH {
+class LLVM_ABI SCEVUnknown final : public SCEV, private CallbackVH {
   friend class ScalarEvolution;
 
   /// The parent ScalarEvolution value. This is used to update the
@@ -605,7 +605,7 @@ public:
 
 /// This class defines a simple visitor class that may be used for
 /// various SCEV analysis purposes.
-template <typename SC, typename RetVal = void> struct SCEVVisitor {
+template <typename SC, typename RetVal = void> struct LLVM_ABI SCEVVisitor {
   RetVal visit(const SCEV *S) {
     switch (S->getSCEVType()) {
     case scConstant:
@@ -659,7 +659,7 @@ template <typename SC, typename RetVal = void> struct SCEVVisitor {
 ///   bool follow(const SCEV *S);
 ///   // return true to terminate the search.
 ///   bool isDone();
-template <typename SV> class SCEVTraversal {
+template <typename SV> class LLVM_ABI SCEVTraversal {
   SV &Visitor;
   SmallVector<const SCEV *, 8> Worklist;
   SmallPtrSet<const SCEV *, 8> Visited;
@@ -718,7 +718,7 @@ template <typename SV> void visitAll(const SCEV *Root, SV &Visitor) {
 /// Return true if any node in \p Root satisfies the predicate \p Pred.
 template <typename PredTy>
 bool SCEVExprContains(const SCEV *Root, PredTy Pred) {
-  struct FindClosure {
+  struct LLVM_ABI FindClosure {
     bool Found = false;
     PredTy Pred;
 
@@ -744,7 +744,7 @@ bool SCEVExprContains(const SCEV *Root, PredTy Pred) {
 /// The result from each visit is cached, so it will return the same
 /// SCEV for the same input.
 template <typename SC>
-class SCEVRewriteVisitor : public SCEVVisitor<SC, const SCEV *> {
+class LLVM_ABI SCEVRewriteVisitor : public SCEVVisitor<SC, const SCEV *> {
 protected:
   ScalarEvolution &SE;
   // Memoize the result of each visit so that we only compute once for
@@ -900,7 +900,7 @@ using ValueToSCEVMapTy = DenseMap<const Value *, const SCEV *>;
 
 /// The SCEVParameterRewriter takes a scalar evolution expression and updates
 /// the SCEVUnknown components following the Map (Value -> SCEV).
-class SCEVParameterRewriter : public SCEVRewriteVisitor<SCEVParameterRewriter> {
+class LLVM_ABI SCEVParameterRewriter : public SCEVRewriteVisitor<SCEVParameterRewriter> {
 public:
   static const SCEV *rewrite(const SCEV *Scev, ScalarEvolution &SE,
                              ValueToSCEVMapTy &Map) {
@@ -926,7 +926,7 @@ using LoopToScevMapT = DenseMap<const Loop *, const SCEV *>;
 
 /// The SCEVLoopAddRecRewriter takes a scalar evolution expression and applies
 /// the Map (Loop -> SCEV) to all AddRecExprs.
-class SCEVLoopAddRecRewriter
+class LLVM_ABI SCEVLoopAddRecRewriter
     : public SCEVRewriteVisitor<SCEVLoopAddRecRewriter> {
 public:
   SCEVLoopAddRecRewriter(ScalarEvolution &SE, LoopToScevMapT &M)

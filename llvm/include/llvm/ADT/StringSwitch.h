@@ -40,8 +40,7 @@ namespace llvm {
 ///   .Cases("violet", "purple", Violet)
 ///   .Default(UnknownColor);
 /// \endcode
-template<typename T, typename R = T>
-class StringSwitch {
+template <typename T, typename R = T> class LLVM_ABI StringSwitch {
   /// The string we are matching.
   const StringRef Str;
 

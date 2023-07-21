@@ -21,7 +21,7 @@
 
 namespace llvm {
 
-class EdgeBundles : public MachineFunctionPass {
+class LLVM_ABI EdgeBundles : public MachineFunctionPass {
   const MachineFunction *MF = nullptr;
 
   /// EC - Each edge bundle is an equivalence class. The keys are:

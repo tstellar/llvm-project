@@ -23,7 +23,7 @@ class DataExtractor;
 class DWARFUnit;
 class raw_ostream;
 
-class DWARFAbbreviationDeclaration {
+class LLVM_ABI DWARFAbbreviationDeclaration {
 public:
   enum class ExtractState { Complete, MoreItems };
   struct AttributeSpec {

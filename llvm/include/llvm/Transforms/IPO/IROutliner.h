@@ -60,7 +60,7 @@ class OptimizationRemarkEmitter;
 /// sequence of instructions. This includes what values need to be hoisted to
 /// arguments from the extracted function, inputs and outputs to the region, and
 /// mapping from the extracted function arguments to overall function arguments.
-struct OutlinableRegion {
+struct LLVM_ABI OutlinableRegion {
   /// Describes the region of code.
   IRSimilarityCandidate *Candidate = nullptr;
 
@@ -196,7 +196,7 @@ struct OutlinableRegion {
 /// to identify the similar regions of code, and then extracts the similar
 /// sections into a single function.  See the above for an example as to
 /// how code is extracted and consolidated into a single function.
-class IROutliner {
+class LLVM_ABI IROutliner {
 public:
   IROutliner(function_ref<TargetTransformInfo &(Function &)> GTTI,
              function_ref<IRSimilarityIdentifier &(Module &)> GIRSI,
@@ -441,7 +441,7 @@ private:
 };
 
 /// Pass to outline similar regions.
-class IROutlinerPass : public PassInfoMixin<IROutlinerPass> {
+class LLVM_ABI IROutlinerPass : public PassInfoMixin<IROutlinerPass> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
 };

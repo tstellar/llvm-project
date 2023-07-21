@@ -20,7 +20,7 @@ namespace llvm {
 
 class MCSymbol;
 
-class MCSectionDXContainer final : public MCSection {
+class LLVM_ABI MCSectionDXContainer final : public MCSection {
   friend class MCContext;
 
   MCSectionDXContainer(StringRef Name, SectionKind K, MCSymbol *Begin)

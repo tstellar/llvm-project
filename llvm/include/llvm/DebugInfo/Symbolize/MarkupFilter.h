@@ -29,7 +29,7 @@ class LLVMSymbolizer;
 
 /// Filter to convert parsed log symbolizer markup elements into human-readable
 /// text.
-class MarkupFilter {
+class LLVM_ABI MarkupFilter {
 public:
   MarkupFilter(raw_ostream &OS, LLVMSymbolizer &Symbolizer,
                std::optional<bool> ColorsEnabled = std::nullopt);

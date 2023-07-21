@@ -21,7 +21,7 @@ class Twine;
 /// Generic interface for extending the MCAsmParser,
 /// which is implemented by target and object file assembly parser
 /// implementations.
-class MCAsmParserExtension {
+class LLVM_ABI MCAsmParserExtension {
   MCAsmParser *Parser = nullptr;
 
 protected:

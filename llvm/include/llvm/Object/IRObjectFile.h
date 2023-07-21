@@ -24,7 +24,7 @@ class Module;
 namespace object {
 class ObjectFile;
 
-class IRObjectFile : public SymbolicFile {
+class LLVM_ABI IRObjectFile : public SymbolicFile {
   std::vector<std::unique_ptr<Module>> Mods;
   ModuleSymbolTable SymTab;
   IRObjectFile(MemoryBufferRef Object,
@@ -73,14 +73,14 @@ public:
 
 /// The contents of a bitcode file and its irsymtab. Any underlying data
 /// for the irsymtab are owned by Symtab and Strtab.
-struct IRSymtabFile {
+struct LLVM_ABI IRSymtabFile {
   std::vector<BitcodeModule> Mods;
   SmallVector<char, 0> Symtab, Strtab;
   irsymtab::Reader TheReader;
 };
 
 /// Reads a bitcode file, creating its irsymtab if necessary.
-Expected<IRSymtabFile> readIRSymtab(MemoryBufferRef MBRef);
+LLVM_ABI Expected<IRSymtabFile> readIRSymtab(MemoryBufferRef MBRef);
 
 }
 

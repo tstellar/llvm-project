@@ -34,7 +34,7 @@ class PDBSymbol;
 class PDBSymbolCompiland;
 class DbiStream;
 
-class SymbolCache {
+class LLVM_ABI SymbolCache {
   NativeSession &Session;
   DbiStream *Dbi = nullptr;
 

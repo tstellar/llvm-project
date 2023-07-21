@@ -22,25 +22,25 @@
 namespace llvm {
 
 template <class T, bool IsReverse> struct MachineInstrBundleIteratorTraits;
-template <class T> struct MachineInstrBundleIteratorTraits<T, false> {
+template <class T> struct LLVM_ABI MachineInstrBundleIteratorTraits<T, false> {
   using list_type = simple_ilist<T, ilist_sentinel_tracking<true>>;
   using instr_iterator = typename list_type::iterator;
   using nonconst_instr_iterator = typename list_type::iterator;
   using const_instr_iterator = typename list_type::const_iterator;
 };
-template <class T> struct MachineInstrBundleIteratorTraits<T, true> {
+template <class T> struct LLVM_ABI MachineInstrBundleIteratorTraits<T, true> {
   using list_type = simple_ilist<T, ilist_sentinel_tracking<true>>;
   using instr_iterator = typename list_type::reverse_iterator;
   using nonconst_instr_iterator = typename list_type::reverse_iterator;
   using const_instr_iterator = typename list_type::const_reverse_iterator;
 };
-template <class T> struct MachineInstrBundleIteratorTraits<const T, false> {
+template <class T> struct LLVM_ABI MachineInstrBundleIteratorTraits<const T, false> {
   using list_type = simple_ilist<T, ilist_sentinel_tracking<true>>;
   using instr_iterator = typename list_type::const_iterator;
   using nonconst_instr_iterator = typename list_type::iterator;
   using const_instr_iterator = typename list_type::const_iterator;
 };
-template <class T> struct MachineInstrBundleIteratorTraits<const T, true> {
+template <class T> struct LLVM_ABI MachineInstrBundleIteratorTraits<const T, true> {
   using list_type = simple_ilist<T, ilist_sentinel_tracking<true>>;
   using instr_iterator = typename list_type::const_reverse_iterator;
   using nonconst_instr_iterator = typename list_type::reverse_iterator;
@@ -48,7 +48,7 @@ template <class T> struct MachineInstrBundleIteratorTraits<const T, true> {
 };
 
 template <bool IsReverse> struct MachineInstrBundleIteratorHelper;
-template <> struct MachineInstrBundleIteratorHelper<false> {
+template <> struct LLVM_ABI MachineInstrBundleIteratorHelper<false> {
   /// Get the beginning of the current bundle.
   template <class Iterator> static Iterator getBundleBegin(Iterator I) {
     if (!I.isEnd())
@@ -76,7 +76,7 @@ template <> struct MachineInstrBundleIteratorHelper<false> {
   }
 };
 
-template <> struct MachineInstrBundleIteratorHelper<true> {
+template <> struct LLVM_ABI MachineInstrBundleIteratorHelper<true> {
   /// Get the beginning of the current bundle.
   template <class Iterator> static Iterator getBundleBegin(Iterator I) {
     return MachineInstrBundleIteratorHelper<false>::getBundleBegin(
@@ -105,7 +105,7 @@ template <> struct MachineInstrBundleIteratorHelper<true> {
 /// MachineBasicBlock iterator that automatically skips over MIs that are
 /// inside bundles (i.e. walk top level MIs only).
 template <typename Ty, bool IsReverse = false>
-class MachineInstrBundleIterator : MachineInstrBundleIteratorHelper<IsReverse> {
+class LLVM_ABI MachineInstrBundleIterator : MachineInstrBundleIteratorHelper<IsReverse> {
   using Traits = MachineInstrBundleIteratorTraits<Ty, IsReverse>;
   using instr_iterator = typename Traits::instr_iterator;
 

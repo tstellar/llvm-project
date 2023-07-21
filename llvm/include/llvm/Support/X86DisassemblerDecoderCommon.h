@@ -454,7 +454,7 @@ enum OperandType {
 #undef ENUM_ENTRY
 
 /// The specification for how to extract and interpret one operand.
-struct OperandSpecifier {
+struct LLVM_ABI OperandSpecifier {
   uint8_t encoding;
   uint8_t type;
 };

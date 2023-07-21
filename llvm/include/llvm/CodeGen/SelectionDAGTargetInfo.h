@@ -28,7 +28,7 @@ class SelectionDAG;
 /// Targets can subclass this to parameterize the
 /// SelectionDAG lowering and instruction selection process.
 ///
-class SelectionDAGTargetInfo {
+class LLVM_ABI SelectionDAGTargetInfo {
 public:
   explicit SelectionDAGTargetInfo() = default;
   SelectionDAGTargetInfo(const SelectionDAGTargetInfo &) = delete;

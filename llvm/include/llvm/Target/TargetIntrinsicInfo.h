@@ -26,7 +26,7 @@ class Type;
 ///
 /// TargetIntrinsicInfo - Interface to description of machine instruction set
 ///
-class TargetIntrinsicInfo {
+class LLVM_ABI TargetIntrinsicInfo {
   TargetIntrinsicInfo(const TargetIntrinsicInfo &) = delete;
   void operator=(const TargetIntrinsicInfo &) = delete;
 public:

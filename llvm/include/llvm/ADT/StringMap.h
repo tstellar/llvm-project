@@ -29,7 +29,7 @@ template <typename ValueTy> class StringMapKeyIterator;
 
 /// StringMapImpl - This is the base class of StringMap that is shared among
 /// all of its instantiations.
-class StringMapImpl {
+class LLVM_ABI StringMapImpl {
 protected:
   // Array of NumBuckets pointers to entries, null pointers are holes.
   // TheTable[NumBuckets] contains a sentinel value for easy iteration. Followed
@@ -107,7 +107,7 @@ public:
 /// funky memory allocation and hashing things to make it extremely efficient,
 /// storing the string data *after* the value in the map.
 template <typename ValueTy, typename AllocatorTy = MallocAllocator>
-class LLVM_ALLOCATORHOLDER_EMPTYBASE StringMap
+class LLVM_ABI LLVM_ALLOCATORHOLDER_EMPTYBASE StringMap
     : public StringMapImpl,
       private detail::AllocatorHolder<AllocatorTy> {
   using AllocTy = detail::AllocatorHolder<AllocatorTy>;
@@ -395,7 +395,7 @@ public:
 };
 
 template <typename DerivedTy, typename ValueTy>
-class StringMapIterBase
+class LLVM_ABI StringMapIterBase
     : public iterator_facade_base<DerivedTy, std::forward_iterator_tag,
                                   ValueTy> {
 protected:
@@ -440,7 +440,7 @@ private:
 };
 
 template <typename ValueTy>
-class StringMapConstIterator
+class LLVM_ABI StringMapConstIterator
     : public StringMapIterBase<StringMapConstIterator<ValueTy>,
                                const StringMapEntry<ValueTy>> {
   using base = StringMapIterBase<StringMapConstIterator<ValueTy>,
@@ -458,7 +458,7 @@ public:
 };
 
 template <typename ValueTy>
-class StringMapIterator : public StringMapIterBase<StringMapIterator<ValueTy>,
+class LLVM_ABI StringMapIterator : public StringMapIterBase<StringMapIterator<ValueTy>,
                                                    StringMapEntry<ValueTy>> {
   using base =
       StringMapIterBase<StringMapIterator<ValueTy>, StringMapEntry<ValueTy>>;
@@ -479,7 +479,7 @@ public:
 };
 
 template <typename ValueTy>
-class StringMapKeyIterator
+class LLVM_ABI StringMapKeyIterator
     : public iterator_adaptor_base<StringMapKeyIterator<ValueTy>,
                                    StringMapConstIterator<ValueTy>,
                                    std::forward_iterator_tag, StringRef> {

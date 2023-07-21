@@ -18,7 +18,7 @@ namespace llvm {
 /// Optionally tracks whether this node is the sentinel.
 template <bool EnableSentinelTracking> class ilist_node_base;
 
-template <> class ilist_node_base<false> {
+template <> class LLVM_ABI ilist_node_base<false> {
   ilist_node_base *Prev = nullptr;
   ilist_node_base *Next = nullptr;
 
@@ -32,7 +32,7 @@ public:
   void initializeSentinel() {}
 };
 
-template <> class ilist_node_base<true> {
+template <> class LLVM_ABI ilist_node_base<true> {
   PointerIntPair<ilist_node_base *, 1> PrevAndSentinel;
   ilist_node_base *Next = nullptr;
 

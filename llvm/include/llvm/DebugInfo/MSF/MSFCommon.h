@@ -28,7 +28,7 @@ static const char Magic[] = {'M',  'i',  'c',    'r', 'o', 's',  'o',  'f',
 // The superblock is overlaid at the beginning of the file (offset 0).
 // It starts with a magic header and is followed by information which
 // describes the layout of the file system.
-struct SuperBlock {
+struct LLVM_ABI SuperBlock {
   char MagicBytes[sizeof(Magic)];
   // The file system is split into a variable number of fixed size elements.
   // These elements are referred to as blocks.  The size of a block may vary
@@ -48,7 +48,7 @@ struct SuperBlock {
   support::ulittle32_t BlockMapAddr;
 };
 
-struct MSFLayout {
+struct LLVM_ABI MSFLayout {
   MSFLayout() = default;
 
   uint32_t mainFpmBlock() const {
@@ -74,7 +74,7 @@ struct MSFLayout {
 /// from a particular MSF Stream, we fill out a stream layout structure and the
 /// reader uses it to determine which blocks in the underlying MSF file contain
 /// the data, so that it can be pieced together in the right order.
-class MSFStreamLayout {
+class LLVM_ABI MSFStreamLayout {
 public:
   uint32_t Length;
   std::vector<support::ulittle32_t> Blocks;
@@ -83,7 +83,7 @@ public:
 /// Determine the layout of the FPM stream, given the MSF layout.  An FPM
 /// stream spans 1 or more blocks, each at equally spaced intervals throughout
 /// the file.
-MSFStreamLayout getFpmStreamLayout(const MSFLayout &Msf,
+LLVM_ABI MSFStreamLayout getFpmStreamLayout(const MSFLayout &Msf,
                                    bool IncludeUnusedFpmData = false,
                                    bool AltFpm = false);
 
@@ -176,7 +176,7 @@ inline uint32_t getNumFpmIntervals(const MSFLayout &L,
                             AltFpm ? L.alternateFpmBlock() : L.mainFpmBlock());
 }
 
-Error validateSuperBlock(const SuperBlock &SB);
+LLVM_ABI Error validateSuperBlock(const SuperBlock &SB);
 
 } // end namespace msf
 } // end namespace llvm

@@ -66,7 +66,7 @@ namespace llvm {
 /// Analysis passes should have a static data member of this type and derive
 /// from the \c AnalysisInfoMixin to get a static ID method used to identify
 /// the analysis in the pass management infrastructure.
-struct alignas(8) AnalysisKey {};
+struct LLVM_ABI alignas(8) AnalysisKey {};
 
 /// A special type used to provide an address that identifies a set of related
 /// analyses.  These sets are primarily used below to mark sets of analyses as
@@ -76,7 +76,7 @@ struct alignas(8) AnalysisKey {};
 /// function by preserving the appropriate AnalysisSetKey.  An analysis that
 /// depends only on the CFG can then check if that AnalysisSetKey is preserved;
 /// if it is, the analysis knows that it itself is preserved.
-struct alignas(8) AnalysisSetKey {};
+struct LLVM_ABI alignas(8) AnalysisSetKey {};
 
 /// This templated class represents "all analyses that operate over \<a
 /// particular IR unit\>" (e.g. a Function or a Module) in instances of
@@ -87,7 +87,7 @@ struct alignas(8) AnalysisSetKey {};
 /// Note that you must provide an explicit instantiation declaration and
 /// definition for this template in order to get the correct behavior on
 /// Windows. Otherwise, the address of SetKey will not be stable.
-template <typename IRUnitT> class AllAnalysesOn {
+template <typename IRUnitT> class LLVM_ABI AllAnalysesOn {
 public:
   static AnalysisSetKey *ID() { return &SetKey; }
 
@@ -110,7 +110,7 @@ extern template class AllAnalysesOn<Function>;
 /// mutate the CFG. Mutating the condition of a branch or argument of an
 /// invoked function does not mutate the CFG, but changing the successor labels
 /// of those instructions does.
-class CFGAnalyses {
+class LLVM_ABI CFGAnalyses {
 public:
   static AnalysisSetKey *ID() { return &SetKey; }
 
@@ -149,7 +149,7 @@ private:
 ///     // The analysis has been successfully preserved ...
 ///   }
 /// ```
-class PreservedAnalyses {
+class LLVM_ABI PreservedAnalyses {
 public:
   /// Convenience factory function for the empty preserved set.
   static PreservedAnalyses none() { return PreservedAnalyses(); }
@@ -362,13 +362,13 @@ private:
 };
 
 // Forward declare the analysis manager template.
-template <typename IRUnitT, typename... ExtraArgTs> class AnalysisManager;
+template <typename IRUnitT, typename... ExtraArgTs> class LLVM_ABI AnalysisManager;
 
 /// A CRTP mix-in to automatically provide informational APIs needed for
 /// passes.
 ///
 /// This provides some boilerplate for types that are passes.
-template <typename DerivedT> struct PassInfoMixin {
+template <typename DerivedT> struct LLVM_ABI PassInfoMixin {
   /// Gets the name of the pass we are mixed into.
   static StringRef name() {
     static_assert(std::is_base_of<PassInfoMixin, DerivedT>::value,
@@ -391,7 +391,7 @@ template <typename DerivedT> struct PassInfoMixin {
 /// This provides some boilerplate for types that are analysis passes. It
 /// automatically mixes in \c PassInfoMixin.
 template <typename DerivedT>
-struct AnalysisInfoMixin : PassInfoMixin<DerivedT> {
+struct LLVM_ABI AnalysisInfoMixin : PassInfoMixin<DerivedT> {
   /// Returns an opaque, unique ID for this analysis type.
   ///
   /// This ID is a pointer type that is guaranteed to be 8-byte aligned and thus
@@ -466,7 +466,7 @@ class PassInstrumentationAnalysis;
 template <typename IRUnitT,
           typename AnalysisManagerT = AnalysisManager<IRUnitT>,
           typename... ExtraArgTs>
-class PassManager : public PassInfoMixin<
+class LLVM_ABI PassManager : public PassInfoMixin<
                         PassManager<IRUnitT, AnalysisManagerT, ExtraArgTs...>> {
 public:
   /// Construct a pass manager.
@@ -591,7 +591,7 @@ using FunctionPassManager = PassManager<Function>;
 /// internals (e.g PassInstrumentationAnalysis::ID) for use there if needed.
 /// FIXME: figure out a way to move PassInstrumentationAnalysis into its own
 /// header.
-class PassInstrumentationAnalysis
+class LLVM_ABI PassInstrumentationAnalysis
     : public AnalysisInfoMixin<PassInstrumentationAnalysis> {
   friend AnalysisInfoMixin<PassInstrumentationAnalysis>;
   static AnalysisKey Key;
@@ -617,7 +617,7 @@ public:
 ///
 /// This class can manage analyses for any IR unit where the address of the IR
 /// unit sufficies as its identity.
-template <typename IRUnitT, typename... ExtraArgTs> class AnalysisManager {
+template <typename IRUnitT, typename... ExtraArgTs> class LLVM_ABI AnalysisManager {
 public:
   class Invalidator;
 
@@ -928,7 +928,7 @@ using FunctionAnalysisManager = AnalysisManager<Function>;
 /// Note that the proxy's result is a move-only RAII object.  The validity of
 /// the analyses in the inner analysis manager is tied to its lifetime.
 template <typename AnalysisManagerT, typename IRUnitT, typename... ExtraArgTs>
-class InnerAnalysisManagerProxy
+class LLVM_ABI InnerAnalysisManagerProxy
     : public AnalysisInfoMixin<
           InnerAnalysisManagerProxy<AnalysisManagerT, IRUnitT>> {
 public:
@@ -1053,7 +1053,7 @@ extern template class InnerAnalysisManagerProxy<FunctionAnalysisManager,
 /// this is the outer analyses may be stale.  We invalidate the outer analyses
 /// only when we're done running passes over the inner IR units.
 template <typename AnalysisManagerT, typename IRUnitT, typename... ExtraArgTs>
-class OuterAnalysisManagerProxy
+class LLVM_ABI OuterAnalysisManagerProxy
     : public AnalysisInfoMixin<
           OuterAnalysisManagerProxy<AnalysisManagerT, IRUnitT, ExtraArgTs...>> {
 public:
@@ -1190,7 +1190,7 @@ using ModuleAnalysisManagerFunctionProxy =
 /// Note that although function passes can access module analyses, module
 /// analyses are not invalidated while the function passes are running, so they
 /// may be stale.  Function analyses will not be stale.
-class ModuleToFunctionPassAdaptor
+class LLVM_ABI ModuleToFunctionPassAdaptor
     : public PassInfoMixin<ModuleToFunctionPassAdaptor> {
 public:
   using PassConceptT = detail::PassConcept<Function, FunctionAnalysisManager>;
@@ -1240,7 +1240,7 @@ createModuleToFunctionPassAdaptor(FunctionPassT &&Pass,
 template <typename AnalysisT, typename IRUnitT,
           typename AnalysisManagerT = AnalysisManager<IRUnitT>,
           typename... ExtraArgTs>
-struct RequireAnalysisPass
+struct LLVM_ABI RequireAnalysisPass
     : PassInfoMixin<RequireAnalysisPass<AnalysisT, IRUnitT, AnalysisManagerT,
                                         ExtraArgTs...>> {
   /// Run this pass over some unit of IR.
@@ -1268,7 +1268,7 @@ struct RequireAnalysisPass
 /// A no-op pass template which simply forces a specific analysis result
 /// to be invalidated.
 template <typename AnalysisT>
-struct InvalidateAnalysisPass
+struct LLVM_ABI InvalidateAnalysisPass
     : PassInfoMixin<InvalidateAnalysisPass<AnalysisT>> {
   /// Run this pass over some unit of IR.
   ///
@@ -1294,7 +1294,7 @@ struct InvalidateAnalysisPass
 ///
 /// Because this preserves no analyses, any analysis passes queried after this
 /// pass runs will recompute fresh results.
-struct InvalidateAllAnalysesPass : PassInfoMixin<InvalidateAllAnalysesPass> {
+struct LLVM_ABI InvalidateAllAnalysesPass : PassInfoMixin<InvalidateAllAnalysesPass> {
   /// Run this pass over some unit of IR.
   template <typename IRUnitT, typename AnalysisManagerT, typename... ExtraArgTs>
   PreservedAnalyses run(IRUnitT &, AnalysisManagerT &, ExtraArgTs &&...) {
@@ -1307,7 +1307,7 @@ struct InvalidateAllAnalysesPass : PassInfoMixin<InvalidateAllAnalysesPass> {
 /// This can be useful when debugging or testing passes. It also serves as an
 /// example of how to extend the pass manager in ways beyond composition.
 template <typename PassT>
-class RepeatedPass : public PassInfoMixin<RepeatedPass<PassT>> {
+class LLVM_ABI RepeatedPass : public PassInfoMixin<RepeatedPass<PassT>> {
 public:
   RepeatedPass(int Count, PassT &&P)
       : Count(Count), P(std::forward<PassT>(P)) {}

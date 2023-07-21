@@ -20,7 +20,7 @@ namespace llvm {
 
 using PointerTy = void *;
 
-struct GenericValue {
+struct LLVM_ABI GenericValue {
   struct IntPair {
     unsigned int first;
     unsigned int second;

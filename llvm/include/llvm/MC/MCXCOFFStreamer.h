@@ -13,7 +13,7 @@
 
 namespace llvm {
 
-class MCXCOFFStreamer : public MCObjectStreamer {
+class LLVM_ABI MCXCOFFStreamer : public MCObjectStreamer {
 public:
   MCXCOFFStreamer(MCContext &Context, std::unique_ptr<MCAsmBackend> MAB,
                   std::unique_ptr<MCObjectWriter> OW,

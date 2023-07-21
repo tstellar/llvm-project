@@ -26,7 +26,7 @@ class DominatorTree;
 class ScalarEvolution;
 class SCEV;
 
-struct AlignmentFromAssumptionsPass
+struct LLVM_ABI AlignmentFromAssumptionsPass
     : public PassInfoMixin<AlignmentFromAssumptionsPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 

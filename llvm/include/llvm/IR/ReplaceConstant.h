@@ -24,7 +24,7 @@ class Constant;
 
 /// Replace constant expressions users of the given constants with
 /// instructions. Return whether anything was changed.
-bool convertUsersOfConstantsToInstructions(ArrayRef<Constant *> Consts);
+LLVM_ABI bool convertUsersOfConstantsToInstructions(ArrayRef<Constant *> Consts);
 
 } // end namespace llvm
 

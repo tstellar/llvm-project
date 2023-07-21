@@ -13,7 +13,7 @@
 
 namespace llvm {
 
-class MCAsmInfoXCOFF : public MCAsmInfo {
+class LLVM_ABI MCAsmInfoXCOFF : public MCAsmInfo {
   virtual void anchor();
 
 protected:

@@ -22,7 +22,7 @@ namespace llvm {
 class Module;
 
 /// Merge identical functions.
-class MergeFunctionsPass : public PassInfoMixin<MergeFunctionsPass> {
+class LLVM_ABI MergeFunctionsPass : public PassInfoMixin<MergeFunctionsPass> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
 };

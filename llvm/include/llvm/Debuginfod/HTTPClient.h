@@ -27,7 +27,7 @@ namespace llvm {
 enum class HTTPMethod { GET };
 
 /// A stateless description of an outbound HTTP request.
-struct HTTPRequest {
+struct LLVM_ABI HTTPRequest {
   SmallString<128> Url;
   SmallVector<std::string, 0> Headers;
   HTTPMethod Method = HTTPMethod::GET;
@@ -35,12 +35,12 @@ struct HTTPRequest {
   HTTPRequest(StringRef Url);
 };
 
-bool operator==(const HTTPRequest &A, const HTTPRequest &B);
+LLVM_ABI bool operator==(const HTTPRequest &A, const HTTPRequest &B);
 
 /// A handler for state updates occurring while an HTTPRequest is performed.
 /// Can trigger the client to abort the request by returning an Error from any
 /// of its methods.
-class HTTPResponseHandler {
+class LLVM_ABI HTTPResponseHandler {
 public:
   /// Processes an additional chunk of bytes of the HTTP response body.
   virtual Error handleBodyChunk(StringRef BodyChunk) = 0;
@@ -50,7 +50,7 @@ protected:
 };
 
 /// A reusable client that can perform HTTPRequests through a network socket.
-class HTTPClient {
+class LLVM_ABI HTTPClient {
 #ifdef LLVM_ENABLE_CURL
   void *Curl = nullptr;
 #endif

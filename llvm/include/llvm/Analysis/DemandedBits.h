@@ -36,7 +36,7 @@ class Instruction;
 struct KnownBits;
 class raw_ostream;
 
-class DemandedBits {
+class LLVM_ABI DemandedBits {
 public:
   DemandedBits(Function &F, AssumptionCache &AC, DominatorTree &DT) :
     F(F), AC(AC), DT(DT) {}
@@ -99,7 +99,7 @@ private:
 };
 
 /// An analysis that produces \c DemandedBits for a function.
-class DemandedBitsAnalysis : public AnalysisInfoMixin<DemandedBitsAnalysis> {
+class LLVM_ABI DemandedBitsAnalysis : public AnalysisInfoMixin<DemandedBitsAnalysis> {
   friend AnalysisInfoMixin<DemandedBitsAnalysis>;
 
   static AnalysisKey Key;
@@ -114,7 +114,7 @@ public:
 };
 
 /// Printer pass for DemandedBits
-class DemandedBitsPrinterPass : public PassInfoMixin<DemandedBitsPrinterPass> {
+class LLVM_ABI DemandedBitsPrinterPass : public PassInfoMixin<DemandedBitsPrinterPass> {
   raw_ostream &OS;
 
 public:

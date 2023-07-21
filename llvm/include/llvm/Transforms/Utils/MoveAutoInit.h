@@ -20,7 +20,7 @@
 
 namespace llvm {
 
-class MoveAutoInitPass : public PassInfoMixin<MoveAutoInitPass> {
+class LLVM_ABI MoveAutoInitPass : public PassInfoMixin<MoveAutoInitPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

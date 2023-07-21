@@ -26,7 +26,7 @@ namespace llvm {
 
 class MachObjectWriter;
 
-class MCMachObjectTargetWriter : public MCObjectTargetWriter {
+class LLVM_ABI MCMachObjectTargetWriter : public MCObjectTargetWriter {
   const unsigned Is64Bit : 1;
   const uint32_t CPUType;
 protected:
@@ -81,7 +81,7 @@ public:
   /// @}
 };
 
-class MachObjectWriter : public MCObjectWriter {
+class LLVM_ABI MachObjectWriter : public MCObjectWriter {
   /// Helper struct for containing some precomputed information on symbols.
   struct MachSymbolData {
     const MCSymbol *Symbol;
@@ -275,7 +275,7 @@ public:
 /// \param MOTW - The target specific Mach-O writer subclass.
 /// \param OS - The stream to write to.
 /// \returns The constructed object writer.
-std::unique_ptr<MCObjectWriter>
+LLVM_ABI std::unique_ptr<MCObjectWriter>
 createMachObjectWriter(std::unique_ptr<MCMachObjectTargetWriter> MOTW,
                        raw_pwrite_stream &OS, bool IsLittleEndian);
 

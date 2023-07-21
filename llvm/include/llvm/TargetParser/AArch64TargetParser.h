@@ -161,7 +161,7 @@ enum ArchExtKind : uint64_t {
 // Typically these correspond to Arm Architecture extensions, unlike
 // SubtargetFeature which may represent either an actual extension or some
 // internal LLVM property.
-struct ExtensionInfo {
+struct LLVM_ABI ExtensionInfo {
   StringRef Name;              // Human readable name, e.g. "profile".
   ArchExtKind ID;              // Corresponding to the ArchExtKind, this
                                // extensions representation in the bitfield.
@@ -268,7 +268,7 @@ inline constexpr ExtensionInfo Extensions[] = {
 enum ArchProfile { AProfile = 'A', RProfile = 'R', InvalidProfile = '?' };
 
 // Information about a specific architecture, e.g. V8.1-A
-struct ArchInfo {
+struct LLVM_ABI ArchInfo {
   VersionTuple Version;  // Architecture version, major + minor.
   ArchProfile Profile;   // Architecuture profile
   StringRef Name;        // Human readable name, e.g. "armv8.1-a"
@@ -342,7 +342,7 @@ static constexpr std::array<const ArchInfo *, 16> ArchInfos = {
 };
 
 // Details of a specific CPU.
-struct CpuInfo {
+struct LLVM_ABI CpuInfo {
   StringRef Name; // Name, as written for -mcpu.
   const ArchInfo &Arch;
   uint64_t DefaultExtensions; // Default extensions for this CPU. These will be
@@ -545,36 +545,36 @@ inline constexpr CpuInfo CpuInfos[] = {
 };
 
 // An alias for a CPU.
-struct CpuAlias {
+struct LLVM_ABI CpuAlias {
   StringRef Alias;
   StringRef Name;
 };
 
 inline constexpr CpuAlias CpuAliases[] = {{"grace", "neoverse-v2"}};
 
-bool getExtensionFeatures(uint64_t Extensions,
+LLVM_ABI bool getExtensionFeatures(uint64_t Extensions,
                           std::vector<StringRef> &Features);
 
-StringRef getArchExtFeature(StringRef ArchExt);
-StringRef resolveCPUAlias(StringRef CPU);
+LLVM_ABI StringRef getArchExtFeature(StringRef ArchExt);
+LLVM_ABI StringRef resolveCPUAlias(StringRef CPU);
 
 // Information by Name
-std::optional<ArchInfo> getArchForCpu(StringRef CPU);
+LLVM_ABI std::optional<ArchInfo> getArchForCpu(StringRef CPU);
 
 // Parser
-std::optional<ArchInfo> parseArch(StringRef Arch);
-std::optional<ExtensionInfo> parseArchExtension(StringRef Extension);
+LLVM_ABI std::optional<ArchInfo> parseArch(StringRef Arch);
+LLVM_ABI std::optional<ExtensionInfo> parseArchExtension(StringRef Extension);
 // Given the name of a CPU or alias, return the correponding CpuInfo.
-std::optional<CpuInfo> parseCpu(StringRef Name);
+LLVM_ABI std::optional<CpuInfo> parseCpu(StringRef Name);
 // Used by target parser tests
-void fillValidCPUArchList(SmallVectorImpl<StringRef> &Values);
+LLVM_ABI void fillValidCPUArchList(SmallVectorImpl<StringRef> &Values);
 
-bool isX18ReservedByDefault(const Triple &TT);
+LLVM_ABI bool isX18ReservedByDefault(const Triple &TT);
 
 // For given feature names, return a bitmask corresponding to the entries of
 // AArch64::CPUFeatures. The values in CPUFeatures are not bitmasks
 // themselves, they are sequential (0, 1, 2, 3, ...).
-uint64_t getCpuSupportsMask(ArrayRef<StringRef> FeatureStrs);
+LLVM_ABI uint64_t getCpuSupportsMask(ArrayRef<StringRef> FeatureStrs);
 
 } // namespace AArch64
 } // namespace llvm

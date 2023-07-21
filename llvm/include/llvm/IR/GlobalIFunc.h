@@ -31,7 +31,7 @@ class Module;
 // Traits class for using GlobalIFunc in symbol table in Module.
 template <typename ValueSubClass> class SymbolTableListTraits;
 
-class GlobalIFunc final : public GlobalObject, public ilist_node<GlobalIFunc> {
+class LLVM_ABI GlobalIFunc final : public GlobalObject, public ilist_node<GlobalIFunc> {
   friend class SymbolTableListTraits<GlobalIFunc>;
 
   GlobalIFunc(Type *Ty, unsigned AddressSpace, LinkageTypes Linkage,
@@ -102,7 +102,7 @@ public:
 };
 
 template <>
-struct OperandTraits<GlobalIFunc>
+struct LLVM_ABI OperandTraits<GlobalIFunc>
     : public FixedNumOperandTraits<GlobalIFunc, 1> {};
 
 DEFINE_TRANSPARENT_OPERAND_ACCESSORS(GlobalIFunc, Constant)

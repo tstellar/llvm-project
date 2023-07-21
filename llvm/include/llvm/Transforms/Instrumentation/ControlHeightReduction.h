@@ -18,7 +18,7 @@
 
 namespace llvm {
 
-class ControlHeightReductionPass :
+class LLVM_ABI ControlHeightReductionPass :
       public PassInfoMixin<ControlHeightReductionPass> {
 public:
   ControlHeightReductionPass();

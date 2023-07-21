@@ -17,7 +17,7 @@ namespace llvm {
 /// Type wrapper for integer ID for Variables. 0 is reserved.
 enum class VariableID : unsigned { Reserved = 0 };
 /// Variable location definition used by FunctionVarLocs.
-struct VarLocInfo {
+struct LLVM_ABI VarLocInfo {
   llvm::VariableID VariableID;
   DIExpression *Expr = nullptr;
   DebugLoc DL;
@@ -27,7 +27,7 @@ struct VarLocInfo {
 /// Data structure describing the variable locations in a function. Used as the
 /// result of the AssignmentTrackingAnalysis pass. Essentially read-only
 /// outside of AssignmentTrackingAnalysis where it is built.
-class FunctionVarLocs {
+class LLVM_ABI FunctionVarLocs {
   /// Maps VarLocInfo.VariableID to a DebugVariable for VarLocRecords.
   SmallVector<DebugVariable> Variables;
   /// List of variable location changes grouped by the instruction the
@@ -94,7 +94,7 @@ public:
   ///@}
 };
 
-class AssignmentTrackingAnalysis : public FunctionPass {
+class LLVM_ABI AssignmentTrackingAnalysis : public FunctionPass {
   std::unique_ptr<FunctionVarLocs> Results;
 
 public:

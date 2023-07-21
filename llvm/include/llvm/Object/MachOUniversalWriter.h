@@ -31,7 +31,7 @@ class Binary;
 class IRObjectFile;
 class MachOObjectFile;
 
-class Slice {
+class LLVM_ABI Slice {
   const Binary *B;
   uint32_t CPUType;
   uint32_t CPUSubType;
@@ -97,9 +97,9 @@ public:
   }
 };
 
-Error writeUniversalBinary(ArrayRef<Slice> Slices, StringRef OutputFileName);
+LLVM_ABI Error writeUniversalBinary(ArrayRef<Slice> Slices, StringRef OutputFileName);
 
-Error writeUniversalBinaryToStream(ArrayRef<Slice> Slices, raw_ostream &Out);
+LLVM_ABI Error writeUniversalBinaryToStream(ArrayRef<Slice> Slices, raw_ostream &Out);
 
 } // end namespace object
 

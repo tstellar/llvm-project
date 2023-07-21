@@ -23,7 +23,7 @@
 namespace llvm {
 namespace mca {
 
-class View : public HWEventListener {
+class LLVM_ABI View : public HWEventListener {
 public:
   virtual ~View() = default;
 

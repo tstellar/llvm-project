@@ -44,7 +44,7 @@ class Metadata;
 /// A wrapper class for inspecting calls to intrinsic functions.
 /// This allows the standard isa/dyncast/cast functionality to work with calls
 /// to intrinsic functions.
-class IntrinsicInst : public CallInst {
+class LLVM_ABI IntrinsicInst : public CallInst {
 public:
   IntrinsicInst() = delete;
   IntrinsicInst(const IntrinsicInst &) = delete;
@@ -136,7 +136,7 @@ static inline bool isLifetimeIntrinsic(Intrinsic::ID ID) {
 }
 
 /// This is the common base class for lifetime intrinsics.
-class LifetimeIntrinsic : public IntrinsicInst {
+class LLVM_ABI LifetimeIntrinsic : public IntrinsicInst {
 public:
   /// \name Casting methods
   /// @{
@@ -163,7 +163,7 @@ static inline bool isDbgInfoIntrinsic(Intrinsic::ID ID) {
 }
 
 /// This is the common base class for debug info intrinsics.
-class DbgInfoIntrinsic : public IntrinsicInst {
+class LLVM_ABI DbgInfoIntrinsic : public IntrinsicInst {
 public:
   /// \name Casting methods
   /// @{
@@ -179,7 +179,7 @@ public:
 // Iterator for ValueAsMetadata that internally uses direct pointer iteration
 // over either a ValueAsMetadata* or a ValueAsMetadata**, dereferencing to the
 // ValueAsMetadata .
-class location_op_iterator
+class LLVM_ABI location_op_iterator
     : public iterator_facade_base<location_op_iterator,
                                   std::bidirectional_iterator_tag, Value *> {
   PointerUnion<ValueAsMetadata *, ValueAsMetadata **> I;
@@ -225,7 +225,7 @@ public:
 /// Lightweight class that wraps the location operand metadata of a debug
 /// intrinsic. The raw location may be a ValueAsMetadata, an empty MDTuple,
 /// or a DIArgList.
-class RawLocationWrapper {
+class LLVM_ABI RawLocationWrapper {
   Metadata *RawLocation = nullptr;
 
 public:
@@ -290,7 +290,7 @@ public:
 };
 
 /// This is the common base class for debug info intrinsics for variables.
-class DbgVariableIntrinsic : public DbgInfoIntrinsic {
+class LLVM_ABI DbgVariableIntrinsic : public DbgInfoIntrinsic {
 public:
   /// Get the locations corresponding to the variable referenced by the debug
   /// info intrinsic.  Depending on the intrinsic, this could be the
@@ -421,7 +421,7 @@ protected:
 };
 
 /// This represents the llvm.dbg.declare instruction.
-class DbgDeclareInst : public DbgVariableIntrinsic {
+class LLVM_ABI DbgDeclareInst : public DbgVariableIntrinsic {
 public:
   Value *getAddress() const {
     assert(getNumVariableLocationOps() == 1 &&
@@ -441,7 +441,7 @@ public:
 };
 
 /// This represents the llvm.dbg.value instruction.
-class DbgValueInst : public DbgVariableIntrinsic {
+class LLVM_ABI DbgValueInst : public DbgVariableIntrinsic {
 public:
   // The default argument should only be used in ISel, and the default option
   // should be removed once ISel support for multiple location ops is complete.
@@ -465,7 +465,7 @@ public:
 };
 
 /// This represents the llvm.dbg.assign instruction.
-class DbgAssignIntrinsic : public DbgValueInst {
+class LLVM_ABI DbgAssignIntrinsic : public DbgValueInst {
   enum Operands {
     OpValue,
     OpVar,
@@ -516,7 +516,7 @@ public:
 };
 
 /// This represents the llvm.dbg.label instruction.
-class DbgLabelInst : public DbgInfoIntrinsic {
+class LLVM_ABI DbgLabelInst : public DbgInfoIntrinsic {
 public:
   DILabel *getLabel() const { return cast<DILabel>(getRawLabel()); }
 
@@ -536,7 +536,7 @@ public:
 };
 
 /// This is the common base class for vector predication intrinsics.
-class VPIntrinsic : public IntrinsicInst {
+class LLVM_ABI VPIntrinsic : public IntrinsicInst {
 public:
   /// \brief Declares a llvm.vp.* intrinsic in \p M that matches the parameters
   /// \p Params. Additionally, the load and gather intrinsics require
@@ -610,7 +610,7 @@ public:
 };
 
 /// This represents vector predication reduction intrinsics.
-class VPReductionIntrinsic : public VPIntrinsic {
+class LLVM_ABI VPReductionIntrinsic : public VPIntrinsic {
 public:
   static bool isVPReduction(Intrinsic::ID ID);
 
@@ -631,7 +631,7 @@ public:
   /// @}
 };
 
-class VPCastIntrinsic : public VPIntrinsic {
+class LLVM_ABI VPCastIntrinsic : public VPIntrinsic {
 public:
   static bool isVPCast(Intrinsic::ID ID);
 
@@ -646,7 +646,7 @@ public:
   /// @}
 };
 
-class VPCmpIntrinsic : public VPIntrinsic {
+class LLVM_ABI VPCmpIntrinsic : public VPIntrinsic {
 public:
   static bool isVPCmp(Intrinsic::ID ID);
 
@@ -664,7 +664,7 @@ public:
 };
 
 /// This is the common base class for constrained floating point intrinsics.
-class ConstrainedFPIntrinsic : public IntrinsicInst {
+class LLVM_ABI ConstrainedFPIntrinsic : public IntrinsicInst {
 public:
   bool isUnaryOp() const;
   bool isTernaryOp() const;
@@ -680,7 +680,7 @@ public:
 };
 
 /// Constrained floating point compare intrinsics.
-class ConstrainedFPCmpIntrinsic : public ConstrainedFPIntrinsic {
+class LLVM_ABI ConstrainedFPCmpIntrinsic : public ConstrainedFPIntrinsic {
 public:
   FCmpInst::Predicate getPredicate() const;
   bool isSignaling() const {
@@ -703,7 +703,7 @@ public:
 };
 
 /// This class represents min/max intrinsics.
-class MinMaxIntrinsic : public IntrinsicInst {
+class LLVM_ABI MinMaxIntrinsic : public IntrinsicInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     switch (I->getIntrinsicID()) {
@@ -795,7 +795,7 @@ public:
 
 /// This class represents an intrinsic that is based on a binary operation.
 /// This includes op.with.overflow and saturating add/sub intrinsics.
-class BinaryOpIntrinsic : public IntrinsicInst {
+class LLVM_ABI BinaryOpIntrinsic : public IntrinsicInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     switch (I->getIntrinsicID()) {
@@ -832,7 +832,7 @@ public:
 };
 
 /// Represents an op.with.overflow intrinsic.
-class WithOverflowInst : public BinaryOpIntrinsic {
+class LLVM_ABI WithOverflowInst : public BinaryOpIntrinsic {
 public:
   static bool classof(const IntrinsicInst *I) {
     switch (I->getIntrinsicID()) {
@@ -853,7 +853,7 @@ public:
 };
 
 /// Represents a saturating add/sub intrinsic.
-class SaturatingInst : public BinaryOpIntrinsic {
+class LLVM_ABI SaturatingInst : public BinaryOpIntrinsic {
 public:
   static bool classof(const IntrinsicInst *I) {
     switch (I->getIntrinsicID()) {
@@ -875,7 +875,7 @@ public:
 /// common methods.
 /// Written as CRTP to avoid a common base class amongst the
 /// three atomicity hierarchies.
-template <typename Derived> class MemIntrinsicBase : public IntrinsicInst {
+template <typename Derived> class LLVM_ABI MemIntrinsicBase : public IntrinsicInst {
 private:
   enum { ARG_DEST = 0, ARG_LENGTH = 2 };
 
@@ -939,7 +939,7 @@ public:
 
 /// Common base class for all memory transfer intrinsics. Simply provides
 /// common methods.
-template <class BaseCL> class MemTransferBase : public BaseCL {
+template <class BaseCL> class LLVM_ABI MemTransferBase : public BaseCL {
 private:
   enum { ARG_SOURCE = 1 };
 
@@ -997,7 +997,7 @@ public:
 
 /// Common base class for all memset intrinsics. Simply provides
 /// common methods.
-template <class BaseCL> class MemSetBase : public BaseCL {
+template <class BaseCL> class LLVM_ABI MemSetBase : public BaseCL {
 private:
   enum { ARG_VALUE = 1 };
 
@@ -1017,7 +1017,7 @@ public:
 
 // The common base class for the atomic memset/memmove/memcpy intrinsics
 // i.e. llvm.element.unordered.atomic.memset/memcpy/memmove
-class AtomicMemIntrinsic : public MemIntrinsicBase<AtomicMemIntrinsic> {
+class LLVM_ABI AtomicMemIntrinsic : public MemIntrinsicBase<AtomicMemIntrinsic> {
 private:
   enum { ARG_ELEMENTSIZE = 3 };
 
@@ -1057,7 +1057,7 @@ public:
 
 /// This class represents atomic memset intrinsic
 // i.e. llvm.element.unordered.atomic.memset
-class AtomicMemSetInst : public MemSetBase<AtomicMemIntrinsic> {
+class LLVM_ABI AtomicMemSetInst : public MemSetBase<AtomicMemIntrinsic> {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::memset_element_unordered_atomic;
@@ -1069,7 +1069,7 @@ public:
 
 // This class wraps the atomic memcpy/memmove intrinsics
 // i.e. llvm.element.unordered.atomic.memcpy/memmove
-class AtomicMemTransferInst : public MemTransferBase<AtomicMemIntrinsic> {
+class LLVM_ABI AtomicMemTransferInst : public MemTransferBase<AtomicMemIntrinsic> {
 public:
   static bool classof(const IntrinsicInst *I) {
     switch (I->getIntrinsicID()) {
@@ -1087,7 +1087,7 @@ public:
 
 /// This class represents the atomic memcpy intrinsic
 /// i.e. llvm.element.unordered.atomic.memcpy
-class AtomicMemCpyInst : public AtomicMemTransferInst {
+class LLVM_ABI AtomicMemCpyInst : public AtomicMemTransferInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::memcpy_element_unordered_atomic;
@@ -1099,7 +1099,7 @@ public:
 
 /// This class represents the atomic memmove intrinsic
 /// i.e. llvm.element.unordered.atomic.memmove
-class AtomicMemMoveInst : public AtomicMemTransferInst {
+class LLVM_ABI AtomicMemMoveInst : public AtomicMemTransferInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::memmove_element_unordered_atomic;
@@ -1110,7 +1110,7 @@ public:
 };
 
 /// This is the common base class for memset/memcpy/memmove.
-class MemIntrinsic : public MemIntrinsicBase<MemIntrinsic> {
+class LLVM_ABI MemIntrinsic : public MemIntrinsicBase<MemIntrinsic> {
 private:
   enum { ARG_VOLATILE = 3 };
 
@@ -1142,7 +1142,7 @@ public:
 };
 
 /// This class wraps the llvm.memset and llvm.memset.inline intrinsics.
-class MemSetInst : public MemSetBase<MemIntrinsic> {
+class LLVM_ABI MemSetInst : public MemSetBase<MemIntrinsic> {
 public:
   // Methods for support type inquiry through isa, cast, and dyn_cast:
   static bool classof(const IntrinsicInst *I) {
@@ -1160,7 +1160,7 @@ public:
 };
 
 /// This class wraps the llvm.memset.inline intrinsic.
-class MemSetInlineInst : public MemSetInst {
+class LLVM_ABI MemSetInlineInst : public MemSetInst {
 public:
   ConstantInt *getLength() const {
     return cast<ConstantInt>(MemSetInst::getLength());
@@ -1175,7 +1175,7 @@ public:
 };
 
 /// This class wraps the llvm.memcpy/memmove intrinsics.
-class MemTransferInst : public MemTransferBase<MemIntrinsic> {
+class LLVM_ABI MemTransferInst : public MemTransferBase<MemIntrinsic> {
 public:
   // Methods for support type inquiry through isa, cast, and dyn_cast:
   static bool classof(const IntrinsicInst *I) {
@@ -1194,7 +1194,7 @@ public:
 };
 
 /// This class wraps the llvm.memcpy intrinsic.
-class MemCpyInst : public MemTransferInst {
+class LLVM_ABI MemCpyInst : public MemTransferInst {
 public:
   // Methods for support type inquiry through isa, cast, and dyn_cast:
   static bool classof(const IntrinsicInst *I) {
@@ -1207,7 +1207,7 @@ public:
 };
 
 /// This class wraps the llvm.memmove intrinsic.
-class MemMoveInst : public MemTransferInst {
+class LLVM_ABI MemMoveInst : public MemTransferInst {
 public:
   // Methods for support type inquiry through isa, cast, and dyn_cast:
   static bool classof(const IntrinsicInst *I) {
@@ -1219,7 +1219,7 @@ public:
 };
 
 /// This class wraps the llvm.memcpy.inline intrinsic.
-class MemCpyInlineInst : public MemCpyInst {
+class LLVM_ABI MemCpyInlineInst : public MemCpyInst {
 public:
   ConstantInt *getLength() const {
     return cast<ConstantInt>(MemCpyInst::getLength());
@@ -1237,7 +1237,7 @@ public:
 // whether they be atomic or non-atomic.
 // i.e. llvm.element.unordered.atomic.memset/memcpy/memmove
 //  and llvm.memset/memcpy/memmove
-class AnyMemIntrinsic : public MemIntrinsicBase<AnyMemIntrinsic> {
+class LLVM_ABI AnyMemIntrinsic : public MemIntrinsicBase<AnyMemIntrinsic> {
 public:
   bool isVolatile() const {
     // Only the non-atomic intrinsics can be volatile
@@ -1269,7 +1269,7 @@ public:
 /// This class represents any memset intrinsic
 // i.e. llvm.element.unordered.atomic.memset
 // and  llvm.memset
-class AnyMemSetInst : public MemSetBase<AnyMemIntrinsic> {
+class LLVM_ABI AnyMemSetInst : public MemSetBase<AnyMemIntrinsic> {
 public:
   static bool classof(const IntrinsicInst *I) {
     switch (I->getIntrinsicID()) {
@@ -1289,7 +1289,7 @@ public:
 // This class wraps any memcpy/memmove intrinsics
 // i.e. llvm.element.unordered.atomic.memcpy/memmove
 // and  llvm.memcpy/memmove
-class AnyMemTransferInst : public MemTransferBase<AnyMemIntrinsic> {
+class LLVM_ABI AnyMemTransferInst : public MemTransferBase<AnyMemIntrinsic> {
 public:
   static bool classof(const IntrinsicInst *I) {
     switch (I->getIntrinsicID()) {
@@ -1311,7 +1311,7 @@ public:
 /// This class represents any memcpy intrinsic
 /// i.e. llvm.element.unordered.atomic.memcpy
 ///  and llvm.memcpy
-class AnyMemCpyInst : public AnyMemTransferInst {
+class LLVM_ABI AnyMemCpyInst : public AnyMemTransferInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     switch (I->getIntrinsicID()) {
@@ -1331,7 +1331,7 @@ public:
 /// This class represents any memmove intrinsic
 /// i.e. llvm.element.unordered.atomic.memmove
 ///  and llvm.memmove
-class AnyMemMoveInst : public AnyMemTransferInst {
+class LLVM_ABI AnyMemMoveInst : public AnyMemTransferInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     switch (I->getIntrinsicID()) {
@@ -1348,7 +1348,7 @@ public:
 };
 
 /// This represents the llvm.va_start intrinsic.
-class VAStartInst : public IntrinsicInst {
+class LLVM_ABI VAStartInst : public IntrinsicInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::vastart;
@@ -1361,7 +1361,7 @@ public:
 };
 
 /// This represents the llvm.va_end intrinsic.
-class VAEndInst : public IntrinsicInst {
+class LLVM_ABI VAEndInst : public IntrinsicInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::vaend;
@@ -1374,7 +1374,7 @@ public:
 };
 
 /// This represents the llvm.va_copy intrinsic.
-class VACopyInst : public IntrinsicInst {
+class LLVM_ABI VACopyInst : public IntrinsicInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::vacopy;
@@ -1388,7 +1388,7 @@ public:
 };
 
 /// A base class for all instrprof intrinsics.
-class InstrProfInstBase : public IntrinsicInst {
+class LLVM_ABI InstrProfInstBase : public IntrinsicInst {
 public:
   // The name of the instrumented function.
   GlobalVariable *getName() const {
@@ -1406,7 +1406,7 @@ public:
 };
 
 /// This represents the llvm.instrprof.cover intrinsic.
-class InstrProfCoverInst : public InstrProfInstBase {
+class LLVM_ABI InstrProfCoverInst : public InstrProfInstBase {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::instrprof_cover;
@@ -1417,7 +1417,7 @@ public:
 };
 
 /// This represents the llvm.instrprof.increment intrinsic.
-class InstrProfIncrementInst : public InstrProfInstBase {
+class LLVM_ABI InstrProfIncrementInst : public InstrProfInstBase {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::instrprof_increment ||
@@ -1430,7 +1430,7 @@ public:
 };
 
 /// This represents the llvm.instrprof.increment.step intrinsic.
-class InstrProfIncrementInstStep : public InstrProfIncrementInst {
+class LLVM_ABI InstrProfIncrementInstStep : public InstrProfIncrementInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::instrprof_increment_step;
@@ -1441,7 +1441,7 @@ public:
 };
 
 /// This represents the llvm.instrprof.timestamp intrinsic.
-class InstrProfTimestampInst : public InstrProfInstBase {
+class LLVM_ABI InstrProfTimestampInst : public InstrProfInstBase {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::instrprof_timestamp;
@@ -1452,7 +1452,7 @@ public:
 };
 
 /// This represents the llvm.instrprof.value.profile intrinsic.
-class InstrProfValueProfileInst : public InstrProfInstBase {
+class LLVM_ABI InstrProfValueProfileInst : public InstrProfInstBase {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::instrprof_value_profile;
@@ -1475,7 +1475,7 @@ public:
   }
 };
 
-class PseudoProbeInst : public IntrinsicInst {
+class LLVM_ABI PseudoProbeInst : public IntrinsicInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::pseudoprobe;
@@ -1502,7 +1502,7 @@ public:
   }
 };
 
-class NoAliasScopeDeclInst : public IntrinsicInst {
+class LLVM_ABI NoAliasScopeDeclInst : public IntrinsicInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::experimental_noalias_scope_decl;
@@ -1526,7 +1526,7 @@ public:
 
 /// Common base class for representing values projected from a statepoint.
 /// Currently, the only projections available are gc.result and gc.relocate.
-class GCProjectionInst : public IntrinsicInst {
+class LLVM_ABI GCProjectionInst : public IntrinsicInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::experimental_gc_relocate ||
@@ -1550,7 +1550,7 @@ public:
 };
 
 /// Represents calls to the gc.relocate intrinsic.
-class GCRelocateInst : public GCProjectionInst {
+class LLVM_ABI GCRelocateInst : public GCProjectionInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::experimental_gc_relocate;
@@ -1578,7 +1578,7 @@ public:
 };
 
 /// Represents calls to the gc.result intrinsic.
-class GCResultInst : public GCProjectionInst {
+class LLVM_ABI GCResultInst : public GCProjectionInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::experimental_gc_result;
@@ -1591,7 +1591,7 @@ public:
 
 
 /// This represents the llvm.assume intrinsic.
-class AssumeInst : public IntrinsicInst {
+class LLVM_ABI AssumeInst : public IntrinsicInst {
 public:
   static bool classof(const IntrinsicInst *I) {
     return I->getIntrinsicID() == Intrinsic::assume;

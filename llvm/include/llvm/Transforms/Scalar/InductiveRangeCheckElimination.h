@@ -18,7 +18,7 @@
 
 namespace llvm {
 
-class IRCEPass : public PassInfoMixin<IRCEPass> {
+class LLVM_ABI IRCEPass : public PassInfoMixin<IRCEPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

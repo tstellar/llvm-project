@@ -24,40 +24,40 @@ enum class EmitDwarfUnwindType;
 
 namespace mc {
 
-bool getRelaxAll();
-std::optional<bool> getExplicitRelaxAll();
+LLVM_ABI bool getRelaxAll();
+LLVM_ABI std::optional<bool> getExplicitRelaxAll();
 
-bool getIncrementalLinkerCompatible();
+LLVM_ABI bool getIncrementalLinkerCompatible();
 
-int getDwarfVersion();
+LLVM_ABI int getDwarfVersion();
 
-bool getDwarf64();
+LLVM_ABI bool getDwarf64();
 
-EmitDwarfUnwindType getEmitDwarfUnwind();
+LLVM_ABI EmitDwarfUnwindType getEmitDwarfUnwind();
 
-bool getEmitCompactUnwindNonCanonical();
+LLVM_ABI bool getEmitCompactUnwindNonCanonical();
 
-bool getShowMCInst();
+LLVM_ABI bool getShowMCInst();
 
-bool getFatalWarnings();
+LLVM_ABI bool getFatalWarnings();
 
-bool getNoWarn();
+LLVM_ABI bool getNoWarn();
 
-bool getNoDeprecatedWarn();
+LLVM_ABI bool getNoDeprecatedWarn();
 
-bool getNoTypeCheck();
+LLVM_ABI bool getNoTypeCheck();
 
-std::string getABIName();
+LLVM_ABI std::string getABIName();
 
-std::string getAsSecureLogFile();
+LLVM_ABI std::string getAsSecureLogFile();
 
 /// Create this object with static storage to register mc-related command
 /// line options.
-struct RegisterMCTargetOptionsFlags {
+struct LLVM_ABI RegisterMCTargetOptionsFlags {
   RegisterMCTargetOptionsFlags();
 };
 
-MCTargetOptions InitMCTargetOptionsFromFlags();
+LLVM_ABI MCTargetOptions InitMCTargetOptionsFromFlags();
 
 } // namespace mc
 

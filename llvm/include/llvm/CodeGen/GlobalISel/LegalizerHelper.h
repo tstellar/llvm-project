@@ -44,7 +44,7 @@ class GISelChangeObserver;
 class LostDebugLocObserver;
 class TargetLowering;
 
-class LegalizerHelper {
+class LLVM_ABI LegalizerHelper {
 public:
   /// Expose MIRBuilder so clients can set their own RecordInsertInstruction
   /// functions
@@ -422,19 +422,19 @@ public:
 
 /// Helper function that creates a libcall to the given \p Name using the given
 /// calling convention \p CC.
-LegalizerHelper::LegalizeResult
+LLVM_ABI LegalizerHelper::LegalizeResult
 createLibcall(MachineIRBuilder &MIRBuilder, const char *Name,
               const CallLowering::ArgInfo &Result,
               ArrayRef<CallLowering::ArgInfo> Args, CallingConv::ID CC);
 
 /// Helper function that creates the given libcall.
-LegalizerHelper::LegalizeResult
+LLVM_ABI LegalizerHelper::LegalizeResult
 createLibcall(MachineIRBuilder &MIRBuilder, RTLIB::Libcall Libcall,
               const CallLowering::ArgInfo &Result,
               ArrayRef<CallLowering::ArgInfo> Args);
 
 /// Create a libcall to memcpy et al.
-LegalizerHelper::LegalizeResult
+LLVM_ABI LegalizerHelper::LegalizeResult
 createMemLibcall(MachineIRBuilder &MIRBuilder, MachineRegisterInfo &MRI,
                  MachineInstr &MI, LostDebugLocObserver &LocObserver);
 

@@ -24,7 +24,7 @@
 namespace llvm {
 namespace ISD {
 
-  struct ArgFlagsTy {
+  struct LLVM_ABI ArgFlagsTy {
   private:
     unsigned IsZExt : 1;     ///< Zero extended
     unsigned IsSExt : 1;     ///< Sign extended
@@ -192,7 +192,7 @@ namespace ISD {
   /// single incoming (formal) argument or incoming (from the perspective
   /// of the caller) return value virtual register.
   ///
-  struct InputArg {
+  struct LLVM_ABI InputArg {
     ArgFlagsTy Flags;
     MVT VT = MVT::Other;
     EVT ArgVT;
@@ -230,7 +230,7 @@ namespace ISD {
   /// single outgoing (actual) argument or outgoing (from the perspective
   /// of the caller) return value virtual register.
   ///
-  struct OutputArg {
+  struct LLVM_ABI OutputArg {
     ArgFlagsTy Flags;
     MVT VT;
     EVT ArgVT;

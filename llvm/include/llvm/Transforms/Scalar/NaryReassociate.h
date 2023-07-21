@@ -99,7 +99,7 @@ class TargetTransformInfo;
 class Type;
 class Value;
 
-class NaryReassociatePass : public PassInfoMixin<NaryReassociatePass> {
+class LLVM_ABI NaryReassociatePass : public PassInfoMixin<NaryReassociatePass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 

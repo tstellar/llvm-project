@@ -29,6 +29,7 @@
 #ifndef LLVM_SUPPORT_ERRC_H
 #define LLVM_SUPPORT_ERRC_H
 
+#include "llvm/Support/Compiler.h"
 #include <system_error>
 
 namespace llvm {
@@ -81,6 +82,7 @@ inline std::error_code make_error_code(errc E) {
 }
 
 namespace std {
-template <> struct is_error_code_enum<llvm::errc> : std::true_type {};
+template <>
+struct LLVM_ABI is_error_code_enum<llvm::errc> : std::true_type {};
 }
 #endif

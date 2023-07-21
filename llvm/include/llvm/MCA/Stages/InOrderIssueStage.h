@@ -24,7 +24,7 @@ namespace mca {
 class LSUnit;
 class RegisterFile;
 
-struct StallInfo {
+struct LLVM_ABI StallInfo {
   enum class StallKind {
     DEFAULT,
     REGISTER_DEPS,
@@ -51,7 +51,7 @@ struct StallInfo {
   void cycleEnd();
 };
 
-class InOrderIssueStage final : public Stage {
+class LLVM_ABI InOrderIssueStage final : public Stage {
   const MCSubtargetInfo &STI;
   RegisterFile &PRF;
   ResourceManager RM;

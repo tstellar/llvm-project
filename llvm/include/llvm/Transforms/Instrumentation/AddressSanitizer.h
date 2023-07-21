@@ -20,7 +20,7 @@ namespace llvm {
 class Module;
 class raw_ostream;
 
-struct AddressSanitizerOptions {
+struct LLVM_ABI AddressSanitizerOptions {
   bool CompileKernel = false;
   bool Recover = false;
   bool UseAfterScope = false;
@@ -33,7 +33,7 @@ struct AddressSanitizerOptions {
 ///
 /// This adds 'asan.module_ctor' to 'llvm.global_ctors'. This pass may also
 /// run intependently of the function address sanitizer.
-class AddressSanitizerPass : public PassInfoMixin<AddressSanitizerPass> {
+class LLVM_ABI AddressSanitizerPass : public PassInfoMixin<AddressSanitizerPass> {
 public:
   AddressSanitizerPass(const AddressSanitizerOptions &Options,
                        bool UseGlobalGC = true, bool UseOdrIndicator = true,
@@ -52,7 +52,7 @@ private:
   AsanCtorKind ConstructorKind;
 };
 
-struct ASanAccessInfo {
+struct LLVM_ABI ASanAccessInfo {
   const int32_t Packed;
   const uint8_t AccessSizeIndex;
   const bool IsWrite;

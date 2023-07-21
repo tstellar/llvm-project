@@ -34,7 +34,7 @@ class MachineInstr;
 class GISelChangeObserver;
 class LostDebugLocObserver;
 
-class Legalizer : public MachineFunctionPass {
+class LLVM_ABI Legalizer : public MachineFunctionPass {
 public:
   static char ID;
 

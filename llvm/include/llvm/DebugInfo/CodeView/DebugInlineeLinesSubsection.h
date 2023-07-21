@@ -32,7 +32,7 @@ enum class InlineeLinesSignature : uint32_t {
   ExtraFiles // CV_INLINEE_SOURCE_LINE_SIGNATURE_EX
 };
 
-struct InlineeSourceLineHeader {
+struct LLVM_ABI InlineeSourceLineHeader {
   TypeIndex Inlinee;                  // ID of the function that was inlined.
   support::ulittle32_t FileID;        // Offset into FileChecksums subsection.
   support::ulittle32_t SourceLineNum; // First line of inlined code.
@@ -41,14 +41,14 @@ struct InlineeSourceLineHeader {
                                       //   ulittle32_t Files[];
 };
 
-struct InlineeSourceLine {
+struct LLVM_ABI InlineeSourceLine {
   const InlineeSourceLineHeader *Header;
   FixedStreamArray<support::ulittle32_t> ExtraFiles;
 };
 
 } // end namespace codeview
 
-template <> struct VarStreamArrayExtractor<codeview::InlineeSourceLine> {
+template <> struct LLVM_ABI VarStreamArrayExtractor<codeview::InlineeSourceLine> {
   Error operator()(BinaryStreamRef Stream, uint32_t &Len,
                    codeview::InlineeSourceLine &Item);
 
@@ -57,7 +57,7 @@ template <> struct VarStreamArrayExtractor<codeview::InlineeSourceLine> {
 
 namespace codeview {
 
-class DebugInlineeLinesSubsectionRef final : public DebugSubsectionRef {
+class LLVM_ABI DebugInlineeLinesSubsectionRef final : public DebugSubsectionRef {
   using LinesArray = VarStreamArray<InlineeSourceLine>;
   using Iterator = LinesArray::Iterator;
 
@@ -84,7 +84,7 @@ private:
   LinesArray Lines;
 };
 
-class DebugInlineeLinesSubsection final : public DebugSubsection {
+class LLVM_ABI DebugInlineeLinesSubsection final : public DebugSubsection {
 public:
   struct Entry {
     std::vector<support::ulittle32_t> ExtraFiles;

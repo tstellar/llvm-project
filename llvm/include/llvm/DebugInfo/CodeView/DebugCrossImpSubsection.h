@@ -26,14 +26,14 @@ class BinaryStreamWriter;
 
 namespace codeview {
 
-struct CrossModuleImportItem {
+struct LLVM_ABI CrossModuleImportItem {
   const CrossModuleImport *Header = nullptr;
   FixedStreamArray<support::ulittle32_t> Imports;
 };
 
 } // end namespace codeview
 
-template <> struct VarStreamArrayExtractor<codeview::CrossModuleImportItem> {
+template <> struct LLVM_ABI VarStreamArrayExtractor<codeview::CrossModuleImportItem> {
 public:
   using ContextType = void;
 
@@ -45,7 +45,7 @@ namespace codeview {
 
 class DebugStringTableSubsection;
 
-class DebugCrossModuleImportsSubsectionRef final : public DebugSubsectionRef {
+class LLVM_ABI DebugCrossModuleImportsSubsectionRef final : public DebugSubsectionRef {
   using ReferenceArray = VarStreamArray<CrossModuleImportItem>;
   using Iterator = ReferenceArray::Iterator;
 
@@ -67,7 +67,7 @@ private:
   ReferenceArray References;
 };
 
-class DebugCrossModuleImportsSubsection final : public DebugSubsection {
+class LLVM_ABI DebugCrossModuleImportsSubsection final : public DebugSubsection {
 public:
   explicit DebugCrossModuleImportsSubsection(
       DebugStringTableSubsection &Strings)

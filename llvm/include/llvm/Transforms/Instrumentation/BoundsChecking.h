@@ -16,7 +16,7 @@ class Function;
 
 /// A pass to instrument code and perform run-time bounds checking on loads,
 /// stores, and other memory intrinsics.
-struct BoundsCheckingPass : PassInfoMixin<BoundsCheckingPass> {
+struct LLVM_ABI BoundsCheckingPass : PassInfoMixin<BoundsCheckingPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
   static bool isRequired() { return true; }
 };

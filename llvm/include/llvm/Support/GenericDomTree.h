@@ -51,7 +51,7 @@ struct SemiNCAInfo;
 }  // namespace DomTreeBuilder
 
 /// Base class for the actual dominator tree node.
-template <class NodeT> class DomTreeNodeBase {
+template <class NodeT> class LLVM_ABI DomTreeNodeBase {
   friend class PostDominatorTree;
   friend class DominatorTreeBase<NodeT, false>;
   friend class DominatorTreeBase<NodeT, true>;
@@ -195,35 +195,35 @@ void PrintDomTree(const DomTreeNodeBase<NodeT> *N, raw_ostream &O,
 
 namespace DomTreeBuilder {
 // The routines below are provided in a separate header but referenced here.
-template <typename DomTreeT>
+template <typename DomTreeT> LLVM_ABI
 void Calculate(DomTreeT &DT);
 
-template <typename DomTreeT>
+template <typename DomTreeT> LLVM_ABI
 void CalculateWithUpdates(DomTreeT &DT,
                           ArrayRef<typename DomTreeT::UpdateType> Updates);
 
-template <typename DomTreeT>
+template <typename DomTreeT> LLVM_ABI
 void InsertEdge(DomTreeT &DT, typename DomTreeT::NodePtr From,
                 typename DomTreeT::NodePtr To);
 
-template <typename DomTreeT>
+template <typename DomTreeT> LLVM_ABI
 void DeleteEdge(DomTreeT &DT, typename DomTreeT::NodePtr From,
                 typename DomTreeT::NodePtr To);
 
-template <typename DomTreeT>
+template <typename DomTreeT> LLVM_ABI
 void ApplyUpdates(DomTreeT &DT,
                   GraphDiff<typename DomTreeT::NodePtr,
                             DomTreeT::IsPostDominator> &PreViewCFG,
                   GraphDiff<typename DomTreeT::NodePtr,
                             DomTreeT::IsPostDominator> *PostViewCFG);
 
-template <typename DomTreeT>
+template <typename DomTreeT> LLVM_ABI
 bool Verify(const DomTreeT &DT, typename DomTreeT::VerificationLevel VL);
 }  // namespace DomTreeBuilder
 
 /// Default DomTreeNode traits for NodeT. The default implementation assume a
 /// Function-like NodeT. Can be specialized to support different node types.
-template <typename NodeT> struct DomTreeNodeTraits {
+template <typename NodeT> struct LLVM_ABI DomTreeNodeTraits {
   using NodeType = NodeT;
   using NodePtr = NodeT *;
   using ParentPtr = decltype(std::declval<NodePtr>()->getParent());
@@ -240,7 +240,7 @@ template <typename NodeT> struct DomTreeNodeTraits {
 /// This class is a generic template over graph nodes. It is instantiated for
 /// various graphs in the LLVM IR or in the code generator.
 template <typename NodeT, bool IsPostDom>
-class DominatorTreeBase {
+class LLVM_ABI DominatorTreeBase {
  public:
   static_assert(std::is_pointer_v<typename GraphTraits<NodeT *>::NodeRef>,
                 "Currently DominatorTreeBase supports only pointer nodes");

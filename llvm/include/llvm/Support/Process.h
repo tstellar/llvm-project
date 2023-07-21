@@ -40,7 +40,7 @@ namespace sys {
 
 /// A collection of legacy interfaces for querying information about the
 /// current executing process.
-class Process {
+class LLVM_ABI Process {
 public:
   using Pid = int32_t;
 

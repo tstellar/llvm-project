@@ -31,7 +31,7 @@ namespace llvm {
 
 /// ForwardIterator for the bits that are set.
 /// Iterators get invalidated when resize / reserve is called.
-template <typename BitVectorT> class const_set_bits_iterator_impl {
+template <typename BitVectorT> class LLVM_ABI const_set_bits_iterator_impl {
   const BitVectorT &Parent;
   int Current = 0;
 
@@ -79,7 +79,7 @@ public:
   }
 };
 
-class BitVector {
+class LLVM_ABI BitVector {
   typedef uintptr_t BitWord;
 
   enum { BITWORD_SIZE = (unsigned)sizeof(BitWord) * CHAR_BIT };
@@ -836,7 +836,7 @@ inline BitVector::size_type capacity_in_bytes(const BitVector &X) {
   return X.getMemorySize();
 }
 
-template <> struct DenseMapInfo<BitVector> {
+template <> struct LLVM_ABI DenseMapInfo<BitVector> {
   static inline BitVector getEmptyKey() { return {}; }
   static inline BitVector getTombstoneKey() {
     BitVector V;

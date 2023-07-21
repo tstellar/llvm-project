@@ -16,10 +16,10 @@ namespace llvm {
 class FunctionPass;
 
 /// Insert Control FLow Guard checks on indirect function calls.
-FunctionPass *createCFGuardCheckPass();
+LLVM_ABI FunctionPass *createCFGuardCheckPass();
 
 /// Insert Control FLow Guard dispatches on indirect function calls.
-FunctionPass *createCFGuardDispatchPass();
+LLVM_ABI FunctionPass *createCFGuardDispatchPass();
 
 } // namespace llvm
 

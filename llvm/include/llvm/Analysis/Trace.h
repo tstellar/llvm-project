@@ -27,7 +27,7 @@ class Function;
 class Module;
 class raw_ostream;
 
-class Trace {
+class LLVM_ABI Trace {
   using BasicBlockListType = std::vector<BasicBlock *>;
 
   BasicBlockListType BasicBlocks;

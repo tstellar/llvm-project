@@ -19,7 +19,7 @@ class PDBSymbolCompiland;
 template <typename ChildType> class IPDBEnumChildren;
 class NativeSession;
 
-class NativeSourceFile : public IPDBSourceFile {
+class LLVM_ABI NativeSourceFile : public IPDBSourceFile {
 public:
   explicit NativeSourceFile(NativeSession &Session, uint32_t FileId,
                             const codeview::FileChecksumEntry &Checksum);

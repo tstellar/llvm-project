@@ -19,7 +19,7 @@ namespace llvm {
 
 class Function;
 
-struct DFAJumpThreadingPass : PassInfoMixin<DFAJumpThreadingPass> {
+struct LLVM_ABI DFAJumpThreadingPass : PassInfoMixin<DFAJumpThreadingPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 

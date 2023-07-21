@@ -19,7 +19,7 @@
 namespace llvm {
 
 /// Simple pass that provides a name to every anonymous globals.
-class NameAnonGlobalPass : public PassInfoMixin<NameAnonGlobalPass> {
+class LLVM_ABI NameAnonGlobalPass : public PassInfoMixin<NameAnonGlobalPass> {
 public:
   NameAnonGlobalPass() = default;
 

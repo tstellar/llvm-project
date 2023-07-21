@@ -30,7 +30,7 @@ class LVType;
 
 using AttributeSpec = DWARFAbbreviationDeclaration::AttributeSpec;
 
-class LVELFReader final : public LVBinaryReader {
+class LLVM_ABI LVELFReader final : public LVBinaryReader {
   object::ObjectFile &Obj;
 
   // Indicates if ranges data are available; in the case of split DWARF any

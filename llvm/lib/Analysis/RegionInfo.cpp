@@ -9,6 +9,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "llvm/Analysis/RegionInfo.h"
+#include "llvm/Analysis/Passes.h"
 #include "llvm/ADT/Statistic.h"
 #include "llvm/Analysis/DominanceFrontier.h"
 #include "llvm/InitializePasses.h"

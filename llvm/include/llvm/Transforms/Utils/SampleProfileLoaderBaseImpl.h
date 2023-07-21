@@ -57,7 +57,7 @@ class FileSystem;
 namespace afdo_detail {
 
 template <typename BlockT> struct IRTraits;
-template <> struct IRTraits<BasicBlock> {
+template <> struct LLVM_ABI IRTraits<BasicBlock> {
   using InstructionT = Instruction;
   using BasicBlockT = BasicBlock;
   using FunctionT = Function;
@@ -84,7 +84,7 @@ template <> struct IRTraits<BasicBlock> {
 // This class serves sample counts correlation for SampleProfileLoader by
 // analyzing pseudo probes and their function descriptors injected by
 // SampleProfileProber.
-class PseudoProbeManager {
+class LLVM_ABI PseudoProbeManager {
   DenseMap<uint64_t, PseudoProbeDescriptor> GUIDToProbeDescMap;
 
   const PseudoProbeDescriptor *getDesc(const Function &F) const {
@@ -130,9 +130,9 @@ public:
 
 
 
-extern cl::opt<bool> SampleProfileUseProfi;
+LLVM_ABI extern cl::opt<bool> SampleProfileUseProfi;
 
-template <typename FT> class SampleProfileLoaderBaseImpl {
+template <typename FT> class LLVM_ABI SampleProfileLoaderBaseImpl {
 public:
   SampleProfileLoaderBaseImpl(std::string Name, std::string RemapName,
                               IntrusiveRefCntPtr<vfs::FileSystem> FS)

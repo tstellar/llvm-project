@@ -137,7 +137,7 @@ namespace llvm {
 //===----------------------------------------------------------------------===//
 
 template <typename T>
-struct IntervalMapInfo {
+struct LLVM_ABI IntervalMapInfo {
   /// startLess - Return true if x is not in [a;b].
   /// This is x < a both for closed intervals and for [a;b) half-open intervals.
   static inline bool startLess(const T &x, const T &a) {
@@ -164,7 +164,7 @@ struct IntervalMapInfo {
 };
 
 template <typename T>
-struct IntervalMapHalfOpenInfo {
+struct LLVM_ABI IntervalMapHalfOpenInfo {
   /// startLess - Return true if x is not in [a;b).
   static inline bool startLess(const T &x, const T &a) {
     return x < a;
@@ -220,7 +220,7 @@ using IdxPair = std::pair<unsigned,unsigned>;
 //===----------------------------------------------------------------------===//
 
 template <typename T1, typename T2, unsigned N>
-class NodeBase {
+class LLVM_ABI NodeBase {
 public:
   enum { Capacity = N };
 
@@ -411,7 +411,7 @@ void adjustSiblingSizes(NodeT *Node[], unsigned Nodes,
 /// @param Position Insert position.
 /// @param Grow     Reserve space for a new element at Position.
 /// @return         (node, offset) for Position.
-IdxPair distribute(unsigned Nodes, unsigned Elements, unsigned Capacity,
+LLVM_ABI IdxPair distribute(unsigned Nodes, unsigned Elements, unsigned Capacity,
                    const unsigned *CurSize, unsigned NewSize[],
                    unsigned Position, bool Grow);
 
@@ -436,7 +436,7 @@ enum {
 };
 
 template <typename KeyT, typename ValT>
-struct NodeSizer {
+struct LLVM_ABI NodeSizer {
   enum {
     // Compute the leaf node branching factor that makes a node fit in three
     // cache lines. The branching factor must be at least 3, or some B+-tree
@@ -490,7 +490,7 @@ struct NodeSizer {
 //
 //===----------------------------------------------------------------------===//
 
-class NodeRef {
+class LLVM_ABI NodeRef {
   struct CacheAlignedPointerTraits {
     static inline void *getAsVoidPointer(void *P) { return P; }
     static inline void *getFromVoidPointer(void *P) { return P; }
@@ -563,7 +563,7 @@ public:
 //===----------------------------------------------------------------------===//
 
 template <typename KeyT, typename ValT, unsigned N, typename Traits>
-class LeafNode : public NodeBase<std::pair<KeyT, KeyT>, ValT, N> {
+class LLVM_ABI LeafNode : public NodeBase<std::pair<KeyT, KeyT>, ValT, N> {
 public:
   const KeyT &start(unsigned i) const { return this->first[i].first; }
   const KeyT &stop(unsigned i) const { return this->first[i].second; }
@@ -700,7 +700,7 @@ insertFrom(unsigned &Pos, unsigned Size, KeyT a, KeyT b, ValT y) {
 //===----------------------------------------------------------------------===//
 
 template <typename KeyT, typename ValT, unsigned N, typename Traits>
-class BranchNode : public NodeBase<NodeRef, KeyT, N> {
+class LLVM_ABI BranchNode : public NodeBase<NodeRef, KeyT, N> {
 public:
   const KeyT &stop(unsigned i) const { return this->second[i]; }
   const NodeRef &subtree(unsigned i) const { return this->first[i]; }
@@ -770,7 +770,7 @@ public:
 //
 //===----------------------------------------------------------------------===//
 
-class Path {
+class LLVM_ABI Path {
   /// Entry - Each step in the path is a node pointer and an offset into that
   /// node.
   struct Entry {
@@ -933,7 +933,7 @@ public:
 template <typename KeyT, typename ValT,
           unsigned N = IntervalMapImpl::NodeSizer<KeyT, ValT>::LeafSize,
           typename Traits = IntervalMapInfo<KeyT>>
-class IntervalMap {
+class LLVM_ABI IntervalMap {
   using Sizer = IntervalMapImpl::NodeSizer<KeyT, ValT>;
   using Leaf = IntervalMapImpl::LeafNode<KeyT, ValT, Sizer::LeafSize, Traits>;
   using Branch =
@@ -2107,7 +2107,7 @@ iterator::overflow(unsigned Level) {
 ///    for (IntervalMapOverlaps I(a, b); I.valid() ; ++I) { ... }
 ///
 template <typename MapA, typename MapB>
-class IntervalMapOverlaps {
+class LLVM_ABI IntervalMapOverlaps {
   using KeyType = typename MapA::KeyType;
   using Traits = typename MapA::KeyTraits;
 

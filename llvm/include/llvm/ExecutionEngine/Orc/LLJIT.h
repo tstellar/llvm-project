@@ -35,7 +35,7 @@ class ExecutorProcessControl;
 /// A pre-fabricated ORC JIT stack that can serve as an alternative to MCJIT.
 ///
 /// Create instances using LLJITBuilder.
-class LLJIT {
+class LLVM_ABI LLJIT {
   template <typename, typename, typename> friend class LLJITBuilderSetters;
 
   friend Expected<JITDylibSP> setUpGenericLLVMIRPlatform(LLJIT &J);
@@ -265,7 +265,7 @@ protected:
 
 /// An extended version of LLJIT that supports lazy function-at-a-time
 /// compilation of LLVM IR.
-class LLLazyJIT : public LLJIT {
+class LLVM_ABI LLLazyJIT : public LLJIT {
   template <typename, typename, typename> friend class LLJITBuilderSetters;
 
 public:
@@ -296,7 +296,7 @@ private:
   std::unique_ptr<CompileOnDemandLayer> CODLayer;
 };
 
-class LLJITBuilderState {
+class LLVM_ABI LLJITBuilderState {
 public:
   using ObjectLinkingLayerCreator =
       std::function<Expected<std::unique_ptr<ObjectLayer>>(ExecutionSession &,
@@ -328,7 +328,7 @@ public:
 };
 
 template <typename JITType, typename SetterImpl, typename State>
-class LLJITBuilderSetters {
+class LLVM_ABI LLJITBuilderSetters {
 public:
   /// Set a ExecutorProcessControl for this instance.
   /// This should not be called if ExecutionSession has already been set.
@@ -475,11 +475,11 @@ protected:
 };
 
 /// Constructs LLJIT instances.
-class LLJITBuilder
+class LLVM_ABI LLJITBuilder
     : public LLJITBuilderState,
       public LLJITBuilderSetters<LLJIT, LLJITBuilder, LLJITBuilderState> {};
 
-class LLLazyJITBuilderState : public LLJITBuilderState {
+class LLVM_ABI LLLazyJITBuilderState : public LLJITBuilderState {
   friend class LLLazyJIT;
 
 public:
@@ -495,7 +495,7 @@ public:
 };
 
 template <typename JITType, typename SetterImpl, typename State>
-class LLLazyJITBuilderSetters
+class LLVM_ABI LLLazyJITBuilderSetters
     : public LLJITBuilderSetters<JITType, SetterImpl, State> {
 public:
   /// Set the address in the target address to call if a lazy compile fails.
@@ -528,18 +528,18 @@ public:
 };
 
 /// Constructs LLLazyJIT instances.
-class LLLazyJITBuilder
+class LLVM_ABI LLLazyJITBuilder
     : public LLLazyJITBuilderState,
       public LLLazyJITBuilderSetters<LLLazyJIT, LLLazyJITBuilder,
                                      LLLazyJITBuilderState> {};
 
 /// Configure the LLJIT instance to use orc runtime support. This overload
 /// assumes that the client has manually configured a Platform object.
-Error setUpOrcPlatformManually(LLJIT &J);
+LLVM_ABI Error setUpOrcPlatformManually(LLJIT &J);
 
 /// Configure the LLJIT instance to use the ORC runtime and the detected
 /// native target for the executor.
-class ExecutorNativePlatform {
+class LLVM_ABI ExecutorNativePlatform {
 public:
   /// Set up using path to Orc runtime.
   ExecutorNativePlatform(std::string OrcRuntimePath)
@@ -569,13 +569,13 @@ private:
 /// llvm.global_dtors variables and (if present) build initialization and
 /// deinitialization functions. Platform specific initialization configurations
 /// should be preferred where available.
-Expected<JITDylibSP> setUpGenericLLVMIRPlatform(LLJIT &J);
+LLVM_ABI Expected<JITDylibSP> setUpGenericLLVMIRPlatform(LLJIT &J);
 
 /// Configure the LLJIT instance to disable platform support explicitly. This is
 /// useful in two cases: for platforms that don't have such requirements and for
 /// platforms, that we have no explicit support yet and that don't work well
 /// with the generic IR platform.
-Expected<JITDylibSP> setUpInactivePlatform(LLJIT &J);
+LLVM_ABI Expected<JITDylibSP> setUpInactivePlatform(LLJIT &J);
 
 } // End namespace orc
 } // End namespace llvm

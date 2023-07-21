@@ -21,7 +21,7 @@ class Instruction;
 
 // Class for identifying profitable indirect call promotion candidates when
 // the indirect-call value profile metadata is available.
-class ICallPromotionAnalysis {
+class LLVM_ABI ICallPromotionAnalysis {
 private:
   // Allocate space to read the profile annotation.
   std::unique_ptr<InstrProfValueData[]> ValueDataArray;

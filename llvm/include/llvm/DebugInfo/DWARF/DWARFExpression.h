@@ -20,7 +20,7 @@ struct DIDumpOptions;
 class MCRegisterInfo;
 class raw_ostream;
 
-class DWARFExpression {
+class LLVM_ABI DWARFExpression {
 public:
   class iterator;
 

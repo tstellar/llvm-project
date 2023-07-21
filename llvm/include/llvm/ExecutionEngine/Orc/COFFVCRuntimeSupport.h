@@ -28,7 +28,7 @@ namespace llvm {
 namespace orc {
 
 /// Bootstraps the vc runtime within jitdylibs.
-class COFFVCRuntimeBootstrapper {
+class LLVM_ABI COFFVCRuntimeBootstrapper {
 public:
   /// Try to create a COFFVCRuntimeBootstrapper instance. An optional
   /// RuntimePath can be given to specify the location of directory that

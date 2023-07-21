@@ -98,7 +98,7 @@ namespace llvm {
 /// construction. The \c MachinePassRegistry.def file specifies how to construct
 /// all of the built-in passes, and those may reference these members during
 /// construction.
-template <typename DerivedT> class CodeGenPassBuilder {
+template <typename DerivedT> class LLVM_ABI CodeGenPassBuilder {
 public:
   explicit CodeGenPassBuilder(LLVMTargetMachine &TM, CGPassBuilderOption Opts,
                               PassInstrumentationCallbacks *PIC)

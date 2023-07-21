@@ -151,7 +151,7 @@ enum class PDB_Machine {
 // A struct with an inner unnamed enum with explicit underlying type resuls
 // in an enum class that can implicitly convert to the underlying type, which
 // is convenient for this enum.
-struct PDB_SourceCompression {
+struct LLVM_ABI PDB_SourceCompression {
   enum : uint32_t {
     // No compression. Produced e.g. by `link.exe /natvis:foo.natvis`.
     None,
@@ -384,7 +384,7 @@ enum PDB_UndnameFlags : uint32_t {
 
 enum class PDB_MemberAccess { Private = 1, Protected = 2, Public = 3 };
 
-struct VersionInfo {
+struct LLVM_ABI VersionInfo {
   uint32_t Major;
   uint32_t Minor;
   uint32_t Build;
@@ -408,7 +408,7 @@ enum PDB_VariantType {
   String
 };
 
-struct Variant {
+struct LLVM_ABI Variant {
   Variant() = default;
 
   explicit Variant(bool V) : Type(PDB_VariantType::Bool) { Value.Bool = V; }
@@ -597,7 +597,7 @@ struct Variant {
 
 namespace std {
 
-template <> struct hash<llvm::pdb::PDB_SymType> {
+template <> struct LLVM_ABI hash<llvm::pdb::PDB_SymType> {
   using argument_type = llvm::pdb::PDB_SymType;
   using result_type = std::size_t;
 

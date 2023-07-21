@@ -41,7 +41,7 @@ namespace orc {
 /// addresses before using them).
 ///
 /// Asynchronous version.
-void lookupAndRecordAddrs(
+LLVM_ABI void lookupAndRecordAddrs(
     unique_function<void(Error)> OnRecorded, ExecutionSession &ES, LookupKind K,
     const JITDylibSearchOrder &SearchOrder,
     std::vector<std::pair<SymbolStringPtr, ExecutorAddr *>> Pairs,
@@ -50,7 +50,7 @@ void lookupAndRecordAddrs(
 /// Record addresses of the given symbols in the given ExecutorAddrs.
 ///
 /// Blocking version.
-Error lookupAndRecordAddrs(
+LLVM_ABI Error lookupAndRecordAddrs(
     ExecutionSession &ES, LookupKind K, const JITDylibSearchOrder &SearchOrder,
     std::vector<std::pair<SymbolStringPtr, ExecutorAddr *>> Pairs,
     SymbolLookupFlags LookupFlags = SymbolLookupFlags::RequiredSymbol);
@@ -59,7 +59,7 @@ Error lookupAndRecordAddrs(
 ///
 /// ExecutorProcessControl lookup version. Lookups are always implicitly
 /// weak.
-Error lookupAndRecordAddrs(
+LLVM_ABI Error lookupAndRecordAddrs(
     ExecutorProcessControl &EPC, tpctypes::DylibHandle H,
     std::vector<std::pair<SymbolStringPtr, ExecutorAddr *>> Pairs,
     SymbolLookupFlags LookupFlags = SymbolLookupFlags::RequiredSymbol);

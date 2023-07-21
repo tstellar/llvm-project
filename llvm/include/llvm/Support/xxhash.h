@@ -42,8 +42,8 @@
 #include "llvm/ADT/StringRef.h"
 
 namespace llvm {
-uint64_t xxHash64(llvm::StringRef Data);
-uint64_t xxHash64(llvm::ArrayRef<uint8_t> Data);
+LLVM_ABI uint64_t xxHash64(llvm::StringRef Data);
+LLVM_ABI uint64_t xxHash64(llvm::ArrayRef<uint8_t> Data);
 }
 
 #endif

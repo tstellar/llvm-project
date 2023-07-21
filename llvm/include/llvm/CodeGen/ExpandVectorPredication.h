@@ -13,7 +13,7 @@
 
 namespace llvm {
 
-class ExpandVectorPredicationPass
+class LLVM_ABI ExpandVectorPredicationPass
     : public PassInfoMixin<ExpandVectorPredicationPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);

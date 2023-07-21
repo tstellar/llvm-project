@@ -22,7 +22,7 @@ namespace llvm {
 class MCInst;
 class raw_ostream;
 
-class MCSPIRVStreamer : public MCObjectStreamer {
+class LLVM_ABI MCSPIRVStreamer : public MCObjectStreamer {
 public:
   MCSPIRVStreamer(MCContext &Context, std::unique_ptr<MCAsmBackend> TAB,
                   std::unique_ptr<MCObjectWriter> OW,

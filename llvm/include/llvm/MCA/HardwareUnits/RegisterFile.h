@@ -35,7 +35,7 @@ class Instruction;
 /// This class is mainly used by the register file to describe register
 /// mappings. It correlates a register write to the source index of the
 /// defining instruction.
-class WriteRef {
+class LLVM_ABI WriteRef {
   unsigned IID;
   unsigned WriteBackCycle;
   unsigned WriteResID;
@@ -80,7 +80,7 @@ public:
 
 /// Manages hardware register files, and tracks register definitions for
 /// register renaming purposes.
-class RegisterFile : public HardwareUnit {
+class LLVM_ABI RegisterFile : public HardwareUnit {
   const MCRegisterInfo &MRI;
 
   // class RegisterMappingTracker is a  physical register file (PRF) descriptor.

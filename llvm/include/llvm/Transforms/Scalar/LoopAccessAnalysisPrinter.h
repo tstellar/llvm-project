@@ -17,7 +17,7 @@ class Function;
 class raw_ostream;
 
 /// Printer pass for the \c LoopAccessInfo results.
-class LoopAccessInfoPrinterPass
+class LLVM_ABI LoopAccessInfoPrinterPass
     : public PassInfoMixin<LoopAccessInfoPrinterPass> {
   raw_ostream &OS;
 

@@ -18,7 +18,7 @@ class DWARFObject;
 
 /// A DataExtractor (typically for an in-memory copy of an object-file section)
 /// plus a relocation map for that section, if there is one.
-class DWARFDataExtractor : public DataExtractor {
+class LLVM_ABI DWARFDataExtractor : public DataExtractor {
   const DWARFObject *Obj = nullptr;
   const DWARFSection *Section = nullptr;
 

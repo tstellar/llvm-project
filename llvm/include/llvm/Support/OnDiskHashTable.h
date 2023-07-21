@@ -55,7 +55,7 @@ namespace llvm {
 ///   static bool EqualKey(key_type_ref Key1, key_type_ref Key2);
 /// };
 /// \endcode
-template <typename Info> class OnDiskChainedHashTableGenerator {
+template <typename Info> class LLVM_ABI OnDiskChainedHashTableGenerator {
   /// A single item in the hash table.
   class Item {
   public:
@@ -270,7 +270,7 @@ public:
 ///                      offset_type DataLen);
 /// };
 /// \endcode
-template <typename Info> class OnDiskChainedHashTable {
+template <typename Info> class LLVM_ABI OnDiskChainedHashTable {
   const typename Info::offset_type NumBuckets;
   const typename Info::offset_type NumEntries;
   const unsigned char *const Buckets;
@@ -427,7 +427,7 @@ public:
 ///
 /// \copydetails llvm::OnDiskChainedHashTable
 template <typename Info>
-class OnDiskIterableChainedHashTable : public OnDiskChainedHashTable<Info> {
+class LLVM_ABI OnDiskIterableChainedHashTable : public OnDiskChainedHashTable<Info> {
   const unsigned char *Payload;
 
 public:

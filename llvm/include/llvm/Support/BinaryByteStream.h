@@ -27,7 +27,7 @@ namespace llvm {
 /// in a single contiguous buffer.  BinaryByteStream guarantees that no read
 /// operation will ever incur a copy.  Note that BinaryByteStream does not
 /// own the underlying buffer.
-class BinaryByteStream : public BinaryStream {
+class LLVM_ABI BinaryByteStream : public BinaryStream {
 public:
   BinaryByteStream() = default;
   BinaryByteStream(ArrayRef<uint8_t> Data, llvm::support::endianness Endian)
@@ -71,7 +71,7 @@ protected:
 /// MemoryBuffer object.  MemoryBufferByteStream owns the MemoryBuffer in
 /// question.  As with BinaryByteStream, reading from a MemoryBufferByteStream
 /// will never cause a copy.
-class MemoryBufferByteStream : public BinaryByteStream {
+class LLVM_ABI MemoryBufferByteStream : public BinaryByteStream {
 public:
   MemoryBufferByteStream(std::unique_ptr<MemoryBuffer> Buffer,
                          llvm::support::endianness Endian)
@@ -85,7 +85,7 @@ public:
 /// in a single contiguous buffer.  As with BinaryByteStream, the mutable
 /// version also guarantees that no read operation will ever incur a copy,
 /// and similarly it does not own the underlying buffer.
-class MutableBinaryByteStream : public WritableBinaryStream {
+class LLVM_ABI MutableBinaryByteStream : public WritableBinaryStream {
 public:
   MutableBinaryByteStream() = default;
   MutableBinaryByteStream(MutableArrayRef<uint8_t> Data,
@@ -131,7 +131,7 @@ private:
 
 /// An implementation of WritableBinaryStream which can write at its end
 /// causing the underlying data to grow.  This class owns the underlying data.
-class AppendingBinaryByteStream : public WritableBinaryStream {
+class LLVM_ABI AppendingBinaryByteStream : public WritableBinaryStream {
   std::vector<uint8_t> Data;
   llvm::support::endianness Endian = llvm::support::little;
 
@@ -199,7 +199,7 @@ public:
 
 /// An implementation of WritableBinaryStream backed by an llvm
 /// FileOutputBuffer.
-class FileBufferByteStream : public WritableBinaryStream {
+class LLVM_ABI FileBufferByteStream : public WritableBinaryStream {
 private:
   class StreamImpl : public MutableBinaryByteStream {
   public:

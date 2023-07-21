@@ -19,7 +19,7 @@
 
 namespace llvm {
 
-class UnifyFunctionExitNodesLegacyPass : public FunctionPass {
+class LLVM_ABI UnifyFunctionExitNodesLegacyPass : public FunctionPass {
 public:
   static char ID; // Pass identification, replacement for typeid
   UnifyFunctionExitNodesLegacyPass();
@@ -30,9 +30,9 @@ public:
   bool runOnFunction(Function &F) override;
 };
 
-Pass *createUnifyFunctionExitNodesPass();
+LLVM_ABI Pass *createUnifyFunctionExitNodesPass();
 
-class UnifyFunctionExitNodesPass
+class LLVM_ABI UnifyFunctionExitNodesPass
     : public PassInfoMixin<UnifyFunctionExitNodesPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);

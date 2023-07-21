@@ -14,7 +14,7 @@
 
 namespace llvm {
 
-class LoopRerollPass : public PassInfoMixin<LoopRerollPass> {
+class LLVM_ABI LoopRerollPass : public PassInfoMixin<LoopRerollPass> {
 public:
   PreservedAnalyses run(Loop &L, LoopAnalysisManager &AM,
                         LoopStandardAnalysisResults &AR, LPMUpdater &U);

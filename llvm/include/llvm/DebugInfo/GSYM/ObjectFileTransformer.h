@@ -23,7 +23,7 @@ namespace gsym {
 
 class GsymCreator;
 
-class ObjectFileTransformer {
+class LLVM_ABI ObjectFileTransformer {
 public:
   /// Extract any object file data that is needed by the GsymCreator.
   ///

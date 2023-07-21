@@ -66,7 +66,7 @@ namespace vfs {
 class FileSystem;
 }
 
-class SpecialCaseList {
+class LLVM_ABI SpecialCaseList {
 public:
   /// Parses the special case list entries from files. On failure, returns
   /// 0 and writes an error message to string.

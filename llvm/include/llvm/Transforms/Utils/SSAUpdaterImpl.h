@@ -27,7 +27,7 @@ namespace llvm {
 template<typename T> class SSAUpdaterTraits;
 
 template<typename UpdaterT>
-class SSAUpdaterImpl {
+class LLVM_ABI SSAUpdaterImpl {
 private:
   UpdaterT *Updater;
 

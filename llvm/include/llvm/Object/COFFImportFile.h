@@ -26,7 +26,7 @@
 namespace llvm {
 namespace object {
 
-class COFFImportFile : public SymbolicFile {
+class LLVM_ABI COFFImportFile : public SymbolicFile {
 public:
   COFFImportFile(MemoryBufferRef Source)
       : SymbolicFile(ID_COFFImportFile, Source) {}
@@ -69,7 +69,7 @@ private:
   }
 };
 
-struct COFFShortExport {
+struct LLVM_ABI COFFShortExport {
   /// The name of the export as specified in the .def file or on the command
   /// line, i.e. "foo" in "/EXPORT:foo", and "bar" in "/EXPORT:foo=bar". This
   /// may lack mangling, such as underscore prefixing and stdcall suffixing.
@@ -104,7 +104,7 @@ struct COFFShortExport {
   }
 };
 
-Error writeImportLibrary(StringRef ImportName, StringRef Path,
+LLVM_ABI Error writeImportLibrary(StringRef ImportName, StringRef Path,
                          ArrayRef<COFFShortExport> Exports,
                          COFF::MachineTypes Machine, bool MinGW);
 

@@ -38,7 +38,7 @@ class ScheduleDAGSDNodes;
 
 /// SelectionDAGISel - This is the common base class used for SelectionDAG-based
 /// pattern-matching instruction selectors.
-class SelectionDAGISel : public MachineFunctionPass {
+class LLVM_ABI SelectionDAGISel : public MachineFunctionPass {
 public:
   TargetMachine &TM;
   const TargetLibraryInfo *LibInfo;

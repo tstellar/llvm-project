@@ -25,13 +25,13 @@ namespace llvm {
 
 namespace pdb {
 
-Error readSparseBitVector(BinaryStreamReader &Stream, SparseBitVector<> &V);
-Error writeSparseBitVector(BinaryStreamWriter &Writer, SparseBitVector<> &Vec);
+LLVM_ABI Error readSparseBitVector(BinaryStreamReader &Stream, SparseBitVector<> &V);
+LLVM_ABI Error writeSparseBitVector(BinaryStreamWriter &Writer, SparseBitVector<> &Vec);
 
 template <typename ValueT> class HashTable;
 
 template <typename ValueT>
-class HashTableIterator
+class LLVM_ABI HashTableIterator
     : public iterator_facade_base<HashTableIterator<ValueT>,
                                   std::forward_iterator_tag,
                                   const std::pair<uint32_t, ValueT>> {
@@ -96,7 +96,7 @@ private:
 };
 
 template <typename ValueT>
-class HashTable {
+class LLVM_ABI HashTable {
   struct Header {
     support::ulittle32_t Size;
     support::ulittle32_t Capacity;

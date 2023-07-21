@@ -27,7 +27,7 @@ namespace llvm {
 /// some other productive instruction (e.g. arithmetic instructions).
 /// Bit manipulation instructions like shifts are not ByteProviders, rather
 /// are used to extract Bytes.
-template <typename ISelOp> class ByteProvider {
+template <typename ISelOp> class LLVM_ABI ByteProvider {
 private:
   ByteProvider<ISelOp>(std::optional<ISelOp> Src, int64_t DestOffset,
                        int64_t SrcOffset)

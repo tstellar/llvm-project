@@ -45,7 +45,7 @@ class MCSymbol;
 /// MachineRegisterInfo::moveOperands(), and MF::DeleteMachineInstr() depend on
 /// not having to call the MachineOperand destructor.
 ///
-class MachineOperand {
+class LLVM_ABI MachineOperand {
 public:
   enum MachineOperandType : unsigned char {
     MO_Register,          ///< Register operand.
@@ -1012,7 +1012,7 @@ private:
   }
 };
 
-template <> struct DenseMapInfo<MachineOperand> {
+template <> struct LLVM_ABI DenseMapInfo<MachineOperand> {
   static MachineOperand getEmptyKey() {
     return MachineOperand(static_cast<MachineOperand::MachineOperandType>(
         MachineOperand::MO_Empty));
@@ -1041,7 +1041,7 @@ inline raw_ostream &operator<<(raw_ostream &OS, const MachineOperand &MO) {
 
 // See friend declaration above. This additional declaration is required in
 // order to compile LLVM with IBM xlC compiler.
-hash_code hash_value(const MachineOperand &MO);
+LLVM_ABI hash_code hash_value(const MachineOperand &MO);
 } // namespace llvm
 
 #endif

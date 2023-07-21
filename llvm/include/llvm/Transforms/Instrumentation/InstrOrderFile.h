@@ -17,7 +17,7 @@ namespace llvm {
 class Module;
 
 /// The instrumentation pass for recording function order.
-class InstrOrderFilePass : public PassInfoMixin<InstrOrderFilePass> {
+class LLVM_ABI InstrOrderFilePass : public PassInfoMixin<InstrOrderFilePass> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
 };

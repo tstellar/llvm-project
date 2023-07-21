@@ -27,7 +27,7 @@ struct SectionedAddress;
 }
 
 /// A class representing a single range list entry.
-struct RangeListEntry : public DWARFListEntryBase {
+struct LLVM_ABI RangeListEntry : public DWARFListEntryBase {
   /// The values making up the range list entry. Most represent a range with
   /// a start and end address or a start address and a length. Others are
   /// single value base addresses or end-of-list with no values. The unneeded
@@ -45,7 +45,7 @@ struct RangeListEntry : public DWARFListEntryBase {
 };
 
 /// A class representing a single rangelist.
-class DWARFDebugRnglist : public DWARFListType<RangeListEntry> {
+class LLVM_ABI DWARFDebugRnglist : public DWARFListType<RangeListEntry> {
 public:
   /// Build a DWARFAddressRangesVector from a rangelist.
   DWARFAddressRangesVector getAbsoluteRanges(
@@ -59,7 +59,7 @@ public:
                     DWARFUnit &U) const;
 };
 
-class DWARFDebugRnglistTable : public DWARFListTableBase<DWARFDebugRnglist> {
+class LLVM_ABI DWARFDebugRnglistTable : public DWARFListTableBase<DWARFDebugRnglist> {
 public:
   DWARFDebugRnglistTable()
       : DWARFListTableBase(/* SectionName    = */ ".debug_rnglists",

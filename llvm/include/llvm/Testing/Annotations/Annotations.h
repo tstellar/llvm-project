@@ -50,7 +50,7 @@ class raw_ostream;
 ///          2. making characters for marking points and ranges configurable,
 ///          3. changing the syntax to something less commonly used,
 ///          4. ...
-class Annotations {
+class LLVM_ABI Annotations {
 public:
   /// Two offsets pointing to a continuous substring. End is not included, i.e.
   /// represents a half-open range.
@@ -125,7 +125,7 @@ private:
   llvm::StringMap<llvm::SmallVector<size_t, 1>> Ranges;
 };
 
-llvm::raw_ostream &operator<<(llvm::raw_ostream &O,
+LLVM_ABI llvm::raw_ostream &operator<<(llvm::raw_ostream &O,
                               const llvm::Annotations::Range &R);
 
 } // namespace llvm

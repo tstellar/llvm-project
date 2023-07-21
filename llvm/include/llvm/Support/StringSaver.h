@@ -18,7 +18,7 @@ namespace llvm {
 
 /// Saves strings in the provided stable storage and returns a
 /// StringRef with a stable character pointer.
-class StringSaver final {
+class LLVM_ABI StringSaver final {
   BumpPtrAllocator &Alloc;
 
 public:
@@ -41,7 +41,7 @@ public:
 ///
 /// Compared to StringPool, it performs fewer allocations but doesn't support
 /// refcounting/deletion.
-class UniqueStringSaver final {
+class LLVM_ABI UniqueStringSaver final {
   StringSaver Strings;
   llvm::DenseSet<llvm::StringRef> Unique;
 

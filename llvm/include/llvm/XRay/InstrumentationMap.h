@@ -31,10 +31,10 @@ class InstrumentationMap;
 
 /// Loads the instrumentation map from |Filename|. This auto-deduces the type of
 /// the instrumentation map.
-Expected<InstrumentationMap> loadInstrumentationMap(StringRef Filename);
+LLVM_ABI Expected<InstrumentationMap> loadInstrumentationMap(StringRef Filename);
 
 /// Represents an XRay instrumentation sled entry from an object file.
-struct SledEntry {
+struct LLVM_ABI SledEntry {
   /// Each entry here represents the kinds of supported instrumentation map
   /// entries.
   enum class FunctionKinds { ENTRY, EXIT, TAIL, LOG_ARGS_ENTER, CUSTOM_EVENT };
@@ -54,7 +54,7 @@ struct SledEntry {
   unsigned char Version;
 };
 
-struct YAMLXRaySledEntry {
+struct LLVM_ABI YAMLXRaySledEntry {
   int32_t FuncId;
   yaml::Hex64 Address;
   yaml::Hex64 Function;
@@ -72,7 +72,7 @@ struct YAMLXRaySledEntry {
 /// We also provide raw access to the actual instrumentation map entries we find
 /// associated with a particular object file.
 ///
-class InstrumentationMap {
+class LLVM_ABI InstrumentationMap {
 public:
   using FunctionAddressMap = std::unordered_map<int32_t, uint64_t>;
   using FunctionAddressReverseMap = std::unordered_map<uint64_t, int32_t>;
@@ -103,7 +103,7 @@ public:
 
 namespace yaml {
 
-template <> struct ScalarEnumerationTraits<xray::SledEntry::FunctionKinds> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<xray::SledEntry::FunctionKinds> {
   static void enumeration(IO &IO, xray::SledEntry::FunctionKinds &Kind) {
     IO.enumCase(Kind, "function-enter", xray::SledEntry::FunctionKinds::ENTRY);
     IO.enumCase(Kind, "function-exit", xray::SledEntry::FunctionKinds::EXIT);
@@ -115,7 +115,7 @@ template <> struct ScalarEnumerationTraits<xray::SledEntry::FunctionKinds> {
   }
 };
 
-template <> struct MappingTraits<xray::YAMLXRaySledEntry> {
+template <> struct LLVM_ABI MappingTraits<xray::YAMLXRaySledEntry> {
   static void mapping(IO &IO, xray::YAMLXRaySledEntry &Entry) {
     IO.mapRequired("id", Entry.FuncId);
     IO.mapRequired("address", Entry.Address);

@@ -26,7 +26,7 @@ namespace llvm {
 
 class raw_ostream;
 
-class InstructionCost {
+class LLVM_ABI InstructionCost {
 public:
   using CostType = int64_t;
 

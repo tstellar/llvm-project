@@ -40,29 +40,29 @@ LLVM_YAML_STRONG_TYPEDEF(uint32_t, LimitFlags)
 LLVM_YAML_STRONG_TYPEDEF(uint32_t, ComdatKind)
 LLVM_YAML_STRONG_TYPEDEF(uint32_t, FeaturePolicyPrefix)
 
-struct FileHeader {
+struct LLVM_ABI FileHeader {
   yaml::Hex32 Version;
 };
 
-struct Limits {
+struct LLVM_ABI Limits {
   LimitFlags Flags;
   yaml::Hex32 Minimum;
   yaml::Hex32 Maximum;
 };
 
-struct Table {
+struct LLVM_ABI Table {
   TableType ElemType;
   Limits TableLimits;
   uint32_t Index;
 };
 
-struct Export {
+struct LLVM_ABI Export {
   StringRef Name;
   ExportKind Kind;
   uint32_t Index;
 };
 
-struct InitExpr {
+struct LLVM_ABI InitExpr {
   InitExpr() {}
   bool Extended;
   union {
@@ -71,7 +71,7 @@ struct InitExpr {
   };
 };
 
-struct ElemSegment {
+struct LLVM_ABI ElemSegment {
   uint32_t Flags;
   uint32_t TableNumber;
   ValueType ElemKind;
@@ -79,14 +79,14 @@ struct ElemSegment {
   std::vector<uint32_t> Functions;
 };
 
-struct Global {
+struct LLVM_ABI Global {
   uint32_t Index;
   ValueType Type;
   bool Mutable;
   InitExpr Init;
 };
 
-struct Import {
+struct LLVM_ABI Import {
   Import() {}
   StringRef Module;
   StringRef Field;
@@ -100,18 +100,18 @@ struct Import {
   };
 };
 
-struct LocalDecl {
+struct LLVM_ABI LocalDecl {
   ValueType Type;
   uint32_t Count;
 };
 
-struct Function {
+struct LLVM_ABI Function {
   uint32_t Index;
   std::vector<LocalDecl> Locals;
   yaml::BinaryRef Body;
 };
 
-struct Relocation {
+struct LLVM_ABI Relocation {
   RelocType Type;
   uint32_t Index;
   // TODO(wvo): this would strictly be better as Hex64, but that will change
@@ -120,7 +120,7 @@ struct Relocation {
   int64_t Addend;
 };
 
-struct DataSegment {
+struct LLVM_ABI DataSegment {
   uint32_t SectionOffset;
   uint32_t InitFlags;
   uint32_t MemoryIndex;
@@ -128,36 +128,36 @@ struct DataSegment {
   yaml::BinaryRef Content;
 };
 
-struct NameEntry {
+struct LLVM_ABI NameEntry {
   uint32_t Index;
   StringRef Name;
 };
 
-struct ProducerEntry {
+struct LLVM_ABI ProducerEntry {
   std::string Name;
   std::string Version;
 };
 
-struct FeatureEntry {
+struct LLVM_ABI FeatureEntry {
   FeaturePolicyPrefix Prefix;
   std::string Name;
 };
 
-struct SegmentInfo {
+struct LLVM_ABI SegmentInfo {
   uint32_t Index;
   StringRef Name;
   uint32_t Alignment;
   SegmentFlags Flags;
 };
 
-struct Signature {
+struct LLVM_ABI Signature {
   uint32_t Index;
   SignatureForm Form = wasm::WASM_TYPE_FUNC;
   std::vector<ValueType> ParamTypes;
   std::vector<ValueType> ReturnTypes;
 };
 
-struct SymbolInfo {
+struct LLVM_ABI SymbolInfo {
   uint32_t Index;
   StringRef Name;
   SymbolKind Kind;
@@ -168,22 +168,22 @@ struct SymbolInfo {
   };
 };
 
-struct InitFunction {
+struct LLVM_ABI InitFunction {
   uint32_t Priority;
   uint32_t Symbol;
 };
 
-struct ComdatEntry {
+struct LLVM_ABI ComdatEntry {
   ComdatKind Kind;
   uint32_t Index;
 };
 
-struct Comdat {
+struct LLVM_ABI Comdat {
   StringRef Name;
   std::vector<ComdatEntry> Entries;
 };
 
-struct Section {
+struct LLVM_ABI Section {
   explicit Section(SectionType SecType) : Type(SecType) {}
   virtual ~Section();
 
@@ -191,7 +191,7 @@ struct Section {
   std::vector<Relocation> Relocations;
 };
 
-struct CustomSection : Section {
+struct LLVM_ABI CustomSection : Section {
   explicit CustomSection(StringRef Name)
       : Section(wasm::WASM_SEC_CUSTOM), Name(Name) {}
 
@@ -203,18 +203,18 @@ struct CustomSection : Section {
   yaml::BinaryRef Payload;
 };
 
-struct DylinkImportInfo {
+struct LLVM_ABI DylinkImportInfo {
   StringRef Module;
   StringRef Field;
   SymbolFlags Flags;
 };
 
-struct DylinkExportInfo {
+struct LLVM_ABI DylinkExportInfo {
   StringRef Name;
   SymbolFlags Flags;
 };
 
-struct DylinkSection : CustomSection {
+struct LLVM_ABI DylinkSection : CustomSection {
   DylinkSection() : CustomSection("dylink.0") {}
 
   static bool classof(const Section *S) {
@@ -231,7 +231,7 @@ struct DylinkSection : CustomSection {
   std::vector<DylinkExportInfo> ExportInfo;
 };
 
-struct NameSection : CustomSection {
+struct LLVM_ABI NameSection : CustomSection {
   NameSection() : CustomSection("name") {}
 
   static bool classof(const Section *S) {
@@ -244,7 +244,7 @@ struct NameSection : CustomSection {
   std::vector<NameEntry> DataSegmentNames;
 };
 
-struct LinkingSection : CustomSection {
+struct LLVM_ABI LinkingSection : CustomSection {
   LinkingSection() : CustomSection("linking") {}
 
   static bool classof(const Section *S) {
@@ -259,7 +259,7 @@ struct LinkingSection : CustomSection {
   std::vector<Comdat> Comdats;
 };
 
-struct ProducersSection : CustomSection {
+struct LLVM_ABI ProducersSection : CustomSection {
   ProducersSection() : CustomSection("producers") {}
 
   static bool classof(const Section *S) {
@@ -272,7 +272,7 @@ struct ProducersSection : CustomSection {
   std::vector<ProducerEntry> SDKs;
 };
 
-struct TargetFeaturesSection : CustomSection {
+struct LLVM_ABI TargetFeaturesSection : CustomSection {
   TargetFeaturesSection() : CustomSection("target_features") {}
 
   static bool classof(const Section *S) {
@@ -283,7 +283,7 @@ struct TargetFeaturesSection : CustomSection {
   std::vector<FeatureEntry> Features;
 };
 
-struct TypeSection : Section {
+struct LLVM_ABI TypeSection : Section {
   TypeSection() : Section(wasm::WASM_SEC_TYPE) {}
 
   static bool classof(const Section *S) {
@@ -293,7 +293,7 @@ struct TypeSection : Section {
   std::vector<Signature> Signatures;
 };
 
-struct ImportSection : Section {
+struct LLVM_ABI ImportSection : Section {
   ImportSection() : Section(wasm::WASM_SEC_IMPORT) {}
 
   static bool classof(const Section *S) {
@@ -303,7 +303,7 @@ struct ImportSection : Section {
   std::vector<Import> Imports;
 };
 
-struct FunctionSection : Section {
+struct LLVM_ABI FunctionSection : Section {
   FunctionSection() : Section(wasm::WASM_SEC_FUNCTION) {}
 
   static bool classof(const Section *S) {
@@ -313,7 +313,7 @@ struct FunctionSection : Section {
   std::vector<uint32_t> FunctionTypes;
 };
 
-struct TableSection : Section {
+struct LLVM_ABI TableSection : Section {
   TableSection() : Section(wasm::WASM_SEC_TABLE) {}
 
   static bool classof(const Section *S) {
@@ -323,7 +323,7 @@ struct TableSection : Section {
   std::vector<Table> Tables;
 };
 
-struct MemorySection : Section {
+struct LLVM_ABI MemorySection : Section {
   MemorySection() : Section(wasm::WASM_SEC_MEMORY) {}
 
   static bool classof(const Section *S) {
@@ -333,7 +333,7 @@ struct MemorySection : Section {
   std::vector<Limits> Memories;
 };
 
-struct TagSection : Section {
+struct LLVM_ABI TagSection : Section {
   TagSection() : Section(wasm::WASM_SEC_TAG) {}
 
   static bool classof(const Section *S) {
@@ -343,7 +343,7 @@ struct TagSection : Section {
   std::vector<uint32_t> TagTypes;
 };
 
-struct GlobalSection : Section {
+struct LLVM_ABI GlobalSection : Section {
   GlobalSection() : Section(wasm::WASM_SEC_GLOBAL) {}
 
   static bool classof(const Section *S) {
@@ -353,7 +353,7 @@ struct GlobalSection : Section {
   std::vector<Global> Globals;
 };
 
-struct ExportSection : Section {
+struct LLVM_ABI ExportSection : Section {
   ExportSection() : Section(wasm::WASM_SEC_EXPORT) {}
 
   static bool classof(const Section *S) {
@@ -363,7 +363,7 @@ struct ExportSection : Section {
   std::vector<Export> Exports;
 };
 
-struct StartSection : Section {
+struct LLVM_ABI StartSection : Section {
   StartSection() : Section(wasm::WASM_SEC_START) {}
 
   static bool classof(const Section *S) {
@@ -373,7 +373,7 @@ struct StartSection : Section {
   uint32_t StartFunction;
 };
 
-struct ElemSection : Section {
+struct LLVM_ABI ElemSection : Section {
   ElemSection() : Section(wasm::WASM_SEC_ELEM) {}
 
   static bool classof(const Section *S) {
@@ -383,7 +383,7 @@ struct ElemSection : Section {
   std::vector<ElemSegment> Segments;
 };
 
-struct CodeSection : Section {
+struct LLVM_ABI CodeSection : Section {
   CodeSection() : Section(wasm::WASM_SEC_CODE) {}
 
   static bool classof(const Section *S) {
@@ -393,7 +393,7 @@ struct CodeSection : Section {
   std::vector<Function> Functions;
 };
 
-struct DataSection : Section {
+struct LLVM_ABI DataSection : Section {
   DataSection() : Section(wasm::WASM_SEC_DATA) {}
 
   static bool classof(const Section *S) {
@@ -403,7 +403,7 @@ struct DataSection : Section {
   std::vector<DataSegment> Segments;
 };
 
-struct DataCountSection : Section {
+struct LLVM_ABI DataCountSection : Section {
   DataCountSection() : Section(wasm::WASM_SEC_DATACOUNT) {}
 
   static bool classof(const Section *S) {
@@ -413,7 +413,7 @@ struct DataCountSection : Section {
   uint32_t Count;
 };
 
-struct Object {
+struct LLVM_ABI Object {
   FileHeader Header;
   std::vector<std::unique_ptr<Section>> Sections;
 };
@@ -448,151 +448,151 @@ LLVM_YAML_IS_SEQUENCE_VECTOR(llvm::WasmYAML::DylinkExportInfo)
 namespace llvm {
 namespace yaml {
 
-template <> struct MappingTraits<WasmYAML::FileHeader> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::FileHeader> {
   static void mapping(IO &IO, WasmYAML::FileHeader &FileHdr);
 };
 
-template <> struct MappingTraits<std::unique_ptr<WasmYAML::Section>> {
+template <> struct LLVM_ABI MappingTraits<std::unique_ptr<WasmYAML::Section>> {
   static void mapping(IO &IO, std::unique_ptr<WasmYAML::Section> &Section);
 };
 
-template <> struct MappingTraits<WasmYAML::Object> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::Object> {
   static void mapping(IO &IO, WasmYAML::Object &Object);
 };
 
-template <> struct MappingTraits<WasmYAML::Import> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::Import> {
   static void mapping(IO &IO, WasmYAML::Import &Import);
 };
 
-template <> struct MappingTraits<WasmYAML::Export> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::Export> {
   static void mapping(IO &IO, WasmYAML::Export &Export);
 };
 
-template <> struct MappingTraits<WasmYAML::Global> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::Global> {
   static void mapping(IO &IO, WasmYAML::Global &Global);
 };
 
-template <> struct ScalarBitSetTraits<WasmYAML::LimitFlags> {
+template <> struct LLVM_ABI ScalarBitSetTraits<WasmYAML::LimitFlags> {
   static void bitset(IO &IO, WasmYAML::LimitFlags &Value);
 };
 
-template <> struct ScalarBitSetTraits<WasmYAML::SymbolFlags> {
+template <> struct LLVM_ABI ScalarBitSetTraits<WasmYAML::SymbolFlags> {
   static void bitset(IO &IO, WasmYAML::SymbolFlags &Value);
 };
 
-template <> struct ScalarEnumerationTraits<WasmYAML::SymbolKind> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<WasmYAML::SymbolKind> {
   static void enumeration(IO &IO, WasmYAML::SymbolKind &Kind);
 };
 
-template <> struct ScalarBitSetTraits<WasmYAML::SegmentFlags> {
+template <> struct LLVM_ABI ScalarBitSetTraits<WasmYAML::SegmentFlags> {
   static void bitset(IO &IO, WasmYAML::SegmentFlags &Value);
 };
 
-template <> struct ScalarEnumerationTraits<WasmYAML::SectionType> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<WasmYAML::SectionType> {
   static void enumeration(IO &IO, WasmYAML::SectionType &Type);
 };
 
-template <> struct MappingTraits<WasmYAML::Signature> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::Signature> {
   static void mapping(IO &IO, WasmYAML::Signature &Signature);
 };
 
-template <> struct MappingTraits<WasmYAML::Table> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::Table> {
   static void mapping(IO &IO, WasmYAML::Table &Table);
 };
 
-template <> struct MappingTraits<WasmYAML::Limits> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::Limits> {
   static void mapping(IO &IO, WasmYAML::Limits &Limits);
 };
 
-template <> struct MappingTraits<WasmYAML::Function> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::Function> {
   static void mapping(IO &IO, WasmYAML::Function &Function);
 };
 
-template <> struct MappingTraits<WasmYAML::Relocation> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::Relocation> {
   static void mapping(IO &IO, WasmYAML::Relocation &Relocation);
 };
 
-template <> struct MappingTraits<WasmYAML::NameEntry> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::NameEntry> {
   static void mapping(IO &IO, WasmYAML::NameEntry &NameEntry);
 };
 
-template <> struct MappingTraits<WasmYAML::ProducerEntry> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::ProducerEntry> {
   static void mapping(IO &IO, WasmYAML::ProducerEntry &ProducerEntry);
 };
 
-template <> struct ScalarEnumerationTraits<WasmYAML::FeaturePolicyPrefix> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<WasmYAML::FeaturePolicyPrefix> {
   static void enumeration(IO &IO, WasmYAML::FeaturePolicyPrefix &Prefix);
 };
 
-template <> struct MappingTraits<WasmYAML::FeatureEntry> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::FeatureEntry> {
   static void mapping(IO &IO, WasmYAML::FeatureEntry &FeatureEntry);
 };
 
-template <> struct MappingTraits<WasmYAML::SegmentInfo> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::SegmentInfo> {
   static void mapping(IO &IO, WasmYAML::SegmentInfo &SegmentInfo);
 };
 
-template <> struct MappingTraits<WasmYAML::LocalDecl> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::LocalDecl> {
   static void mapping(IO &IO, WasmYAML::LocalDecl &LocalDecl);
 };
 
-template <> struct MappingTraits<WasmYAML::InitExpr> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::InitExpr> {
   static void mapping(IO &IO, WasmYAML::InitExpr &Expr);
 };
 
-template <> struct MappingTraits<WasmYAML::DataSegment> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::DataSegment> {
   static void mapping(IO &IO, WasmYAML::DataSegment &Segment);
 };
 
-template <> struct MappingTraits<WasmYAML::ElemSegment> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::ElemSegment> {
   static void mapping(IO &IO, WasmYAML::ElemSegment &Segment);
 };
 
-template <> struct MappingTraits<WasmYAML::SymbolInfo> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::SymbolInfo> {
   static void mapping(IO &IO, WasmYAML::SymbolInfo &Info);
 };
 
-template <> struct MappingTraits<WasmYAML::InitFunction> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::InitFunction> {
   static void mapping(IO &IO, WasmYAML::InitFunction &Init);
 };
 
-template <> struct ScalarEnumerationTraits<WasmYAML::ComdatKind> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<WasmYAML::ComdatKind> {
   static void enumeration(IO &IO, WasmYAML::ComdatKind &Kind);
 };
 
-template <> struct MappingTraits<WasmYAML::ComdatEntry> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::ComdatEntry> {
   static void mapping(IO &IO, WasmYAML::ComdatEntry &ComdatEntry);
 };
 
-template <> struct MappingTraits<WasmYAML::Comdat> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::Comdat> {
   static void mapping(IO &IO, WasmYAML::Comdat &Comdat);
 };
 
-template <> struct ScalarEnumerationTraits<WasmYAML::ValueType> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<WasmYAML::ValueType> {
   static void enumeration(IO &IO, WasmYAML::ValueType &Type);
 };
 
-template <> struct ScalarEnumerationTraits<WasmYAML::ExportKind> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<WasmYAML::ExportKind> {
   static void enumeration(IO &IO, WasmYAML::ExportKind &Kind);
 };
 
-template <> struct ScalarEnumerationTraits<WasmYAML::TableType> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<WasmYAML::TableType> {
   static void enumeration(IO &IO, WasmYAML::TableType &Type);
 };
 
-template <> struct ScalarEnumerationTraits<WasmYAML::Opcode> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<WasmYAML::Opcode> {
   static void enumeration(IO &IO, WasmYAML::Opcode &Opcode);
 };
 
-template <> struct ScalarEnumerationTraits<WasmYAML::RelocType> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<WasmYAML::RelocType> {
   static void enumeration(IO &IO, WasmYAML::RelocType &Kind);
 };
 
-template <> struct MappingTraits<WasmYAML::DylinkImportInfo> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::DylinkImportInfo> {
   static void mapping(IO &IO, WasmYAML::DylinkImportInfo &Info);
 };
 
-template <> struct MappingTraits<WasmYAML::DylinkExportInfo> {
+template <> struct LLVM_ABI MappingTraits<WasmYAML::DylinkExportInfo> {
   static void mapping(IO &IO, WasmYAML::DylinkExportInfo &Info);
 };
 

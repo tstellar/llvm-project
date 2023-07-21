@@ -24,7 +24,7 @@ namespace remarks {
 
 struct Remark;
 
-class EndOfFileError : public ErrorInfo<EndOfFileError> {
+class LLVM_ABI EndOfFileError : public ErrorInfo<EndOfFileError> {
 public:
   static char ID;
 
@@ -37,7 +37,7 @@ public:
 };
 
 /// Parser used to parse a raw buffer to remarks::Remark objects.
-struct RemarkParser {
+struct LLVM_ABI RemarkParser {
   /// The format of the parser.
   Format ParserFormat;
   /// Path to prepend when opening an external remark file.
@@ -57,7 +57,7 @@ struct RemarkParser {
 
 /// In-memory representation of the string table parsed from a buffer (e.g. the
 /// remarks section).
-struct ParsedStringTable {
+struct LLVM_ABI ParsedStringTable {
   /// The buffer mapped from the section contents.
   StringRef Buffer;
   /// This object has high changes to be std::move'd around, so don't use a
@@ -76,14 +76,14 @@ struct ParsedStringTable {
   Expected<StringRef> operator[](size_t Index) const;
 };
 
-Expected<std::unique_ptr<RemarkParser>> createRemarkParser(Format ParserFormat,
+LLVM_ABI Expected<std::unique_ptr<RemarkParser>> createRemarkParser(Format ParserFormat,
                                                            StringRef Buf);
 
-Expected<std::unique_ptr<RemarkParser>>
+LLVM_ABI Expected<std::unique_ptr<RemarkParser>>
 createRemarkParser(Format ParserFormat, StringRef Buf,
                    ParsedStringTable StrTab);
 
-Expected<std::unique_ptr<RemarkParser>> createRemarkParserFromMeta(
+LLVM_ABI Expected<std::unique_ptr<RemarkParser>> createRemarkParserFromMeta(
     Format ParserFormat, StringRef Buf,
     std::optional<ParsedStringTable> StrTab = std::nullopt,
     std::optional<StringRef> ExternalFilePrependPath = std::nullopt);

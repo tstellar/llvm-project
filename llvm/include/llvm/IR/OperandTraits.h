@@ -27,7 +27,7 @@ namespace llvm {
 /// known at compile time.
 
 template <typename SubClass, unsigned ARITY>
-struct FixedNumOperandTraits {
+struct LLVM_ABI FixedNumOperandTraits {
   static Use *op_begin(SubClass* U) {
     static_assert(
         !std::is_polymorphic<SubClass>::value,
@@ -50,7 +50,7 @@ struct FixedNumOperandTraits {
 /// Naturally it may only decrease, because the allocations may not change.
 
 template <typename SubClass, unsigned ARITY = 1>
-struct OptionalOperandTraits : public FixedNumOperandTraits<SubClass, ARITY> {
+struct LLVM_ABI OptionalOperandTraits : public FixedNumOperandTraits<SubClass, ARITY> {
   static unsigned operands(const User *U) {
     return U->getNumOperands();
   }
@@ -65,7 +65,7 @@ struct OptionalOperandTraits : public FixedNumOperandTraits<SubClass, ARITY> {
 /// only known at allocation time.
 
 template <typename SubClass, unsigned MINARITY = 0>
-struct VariadicOperandTraits {
+struct LLVM_ABI VariadicOperandTraits {
   static Use *op_begin(SubClass* U) {
     static_assert(
         !std::is_polymorphic<SubClass>::value,
@@ -92,7 +92,7 @@ struct VariadicOperandTraits {
 /// resizable.
 
 template <unsigned MINARITY = 1>
-struct HungoffOperandTraits {
+struct LLVM_ABI HungoffOperandTraits {
   static Use *op_begin(User* U) {
     return U->getOperandList();
   }

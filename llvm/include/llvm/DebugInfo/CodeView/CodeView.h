@@ -528,7 +528,7 @@ enum class RegisterId : uint16_t {
 
 // Register Ids are shared between architectures in CodeView. CPUType is needed
 // to map register Id to name.
-struct CPURegister {
+struct LLVM_ABI CPURegister {
   CPURegister() = delete;
   CPURegister(CPUType Cpu, codeview::RegisterId Reg) {
     this->Cpu = Cpu;
@@ -547,9 +547,9 @@ enum class EncodedFramePtrReg : uint8_t {
   BasePtr = 3,
 };
 
-RegisterId decodeFramePtrReg(EncodedFramePtrReg EncodedReg, CPUType CPU);
+LLVM_ABI RegisterId decodeFramePtrReg(EncodedFramePtrReg EncodedReg, CPUType CPU);
 
-EncodedFramePtrReg encodeFramePtrReg(RegisterId Reg, CPUType CPU);
+LLVM_ABI EncodedFramePtrReg encodeFramePtrReg(RegisterId Reg, CPUType CPU);
 
 /// These values correspond to the THUNK_ORDINAL enumeration.
 enum class ThunkOrdinal : uint8_t {
@@ -573,7 +573,7 @@ enum LineFlags : uint16_t {
 };
 
 /// Data in the SUBSEC_FRAMEDATA subection.
-struct FrameData {
+struct LLVM_ABI FrameData {
   support::ulittle32_t RvaStart;
   support::ulittle32_t CodeSize;
   support::ulittle32_t LocalSize;
@@ -597,12 +597,12 @@ struct FrameData {
 // IDs may clash between the various compile time PDBs.  For each affected
 // module, a subsection would be put into the PDB containing a mapping from its
 // local IDs to a single ID namespace for all items in the PDB file.
-struct CrossModuleExport {
+struct LLVM_ABI CrossModuleExport {
   support::ulittle32_t Local;
   support::ulittle32_t Global;
 };
 
-struct CrossModuleImport {
+struct LLVM_ABI CrossModuleImport {
   support::ulittle32_t ModuleNameOffset;
   support::ulittle32_t Count; // Number of elements
   // support::ulittle32_t ids[Count]; // id from referenced module

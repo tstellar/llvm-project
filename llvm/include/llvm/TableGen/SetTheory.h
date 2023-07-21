@@ -62,7 +62,7 @@ class DagInit;
 class Init;
 class Record;
 
-class SetTheory {
+class LLVM_ABI SetTheory {
 public:
   using RecVec = std::vector<Record *>;
   using RecSet = SmallSetVector<Record *, 16>;

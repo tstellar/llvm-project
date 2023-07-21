@@ -17,7 +17,7 @@
 namespace llvm {
 namespace codeview {
 
-class TypeTableCollection : public TypeCollection {
+class LLVM_ABI TypeTableCollection : public TypeCollection {
 public:
   explicit TypeTableCollection(ArrayRef<ArrayRef<uint8_t>> Records);
 

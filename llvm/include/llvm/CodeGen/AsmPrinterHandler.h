@@ -30,7 +30,7 @@ typedef MCSymbol *ExceptionSymbolProvider(AsmPrinter *Asm,
 
 /// Collects and handles AsmPrinter objects required to build debug
 /// or EH information.
-class AsmPrinterHandler {
+class LLVM_ABI AsmPrinterHandler {
 public:
   virtual ~AsmPrinterHandler();
 

@@ -19,7 +19,7 @@
 namespace llvm {
 namespace xray {
 
-class RecordPrinter : public RecordVisitor {
+class LLVM_ABI RecordPrinter : public RecordVisitor {
   raw_ostream &OS;
   std::string Delim;
 

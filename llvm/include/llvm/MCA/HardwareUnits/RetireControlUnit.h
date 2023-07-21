@@ -33,7 +33,7 @@ namespace mca {
 /// On instruction retired, register updates are all architecturally
 /// committed, and any physicall registers previously allocated for the
 /// retired instruction are freed.
-struct RetireControlUnit : public HardwareUnit {
+struct LLVM_ABI RetireControlUnit : public HardwareUnit {
   // A RUToken is created by the RCU for every instruction dispatched to the
   // schedulers.  These "tokens" are managed by the RCU in its token Queue.
   //

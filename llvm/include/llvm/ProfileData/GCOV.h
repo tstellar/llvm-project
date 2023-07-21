@@ -42,7 +42,7 @@ namespace GCOV {
 enum GCOVVersion { V304, V407, V408, V800, V900, V1200 };
 
 /// A struct for passing gcov options between functions.
-struct Options {
+struct LLVM_ABI Options {
   Options(bool A, bool B, bool C, bool F, bool P, bool U, bool I, bool L,
           bool M, bool N, bool R, bool T, bool X, std::string SourcePrefix)
       : AllBlocks(A), BranchInfo(B), BranchCount(C), FuncCoverage(F),
@@ -70,7 +70,7 @@ struct Options {
 
 /// GCOVBuffer - A wrapper around MemoryBuffer to provide GCOV specific
 /// read operations.
-class GCOVBuffer {
+class LLVM_ABI GCOVBuffer {
 public:
   GCOVBuffer(MemoryBuffer *B) : Buffer(B) {}
   ~GCOVBuffer() { consumeError(cursor.takeError()); }
@@ -188,7 +188,7 @@ private:
 
 /// GCOVFile - Collects coverage information for one pair of coverage file
 /// (.gcno and .gcda).
-class GCOVFile {
+class LLVM_ABI GCOVFile {
 public:
   GCOVFile() = default;
 
@@ -220,7 +220,7 @@ private:
   unsigned addNormalizedPathToMap(StringRef filename);
 };
 
-struct GCOVArc {
+struct LLVM_ABI GCOVArc {
   GCOVArc(GCOVBlock &src, GCOVBlock &dst, uint32_t flags)
       : src(src), dst(dst), flags(flags) {}
   bool onTree() const;
@@ -233,7 +233,7 @@ struct GCOVArc {
 };
 
 /// GCOVFunction - Collects function information.
-class GCOVFunction {
+class LLVM_ABI GCOVFunction {
 public:
   using BlockIterator = pointee_iterator<
       SmallVectorImpl<std::unique_ptr<GCOVBlock>>::const_iterator>;
@@ -271,7 +271,7 @@ public:
 };
 
 /// GCOVBlock - Collects block information.
-class GCOVBlock {
+class LLVM_ABI GCOVBlock {
 public:
   using EdgeIterator = SmallVectorImpl<GCOVArc *>::const_iterator;
   using BlockVector = SmallVector<const GCOVBlock *, 1>;
@@ -315,7 +315,7 @@ public:
   GCOVArc *incoming = nullptr;
 };
 
-void gcovOneInput(const GCOV::Options &options, StringRef filename,
+LLVM_ABI void gcovOneInput(const GCOV::Options &options, StringRef filename,
                   StringRef gcno, StringRef gcda, GCOVFile &file);
 
 } // end namespace llvm

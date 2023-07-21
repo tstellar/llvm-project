@@ -35,7 +35,7 @@ class RegionInfo;
 ///
 /// For a subregion RegionNode there is just one successor. The RegionNode
 /// representing the exit of the subregion.
-template <class NodeRef, class BlockT, class RegionT> class RNSuccIterator {
+template <class NodeRef, class BlockT, class RegionT> class LLVM_ABI RNSuccIterator {
 public:
   using iterator_category = std::forward_iterator_tag;
   using value_type = NodeRef;
@@ -167,7 +167,7 @@ public:
 /// are contained in the Region and its subregions. This is close to a virtual
 /// control flow graph of the Region.
 template <class NodeRef, class BlockT, class RegionT>
-class RNSuccIterator<FlatIt<NodeRef>, BlockT, RegionT> {
+class LLVM_ABI RNSuccIterator<FlatIt<NodeRef>, BlockT, RegionT> {
   using BlockTraits = GraphTraits<BlockT *>;
   using SuccIterTy = typename BlockTraits::ChildIteratorType;
 
@@ -323,7 +323,7 @@ RegionNodeGraphTraits(const RegionNode, BasicBlock, Region);
 RegionGraphTraits(Region, RegionNode);
 RegionGraphTraits(const Region, const RegionNode);
 
-template <> struct GraphTraits<RegionInfo*>
+template <> struct LLVM_ABI GraphTraits<RegionInfo*>
   : public GraphTraits<FlatIt<RegionNode*>> {
   using nodes_iterator =
       df_iterator<NodeRef, df_iterator_default_set<NodeRef>, false,
@@ -342,7 +342,7 @@ template <> struct GraphTraits<RegionInfo*>
   }
 };
 
-template <> struct GraphTraits<RegionInfoPass*>
+template <> struct LLVM_ABI GraphTraits<RegionInfoPass*>
   : public GraphTraits<RegionInfo *> {
   using nodes_iterator =
       df_iterator<NodeRef, df_iterator_default_set<NodeRef>, false,

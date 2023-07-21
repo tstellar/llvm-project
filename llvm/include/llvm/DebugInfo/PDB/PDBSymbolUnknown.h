@@ -15,7 +15,7 @@ namespace llvm {
 
 namespace pdb {
 
-class PDBSymbolUnknown : public PDBSymbol {
+class LLVM_ABI PDBSymbolUnknown : public PDBSymbol {
   DECLARE_PDB_SYMBOL_CUSTOM_TYPE(S->getSymTag() == PDB_SymType::None ||
                                  S->getSymTag() >= PDB_SymType::Max)
 

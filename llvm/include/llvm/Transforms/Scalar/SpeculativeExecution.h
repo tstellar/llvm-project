@@ -66,7 +66,7 @@
 
 namespace llvm {
 class TargetTransformInfo;
-class SpeculativeExecutionPass
+class LLVM_ABI SpeculativeExecutionPass
     : public PassInfoMixin<SpeculativeExecutionPass> {
 public:
   SpeculativeExecutionPass(bool OnlyIfDivergentTarget = false);

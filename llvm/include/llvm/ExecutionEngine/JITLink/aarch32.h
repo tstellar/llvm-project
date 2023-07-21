@@ -77,10 +77,10 @@ enum TargetFlags_aarch32 : TargetFlagsType {
 };
 
 /// Human-readable name for a given CPU architecture kind
-const char *getCPUArchName(ARMBuildAttrs::CPUArch K);
+LLVM_ABI const char *getCPUArchName(ARMBuildAttrs::CPUArch K);
 
 /// Get a human-readable name for the given AArch32 edge kind.
-const char *getEdgeKindName(Edge::Kind K);
+LLVM_ABI const char *getEdgeKindName(Edge::Kind K);
 
 /// AArch32 uses stubs for a number of purposes, like branch range extension
 /// or interworking between Arm and Thumb instruction subsets.
@@ -99,7 +99,7 @@ enum StubsFlavor {
 };
 
 /// JITLink sub-arch configuration for Arm CPU models
-struct ArmConfig {
+struct LLVM_ABI ArmConfig {
   bool J1J2BranchEncoding = false;
   StubsFlavor Stubs = Unsupported;
 };
@@ -124,7 +124,7 @@ inline ArmConfig getArmConfigForCPUArch(ARMBuildAttrs::CPUArch CPUArch) {
 }
 
 /// Immutable pair of halfwords, Hi and Lo, with overflow check
-struct HalfWords {
+struct LLVM_ABI HalfWords {
   constexpr HalfWords() : Hi(0), Lo(0) {}
   constexpr HalfWords(uint32_t Hi, uint32_t Lo) : Hi(Hi), Lo(Lo) {
     assert(isUInt<16>(Hi) && "Overflow in first half-word");
@@ -143,16 +143,16 @@ struct HalfWords {
 ///   ImmMask     - Mask with all bits set that encode the immediate value
 ///   RegMask     - Mask with all bits set that encode the register
 ///
-template <EdgeKind_aarch32 Kind> struct FixupInfo {};
+template <EdgeKind_aarch32 Kind> struct LLVM_ABI FixupInfo {};
 
-template <> struct FixupInfo<Thumb_Jump24> {
+template <> struct LLVM_ABI FixupInfo<Thumb_Jump24> {
   static constexpr HalfWords Opcode{0xf000, 0x8000};
   static constexpr HalfWords OpcodeMask{0xf800, 0x8000};
   static constexpr HalfWords ImmMask{0x07ff, 0x2fff};
   static constexpr uint16_t LoBitConditional = 0x1000;
 };
 
-template <> struct FixupInfo<Thumb_Call> {
+template <> struct LLVM_ABI FixupInfo<Thumb_Call> {
   static constexpr HalfWords Opcode{0xf000, 0xc000};
   static constexpr HalfWords OpcodeMask{0xf800, 0xc000};
   static constexpr HalfWords ImmMask{0x07ff, 0x2fff};
@@ -160,7 +160,7 @@ template <> struct FixupInfo<Thumb_Call> {
   static constexpr uint16_t LoBitNoBlx = 0x1000;
 };
 
-template <> struct FixupInfo<Thumb_MovtAbs> {
+template <> struct LLVM_ABI FixupInfo<Thumb_MovtAbs> {
   static constexpr HalfWords Opcode{0xf2c0, 0x0000};
   static constexpr HalfWords OpcodeMask{0xfbf0, 0x8000};
   static constexpr HalfWords ImmMask{0x040f, 0x70ff};
@@ -168,18 +168,18 @@ template <> struct FixupInfo<Thumb_MovtAbs> {
 };
 
 template <>
-struct FixupInfo<Thumb_MovwAbsNC> : public FixupInfo<Thumb_MovtAbs> {
+struct LLVM_ABI FixupInfo<Thumb_MovwAbsNC> : public FixupInfo<Thumb_MovtAbs> {
   static constexpr HalfWords Opcode{0xf240, 0x0000};
 };
 
 /// Helper function to read the initial addend for Data-class relocations.
-Expected<int64_t> readAddendData(LinkGraph &G, Block &B, const Edge &E);
+LLVM_ABI Expected<int64_t> readAddendData(LinkGraph &G, Block &B, const Edge &E);
 
 /// Helper function to read the initial addend for Arm-class relocations.
-Expected<int64_t> readAddendArm(LinkGraph &G, Block &B, const Edge &E);
+LLVM_ABI Expected<int64_t> readAddendArm(LinkGraph &G, Block &B, const Edge &E);
 
 /// Helper function to read the initial addend for Thumb-class relocations.
-Expected<int64_t> readAddendThumb(LinkGraph &G, Block &B, const Edge &E,
+LLVM_ABI Expected<int64_t> readAddendThumb(LinkGraph &G, Block &B, const Edge &E,
                                   const ArmConfig &ArmCfg);
 
 /// Read the initial addend for a REL-type relocation. It's the value encoded
@@ -200,13 +200,13 @@ inline Expected<int64_t> readAddend(LinkGraph &G, Block &B, const Edge &E,
 }
 
 /// Helper function to apply the fixup for Data-class relocations.
-Error applyFixupData(LinkGraph &G, Block &B, const Edge &E);
+LLVM_ABI Error applyFixupData(LinkGraph &G, Block &B, const Edge &E);
 
 /// Helper function to apply the fixup for Arm-class relocations.
-Error applyFixupArm(LinkGraph &G, Block &B, const Edge &E);
+LLVM_ABI Error applyFixupArm(LinkGraph &G, Block &B, const Edge &E);
 
 /// Helper function to apply the fixup for Thumb-class relocations.
-Error applyFixupThumb(LinkGraph &G, Block &B, const Edge &E,
+LLVM_ABI Error applyFixupThumb(LinkGraph &G, Block &B, const Edge &E,
                       const ArmConfig &ArmCfg);
 
 /// Apply fixup expression for edge to block content.
@@ -235,7 +235,7 @@ inline Error applyFixup(LinkGraph &G, Block &B, const Edge &E,
 /// Let's keep it simple for the moment and not wire this through a GOT.
 ///
 template <StubsFlavor Flavor>
-class StubsManager : public TableManager<StubsManager<Flavor>> {
+class LLVM_ABI StubsManager : public TableManager<StubsManager<Flavor>> {
 public:
   StubsManager() = default;
 

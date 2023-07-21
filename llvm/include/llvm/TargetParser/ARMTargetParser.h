@@ -69,7 +69,7 @@ enum ArchExtKind : uint64_t {
 };
 
 // List of Arch Extension names.
-struct ExtName {
+struct LLVM_ABI ExtName {
   StringRef Name;
   uint64_t ID;
   StringRef Feature;
@@ -84,7 +84,7 @@ const ExtName ARCHExtNames[] = {
 
 // List of HWDiv names (use getHWDivSynonym) and which architectural
 // features they correspond to (use getHWDivFeatures).
-const struct {
+const struct LLVM_ABI {
   StringRef Name;
   uint64_t ID;
 } HWDivNames[] = {
@@ -104,7 +104,7 @@ enum class ArchKind {
 // The same CPU can have multiple arches and can be default on multiple arches.
 // When finding the Arch for a CPU, first-found prevails. Sort them accordingly.
 // When this becomes table-generated, we'd probably need two tables.
-struct CpuNames {
+struct LLVM_ABI CpuNames {
   StringRef Name;
   ArchKind ArchID;
   bool Default; // is $Name the default CPU for $ArchID ?
@@ -156,7 +156,7 @@ enum class ProfileKind { INVALID = 0, A, R, M };
 // features they correspond to (use getFPUFeatures).
 // The entries must appear in the order listed in ARM::FPUKind for correct
 // indexing
-struct FPUName {
+struct LLVM_ABI FPUName {
   StringRef Name;
   FPUKind ID;
   FPUVersion FPUVer;
@@ -177,7 +177,7 @@ static const FPUName FPUNames[] = {
 // FIXME: SubArch values were simplified to fit into the expectations
 // of the triples and are not conforming with their official names.
 // Check to see if the expectation should be changed.
-struct ArchNames {
+struct LLVM_ABI ArchNames {
   StringRef Name;
   StringRef CPUAttr; // CPU class in build attributes.
   StringRef ArchFeature;
@@ -213,51 +213,51 @@ inline ArchKind &operator--(ArchKind &Kind) {
 }
 
 // Information by ID
-StringRef getFPUName(FPUKind FPUKind);
-FPUVersion getFPUVersion(FPUKind FPUKind);
-NeonSupportLevel getFPUNeonSupportLevel(FPUKind FPUKind);
-FPURestriction getFPURestriction(FPUKind FPUKind);
+LLVM_ABI StringRef getFPUName(FPUKind FPUKind);
+LLVM_ABI FPUVersion getFPUVersion(FPUKind FPUKind);
+LLVM_ABI NeonSupportLevel getFPUNeonSupportLevel(FPUKind FPUKind);
+LLVM_ABI FPURestriction getFPURestriction(FPUKind FPUKind);
 
-bool getFPUFeatures(FPUKind FPUKind, std::vector<StringRef> &Features);
-bool getHWDivFeatures(uint64_t HWDivKind, std::vector<StringRef> &Features);
-bool getExtensionFeatures(uint64_t Extensions,
+LLVM_ABI bool getFPUFeatures(FPUKind FPUKind, std::vector<StringRef> &Features);
+LLVM_ABI bool getHWDivFeatures(uint64_t HWDivKind, std::vector<StringRef> &Features);
+LLVM_ABI bool getExtensionFeatures(uint64_t Extensions,
                           std::vector<StringRef> &Features);
 
-StringRef getArchName(ArchKind AK);
-unsigned getArchAttr(ArchKind AK);
-StringRef getCPUAttr(ArchKind AK);
-StringRef getSubArch(ArchKind AK);
-StringRef getArchExtName(uint64_t ArchExtKind);
-StringRef getArchExtFeature(StringRef ArchExt);
-bool appendArchExtFeatures(StringRef CPU, ARM::ArchKind AK, StringRef ArchExt,
+LLVM_ABI StringRef getArchName(ArchKind AK);
+LLVM_ABI unsigned getArchAttr(ArchKind AK);
+LLVM_ABI StringRef getCPUAttr(ArchKind AK);
+LLVM_ABI StringRef getSubArch(ArchKind AK);
+LLVM_ABI StringRef getArchExtName(uint64_t ArchExtKind);
+LLVM_ABI StringRef getArchExtFeature(StringRef ArchExt);
+LLVM_ABI bool appendArchExtFeatures(StringRef CPU, ARM::ArchKind AK, StringRef ArchExt,
                            std::vector<StringRef> &Features,
                            FPUKind &ArgFPUKind);
-ArchKind convertV9toV8(ArchKind AK);
+LLVM_ABI ArchKind convertV9toV8(ArchKind AK);
 
 // Information by Name
-FPUKind getDefaultFPU(StringRef CPU, ArchKind AK);
-uint64_t getDefaultExtensions(StringRef CPU, ArchKind AK);
-StringRef getDefaultCPU(StringRef Arch);
-StringRef getCanonicalArchName(StringRef Arch);
-StringRef getFPUSynonym(StringRef FPU);
+LLVM_ABI FPUKind getDefaultFPU(StringRef CPU, ArchKind AK);
+LLVM_ABI uint64_t getDefaultExtensions(StringRef CPU, ArchKind AK);
+LLVM_ABI StringRef getDefaultCPU(StringRef Arch);
+LLVM_ABI StringRef getCanonicalArchName(StringRef Arch);
+LLVM_ABI StringRef getFPUSynonym(StringRef FPU);
 
 // Parser
-uint64_t parseHWDiv(StringRef HWDiv);
-FPUKind parseFPU(StringRef FPU);
-ArchKind parseArch(StringRef Arch);
-uint64_t parseArchExt(StringRef ArchExt);
-ArchKind parseCPUArch(StringRef CPU);
-ProfileKind parseArchProfile(StringRef Arch);
-unsigned parseArchVersion(StringRef Arch);
+LLVM_ABI uint64_t parseHWDiv(StringRef HWDiv);
+LLVM_ABI FPUKind parseFPU(StringRef FPU);
+LLVM_ABI ArchKind parseArch(StringRef Arch);
+LLVM_ABI uint64_t parseArchExt(StringRef ArchExt);
+LLVM_ABI ArchKind parseCPUArch(StringRef CPU);
+LLVM_ABI ProfileKind parseArchProfile(StringRef Arch);
+LLVM_ABI unsigned parseArchVersion(StringRef Arch);
 
-void fillValidCPUArchList(SmallVectorImpl<StringRef> &Values);
-StringRef computeDefaultTargetABI(const Triple &TT, StringRef CPU);
+LLVM_ABI void fillValidCPUArchList(SmallVectorImpl<StringRef> &Values);
+LLVM_ABI StringRef computeDefaultTargetABI(const Triple &TT, StringRef CPU);
 
 /// Get the (LLVM) name of the minimum ARM CPU for the arch we are targeting.
 ///
 /// \param Arch the architecture name (e.g., "armv7s"). If it is an empty
 /// string then the triple's arch name is used.
-StringRef getARMCPUForArch(const llvm::Triple &Triple, StringRef MArch = {});
+LLVM_ABI StringRef getARMCPUForArch(const llvm::Triple &Triple, StringRef MArch = {});
 
 } // namespace ARM
 } // namespace llvm

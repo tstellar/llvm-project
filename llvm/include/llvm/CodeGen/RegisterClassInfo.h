@@ -26,7 +26,7 @@
 
 namespace llvm {
 
-class RegisterClassInfo {
+class LLVM_ABI RegisterClassInfo {
   struct RCInfo {
     unsigned Tag = 0;
     unsigned NumRegs = 0;

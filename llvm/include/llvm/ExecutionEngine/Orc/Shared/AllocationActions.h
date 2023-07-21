@@ -32,7 +32,7 @@ namespace shared {
 ///
 /// For unpaired operations one or the other member can be left unused, as
 /// AllocationActionCalls with an FnAddr of zero will be skipped.
-struct AllocActionCallPair {
+struct LLVM_ABI AllocActionCallPair {
   WrapperFunctionCall Finalize;
   WrapperFunctionCall Dealloc;
 };
@@ -62,19 +62,19 @@ inline size_t numDeallocActions(const AllocActions &AAs) {
 /// be returned. The dealloc actions should be run by calling
 /// runDeallocationActions. If this function succeeds then the AA argument will
 /// be cleared before the function returns.
-Expected<std::vector<WrapperFunctionCall>>
+LLVM_ABI Expected<std::vector<WrapperFunctionCall>>
 runFinalizeActions(AllocActions &AAs);
 
 /// Run deallocation actions.
 /// Dealloc actions will be run in reverse order (from last element of DAs to
 /// first).
-Error runDeallocActions(ArrayRef<WrapperFunctionCall> DAs);
+LLVM_ABI Error runDeallocActions(ArrayRef<WrapperFunctionCall> DAs);
 
 using SPSAllocActionCallPair =
     SPSTuple<SPSWrapperFunctionCall, SPSWrapperFunctionCall>;
 
 template <>
-class SPSSerializationTraits<SPSAllocActionCallPair,
+class LLVM_ABI SPSSerializationTraits<SPSAllocActionCallPair,
                              AllocActionCallPair> {
   using AL = SPSAllocActionCallPair::AsArgList;
 

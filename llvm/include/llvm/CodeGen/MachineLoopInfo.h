@@ -41,7 +41,7 @@ class MachineDominatorTree;
 class MachineLoop;
 extern template class LoopBase<MachineBasicBlock, MachineLoop>;
 
-class MachineLoop : public LoopBase<MachineBasicBlock, MachineLoop> {
+class LLVM_ABI MachineLoop : public LoopBase<MachineBasicBlock, MachineLoop> {
 public:
   /// Return the "top" block in the loop, which is the first block in the linear
   /// layout, ignoring any parts of the loop not contiguous with the part that
@@ -86,7 +86,7 @@ private:
 // Implementation in LoopInfoImpl.h
 extern template class LoopInfoBase<MachineBasicBlock, MachineLoop>;
 
-class MachineLoopInfo : public MachineFunctionPass {
+class LLVM_ABI MachineLoopInfo : public MachineFunctionPass {
   friend class LoopBase<MachineBasicBlock, MachineLoop>;
 
   LoopInfoBase<MachineBasicBlock, MachineLoop> LI;
@@ -181,7 +181,7 @@ public:
 };
 
 // Allow clients to walk the list of nested loops...
-template <> struct GraphTraits<const MachineLoop*> {
+template <> struct LLVM_ABI GraphTraits<const MachineLoop*> {
   using NodeRef = const MachineLoop *;
   using ChildIteratorType = MachineLoopInfo::iterator;
 
@@ -190,7 +190,7 @@ template <> struct GraphTraits<const MachineLoop*> {
   static ChildIteratorType child_end(NodeRef N) { return N->end(); }
 };
 
-template <> struct GraphTraits<MachineLoop*> {
+template <> struct LLVM_ABI GraphTraits<MachineLoop*> {
   using NodeRef = MachineLoop *;
   using ChildIteratorType = MachineLoopInfo::iterator;
 

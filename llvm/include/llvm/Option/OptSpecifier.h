@@ -15,7 +15,7 @@ namespace opt {
 class Option;
 
 /// OptSpecifier - Wrapper class for abstracting references to option IDs.
-class OptSpecifier {
+class LLVM_ABI OptSpecifier {
   unsigned ID = 0;
 
 public:

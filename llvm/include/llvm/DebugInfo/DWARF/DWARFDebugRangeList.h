@@ -21,7 +21,7 @@ namespace object {
 struct SectionedAddress;
 }
 
-class DWARFDebugRangeList {
+class LLVM_ABI DWARFDebugRangeList {
 public:
   struct RangeListEntry {
     /// A beginning address offset. This address offset has the size of an

@@ -20,7 +20,7 @@ namespace llvm {
 class Function;
 
 /// An optimization pass inserting data prefetches in loops.
-class LoopDataPrefetchPass : public PassInfoMixin<LoopDataPrefetchPass> {
+class LLVM_ABI LoopDataPrefetchPass : public PassInfoMixin<LoopDataPrefetchPass> {
 public:
   LoopDataPrefetchPass() = default;
 

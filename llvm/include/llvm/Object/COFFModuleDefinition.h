@@ -24,7 +24,7 @@
 namespace llvm {
 namespace object {
 
-struct COFFModuleDefinition {
+struct LLVM_ABI COFFModuleDefinition {
   std::vector<COFFShortExport> Exports;
   std::string OutputFile;
   std::string ImportName;
@@ -39,7 +39,7 @@ struct COFFModuleDefinition {
   uint32_t MinorOSVersion = 0;
 };
 
-Expected<COFFModuleDefinition>
+LLVM_ABI Expected<COFFModuleDefinition>
 parseCOFFModuleDefinition(MemoryBufferRef MB, COFF::MachineTypes Machine,
                           bool MingwDef = false, bool AddUnderscores = true);
 

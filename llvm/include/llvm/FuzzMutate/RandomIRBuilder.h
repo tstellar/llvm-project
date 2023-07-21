@@ -34,7 +34,7 @@ class SourcePred;
 
 using RandomEngine = std::mt19937;
 
-struct RandomIRBuilder {
+struct LLVM_ABI RandomIRBuilder {
   RandomEngine Rand;
   SmallVector<Type *, 16> KnownTypes;
 

@@ -19,10 +19,10 @@ namespace pdb {
 
 class IPDBSession;
 
-Error loadDataForPDB(PDB_ReaderType Type, StringRef Path,
+LLVM_ABI Error loadDataForPDB(PDB_ReaderType Type, StringRef Path,
                      std::unique_ptr<IPDBSession> &Session);
 
-Error loadDataForEXE(PDB_ReaderType Type, StringRef Path,
+LLVM_ABI Error loadDataForEXE(PDB_ReaderType Type, StringRef Path,
                      std::unique_ptr<IPDBSession> &Session);
 
 } // end namespace pdb

@@ -13,7 +13,7 @@
 
 namespace llvm {
 /// Printer pass for cost modeling results.
-class CostModelPrinterPass : public PassInfoMixin<CostModelPrinterPass> {
+class LLVM_ABI CostModelPrinterPass : public PassInfoMixin<CostModelPrinterPass> {
   raw_ostream &OS;
 
 public:

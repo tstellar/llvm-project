@@ -24,7 +24,7 @@
 
 namespace llvm {
 
-extern cl::opt<bool> DebugInfoCorrelate;
+LLVM_ABI extern cl::opt<bool> DebugInfoCorrelate;
 
 class Function;
 class Instruction;
@@ -40,7 +40,7 @@ class FileSystem;
 // can be run after LTO/ThinLTO linking. Lld linker needs to see
 // all the COMDAT variables before linking. So we have this pass
 // always run before linking for CSPGO.
-class PGOInstrumentationGenCreateVar
+class LLVM_ABI PGOInstrumentationGenCreateVar
     : public PassInfoMixin<PGOInstrumentationGenCreateVar> {
 public:
   PGOInstrumentationGenCreateVar(std::string CSInstrName = "")
@@ -52,7 +52,7 @@ private:
 };
 
 /// The instrumentation (profile-instr-gen) pass for IR based PGO.
-class PGOInstrumentationGen : public PassInfoMixin<PGOInstrumentationGen> {
+class LLVM_ABI PGOInstrumentationGen : public PassInfoMixin<PGOInstrumentationGen> {
 public:
   PGOInstrumentationGen(bool IsCS = false) : IsCS(IsCS) {}
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
@@ -63,7 +63,7 @@ private:
 };
 
 /// The profile annotation (profile-instr-use) pass for IR based PGO.
-class PGOInstrumentationUse : public PassInfoMixin<PGOInstrumentationUse> {
+class LLVM_ABI PGOInstrumentationUse : public PassInfoMixin<PGOInstrumentationUse> {
 public:
   PGOInstrumentationUse(std::string Filename = "",
                         std::string RemappingFilename = "", bool IsCS = false,
@@ -80,7 +80,7 @@ private:
 };
 
 /// The indirect function call promotion pass.
-class PGOIndirectCallPromotion : public PassInfoMixin<PGOIndirectCallPromotion> {
+class LLVM_ABI PGOIndirectCallPromotion : public PassInfoMixin<PGOIndirectCallPromotion> {
 public:
   PGOIndirectCallPromotion(bool IsInLTO = false, bool SamplePGO = false)
       : InLTO(IsInLTO), SamplePGO(SamplePGO) {}
@@ -93,17 +93,17 @@ private:
 };
 
 /// The profile size based optimization pass for memory intrinsics.
-class PGOMemOPSizeOpt : public PassInfoMixin<PGOMemOPSizeOpt> {
+class LLVM_ABI PGOMemOPSizeOpt : public PassInfoMixin<PGOMemOPSizeOpt> {
 public:
   PGOMemOPSizeOpt() = default;
 
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 
-void setProfMetadata(Module *M, Instruction *TI, ArrayRef<uint64_t> EdgeCounts,
+LLVM_ABI void setProfMetadata(Module *M, Instruction *TI, ArrayRef<uint64_t> EdgeCounts,
                      uint64_t MaxCount);
 
-void setIrrLoopHeaderMetadata(Module *M, Instruction *TI, uint64_t Count);
+LLVM_ABI void setIrrLoopHeaderMetadata(Module *M, Instruction *TI, uint64_t Count);
 
 } // end namespace llvm
 

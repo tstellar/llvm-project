@@ -91,7 +91,7 @@ namespace llvm {
 namespace bitfields_details {
 
 /// A struct defining useful bit patterns for n-bits integer types.
-template <typename T, unsigned Bits> struct BitPatterns {
+template <typename T, unsigned Bits> struct LLVM_ABI BitPatterns {
   /// Bit patterns are forged using the equivalent `Unsigned` type because of
   /// undefined operations over signed types (e.g. Bitwise shift operators).
   /// Moreover same size casting from unsigned to signed is well defined but not
@@ -118,7 +118,7 @@ template <typename T, unsigned Bits> struct BitPatterns {
 /// `Compressor` is specialized on signed-ness so no runtime cost is incurred.
 /// The `pack` method also checks that the passed in `UserValue` is valid.
 template <typename T, unsigned Bits, bool = std::is_unsigned<T>::value>
-struct Compressor {
+struct LLVM_ABI Compressor {
   static_assert(std::is_unsigned<T>::value, "T must be unsigned");
   using BP = BitPatterns<T, Bits>;
 
@@ -131,7 +131,7 @@ struct Compressor {
   static T unpack(T StorageValue) { return StorageValue; }
 };
 
-template <typename T, unsigned Bits> struct Compressor<T, Bits, false> {
+template <typename T, unsigned Bits> struct LLVM_ABI Compressor<T, Bits, false> {
   static_assert(std::is_signed<T>::value, "T must be signed");
   using BP = BitPatterns<T, Bits>;
 
@@ -153,7 +153,7 @@ template <typename T, unsigned Bits> struct Compressor<T, Bits, false> {
 
 /// Impl is where Bifield description and Storage are put together to interact
 /// with values.
-template <typename Bitfield, typename StorageType> struct Impl {
+template <typename Bitfield, typename StorageType> struct LLVM_ABI Impl {
   static_assert(std::is_unsigned<StorageType>::value,
                 "Storage must be unsigned");
   using IntegerType = typename Bitfield::IntegerType;
@@ -194,13 +194,13 @@ template <typename Bitfield, typename StorageType> struct Impl {
 /// with their unsigned counterparts. The correct type is restored in the public
 /// API.
 template <typename T, bool = std::is_enum<T>::value>
-struct ResolveUnderlyingType {
+struct LLVM_ABI ResolveUnderlyingType {
   using type = std::underlying_type_t<T>;
 };
-template <typename T> struct ResolveUnderlyingType<T, false> {
+template <typename T> struct LLVM_ABI ResolveUnderlyingType<T, false> {
   using type = T;
 };
-template <> struct ResolveUnderlyingType<bool, false> {
+template <> struct LLVM_ABI ResolveUnderlyingType<bool, false> {
   /// In case sizeof(bool) != 1, replace `void` by an additionnal
   /// std::conditional.
   using type = std::conditional_t<sizeof(bool) == 1, uint8_t, void>;
@@ -209,7 +209,7 @@ template <> struct ResolveUnderlyingType<bool, false> {
 } // namespace bitfields_details
 
 /// Holds functions to get, set or test bitfields.
-struct Bitfield {
+struct LLVM_ABI Bitfield {
   /// Describes an element of a Bitfield. This type is then used with the
   /// Bitfield static member functions.
   /// \tparam T         The type of the field once in unpacked form.

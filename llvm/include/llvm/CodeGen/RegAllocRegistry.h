@@ -27,7 +27,7 @@ class FunctionPass;
 ///
 //===----------------------------------------------------------------------===//
 template <class SubClass>
-class RegisterRegAllocBase : public MachinePassRegistryNode<FunctionPass *(*)()> {
+class LLVM_ABI RegisterRegAllocBase : public MachinePassRegistryNode<FunctionPass *(*)()> {
 public:
   using FunctionPassCtor = FunctionPass *(*)();
 
@@ -58,7 +58,7 @@ public:
   }
 };
 
-class RegisterRegAlloc : public RegisterRegAllocBase<RegisterRegAlloc> {
+class LLVM_ABI RegisterRegAlloc : public RegisterRegAllocBase<RegisterRegAlloc> {
 public:
   RegisterRegAlloc(const char *N, const char *D, FunctionPassCtor C)
     : RegisterRegAllocBase(N, D, C) {}

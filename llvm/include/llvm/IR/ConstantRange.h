@@ -44,7 +44,7 @@ class raw_ostream;
 struct KnownBits;
 
 /// This class represents a range of values.
-class [[nodiscard]] ConstantRange {
+class LLVM_ABI [[nodiscard]] ConstantRange {
   APInt Lower, Upper;
 
   /// Create empty constant range with same bitwidth.
@@ -576,7 +576,7 @@ inline raw_ostream &operator<<(raw_ostream &OS, const ConstantRange &CR) {
 /// Parse out a conservative ConstantRange from !range metadata.
 ///
 /// E.g. if RangeMD is !{i32 0, i32 10, i32 15, i32 20} then return [0, 20).
-ConstantRange getConstantRangeFromMetadata(const MDNode &RangeMD);
+LLVM_ABI ConstantRange getConstantRangeFromMetadata(const MDNode &RangeMD);
 
 } // end namespace llvm
 

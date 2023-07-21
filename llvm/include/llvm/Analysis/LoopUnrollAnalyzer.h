@@ -39,7 +39,7 @@
 namespace llvm {
 class Instruction;
 
-class UnrolledInstAnalyzer : private InstVisitor<UnrolledInstAnalyzer, bool> {
+class LLVM_ABI UnrolledInstAnalyzer : private InstVisitor<UnrolledInstAnalyzer, bool> {
   typedef InstVisitor<UnrolledInstAnalyzer, bool> Base;
   friend class InstVisitor<UnrolledInstAnalyzer, bool>;
   struct SimplifiedAddress {

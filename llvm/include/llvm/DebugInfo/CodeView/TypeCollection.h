@@ -15,7 +15,7 @@
 
 namespace llvm {
 namespace codeview {
-class TypeCollection {
+class LLVM_ABI TypeCollection {
 public:
   virtual ~TypeCollection() = default;
 

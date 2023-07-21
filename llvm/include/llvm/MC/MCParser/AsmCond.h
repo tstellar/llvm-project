@@ -18,7 +18,7 @@ namespace llvm {
 /// processing.  Ignore can be either true or false.  When true we are ignoring
 /// the block of code in the middle of a conditional.
 
-class AsmCond {
+class LLVM_ABI AsmCond {
 public:
   enum ConditionalAssemblyType {
     NoCond,     // no conditional is being processed

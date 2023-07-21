@@ -39,7 +39,7 @@ enum AssumeBundleArg {
 ///
 /// Return true iff the queried attribute was found.
 /// If ArgVal is set. the argument will be stored to ArgVal.
-bool hasAttributeInAssume(AssumeInst &Assume, Value *IsOn, StringRef AttrName,
+LLVM_ABI bool hasAttributeInAssume(AssumeInst &Assume, Value *IsOn, StringRef AttrName,
                           uint64_t *ArgVal = nullptr);
 inline bool hasAttributeInAssume(AssumeInst &Assume, Value *IsOn,
                                  Attribute::AttrKind Kind,
@@ -48,7 +48,7 @@ inline bool hasAttributeInAssume(AssumeInst &Assume, Value *IsOn,
                               Attribute::getNameFromAttrKind(Kind), ArgVal);
 }
 
-template<> struct DenseMapInfo<Attribute::AttrKind> {
+template<> struct LLVM_ABI DenseMapInfo<Attribute::AttrKind> {
   static Attribute::AttrKind getEmptyKey() {
     return Attribute::EmptyKey;
   }
@@ -68,7 +68,7 @@ template<> struct DenseMapInfo<Attribute::AttrKind> {
 /// If the Attribute is not on any value, the Value is nullptr.
 using RetainedKnowledgeKey = std::pair<Value *, Attribute::AttrKind>;
 
-struct MinMax {
+struct LLVM_ABI MinMax {
   uint64_t Min;
   uint64_t Max;
 };
@@ -87,7 +87,7 @@ using RetainedKnowledgeMap =
 /// many queries are going to be made on the same llvm.assume.
 /// String attributes are not inserted in the map.
 /// If the IR changes the map will be outdated.
-void fillMapFromAssume(AssumeInst &Assume, RetainedKnowledgeMap &Result);
+LLVM_ABI void fillMapFromAssume(AssumeInst &Assume, RetainedKnowledgeMap &Result);
 
 /// Represent one information held inside an operand bundle of an llvm.assume.
 /// AttrKind is the property that holds.
@@ -97,7 +97,7 @@ void fillMapFromAssume(AssumeInst &Assume, RetainedKnowledgeMap &Result);
 ///  - AttrKind will be Attribute::Alignment.
 ///  - WasOn will be %P.
 ///  - ArgValue will be 4.
-struct RetainedKnowledge {
+struct LLVM_ABI RetainedKnowledge {
   Attribute::AttrKind AttrKind = Attribute::None;
   uint64_t ArgValue = 0;
   Value *WasOn = nullptr;
@@ -121,7 +121,7 @@ struct RetainedKnowledge {
 
 /// Retreive the information help by Assume on the operand at index Idx.
 /// Assume should be an llvm.assume and Idx should be in the operand bundle.
-RetainedKnowledge getKnowledgeFromOperandInAssume(AssumeInst &Assume,
+LLVM_ABI RetainedKnowledge getKnowledgeFromOperandInAssume(AssumeInst &Assume,
                                                   unsigned Idx);
 
 /// Retreive the information help by the Use U of an llvm.assume. the use should
@@ -142,16 +142,16 @@ constexpr StringRef IgnoreBundleTag = "ignore";
 ///
 /// the argument to the call of llvm.assume may still be useful even if the
 /// function returned true.
-bool isAssumeWithEmptyBundle(AssumeInst &Assume);
+LLVM_ABI bool isAssumeWithEmptyBundle(AssumeInst &Assume);
 
 /// Return a valid Knowledge associated to the Use U if its Attribute kind is
 /// in AttrKinds.
-RetainedKnowledge getKnowledgeFromUse(const Use *U,
+LLVM_ABI RetainedKnowledge getKnowledgeFromUse(const Use *U,
                                       ArrayRef<Attribute::AttrKind> AttrKinds);
 
 /// Return a valid Knowledge associated to the Value V if its Attribute kind is
 /// in AttrKinds and it matches the Filter.
-RetainedKnowledge getKnowledgeForValue(
+LLVM_ABI RetainedKnowledge getKnowledgeForValue(
     const Value *V, ArrayRef<Attribute::AttrKind> AttrKinds,
     AssumptionCache *AC = nullptr,
     function_ref<bool(RetainedKnowledge, Instruction *,
@@ -161,14 +161,14 @@ RetainedKnowledge getKnowledgeForValue(
 /// Return a valid Knowledge associated to the Value V if its Attribute kind is
 /// in AttrKinds and the knowledge is suitable to be used in the context of
 /// CtxI.
-RetainedKnowledge getKnowledgeValidInContext(
+LLVM_ABI RetainedKnowledge getKnowledgeValidInContext(
     const Value *V, ArrayRef<Attribute::AttrKind> AttrKinds,
     const Instruction *CtxI, const DominatorTree *DT = nullptr,
     AssumptionCache *AC = nullptr);
 
 /// This extracts the Knowledge from an element of an operand bundle.
 /// This is mostly for use in the assume builder.
-RetainedKnowledge getKnowledgeFromBundle(AssumeInst &Assume,
+LLVM_ABI RetainedKnowledge getKnowledgeFromBundle(AssumeInst &Assume,
                                          const CallBase::BundleOpInfo &BOI);
 
 } // namespace llvm

@@ -23,7 +23,7 @@ class DWARFDataExtractor;
 class Error;
 
 /// Represents structure for holding and parsing .debug_pub* tables.
-class DWARFDebugPubTable {
+class LLVM_ABI DWARFDebugPubTable {
 public:
   struct Entry {
     /// Section offset from the beginning of the compilation unit.

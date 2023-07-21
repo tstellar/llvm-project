@@ -19,7 +19,7 @@ class MappedBlockStream;
 }
 namespace pdb {
 
-class SymbolStream {
+class LLVM_ABI SymbolStream {
 public:
   SymbolStream(std::unique_ptr<msf::MappedBlockStream> Stream);
   ~SymbolStream();

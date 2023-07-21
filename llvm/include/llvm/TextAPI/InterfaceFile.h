@@ -77,7 +77,7 @@ enum FileType : unsigned {
 // clang-format on
 
 /// Reference to an interface file.
-class InterfaceFileRef {
+class LLVM_ABI InterfaceFileRef {
 public:
   InterfaceFileRef() = default;
 
@@ -123,14 +123,14 @@ private:
 
 } // end namespace MachO.
 
-struct SymbolsMapKey {
+struct LLVM_ABI SymbolsMapKey {
   MachO::SymbolKind Kind;
   StringRef Name;
 
   SymbolsMapKey(MachO::SymbolKind Kind, StringRef Name)
       : Kind(Kind), Name(Name) {}
 };
-template <> struct DenseMapInfo<SymbolsMapKey> {
+template <> struct LLVM_ABI DenseMapInfo<SymbolsMapKey> {
   static inline SymbolsMapKey getEmptyKey() {
     return SymbolsMapKey(MachO::SymbolKind::GlobalSymbol, StringRef{});
   }
@@ -152,7 +152,7 @@ template <> struct DenseMapInfo<SymbolsMapKey> {
 namespace MachO {
 
 /// Defines the interface file.
-class InterfaceFile {
+class LLVM_ABI InterfaceFile {
 public:
   /// Set the path from which this file was generated (if applicable).
   ///

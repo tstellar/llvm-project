@@ -23,7 +23,7 @@ namespace llvm {
 // ones they need. We can't use unreachable for as many cases because the parser
 // implementation is eager and will call some of these methods even if the
 // result is not used.
-class DWARFObject {
+class LLVM_ABI DWARFObject {
   DWARFSection Dummy;
 
 public:

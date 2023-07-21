@@ -263,7 +263,7 @@ using NodeId = uint32_t;
 
 struct DataFlowGraph;
 
-struct NodeAttrs {
+struct LLVM_ABI NodeAttrs {
   // clang-format off
   enum : uint16_t {
     None          = 0x0000,   // Nothing
@@ -333,7 +333,7 @@ struct NodeAttrs {
   }
 };
 
-struct BuildOptions {
+struct LLVM_ABI BuildOptions {
   enum : unsigned {
     None = 0x00,
     KeepDeadPhis = 0x01, // Do not remove dead phis during build.
@@ -341,7 +341,7 @@ struct BuildOptions {
   };
 };
 
-template <typename T> struct NodeAddr {
+template <typename T> struct LLVM_ABI NodeAddr {
   NodeAddr() = default;
   NodeAddr(T A, NodeId I) : Addr(A), Id(I) {}
 
@@ -408,7 +408,7 @@ using Func = NodeAddr<FuncNode *>;
 //
 // This method significantly improved the build time, compared to using maps
 // (std::unordered_map or DenseMap) to translate between pointers and ids.
-struct NodeAllocator {
+struct LLVM_ABI NodeAllocator {
   // Amount of storage for a single node.
   enum { NodeMemSize = 32 };
 
@@ -449,7 +449,7 @@ private:
 
 using RegisterSet = std::set<RegisterRef>;
 
-struct TargetOperandInfo {
+struct LLVM_ABI TargetOperandInfo {
   TargetOperandInfo(const TargetInstrInfo &tii) : TII(tii) {}
   virtual ~TargetOperandInfo() = default;
 
@@ -461,12 +461,12 @@ struct TargetOperandInfo {
 };
 
 // Packed register reference. Only used for storage.
-struct PackedRegisterRef {
+struct LLVM_ABI PackedRegisterRef {
   RegisterId Reg;
   uint32_t MaskId;
 };
 
-struct LaneMaskIndex : private IndexedSet<LaneBitmask> {
+struct LLVM_ABI LaneMaskIndex : private IndexedSet<LaneBitmask> {
   LaneMaskIndex() = default;
 
   LaneBitmask getLaneMaskForIndex(uint32_t K) const {
@@ -484,7 +484,7 @@ struct LaneMaskIndex : private IndexedSet<LaneBitmask> {
   }
 };
 
-struct NodeBase {
+struct LLVM_ABI NodeBase {
 public:
   // Make sure this is a POD.
   NodeBase() = default;
@@ -550,7 +550,7 @@ static_assert(sizeof(NodeBase) <= NodeAllocator::NodeMemSize,
 using NodeList = SmallVector<Node, 4>;
 using NodeSet = std::set<NodeId>;
 
-struct RefNode : public NodeBase {
+struct LLVM_ABI RefNode : public NodeBase {
   RefNode() = default;
 
   RegisterRef getRegRef(const DataFlowGraph &G) const;
@@ -585,7 +585,7 @@ struct RefNode : public NodeBase {
   Node getOwner(const DataFlowGraph &G);
 };
 
-struct DefNode : public RefNode {
+struct LLVM_ABI DefNode : public RefNode {
   NodeId getReachedDef() const { return RefData.Def.DD; }
   void setReachedDef(NodeId D) { RefData.Def.DD = D; }
   NodeId getReachedUse() const { return RefData.Def.DU; }
@@ -594,11 +594,11 @@ struct DefNode : public RefNode {
   void linkToDef(NodeId Self, Def DA);
 };
 
-struct UseNode : public RefNode {
+struct LLVM_ABI UseNode : public RefNode {
   void linkToDef(NodeId Self, Def DA);
 };
 
-struct PhiUseNode : public UseNode {
+struct LLVM_ABI PhiUseNode : public UseNode {
   NodeId getPredecessor() const {
     assert(getFlags() & NodeAttrs::PhiRef);
     return RefData.PhiU.PredB;
@@ -609,7 +609,7 @@ struct PhiUseNode : public UseNode {
   }
 };
 
-struct CodeNode : public NodeBase {
+struct LLVM_ABI CodeNode : public NodeBase {
   template <typename T> T getCode() const { //
     return static_cast<T>(CodeData.CP);
   }
@@ -626,21 +626,21 @@ struct CodeNode : public NodeBase {
   NodeList members_if(Predicate P, const DataFlowGraph &G) const;
 };
 
-struct InstrNode : public CodeNode {
+struct LLVM_ABI InstrNode : public CodeNode {
   Node getOwner(const DataFlowGraph &G);
 };
 
-struct PhiNode : public InstrNode {
+struct LLVM_ABI PhiNode : public InstrNode {
   MachineInstr *getCode() const { return nullptr; }
 };
 
-struct StmtNode : public InstrNode {
+struct LLVM_ABI StmtNode : public InstrNode {
   MachineInstr *getCode() const { //
     return CodeNode::getCode<MachineInstr *>();
   }
 };
 
-struct BlockNode : public CodeNode {
+struct LLVM_ABI BlockNode : public CodeNode {
   MachineBasicBlock *getCode() const {
     return CodeNode::getCode<MachineBasicBlock *>();
   }
@@ -648,7 +648,7 @@ struct BlockNode : public CodeNode {
   void addPhi(Phi PA, const DataFlowGraph &G);
 };
 
-struct FuncNode : public CodeNode {
+struct LLVM_ABI FuncNode : public CodeNode {
   MachineFunction *getCode() const {
     return CodeNode::getCode<MachineFunction *>();
   }
@@ -657,7 +657,7 @@ struct FuncNode : public CodeNode {
   Block getEntryBlock(const DataFlowGraph &G);
 };
 
-struct DataFlowGraph {
+struct LLVM_ABI DataFlowGraph {
   DataFlowGraph(MachineFunction &mf, const TargetInstrInfo &tii,
                 const TargetRegisterInfo &tri, const MachineDominatorTree &mdt,
                 const MachineDominanceFrontier &mdf);
@@ -957,7 +957,7 @@ NodeList CodeNode::members_if(Predicate P, const DataFlowGraph &G) const {
   return MM;
 }
 
-template <typename T> struct Print {
+template <typename T> struct LLVM_ABI Print {
   Print(const T &x, const DataFlowGraph &g) : Obj(x), G(g) {}
 
   const T &Obj;
@@ -966,27 +966,27 @@ template <typename T> struct Print {
 
 template <typename T> Print(const T &, const DataFlowGraph &) -> Print<T>;
 
-template <typename T> struct PrintNode : Print<NodeAddr<T>> {
+template <typename T> struct LLVM_ABI PrintNode : Print<NodeAddr<T>> {
   PrintNode(const NodeAddr<T> &x, const DataFlowGraph &g)
       : Print<NodeAddr<T>>(x, g) {}
 };
 
-raw_ostream &operator<<(raw_ostream &OS, const Print<RegisterRef> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<NodeId> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<Def> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<Use> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<PhiUse> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<Ref> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<NodeList> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<NodeSet> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<Phi> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<Stmt> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<Instr> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<Block> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<Func> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<RegisterSet> &P);
-raw_ostream &operator<<(raw_ostream &OS, const Print<RegisterAggr> &P);
-raw_ostream &operator<<(raw_ostream &OS,
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<RegisterRef> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<NodeId> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<Def> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<Use> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<PhiUse> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<Ref> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<NodeList> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<NodeSet> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<Phi> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<Stmt> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<Instr> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<Block> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<Func> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<RegisterSet> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<RegisterAggr> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS,
                         const Print<DataFlowGraph::DefStack> &P);
 
 } // end namespace rdf

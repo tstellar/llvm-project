@@ -13,6 +13,7 @@
 #ifndef LLVM_SUPPORT_ALIGNOF_H
 #define LLVM_SUPPORT_ALIGNOF_H
 
+#include "llvm/Support/Compiler.h"
 #include <type_traits>
 
 namespace llvm {
@@ -24,7 +25,8 @@ namespace llvm {
 /// use it due to a bug in the MSVC x86 compiler:
 /// https://github.com/microsoft/STL/issues/1533
 /// Using `alignas` here works around the bug.
-template <typename T, typename... Ts> struct AlignedCharArrayUnion {
+template <typename T, typename... Ts>
+struct LLVM_ABI AlignedCharArrayUnion {
   using AlignedUnion = std::aligned_union_t<1, T, Ts...>;
   alignas(alignof(AlignedUnion)) char buffer[sizeof(AlignedUnion)];
 };

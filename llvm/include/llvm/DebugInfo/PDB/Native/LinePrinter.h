@@ -21,7 +21,7 @@
 #include <list>
 
 // Container for filter options to control which elements will be printed.
-struct FilterOptions {
+struct LLVM_ABI FilterOptions {
   std::list<std::string> ExcludeTypes;
   std::list<std::string> ExcludeSymbols;
   std::list<std::string> ExcludeCompilands;
@@ -47,7 +47,7 @@ class ClassLayout;
 class PDBFile;
 class SymbolGroup;
 
-class LinePrinter {
+class LLVM_ABI LinePrinter {
   friend class WithColor;
 
 public:
@@ -114,7 +114,7 @@ private:
   std::list<Regex> IncludeSymbolFilters;
 };
 
-struct PrintScope {
+struct LLVM_ABI PrintScope {
   explicit PrintScope(LinePrinter &P, uint32_t IndentLevel)
       : P(P), IndentLevel(IndentLevel) {}
   explicit PrintScope(const PrintScope &Other, uint32_t LabelWidth)
@@ -129,7 +129,7 @@ inline PrintScope withLabelWidth(const PrintScope &Scope, uint32_t W) {
   return PrintScope{Scope, W};
 }
 
-struct AutoIndent {
+struct LLVM_ABI AutoIndent {
   explicit AutoIndent(LinePrinter &L, uint32_t Amount = 0)
       : L(&L), Amount(Amount) {
     L.Indent(Amount);
@@ -167,7 +167,7 @@ enum class PDB_ColorItem {
   Register,
 };
 
-class WithColor {
+class LLVM_ABI WithColor {
 public:
   WithColor(LinePrinter &P, PDB_ColorItem C);
   ~WithColor();

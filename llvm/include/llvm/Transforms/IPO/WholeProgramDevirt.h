@@ -36,7 +36,7 @@ namespace wholeprogramdevirt {
 
 // A bit vector that keeps track of which bits are used. We use this to
 // pack constant values compactly before and after each virtual table.
-struct AccumBitVector {
+struct LLVM_ABI AccumBitVector {
   std::vector<uint8_t> Bytes;
 
   // Bits in BytesUsed[I] are 1 if matching bit in Bytes[I] is used, 0 if not.
@@ -85,7 +85,7 @@ struct AccumBitVector {
 };
 
 // The bits that will be stored before and after a particular vtable.
-struct VTableBits {
+struct LLVM_ABI VTableBits {
   // The vtable global.
   GlobalVariable *GV;
 
@@ -103,7 +103,7 @@ struct VTableBits {
 };
 
 // Information about a member of a particular type identifier.
-struct TypeMemberInfo {
+struct LLVM_ABI TypeMemberInfo {
   // The VTableBits for the vtable.
   VTableBits *Bits;
 
@@ -116,7 +116,7 @@ struct TypeMemberInfo {
 };
 
 // A virtual call target, i.e. an entry in a particular vtable.
-struct VirtualCallTarget {
+struct LLVM_ABI VirtualCallTarget {
   VirtualCallTarget(GlobalValue *Fn, const TypeMemberInfo *TM);
 
   // For testing only.
@@ -201,26 +201,26 @@ struct VirtualCallTarget {
 // Find the minimum offset that we may store a value of size Size bits at. If
 // IsAfter is set, look for an offset before the object, otherwise look for an
 // offset after the object.
-uint64_t findLowestOffset(ArrayRef<VirtualCallTarget> Targets, bool IsAfter,
+LLVM_ABI uint64_t findLowestOffset(ArrayRef<VirtualCallTarget> Targets, bool IsAfter,
                           uint64_t Size);
 
 // Set the stored value in each of Targets to VirtualCallTarget::RetVal at the
 // given allocation offset before the vtable address. Stores the computed
 // byte/bit offset to OffsetByte/OffsetBit.
-void setBeforeReturnValues(MutableArrayRef<VirtualCallTarget> Targets,
+LLVM_ABI void setBeforeReturnValues(MutableArrayRef<VirtualCallTarget> Targets,
                            uint64_t AllocBefore, unsigned BitWidth,
                            int64_t &OffsetByte, uint64_t &OffsetBit);
 
 // Set the stored value in each of Targets to VirtualCallTarget::RetVal at the
 // given allocation offset after the vtable address. Stores the computed
 // byte/bit offset to OffsetByte/OffsetBit.
-void setAfterReturnValues(MutableArrayRef<VirtualCallTarget> Targets,
+LLVM_ABI void setAfterReturnValues(MutableArrayRef<VirtualCallTarget> Targets,
                           uint64_t AllocAfter, unsigned BitWidth,
                           int64_t &OffsetByte, uint64_t &OffsetBit);
 
 } // end namespace wholeprogramdevirt
 
-struct WholeProgramDevirtPass : public PassInfoMixin<WholeProgramDevirtPass> {
+struct LLVM_ABI WholeProgramDevirtPass : public PassInfoMixin<WholeProgramDevirtPass> {
   ModuleSummaryIndex *ExportSummary;
   const ModuleSummaryIndex *ImportSummary;
   bool UseCommandLine = false;
@@ -234,17 +234,17 @@ struct WholeProgramDevirtPass : public PassInfoMixin<WholeProgramDevirtPass> {
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &);
 };
 
-struct VTableSlotSummary {
+struct LLVM_ABI VTableSlotSummary {
   StringRef TypeID;
   uint64_t ByteOffset;
 };
-bool hasWholeProgramVisibility(bool WholeProgramVisibilityEnabledInLTO);
-void updatePublicTypeTestCalls(Module &M,
+LLVM_ABI bool hasWholeProgramVisibility(bool WholeProgramVisibilityEnabledInLTO);
+LLVM_ABI void updatePublicTypeTestCalls(Module &M,
                                bool WholeProgramVisibilityEnabledInLTO);
-void updateVCallVisibilityInModule(
+LLVM_ABI void updateVCallVisibilityInModule(
     Module &M, bool WholeProgramVisibilityEnabledInLTO,
     const DenseSet<GlobalValue::GUID> &DynamicExportSymbols);
-void updateVCallVisibilityInIndex(
+LLVM_ABI void updateVCallVisibilityInIndex(
     ModuleSummaryIndex &Index, bool WholeProgramVisibilityEnabledInLTO,
     const DenseSet<GlobalValue::GUID> &DynamicExportSymbols);
 
@@ -255,13 +255,13 @@ void updateVCallVisibilityInIndex(
 /// locating the corresponding WPD resolution is recorded for the ValueInfo
 /// in case it is exported by cross module importing (in which case the
 /// devirtualized target name will need adjustment).
-void runWholeProgramDevirtOnIndex(
+LLVM_ABI void runWholeProgramDevirtOnIndex(
     ModuleSummaryIndex &Summary, std::set<GlobalValue::GUID> &ExportedGUIDs,
     std::map<ValueInfo, std::vector<VTableSlotSummary>> &LocalWPDTargetsMap);
 
 /// Call after cross-module importing to update the recorded single impl
 /// devirt target names for any locals that were exported.
-void updateIndexWPDForExports(
+LLVM_ABI void updateIndexWPDForExports(
     ModuleSummaryIndex &Summary,
     function_ref<bool(StringRef, ValueInfo)> isExported,
     std::map<ValueInfo, std::vector<VTableSlotSummary>> &LocalWPDTargetsMap);

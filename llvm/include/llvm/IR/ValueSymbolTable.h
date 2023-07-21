@@ -34,7 +34,7 @@ template <typename ValueSubClass> class SymbolTableListTraits;
 /// a std::map<std::string,Value*> but has a controlled interface provided by
 /// LLVM as well as ensuring uniqueness of names.
 ///
-class ValueSymbolTable {
+class LLVM_ABI ValueSymbolTable {
   friend class SymbolTableListTraits<Argument>;
   friend class SymbolTableListTraits<BasicBlock>;
   friend class SymbolTableListTraits<Function>;

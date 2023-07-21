@@ -27,7 +27,7 @@ namespace llvm {
 /// because it is based on being implicitly convertible to an integral type.
 /// Also note that enum classes aren't implicitly convertible to integral types,
 /// the value may therefore need to be explicitly converted before being used.
-template <typename T> class is_integral_or_enum {
+template <typename T> class LLVM_ABI is_integral_or_enum {
   using UnderlyingT = std::remove_reference_t<T>;
 
 public:
@@ -41,10 +41,10 @@ public:
 
 /// If T is a pointer, just return it. If it is not, return T&.
 template<typename T, typename Enable = void>
-struct add_lvalue_reference_if_not_pointer { using type = T &; };
+struct LLVM_ABI add_lvalue_reference_if_not_pointer { using type = T &; };
 
 template <typename T>
-struct add_lvalue_reference_if_not_pointer<
+struct LLVM_ABI add_lvalue_reference_if_not_pointer<
     T, std::enable_if_t<std::is_pointer_v<T>>> {
   using type = T;
 };
@@ -52,19 +52,19 @@ struct add_lvalue_reference_if_not_pointer<
 /// If T is a pointer to X, return a pointer to const X. If it is not,
 /// return const T.
 template<typename T, typename Enable = void>
-struct add_const_past_pointer { using type = const T; };
+struct LLVM_ABI add_const_past_pointer { using type = const T; };
 
 template <typename T>
-struct add_const_past_pointer<T, std::enable_if_t<std::is_pointer_v<T>>> {
+struct LLVM_ABI add_const_past_pointer<T, std::enable_if_t<std::is_pointer_v<T>>> {
   using type = const std::remove_pointer_t<T> *;
 };
 
 template <typename T, typename Enable = void>
-struct const_pointer_or_const_ref {
+struct LLVM_ABI const_pointer_or_const_ref {
   using type = const T &;
 };
 template <typename T>
-struct const_pointer_or_const_ref<T, std::enable_if_t<std::is_pointer_v<T>>> {
+struct LLVM_ABI const_pointer_or_const_ref<T, std::enable_if_t<std::is_pointer_v<T>>> {
   using type = typename add_const_past_pointer<T>::type;
 };
 
@@ -94,28 +94,28 @@ union trivial_helper {
 /// An implementation of `std::is_trivially_copy_constructible` since we have
 /// users with STLs that don't yet include it.
 template <typename T>
-struct is_trivially_copy_constructible
+struct LLVM_ABI is_trivially_copy_constructible
     : std::is_copy_constructible<
           ::llvm::detail::copy_construction_triviality_helper<T>> {};
 template <typename T>
-struct is_trivially_copy_constructible<T &> : std::true_type {};
+struct LLVM_ABI is_trivially_copy_constructible<T &> : std::true_type {};
 template <typename T>
-struct is_trivially_copy_constructible<T &&> : std::false_type {};
+struct LLVM_ABI is_trivially_copy_constructible<T &&> : std::false_type {};
 
 /// An implementation of `std::is_trivially_move_constructible` since we have
 /// users with STLs that don't yet include it.
 template <typename T>
-struct is_trivially_move_constructible
+struct LLVM_ABI is_trivially_move_constructible
     : std::is_move_constructible<
           ::llvm::detail::move_construction_triviality_helper<T>> {};
 template <typename T>
-struct is_trivially_move_constructible<T &> : std::true_type {};
+struct LLVM_ABI is_trivially_move_constructible<T &> : std::true_type {};
 template <typename T>
-struct is_trivially_move_constructible<T &&> : std::true_type {};
+struct LLVM_ABI is_trivially_move_constructible<T &&> : std::true_type {};
 
 
 template <typename T>
-struct is_copy_assignable {
+struct LLVM_ABI is_copy_assignable {
   template<class F>
     static auto get(F*) -> decltype(std::declval<F &>() = std::declval<const F &>(), std::true_type{});
     static std::false_type get(...);
@@ -123,7 +123,7 @@ struct is_copy_assignable {
 };
 
 template <typename T>
-struct is_move_assignable {
+struct LLVM_ABI is_move_assignable {
   template<class F>
     static auto get(F*) -> decltype(std::declval<F &>() = std::declval<F &&>(), std::true_type{});
     static std::false_type get(...);

@@ -29,7 +29,7 @@ class ObjectFile;
 
 /// InstrProfCorrelator - A base class used to create raw instrumentation data
 /// to their functions.
-class InstrProfCorrelator {
+class LLVM_ABI InstrProfCorrelator {
 public:
   static llvm::Expected<std::unique_ptr<InstrProfCorrelator>>
   get(StringRef DebugInfoFilename);
@@ -110,7 +110,7 @@ private:
 /// InstrProfCorrelatorImpl - A child of InstrProfCorrelator with a template
 /// pointer type so that the ProfileData vector can be materialized.
 template <class IntPtrT>
-class InstrProfCorrelatorImpl : public InstrProfCorrelator {
+class LLVM_ABI InstrProfCorrelatorImpl : public InstrProfCorrelator {
 public:
   InstrProfCorrelatorImpl(std::unique_ptr<InstrProfCorrelator::Context> Ctx);
   static bool classof(const InstrProfCorrelator *C);
@@ -155,7 +155,7 @@ private:
 /// DwarfInstrProfCorrelator - A child of InstrProfCorrelatorImpl that takes
 /// DWARF debug info as input to correlate profiles.
 template <class IntPtrT>
-class DwarfInstrProfCorrelator : public InstrProfCorrelatorImpl<IntPtrT> {
+class LLVM_ABI DwarfInstrProfCorrelator : public InstrProfCorrelatorImpl<IntPtrT> {
 public:
   DwarfInstrProfCorrelator(std::unique_ptr<DWARFContext> DICtx,
                            std::unique_ptr<InstrProfCorrelator::Context> Ctx)

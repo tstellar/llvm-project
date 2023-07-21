@@ -22,7 +22,7 @@ namespace llvm {
 class BinaryByteStream;
 template <typename T> struct BinaryItemTraits;
 
-template <> struct BinaryItemTraits<llvm::codeview::CVType> {
+template <> struct LLVM_ABI BinaryItemTraits<llvm::codeview::CVType> {
   static size_t length(const codeview::CVType &Item) { return Item.length(); }
   static ArrayRef<uint8_t> bytes(const codeview::CVType &Item) {
     return Item.data();
@@ -36,7 +36,7 @@ struct MSFLayout;
 namespace pdb {
 struct TpiStreamHeader;
 
-class TpiStreamBuilder {
+class LLVM_ABI TpiStreamBuilder {
 public:
   explicit TpiStreamBuilder(msf::MSFBuilder &Msf, uint32_t StreamIdx);
   ~TpiStreamBuilder();

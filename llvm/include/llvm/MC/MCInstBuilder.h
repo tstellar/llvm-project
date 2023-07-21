@@ -18,7 +18,7 @@
 
 namespace llvm {
 
-class MCInstBuilder {
+class LLVM_ABI MCInstBuilder {
   MCInst Inst;
 
 public:

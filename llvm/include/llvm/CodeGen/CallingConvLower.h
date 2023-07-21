@@ -30,7 +30,7 @@ class MVT;
 class TargetRegisterInfo;
 
 /// CCValAssign - Represent assignment of one arg/retval to a location.
-class CCValAssign {
+class LLVM_ABI CCValAssign {
 public:
   enum LocInfo {
     Full,      // The value fills the full location.
@@ -143,7 +143,7 @@ public:
 
 /// Describes a register that needs to be forwarded from the prologue to a
 /// musttail call.
-struct ForwardedRegister {
+struct LLVM_ABI ForwardedRegister {
   ForwardedRegister(Register VReg, MCPhysReg PReg, MVT VT)
       : VReg(VReg), PReg(PReg), VT(VT) {}
   Register VReg;
@@ -167,7 +167,7 @@ typedef bool CCCustomFn(unsigned &ValNo, MVT &ValVT,
 /// CCState - This class holds information needed while lowering arguments and
 /// return values.  It captures which registers are already assigned and which
 /// stack slots are used.  It provides accessors to allocate these values.
-class CCState {
+class LLVM_ABI CCState {
 private:
   CallingConv::ID CallingConv;
   bool IsVarArg;

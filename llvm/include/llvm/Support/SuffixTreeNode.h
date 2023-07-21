@@ -30,7 +30,7 @@
 namespace llvm {
 
 /// A node in a suffix tree which represents a substring or suffix.
-struct SuffixTreeNode {
+struct LLVM_ABI SuffixTreeNode {
 public:
   /// Represents an undefined index in the suffix tree.
   static const unsigned EmptyIdx = -1;
@@ -71,7 +71,7 @@ public:
 };
 
 // A node with two or more children, or the root.
-struct SuffixTreeInternalNode : SuffixTreeNode {
+struct LLVM_ABI SuffixTreeInternalNode : SuffixTreeNode {
 private:
   /// The end index of this node's substring in the main string.
   ///
@@ -135,7 +135,7 @@ public:
 };
 
 // A node representing a suffix.
-struct SuffixTreeLeafNode : SuffixTreeNode {
+struct LLVM_ABI SuffixTreeLeafNode : SuffixTreeNode {
 private:
   /// The start index of the suffix represented by this leaf.
   unsigned SuffixIdx = EmptyIdx;

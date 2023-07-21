@@ -20,7 +20,7 @@
 namespace llvm {
 
 class Value;
-class ConstraintSystem {
+class LLVM_ABI ConstraintSystem {
   struct Entry {
     int64_t Coefficient;
     uint16_t Id;

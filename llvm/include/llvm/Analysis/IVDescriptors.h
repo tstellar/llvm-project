@@ -68,7 +68,7 @@ enum class RecurKind {
 /// references.
 
 /// This struct holds information about recurrence variables.
-class RecurrenceDescriptor {
+class LLVM_ABI RecurrenceDescriptor {
 public:
   RecurrenceDescriptor() = default;
 
@@ -303,7 +303,7 @@ private:
 };
 
 /// A struct for saving information about induction variables.
-class InductionDescriptor {
+class LLVM_ABI InductionDescriptor {
 public:
   /// This enum represents the kinds of inductions that we support.
   enum InductionKind {

@@ -30,7 +30,7 @@ namespace llvm {
 class GlobalValue;
 class Module;
 
-class ModuleSymbolTable {
+class LLVM_ABI ModuleSymbolTable {
 public:
   using AsmSymbol = std::pair<std::string, uint32_t>;
   using Symbol = PointerUnion<GlobalValue *, AsmSymbol *>;

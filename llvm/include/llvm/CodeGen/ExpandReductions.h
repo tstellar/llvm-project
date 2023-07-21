@@ -13,7 +13,7 @@
 
 namespace llvm {
 
-class ExpandReductionsPass
+class LLVM_ABI ExpandReductionsPass
     : public PassInfoMixin<ExpandReductionsPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);

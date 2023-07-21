@@ -23,7 +23,9 @@
 namespace llvm {
 namespace object {
 
-struct XCOFFFileHeader32 {
+template <typename AddressType> struct LLVM_ABI XCOFFRelocation;
+
+struct LLVM_ABI XCOFFFileHeader32 {
   support::ubig16_t Magic;
   support::ubig16_t NumberOfSections;
 
@@ -37,7 +39,7 @@ struct XCOFFFileHeader32 {
   support::ubig16_t Flags;
 };
 
-struct XCOFFFileHeader64 {
+struct LLVM_ABI XCOFFFileHeader64 {
   support::ubig16_t Magic;
   support::ubig16_t NumberOfSections;
 
@@ -51,7 +53,7 @@ struct XCOFFFileHeader64 {
   support::ubig32_t NumberOfSymTableEntries;
 };
 
-template <typename T> struct XCOFFAuxiliaryHeader {
+template <typename T> struct LLVM_ABI XCOFFAuxiliaryHeader {
   static constexpr uint8_t AuxiHeaderFlagMask = 0xF0;
   static constexpr uint8_t AuxiHeaderTDataAlignmentMask = 0x0F;
 
@@ -69,7 +71,7 @@ public:
   uint16_t getVersion() const { return static_cast<const T *>(this)->Version; }
 };
 
-struct XCOFFAuxiliaryHeader32 : XCOFFAuxiliaryHeader<XCOFFAuxiliaryHeader32> {
+struct LLVM_ABI XCOFFAuxiliaryHeader32 : XCOFFAuxiliaryHeader<XCOFFAuxiliaryHeader32> {
   support::ubig16_t
       AuxMagic; ///< If the value of the o_vstamp field is greater than 1, the
                 ///< o_mflags field is reserved for future use and it should
@@ -116,7 +118,7 @@ struct XCOFFAuxiliaryHeader32 : XCOFFAuxiliaryHeader<XCOFFAuxiliaryHeader32> {
   support::ubig16_t SecNumOfTBSS;
 };
 
-struct XCOFFAuxiliaryHeader64 : XCOFFAuxiliaryHeader<XCOFFAuxiliaryHeader64> {
+struct LLVM_ABI XCOFFAuxiliaryHeader64 : XCOFFAuxiliaryHeader<XCOFFAuxiliaryHeader64> {
   support::ubig16_t AuxMagic;
   support::ubig16_t Version;
   support::ubig32_t ReservedForDebugger;
@@ -149,7 +151,7 @@ struct XCOFFAuxiliaryHeader64 : XCOFFAuxiliaryHeader<XCOFFAuxiliaryHeader64> {
   support::ubig16_t XCOFF64Flag;
 };
 
-template <typename T> struct XCOFFSectionHeader {
+template <typename T> struct LLVM_ABI XCOFFSectionHeader {
   // Least significant 3 bits are reserved.
   static constexpr unsigned SectionFlagsReservedMask = 0x7;
 
@@ -168,7 +170,7 @@ struct XCOFFSectionHeader64;
 extern template struct XCOFFSectionHeader<XCOFFSectionHeader32>;
 extern template struct XCOFFSectionHeader<XCOFFSectionHeader64>;
 
-struct XCOFFSectionHeader32 : XCOFFSectionHeader<XCOFFSectionHeader32> {
+struct LLVM_ABI XCOFFSectionHeader32 : XCOFFSectionHeader<XCOFFSectionHeader32> {
   char Name[XCOFF::NameSize];
   support::ubig32_t PhysicalAddress;
   support::ubig32_t VirtualAddress;
@@ -181,7 +183,7 @@ struct XCOFFSectionHeader32 : XCOFFSectionHeader<XCOFFSectionHeader32> {
   support::big32_t Flags;
 };
 
-struct XCOFFSectionHeader64 : XCOFFSectionHeader<XCOFFSectionHeader64> {
+struct LLVM_ABI XCOFFSectionHeader64 : XCOFFSectionHeader<XCOFFSectionHeader64> {
   char Name[XCOFF::NameSize];
   support::ubig64_t PhysicalAddress;
   support::ubig64_t VirtualAddress;
@@ -197,7 +199,7 @@ struct XCOFFSectionHeader64 : XCOFFSectionHeader<XCOFFSectionHeader64> {
 
 struct LoaderSectionHeader32;
 struct LoaderSectionHeader64;
-struct LoaderSectionSymbolEntry32 {
+struct LLVM_ABI LoaderSectionSymbolEntry32 {
   struct NameOffsetInStrTbl {
     support::big32_t IsNameInStrTbl; // Zero indicates name in string table.
     support::ubig32_t Offset;
@@ -215,7 +217,7 @@ struct LoaderSectionSymbolEntry32 {
   getSymbolName(const LoaderSectionHeader32 *LoaderSecHeader) const;
 };
 
-struct LoaderSectionSymbolEntry64 {
+struct LLVM_ABI LoaderSectionSymbolEntry64 {
   support::ubig64_t Value; // The virtual address of the symbol.
   support::ubig32_t Offset;
   support::big16_t SectionNumber;
@@ -228,21 +230,21 @@ struct LoaderSectionSymbolEntry64 {
   getSymbolName(const LoaderSectionHeader64 *LoaderSecHeader) const;
 };
 
-struct LoaderSectionRelocationEntry32 {
+struct LLVM_ABI LoaderSectionRelocationEntry32 {
   support::ubig32_t VirtualAddr;
   support::big32_t SymbolIndex;
   support::ubig16_t Type;
   support::big16_t SectionNum;
 };
 
-struct LoaderSectionRelocationEntry64 {
+struct LLVM_ABI LoaderSectionRelocationEntry64 {
   support::ubig64_t VirtualAddr;
   support::ubig16_t Type;
   support::big16_t SectionNum;
   support::big32_t SymbolIndex;
 };
 
-struct LoaderSectionHeader32 {
+struct LLVM_ABI LoaderSectionHeader32 {
   support::ubig32_t Version;
   support::ubig32_t NumberOfSymTabEnt;
   support::ubig32_t NumberOfRelTabEnt;
@@ -265,7 +267,7 @@ struct LoaderSectionHeader32 {
   }
 };
 
-struct LoaderSectionHeader64 {
+struct LLVM_ABI LoaderSectionHeader64 {
   support::ubig32_t Version;
   support::ubig32_t NumberOfSymTabEnt;
   support::ubig32_t NumberOfRelTabEnt;
@@ -281,7 +283,7 @@ struct LoaderSectionHeader64 {
   uint64_t getOffsetToRelEnt() const { return OffsetToRelEnt; }
 };
 
-template <typename AddressType> struct ExceptionSectionEntry {
+template <typename AddressType> struct LLVM_ABI ExceptionSectionEntry {
   union {
     support::ubig32_t SymbolIdx;
     AddressType TrapInstAddr;
@@ -310,12 +312,12 @@ typedef ExceptionSectionEntry<support::ubig64_t> ExceptionSectionEntry64;
 extern template struct ExceptionSectionEntry<support::ubig32_t>;
 extern template struct ExceptionSectionEntry<support::ubig64_t>;
 
-struct XCOFFStringTable {
+struct LLVM_ABI XCOFFStringTable {
   uint32_t Size;
   const char *Data;
 };
 
-struct XCOFFCsectAuxEnt32 {
+struct LLVM_ABI XCOFFCsectAuxEnt32 {
   support::ubig32_t SectionOrLength;
   support::ubig32_t ParameterHashIndex;
   support::ubig16_t TypeChkSectNum;
@@ -325,7 +327,7 @@ struct XCOFFCsectAuxEnt32 {
   support::ubig16_t StabSectNum;
 };
 
-struct XCOFFCsectAuxEnt64 {
+struct LLVM_ABI XCOFFCsectAuxEnt64 {
   support::ubig32_t SectionOrLengthLowByte;
   support::ubig32_t ParameterHashIndex;
   support::ubig16_t TypeChkSectNum;
@@ -336,7 +338,7 @@ struct XCOFFCsectAuxEnt64 {
   XCOFF::SymbolAuxType AuxType;
 };
 
-class XCOFFCsectAuxRef {
+class LLVM_ABI XCOFFCsectAuxRef {
 public:
   static constexpr uint8_t SymbolTypeMask = 0x07;
   static constexpr uint8_t SymbolAlignmentMask = 0xF8;
@@ -419,7 +421,7 @@ private:
   const XCOFFCsectAuxEnt64 *Entry64 = nullptr;
 };
 
-struct XCOFFFileAuxEnt {
+struct LLVM_ABI XCOFFFileAuxEnt {
   typedef struct {
     support::big32_t Magic; // Zero indicates name in string table.
     support::ubig32_t Offset;
@@ -434,14 +436,14 @@ struct XCOFFFileAuxEnt {
   XCOFF::SymbolAuxType AuxType; // 64-bit XCOFF file only.
 };
 
-struct XCOFFSectAuxEntForStat {
+struct LLVM_ABI XCOFFSectAuxEntForStat {
   support::ubig32_t SectionLength;
   support::ubig16_t NumberOfRelocEnt;
   support::ubig16_t NumberOfLineNum;
   uint8_t Pad[10];
 }; // 32-bit XCOFF file only.
 
-struct XCOFFFunctionAuxEnt32 {
+struct LLVM_ABI XCOFFFunctionAuxEnt32 {
   support::ubig32_t OffsetToExceptionTbl;
   support::ubig32_t SizeOfFunction;
   support::ubig32_t PtrToLineNum;
@@ -449,7 +451,7 @@ struct XCOFFFunctionAuxEnt32 {
   uint8_t Pad[2];
 };
 
-struct XCOFFFunctionAuxEnt64 {
+struct LLVM_ABI XCOFFFunctionAuxEnt64 {
   support::ubig64_t PtrToLineNum;
   support::ubig32_t SizeOfFunction;
   support::big32_t SymIdxOfNextBeyond;
@@ -457,7 +459,7 @@ struct XCOFFFunctionAuxEnt64 {
   XCOFF::SymbolAuxType AuxType; // Contains _AUX_FCN; Type of auxiliary entry
 };
 
-struct XCOFFExceptionAuxEnt {
+struct LLVM_ABI XCOFFExceptionAuxEnt {
   support::ubig64_t OffsetToExceptionTbl;
   support::ubig32_t SizeOfFunction;
   support::big32_t SymIdxOfNextBeyond;
@@ -465,34 +467,34 @@ struct XCOFFExceptionAuxEnt {
   XCOFF::SymbolAuxType AuxType; // Contains _AUX_EXCEPT; Type of auxiliary entry
 };
 
-struct XCOFFBlockAuxEnt32 {
+struct LLVM_ABI XCOFFBlockAuxEnt32 {
   uint8_t ReservedZeros1[2];
   support::ubig16_t LineNumHi;
   support::ubig16_t LineNumLo;
   uint8_t ReservedZeros2[12];
 };
 
-struct XCOFFBlockAuxEnt64 {
+struct LLVM_ABI XCOFFBlockAuxEnt64 {
   support::ubig32_t LineNum;
   uint8_t Pad[13];
   XCOFF::SymbolAuxType AuxType; // Contains _AUX_SYM; Type of auxiliary entry
 };
 
-struct XCOFFSectAuxEntForDWARF32 {
+struct LLVM_ABI XCOFFSectAuxEntForDWARF32 {
   support::ubig32_t LengthOfSectionPortion;
   uint8_t Pad1[4];
   support::ubig32_t NumberOfRelocEnt;
   uint8_t Pad2[6];
 };
 
-struct XCOFFSectAuxEntForDWARF64 {
+struct LLVM_ABI XCOFFSectAuxEntForDWARF64 {
   support::ubig64_t LengthOfSectionPortion;
   support::ubig64_t NumberOfRelocEnt;
   uint8_t Pad;
   XCOFF::SymbolAuxType AuxType; // Contains _AUX_SECT; Type of Auxillary entry
 };
 
-template <typename AddressType> struct XCOFFRelocation {
+template <typename AddressType> struct LLVM_ABI XCOFFRelocation {
 public:
   AddressType VirtualAddress;
   support::ubig32_t SymbolIndex;
@@ -510,15 +512,15 @@ public:
   uint8_t getRelocatedLength() const;
 };
 
-extern template struct XCOFFRelocation<llvm::support::ubig32_t>;
-extern template struct XCOFFRelocation<llvm::support::ubig64_t>;
+extern template struct LLVM_ABI XCOFFRelocation<llvm::support::ubig32_t>;
+extern template struct LLVM_ABI XCOFFRelocation<llvm::support::ubig64_t>;
 
-struct XCOFFRelocation32 : XCOFFRelocation<llvm::support::ubig32_t> {};
-struct XCOFFRelocation64 : XCOFFRelocation<llvm::support::ubig64_t> {};
+struct LLVM_ABI XCOFFRelocation32 : XCOFFRelocation<llvm::support::ubig32_t> {};
+struct LLVM_ABI XCOFFRelocation64 : XCOFFRelocation<llvm::support::ubig64_t> {};
 
 class XCOFFSymbolRef;
 
-class XCOFFObjectFile : public ObjectFile {
+class LLVM_ABI XCOFFObjectFile : public ObjectFile {
 private:
   const void *FileHeader = nullptr;
   const void *AuxiliaryHeader = nullptr;
@@ -717,12 +719,18 @@ public:
   static bool classof(const Binary *B) { return B->isXCOFF(); }
 }; // XCOFFObjectFile
 
-typedef struct {
+
+extern template Expected<ArrayRef<ExceptionSectionEntry32>> LLVM_ABI
+XCOFFObjectFile::getExceptionEntries() const;
+extern template Expected<ArrayRef<ExceptionSectionEntry64>> LLVM_ABI
+XCOFFObjectFile::getExceptionEntries() const;
+
+typedef struct LLVM_ABI {
   uint8_t LanguageId;
   uint8_t CpuTypeId;
 } CFileLanguageIdAndTypeIdType;
 
-struct XCOFFSymbolEntry32 {
+struct LLVM_ABI XCOFFSymbolEntry32 {
   typedef struct {
     support::big32_t Magic; // Zero indicates name in string table.
     support::ubig32_t Offset;
@@ -745,7 +753,7 @@ struct XCOFFSymbolEntry32 {
   uint8_t NumberOfAuxEntries;
 };
 
-struct XCOFFSymbolEntry64 {
+struct LLVM_ABI XCOFFSymbolEntry64 {
   support::ubig64_t Value; // Symbol value; storage class-dependent.
   support::ubig32_t Offset;
   support::big16_t SectionNumber;
@@ -759,7 +767,7 @@ struct XCOFFSymbolEntry64 {
   uint8_t NumberOfAuxEntries;
 };
 
-class XCOFFSymbolRef {
+class LLVM_ABI XCOFFSymbolRef {
 public:
   enum { NAME_IN_STR_TBL_MAGIC = 0x0 };
 
@@ -825,7 +833,7 @@ private:
   const XCOFFSymbolEntry64 *Entry64 = nullptr;
 };
 
-class TBVectorExt {
+class LLVM_ABI TBVectorExt {
   uint16_t Data;
   SmallString<32> VecParmsInfo;
 
@@ -844,7 +852,7 @@ public:
 /// This class provides methods to extract traceback table data from a buffer.
 /// The various accessors may reference the buffer provided via the constructor.
 
-class XCOFFTracebackTable {
+class LLVM_ABI XCOFFTracebackTable {
   const uint8_t *const TBPtr;
   bool Is64BitObj;
   std::optional<SmallString<32>> ParmsType;
@@ -936,7 +944,7 @@ public:
   const std::optional<uint64_t> &getEhInfoDisp() const { return EhInfoDisp; }
 };
 
-bool doesXCOFFTracebackTableBegin(ArrayRef<uint8_t> Bytes);
+LLVM_ABI bool doesXCOFFTracebackTableBegin(ArrayRef<uint8_t> Bytes);
 } // namespace object
 } // namespace llvm
 

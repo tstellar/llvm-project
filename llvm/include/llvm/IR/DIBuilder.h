@@ -39,7 +39,7 @@ namespace llvm {
   class Value;
   class DbgAssignIntrinsic;
 
-  class DIBuilder {
+  class LLVM_ABI DIBuilder {
     Module &M;
     LLVMContext &VMContext;
 

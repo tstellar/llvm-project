@@ -25,7 +25,7 @@ class Error;
 class GlobalValue;
 class StructType;
 
-class GVMaterializer {
+class LLVM_ABI GVMaterializer {
 protected:
   GVMaterializer() = default;
 

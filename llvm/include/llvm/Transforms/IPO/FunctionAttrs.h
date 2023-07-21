@@ -28,11 +28,11 @@ class Function;
 class Module;
 
 /// Returns the memory access properties of this copy of the function.
-MemoryEffects computeFunctionBodyMemoryAccess(Function &F, AAResults &AAR);
+LLVM_ABI MemoryEffects computeFunctionBodyMemoryAccess(Function &F, AAResults &AAR);
 
 /// Propagate function attributes for function summaries along the index's
 /// callgraph during thinlink
-bool thinLTOPropagateFunctionAttrs(
+LLVM_ABI bool thinLTOPropagateFunctionAttrs(
     ModuleSummaryIndex &Index,
     function_ref<bool(GlobalValue::GUID, const GlobalValueSummary *)>
         isPrevailing);
@@ -46,7 +46,7 @@ bool thinLTOPropagateFunctionAttrs(
 /// access memory, or only read memory, and give them the readnone/readonly
 /// attribute. It also discovers function arguments that are not captured by
 /// the function and marks them with the nocapture attribute.
-struct PostOrderFunctionAttrsPass : PassInfoMixin<PostOrderFunctionAttrsPass> {
+struct LLVM_ABI PostOrderFunctionAttrsPass : PassInfoMixin<PostOrderFunctionAttrsPass> {
   PostOrderFunctionAttrsPass(bool SkipNonRecursive = false)
       : SkipNonRecursive(SkipNonRecursive) {}
   PreservedAnalyses run(LazyCallGraph::SCC &C, CGSCCAnalysisManager &AM,
@@ -69,7 +69,7 @@ private:
 // FIXME: Currently there is no RPO CGSCC pass structure to slide into and so
 // this is a boring module pass, but eventually it should be an RPO CGSCC pass
 // when such infrastructure is available.
-class ReversePostOrderFunctionAttrsPass
+class LLVM_ABI ReversePostOrderFunctionAttrsPass
     : public PassInfoMixin<ReversePostOrderFunctionAttrsPass> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);

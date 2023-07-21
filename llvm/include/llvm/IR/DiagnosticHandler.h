@@ -21,7 +21,7 @@ class DiagnosticInfo;
 /// The handleDiagnostics method must be overriden by the subclasses to handle
 /// diagnostic. The *RemarkEnabled methods can be overriden to control
 /// which remarks are enabled.
-struct DiagnosticHandler {
+struct LLVM_ABI DiagnosticHandler {
   void *DiagnosticContext = nullptr;
   DiagnosticHandler(void *DiagContext = nullptr)
       : DiagnosticContext(DiagContext) {}

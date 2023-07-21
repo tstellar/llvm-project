@@ -43,35 +43,35 @@ typedef enum {
  *
  * @see llvm::Module::getOrInsertComdat()
  */
-LLVMComdatRef LLVMGetOrInsertComdat(LLVMModuleRef M, const char *Name);
+LLVM_ABI LLVMComdatRef LLVMGetOrInsertComdat(LLVMModuleRef M, const char *Name);
 
 /**
  * Get the Comdat assigned to the given global object.
  *
  * @see llvm::GlobalObject::getComdat()
  */
-LLVMComdatRef LLVMGetComdat(LLVMValueRef V);
+LLVM_ABI LLVMComdatRef LLVMGetComdat(LLVMValueRef V);
 
 /**
  * Assign the Comdat to the given global object.
  *
  * @see llvm::GlobalObject::setComdat()
  */
-void LLVMSetComdat(LLVMValueRef V, LLVMComdatRef C);
+LLVM_ABI void LLVMSetComdat(LLVMValueRef V, LLVMComdatRef C);
 
 /*
  * Get the conflict resolution selection kind for the Comdat.
  *
  * @see llvm::Comdat::getSelectionKind()
  */
-LLVMComdatSelectionKind LLVMGetComdatSelectionKind(LLVMComdatRef C);
+LLVM_ABI LLVMComdatSelectionKind LLVMGetComdatSelectionKind(LLVMComdatRef C);
 
 /*
  * Set the conflict resolution selection kind for the Comdat.
  *
  * @see llvm::Comdat::setSelectionKind()
  */
-void LLVMSetComdatSelectionKind(LLVMComdatRef C, LLVMComdatSelectionKind Kind);
+LLVM_ABI void LLVMSetComdatSelectionKind(LLVMComdatRef C, LLVMComdatSelectionKind Kind);
 
 /**
  * @}

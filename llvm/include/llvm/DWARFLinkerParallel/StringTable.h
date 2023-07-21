@@ -19,7 +19,7 @@ using StringsVector = SmallVector<StringEntry *>;
 
 /// This class prepares strings for emission into .debug_str table:
 /// translates string if necessary, assigns index and offset, keeps in order.
-class StringTable {
+class LLVM_ABI StringTable {
 public:
   StringTable(StringPool &Strings,
               std::function<StringRef(StringRef)> StringsTranslator)

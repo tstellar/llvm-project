@@ -56,7 +56,7 @@ class TargetLibraryInfo;
 class Value;
 /// A private "module" namespace for types and utilities used by GVN. These
 /// are implementation details and should not be used by clients.
-namespace LLVM_LIBRARY_VISIBILITY gvn {
+namespace gvn LLVM_LIBRARY_VISIBILITY {
 
 struct AvailableValue;
 struct AvailableValueInBlock;
@@ -71,7 +71,7 @@ class GVNLegacyPass;
 ///      None - relying on a global default.
 /// Intended use is to create a default object, modify parameters with
 /// additional setters and then pass it to GVN.
-struct GVNOptions {
+struct LLVM_ABI GVNOptions {
   std::optional<bool> AllowPRE;
   std::optional<bool> AllowLoadPRE;
   std::optional<bool> AllowLoadInLoopPRE;
@@ -114,7 +114,7 @@ struct GVNOptions {
 ///
 /// FIXME: We should have a good summary of the GVN algorithm implemented by
 /// this particular pass here.
-class GVNPass : public PassInfoMixin<GVNPass> {
+class LLVM_ABI GVNPass : public PassInfoMixin<GVNPass> {
   GVNOptions Options;
 
 public:
@@ -376,18 +376,18 @@ private:
 
 /// Create a legacy GVN pass. This also allows parameterizing whether or not
 /// MemDep is enabled.
-FunctionPass *createGVNPass(bool NoMemDepAnalysis = false);
+LLVM_ABI FunctionPass *createGVNPass(bool NoMemDepAnalysis = false);
 
 /// A simple and fast domtree-based GVN pass to hoist common expressions
 /// from sibling branches.
-struct GVNHoistPass : PassInfoMixin<GVNHoistPass> {
+struct LLVM_ABI GVNHoistPass : PassInfoMixin<GVNHoistPass> {
   /// Run the pass over the function.
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 
 /// Uses an "inverted" value numbering to decide the similarity of
 /// expressions and sinks similar expressions into successors.
-struct GVNSinkPass : PassInfoMixin<GVNSinkPass> {
+struct LLVM_ABI GVNSinkPass : PassInfoMixin<GVNSinkPass> {
   /// Run the pass over the function.
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

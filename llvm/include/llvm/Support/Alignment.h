@@ -36,7 +36,7 @@ namespace llvm {
 /// This struct is a compact representation of a valid (non-zero power of two)
 /// alignment.
 /// It is suitable for use as static global constants.
-struct Align {
+struct LLVM_ABI Align {
 private:
   uint8_t ShiftValue = 0; /// The log2 of the required alignment.
                           /// ShiftValue is less than 64 by construction.
@@ -114,7 +114,7 @@ inline Align assumeAligned(uint64_t Value) {
 
 /// This struct is a compact representation of a valid (power of two) or
 /// undefined (0) alignment.
-struct MaybeAlign : public std::optional<Align> {
+struct LLVM_ABI MaybeAlign : public std::optional<Align> {
 private:
   using UP = std::optional<Align>;
 

@@ -31,7 +31,7 @@ DEMANGLE_NAMESPACE_BEGIN
 
 // Stream that AST nodes write their string representation into after the AST
 // has been parsed.
-class OutputBuffer {
+class LLVM_ABI OutputBuffer {
   char *Buffer = nullptr;
   size_t CurrentPosition = 0;
   size_t BufferCapacity = 0;
@@ -184,7 +184,7 @@ public:
   size_t getBufferCapacity() const { return BufferCapacity; }
 };
 
-template <class T> class ScopedOverride {
+template <class T> class LLVM_ABI ScopedOverride {
   T &Loc;
   T Original;
 

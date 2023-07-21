@@ -34,7 +34,7 @@ inline auto instrs(const BasicBlock &BB) {
   return llvm::make_range(BB.begin(), BB.end());
 }
 
-template <> class GenericSSAContext<Function> {
+template <> class LLVM_ABI GenericSSAContext<Function> {
   Function *F;
 
 public:

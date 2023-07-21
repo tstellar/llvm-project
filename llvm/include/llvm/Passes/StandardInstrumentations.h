@@ -39,7 +39,7 @@ class PassInstrumentationCallbacks;
 ///
 /// Needs state to be able to print module after pass that invalidates IR unit
 /// (typically Loop or SCC).
-class PrintIRInstrumentation {
+class LLVM_ABI PrintIRInstrumentation {
 public:
   ~PrintIRInstrumentation();
 
@@ -69,7 +69,7 @@ private:
   unsigned CurrentPassNumber = 0;
 };
 
-class OptNoneInstrumentation {
+class LLVM_ABI OptNoneInstrumentation {
 public:
   OptNoneInstrumentation(bool DebugLogging) : DebugLogging(DebugLogging) {}
   void registerCallbacks(PassInstrumentationCallbacks &PIC);
@@ -79,7 +79,7 @@ private:
   bool shouldRun(StringRef PassID, Any IR);
 };
 
-class OptPassGateInstrumentation {
+class LLVM_ABI OptPassGateInstrumentation {
   LLVMContext &Context;
   bool HasWrittenIR = false;
 public:
@@ -88,7 +88,7 @@ public:
   void registerCallbacks(PassInstrumentationCallbacks &PIC);
 };
 
-struct PrintPassOptions {
+struct LLVM_ABI PrintPassOptions {
   /// Print adaptors and pass managers.
   bool Verbose = false;
   /// Don't print information for analyses.
@@ -98,7 +98,7 @@ struct PrintPassOptions {
 };
 
 // Debug logging for transformation and analysis passes.
-class PrintPassInstrumentation {
+class LLVM_ABI PrintPassInstrumentation {
   raw_ostream &print();
 
 public:
@@ -112,7 +112,7 @@ private:
   int Indent = 0;
 };
 
-class PreservedCFGCheckerInstrumentation {
+class LLVM_ABI PreservedCFGCheckerInstrumentation {
 public:
   // Keeps sticky poisoned flag for the given basic block once it has been
   // deleted or RAUWed.
@@ -176,7 +176,7 @@ public:
 // 6.  When a pass is run on an IR that is not interesting (based on options).
 // 7.  When a pass is ignored (pass manager or adapter pass).
 // 8.  To compare two IR representations (of type \p T).
-template <typename IRUnitT> class ChangeReporter {
+template <typename IRUnitT> class LLVM_ABI ChangeReporter {
 protected:
   ChangeReporter(bool RunInVerboseMode) : VerboseMode(RunInVerboseMode) {}
 
@@ -225,7 +225,7 @@ protected:
 // An abstract template base class that handles printing banners and
 // reporting when things have not changed or are filtered out.
 template <typename IRUnitT>
-class TextChangeReporter : public ChangeReporter<IRUnitT> {
+class LLVM_ABI TextChangeReporter : public ChangeReporter<IRUnitT> {
 protected:
   TextChangeReporter(bool Verbose);
 
@@ -249,7 +249,7 @@ protected:
 // by unwrapAndPrint.  The string representation is stored in a std::string
 // to preserve it as the IR changes in each pass.  Note that the banner is
 // included in this representation but it is massaged before reporting.
-class IRChangedPrinter : public TextChangeReporter<std::string> {
+class LLVM_ABI IRChangedPrinter : public TextChangeReporter<std::string> {
 public:
   IRChangedPrinter(bool VerboseMode)
       : TextChangeReporter<std::string>(VerboseMode) {}
@@ -266,7 +266,7 @@ protected:
                    Any) override;
 };
 
-class IRChangedTester : public IRChangedPrinter {
+class LLVM_ABI IRChangedTester : public IRChangedPrinter {
 public:
   IRChangedTester() : IRChangedPrinter(true) {}
   ~IRChangedTester() override;
@@ -294,7 +294,7 @@ protected:
 
 // Information that needs to be saved for a basic block in order to compare
 // before and after the pass to determine if it was changed by a pass.
-template <typename T> class BlockDataT {
+template <typename T> class LLVM_ABI BlockDataT {
 public:
   BlockDataT(const BasicBlock &B) : Label(B.getName().str()), Data(B) {
     raw_string_ostream SS(Body);
@@ -320,7 +320,7 @@ protected:
   T Data;
 };
 
-template <typename T> class OrderedChangedData {
+template <typename T> class LLVM_ABI OrderedChangedData {
 public:
   // Return the names in the order they were saved
   std::vector<std::string> &getOrder() { return Order; }
@@ -349,14 +349,14 @@ protected:
 };
 
 // Do not need extra information for patch-style change reporter.
-class EmptyData {
+class LLVM_ABI EmptyData {
 public:
   EmptyData(const BasicBlock &) {}
 };
 
 // The data saved for comparing functions.
 template <typename T>
-class FuncDataT : public OrderedChangedData<BlockDataT<T>> {
+class LLVM_ABI FuncDataT : public OrderedChangedData<BlockDataT<T>> {
 public:
   FuncDataT(std::string S) : EntryBlockName(S) {}
 
@@ -369,12 +369,12 @@ protected:
 
 // The data saved for comparing IRs.
 template <typename T>
-class IRDataT : public OrderedChangedData<FuncDataT<T>> {};
+class LLVM_ABI IRDataT : public OrderedChangedData<FuncDataT<T>> {};
 
 // Abstract template base class for a class that compares two IRs.  The
 // class is created with the 2 IRs to compare and then compare is called.
 // The static function analyzeIR is used to build up the IR representation.
-template <typename T> class IRComparer {
+template <typename T> class LLVM_ABI IRComparer {
 public:
   IRComparer(const IRDataT<T> &Before, const IRDataT<T> &After)
       : Before(Before), After(After) {}
@@ -405,7 +405,7 @@ protected:
 // and added, respectively.  Changes to the IR that do not affect basic
 // blocks are not reported as having changed the IR.  The option
 // -print-module-scope does not affect this change reporter.
-class InLineChangePrinter : public TextChangeReporter<IRDataT<EmptyData>> {
+class LLVM_ABI InLineChangePrinter : public TextChangeReporter<IRDataT<EmptyData>> {
 public:
   InLineChangePrinter(bool VerboseMode, bool ColourMode)
       : TextChangeReporter<IRDataT<EmptyData>>(VerboseMode),
@@ -431,7 +431,7 @@ protected:
   bool UseColour;
 };
 
-class VerifyInstrumentation {
+class LLVM_ABI VerifyInstrumentation {
   bool DebugLogging;
 
 public:
@@ -442,7 +442,7 @@ public:
 /// This class implements --time-trace functionality for new pass manager.
 /// It provides the pass-instrumentation callbacks that measure the pass
 /// execution time. They collect time tracing info by TimeProfiler.
-class TimeProfilingPassesHandler {
+class LLVM_ABI TimeProfilingPassesHandler {
 public:
   TimeProfilingPassesHandler();
   // We intend this to be unique per-compilation, thus no copies.
@@ -459,7 +459,7 @@ private:
 
 // Class that holds transitions between basic blocks.  The transitions
 // are contained in a map of values to names of basic blocks.
-class DCData {
+class LLVM_ABI DCData {
 public:
   // Fill the map with the transitions from basic block \p B.
   DCData(const BasicBlock &B);
@@ -490,7 +490,7 @@ protected:
 
 // A change reporter that builds a website with links to pdf files showing
 // dot control flow graphs with changed instructions shown in colour.
-class DotCfgChangeReporter : public ChangeReporter<IRDataT<DCData>> {
+class LLVM_ABI DotCfgChangeReporter : public ChangeReporter<IRDataT<DCData>> {
 public:
   DotCfgChangeReporter(bool Verbose);
   ~DotCfgChangeReporter() override;
@@ -533,7 +533,7 @@ protected:
 };
 
 // Print IR on crash.
-class PrintCrashIRInstrumentation {
+class LLVM_ABI PrintCrashIRInstrumentation {
 public:
   PrintCrashIRInstrumentation()
       : SavedIR("*** Dump of IR Before Last Pass Unknown ***") {}
@@ -553,7 +553,7 @@ private:
 
 /// This class provides an interface to register all the standard pass
 /// instrumentations and manages their state (if any).
-class StandardInstrumentations {
+class LLVM_ABI StandardInstrumentations {
   PrintIRInstrumentation PrintIR;
   PrintPassInstrumentation PrintPass;
   TimePassesHandler TimePasses;

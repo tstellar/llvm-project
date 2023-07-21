@@ -20,7 +20,7 @@
 
 namespace llvm {
 
-class DebuginfodFetcher : public object::BuildIDFetcher {
+class LLVM_ABI DebuginfodFetcher : public object::BuildIDFetcher {
 public:
   DebuginfodFetcher(std::vector<std::string> DebugFileDirectories)
       : BuildIDFetcher(std::move(DebugFileDirectories)) {}

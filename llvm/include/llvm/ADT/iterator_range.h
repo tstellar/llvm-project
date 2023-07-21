@@ -19,16 +19,17 @@
 #define LLVM_ADT_ITERATOR_RANGE_H
 
 #include "llvm/ADT/ADL.h"
+#include "llvm/Support/Compiler.h"
 #include <type_traits>
 #include <utility>
 
 namespace llvm {
 
 template <typename From, typename To, typename = void>
-struct explicitly_convertible : std::false_type {};
+struct LLVM_ABI explicitly_convertible : std::false_type {};
 
 template <typename From, typename To>
-struct explicitly_convertible<
+struct LLVM_ABI explicitly_convertible<
     From, To,
     std::void_t<decltype(static_cast<To>(
         std::declval<std::add_rvalue_reference_t<From>>()))>> : std::true_type {
@@ -38,8 +39,7 @@ struct explicitly_convertible<
 ///
 /// This just wraps two iterators into a range-compatible interface. Nothing
 /// fancy at all.
-template <typename IteratorT>
-class iterator_range {
+template <typename IteratorT> class LLVM_ABI iterator_range {
   IteratorT begin_iterator, end_iterator;
 
 public:

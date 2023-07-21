@@ -23,7 +23,7 @@ namespace llvm {
 template <typename ValueType, typename Enumeration,
           Enumeration LargestEnum = Enumeration::Last, typename IndexType = int,
           IndexType Size = 1 + static_cast<IndexType>(LargestEnum)>
-class EnumeratedArray {
+class LLVM_ABI EnumeratedArray {
 public:
   using iterator = ValueType *;
   using const_iterator = const ValueType *;

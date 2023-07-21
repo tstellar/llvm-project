@@ -17,7 +17,7 @@ class BinaryStreamReader;
 class BinaryStreamWriter;
 
 namespace codeview {
-class SymbolRecordMapping : public SymbolVisitorCallbacks {
+class LLVM_ABI SymbolRecordMapping : public SymbolVisitorCallbacks {
 public:
   explicit SymbolRecordMapping(BinaryStreamReader &Reader,
                                CodeViewContainer Container)

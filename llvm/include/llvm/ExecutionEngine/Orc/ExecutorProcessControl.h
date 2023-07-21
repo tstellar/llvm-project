@@ -35,7 +35,7 @@ class ExecutionSession;
 class SymbolLookupSet;
 
 /// ExecutorProcessControl supports interaction with a JIT target process.
-class ExecutorProcessControl {
+class LLVM_ABI ExecutorProcessControl {
   friend class ExecutionSession;
 public:
 
@@ -406,7 +406,7 @@ protected:
 /// A ExecutorProcessControl instance that asserts if any of its methods are
 /// used. Suitable for use is unit tests, and by ORC clients who haven't moved
 /// to ExecutorProcessControl-based APIs yet.
-class UnsupportedExecutorProcessControl : public ExecutorProcessControl {
+class LLVM_ABI UnsupportedExecutorProcessControl : public ExecutorProcessControl {
 public:
   UnsupportedExecutorProcessControl(
       std::shared_ptr<SymbolStringPool> SSP = nullptr,
@@ -452,7 +452,7 @@ public:
 };
 
 /// A ExecutorProcessControl implementation targeting the current process.
-class SelfExecutorProcessControl
+class LLVM_ABI SelfExecutorProcessControl
     : public ExecutorProcessControl,
       private ExecutorProcessControl::MemoryAccess {
 public:

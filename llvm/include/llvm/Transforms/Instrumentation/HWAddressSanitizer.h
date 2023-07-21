@@ -21,7 +21,7 @@ class Module;
 class StringRef;
 class raw_ostream;
 
-struct HWAddressSanitizerOptions {
+struct LLVM_ABI HWAddressSanitizerOptions {
   HWAddressSanitizerOptions()
       : HWAddressSanitizerOptions(false, false, false){};
   HWAddressSanitizerOptions(bool CompileKernel, bool Recover,
@@ -36,7 +36,7 @@ struct HWAddressSanitizerOptions {
 /// This is a public interface to the hardware address sanitizer pass for
 /// instrumenting code to check for various memory errors at runtime, similar to
 /// AddressSanitizer but based on partial hardware assistance.
-class HWAddressSanitizerPass : public PassInfoMixin<HWAddressSanitizerPass> {
+class LLVM_ABI HWAddressSanitizerPass : public PassInfoMixin<HWAddressSanitizerPass> {
 public:
   explicit HWAddressSanitizerPass(HWAddressSanitizerOptions Options)
       : Options(Options){};

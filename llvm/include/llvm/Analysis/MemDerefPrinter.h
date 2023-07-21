@@ -12,7 +12,7 @@
 #include "llvm/IR/PassManager.h"
 
 namespace llvm {
-class MemDerefPrinterPass : public PassInfoMixin<MemDerefPrinterPass> {
+class LLVM_ABI MemDerefPrinterPass : public PassInfoMixin<MemDerefPrinterPass> {
   raw_ostream &OS;
 
 public:

@@ -33,7 +33,7 @@ class Module;
 class Value;
 
 /// Pass to remove unused function declarations.
-class GlobalDCEPass : public PassInfoMixin<GlobalDCEPass> {
+class LLVM_ABI GlobalDCEPass : public PassInfoMixin<GlobalDCEPass> {
 public:
   GlobalDCEPass(bool InLTOPostLink = false) : InLTOPostLink(InLTOPostLink) {}
 

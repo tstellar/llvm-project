@@ -25,7 +25,7 @@ enum class RegAllocType { Default, Basic, Fast, Greedy, PBQP };
 
 // Not one-on-one but mostly corresponding to commandline options in
 // TargetPassConfig.cpp.
-struct CGPassBuilderOption {
+struct LLVM_ABI CGPassBuilderOption {
   std::optional<bool> OptimizeRegAlloc;
   std::optional<bool> EnableIPRA;
   bool DebugPM = false;
@@ -55,7 +55,7 @@ struct CGPassBuilderOption {
   std::optional<bool> EnableGlobalISelOption;
 };
 
-CGPassBuilderOption getCGPassBuilderOption();
+LLVM_ABI CGPassBuilderOption getCGPassBuilderOption();
 
 } // namespace llvm
 

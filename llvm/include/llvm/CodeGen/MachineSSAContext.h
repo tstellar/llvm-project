@@ -34,7 +34,7 @@ inline unsigned pred_size(const MachineBasicBlock *BB) {
 }
 inline auto instrs(const MachineBasicBlock &BB) { return BB.instrs(); }
 
-template <> class GenericSSAContext<MachineFunction> {
+template <> class LLVM_ABI GenericSSAContext<MachineFunction> {
   const MachineRegisterInfo *RegInfo = nullptr;
   MachineFunction *MF = nullptr;
 

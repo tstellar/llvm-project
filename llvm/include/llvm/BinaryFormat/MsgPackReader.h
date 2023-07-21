@@ -61,7 +61,7 @@ enum class Type : uint8_t {
 
 /// Extension types are composed of a user-defined type ID and an uninterpreted
 /// sequence of bytes.
-struct ExtensionType {
+struct LLVM_ABI ExtensionType {
   /// User-defined extension type.
   int8_t Type;
   /// Raw bytes of the extension object.
@@ -73,7 +73,7 @@ struct ExtensionType {
 /// All types except \c Type::Nil (which has only one value, and so is
 /// completely represented by the \c Kind itself) map to a exactly one union
 /// member.
-struct Object {
+struct LLVM_ABI Object {
   Type Kind;
   union {
     /// Value for \c Type::Int.
@@ -96,7 +96,7 @@ struct Object {
 };
 
 /// Reads MessagePack objects from memory, one at a time.
-class Reader {
+class LLVM_ABI Reader {
 public:
   /// Construct a reader, keeping a reference to the \p InputBuffer.
   Reader(MemoryBufferRef InputBuffer);

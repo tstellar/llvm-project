@@ -41,7 +41,7 @@ using NodeRef = std::pair<NodeId, LaneBitmask>;
 
 namespace std {
 
-template <> struct hash<llvm::rdf::detail::NodeRef> {
+template <> struct LLVM_ABI hash<llvm::rdf::detail::NodeRef> {
   std::size_t operator()(llvm::rdf::detail::NodeRef R) const {
     return std::hash<llvm::rdf::NodeId>{}(R.first) ^
            std::hash<llvm::LaneBitmask::Type>{}(R.second.getAsInteger());
@@ -52,7 +52,7 @@ template <> struct hash<llvm::rdf::detail::NodeRef> {
 
 namespace llvm::rdf {
 
-struct Liveness {
+struct LLVM_ABI Liveness {
 public:
   using LiveMapType = RegisterAggrMap<MachineBasicBlock *>;
   using NodeRef = detail::NodeRef;
@@ -153,7 +153,7 @@ private:
                             unsigned Nest, unsigned MaxNest);
 };
 
-raw_ostream &operator<<(raw_ostream &OS, const Print<Liveness::RefMap> &P);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const Print<Liveness::RefMap> &P);
 
 } // end namespace llvm::rdf
 

@@ -26,11 +26,11 @@ namespace RISCV {
 // We use 64 bits as the known part in the scalable vector types.
 static constexpr unsigned RVVBitsPerBlock = 64;
 
-bool parseCPU(StringRef CPU, bool IsRV64);
-bool parseTuneCPU(StringRef CPU, bool IsRV64);
-StringRef getMArchFromMcpu(StringRef CPU);
-void fillValidCPUArchList(SmallVectorImpl<StringRef> &Values, bool IsRV64);
-void fillValidTuneCPUArchList(SmallVectorImpl<StringRef> &Values, bool IsRV64);
+LLVM_ABI bool parseCPU(StringRef CPU, bool IsRV64);
+LLVM_ABI bool parseTuneCPU(StringRef CPU, bool IsRV64);
+LLVM_ABI StringRef getMArchFromMcpu(StringRef CPU);
+LLVM_ABI void fillValidCPUArchList(SmallVectorImpl<StringRef> &Values, bool IsRV64);
+LLVM_ABI void fillValidTuneCPUArchList(SmallVectorImpl<StringRef> &Values, bool IsRV64);
 
 } // namespace RISCV
 } // namespace llvm

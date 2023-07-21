@@ -20,10 +20,11 @@
 #include "llvm/Support/CommandLine.h"
 #endif
 
+#include "llvm/Support/Compiler.h"
 #include <string>
 
 namespace llvm {
-  struct PluginLoader {
+  struct LLVM_ABI PluginLoader {
     void operator=(const std::string &Filename);
     static unsigned getNumPlugins();
     static std::string& getPlugin(unsigned num);

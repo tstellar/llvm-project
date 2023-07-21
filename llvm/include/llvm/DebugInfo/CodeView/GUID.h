@@ -18,7 +18,7 @@ class raw_ostream;
 namespace codeview {
 
 /// This represents the 'GUID' type from windows.h.
-struct GUID {
+struct LLVM_ABI GUID {
   uint8_t Guid[16];
 };
 
@@ -46,7 +46,7 @@ inline bool operator!=(const GUID &LHS, const GUID &RHS) {
   return !(LHS == RHS);
 }
 
-raw_ostream &operator<<(raw_ostream &OS, const GUID &Guid);
+LLVM_ABI raw_ostream &operator<<(raw_ostream &OS, const GUID &Guid);
 
 } // namespace codeview
 } // namespace llvm

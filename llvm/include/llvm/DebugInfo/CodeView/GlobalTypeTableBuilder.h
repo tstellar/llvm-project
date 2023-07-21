@@ -26,7 +26,7 @@ namespace codeview {
 
 class ContinuationRecordBuilder;
 
-class GlobalTypeTableBuilder : public TypeCollection {
+class LLVM_ABI GlobalTypeTableBuilder : public TypeCollection {
   /// Storage for records.  These need to outlive the TypeTableBuilder.
   BumpPtrAllocator &RecordStorage;
 

@@ -29,8 +29,8 @@
 namespace llvm {
 namespace ELFYAML {
 
-StringRef dropUniqueSuffix(StringRef S);
-std::string appendUniqueSuffix(StringRef Name, const Twine& Msg);
+LLVM_ABI StringRef dropUniqueSuffix(StringRef S);
+LLVM_ABI std::string appendUniqueSuffix(StringRef Name, const Twine& Msg);
 
 // These types are invariant across 32/64-bit ELF, so for simplicity just
 // directly give them their exact sizes. We don't need to worry about
@@ -110,7 +110,7 @@ unsigned getDefaultShEntSize(unsigned EMachine, ELF_SHT SecType,
 
 // For now, hardcode 64 bits everywhere that 32 or 64 would be needed
 // since 64-bit can hold 32-bit values too.
-struct FileHeader {
+struct LLVM_ABI FileHeader {
   ELF_ELFCLASS Class;
   ELF_ELFDATA Data;
   ELF_ELFOSABI OSABI;
@@ -130,11 +130,11 @@ struct FileHeader {
   std::optional<llvm::yaml::Hex16> EShStrNdx;
 };
 
-struct SectionHeader {
+struct LLVM_ABI SectionHeader {
   StringRef Name;
 };
 
-struct Symbol {
+struct LLVM_ABI Symbol {
   StringRef Name;
   ELF_STT Type;
   std::optional<StringRef> Section;
@@ -147,16 +147,16 @@ struct Symbol {
   std::optional<uint32_t> StName;
 };
 
-struct SectionOrType {
+struct LLVM_ABI SectionOrType {
   StringRef sectionNameOrType;
 };
 
-struct DynamicEntry {
+struct LLVM_ABI DynamicEntry {
   ELF_DYNTAG Tag;
   llvm::yaml::Hex64 Val;
 };
 
-struct BBAddrMapEntry {
+struct LLVM_ABI BBAddrMapEntry {
   struct BBEntry {
     uint32_t ID;
     llvm::yaml::Hex64 AddressOffset;
@@ -170,18 +170,18 @@ struct BBAddrMapEntry {
   std::optional<std::vector<BBEntry>> BBEntries;
 };
 
-struct StackSizeEntry {
+struct LLVM_ABI StackSizeEntry {
   llvm::yaml::Hex64 Address;
   llvm::yaml::Hex64 Size;
 };
 
-struct NoteEntry {
+struct LLVM_ABI NoteEntry {
   StringRef Name;
   yaml::BinaryRef Desc;
   ELF_NT Type;
 };
 
-struct Chunk {
+struct LLVM_ABI Chunk {
   enum class ChunkKind {
     Dynamic,
     Group,
@@ -223,7 +223,7 @@ struct Chunk {
   virtual ~Chunk();
 };
 
-struct Section : public Chunk {
+struct LLVM_ABI Section : public Chunk {
   ELF_SHT Type;
   std::optional<ELF_SHF> Flags;
   std::optional<llvm::yaml::Hex64> Address;
@@ -281,7 +281,7 @@ struct Section : public Chunk {
 // Fill is a block of data which is placed outside of sections. It is
 // not present in the sections header table, but it might affect the output file
 // size and program headers produced.
-struct Fill : Chunk {
+struct LLVM_ABI Fill : Chunk {
   std::optional<yaml::BinaryRef> Pattern;
   llvm::yaml::Hex64 Size;
 
@@ -290,7 +290,7 @@ struct Fill : Chunk {
   static bool classof(const Chunk *S) { return S->Kind == ChunkKind::Fill; }
 };
 
-struct SectionHeaderTable : Chunk {
+struct LLVM_ABI SectionHeaderTable : Chunk {
   SectionHeaderTable(bool IsImplicit)
       : Chunk(ChunkKind::SectionHeaderTable, IsImplicit) {}
 
@@ -315,7 +315,7 @@ struct SectionHeaderTable : Chunk {
   static constexpr StringRef TypeStr = "SectionHeaderTable";
 };
 
-struct BBAddrMapSection : Section {
+struct LLVM_ABI BBAddrMapSection : Section {
   std::optional<std::vector<BBAddrMapEntry>> Entries;
 
   BBAddrMapSection() : Section(ChunkKind::BBAddrMap) {}
@@ -329,7 +329,7 @@ struct BBAddrMapSection : Section {
   }
 };
 
-struct StackSizesSection : Section {
+struct LLVM_ABI StackSizesSection : Section {
   std::optional<std::vector<StackSizeEntry>> Entries;
 
   StackSizesSection() : Section(ChunkKind::StackSizes) {}
@@ -347,7 +347,7 @@ struct StackSizesSection : Section {
   }
 };
 
-struct DynamicSection : Section {
+struct LLVM_ABI DynamicSection : Section {
   std::optional<std::vector<DynamicEntry>> Entries;
 
   DynamicSection() : Section(ChunkKind::Dynamic) {}
@@ -359,7 +359,7 @@ struct DynamicSection : Section {
   static bool classof(const Chunk *S) { return S->Kind == ChunkKind::Dynamic; }
 };
 
-struct RawContentSection : Section {
+struct LLVM_ABI RawContentSection : Section {
   std::optional<llvm::yaml::Hex64> Info;
 
   RawContentSection() : Section(ChunkKind::RawContent) {}
@@ -372,13 +372,13 @@ struct RawContentSection : Section {
   std::optional<std::vector<uint8_t>> ContentBuf;
 };
 
-struct NoBitsSection : Section {
+struct LLVM_ABI NoBitsSection : Section {
   NoBitsSection() : Section(ChunkKind::NoBits) {}
 
   static bool classof(const Chunk *S) { return S->Kind == ChunkKind::NoBits; }
 };
 
-struct NoteSection : Section {
+struct LLVM_ABI NoteSection : Section {
   std::optional<std::vector<ELFYAML::NoteEntry>> Notes;
 
   NoteSection() : Section(ChunkKind::Note) {}
@@ -390,7 +390,7 @@ struct NoteSection : Section {
   static bool classof(const Chunk *S) { return S->Kind == ChunkKind::Note; }
 };
 
-struct HashSection : Section {
+struct LLVM_ABI HashSection : Section {
   std::optional<std::vector<uint32_t>> Bucket;
   std::optional<std::vector<uint32_t>> Chain;
 
@@ -408,7 +408,7 @@ struct HashSection : Section {
   static bool classof(const Chunk *S) { return S->Kind == ChunkKind::Hash; }
 };
 
-struct GnuHashHeader {
+struct LLVM_ABI GnuHashHeader {
   // The number of hash buckets.
   // Not used when dumping the object, but can be used to override
   // the real number of buckets when emiting an object from a YAML document.
@@ -428,7 +428,7 @@ struct GnuHashHeader {
   llvm::yaml::Hex32 Shift2;
 };
 
-struct GnuHashSection : Section {
+struct LLVM_ABI GnuHashSection : Section {
   std::optional<GnuHashHeader> Header;
   std::optional<std::vector<llvm::yaml::Hex64>> BloomFilter;
   std::optional<std::vector<llvm::yaml::Hex32>> HashBuckets;
@@ -446,20 +446,20 @@ struct GnuHashSection : Section {
   static bool classof(const Chunk *S) { return S->Kind == ChunkKind::GnuHash; }
 };
 
-struct VernauxEntry {
+struct LLVM_ABI VernauxEntry {
   uint32_t Hash;
   uint16_t Flags;
   uint16_t Other;
   StringRef Name;
 };
 
-struct VerneedEntry {
+struct LLVM_ABI VerneedEntry {
   uint16_t Version;
   StringRef File;
   std::vector<VernauxEntry> AuxV;
 };
 
-struct VerneedSection : Section {
+struct LLVM_ABI VerneedSection : Section {
   std::optional<std::vector<VerneedEntry>> VerneedV;
   std::optional<llvm::yaml::Hex64> Info;
 
@@ -474,7 +474,7 @@ struct VerneedSection : Section {
   }
 };
 
-struct AddrsigSection : Section {
+struct LLVM_ABI AddrsigSection : Section {
   std::optional<std::vector<YAMLFlowString>> Symbols;
 
   AddrsigSection() : Section(ChunkKind::Addrsig) {}
@@ -486,12 +486,12 @@ struct AddrsigSection : Section {
   static bool classof(const Chunk *S) { return S->Kind == ChunkKind::Addrsig; }
 };
 
-struct LinkerOption {
+struct LLVM_ABI LinkerOption {
   StringRef Key;
   StringRef Value;
 };
 
-struct LinkerOptionsSection : Section {
+struct LLVM_ABI LinkerOptionsSection : Section {
   std::optional<std::vector<LinkerOption>> Options;
 
   LinkerOptionsSection() : Section(ChunkKind::LinkerOptions) {}
@@ -505,7 +505,7 @@ struct LinkerOptionsSection : Section {
   }
 };
 
-struct DependentLibrariesSection : Section {
+struct LLVM_ABI DependentLibrariesSection : Section {
   std::optional<std::vector<YAMLFlowString>> Libs;
 
   DependentLibrariesSection() : Section(ChunkKind::DependentLibraries) {}
@@ -520,12 +520,12 @@ struct DependentLibrariesSection : Section {
 };
 
 // Represents the call graph profile section entry.
-struct CallGraphEntryWeight {
+struct LLVM_ABI CallGraphEntryWeight {
   // The weight of the edge.
   uint64_t Weight;
 };
 
-struct CallGraphProfileSection : Section {
+struct LLVM_ABI CallGraphProfileSection : Section {
   std::optional<std::vector<CallGraphEntryWeight>> Entries;
 
   CallGraphProfileSection() : Section(ChunkKind::CallGraphProfile) {}
@@ -539,7 +539,7 @@ struct CallGraphProfileSection : Section {
   }
 };
 
-struct SymverSection : Section {
+struct LLVM_ABI SymverSection : Section {
   std::optional<std::vector<uint16_t>> Entries;
 
   SymverSection() : Section(ChunkKind::Symver) {}
@@ -551,7 +551,7 @@ struct SymverSection : Section {
   static bool classof(const Chunk *S) { return S->Kind == ChunkKind::Symver; }
 };
 
-struct VerdefEntry {
+struct LLVM_ABI VerdefEntry {
   std::optional<uint16_t> Version;
   std::optional<uint16_t> Flags;
   std::optional<uint16_t> VersionNdx;
@@ -559,7 +559,7 @@ struct VerdefEntry {
   std::vector<StringRef> VerNames;
 };
 
-struct VerdefSection : Section {
+struct LLVM_ABI VerdefSection : Section {
   std::optional<std::vector<VerdefEntry>> Entries;
   std::optional<llvm::yaml::Hex64> Info;
 
@@ -572,7 +572,7 @@ struct VerdefSection : Section {
   static bool classof(const Chunk *S) { return S->Kind == ChunkKind::Verdef; }
 };
 
-struct GroupSection : Section {
+struct LLVM_ABI GroupSection : Section {
   // Members of a group contain a flag and a list of section indices
   // that are part of the group.
   std::optional<std::vector<SectionOrType>> Members;
@@ -587,14 +587,14 @@ struct GroupSection : Section {
   static bool classof(const Chunk *S) { return S->Kind == ChunkKind::Group; }
 };
 
-struct Relocation {
+struct LLVM_ABI Relocation {
   llvm::yaml::Hex64 Offset;
   YAMLIntUInt Addend;
   ELF_REL Type;
   std::optional<StringRef> Symbol;
 };
 
-struct RelocationSection : Section {
+struct LLVM_ABI RelocationSection : Section {
   std::optional<std::vector<Relocation>> Relocations;
   StringRef RelocatableSec; /* Info */
 
@@ -609,7 +609,7 @@ struct RelocationSection : Section {
   }
 };
 
-struct RelrSection : Section {
+struct LLVM_ABI RelrSection : Section {
   std::optional<std::vector<llvm::yaml::Hex64>> Entries;
 
   RelrSection() : Section(ChunkKind::Relr) {}
@@ -623,7 +623,7 @@ struct RelrSection : Section {
   }
 };
 
-struct SymtabShndxSection : Section {
+struct LLVM_ABI SymtabShndxSection : Section {
   std::optional<std::vector<uint32_t>> Entries;
 
   SymtabShndxSection() : Section(ChunkKind::SymtabShndxSection) {}
@@ -637,12 +637,12 @@ struct SymtabShndxSection : Section {
   }
 };
 
-struct ARMIndexTableEntry {
+struct LLVM_ABI ARMIndexTableEntry {
   llvm::yaml::Hex32 Offset;
   llvm::yaml::Hex32 Value;
 };
 
-struct ARMIndexTableSection : Section {
+struct LLVM_ABI ARMIndexTableSection : Section {
   std::optional<std::vector<ARMIndexTableEntry>> Entries;
 
   ARMIndexTableSection() : Section(ChunkKind::ARMIndexTable) {}
@@ -657,7 +657,7 @@ struct ARMIndexTableSection : Section {
 };
 
 // Represents .MIPS.abiflags section
-struct MipsABIFlags : Section {
+struct LLVM_ABI MipsABIFlags : Section {
   llvm::yaml::Hex16 Version;
   MIPS_ISA ISALevel;
   llvm::yaml::Hex8 ISARevision;
@@ -677,7 +677,7 @@ struct MipsABIFlags : Section {
   }
 };
 
-struct ProgramHeader {
+struct LLVM_ABI ProgramHeader {
   ELF_PT Type;
   ELF_PF Flags;
   llvm::yaml::Hex64 VAddr;
@@ -693,7 +693,7 @@ struct ProgramHeader {
   std::vector<Chunk *> Chunks;
 };
 
-struct Object {
+struct LLVM_ABI Object {
   FileHeader Header;
   std::vector<ProgramHeader> ProgramHeaders;
 
@@ -728,7 +728,7 @@ struct Object {
   unsigned getMachine() const;
 };
 
-bool shouldAllocateFileSpace(ArrayRef<ProgramHeader> Phdrs,
+LLVM_ABI bool shouldAllocateFileSpace(ArrayRef<ProgramHeader> Phdrs,
                              const NoBitsSection &S);
 
 } // end namespace ELFYAML
@@ -755,7 +755,7 @@ LLVM_YAML_IS_SEQUENCE_VECTOR(llvm::ELFYAML::ARMIndexTableEntry)
 namespace llvm {
 namespace yaml {
 
-template <> struct ScalarTraits<ELFYAML::YAMLIntUInt> {
+template <> struct LLVM_ABI ScalarTraits<ELFYAML::YAMLIntUInt> {
   static void output(const ELFYAML::YAMLIntUInt &Val, void *Ctx,
                      raw_ostream &Out);
   static StringRef input(StringRef Scalar, void *Ctx,
@@ -764,198 +764,198 @@ template <> struct ScalarTraits<ELFYAML::YAMLIntUInt> {
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::ELF_ET> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_ET> {
   static void enumeration(IO &IO, ELFYAML::ELF_ET &Value);
 };
 
-template <> struct ScalarEnumerationTraits<ELFYAML::ELF_PT> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_PT> {
   static void enumeration(IO &IO, ELFYAML::ELF_PT &Value);
 };
 
-template <> struct ScalarEnumerationTraits<ELFYAML::ELF_NT> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_NT> {
   static void enumeration(IO &IO, ELFYAML::ELF_NT &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::ELF_EM> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_EM> {
   static void enumeration(IO &IO, ELFYAML::ELF_EM &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::ELF_ELFCLASS> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_ELFCLASS> {
   static void enumeration(IO &IO, ELFYAML::ELF_ELFCLASS &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::ELF_ELFDATA> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_ELFDATA> {
   static void enumeration(IO &IO, ELFYAML::ELF_ELFDATA &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::ELF_ELFOSABI> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_ELFOSABI> {
   static void enumeration(IO &IO, ELFYAML::ELF_ELFOSABI &Value);
 };
 
 template <>
-struct ScalarBitSetTraits<ELFYAML::ELF_EF> {
+struct LLVM_ABI ScalarBitSetTraits<ELFYAML::ELF_EF> {
   static void bitset(IO &IO, ELFYAML::ELF_EF &Value);
 };
 
-template <> struct ScalarBitSetTraits<ELFYAML::ELF_PF> {
+template <> struct LLVM_ABI ScalarBitSetTraits<ELFYAML::ELF_PF> {
   static void bitset(IO &IO, ELFYAML::ELF_PF &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::ELF_SHT> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_SHT> {
   static void enumeration(IO &IO, ELFYAML::ELF_SHT &Value);
 };
 
 template <>
-struct ScalarBitSetTraits<ELFYAML::ELF_SHF> {
+struct LLVM_ABI ScalarBitSetTraits<ELFYAML::ELF_SHF> {
   static void bitset(IO &IO, ELFYAML::ELF_SHF &Value);
 };
 
-template <> struct ScalarEnumerationTraits<ELFYAML::ELF_SHN> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_SHN> {
   static void enumeration(IO &IO, ELFYAML::ELF_SHN &Value);
 };
 
-template <> struct ScalarEnumerationTraits<ELFYAML::ELF_STB> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_STB> {
   static void enumeration(IO &IO, ELFYAML::ELF_STB &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::ELF_STT> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_STT> {
   static void enumeration(IO &IO, ELFYAML::ELF_STT &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::ELF_REL> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_REL> {
   static void enumeration(IO &IO, ELFYAML::ELF_REL &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::ELF_DYNTAG> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_DYNTAG> {
   static void enumeration(IO &IO, ELFYAML::ELF_DYNTAG &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::ELF_RSS> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::ELF_RSS> {
   static void enumeration(IO &IO, ELFYAML::ELF_RSS &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::MIPS_AFL_REG> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::MIPS_AFL_REG> {
   static void enumeration(IO &IO, ELFYAML::MIPS_AFL_REG &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::MIPS_ABI_FP> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::MIPS_ABI_FP> {
   static void enumeration(IO &IO, ELFYAML::MIPS_ABI_FP &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::MIPS_AFL_EXT> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::MIPS_AFL_EXT> {
   static void enumeration(IO &IO, ELFYAML::MIPS_AFL_EXT &Value);
 };
 
 template <>
-struct ScalarEnumerationTraits<ELFYAML::MIPS_ISA> {
+struct LLVM_ABI ScalarEnumerationTraits<ELFYAML::MIPS_ISA> {
   static void enumeration(IO &IO, ELFYAML::MIPS_ISA &Value);
 };
 
 template <>
-struct ScalarBitSetTraits<ELFYAML::MIPS_AFL_ASE> {
+struct LLVM_ABI ScalarBitSetTraits<ELFYAML::MIPS_AFL_ASE> {
   static void bitset(IO &IO, ELFYAML::MIPS_AFL_ASE &Value);
 };
 
 template <>
-struct ScalarBitSetTraits<ELFYAML::MIPS_AFL_FLAGS1> {
+struct LLVM_ABI ScalarBitSetTraits<ELFYAML::MIPS_AFL_FLAGS1> {
   static void bitset(IO &IO, ELFYAML::MIPS_AFL_FLAGS1 &Value);
 };
 
 template <>
-struct MappingTraits<ELFYAML::FileHeader> {
+struct LLVM_ABI MappingTraits<ELFYAML::FileHeader> {
   static void mapping(IO &IO, ELFYAML::FileHeader &FileHdr);
 };
 
-template <> struct MappingTraits<ELFYAML::SectionHeader> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::SectionHeader> {
   static void mapping(IO &IO, ELFYAML::SectionHeader &SHdr);
 };
 
-template <> struct MappingTraits<ELFYAML::ProgramHeader> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::ProgramHeader> {
   static void mapping(IO &IO, ELFYAML::ProgramHeader &FileHdr);
   static std::string validate(IO &IO, ELFYAML::ProgramHeader &FileHdr);
 };
 
 template <>
-struct MappingTraits<ELFYAML::Symbol> {
+struct LLVM_ABI MappingTraits<ELFYAML::Symbol> {
   static void mapping(IO &IO, ELFYAML::Symbol &Symbol);
   static std::string validate(IO &IO, ELFYAML::Symbol &Symbol);
 };
 
-template <> struct MappingTraits<ELFYAML::StackSizeEntry> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::StackSizeEntry> {
   static void mapping(IO &IO, ELFYAML::StackSizeEntry &Rel);
 };
 
-template <> struct MappingTraits<ELFYAML::BBAddrMapEntry> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::BBAddrMapEntry> {
   static void mapping(IO &IO, ELFYAML::BBAddrMapEntry &Rel);
 };
 
-template <> struct MappingTraits<ELFYAML::BBAddrMapEntry::BBEntry> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::BBAddrMapEntry::BBEntry> {
   static void mapping(IO &IO, ELFYAML::BBAddrMapEntry::BBEntry &Rel);
 };
 
-template <> struct MappingTraits<ELFYAML::GnuHashHeader> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::GnuHashHeader> {
   static void mapping(IO &IO, ELFYAML::GnuHashHeader &Rel);
 };
 
-template <> struct MappingTraits<ELFYAML::DynamicEntry> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::DynamicEntry> {
   static void mapping(IO &IO, ELFYAML::DynamicEntry &Rel);
 };
 
-template <> struct MappingTraits<ELFYAML::NoteEntry> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::NoteEntry> {
   static void mapping(IO &IO, ELFYAML::NoteEntry &N);
 };
 
-template <> struct MappingTraits<ELFYAML::VerdefEntry> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::VerdefEntry> {
   static void mapping(IO &IO, ELFYAML::VerdefEntry &E);
 };
 
-template <> struct MappingTraits<ELFYAML::VerneedEntry> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::VerneedEntry> {
   static void mapping(IO &IO, ELFYAML::VerneedEntry &E);
 };
 
-template <> struct MappingTraits<ELFYAML::VernauxEntry> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::VernauxEntry> {
   static void mapping(IO &IO, ELFYAML::VernauxEntry &E);
 };
 
-template <> struct MappingTraits<ELFYAML::LinkerOption> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::LinkerOption> {
   static void mapping(IO &IO, ELFYAML::LinkerOption &Sym);
 };
 
-template <> struct MappingTraits<ELFYAML::CallGraphEntryWeight> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::CallGraphEntryWeight> {
   static void mapping(IO &IO, ELFYAML::CallGraphEntryWeight &E);
 };
 
-template <> struct MappingTraits<ELFYAML::Relocation> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::Relocation> {
   static void mapping(IO &IO, ELFYAML::Relocation &Rel);
 };
 
-template <> struct MappingTraits<ELFYAML::ARMIndexTableEntry> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::ARMIndexTableEntry> {
   static void mapping(IO &IO, ELFYAML::ARMIndexTableEntry &E);
 };
 
-template <> struct MappingTraits<std::unique_ptr<ELFYAML::Chunk>> {
+template <> struct LLVM_ABI MappingTraits<std::unique_ptr<ELFYAML::Chunk>> {
   static void mapping(IO &IO, std::unique_ptr<ELFYAML::Chunk> &C);
   static std::string validate(IO &io, std::unique_ptr<ELFYAML::Chunk> &C);
 };
 
 template <>
-struct MappingTraits<ELFYAML::Object> {
+struct LLVM_ABI MappingTraits<ELFYAML::Object> {
   static void mapping(IO &IO, ELFYAML::Object &Object);
 };
 
-template <> struct MappingTraits<ELFYAML::SectionOrType> {
+template <> struct LLVM_ABI MappingTraits<ELFYAML::SectionOrType> {
   static void mapping(IO &IO, ELFYAML::SectionOrType &sectionOrType);
 };
 

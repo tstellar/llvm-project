@@ -13,7 +13,7 @@
 
 namespace llvm {
 
-class HelloWorldPass : public PassInfoMixin<HelloWorldPass> {
+class LLVM_ABI HelloWorldPass : public PassInfoMixin<HelloWorldPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

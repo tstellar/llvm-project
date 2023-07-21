@@ -20,7 +20,7 @@
 namespace llvm {
 namespace xray {
 
-struct YAMLXRayFileHeader {
+struct LLVM_ABI YAMLXRayFileHeader {
   uint16_t Version;
   uint16_t Type;
   bool ConstantTSC;
@@ -28,7 +28,7 @@ struct YAMLXRayFileHeader {
   uint64_t CycleFrequency;
 };
 
-struct YAMLXRayRecord {
+struct LLVM_ABI YAMLXRayRecord {
   uint16_t RecordType;
   uint16_t CPU;
   RecordTypes Type;
@@ -41,7 +41,7 @@ struct YAMLXRayRecord {
   std::string Data;
 };
 
-struct YAMLXRayTrace {
+struct LLVM_ABI YAMLXRayTrace {
   YAMLXRayFileHeader Header;
   std::vector<YAMLXRayRecord> Records;
 };
@@ -52,7 +52,7 @@ namespace yaml {
 
 // YAML Traits
 // -----------
-template <> struct ScalarEnumerationTraits<xray::RecordTypes> {
+template <> struct LLVM_ABI ScalarEnumerationTraits<xray::RecordTypes> {
   static void enumeration(IO &IO, xray::RecordTypes &Type) {
     IO.enumCase(Type, "function-enter", xray::RecordTypes::ENTER);
     IO.enumCase(Type, "function-exit", xray::RecordTypes::EXIT);
@@ -63,7 +63,7 @@ template <> struct ScalarEnumerationTraits<xray::RecordTypes> {
   }
 };
 
-template <> struct MappingTraits<xray::YAMLXRayFileHeader> {
+template <> struct LLVM_ABI MappingTraits<xray::YAMLXRayFileHeader> {
   static void mapping(IO &IO, xray::YAMLXRayFileHeader &Header) {
     IO.mapRequired("version", Header.Version);
     IO.mapRequired("type", Header.Type);
@@ -73,7 +73,7 @@ template <> struct MappingTraits<xray::YAMLXRayFileHeader> {
   }
 };
 
-template <> struct MappingTraits<xray::YAMLXRayRecord> {
+template <> struct LLVM_ABI MappingTraits<xray::YAMLXRayRecord> {
   static void mapping(IO &IO, xray::YAMLXRayRecord &Record) {
     IO.mapRequired("type", Record.RecordType);
     IO.mapOptional("func-id", Record.FuncId);
@@ -90,7 +90,7 @@ template <> struct MappingTraits<xray::YAMLXRayRecord> {
   static constexpr bool flow = true;
 };
 
-template <> struct MappingTraits<xray::YAMLXRayTrace> {
+template <> struct LLVM_ABI MappingTraits<xray::YAMLXRayTrace> {
   static void mapping(IO &IO, xray::YAMLXRayTrace &Trace) {
     // A trace file contains two parts, the header and the list of all the
     // trace records.

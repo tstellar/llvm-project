@@ -29,7 +29,7 @@ namespace llvm {
 /// registration list.
 ///
 //===----------------------------------------------------------------------===//
-template <class PassCtorTy> class MachinePassRegistryListener {
+template <class PassCtorTy> class LLVM_ABI MachinePassRegistryListener {
   virtual void anchor() {}
 
 public:
@@ -45,7 +45,7 @@ public:
 /// MachinePassRegistryNode - Machine pass node stored in registration list.
 ///
 //===----------------------------------------------------------------------===//
-template <typename PassCtorTy> class MachinePassRegistryNode {
+template <typename PassCtorTy> class LLVM_ABI MachinePassRegistryNode {
 private:
   MachinePassRegistryNode *Next = nullptr; // Next function pass in list.
   StringRef Name;                       // Name of function pass.
@@ -70,7 +70,7 @@ public:
 /// MachinePassRegistry - Track the registration of machine passes.
 ///
 //===----------------------------------------------------------------------===//
-template <typename PassCtorTy> class MachinePassRegistry {
+template <typename PassCtorTy> class LLVM_ABI MachinePassRegistry {
 private:
   MachinePassRegistryNode<PassCtorTy> *List; // List of registry nodes.
   PassCtorTy Default;                        // Default function pass creator.
@@ -132,7 +132,7 @@ public:
 ///
 //===----------------------------------------------------------------------===//
 template <class RegistryClass>
-class RegisterPassParser
+class LLVM_ABI RegisterPassParser
     : public MachinePassRegistryListener<
           typename RegistryClass::FunctionPassCtor>,
       public cl::parser<typename RegistryClass::FunctionPassCtor> {
