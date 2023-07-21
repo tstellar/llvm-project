@@ -28,6 +28,9 @@
 #include <vector>
 
 namespace llvm {
+
+extern cl::opt<bool> PrintPipelinePasses;
+
 class StringRef;
 class AAManager;
 class TargetMachine;
