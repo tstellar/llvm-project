@@ -591,9 +591,9 @@ function(llvm_add_library name)
   endif()
 
   if(ARG_COMPONENT_LIB)
-    set_target_properties(${name} PROPERTIES
-	                  LLVM_COMPONENT TRUE
-			  DEFINE_SYMBOL "LLVM_ABI_EXPORTS")
+    set_target_properties(${name} PROPERTIES LLVM_COMPONENT TRUE)
+    #target_compile_definitions(${name} PRIVATE LLVM_ABI_EXPORTS)
+    target_compile_options(${name} PRIVATE -DLLVM_ABI_EXPORTS)
 
     # When building shared objects for each target there are some internal APIs
     # that are used across shared objects which we can't hide.
