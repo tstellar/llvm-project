@@ -455,7 +455,7 @@ public:
   /// emphasizes producing different codes for different inputs in order to
   /// be used in canonicalization and memoization. As such, equality is
   /// bitwiseIsEqual, and 0 != -0.
-  friend hash_code hash_value(const IEEEFloat &Arg);
+  friend LLVM_ABI hash_code hash_value(const IEEEFloat &Arg);
 
   /// Converts this value into a decimal string.
   ///
@@ -499,12 +499,12 @@ public:
   ///   0   -> \c IEK_Zero
   ///   Inf -> \c IEK_Inf
   ///
-  friend int ilogb(const IEEEFloat &Arg);
+  friend LLVM_ABI int ilogb(const IEEEFloat &Arg);
 
   /// Returns: X * 2^Exp for integral exponents.
-  friend IEEEFloat scalbn(IEEEFloat X, int Exp, roundingMode);
+  friend LLVM_ABI IEEEFloat scalbn(IEEEFloat X, int Exp, roundingMode);
 
-  friend IEEEFloat frexp(const IEEEFloat &X, int &Exp, roundingMode);
+  friend LLVM_ABI IEEEFloat frexp(const IEEEFloat &X, int &Exp, roundingMode);
 
   /// \name Special value setters.
   /// @{
@@ -748,9 +748,9 @@ public:
 
   bool getExactInverse(APFloat *inv) const;
 
-  friend DoubleAPFloat scalbn(const DoubleAPFloat &X, int Exp, roundingMode);
-  friend DoubleAPFloat frexp(const DoubleAPFloat &X, int &Exp, roundingMode);
-  friend hash_code hash_value(const DoubleAPFloat &Arg);
+  friend LLVM_ABI DoubleAPFloat scalbn(const DoubleAPFloat &X, int Exp, roundingMode);
+  friend LLVM_ABI DoubleAPFloat frexp(const DoubleAPFloat &X, int &Exp, roundingMode);
+  friend LLVM_ABI hash_code hash_value(const DoubleAPFloat &Arg);
 };
 
 LLVM_ABI hash_code hash_value(const DoubleAPFloat &Arg);
@@ -1319,9 +1319,9 @@ public:
     APFLOAT_DISPATCH_ON_SEMANTICS(getExactInverse(inv));
   }
 
-  friend hash_code hash_value(const APFloat &Arg);
+  friend LLVM_ABI hash_code hash_value(const APFloat &Arg);
   friend int ilogb(const APFloat &Arg) { return ilogb(Arg.getIEEE()); }
-  friend APFloat scalbn(APFloat X, int Exp, roundingMode RM);
+  friend LLVM_ABI APFloat scalbn(APFloat X, int Exp, roundingMode RM);
   friend APFloat frexp(const APFloat &X, int &Exp, roundingMode RM);
   friend IEEEFloat;
   friend DoubleAPFloat;
