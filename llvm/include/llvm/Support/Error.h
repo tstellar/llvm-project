@@ -380,6 +380,9 @@ public:
 
   std::error_code convertToErrorCode() const override;
 
+  ErrorList(const ErrorList &) = delete;
+  ErrorList &operator=(const ErrorList &) = delete;
+
   // Used by ErrorInfo::classID.
   static char ID;
 
