@@ -511,7 +511,7 @@ private:
                                       llvm::StringRef, std::string, json::Array,
                                       json::Object>
       Union;
-  friend bool operator==(const Value &, const Value &);
+  friend bool LLVM_ABI operator==(const Value &, const Value &);
 };
 
 LLVM_ABI bool operator==(const Value &, const Value &);
