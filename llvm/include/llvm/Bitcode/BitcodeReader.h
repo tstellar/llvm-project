@@ -120,7 +120,7 @@ struct LLVM_ABI ParserCallbacks {
 
     // Calls the ctor.
     friend Expected<BitcodeFileContents>
-    getBitcodeFileContents(MemoryBufferRef Buffer);
+    LLVM_ABI getBitcodeFileContents(MemoryBufferRef Buffer);
 
     Expected<std::unique_ptr<Module>>
     getModuleImpl(LLVMContext &Context, bool MaterializeAll,

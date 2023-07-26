@@ -141,7 +141,7 @@ public:
     }
 
     // Comparison operators are provided out of line.
-    friend bool operator==(const iterator &, const iterator &);
+    friend bool LLVM_ABI operator==(const iterator &, const iterator &);
   };
 
   DWARFExpression(DataExtractor Data, uint8_t AddressSize,

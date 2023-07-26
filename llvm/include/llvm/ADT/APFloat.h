@@ -1322,7 +1322,7 @@ public:
   friend LLVM_ABI hash_code hash_value(const APFloat &Arg);
   friend int ilogb(const APFloat &Arg) { return ilogb(Arg.getIEEE()); }
   friend LLVM_ABI APFloat scalbn(APFloat X, int Exp, roundingMode RM);
-  friend APFloat frexp(const APFloat &X, int &Exp, roundingMode RM);
+  friend APFloat LLVM_ABI frexp(const APFloat &X, int &Exp, roundingMode RM);
   friend IEEEFloat;
   friend DoubleAPFloat;
 };

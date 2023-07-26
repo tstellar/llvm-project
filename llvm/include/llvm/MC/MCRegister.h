@@ -32,7 +32,7 @@ using MCRegUnit = unsigned;
 
 /// Wrapper class representing physical registers. Should be passed by value.
 class LLVM_ABI MCRegister {
-  friend hash_code hash_value(const MCRegister &);
+  friend hash_code LLVM_ABI hash_value(const MCRegister &);
   unsigned Reg;
 
 public:

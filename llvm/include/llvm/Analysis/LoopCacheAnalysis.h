@@ -47,7 +47,7 @@ using LoopVectorTy = SmallVector<Loop *, 8>;
 ///   Subscripts -> [{0,+,1}<%for.i>][{1,+,2}<%for.j>][{2,+,3}<%for.k>]
 ///   Sizes -> [m][o][4]
 class LLVM_ABI IndexedReference {
-  friend raw_ostream &operator<<(raw_ostream &OS, const IndexedReference &R);
+  friend raw_ostream &LLVM_ABI operator<<(raw_ostream &OS, const IndexedReference &R);
 
 public:
   /// Construct an indexed reference given a \p StoreOrLoadInst instruction.
@@ -188,7 +188,7 @@ using ReferenceGroupsTy = SmallVector<ReferenceGroupTy, 8>;
 ///  - equal to the innermost loop trip count if the reference stride is greater
 ///    or equal to the cache line size CLS.
 class LLVM_ABI CacheCost {
-  friend raw_ostream &operator<<(raw_ostream &OS, const CacheCost &CC);
+  friend raw_ostream &LLVM_ABI operator<<(raw_ostream &OS, const CacheCost &CC);
   using LoopTripCountTy = std::pair<const Loop *, unsigned>;
   using LoopCacheCostTy = std::pair<const Loop *, CacheCostTy>;
 

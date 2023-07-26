@@ -52,7 +52,7 @@ namespace llvm {
   /// virtual stack trace.  This gets dumped out if the program crashes.
   class LLVM_ABI PrettyStackTraceEntry {
     friend PrettyStackTraceEntry *
-    ReverseStackTrace(PrettyStackTraceEntry *);
+    LLVM_ABI ReverseStackTrace(PrettyStackTraceEntry *);
 
     PrettyStackTraceEntry *NextEntry;
     PrettyStackTraceEntry(const PrettyStackTraceEntry &) = delete;
