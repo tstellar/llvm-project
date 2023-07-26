@@ -44,7 +44,7 @@ class ErrorSuccess;
 
 /// Base class for error info classes. Do not extend this directly: Extend
 /// the ErrorInfo template subclass instead.
-class ErrorInfoBase {
+class LLVM_CLASS_ABI ErrorInfoBase {
 public:
   virtual ~ErrorInfoBase() = default;
 
@@ -153,7 +153,7 @@ private:
 /// *All* Error instances must be checked before destruction, even if
 /// they're moved-assigned or constructed from Success values that have already
 /// been checked. This enforces checking through all levels of the call stack.
-class [[nodiscard]] Error {
+class LLVM_CLASS_ABI [[nodiscard]] Error {
   // ErrorList needs to be able to yank ErrorInfoBase pointers out of Errors
   // to add to the error list. It can't rely on handleErrors for this, since
   // handleErrors does not support ErrorList handlers.
@@ -168,7 +168,7 @@ class [[nodiscard]] Error {
   template <typename T> friend class Expected;
 
   // wrap needs to be able to steal the payload.
-  friend LLVMErrorRef wrap(Error);
+  friend LLVM_FUNC_ABI LLVMErrorRef wrap(Error);
 
 protected:
   /// Create a success value. Prefer using 'Error::success()' for readability
@@ -325,7 +325,7 @@ private:
 /// Subclass of Error for the sole purpose of identifying the success path in
 /// the type system. This allows to catch invalid conversion to Expected<T> at
 /// compile time.
-class ErrorSuccess final : public Error {};
+class LLVM_CLASS_ABI ErrorSuccess final : public Error {};
 
 inline ErrorSuccess Error::success() { return ErrorSuccess(); }
 
@@ -345,7 +345,7 @@ template <typename ErrT, typename... ArgTs> Error make_error(ArgTs &&... Args) {
 /// This class provides an implementation of the ErrorInfoBase::kind
 /// method, which is used by the Error RTTI system.
 template <typename ThisErrT, typename ParentErrT = ErrorInfoBase>
-class ErrorInfo : public ParentErrT {
+class LLVM_CLASS_ABI ErrorInfo : public ParentErrT {
 public:
   using ParentErrT::ParentErrT; // inherit constructors
 
@@ -360,14 +360,14 @@ public:
 
 /// Special ErrorInfo subclass representing a list of ErrorInfos.
 /// Instances of this class are constructed by joinError.
-class ErrorList final : public ErrorInfo<ErrorList> {
+class LLVM_CLASS_ABI ErrorList final : public ErrorInfo<ErrorList> {
   // handleErrors needs to be able to iterate the payload list of an
   // ErrorList.
   template <typename... HandlerTs>
   friend Error handleErrors(Error E, HandlerTs &&... Handlers);
 
   // joinErrors is implemented in terms of join.
-  friend Error joinErrors(Error, Error);
+  friend LLVM_FUNC_ABI Error joinErrors(Error, Error);
 
 public:
   void log(raw_ostream &OS) const override {
@@ -467,7 +467,7 @@ inline Error joinErrors(Error E1, Error E2) {
 ///  For unit-testing a function returning an 'Expected<T>', see the
 ///  'EXPECT_THAT_EXPECTED' macros in llvm/Testing/Support/Error.h
 
-template <class T> class [[nodiscard]] Expected {
+template <class T> class LLVM_CLASS_ABI [[nodiscard]] Expected {
   template <class T1> friend class ExpectedAsOutParameter;
   template <class OtherT> friend class Expected;
 
@@ -727,7 +727,7 @@ private:
 
 /// Report a serious error, calling any installed error handler. See
 /// ErrorHandling.h.
-[[noreturn]] void report_fatal_error(Error Err, bool gen_crash_diag = true);
+[[noreturn]] LLVM_FUNC_ABI void report_fatal_error(Error Err, bool gen_crash_diag = true);
 
 /// Report a fatal error if Err is a failure value.
 ///
@@ -821,12 +821,12 @@ T& cantFail(Expected<T&> ValOrErr, const char *Msg = nullptr) {
 /// Helper for testing applicability of, and applying, handlers for
 /// ErrorInfo types.
 template <typename HandlerT>
-class ErrorHandlerTraits
+class LLVM_CLASS_ABI ErrorHandlerTraits
     : public ErrorHandlerTraits<
           decltype(&std::remove_reference_t<HandlerT>::operator())> {};
 
 // Specialization functions of the form 'Error (const ErrT&)'.
-template <typename ErrT> class ErrorHandlerTraits<Error (&)(ErrT &)> {
+template <typename ErrT> class LLVM_CLASS_ABI ErrorHandlerTraits<Error (&)(ErrT &)> {
 public:
   static bool appliesTo(const ErrorInfoBase &E) {
     return E.template isA<ErrT>();
@@ -840,7 +840,7 @@ public:
 };
 
 // Specialization functions of the form 'void (const ErrT&)'.
-template <typename ErrT> class ErrorHandlerTraits<void (&)(ErrT &)> {
+template <typename ErrT> class LLVM_CLASS_ABI ErrorHandlerTraits<void (&)(ErrT &)> {
 public:
   static bool appliesTo(const ErrorInfoBase &E) {
     return E.template isA<ErrT>();
@@ -856,7 +856,7 @@ public:
 
 /// Specialization for functions of the form 'Error (std::unique_ptr<ErrT>)'.
 template <typename ErrT>
-class ErrorHandlerTraits<Error (&)(std::unique_ptr<ErrT>)> {
+class LLVM_CLASS_ABI ErrorHandlerTraits<Error (&)(std::unique_ptr<ErrT>)> {
 public:
   static bool appliesTo(const ErrorInfoBase &E) {
     return E.template isA<ErrT>();
@@ -872,7 +872,7 @@ public:
 
 /// Specialization for functions of the form 'void (std::unique_ptr<ErrT>)'.
 template <typename ErrT>
-class ErrorHandlerTraits<void (&)(std::unique_ptr<ErrT>)> {
+class LLVM_CLASS_ABI ErrorHandlerTraits<void (&)(std::unique_ptr<ErrT>)> {
 public:
   static bool appliesTo(const ErrorInfoBase &E) {
     return E.template isA<ErrT>();
@@ -889,34 +889,34 @@ public:
 
 // Specialization for member functions of the form 'RetT (const ErrT&)'.
 template <typename C, typename RetT, typename ErrT>
-class ErrorHandlerTraits<RetT (C::*)(ErrT &)>
+class LLVM_CLASS_ABI ErrorHandlerTraits<RetT (C::*)(ErrT &)>
     : public ErrorHandlerTraits<RetT (&)(ErrT &)> {};
 
 // Specialization for member functions of the form 'RetT (const ErrT&) const'.
 template <typename C, typename RetT, typename ErrT>
-class ErrorHandlerTraits<RetT (C::*)(ErrT &) const>
+class LLVM_CLASS_ABI ErrorHandlerTraits<RetT (C::*)(ErrT &) const>
     : public ErrorHandlerTraits<RetT (&)(ErrT &)> {};
 
 // Specialization for member functions of the form 'RetT (const ErrT&)'.
 template <typename C, typename RetT, typename ErrT>
-class ErrorHandlerTraits<RetT (C::*)(const ErrT &)>
+class LLVM_CLASS_ABI ErrorHandlerTraits<RetT (C::*)(const ErrT &)>
     : public ErrorHandlerTraits<RetT (&)(ErrT &)> {};
 
 // Specialization for member functions of the form 'RetT (const ErrT&) const'.
 template <typename C, typename RetT, typename ErrT>
-class ErrorHandlerTraits<RetT (C::*)(const ErrT &) const>
+class LLVM_CLASS_ABI ErrorHandlerTraits<RetT (C::*)(const ErrT &) const>
     : public ErrorHandlerTraits<RetT (&)(ErrT &)> {};
 
 /// Specialization for member functions of the form
 /// 'RetT (std::unique_ptr<ErrT>)'.
 template <typename C, typename RetT, typename ErrT>
-class ErrorHandlerTraits<RetT (C::*)(std::unique_ptr<ErrT>)>
+class LLVM_CLASS_ABI ErrorHandlerTraits<RetT (C::*)(std::unique_ptr<ErrT>)>
     : public ErrorHandlerTraits<RetT (&)(std::unique_ptr<ErrT>)> {};
 
 /// Specialization for member functions of the form
 /// 'RetT (std::unique_ptr<ErrT>) const'.
 template <typename C, typename RetT, typename ErrT>
-class ErrorHandlerTraits<RetT (C::*)(std::unique_ptr<ErrT>) const>
+class LLVM_CLASS_ABI ErrorHandlerTraits<RetT (C::*)(std::unique_ptr<ErrT>) const>
     : public ErrorHandlerTraits<RetT (&)(std::unique_ptr<ErrT>)> {};
 
 inline Error handleErrorImpl(std::unique_ptr<ErrorInfoBase> Payload) {
@@ -1021,7 +1021,7 @@ Expected<T> handleExpected(Expected<T> ValOrErr, RecoveryFtor &&RecoveryPath,
 /// This is useful in the base level of your program to allow clean termination
 /// (allowing clean deallocation of resources, etc.), while reporting error
 /// information to the user.
-void logAllUnhandledErrors(Error E, raw_ostream &OS, Twine ErrorBanner = {});
+LLVM_FUNC_ABI void logAllUnhandledErrors(Error E, raw_ostream &OS, Twine ErrorBanner = {});
 
 /// Write all error messages (if any) in E to a string. The newline character
 /// is used to separate error messages.
@@ -1101,7 +1101,7 @@ inline bool errorToBool(Error Err) {
 /// created inside every condition that verified that Error was non-null. By
 /// taking an Error pointer we can just create one instance at the top of the
 /// function.
-class ErrorAsOutParameter {
+class LLVM_CLASS_ABI ErrorAsOutParameter {
 public:
   ErrorAsOutParameter(Error *Err) : Err(Err) {
     // Raise the checked bit if Err is success.
@@ -1123,7 +1123,7 @@ private:
 ///
 /// See ErrorAsOutParameter.
 template <typename T>
-class ExpectedAsOutParameter {
+class LLVM_CLASS_ABI ExpectedAsOutParameter {
 public:
   ExpectedAsOutParameter(Expected<T> *ValOrErr)
     : ValOrErr(ValOrErr) {
@@ -1145,8 +1145,8 @@ private:
 /// This is useful if you're writing an interface that returns a Error
 /// (or Expected) and you want to call code that still returns
 /// std::error_codes.
-class ECError : public ErrorInfo<ECError> {
-  friend Error errorCodeToError(std::error_code);
+class LLVM_CLASS_ABI ECError : public ErrorInfo<ECError> {
+  friend LLVM_FUNC_ABI Error errorCodeToError(std::error_code);
 
   void anchor() override;
 
@@ -1171,16 +1171,16 @@ protected:
 /// sensible conversion to std::error_code is available, as attempts to convert
 /// to/from this error will result in a fatal error. (i.e. it is a programmatic
 /// error to try to convert such a value).
-std::error_code inconvertibleErrorCode();
+LLVM_FUNC_ABI std::error_code inconvertibleErrorCode();
 
 /// Helper for converting an std::error_code to a Error.
-Error errorCodeToError(std::error_code EC);
+LLVM_FUNC_ABI Error errorCodeToError(std::error_code EC);
 
 /// Helper for converting an ECError to a std::error_code.
 ///
 /// This method requires that Err be Error() or an ECError, otherwise it
 /// will trigger a call to abort().
-std::error_code errorToErrorCode(Error Err);
+LLVM_FUNC_ABI std::error_code errorToErrorCode(Error Err);
 
 /// Convert an ErrorOr<T> to an Expected<T>.
 template <typename T> Expected<T> errorOrToExpected(ErrorOr<T> &&EO) {
@@ -1220,7 +1220,7 @@ template <typename T> ErrorOr<T> expectedToErrorOr(Expected<T> &&E) {
 ///   }
 ///   @endcode
 ///
-class StringError : public ErrorInfo<StringError> {
+class LLVM_CLASS_ABI StringError : public ErrorInfo<StringError> {
 public:
   static char ID;
 
@@ -1251,7 +1251,7 @@ inline Error createStringError(std::error_code EC, char const *Fmt,
   return make_error<StringError>(Stream.str(), EC);
 }
 
-Error createStringError(std::error_code EC, char const *Msg);
+LLVM_FUNC_ABI Error createStringError(std::error_code EC, char const *Msg);
 
 inline Error createStringError(std::error_code EC, const Twine &S) {
   return createStringError(EC, S.str().c_str());
@@ -1267,10 +1267,10 @@ inline Error createStringError(std::errc EC, char const *Fmt,
 ///
 /// In some cases, an error needs to live along a 'source' name, in order to
 /// show more detailed information to the user.
-class FileError final : public ErrorInfo<FileError> {
+class LLVM_CLASS_ABI FileError final : public ErrorInfo<FileError> {
 
-  friend Error createFileError(const Twine &, Error);
-  friend Error createFileError(const Twine &, size_t, Error);
+  friend LLVM_FUNC_ABI Error createFileError(const Twine &, Error);
+  friend LLVM_FUNC_ABI Error createFileError(const Twine &, size_t, Error);
 
 public:
   void log(raw_ostream &OS) const override {
@@ -1352,7 +1352,7 @@ Error createFileError(const Twine &F, ErrorSuccess) = delete;
 ///
 /// For tool use only. NOT FOR USE IN LIBRARY CODE.
 ///
-class ExitOnError {
+class LLVM_CLASS_ABI ExitOnError {
 public:
   /// Create an error on exit helper.
   ExitOnError(std::string Banner = "", int DefaultErrorExitCode = 1)
