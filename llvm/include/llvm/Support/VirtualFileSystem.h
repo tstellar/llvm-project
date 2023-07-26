@@ -777,6 +777,9 @@ public:
     Entry(EntryKind K, StringRef Name) : Kind(K), Name(Name) {}
     virtual ~Entry() = default;
 
+    Entry(const Entry &) = delete;
+    Entry &operator=(const Entry &) = delete;
+
     StringRef getName() const { return Name; }
     EntryKind getKind() const { return Kind; }
   };
