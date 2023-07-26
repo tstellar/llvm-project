@@ -114,15 +114,15 @@ private:
   native_handle_type Thread;
 };
 
-LLVM_ABI thread::native_handle_type
+LLVM_ABI LLVM_ABI thread::native_handle_type
 llvm_execute_on_thread_impl(thread::start_routine_type ThreadFunc, void *Arg,
                             std::optional<unsigned> StackSizeInBytes);
-LLVM_ABI void llvm_thread_join_impl(thread::native_handle_type Thread);
-LLVM_ABI void
+LLVM_ABI LLVM_ABI void llvm_thread_join_impl(thread::native_handle_type Thread);
+LLVM_ABI LLVM_ABI void
 llvm_thread_detach_impl(thread::native_handle_type Thread);
-LLVM_ABI thread::id
+LLVM_ABI LLVM_ABI thread::id
 llvm_thread_get_id_impl(thread::native_handle_type Thread);
-LLVM_ABI thread::id llvm_thread_get_current_id_impl();
+LLVM_ABI LLVM_ABI thread::id llvm_thread_get_current_id_impl();
 
 template <class Function, class... Args>
 thread::thread(std::optional<unsigned> StackSizeInBytes, Function &&f,

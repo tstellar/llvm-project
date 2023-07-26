@@ -2661,16 +2661,16 @@ public:
 template <typename FolderTy, typename InserterTy>
 IRBuilder(LLVMContext &, FolderTy, InserterTy, MDNode *,
           ArrayRef<OperandBundleDef>) -> IRBuilder<FolderTy, InserterTy>;
-IRBuilder(LLVMContext &, MDNode *, ArrayRef<OperandBundleDef>) -> IRBuilder<>;
+LLVM_ABI IRBuilder(LLVMContext &, MDNode *, ArrayRef<OperandBundleDef>) -> IRBuilder<>;
 template <typename FolderTy>
 IRBuilder(BasicBlock *, FolderTy, MDNode *, ArrayRef<OperandBundleDef>)
     -> IRBuilder<FolderTy>;
-IRBuilder(BasicBlock *, MDNode *, ArrayRef<OperandBundleDef>) -> IRBuilder<>;
-IRBuilder(Instruction *, MDNode *, ArrayRef<OperandBundleDef>) -> IRBuilder<>;
+LLVM_ABI IRBuilder(BasicBlock *, MDNode *, ArrayRef<OperandBundleDef>) -> IRBuilder<>;
+LLVM_ABI IRBuilder(Instruction *, MDNode *, ArrayRef<OperandBundleDef>) -> IRBuilder<>;
 template <typename FolderTy>
 IRBuilder(BasicBlock *, BasicBlock::iterator, FolderTy, MDNode *,
           ArrayRef<OperandBundleDef>) -> IRBuilder<FolderTy>;
-IRBuilder(BasicBlock *, BasicBlock::iterator, MDNode *,
+LLVM_ABI IRBuilder(BasicBlock *, BasicBlock::iterator, MDNode *,
           ArrayRef<OperandBundleDef>) -> IRBuilder<>;
 
 

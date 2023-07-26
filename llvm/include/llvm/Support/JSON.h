@@ -204,7 +204,7 @@ public:
   template <typename It> iterator insert(const_iterator P, It A, It Z);
   template <typename... Args> iterator emplace(const_iterator P, Args &&...A);
 
-  friend bool operator==(const Array &L, const Array &R);
+  friend bool LLVM_ABI operator==(const Array &L, const Array &R);
 };
 inline bool operator!=(const Array &L, const Array &R) { return !(L == R); }
 

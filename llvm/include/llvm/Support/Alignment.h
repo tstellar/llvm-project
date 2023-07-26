@@ -43,15 +43,15 @@ private:
                           /// ShiftValue is less than 64 by construction.
 
   friend struct MaybeAlign;
-  friend unsigned Log2(Align);
-  friend bool operator==(Align Lhs, Align Rhs);
-  friend bool operator!=(Align Lhs, Align Rhs);
-  friend bool operator<=(Align Lhs, Align Rhs);
-  friend bool operator>=(Align Lhs, Align Rhs);
-  friend bool operator<(Align Lhs, Align Rhs);
-  friend bool operator>(Align Lhs, Align Rhs);
-  friend unsigned encode(struct MaybeAlign A);
-  friend struct MaybeAlign decodeMaybeAlign(unsigned Value);
+  friend unsigned LLVM_ABI Log2(Align);
+  friend bool LLVM_ABI operator==(Align Lhs, Align Rhs);
+  friend bool LLVM_ABI operator!=(Align Lhs, Align Rhs);
+  friend bool LLVM_ABI operator<=(Align Lhs, Align Rhs);
+  friend bool LLVM_ABI operator>=(Align Lhs, Align Rhs);
+  friend bool LLVM_ABI operator<(Align Lhs, Align Rhs);
+  friend bool LLVM_ABI operator>(Align Lhs, Align Rhs);
+  friend unsigned LLVM_ABI encode(struct MaybeAlign A);
+  friend struct MaybeAlign LLVM_ABI decodeMaybeAlign(unsigned Value);
 
   /// A trivial type to allow construction of constexpr Align.
   /// This is currently needed to workaround a bug in GCC 5.3 which prevents

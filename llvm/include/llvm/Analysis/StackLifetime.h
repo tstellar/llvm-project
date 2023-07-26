@@ -63,7 +63,7 @@ public:
   /// live.
   class LiveRange {
     BitVector Bits;
-    friend raw_ostream &operator<<(raw_ostream &OS,
+    friend raw_ostream &LLVM_ABI operator<<(raw_ostream &OS,
                                    const StackLifetime::LiveRange &R);
 
   public:

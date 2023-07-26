@@ -168,7 +168,7 @@ class LLVM_ABI [[nodiscard]] Error {
   template <typename T> friend class Expected;
 
   // wrap needs to be able to steal the payload.
-  friend LLVMErrorRef wrap(Error);
+  friend LLVMErrorRef LLVM_ABI wrap(Error);
 
 protected:
   /// Create a success value. Prefer using 'Error::success()' for readability
@@ -367,7 +367,7 @@ class LLVM_ABI ErrorList final : public ErrorInfo<ErrorList> {
   friend Error handleErrors(Error E, HandlerTs &&... Handlers);
 
   // joinErrors is implemented in terms of join.
-  friend Error joinErrors(Error, Error);
+  friend Error LLVM_ABI joinErrors(Error, Error);
 
 public:
   void log(raw_ostream &OS) const override {
@@ -1272,8 +1272,8 @@ inline Error createStringError(std::errc EC, char const *Fmt,
 /// show more detailed information to the user.
 class LLVM_ABI FileError final : public ErrorInfo<FileError> {
 
-  friend Error createFileError(const Twine &, Error);
-  friend Error createFileError(const Twine &, size_t, Error);
+  friend Error LLVM_ABI createFileError(const Twine &, Error);
+  friend Error LLVM_ABI createFileError(const Twine &, size_t, Error);
 
 public:
   void log(raw_ostream &OS) const override {
