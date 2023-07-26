@@ -797,6 +797,9 @@ public:
     DirectoryEntry(StringRef Name, Status S)
         : Entry(EK_Directory, Name), S(std::move(S)) {}
 
+    DirectoryEntry(const DirectoryEntry &) = delete;
+    DirectoryEntry &operator=(const DirectoryEntry &) = delete;
+
     Status getStatus() { return S; }
 
     void addContent(std::unique_ptr<Entry> Content) {
