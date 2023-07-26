@@ -225,7 +225,7 @@ public:
 
 /// Represents the result of a call to sys::fs::status().
 class LLVM_ABI file_status : public basic_file_status {
-  friend bool LLVM_ABI equivalent(file_status A, file_status B);
+  friend bool equivalent(file_status A, file_status B);
 
   #if defined(LLVM_ON_UNIX)
   dev_t fs_st_dev = 0;
