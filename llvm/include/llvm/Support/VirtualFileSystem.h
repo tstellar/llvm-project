@@ -993,6 +993,8 @@ private:
   /// @}
 
   RedirectingFileSystem(IntrusiveRefCntPtr<FileSystem> ExternalFS);
+  RedirectingFileSystem(const RedirectingFileSystem &) = delete;
+  RedirectingFileSystem &operator=(const RedirectingFileSystem &) = delete;
 
   /// Looks up the path <tt>[Start, End)</tt> in \p From, possibly recursing
   /// into the contents of \p From if it is a directory. Returns a LookupResult
