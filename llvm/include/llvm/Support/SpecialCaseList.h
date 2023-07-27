@@ -125,6 +125,7 @@ protected:
     // Returns the line number in the source file that this query matches to.
     // Returns zero if no match is found.
     unsigned match(StringRef Query) const;
+    Matcher &operator=(Matcher const &) = delete;
 
   private:
     StringMap<unsigned> Strings;
