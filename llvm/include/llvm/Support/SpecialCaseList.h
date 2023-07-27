@@ -124,7 +124,9 @@ protected:
     bool insert(std::string Regexp, unsigned LineNumber, std::string &REError);
     // Returns the line number in the source file that this query matches to.
     // Returns zero if no match is found.
+    Matcher() = default;
     unsigned match(StringRef Query) const;
+    Matcher(Matcher const &) = delete;
     Matcher &operator=(Matcher const &) = delete;
 
   private:
