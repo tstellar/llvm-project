@@ -135,7 +135,7 @@ protected:
     std::vector<std::pair<std::unique_ptr<Regex>, unsigned>> RegExes;
   };
 
-  using SectionEntries = StringMap<StringMap<Matcher>>;
+  using SectionEntries = StringMap<StringMap<std::unique_ptr<Matcher>>>;
 
   struct Section {
     Section(std::unique_ptr<Matcher> M) : SectionMatcher(std::move(M)){};

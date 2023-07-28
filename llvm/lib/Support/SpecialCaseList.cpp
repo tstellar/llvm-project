@@ -184,9 +184,9 @@ bool SpecialCaseList::parse(const MemoryBuffer *MB,
       Sections.emplace_back(std::move(M));
     }
 
-    Matcher &Entry = Sections[SectionsMap[Section]].Entries[Prefix][Category];
+    std::unique_ptr<Matcher> &Entry = Sections[SectionsMap[Section]].Entries[Prefix][Category];
     std::string REError;
-    if (!Entry.insert(std::move(Regexp), LineNo, REError)) {
+    if (!Entry->insert(std::move(Regexp), LineNo, REError)) {
       Error = (Twine("malformed regex in line ") + Twine(LineNo) + ": '" +
                SplitLine.second + "': " + REError).str();
       return false;
@@ -220,10 +220,10 @@ unsigned SpecialCaseList::inSectionBlame(const SectionEntries &Entries,
                                          StringRef Category) const {
   SectionEntries::const_iterator I = Entries.find(Prefix);
   if (I == Entries.end()) return 0;
-  StringMap<Matcher>::const_iterator II = I->second.find(Category);
+  StringMap<std::unique_ptr<Matcher>>::const_iterator II = I->second.find(Category);
   if (II == I->second.end()) return 0;
 
-  return II->getValue().match(Query);
+  return II->getValue()->match(Query);
 }
 
 }  // namespace llvm
