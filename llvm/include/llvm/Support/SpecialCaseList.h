@@ -128,6 +128,7 @@ protected:
     Matcher() = default;
     Matcher &operator=(Matcher const &) = delete;
     Matcher(Matcher const&) = delete;
+    Matcher(Matcher&& m) { }
 
   private:
     StringMap<unsigned> Strings;
