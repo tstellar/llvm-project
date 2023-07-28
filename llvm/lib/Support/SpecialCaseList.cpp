@@ -184,7 +184,7 @@ bool SpecialCaseList::parse(const MemoryBuffer *MB,
       Sections.emplace_back(std::move(M));
     }
 
-    auto &Entry = Sections[SectionsMap[Section]].Entries[Prefix][Category];
+    Matcher &Entry = Sections[SectionsMap[Section]].Entries[Prefix][Category];
     std::string REError;
     if (!Entry.insert(std::move(Regexp), LineNo, REError)) {
       Error = (Twine("malformed regex in line ") + Twine(LineNo) + ": '" +

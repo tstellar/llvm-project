@@ -119,7 +119,7 @@ protected:
   /// "literal" (i.e. no regex metacharacters) are stored in Strings.  The
   /// reason for doing so is efficiency; StringMap is much faster at matching
   /// literal strings than Regex.
-  class Matcher {
+  class LLVM_ABI Matcher {
   public:
     bool insert(std::string Regexp, unsigned LineNumber, std::string &REError);
     // Returns the line number in the source file that this query matches to.
