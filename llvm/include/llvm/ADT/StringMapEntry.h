@@ -78,6 +78,9 @@ public:
       : StringMapEntryBase(keyLength),
         second(std::forward<InitTy>(initVals)...) {}
   StringMapEntryStorage(StringMapEntryStorage &e) = delete;
+  /// Explicitly delete copy assignment operator.  If \c second contains any
+  /// unique_ptrs, then this class can't be copied.
+  StringMapEntryStorage &operator=(StringMapEntryStorage const &) = delete;
 
   const ValueTy &getValue() const { return second; }
   ValueTy &getValue() { return second; }
