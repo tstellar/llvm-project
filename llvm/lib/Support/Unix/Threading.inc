@@ -56,7 +56,7 @@
 #endif
 
 namespace llvm {
-pthread_t
+LLVM_ABI pthread_t
 llvm_execute_on_thread_impl(void *(*ThreadFunc)(void *), void *Arg,
                             std::optional<unsigned> StackSizeInBytes) {
   int errnum;
@@ -88,7 +88,7 @@ llvm_execute_on_thread_impl(void *(*ThreadFunc)(void *), void *Arg,
   return Thread;
 }
 
-void llvm_thread_detach_impl(pthread_t Thread) {
+LLVM_ABI void llvm_thread_detach_impl(pthread_t Thread) {
   int errnum;
 
   if ((errnum = ::pthread_detach(Thread)) != 0) {
@@ -96,7 +96,7 @@ void llvm_thread_detach_impl(pthread_t Thread) {
   }
 }
 
-void llvm_thread_join_impl(pthread_t Thread) {
+LLVM_ABI void llvm_thread_join_impl(pthread_t Thread) {
   int errnum;
 
   if ((errnum = ::pthread_join(Thread, nullptr)) != 0) {
@@ -104,9 +104,9 @@ void llvm_thread_join_impl(pthread_t Thread) {
   }
 }
 
-pthread_t llvm_thread_get_id_impl(pthread_t Thread) { return Thread; }
+LLVM_ABI pthread_t llvm_thread_get_id_impl(pthread_t Thread) { return Thread; }
 
-pthread_t llvm_thread_get_current_id_impl() { return ::pthread_self(); }
+LLVM_ABI pthread_t llvm_thread_get_current_id_impl() { return ::pthread_self(); }
 
 } // namespace llvm
 
