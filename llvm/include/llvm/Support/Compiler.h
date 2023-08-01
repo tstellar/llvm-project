@@ -147,7 +147,7 @@
 # if defined(LLVM_ABI_EXPORTS)
 #   define LLVM_ABI __declspec(dllexport)
 # else
-#   define LLVM_ABI __declspec(dllimport)
+#   define LLVM_ABI
 # endif
 #endif
 
