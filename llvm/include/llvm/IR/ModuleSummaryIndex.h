@@ -150,11 +150,6 @@ struct LLVM_ABI alignas(8) GlobalValueSummaryInfo {
 
   inline GlobalValueSummaryInfo(bool HaveGVs);
 
-  /// Explicitly delete copy constructor/copy assignment operator.  \c SummaryList
-  /// is a vector of unique_ptrs, so it cannot be copied.
-  GlobalValueSummaryInfo(const GlobalValueSummaryInfo &) = delete;
-  GlobalValueSummaryInfo &operator=(const GlobalValueSummaryInfo &) = delete;
-
   /// List of global value summary structures for a particular value held
   /// in the GlobalValueMap. Requires a vector in the case of multiple
   /// COMDAT values of the same name.
