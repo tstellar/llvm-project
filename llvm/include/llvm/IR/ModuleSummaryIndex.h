@@ -178,6 +178,8 @@ struct LLVM_ABI ValueInfo {
       RefAndFlags;
 
   ValueInfo() = default;
+  ValueInfo(const ValueInfo &) = delete;
+  ValueInfo &operator=(const ValueInfo &) = delete;
   ValueInfo(bool HaveGVs, const GlobalValueSummaryMapTy::value_type *R) {
     RefAndFlags.setPointer(R);
     RefAndFlags.setInt(HaveGVs);
