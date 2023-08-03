@@ -1370,7 +1370,7 @@ private:
 
   GlobalValueSummaryMapTy::value_type *
   getOrInsertValuePtr(GlobalValue::GUID GUID) {
-    return &*GlobalValueMap.emplace(GUID, GlobalValueSummaryInfo(HaveGVs))
+    return &*GlobalValueMap.emplace(GUID, std::move(GlobalValueSummaryInfo(HaveGVs)))
                  .first;
   }
 
