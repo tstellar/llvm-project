@@ -114,7 +114,7 @@
 /// this attribute will be made public and visible outside of any shared library
 /// they are linked in to.
 
-#if LLVM_HAS_CPP_ATTRIBUTE(gnu::visibility)
+#if LLVM_HAS_CPP_ATTRIBUTE(gnu::visibility) && defined(__GNUC__) && !defined(__clang__)
 #define LLVM_ATTRIBUTE_VISIBILITY_HIDDEN [[gnu::visibility("hidden")]]
 #define LLVM_ATTRIBUTE_VISIBILITY_DEFAULT [[gnu::visibility("default")]]
 #elif __has_attribute(visibility)
@@ -138,6 +138,19 @@
 #define LLVM_LIBRARY_VISIBILITY
 #define LLVM_EXTERNAL_VISIBILITY
 #endif
+
+#if defined(__ELF__)
+# define LLVM_ABI LLVM_ATTRIBUTE_VISIBILITY_DEFAULT
+#elif defined(__MACH__) || defined(__WASM__)
+# define LLVM_ABI LLVM_ATTRIBUTE_VISIBILITY_DEFAULT
+#else
+# if defined(LLVM_ABI_EXPORTS)
+#   define LLVM_ABI __declspec(dllexport)
+# else
+#   define LLVM_ABI __declspec(dllimport)
+# endif
+#endif
+
 
 #if defined(__GNUC__)
 #define LLVM_PREFETCH(addr, rw, locality) __builtin_prefetch(addr, rw, locality)
