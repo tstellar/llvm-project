@@ -35,7 +35,7 @@ class LLVMContext;
 /// Module. The ShouldLazyLoadMetadata flag is passed down to the bitcode
 /// reader to optionally enable lazy metadata loading. This takes ownership
 /// of \p Buffer.
-std::unique_ptr<Module> getLazyIRModule(std::unique_ptr<MemoryBuffer> Buffer,
+LLVM_FUNC_ABI std::unique_ptr<Module> getLazyIRModule(std::unique_ptr<MemoryBuffer> Buffer,
                                         SMDiagnostic &Err, LLVMContext &Context,
                                         bool ShouldLazyLoadMetadata = false);
 
@@ -44,7 +44,7 @@ std::unique_ptr<Module> getLazyIRModule(std::unique_ptr<MemoryBuffer> Buffer,
 /// attempt to parse it as LLVM Assembly and return a fully populated
 /// Module. The ShouldLazyLoadMetadata flag is passed down to the bitcode
 /// reader to optionally enable lazy metadata loading.
-std::unique_ptr<Module>
+LLVM_FUNC_ABI std::unique_ptr<Module>
 getLazyIRFileModule(StringRef Filename, SMDiagnostic &Err, LLVMContext &Context,
                     bool ShouldLazyLoadMetadata = false);
 
@@ -52,7 +52,7 @@ getLazyIRFileModule(StringRef Filename, SMDiagnostic &Err, LLVMContext &Context,
 /// for it.  Otherwise, attempt to parse it as LLVM Assembly and return
 /// a Module for it.
 /// \param DataLayoutCallback Override datalayout in the llvm assembly.
-std::unique_ptr<Module> parseIR(MemoryBufferRef Buffer, SMDiagnostic &Err,
+LLVM_FUNC_ABI std::unique_ptr<Module> parseIR(MemoryBufferRef Buffer, SMDiagnostic &Err,
                                 LLVMContext &Context,
                                 ParserCallbacks Callbacks = {});
 
@@ -60,7 +60,7 @@ std::unique_ptr<Module> parseIR(MemoryBufferRef Buffer, SMDiagnostic &Err,
 /// Otherwise, attempt to parse it as LLVM Assembly and return a Module
 /// for it.
 /// \param DataLayoutCallback Override datalayout in the llvm assembly.
-std::unique_ptr<Module> parseIRFile(StringRef Filename, SMDiagnostic &Err,
+LLVM_FUNC_ABI std::unique_ptr<Module> parseIRFile(StringRef Filename, SMDiagnostic &Err,
                                     LLVMContext &Context,
                                     ParserCallbacks Callbacks = {});
 }

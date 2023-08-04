@@ -21,7 +21,7 @@ namespace llvm {
 
 class Function;
 
-struct AnnotationRemarksPass : public PassInfoMixin<AnnotationRemarksPass> {
+struct LLVM_CLASS_ABI AnnotationRemarksPass : public PassInfoMixin<AnnotationRemarksPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
   static bool isRequired() { return true; }
 };

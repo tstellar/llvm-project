@@ -21,7 +21,7 @@
 namespace llvm {
 namespace xray {
 
-class TraceExpander : public RecordVisitor {
+class LLVM_CLASS_ABI TraceExpander : public RecordVisitor {
   // Type-erased callback for handling individual XRayRecord instances.
   function_ref<void(const XRayRecord &)> C;
   int32_t PID = 0;

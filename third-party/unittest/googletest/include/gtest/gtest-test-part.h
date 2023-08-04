@@ -124,7 +124,7 @@ class GTEST_API_ TestPartResult {
 };
 
 // Prints a TestPartResult object.
-std::ostream& operator<<(std::ostream& os, const TestPartResult& result);
+LLVM_FUNC_ABI std::ostream& operator<<(std::ostream& os, const TestPartResult& result);
 
 // An array of TestPartResult objects.
 //

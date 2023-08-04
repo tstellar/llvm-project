@@ -46,8 +46,8 @@ using LoopVectorTy = SmallVector<Loop *, 8>;
 ///   BasePointer -> A
 ///   Subscripts -> [{0,+,1}<%for.i>][{1,+,2}<%for.j>][{2,+,3}<%for.k>]
 ///   Sizes -> [m][o][4]
-class IndexedReference {
-  friend raw_ostream &operator<<(raw_ostream &OS, const IndexedReference &R);
+class LLVM_CLASS_ABI IndexedReference {
+  friend LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, const IndexedReference &R);
 
 public:
   /// Construct an indexed reference given a \p StoreOrLoadInst instruction.
@@ -187,8 +187,8 @@ using ReferenceGroupsTy = SmallVector<ReferenceGroupTy, 8>;
 ///    other subscripts is zero (e.g. RefCost = TripCount/(CLS/RefStride))
 ///  - equal to the innermost loop trip count if the reference stride is greater
 ///    or equal to the cache line size CLS.
-class CacheCost {
-  friend raw_ostream &operator<<(raw_ostream &OS, const CacheCost &CC);
+class LLVM_CLASS_ABI CacheCost {
+  friend LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, const CacheCost &CC);
   using LoopTripCountTy = std::pair<const Loop *, unsigned>;
   using LoopCacheCostTy = std::pair<const Loop *, CacheCostTy>;
 
@@ -280,11 +280,11 @@ private:
   DependenceInfo &DI;
 };
 
-raw_ostream &operator<<(raw_ostream &OS, const IndexedReference &R);
-raw_ostream &operator<<(raw_ostream &OS, const CacheCost &CC);
+LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, const IndexedReference &R);
+LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, const CacheCost &CC);
 
 /// Printer pass for the \c CacheCost results.
-class LoopCachePrinterPass : public PassInfoMixin<LoopCachePrinterPass> {
+class LLVM_CLASS_ABI LoopCachePrinterPass : public PassInfoMixin<LoopCachePrinterPass> {
   raw_ostream &OS;
 
 public:

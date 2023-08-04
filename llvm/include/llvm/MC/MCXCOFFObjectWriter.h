@@ -16,7 +16,7 @@ namespace llvm {
 
 class raw_pwrite_stream;
 
-class MCXCOFFObjectTargetWriter : public MCObjectTargetWriter {
+class LLVM_CLASS_ABI MCXCOFFObjectTargetWriter : public MCObjectTargetWriter {
 protected:
   MCXCOFFObjectTargetWriter(bool Is64Bit);
 
@@ -40,7 +40,7 @@ private:
   bool Is64Bit;
 };
 
-std::unique_ptr<MCObjectWriter>
+LLVM_FUNC_ABI std::unique_ptr<MCObjectWriter>
 createXCOFFObjectWriter(std::unique_ptr<MCXCOFFObjectTargetWriter> MOTW,
                         raw_pwrite_stream &OS);
 

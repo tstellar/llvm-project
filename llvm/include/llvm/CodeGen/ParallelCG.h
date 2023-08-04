@@ -33,7 +33,7 @@ class raw_pwrite_stream;
 ///
 /// Writes bitcode for individual partitions into output streams in BCOSs, if
 /// BCOSs is not empty.
-void splitCodeGen(
+LLVM_FUNC_ABI void splitCodeGen(
     Module &M, ArrayRef<raw_pwrite_stream *> OSs,
     ArrayRef<llvm::raw_pwrite_stream *> BCOSs,
     const std::function<std::unique_ptr<TargetMachine>()> &TMFactory,

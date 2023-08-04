@@ -22,7 +22,7 @@ namespace llvm {
 
 class Function;
 
-struct LowerConstantIntrinsicsPass :
+struct LLVM_CLASS_ABI LowerConstantIntrinsicsPass :
     PassInfoMixin<LowerConstantIntrinsicsPass> {
 public:
   explicit LowerConstantIntrinsicsPass() = default;

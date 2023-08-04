@@ -13,7 +13,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-struct StructurizeCFGPass : PassInfoMixin<StructurizeCFGPass> {
+struct LLVM_CLASS_ABI StructurizeCFGPass : PassInfoMixin<StructurizeCFGPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 } // namespace llvm

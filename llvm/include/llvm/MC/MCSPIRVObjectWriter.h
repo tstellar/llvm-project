@@ -16,7 +16,7 @@
 
 namespace llvm {
 
-class MCSPIRVObjectTargetWriter : public MCObjectTargetWriter {
+class LLVM_CLASS_ABI MCSPIRVObjectTargetWriter : public MCObjectTargetWriter {
 protected:
   explicit MCSPIRVObjectTargetWriter() {}
 
@@ -32,7 +32,7 @@ public:
 /// \param MOTW - The target specific SPIR-V writer subclass.
 /// \param OS - The stream to write to.
 /// \returns The constructed object writer.
-std::unique_ptr<MCObjectWriter>
+LLVM_FUNC_ABI std::unique_ptr<MCObjectWriter>
 createSPIRVObjectWriter(std::unique_ptr<MCSPIRVObjectTargetWriter> MOTW,
                         raw_pwrite_stream &OS);
 

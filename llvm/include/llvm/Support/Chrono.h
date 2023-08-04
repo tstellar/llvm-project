@@ -57,7 +57,7 @@ toTimePoint(std::time_t T, uint32_t nsec) {
 
 } // namespace sys
 
-raw_ostream &operator<<(raw_ostream &OS, sys::TimePoint<> TP);
+LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, sys::TimePoint<> TP);
 
 /// Format provider for TimePoint<>
 ///
@@ -68,21 +68,21 @@ raw_ostream &operator<<(raw_ostream &OS, sys::TimePoint<> TP);
 ///
 /// If no options are given, the default format is "%Y-%m-%d %H:%M:%S.%N".
 template <>
-struct format_provider<sys::TimePoint<>> {
+struct LLVM_CLASS_ABI format_provider<sys::TimePoint<>> {
   static void format(const sys::TimePoint<> &TP, llvm::raw_ostream &OS,
                      StringRef Style);
 };
 
 namespace detail {
-template <typename Period> struct unit { static const char value[]; };
+template <typename Period> struct LLVM_CLASS_ABI unit { static const char value[]; };
 template <typename Period> const char unit<Period>::value[] = "";
 
-template <> struct unit<std::ratio<3600>> { static const char value[]; };
-template <> struct unit<std::ratio<60>> { static const char value[]; };
-template <> struct unit<std::ratio<1>> { static const char value[]; };
-template <> struct unit<std::milli> { static const char value[]; };
-template <> struct unit<std::micro> { static const char value[]; };
-template <> struct unit<std::nano> { static const char value[]; };
+template <> struct LLVM_CLASS_ABI unit<std::ratio<3600>> { static const char value[]; };
+template <> struct LLVM_CLASS_ABI unit<std::ratio<60>> { static const char value[]; };
+template <> struct LLVM_CLASS_ABI unit<std::ratio<1>> { static const char value[]; };
+template <> struct LLVM_CLASS_ABI unit<std::milli> { static const char value[]; };
+template <> struct LLVM_CLASS_ABI unit<std::micro> { static const char value[]; };
+template <> struct LLVM_CLASS_ABI unit<std::nano> { static const char value[]; };
 } // namespace detail
 
 /// Implementation of format_provider<T> for duration types.
@@ -110,7 +110,7 @@ template <> struct unit<std::nano> { static const char value[]; };
 ///  display unit or you request that the unit is not displayed.
 
 template <typename Rep, typename Period>
-struct format_provider<std::chrono::duration<Rep, Period>> {
+struct LLVM_CLASS_ABI format_provider<std::chrono::duration<Rep, Period>> {
 private:
   typedef std::chrono::duration<Rep, Period> Dur;
   typedef std::conditional_t<std::chrono::treat_as_floating_point<Rep>::value,

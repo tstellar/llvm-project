@@ -31,7 +31,7 @@ namespace llvm {
   /// getDefaultMaxUsesToExploreForCaptureTracking - Return default value of
   /// the maximal number of uses to explore before giving up. It is used by
   /// PointerMayBeCaptured family analysis.
-  unsigned getDefaultMaxUsesToExploreForCaptureTracking();
+  LLVM_FUNC_ABI unsigned getDefaultMaxUsesToExploreForCaptureTracking();
 
   /// PointerMayBeCaptured - Return true if this pointer value may be captured
   /// by the enclosing function (which is required to exist).  This routine can
@@ -43,12 +43,12 @@ namespace llvm {
   /// MaxUsesToExplore specifies how many uses the analysis should explore for
   /// one value before giving up due too "too many uses". If MaxUsesToExplore
   /// is zero, a default value is assumed.
-  bool PointerMayBeCaptured(const Value *V, bool ReturnCaptures,
+  LLVM_FUNC_ABI bool PointerMayBeCaptured(const Value *V, bool ReturnCaptures,
                             bool StoreCaptures, unsigned MaxUsesToExplore = 0);
 
   /// Variant of the above function which accepts a set of Values that are
   /// ephemeral and cannot cause pointers to escape.
-  bool PointerMayBeCaptured(const Value *V, bool ReturnCaptures,
+  LLVM_FUNC_ABI bool PointerMayBeCaptured(const Value *V, bool ReturnCaptures,
                             bool StoreCaptures,
                             const SmallPtrSetImpl<const Value *> &EphValues,
                             unsigned MaxUsesToExplore = 0);
@@ -66,7 +66,7 @@ namespace llvm {
   /// MaxUsesToExplore specifies how many uses the analysis should explore for
   /// one value before giving up due too "too many uses". If MaxUsesToExplore
   /// is zero, a default value is assumed.
-  bool PointerMayBeCapturedBefore(const Value *V, bool ReturnCaptures,
+  LLVM_FUNC_ABI bool PointerMayBeCapturedBefore(const Value *V, bool ReturnCaptures,
                                   bool StoreCaptures, const Instruction *I,
                                   const DominatorTree *DT,
                                   bool IncludeI = false,
@@ -81,7 +81,7 @@ namespace llvm {
   // nullptr is returned. Note that the caller of the function has to ensure
   // that the instruction the result value is compared against is not in a
   // cycle.
-  Instruction *
+  LLVM_FUNC_ABI Instruction *
   FindEarliestCapture(const Value *V, Function &F, bool ReturnCaptures,
                       bool StoreCaptures, const DominatorTree &DT,
                       const SmallPtrSetImpl<const Value *> &EphValues,
@@ -90,7 +90,7 @@ namespace llvm {
   /// This callback is used in conjunction with PointerMayBeCaptured. In
   /// addition to the interface here, you'll need to provide your own getters
   /// to see whether anything was captured.
-  struct CaptureTracker {
+  struct LLVM_CLASS_ABI CaptureTracker {
     virtual ~CaptureTracker();
 
     /// tooManyUses - The depth of traversal has breached a limit. There may be
@@ -128,7 +128,7 @@ namespace llvm {
   /// passthrough such that the uses of the user or \p U should be inspected.
   /// The \p IsDereferenceableOrNull callback is used to rule out capturing for
   /// certain comparisons.
-  UseCaptureKind
+  LLVM_FUNC_ABI UseCaptureKind
   DetermineUseCaptureKind(const Use &U,
                           llvm::function_ref<bool(Value *, const DataLayout &)>
                               IsDereferenceableOrNull);
@@ -139,12 +139,12 @@ namespace llvm {
   /// MaxUsesToExplore specifies how many uses the analysis should explore for
   /// one value before giving up due too "too many uses". If MaxUsesToExplore
   /// is zero, a default value is assumed.
-  void PointerMayBeCaptured(const Value *V, CaptureTracker *Tracker,
+  LLVM_FUNC_ABI void PointerMayBeCaptured(const Value *V, CaptureTracker *Tracker,
                             unsigned MaxUsesToExplore = 0);
 
   /// Returns true if the pointer is to a function-local object that never
   /// escapes from the function.
-  bool isNonEscapingLocalObject(
+  LLVM_FUNC_ABI bool isNonEscapingLocalObject(
       const Value *V,
       SmallDenseMap<const Value *, bool, 8> *IsCapturedCache = nullptr);
 } // end namespace llvm

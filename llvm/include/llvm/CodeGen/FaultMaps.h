@@ -19,7 +19,7 @@ namespace llvm {
 class AsmPrinter;
 class MCExpr;
 
-class FaultMaps {
+class LLVM_CLASS_ABI FaultMaps {
 public:
   enum FaultKind {
     FaultingLoad = 1,

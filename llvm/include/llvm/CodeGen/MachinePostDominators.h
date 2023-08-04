@@ -25,7 +25,7 @@ namespace llvm {
 /// MachinePostDominatorTree - an analysis pass wrapper for DominatorTree
 /// used to compute the post-dominator tree for MachineFunctions.
 ///
-class MachinePostDominatorTree : public MachineFunctionPass {
+class LLVM_CLASS_ABI MachinePostDominatorTree : public MachineFunctionPass {
   using PostDomTreeT = PostDomTreeBase<MachineBasicBlock>;
   std::unique_ptr<PostDomTreeT> PDT;
 

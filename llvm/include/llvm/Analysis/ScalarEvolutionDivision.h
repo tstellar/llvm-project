@@ -24,7 +24,7 @@ class ScalarEvolution;
 
 struct SCEVCouldNotCompute;
 
-struct SCEVDivision : public SCEVVisitor<SCEVDivision, void> {
+struct LLVM_CLASS_ABI SCEVDivision : public SCEVVisitor<SCEVDivision, void> {
 public:
   // Computes the Quotient and Remainder of the division of Numerator by
   // Denominator.

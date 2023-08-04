@@ -35,34 +35,34 @@ namespace memtag {
 // Returns whether Ends covered all possible exits. If they did not,
 // the caller should remove Ends to ensure that work done at the other
 // exits does not happen outside of the lifetime.
-bool forAllReachableExits(const DominatorTree &DT, const PostDominatorTree &PDT,
+LLVM_FUNC_ABI bool forAllReachableExits(const DominatorTree &DT, const PostDominatorTree &PDT,
                           const LoopInfo &LI, const Instruction *Start,
                           const SmallVectorImpl<IntrinsicInst *> &Ends,
                           const SmallVectorImpl<Instruction *> &RetVec,
                           llvm::function_ref<void(Instruction *)> Callback);
 
-bool isStandardLifetime(const SmallVectorImpl<IntrinsicInst *> &LifetimeStart,
+LLVM_FUNC_ABI bool isStandardLifetime(const SmallVectorImpl<IntrinsicInst *> &LifetimeStart,
                         const SmallVectorImpl<IntrinsicInst *> &LifetimeEnd,
                         const DominatorTree *DT, const LoopInfo *LI,
                         size_t MaxLifetimes);
 
-Instruction *getUntagLocationIfFunctionExit(Instruction &Inst);
+LLVM_FUNC_ABI Instruction *getUntagLocationIfFunctionExit(Instruction &Inst);
 
-struct AllocaInfo {
+struct LLVM_CLASS_ABI AllocaInfo {
   AllocaInst *AI;
   SmallVector<IntrinsicInst *, 2> LifetimeStart;
   SmallVector<IntrinsicInst *, 2> LifetimeEnd;
   SmallVector<DbgVariableIntrinsic *, 2> DbgVariableIntrinsics;
 };
 
-struct StackInfo {
+struct LLVM_CLASS_ABI StackInfo {
   MapVector<AllocaInst *, AllocaInfo> AllocasToInstrument;
   SmallVector<Instruction *, 4> UnrecognizedLifetimes;
   SmallVector<Instruction *, 8> RetVec;
   bool CallsReturnTwice = false;
 };
 
-class StackInfoBuilder {
+class LLVM_CLASS_ABI StackInfoBuilder {
 public:
   StackInfoBuilder(const StackSafetyGlobalInfo *SSI) : SSI(SSI) {}
 
@@ -75,8 +75,8 @@ private:
   const StackSafetyGlobalInfo *SSI;
 };
 
-uint64_t getAllocaSizeInBytes(const AllocaInst &AI);
-void alignAndPadAlloca(memtag::AllocaInfo &Info, llvm::Align Align);
+LLVM_FUNC_ABI uint64_t getAllocaSizeInBytes(const AllocaInst &AI);
+LLVM_FUNC_ABI void alignAndPadAlloca(memtag::AllocaInfo &Info, llvm::Align Align);
 
 } // namespace memtag
 } // namespace llvm

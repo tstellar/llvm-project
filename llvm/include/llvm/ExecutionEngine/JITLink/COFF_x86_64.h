@@ -24,15 +24,15 @@ namespace jitlink {
 /// Note: The graph does not take ownership of the underlying buffer, nor copy
 /// its contents. The caller is responsible for ensuring that the object buffer
 /// outlives the graph.
-Expected<std::unique_ptr<LinkGraph>>
+LLVM_FUNC_ABI Expected<std::unique_ptr<LinkGraph>>
 createLinkGraphFromCOFFObject_x86_64(MemoryBufferRef ObjectBuffer);
 
 /// jit-link the given object buffer, which must be a COFF x86-64 object file.
-void link_COFF_x86_64(std::unique_ptr<LinkGraph> G,
+LLVM_FUNC_ABI void link_COFF_x86_64(std::unique_ptr<LinkGraph> G,
                       std::unique_ptr<JITLinkContext> Ctx);
 
 /// Return the string name of the given COFF x86-64 edge kind.
-const char *getCOFFX86RelocationKindName(Edge::Kind R);
+LLVM_FUNC_ABI const char *getCOFFX86RelocationKindName(Edge::Kind R);
 } // end namespace jitlink
 } // end namespace llvm
 

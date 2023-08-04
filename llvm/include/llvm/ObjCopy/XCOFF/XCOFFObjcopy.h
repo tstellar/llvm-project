@@ -27,7 +27,7 @@ namespace xcoff {
 /// Apply the transformations described by \p Config and \p XCOFFConfig
 /// to \p In and writes the result into \p Out.
 /// \returns any Error encountered whilst performing the operation.
-Error executeObjcopyOnBinary(const CommonConfig &Config, const XCOFFConfig &,
+LLVM_FUNC_ABI Error executeObjcopyOnBinary(const CommonConfig &Config, const XCOFFConfig &,
                              object::XCOFFObjectFile &In, raw_ostream &Out);
 
 } // end namespace xcoff

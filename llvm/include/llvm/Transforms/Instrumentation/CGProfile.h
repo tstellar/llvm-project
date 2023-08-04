@@ -17,7 +17,7 @@
 
 namespace llvm {
 class Module;
-class CGProfilePass : public PassInfoMixin<CGProfilePass> {
+class LLVM_CLASS_ABI CGProfilePass : public PassInfoMixin<CGProfilePass> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
 };

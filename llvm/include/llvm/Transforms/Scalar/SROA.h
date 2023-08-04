@@ -41,14 +41,14 @@ class Use;
 
 /// A private "module" namespace for types and utilities used by SROA. These
 /// are implementation details and should not be used by clients.
-namespace LLVM_LIBRARY_VISIBILITY sroa {
+namespace sroa LLVM_LIBRARY_VISIBILITY {
 
 class AllocaSliceRewriter;
 class AllocaSlices;
 class Partition;
 class SROALegacyPass;
 
-class SelectHandSpeculativity {
+class LLVM_CLASS_ABI SelectHandSpeculativity {
   unsigned char Storage = 0; // None are speculatable by default.
   using TrueVal = Bitfield::Element<bool, 0, 1>;  // Low 0'th bit.
   using FalseVal = Bitfield::Element<bool, 1, 1>; // Low 1'th bit.
@@ -94,7 +94,7 @@ enum class SROAOptions : bool { ModifyCFG, PreserveCFG };
 ///    onto insert and extract operations on a vector value, and convert them to
 ///    this form. By doing so, it will enable promotion of vector aggregates to
 ///    SSA vector values.
-class SROAPass : public PassInfoMixin<SROAPass> {
+class LLVM_CLASS_ABI SROAPass : public PassInfoMixin<SROAPass> {
   LLVMContext *C = nullptr;
   DomTreeUpdater *DTU = nullptr;
   AssumptionCache *AC = nullptr;

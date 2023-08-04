@@ -24,7 +24,7 @@ namespace llvm {
 class MCSymbol;
 
 /// This represents a section on Windows
-class MCSectionCOFF final : public MCSection {
+class LLVM_CLASS_ABI MCSectionCOFF final : public MCSection {
   // FIXME: The following fields should not be mutable, but are for now so the
   // asm parser can honor the .linkonce directive.
 

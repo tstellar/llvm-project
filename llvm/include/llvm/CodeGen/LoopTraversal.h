@@ -63,7 +63,7 @@ class MachineFunction;
 ///
 /// In the optimized approach we avoid processing D twice, because we
 /// can entirely process the predecessors before getting to D.
-class LoopTraversal {
+class LLVM_CLASS_ABI LoopTraversal {
 private:
   struct MBBInfo {
     /// Whether we have gotten to this block in primary processing yet.

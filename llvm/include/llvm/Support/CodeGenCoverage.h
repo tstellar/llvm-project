@@ -17,7 +17,7 @@
 namespace llvm {
 class MemoryBuffer;
 
-class CodeGenCoverage {
+class LLVM_CLASS_ABI CodeGenCoverage {
 protected:
   BitVector RuleCoverage;
 

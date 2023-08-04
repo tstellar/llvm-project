@@ -34,7 +34,7 @@ class InterfaceFile;
 
 namespace object {
 
-class TapiFile : public SymbolicFile {
+class LLVM_CLASS_ABI TapiFile : public SymbolicFile {
 public:
   TapiFile(MemoryBufferRef Source, const MachO::InterfaceFile &Interface,
            MachO::Architecture Arch);

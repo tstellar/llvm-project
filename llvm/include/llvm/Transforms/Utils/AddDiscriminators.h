@@ -22,7 +22,7 @@ namespace llvm {
 
 class Function;
 
-class AddDiscriminatorsPass : public PassInfoMixin<AddDiscriminatorsPass> {
+class LLVM_CLASS_ABI AddDiscriminatorsPass : public PassInfoMixin<AddDiscriminatorsPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
   static bool isRequired() { return true; }

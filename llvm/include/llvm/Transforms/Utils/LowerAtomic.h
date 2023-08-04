@@ -22,16 +22,16 @@ namespace llvm {
 class IRBuilderBase;
 
 /// Convert the given Cmpxchg into primitive load and compare.
-bool lowerAtomicCmpXchgInst(AtomicCmpXchgInst *CXI);
+LLVM_FUNC_ABI bool lowerAtomicCmpXchgInst(AtomicCmpXchgInst *CXI);
 
 /// Convert the given RMWI into primitive load and stores,
 /// assuming that doing so is legal. Return true if the lowering
 /// succeeds.
-bool lowerAtomicRMWInst(AtomicRMWInst *RMWI);
+LLVM_FUNC_ABI bool lowerAtomicRMWInst(AtomicRMWInst *RMWI);
 
 /// Emit IR to implement the given atomicrmw operation on values in registers,
 /// returning the new value.
-Value *buildAtomicRMWValue(AtomicRMWInst::BinOp Op, IRBuilderBase &Builder,
+LLVM_FUNC_ABI Value *buildAtomicRMWValue(AtomicRMWInst::BinOp Op, IRBuilderBase &Builder,
                            Value *Loaded, Value *Val);
 }
 

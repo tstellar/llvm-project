@@ -84,11 +84,11 @@ namespace internal {
 //
 // This primary template is used when kDefaultConstructible is true.
 template <typename T, bool kDefaultConstructible>
-struct BuiltInDefaultValueGetter {
+struct LLVM_CLASS_ABI BuiltInDefaultValueGetter {
   static T Get() { return T(); }
 };
 template <typename T>
-struct BuiltInDefaultValueGetter<T, false> {
+struct LLVM_CLASS_ABI BuiltInDefaultValueGetter<T, false> {
   static T Get() {
     Assert(false, __FILE__, __LINE__,
            "Default action undefined for the function return type.");
@@ -106,7 +106,7 @@ struct BuiltInDefaultValueGetter<T, false> {
 // other type T, the built-in default T value is undefined, and the
 // function will abort the process.
 template <typename T>
-class BuiltInDefaultValue {
+class LLVM_CLASS_ABI BuiltInDefaultValue {
  public:
   // This function returns true if and only if type T has a built-in default
   // value.
@@ -123,7 +123,7 @@ class BuiltInDefaultValue {
 // This partial specialization says that we use the same built-in
 // default value for T and const T.
 template <typename T>
-class BuiltInDefaultValue<const T> {
+class LLVM_CLASS_ABI BuiltInDefaultValue<const T> {
  public:
   static bool Exists() { return BuiltInDefaultValue<T>::Exists(); }
   static T Get() { return BuiltInDefaultValue<T>::Get(); }
@@ -132,7 +132,7 @@ class BuiltInDefaultValue<const T> {
 // This partial specialization defines the default values for pointer
 // types.
 template <typename T>
-class BuiltInDefaultValue<T*> {
+class LLVM_CLASS_ABI BuiltInDefaultValue<T*> {
  public:
   static bool Exists() { return true; }
   static T* Get() { return nullptr; }
@@ -194,7 +194,7 @@ GMOCK_DEFINE_DEFAULT_ACTION_FOR_RETURN_TYPE_(double, 0);
 //   // Sets the default value for type T to be foo.
 //   DefaultValue<T>::Set(foo);
 template <typename T>
-class DefaultValue {
+class LLVM_CLASS_ABI DefaultValue {
  public:
   // Sets the default value for type T; requires T to be
   // copy-constructable and have a public destructor.
@@ -269,7 +269,7 @@ class DefaultValue {
 // This partial specialization allows a user to set default values for
 // reference types.
 template <typename T>
-class DefaultValue<T&> {
+class LLVM_CLASS_ABI DefaultValue<T&> {
  public:
   // Sets the default value for type T&.
   static void Set(T& x) {  // NOLINT
@@ -303,7 +303,7 @@ class DefaultValue<T&> {
 // This specialization allows DefaultValue<void>::Get() to
 // compile.
 template <>
-class DefaultValue<void> {
+class LLVM_CLASS_ABI DefaultValue<void> {
  public:
   static bool Exists() { return true; }
   static void Get() {}
@@ -319,7 +319,7 @@ T* DefaultValue<T&>::address_ = nullptr;
 
 // Implement this interface to define an action for function type F.
 template <typename F>
-class ActionInterface {
+class LLVM_CLASS_ABI ActionInterface {
  public:
   typedef typename internal::Function<F>::Result Result;
   typedef typename internal::Function<F>::ArgumentTuple ArgumentTuple;
@@ -345,7 +345,7 @@ class ActionInterface {
 // concrete action (including its current state), and an Action<F>
 // object as a handle to it.
 template <typename F>
-class Action {
+class LLVM_CLASS_ABI Action {
   // Adapter class to allow constructing Action from a legacy ActionInterface.
   // New code should create Actions from functors instead.
   struct ActionAdapter {
@@ -431,7 +431,7 @@ class Action {
 // the definition of Return(void) and SetArgumentPointee<N>(value) for
 // complete examples.
 template <typename Impl>
-class PolymorphicAction {
+class LLVM_CLASS_ABI PolymorphicAction {
  public:
   explicit PolymorphicAction(const Impl& impl) : impl_(impl) {}
 
@@ -488,7 +488,7 @@ namespace internal {
 // Helper struct to specialize ReturnAction to execute a move instead of a copy
 // on return. Useful for move-only types, but could be used on any type.
 template <typename T>
-struct ByMoveWrapper {
+struct LLVM_CLASS_ABI ByMoveWrapper {
   explicit ByMoveWrapper(T value) : payload(std::move(value)) {}
   T payload;
 };
@@ -521,7 +521,7 @@ struct ByMoveWrapper {
 // of gtl::Container() is passed into Return.
 //
 template <typename R>
-class ReturnAction {
+class LLVM_CLASS_ABI ReturnAction {
  public:
   // Constructs a ReturnAction object from the value to be returned.
   // 'value' is passed by value instead of by const reference in order
@@ -612,7 +612,7 @@ class ReturnAction {
 };
 
 // Implements the ReturnNull() action.
-class ReturnNullAction {
+class LLVM_CLASS_ABI ReturnNullAction {
  public:
   // Allows ReturnNull() to be used in any pointer-returning function. In C++11
   // this is enforced by returning nullptr, and in non-C++11 by asserting a
@@ -624,7 +624,7 @@ class ReturnNullAction {
 };
 
 // Implements the Return() action.
-class ReturnVoidAction {
+class LLVM_CLASS_ABI ReturnVoidAction {
  public:
   // Allows Return() to be used in any void-returning function.
   template <typename Result, typename ArgumentTuple>
@@ -637,7 +637,7 @@ class ReturnVoidAction {
 // in any function that returns a reference to the type of x,
 // regardless of the argument types.
 template <typename T>
-class ReturnRefAction {
+class LLVM_CLASS_ABI ReturnRefAction {
  public:
   // Constructs a ReturnRefAction object from the reference to be returned.
   explicit ReturnRefAction(T& ref) : ref_(ref) {}  // NOLINT
@@ -682,7 +682,7 @@ class ReturnRefAction {
 // used in any function that returns a reference to the type of x,
 // regardless of the argument types.
 template <typename T>
-class ReturnRefOfCopyAction {
+class LLVM_CLASS_ABI ReturnRefOfCopyAction {
  public:
   // Constructs a ReturnRefOfCopyAction object from the reference to
   // be returned.
@@ -726,7 +726,7 @@ class ReturnRefOfCopyAction {
 };
 
 // Implements the polymorphic DoDefault() action.
-class DoDefaultAction {
+class LLVM_CLASS_ABI DoDefaultAction {
  public:
   // This template type conversion operator allows DoDefault() to be
   // used in any function.
@@ -737,7 +737,7 @@ class DoDefaultAction {
 // Implements the Assign action to set a given pointer referent to a
 // particular value.
 template <typename T1, typename T2>
-class AssignAction {
+class LLVM_CLASS_ABI AssignAction {
  public:
   AssignAction(T1* ptr, T2 value) : ptr_(ptr), value_(value) {}
 
@@ -758,7 +758,7 @@ class AssignAction {
 // Implements the SetErrnoAndReturn action to simulate return from
 // various system calls and libc functions.
 template <typename T>
-class SetErrnoAndReturnAction {
+class LLVM_CLASS_ABI SetErrnoAndReturnAction {
  public:
   SetErrnoAndReturnAction(int errno_value, T result)
       : errno_(errno_value),
@@ -781,7 +781,7 @@ class SetErrnoAndReturnAction {
 // Implements the SetArgumentPointee<N>(x) action for any function
 // whose N-th argument (0-based) is a pointer to x's type.
 template <size_t N, typename A, typename = void>
-struct SetArgumentPointeeAction {
+struct LLVM_CLASS_ABI SetArgumentPointeeAction {
   A value;
 
   template <typename... Args>
@@ -792,7 +792,7 @@ struct SetArgumentPointeeAction {
 
 // Implements the Invoke(object_ptr, &Class::Method) action.
 template <class Class, typename MethodPtr>
-struct InvokeMethodAction {
+struct LLVM_CLASS_ABI InvokeMethodAction {
   Class* const obj_ptr;
   const MethodPtr method_ptr;
 
@@ -808,7 +808,7 @@ struct InvokeMethodAction {
 // function pointer or a functor.  InvokeWithoutArgs(f) can be used as an
 // Action<F> as long as f's type is compatible with F.
 template <typename FunctionImpl>
-struct InvokeWithoutArgsAction {
+struct LLVM_CLASS_ABI InvokeWithoutArgsAction {
   FunctionImpl function_impl;
 
   // Allows InvokeWithoutArgs(f) to be used as any action whose type is
@@ -821,7 +821,7 @@ struct InvokeWithoutArgsAction {
 
 // Implements the InvokeWithoutArgs(object_ptr, &Class::Method) action.
 template <class Class, typename MethodPtr>
-struct InvokeMethodWithoutArgsAction {
+struct LLVM_CLASS_ABI InvokeMethodWithoutArgsAction {
   Class* const obj_ptr;
   const MethodPtr method_ptr;
 
@@ -836,7 +836,7 @@ struct InvokeMethodWithoutArgsAction {
 
 // Implements the IgnoreResult(action) action.
 template <typename A>
-class IgnoreResultAction {
+class LLVM_CLASS_ABI IgnoreResultAction {
  public:
   explicit IgnoreResultAction(const A& action) : action_(action) {}
 
@@ -889,7 +889,7 @@ class IgnoreResultAction {
 };
 
 template <typename InnerAction, size_t... I>
-struct WithArgsAction {
+struct LLVM_CLASS_ABI WithArgsAction {
   InnerAction action;
 
   // The inner action could be anything convertible to Action<X>.
@@ -907,7 +907,7 @@ struct WithArgsAction {
 };
 
 template <typename... Actions>
-struct DoAllAction {
+struct LLVM_CLASS_ABI DoAllAction {
  private:
   template <typename... Args, size_t... I>
   std::vector<Action<void(Args...)>> Convert(IndexSequence<I...>) const {
@@ -919,7 +919,7 @@ struct DoAllAction {
 
   template <typename R, typename... Args>
   operator Action<R(Args...)>() const {  // NOLINT
-    struct Op {
+    struct LLVM_CLASS_ABI Op {
       std::vector<Action<void(Args...)>> converted;
       Action<R(Args...)> last;
       R operator()(Args... args) const {

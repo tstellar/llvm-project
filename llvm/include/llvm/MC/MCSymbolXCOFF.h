@@ -17,7 +17,7 @@ namespace llvm {
 
 class MCSectionXCOFF;
 
-class MCSymbolXCOFF : public MCSymbol {
+class LLVM_CLASS_ABI MCSymbolXCOFF : public MCSymbol {
 public:
   MCSymbolXCOFF(const StringMapEntry<bool> *Name, bool isTemporary)
       : MCSymbol(SymbolKindXCOFF, Name, isTemporary) {}

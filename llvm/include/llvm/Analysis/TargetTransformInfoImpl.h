@@ -32,7 +32,7 @@ class Function;
 
 /// Base class for use as a mix-in that aids implementing
 /// a TargetTransformInfo-compatible class.
-class TargetTransformInfoImplBase {
+class LLVM_CLASS_ABI TargetTransformInfoImplBase {
 protected:
   typedef TargetTransformInfo TTI;
 
@@ -977,7 +977,7 @@ protected:
 /// CRTP base class for use as a mix-in that aids implementing
 /// a TargetTransformInfo-compatible class.
 template <typename T>
-class TargetTransformInfoImplCRTPBase : public TargetTransformInfoImplBase {
+class LLVM_CLASS_ABI TargetTransformInfoImplCRTPBase : public TargetTransformInfoImplBase {
 private:
   typedef TargetTransformInfoImplBase BaseT;
 

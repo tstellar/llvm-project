@@ -32,7 +32,7 @@ namespace yaml {
 
 /// A wrapper around std::string which contains a source range that's being
 /// set during parsing.
-struct StringValue {
+struct LLVM_CLASS_ABI StringValue {
   std::string Value;
   SMRange SourceRange;
 
@@ -45,7 +45,7 @@ struct StringValue {
   }
 };
 
-template <> struct ScalarTraits<StringValue> {
+template <> struct LLVM_CLASS_ABI ScalarTraits<StringValue> {
   static void output(const StringValue &S, void *, raw_ostream &OS) {
     OS << S.Value;
   }
@@ -61,12 +61,12 @@ template <> struct ScalarTraits<StringValue> {
   static QuotingType mustQuote(StringRef S) { return needsQuotes(S); }
 };
 
-struct FlowStringValue : StringValue {
+struct LLVM_CLASS_ABI FlowStringValue : StringValue {
   FlowStringValue() = default;
   FlowStringValue(std::string Value) : StringValue(std::move(Value)) {}
 };
 
-template <> struct ScalarTraits<FlowStringValue> {
+template <> struct LLVM_CLASS_ABI ScalarTraits<FlowStringValue> {
   static void output(const FlowStringValue &S, void *, raw_ostream &OS) {
     return ScalarTraits<StringValue>::output(S, nullptr, OS);
   }
@@ -78,7 +78,7 @@ template <> struct ScalarTraits<FlowStringValue> {
   static QuotingType mustQuote(StringRef S) { return needsQuotes(S); }
 };
 
-struct BlockStringValue {
+struct LLVM_CLASS_ABI BlockStringValue {
   StringValue Value;
 
   bool operator==(const BlockStringValue &Other) const {
@@ -86,7 +86,7 @@ struct BlockStringValue {
   }
 };
 
-template <> struct BlockScalarTraits<BlockStringValue> {
+template <> struct LLVM_CLASS_ABI BlockScalarTraits<BlockStringValue> {
   static void output(const BlockStringValue &S, void *Ctx, raw_ostream &OS) {
     return ScalarTraits<StringValue>::output(S.Value, Ctx, OS);
   }
@@ -98,7 +98,7 @@ template <> struct BlockScalarTraits<BlockStringValue> {
 
 /// A wrapper around unsigned which contains a source range that's being set
 /// during parsing.
-struct UnsignedValue {
+struct LLVM_CLASS_ABI UnsignedValue {
   unsigned Value = 0;
   SMRange SourceRange;
 
@@ -110,7 +110,7 @@ struct UnsignedValue {
   }
 };
 
-template <> struct ScalarTraits<UnsignedValue> {
+template <> struct LLVM_CLASS_ABI ScalarTraits<UnsignedValue> {
   static void output(const UnsignedValue &Value, void *Ctx, raw_ostream &OS) {
     return ScalarTraits<unsigned>::output(Value.Value, Ctx, OS);
   }
@@ -127,7 +127,7 @@ template <> struct ScalarTraits<UnsignedValue> {
   }
 };
 
-template <> struct ScalarEnumerationTraits<MachineJumpTableInfo::JTEntryKind> {
+template <> struct LLVM_CLASS_ABI ScalarEnumerationTraits<MachineJumpTableInfo::JTEntryKind> {
   static void enumeration(yaml::IO &IO,
                           MachineJumpTableInfo::JTEntryKind &EntryKind) {
     IO.enumCase(EntryKind, "block-address",
@@ -143,7 +143,7 @@ template <> struct ScalarEnumerationTraits<MachineJumpTableInfo::JTEntryKind> {
   }
 };
 
-template <> struct ScalarTraits<MaybeAlign> {
+template <> struct LLVM_CLASS_ABI ScalarTraits<MaybeAlign> {
   static void output(const MaybeAlign &Alignment, void *,
                      llvm::raw_ostream &out) {
     out << uint64_t(Alignment ? Alignment->value() : 0U);
@@ -160,7 +160,7 @@ template <> struct ScalarTraits<MaybeAlign> {
   static QuotingType mustQuote(StringRef) { return QuotingType::None; }
 };
 
-template <> struct ScalarTraits<Align> {
+template <> struct LLVM_CLASS_ABI ScalarTraits<Align> {
   static void output(const Align &Alignment, void *, llvm::raw_ostream &OS) {
     OS << Alignment.value();
   }
@@ -186,7 +186,7 @@ LLVM_YAML_IS_FLOW_SEQUENCE_VECTOR(llvm::yaml::UnsignedValue)
 namespace llvm {
 namespace yaml {
 
-struct VirtualRegisterDefinition {
+struct LLVM_CLASS_ABI VirtualRegisterDefinition {
   UnsignedValue ID;
   StringValue Class;
   StringValue PreferredRegister;
@@ -199,7 +199,7 @@ struct VirtualRegisterDefinition {
   }
 };
 
-template <> struct MappingTraits<VirtualRegisterDefinition> {
+template <> struct LLVM_CLASS_ABI MappingTraits<VirtualRegisterDefinition> {
   static void mapping(IO &YamlIO, VirtualRegisterDefinition &Reg) {
     YamlIO.mapRequired("id", Reg.ID);
     YamlIO.mapRequired("class", Reg.Class);
@@ -210,7 +210,7 @@ template <> struct MappingTraits<VirtualRegisterDefinition> {
   static const bool flow = true;
 };
 
-struct MachineFunctionLiveIn {
+struct LLVM_CLASS_ABI MachineFunctionLiveIn {
   StringValue Register;
   StringValue VirtualRegister;
 
@@ -220,7 +220,7 @@ struct MachineFunctionLiveIn {
   }
 };
 
-template <> struct MappingTraits<MachineFunctionLiveIn> {
+template <> struct LLVM_CLASS_ABI MappingTraits<MachineFunctionLiveIn> {
   static void mapping(IO &YamlIO, MachineFunctionLiveIn &LiveIn) {
     YamlIO.mapRequired("reg", LiveIn.Register);
     YamlIO.mapOptional(
@@ -238,7 +238,7 @@ template <> struct MappingTraits<MachineFunctionLiveIn> {
 /// Dead stack objects aren't serialized.
 ///
 /// The 'isPreallocated' flag is determined by the local offset.
-struct MachineStackObject {
+struct LLVM_CLASS_ABI MachineStackObject {
   enum ObjectType { DefaultType, SpillSlot, VariableSized };
   UnsignedValue ID;
   StringValue Name;
@@ -267,7 +267,7 @@ struct MachineStackObject {
   }
 };
 
-template <> struct ScalarEnumerationTraits<MachineStackObject::ObjectType> {
+template <> struct LLVM_CLASS_ABI ScalarEnumerationTraits<MachineStackObject::ObjectType> {
   static void enumeration(yaml::IO &IO, MachineStackObject::ObjectType &Type) {
     IO.enumCase(Type, "default", MachineStackObject::DefaultType);
     IO.enumCase(Type, "spill-slot", MachineStackObject::SpillSlot);
@@ -275,7 +275,7 @@ template <> struct ScalarEnumerationTraits<MachineStackObject::ObjectType> {
   }
 };
 
-template <> struct MappingTraits<MachineStackObject> {
+template <> struct LLVM_CLASS_ABI MappingTraits<MachineStackObject> {
   static void mapping(yaml::IO &YamlIO, MachineStackObject &Object) {
     YamlIO.mapRequired("id", Object.ID);
     YamlIO.mapOptional("name", Object.Name,
@@ -307,7 +307,7 @@ template <> struct MappingTraits<MachineStackObject> {
 
 /// Serializable representation of the MCRegister variant of
 /// MachineFunction::VariableDbgInfo.
-struct EntryValueObject {
+struct LLVM_CLASS_ABI EntryValueObject {
   StringValue EntryValueRegister;
   StringValue DebugVar;
   StringValue DebugExpr;
@@ -319,7 +319,7 @@ struct EntryValueObject {
   }
 };
 
-template <> struct MappingTraits<EntryValueObject> {
+template <> struct LLVM_CLASS_ABI MappingTraits<EntryValueObject> {
   static void mapping(yaml::IO &YamlIO, EntryValueObject &Object) {
     YamlIO.mapRequired("entry-value-register", Object.EntryValueRegister);
     YamlIO.mapRequired("debug-info-variable", Object.DebugVar);
@@ -331,7 +331,7 @@ template <> struct MappingTraits<EntryValueObject> {
 
 /// Serializable representation of the fixed stack object from the
 /// MachineFrameInfo class.
-struct FixedMachineStackObject {
+struct LLVM_CLASS_ABI FixedMachineStackObject {
   enum ObjectType { DefaultType, SpillSlot };
   UnsignedValue ID;
   ObjectType Type = DefaultType;
@@ -360,7 +360,7 @@ struct FixedMachineStackObject {
 };
 
 template <>
-struct ScalarEnumerationTraits<FixedMachineStackObject::ObjectType> {
+struct LLVM_CLASS_ABI ScalarEnumerationTraits<FixedMachineStackObject::ObjectType> {
   static void enumeration(yaml::IO &IO,
                           FixedMachineStackObject::ObjectType &Type) {
     IO.enumCase(Type, "default", FixedMachineStackObject::DefaultType);
@@ -369,7 +369,7 @@ struct ScalarEnumerationTraits<FixedMachineStackObject::ObjectType> {
 };
 
 template <>
-struct ScalarEnumerationTraits<TargetStackID::Value> {
+struct LLVM_CLASS_ABI ScalarEnumerationTraits<TargetStackID::Value> {
   static void enumeration(yaml::IO &IO, TargetStackID::Value &ID) {
     IO.enumCase(ID, "default", TargetStackID::Default);
     IO.enumCase(ID, "sgpr-spill", TargetStackID::SGPRSpill);
@@ -379,7 +379,7 @@ struct ScalarEnumerationTraits<TargetStackID::Value> {
   }
 };
 
-template <> struct MappingTraits<FixedMachineStackObject> {
+template <> struct LLVM_CLASS_ABI MappingTraits<FixedMachineStackObject> {
   static void mapping(yaml::IO &YamlIO, FixedMachineStackObject &Object) {
     YamlIO.mapRequired("id", Object.ID);
     YamlIO.mapOptional(
@@ -410,7 +410,7 @@ template <> struct MappingTraits<FixedMachineStackObject> {
 
 /// A serializaable representation of a reference to a stack object or fixed
 /// stack object.
-struct FrameIndex {
+struct LLVM_CLASS_ABI FrameIndex {
   // The frame index as printed. This is always a positive number, even for
   // fixed objects. To obtain the real index,
   // MachineFrameInfo::getObjectIndexBegin has to be added.
@@ -424,7 +424,7 @@ struct FrameIndex {
   Expected<int> getFI(const llvm::MachineFrameInfo &MFI) const;
 };
 
-template <> struct ScalarTraits<FrameIndex> {
+template <> struct LLVM_CLASS_ABI ScalarTraits<FrameIndex> {
   static void output(const FrameIndex &FI, void *, raw_ostream &OS) {
     MachineOperand::printStackObjectReference(OS, FI.FI, FI.IsFixed, "");
   }
@@ -454,7 +454,7 @@ template <> struct ScalarTraits<FrameIndex> {
 };
 
 /// Serializable representation of CallSiteInfo.
-struct CallSiteInfo {
+struct LLVM_CLASS_ABI CallSiteInfo {
   // Representation of call argument and register which is used to
   // transfer it.
   struct ArgRegPair {
@@ -485,7 +485,7 @@ struct CallSiteInfo {
   }
 };
 
-template <> struct MappingTraits<CallSiteInfo::ArgRegPair> {
+template <> struct LLVM_CLASS_ABI MappingTraits<CallSiteInfo::ArgRegPair> {
   static void mapping(IO &YamlIO, CallSiteInfo::ArgRegPair &ArgReg) {
     YamlIO.mapRequired("arg", ArgReg.ArgNo);
     YamlIO.mapRequired("reg", ArgReg.Reg);
@@ -501,7 +501,7 @@ LLVM_YAML_IS_SEQUENCE_VECTOR(llvm::yaml::CallSiteInfo::ArgRegPair)
 namespace llvm {
 namespace yaml {
 
-template <> struct MappingTraits<CallSiteInfo> {
+template <> struct LLVM_CLASS_ABI MappingTraits<CallSiteInfo> {
   static void mapping(IO &YamlIO, CallSiteInfo &CSInfo) {
     YamlIO.mapRequired("bb", CSInfo.CallLocation.BlockNum);
     YamlIO.mapRequired("offset", CSInfo.CallLocation.Offset);
@@ -513,7 +513,7 @@ template <> struct MappingTraits<CallSiteInfo> {
 };
 
 /// Serializable representation of debug value substitutions.
-struct DebugValueSubstitution {
+struct LLVM_CLASS_ABI DebugValueSubstitution {
   unsigned SrcInst;
   unsigned SrcOp;
   unsigned DstInst;
@@ -526,7 +526,7 @@ struct DebugValueSubstitution {
   }
 };
 
-template <> struct MappingTraits<DebugValueSubstitution> {
+template <> struct LLVM_CLASS_ABI MappingTraits<DebugValueSubstitution> {
   static void mapping(IO &YamlIO, DebugValueSubstitution &Sub) {
     YamlIO.mapRequired("srcinst", Sub.SrcInst);
     YamlIO.mapRequired("srcop", Sub.SrcOp);
@@ -544,7 +544,7 @@ LLVM_YAML_IS_SEQUENCE_VECTOR(llvm::yaml::DebugValueSubstitution)
 
 namespace llvm {
 namespace yaml {
-struct MachineConstantPoolValue {
+struct LLVM_CLASS_ABI MachineConstantPoolValue {
   UnsignedValue ID;
   StringValue Value;
   MaybeAlign Alignment = std::nullopt;
@@ -557,7 +557,7 @@ struct MachineConstantPoolValue {
   }
 };
 
-template <> struct MappingTraits<MachineConstantPoolValue> {
+template <> struct LLVM_CLASS_ABI MappingTraits<MachineConstantPoolValue> {
   static void mapping(IO &YamlIO, MachineConstantPoolValue &Constant) {
     YamlIO.mapRequired("id", Constant.ID);
     YamlIO.mapOptional("value", Constant.Value, StringValue());
@@ -566,7 +566,7 @@ template <> struct MappingTraits<MachineConstantPoolValue> {
   }
 };
 
-struct MachineJumpTable {
+struct LLVM_CLASS_ABI MachineJumpTable {
   struct Entry {
     UnsignedValue ID;
     std::vector<FlowStringValue> Blocks;
@@ -584,7 +584,7 @@ struct MachineJumpTable {
   }
 };
 
-template <> struct MappingTraits<MachineJumpTable::Entry> {
+template <> struct LLVM_CLASS_ABI MappingTraits<MachineJumpTable::Entry> {
   static void mapping(IO &YamlIO, MachineJumpTable::Entry &Entry) {
     YamlIO.mapRequired("id", Entry.ID);
     YamlIO.mapOptional("blocks", Entry.Blocks, std::vector<FlowStringValue>());
@@ -606,7 +606,7 @@ LLVM_YAML_IS_SEQUENCE_VECTOR(llvm::yaml::MachineJumpTable::Entry)
 namespace llvm {
 namespace yaml {
 
-template <> struct MappingTraits<MachineJumpTable> {
+template <> struct LLVM_CLASS_ABI MappingTraits<MachineJumpTable> {
   static void mapping(IO &YamlIO, MachineJumpTable &JT) {
     YamlIO.mapRequired("kind", JT.Kind);
     YamlIO.mapOptional("entries", JT.Entries,
@@ -621,7 +621,7 @@ template <> struct MappingTraits<MachineJumpTable> {
 /// attributes.
 /// It also doesn't serialize attributes like 'NumFixedObject' and
 /// 'HasVarSizedObjects' as they are determined by the frame objects themselves.
-struct MachineFrameInfo {
+struct LLVM_CLASS_ABI MachineFrameInfo {
   bool IsFrameAddressTaken = false;
   bool IsReturnAddressTaken = false;
   bool HasStackMap = false;
@@ -666,7 +666,7 @@ struct MachineFrameInfo {
   }
 };
 
-template <> struct MappingTraits<MachineFrameInfo> {
+template <> struct LLVM_CLASS_ABI MappingTraits<MachineFrameInfo> {
   static void mapping(IO &YamlIO, MachineFrameInfo &MFI) {
     YamlIO.mapOptional("isFrameAddressTaken", MFI.IsFrameAddressTaken, false);
     YamlIO.mapOptional("isReturnAddressTaken", MFI.IsReturnAddressTaken, false);
@@ -700,19 +700,19 @@ template <> struct MappingTraits<MachineFrameInfo> {
 
 /// Targets should override this in a way that mirrors the implementation of
 /// llvm::MachineFunctionInfo.
-struct MachineFunctionInfo {
+struct LLVM_CLASS_ABI MachineFunctionInfo {
   virtual ~MachineFunctionInfo() = default;
   virtual void mappingImpl(IO &YamlIO) {}
 };
 
-template <> struct MappingTraits<std::unique_ptr<MachineFunctionInfo>> {
+template <> struct LLVM_CLASS_ABI MappingTraits<std::unique_ptr<MachineFunctionInfo>> {
   static void mapping(IO &YamlIO, std::unique_ptr<MachineFunctionInfo> &MFI) {
     if (MFI)
       MFI->mappingImpl(YamlIO);
   }
 };
 
-struct MachineFunction {
+struct LLVM_CLASS_ABI MachineFunction {
   StringRef Name;
   MaybeAlign Alignment = std::nullopt;
   bool ExposesReturnsTwice = false;
@@ -753,7 +753,7 @@ struct MachineFunction {
   BlockStringValue Body;
 };
 
-template <> struct MappingTraits<MachineFunction> {
+template <> struct LLVM_CLASS_ABI MappingTraits<MachineFunction> {
   static void mapping(IO &YamlIO, MachineFunction &MF) {
     YamlIO.mapRequired("name", MF.Name);
     YamlIO.mapOptional("alignment", MF.Alignment, std::nullopt);

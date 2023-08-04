@@ -30,7 +30,7 @@ class ScopedPrinter;
 /// DWARF 5 accelerator tables.
 /// TODO: Generalize the rest of the AppleAcceleratorTable interface and move it
 /// to this class.
-class DWARFAcceleratorTable {
+class LLVM_CLASS_ABI DWARFAcceleratorTable {
 protected:
   DWARFDataExtractor AccelSection;
   DataExtractor StringSection;
@@ -82,7 +82,7 @@ public:
 
 /// This implements the Apple accelerator table format, a precursor of the
 /// DWARF 5 accelerator table format.
-class AppleAcceleratorTable : public DWARFAcceleratorTable {
+class LLVM_CLASS_ABI AppleAcceleratorTable : public DWARFAcceleratorTable {
   struct Header {
     uint32_t Magic;
     uint16_t Version;
@@ -365,7 +365,7 @@ public:
 /// The last segment consists of a list of entries, which is a 0-terminated list
 /// referenced by the name table and interpreted with the help of the
 /// abbreviation table.
-class DWARFDebugNames : public DWARFAcceleratorTable {
+class LLVM_CLASS_ABI DWARFDebugNames : public DWARFAcceleratorTable {
 public:
   class NameIndex;
   class NameIterator;

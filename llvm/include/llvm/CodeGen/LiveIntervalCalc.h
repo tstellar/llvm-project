@@ -26,7 +26,7 @@ template <class NodeT> class DomTreeNodeBase;
 
 using MachineDomTreeNode = DomTreeNodeBase<MachineBasicBlock>;
 
-class LiveIntervalCalc : public LiveRangeCalc {
+class LLVM_CLASS_ABI LiveIntervalCalc : public LiveRangeCalc {
   /// Extend the live range of @p LR to reach all uses of Reg.
   ///
   /// If @p LR is a main range, or if @p LI is null, then all uses must be

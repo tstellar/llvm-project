@@ -23,7 +23,7 @@ namespace llvm {
 
 class Function;
 
-class LoopDistributePass : public PassInfoMixin<LoopDistributePass> {
+class LLVM_CLASS_ABI LoopDistributePass : public PassInfoMixin<LoopDistributePass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

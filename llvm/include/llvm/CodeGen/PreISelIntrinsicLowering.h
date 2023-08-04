@@ -20,7 +20,7 @@ namespace llvm {
 
 class Module;
 
-struct PreISelIntrinsicLoweringPass
+struct LLVM_CLASS_ABI PreISelIntrinsicLoweringPass
     : PassInfoMixin<PreISelIntrinsicLoweringPass> {
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
 };

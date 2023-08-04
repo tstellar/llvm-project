@@ -66,7 +66,7 @@ namespace SymbolRewriter {
 /// be rewritten or providing a (posix compatible) regular expression that will
 /// select the symbols to rewrite.  This descriptor list is passed to the
 /// SymbolRewriter pass.
-class RewriteDescriptor {
+class LLVM_CLASS_ABI RewriteDescriptor {
 public:
   enum class Type {
     Invalid,        /// invalid
@@ -92,7 +92,7 @@ private:
 
 using RewriteDescriptorList = std::list<std::unique_ptr<RewriteDescriptor>>;
 
-class RewriteMapParser {
+class LLVM_CLASS_ABI RewriteMapParser {
 public:
   bool parse(const std::string &MapFile, RewriteDescriptorList *Descriptors);
 
@@ -115,7 +115,7 @@ private:
 
 } // end namespace SymbolRewriter
 
-class RewriteSymbolPass : public PassInfoMixin<RewriteSymbolPass> {
+class LLVM_CLASS_ABI RewriteSymbolPass : public PassInfoMixin<RewriteSymbolPass> {
 public:
   RewriteSymbolPass() { loadAndParseMapFiles(); }
 

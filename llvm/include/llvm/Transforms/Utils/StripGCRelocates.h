@@ -16,7 +16,7 @@ namespace llvm {
 
 class Function;
 
-class StripGCRelocates : public PassInfoMixin<StripGCRelocates> {
+class LLVM_CLASS_ABI StripGCRelocates : public PassInfoMixin<StripGCRelocates> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

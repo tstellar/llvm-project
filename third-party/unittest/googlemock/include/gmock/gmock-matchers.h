@@ -95,7 +95,7 @@ namespace testing {
 // plain values.
 
 // A match result listener that stores the explanation in a string.
-class StringMatchResultListener : public MatchResultListener {
+class LLVM_CLASS_ABI StringMatchResultListener : public MatchResultListener {
  public:
   StringMatchResultListener() : MatchResultListener(&ss_) {}
 
@@ -126,7 +126,7 @@ namespace internal {
 // Matcher but is not one yet; for example, Eq(value)) or a value (for
 // example, "hello").
 template <typename T, typename M>
-class MatcherCastImpl {
+class LLVM_CLASS_ABI MatcherCastImpl {
  public:
   static Matcher<T> Cast(const M& polymorphic_matcher_or_value) {
     // M can be a polymorphic matcher, in which case we want to use
@@ -191,7 +191,7 @@ class MatcherCastImpl {
 // is already a Matcher.  This only compiles when type T can be
 // statically converted to type U.
 template <typename T, typename U>
-class MatcherCastImpl<T, Matcher<U> > {
+class LLVM_CLASS_ABI MatcherCastImpl<T, Matcher<U> > {
  public:
   static Matcher<T> Cast(const Matcher<U>& source_matcher) {
     return Matcher<T>(new Impl(source_matcher));
@@ -240,7 +240,7 @@ class MatcherCastImpl<T, Matcher<U> > {
 // This even more specialized version is used for efficiently casting
 // a matcher to its own type.
 template <typename T>
-class MatcherCastImpl<T, Matcher<T> > {
+class LLVM_CLASS_ABI MatcherCastImpl<T, Matcher<T> > {
  public:
   static Matcher<T> Cast(const Matcher<T>& matcher) { return matcher; }
 };
@@ -261,7 +261,7 @@ inline Matcher<T> MatcherCast(const M& matcher) {
 // FIXME: The intermediate SafeMatcherCastImpl class was introduced as a
 // workaround for a compiler bug, and can now be removed.
 template <typename T>
-class SafeMatcherCastImpl {
+class LLVM_CLASS_ABI SafeMatcherCastImpl {
  public:
   // This overload handles polymorphic matchers and values only since
   // monomorphic matchers are handled by the next one.
@@ -365,7 +365,7 @@ bool MatchPrintAndExplain(Value& value, const Matcher<T>& matcher,
 // An internal helper class for doing compile-time loop on a tuple's
 // fields.
 template <size_t N>
-class TuplePrefix {
+class LLVM_CLASS_ABI TuplePrefix {
  public:
   // TuplePrefix<N>::Matches(matcher_tuple, value_tuple) returns true
   // if and only if the first N fields of matcher_tuple matches
@@ -413,7 +413,7 @@ class TuplePrefix {
 
 // The base case.
 template <>
-class TuplePrefix<0> {
+class LLVM_CLASS_ABI TuplePrefix<0> {
  public:
   template <typename MatcherTuple, typename ValueTuple>
   static bool Matches(const MatcherTuple& /* matcher_tuple */,
@@ -459,7 +459,7 @@ void ExplainMatchFailureTupleTo(const MatcherTuple& matchers,
 // TransformTupleValuesHelper hides the internal machinery that
 // TransformTupleValues uses to implement a tuple traversal.
 template <typename Tuple, typename Func, typename OutIter>
-class TransformTupleValuesHelper {
+class LLVM_CLASS_ABI TransformTupleValuesHelper {
  private:
   typedef ::std::tuple_size<Tuple> TupleSize;
 
@@ -496,7 +496,7 @@ OutIter TransformTupleValues(Func f, const Tuple& t, OutIter out) {
 
 // Implements A<T>().
 template <typename T>
-class AnyMatcherImpl : public MatcherInterface<const T&> {
+class LLVM_CLASS_ABI AnyMatcherImpl : public MatcherInterface<const T&> {
  public:
   bool MatchAndExplain(const T& /* x */,
                        MatchResultListener* /* listener */) const override {
@@ -515,7 +515,7 @@ class AnyMatcherImpl : public MatcherInterface<const T&> {
 // type.  This is a polymorphic matcher, so we need a template type
 // conversion operator to make it appearing as a Matcher<T> for any
 // type T.
-class AnythingMatcher {
+class LLVM_CLASS_ABI AnythingMatcher {
  public:
   template <typename T>
   operator Matcher<T>() const { return A<T>(); }
@@ -523,7 +523,7 @@ class AnythingMatcher {
 
 // Implements the polymorphic IsNull() matcher, which matches any raw or smart
 // pointer that is NULL.
-class IsNullMatcher {
+class LLVM_CLASS_ABI IsNullMatcher {
  public:
   template <typename Pointer>
   bool MatchAndExplain(const Pointer& p,
@@ -539,7 +539,7 @@ class IsNullMatcher {
 
 // Implements the polymorphic NotNull() matcher, which matches any raw or smart
 // pointer that is not NULL.
-class NotNullMatcher {
+class LLVM_CLASS_ABI NotNullMatcher {
  public:
   template <typename Pointer>
   bool MatchAndExplain(const Pointer& p,
@@ -570,7 +570,7 @@ template <typename T>
 class RefMatcher;
 
 template <typename T>
-class RefMatcher<T&> {
+class LLVM_CLASS_ABI RefMatcher<T&> {
   // Google Mock is a generic framework and thus needs to support
   // mocking any function types, including those that take non-const
   // reference arguments.  Therefore the template parameter T (and
@@ -664,7 +664,7 @@ bool CaseInsensitiveStringEquals(const StringType& s1,
 
 // Implements equality-based string matchers like StrEq, StrCaseNe, and etc.
 template <typename StringType>
-class StrEqualityMatcher {
+class LLVM_CLASS_ABI StrEqualityMatcher {
  public:
   StrEqualityMatcher(const StringType& str, bool expect_eq,
                      bool case_sensitive)
@@ -735,7 +735,7 @@ class StrEqualityMatcher {
 // can be used as a Matcher<T> as long as T can be converted to a
 // string.
 template <typename StringType>
-class HasSubstrMatcher {
+class LLVM_CLASS_ABI HasSubstrMatcher {
  public:
   explicit HasSubstrMatcher(const StringType& substring)
       : substring_(substring) {}
@@ -792,7 +792,7 @@ class HasSubstrMatcher {
 // can be used as a Matcher<T> as long as T can be converted to a
 // string.
 template <typename StringType>
-class StartsWithMatcher {
+class LLVM_CLASS_ABI StartsWithMatcher {
  public:
   explicit StartsWithMatcher(const StringType& prefix) : prefix_(prefix) {
   }
@@ -849,7 +849,7 @@ class StartsWithMatcher {
 // can be used as a Matcher<T> as long as T can be converted to a
 // string.
 template <typename StringType>
-class EndsWithMatcher {
+class LLVM_CLASS_ABI EndsWithMatcher {
  public:
   explicit EndsWithMatcher(const StringType& suffix) : suffix_(suffix) {}
 
@@ -910,7 +910,7 @@ class EndsWithMatcher {
 // etc).  Therefore we use a template type conversion operator in the
 // implementation.
 template <typename D, typename Op>
-class PairMatchBase {
+class LLVM_CLASS_ABI PairMatchBase {
  public:
   template <typename T1, typename T2>
   operator Matcher<::std::tuple<T1, T2>>() const {
@@ -942,27 +942,27 @@ class PairMatchBase {
   };
 };
 
-class Eq2Matcher : public PairMatchBase<Eq2Matcher, AnyEq> {
+class LLVM_CLASS_ABI Eq2Matcher : public PairMatchBase<Eq2Matcher, AnyEq> {
  public:
   static const char* Desc() { return "an equal pair"; }
 };
-class Ne2Matcher : public PairMatchBase<Ne2Matcher, AnyNe> {
+class LLVM_CLASS_ABI Ne2Matcher : public PairMatchBase<Ne2Matcher, AnyNe> {
  public:
   static const char* Desc() { return "an unequal pair"; }
 };
-class Lt2Matcher : public PairMatchBase<Lt2Matcher, AnyLt> {
+class LLVM_CLASS_ABI Lt2Matcher : public PairMatchBase<Lt2Matcher, AnyLt> {
  public:
   static const char* Desc() { return "a pair where the first < the second"; }
 };
-class Gt2Matcher : public PairMatchBase<Gt2Matcher, AnyGt> {
+class LLVM_CLASS_ABI Gt2Matcher : public PairMatchBase<Gt2Matcher, AnyGt> {
  public:
   static const char* Desc() { return "a pair where the first > the second"; }
 };
-class Le2Matcher : public PairMatchBase<Le2Matcher, AnyLe> {
+class LLVM_CLASS_ABI Le2Matcher : public PairMatchBase<Le2Matcher, AnyLe> {
  public:
   static const char* Desc() { return "a pair where the first <= the second"; }
 };
-class Ge2Matcher : public PairMatchBase<Ge2Matcher, AnyGe> {
+class LLVM_CLASS_ABI Ge2Matcher : public PairMatchBase<Ge2Matcher, AnyGe> {
  public:
   static const char* Desc() { return "a pair where the first >= the second"; }
 };
@@ -972,7 +972,7 @@ class Ge2Matcher : public PairMatchBase<Ge2Matcher, AnyGe> {
 // will prevent different instantiations of NotMatcher from sharing
 // the same NotMatcherImpl<T> class.
 template <typename T>
-class NotMatcherImpl : public MatcherInterface<const T&> {
+class LLVM_CLASS_ABI NotMatcherImpl : public MatcherInterface<const T&> {
  public:
   explicit NotMatcherImpl(const Matcher<T>& matcher)
       : matcher_(matcher) {}
@@ -999,7 +999,7 @@ class NotMatcherImpl : public MatcherInterface<const T&> {
 // Implements the Not(m) matcher, which matches a value that doesn't
 // match matcher m.
 template <typename InnerMatcher>
-class NotMatcher {
+class LLVM_CLASS_ABI NotMatcher {
  public:
   explicit NotMatcher(InnerMatcher matcher) : matcher_(matcher) {}
 
@@ -1021,7 +1021,7 @@ class NotMatcher {
 // that will prevent different instantiations of BothOfMatcher from
 // sharing the same BothOfMatcherImpl<T> class.
 template <typename T>
-class AllOfMatcherImpl : public MatcherInterface<const T&> {
+class LLVM_CLASS_ABI AllOfMatcherImpl : public MatcherInterface<const T&> {
  public:
   explicit AllOfMatcherImpl(std::vector<Matcher<T> > matchers)
       : matchers_(std::move(matchers)) {}
@@ -1084,7 +1084,7 @@ class AllOfMatcherImpl : public MatcherInterface<const T&> {
 // CombiningMatcher<T> is used to recursively combine the provided matchers
 // (of type Args...).
 template <template <typename T> class CombiningMatcher, typename... Args>
-class VariadicMatcher {
+class LLVM_CLASS_ABI VariadicMatcher {
  public:
   VariadicMatcher(const Args&... matchers)  // NOLINT
       : matchers_(matchers...) {
@@ -1127,7 +1127,7 @@ using AllOfMatcher = VariadicMatcher<AllOfMatcherImpl, Args...>;
 // that will prevent different instantiations of AnyOfMatcher from
 // sharing the same EitherOfMatcherImpl<T> class.
 template <typename T>
-class AnyOfMatcherImpl : public MatcherInterface<const T&> {
+class LLVM_CLASS_ABI AnyOfMatcherImpl : public MatcherInterface<const T&> {
  public:
   explicit AnyOfMatcherImpl(std::vector<Matcher<T> > matchers)
       : matchers_(std::move(matchers)) {}
@@ -1191,7 +1191,7 @@ using AnyOfMatcher = VariadicMatcher<AnyOfMatcherImpl, Args...>;
 
 // Wrapper for implementation of Any/AllOfArray().
 template <template <class> class MatcherImpl, typename T>
-class SomeOfArrayMatcher {
+class LLVM_CLASS_ABI SomeOfArrayMatcher {
  public:
   // Constructs the matcher from a sequence of element values or
   // element matchers.
@@ -1223,7 +1223,7 @@ using AnyOfArrayMatcher = SomeOfArrayMatcher<AnyOfMatcherImpl, T>;
 // Used for implementing Truly(pred), which turns a predicate into a
 // matcher.
 template <typename Predicate>
-class TrulyMatcher {
+class LLVM_CLASS_ABI TrulyMatcher {
  public:
   explicit TrulyMatcher(Predicate pred) : predicate_(pred) {}
 
@@ -1262,7 +1262,7 @@ class TrulyMatcher {
 // Used for implementing Matches(matcher), which turns a matcher into
 // a predicate.
 template <typename M>
-class MatcherAsPredicate {
+class LLVM_CLASS_ABI MatcherAsPredicate {
  public:
   explicit MatcherAsPredicate(M matcher) : matcher_(matcher) {}
 
@@ -1300,7 +1300,7 @@ class MatcherAsPredicate {
 // For implementing ASSERT_THAT() and EXPECT_THAT().  The template
 // argument M must be a type that can be converted to a matcher.
 template <typename M>
-class PredicateFormatterFromMatcher {
+class LLVM_CLASS_ABI PredicateFormatterFromMatcher {
  public:
   explicit PredicateFormatterFromMatcher(M m) : matcher_(std::move(m)) {}
 
@@ -1364,7 +1364,7 @@ MakePredicateFormatterFromMatcher(M matcher) {
 // user-specified epsilon.  The template is meant to be instantiated with
 // FloatType being either float or double.
 template <typename FloatType>
-class FloatingEqMatcher {
+class LLVM_CLASS_ABI FloatingEqMatcher {
  public:
   // Constructor for FloatingEqMatcher.
   // The matcher's input will be compared with expected.  The matcher treats two
@@ -1522,7 +1522,7 @@ class FloatingEqMatcher {
 // against y. The former implements "Eq", the latter "Near". At present, there
 // is no version that compares NaNs as equal.
 template <typename FloatType>
-class FloatingEq2Matcher {
+class LLVM_CLASS_ABI FloatingEq2Matcher {
  public:
   FloatingEq2Matcher() { Init(-1, false); }
 
@@ -1595,7 +1595,7 @@ class FloatingEq2Matcher {
 // Implements the Pointee(m) matcher for matching a pointer whose
 // pointee matches matcher m.  The pointer can be either raw or smart.
 template <typename InnerMatcher>
-class PointeeMatcher {
+class LLVM_CLASS_ABI PointeeMatcher {
  public:
   explicit PointeeMatcher(const InnerMatcher& matcher) : matcher_(matcher) {}
 
@@ -1729,7 +1729,7 @@ class WhenDynamicCastToMatcher<To&> : public WhenDynamicCastToMatcherBase<To&> {
 // Implements the Field() matcher for matching a field (i.e. member
 // variable) of an object.
 template <typename Class, typename FieldType>
-class FieldMatcher {
+class LLVM_CLASS_ABI FieldMatcher {
  public:
   FieldMatcher(FieldType Class::*field,
                const Matcher<const FieldType&>& matcher)
@@ -1795,7 +1795,7 @@ class FieldMatcher {
 // Property is a const-qualified member function of Class returning
 // PropertyType.
 template <typename Class, typename PropertyType, typename Property>
-class PropertyMatcher {
+class LLVM_CLASS_ABI PropertyMatcher {
  public:
   typedef const PropertyType& RefToConstProperty;
 
@@ -1862,7 +1862,7 @@ class PropertyMatcher {
 // Type traits specifying various features of different functors for ResultOf.
 // The default template specifies features for functor objects.
 template <typename Functor>
-struct CallableTraits {
+struct LLVM_CLASS_ABI CallableTraits {
   typedef Functor StorageType;
 
   static void CheckIsValid(Functor /* functor */) {}
@@ -1875,7 +1875,7 @@ struct CallableTraits {
 
 // Specialization for function pointers.
 template <typename ArgType, typename ResType>
-struct CallableTraits<ResType(*)(ArgType)> {
+struct LLVM_CLASS_ABI CallableTraits<ResType(*)(ArgType)> {
   typedef ResType ResultType;
   typedef ResType(*StorageType)(ArgType);
 
@@ -1892,7 +1892,7 @@ struct CallableTraits<ResType(*)(ArgType)> {
 // Implements the ResultOf() matcher for matching a return value of a
 // unary function of an object.
 template <typename Callable, typename InnerMatcher>
-class ResultOfMatcher {
+class LLVM_CLASS_ABI ResultOfMatcher {
  public:
   ResultOfMatcher(Callable callable, InnerMatcher matcher)
       : callable_(std::move(callable)), matcher_(std::move(matcher)) {
@@ -1958,7 +1958,7 @@ class ResultOfMatcher {
 
 // Implements a matcher that checks the size of an STL-style container.
 template <typename SizeMatcher>
-class SizeIsMatcher {
+class LLVM_CLASS_ABI SizeIsMatcher {
  public:
   explicit SizeIsMatcher(const SizeMatcher& size_matcher)
        : size_matcher_(size_matcher) {
@@ -2009,7 +2009,7 @@ class SizeIsMatcher {
 // Implements a matcher that checks the begin()..end() distance of an STL-style
 // container.
 template <typename DistanceMatcher>
-class BeginEndDistanceIsMatcher {
+class LLVM_CLASS_ABI BeginEndDistanceIsMatcher {
  public:
   explicit BeginEndDistanceIsMatcher(const DistanceMatcher& distance_matcher)
       : distance_matcher_(distance_matcher) {}
@@ -2077,7 +2077,7 @@ class BeginEndDistanceIsMatcher {
 // Uses the container's const_iterator, value_type, operator ==,
 // begin(), and end().
 template <typename Container>
-class ContainerEqMatcher {
+class LLVM_CLASS_ABI ContainerEqMatcher {
  public:
   typedef internal::StlContainerView<Container> View;
   typedef typename View::type StlContainer;
@@ -2161,14 +2161,14 @@ class ContainerEqMatcher {
 };
 
 // A comparator functor that uses the < operator to compare two values.
-struct LessComparator {
+struct LLVM_CLASS_ABI LessComparator {
   template <typename T, typename U>
   bool operator()(const T& lhs, const U& rhs) const { return lhs < rhs; }
 };
 
 // Implements WhenSortedBy(comparator, container_matcher).
 template <typename Comparator, typename ContainerMatcher>
-class WhenSortedByMatcher {
+class LLVM_CLASS_ABI WhenSortedByMatcher {
  public:
   WhenSortedByMatcher(const Comparator& comparator,
                       const ContainerMatcher& matcher)
@@ -2248,7 +2248,7 @@ class WhenSortedByMatcher {
 // T2&> >, where T1 and T2 are the types of elements in the LHS
 // container and the RHS container respectively.
 template <typename TupleMatcher, typename RhsContainer>
-class PointwiseMatcher {
+class LLVM_CLASS_ABI PointwiseMatcher {
   GTEST_COMPILE_ASSERT_(
       !IsHashTable<GTEST_REMOVE_REFERENCE_AND_CONST_(RhsContainer)>::value,
       use_UnorderedPointwise_with_hash_tables);
@@ -2369,7 +2369,7 @@ class PointwiseMatcher {
 
 // Holds the logic common to ContainsMatcherImpl and EachMatcherImpl.
 template <typename Container>
-class QuantifierMatcherImpl : public MatcherInterface<Container> {
+class LLVM_CLASS_ABI QuantifierMatcherImpl : public MatcherInterface<Container> {
  public:
   typedef GTEST_REMOVE_REFERENCE_AND_CONST_(Container) RawContainer;
   typedef StlContainerView<RawContainer> View;
@@ -2414,7 +2414,7 @@ class QuantifierMatcherImpl : public MatcherInterface<Container> {
 // Implements Contains(element_matcher) for the given argument type Container.
 // Symmetric to EachMatcherImpl.
 template <typename Container>
-class ContainsMatcherImpl : public QuantifierMatcherImpl<Container> {
+class LLVM_CLASS_ABI ContainsMatcherImpl : public QuantifierMatcherImpl<Container> {
  public:
   template <typename InnerMatcher>
   explicit ContainsMatcherImpl(InnerMatcher inner_matcher)
@@ -2443,7 +2443,7 @@ class ContainsMatcherImpl : public QuantifierMatcherImpl<Container> {
 // Implements Each(element_matcher) for the given argument type Container.
 // Symmetric to ContainsMatcherImpl.
 template <typename Container>
-class EachMatcherImpl : public QuantifierMatcherImpl<Container> {
+class LLVM_CLASS_ABI EachMatcherImpl : public QuantifierMatcherImpl<Container> {
  public:
   template <typename InnerMatcher>
   explicit EachMatcherImpl(InnerMatcher inner_matcher)
@@ -2471,7 +2471,7 @@ class EachMatcherImpl : public QuantifierMatcherImpl<Container> {
 
 // Implements polymorphic Contains(element_matcher).
 template <typename M>
-class ContainsMatcher {
+class LLVM_CLASS_ABI ContainsMatcher {
  public:
   explicit ContainsMatcher(M m) : inner_matcher_(m) {}
 
@@ -2489,7 +2489,7 @@ class ContainsMatcher {
 
 // Implements polymorphic Each(element_matcher).
 template <typename M>
-class EachMatcher {
+class LLVM_CLASS_ABI EachMatcher {
  public:
   explicit EachMatcher(M m) : inner_matcher_(m) {}
 
@@ -2505,8 +2505,8 @@ class EachMatcher {
   GTEST_DISALLOW_ASSIGN_(EachMatcher);
 };
 
-struct Rank1 {};
-struct Rank0 : Rank1 {};
+struct LLVM_CLASS_ABI Rank1 {};
+struct LLVM_CLASS_ABI Rank0 : Rank1 {};
 
 namespace pair_getters {
 using std::get;
@@ -2534,7 +2534,7 @@ auto Second(T& x, Rank0) -> decltype((x.second)) {  // NOLINT
 // inner_matcher.  For example, Contains(Key(Ge(5))) can be used to match an
 // std::map that contains at least one element whose key is >= 5.
 template <typename PairType>
-class KeyMatcherImpl : public MatcherInterface<PairType> {
+class LLVM_CLASS_ABI KeyMatcherImpl : public MatcherInterface<PairType> {
  public:
   typedef GTEST_REMOVE_REFERENCE_AND_CONST_(PairType) RawPairType;
   typedef typename RawPairType::first_type KeyType;
@@ -2579,7 +2579,7 @@ class KeyMatcherImpl : public MatcherInterface<PairType> {
 
 // Implements polymorphic Key(matcher_for_key).
 template <typename M>
-class KeyMatcher {
+class LLVM_CLASS_ABI KeyMatcher {
  public:
   explicit KeyMatcher(M m) : matcher_for_key_(m) {}
 
@@ -2598,7 +2598,7 @@ class KeyMatcher {
 // Implements Pair(first_matcher, second_matcher) for the given argument pair
 // type with its two matchers. See Pair() function below.
 template <typename PairType>
-class PairMatcherImpl : public MatcherInterface<PairType> {
+class LLVM_CLASS_ABI PairMatcherImpl : public MatcherInterface<PairType> {
  public:
   typedef GTEST_REMOVE_REFERENCE_AND_CONST_(PairType) RawPairType;
   typedef typename RawPairType::first_type FirstType;
@@ -2684,7 +2684,7 @@ class PairMatcherImpl : public MatcherInterface<PairType> {
 
 // Implements polymorphic Pair(first_matcher, second_matcher).
 template <typename FirstMatcher, typename SecondMatcher>
-class PairMatcher {
+class LLVM_CLASS_ABI PairMatcher {
  public:
   PairMatcher(FirstMatcher first_matcher, SecondMatcher second_matcher)
       : first_matcher_(first_matcher), second_matcher_(second_matcher) {}
@@ -2704,7 +2704,7 @@ class PairMatcher {
 
 // Implements ElementsAre() and ElementsAreArray().
 template <typename Container>
-class ElementsAreMatcherImpl : public MatcherInterface<Container> {
+class LLVM_CLASS_ABI ElementsAreMatcherImpl : public MatcherInterface<Container> {
  public:
   typedef GTEST_REMOVE_REFERENCE_AND_CONST_(Container) RawContainer;
   typedef internal::StlContainerView<RawContainer> View;
@@ -2904,7 +2904,7 @@ typedef ::std::vector<ElementMatcherPair> ElementMatcherPairs;
 GTEST_API_ ElementMatcherPairs
 FindMaxBipartiteMatching(const MatchMatrix& g);
 
-struct UnorderedMatcherRequire {
+struct LLVM_CLASS_ABI UnorderedMatcherRequire {
   enum Flags {
     Superset = 1 << 0,
     Subset = 1 << 1,
@@ -2959,7 +2959,7 @@ class GTEST_API_ UnorderedElementsAreMatcherImplBase {
 // Implements UnorderedElementsAre, UnorderedElementsAreArray, IsSubsetOf, and
 // IsSupersetOf.
 template <typename Container>
-class UnorderedElementsAreMatcherImpl
+class LLVM_CLASS_ABI UnorderedElementsAreMatcherImpl
     : public MatcherInterface<Container>,
       public UnorderedElementsAreMatcherImplBase {
  public:
@@ -3056,7 +3056,7 @@ class UnorderedElementsAreMatcherImpl
 // Functor for use in TransformTuple.
 // Performs MatcherCast<Target> on an input argument of any type.
 template <typename Target>
-struct CastAndAppendTransform {
+struct LLVM_CLASS_ABI CastAndAppendTransform {
   template <typename Arg>
   Matcher<Target> operator()(const Arg& a) const {
     return MatcherCast<Target>(a);
@@ -3065,7 +3065,7 @@ struct CastAndAppendTransform {
 
 // Implements UnorderedElementsAre.
 template <typename MatcherTuple>
-class UnorderedElementsAreMatcher {
+class LLVM_CLASS_ABI UnorderedElementsAreMatcher {
  public:
   explicit UnorderedElementsAreMatcher(const MatcherTuple& args)
       : matchers_(args) {}
@@ -3097,7 +3097,7 @@ class UnorderedElementsAreMatcher {
 
 // Implements ElementsAre.
 template <typename MatcherTuple>
-class ElementsAreMatcher {
+class LLVM_CLASS_ABI ElementsAreMatcher {
  public:
   explicit ElementsAreMatcher(const MatcherTuple& args) : matchers_(args) {}
 
@@ -3131,7 +3131,7 @@ class ElementsAreMatcher {
 
 // Implements UnorderedElementsAreArray(), IsSubsetOf(), and IsSupersetOf().
 template <typename T>
-class UnorderedElementsAreArrayMatcher {
+class LLVM_CLASS_ABI UnorderedElementsAreArrayMatcher {
  public:
   template <typename Iter>
   UnorderedElementsAreArrayMatcher(UnorderedMatcherRequire::Flags match_flags,
@@ -3154,7 +3154,7 @@ class UnorderedElementsAreArrayMatcher {
 
 // Implements ElementsAreArray().
 template <typename T>
-class ElementsAreArrayMatcher {
+class LLVM_CLASS_ABI ElementsAreArrayMatcher {
  public:
   template <typename Iter>
   ElementsAreArrayMatcher(Iter first, Iter last) : matchers_(first, last) {}
@@ -3185,7 +3185,7 @@ class ElementsAreArrayMatcher {
 // instances of this class in a vector when implementing
 // UnorderedPointwise().
 template <typename Tuple2Matcher, typename Second>
-class BoundSecondMatcher {
+class LLVM_CLASS_ABI BoundSecondMatcher {
  public:
   BoundSecondMatcher(const Tuple2Matcher& tm, const Second& second)
       : tuple2_matcher_(tm), second_value_(second) {}
@@ -3261,7 +3261,7 @@ GTEST_API_ std::string FormatMatcherDescription(bool negation,
 
 // Implements a matcher that checks the value of a optional<> type variable.
 template <typename ValueMatcher>
-class OptionalMatcher {
+class LLVM_CLASS_ABI OptionalMatcher {
  public:
   explicit OptionalMatcher(const ValueMatcher& value_matcher)
       : value_matcher_(value_matcher) {}
@@ -3323,7 +3323,7 @@ void get() {}
 
 // Implements a matcher that checks the value of a variant<> type variable.
 template <typename T>
-class VariantMatcher {
+class LLVM_CLASS_ABI VariantMatcher {
  public:
   explicit VariantMatcher(::testing::Matcher<const T&> matcher)
       : matcher_(std::move(matcher)) {}
@@ -3384,7 +3384,7 @@ void any_cast() {}
 
 // Implements a matcher that any_casts the value.
 template <typename T>
-class AnyCastMatcher {
+class LLVM_CLASS_ABI AnyCastMatcher {
  public:
   explicit AnyCastMatcher(const ::testing::Matcher<const T&>& matcher)
       : matcher_(matcher) {}
@@ -3439,7 +3439,7 @@ class AnyCastMatcher {
 
 // Implements the Args() matcher.
 template <class ArgsTuple, size_t... k>
-class ArgsMatcherImpl : public MatcherInterface<ArgsTuple> {
+class LLVM_CLASS_ABI ArgsMatcherImpl : public MatcherInterface<ArgsTuple> {
  public:
   using RawArgsTuple = typename std::decay<ArgsTuple>::type;
   using SelectedArgs =
@@ -3496,7 +3496,7 @@ class ArgsMatcherImpl : public MatcherInterface<ArgsTuple> {
 };
 
 template <class InnerMatcher, size_t... k>
-class ArgsMatcher {
+class LLVM_CLASS_ABI ArgsMatcher {
  public:
   explicit ArgsMatcher(InnerMatcher inner_matcher)
       : inner_matcher_(std::move(inner_matcher)) {}

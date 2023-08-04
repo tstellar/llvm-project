@@ -87,7 +87,7 @@ class GsymReader;
 /// }
 ///
 /// Where "N" is the number of tuples.
-struct FunctionInfo {
+struct LLVM_CLASS_ABI FunctionInfo {
   AddressRange Range;
   uint32_t Name; ///< String table offset in the string table.
   std::optional<LineTable> OptLineTable;
@@ -220,7 +220,7 @@ inline bool operator<(const FunctionInfo &LHS, const FunctionInfo &RHS) {
   return LHS.OptLineTable < RHS.OptLineTable;
 }
 
-raw_ostream &operator<<(raw_ostream &OS, const FunctionInfo &R);
+LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, const FunctionInfo &R);
 
 } // namespace gsym
 } // namespace llvm

@@ -45,7 +45,7 @@ namespace detail {
 /// usage. This class is just a helper base class which is not templated and
 /// contains all common code to be shared between different instantiations of
 /// PtrUseVisitor.
-class PtrUseVisitorBase {
+class LLVM_CLASS_ABI PtrUseVisitorBase {
 public:
   /// This class provides information about the result of a visit.
   ///
@@ -196,7 +196,7 @@ protected:
 ///
 /// FIXME: Generalize this for all values rather than just instructions.
 template <typename DerivedT>
-class PtrUseVisitor : protected InstVisitor<DerivedT>,
+class LLVM_CLASS_ABI PtrUseVisitor : protected InstVisitor<DerivedT>,
                       public detail::PtrUseVisitorBase {
   friend class InstVisitor<DerivedT>;
 

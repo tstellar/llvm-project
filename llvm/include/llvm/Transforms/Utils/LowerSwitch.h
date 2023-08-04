@@ -19,7 +19,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-struct LowerSwitchPass : public PassInfoMixin<LowerSwitchPass> {
+struct LLVM_CLASS_ABI LowerSwitchPass : public PassInfoMixin<LowerSwitchPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 } // namespace llvm

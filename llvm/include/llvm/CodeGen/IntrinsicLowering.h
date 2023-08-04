@@ -21,7 +21,7 @@ namespace llvm {
 class CallInst;
 class DataLayout;
 
-class IntrinsicLowering {
+class LLVM_CLASS_ABI IntrinsicLowering {
   const DataLayout &DL;
 
   bool Warned = false;

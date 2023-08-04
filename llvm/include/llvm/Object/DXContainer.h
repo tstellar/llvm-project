@@ -28,7 +28,7 @@ namespace llvm {
 namespace object {
 
 namespace DirectX {
-class PSVRuntimeInfo {
+class LLVM_CLASS_ABI PSVRuntimeInfo {
 
   // This class provides a view into the underlying resource array. The Resource
   // data is little-endian encoded and may not be properly aligned to read
@@ -129,7 +129,7 @@ public:
 
 } // namespace DirectX
 
-class DXContainer {
+class LLVM_CLASS_ABI DXContainer {
 public:
   using DXILData = std::pair<dxbc::ProgramHeader, const char *>;
 

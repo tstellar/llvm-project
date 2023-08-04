@@ -20,7 +20,7 @@ namespace MachO {
 
 class InterfaceFile;
 
-class TextAPIWriter {
+class LLVM_CLASS_ABI TextAPIWriter {
 public:
   TextAPIWriter() = delete;
 

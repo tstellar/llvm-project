@@ -26,7 +26,7 @@
 namespace llvm {
 namespace PBQP {
 
-template <typename ValueT> class ValuePool {
+template <typename ValueT> class LLVM_CLASS_ABI ValuePool {
 public:
   using PoolRef = std::shared_ptr<const ValueT>;
 
@@ -105,7 +105,7 @@ public:
   }
 };
 
-template <typename VectorT, typename MatrixT> class PoolCostAllocator {
+template <typename VectorT, typename MatrixT> class LLVM_CLASS_ABI PoolCostAllocator {
 private:
   using VectorCostPool = ValuePool<VectorT>;
   using MatrixCostPool = ValuePool<MatrixT>;

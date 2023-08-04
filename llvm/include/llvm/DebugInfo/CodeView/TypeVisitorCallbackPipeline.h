@@ -19,7 +19,7 @@
 namespace llvm {
 namespace codeview {
 
-class TypeVisitorCallbackPipeline : public TypeVisitorCallbacks {
+class LLVM_CLASS_ABI TypeVisitorCallbackPipeline : public TypeVisitorCallbacks {
 public:
   TypeVisitorCallbackPipeline() = default;
 

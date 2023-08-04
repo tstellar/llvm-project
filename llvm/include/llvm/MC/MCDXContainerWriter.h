@@ -17,7 +17,7 @@ namespace llvm {
 
 class raw_pwrite_stream;
 
-class MCDXContainerTargetWriter : public MCObjectTargetWriter {
+class LLVM_CLASS_ABI MCDXContainerTargetWriter : public MCObjectTargetWriter {
 protected:
   MCDXContainerTargetWriter() {}
 
@@ -37,7 +37,7 @@ public:
 /// \param MOTW - The target specific DXContainer writer subclass.
 /// \param OS - The stream to write to.
 /// \returns The constructed object writer.
-std::unique_ptr<MCObjectWriter>
+LLVM_FUNC_ABI std::unique_ptr<MCObjectWriter>
 createDXContainerObjectWriter(std::unique_ptr<MCDXContainerTargetWriter> MOTW,
                               raw_pwrite_stream &OS);
 

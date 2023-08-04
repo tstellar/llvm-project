@@ -29,7 +29,7 @@ class DebugSymbolRVASubsectionRef;
 class DebugSymbolsSubsectionRef;
 class DebugUnknownSubsectionRef;
 
-class DebugSubsectionVisitor {
+class LLVM_CLASS_ABI DebugSubsectionVisitor {
 public:
   virtual ~DebugSubsectionVisitor() = default;
 
@@ -61,7 +61,7 @@ public:
                                     const StringsAndChecksumsRef &State) = 0;
 };
 
-Error visitDebugSubsection(const DebugSubsectionRecord &R,
+LLVM_FUNC_ABI Error visitDebugSubsection(const DebugSubsectionRecord &R,
                            DebugSubsectionVisitor &V,
                            const StringsAndChecksumsRef &State);
 

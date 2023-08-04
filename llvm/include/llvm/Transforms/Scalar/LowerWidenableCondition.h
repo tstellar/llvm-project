@@ -18,7 +18,7 @@
 
 namespace llvm {
 
-struct LowerWidenableConditionPass : PassInfoMixin<LowerWidenableConditionPass> {
+struct LLVM_CLASS_ABI LowerWidenableConditionPass : PassInfoMixin<LowerWidenableConditionPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 

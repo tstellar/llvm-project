@@ -29,7 +29,7 @@ using CycleInfo = GenericCycleInfo<SSAContext>;
 using Cycle = CycleInfo::CycleT;
 
 /// Legacy analysis pass which computes a \ref CycleInfo.
-class CycleInfoWrapperPass : public FunctionPass {
+class LLVM_CLASS_ABI CycleInfoWrapperPass : public FunctionPass {
   Function *F = nullptr;
   CycleInfo CI;
 
@@ -50,7 +50,7 @@ public:
 };
 
 /// Analysis pass which computes a \ref CycleInfo.
-class CycleAnalysis : public AnalysisInfoMixin<CycleAnalysis> {
+class LLVM_CLASS_ABI CycleAnalysis : public AnalysisInfoMixin<CycleAnalysis> {
   friend AnalysisInfoMixin<CycleAnalysis>;
   static AnalysisKey Key;
 
@@ -67,7 +67,7 @@ public:
 };
 
 /// Printer pass for the \c DominatorTree.
-class CycleInfoPrinterPass : public PassInfoMixin<CycleInfoPrinterPass> {
+class LLVM_CLASS_ABI CycleInfoPrinterPass : public PassInfoMixin<CycleInfoPrinterPass> {
   raw_ostream &OS;
 
 public:

@@ -20,7 +20,7 @@ struct SrcHeaderBlockEntry;
 struct SrcHeaderBlockHeader;
 class PDBStringTable;
 
-class InjectedSourceStream {
+class LLVM_CLASS_ABI InjectedSourceStream {
 public:
   InjectedSourceStream(std::unique_ptr<msf::MappedBlockStream> Stream);
   Error reload(const PDBStringTable &Strings);

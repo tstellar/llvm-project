@@ -21,7 +21,7 @@ namespace llvm {
 /// This pass walks the functions in each SCC and for each one tries to
 /// transform it and all of its callers to replace indirect arguments with
 /// direct (by-value) arguments.
-class ArgumentPromotionPass : public PassInfoMixin<ArgumentPromotionPass> {
+class LLVM_CLASS_ABI ArgumentPromotionPass : public PassInfoMixin<ArgumentPromotionPass> {
   unsigned MaxElements;
 
 public:

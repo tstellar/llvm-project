@@ -14,7 +14,7 @@
 
 namespace llvm {
 
-class SeparateConstOffsetFromGEPPass
+class LLVM_CLASS_ABI SeparateConstOffsetFromGEPPass
     : public PassInfoMixin<SeparateConstOffsetFromGEPPass> {
   bool LowerGEP;
 

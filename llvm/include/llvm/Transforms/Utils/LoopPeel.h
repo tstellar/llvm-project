@@ -20,22 +20,22 @@
 
 namespace llvm {
 
-bool canPeel(const Loop *L);
+LLVM_FUNC_ABI bool canPeel(const Loop *L);
 
 /// VMap is the value-map that maps instructions from the original loop to
 /// instructions in the last peeled-off iteration.
-bool peelLoop(Loop *L, unsigned PeelCount, LoopInfo *LI, ScalarEvolution *SE,
+LLVM_FUNC_ABI bool peelLoop(Loop *L, unsigned PeelCount, LoopInfo *LI, ScalarEvolution *SE,
               DominatorTree &DT, AssumptionCache *AC, bool PreserveLCSSA,
               ValueToValueMapTy &VMap);
 
-TargetTransformInfo::PeelingPreferences
+LLVM_FUNC_ABI TargetTransformInfo::PeelingPreferences
 gatherPeelingPreferences(Loop *L, ScalarEvolution &SE,
                          const TargetTransformInfo &TTI,
                          std::optional<bool> UserAllowPeeling,
                          std::optional<bool> UserAllowProfileBasedPeeling,
                          bool UnrollingSpecficValues = false);
 
-void computePeelCount(Loop *L, unsigned LoopSize,
+LLVM_FUNC_ABI void computePeelCount(Loop *L, unsigned LoopSize,
                       TargetTransformInfo::PeelingPreferences &PP,
                       unsigned TripCount, DominatorTree &DT,
                       ScalarEvolution &SE, AssumptionCache *AC = nullptr,

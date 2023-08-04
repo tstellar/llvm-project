@@ -36,7 +36,7 @@ enum CfiFunctionLinkage {
 };
 
 /// A call site that could be devirtualized.
-struct DevirtCallSite {
+struct LLVM_CLASS_ABI DevirtCallSite {
   /// The offset from the address point to the virtual function.
   uint64_t Offset;
   /// The call site itself.
@@ -45,14 +45,14 @@ struct DevirtCallSite {
 
 /// Given a call to the intrinsic \@llvm.type.test, find all devirtualizable
 /// call sites based on the call and return them in DevirtCalls.
-void findDevirtualizableCallsForTypeTest(
+LLVM_FUNC_ABI void findDevirtualizableCallsForTypeTest(
     SmallVectorImpl<DevirtCallSite> &DevirtCalls,
     SmallVectorImpl<CallInst *> &Assumes, const CallInst *CI,
     DominatorTree &DT);
 
 /// Given a call to the intrinsic \@llvm.type.checked.load, find all
 /// devirtualizable call sites based on the call and return them in DevirtCalls.
-void findDevirtualizableCallsForTypeCheckedLoad(
+LLVM_FUNC_ABI void findDevirtualizableCallsForTypeCheckedLoad(
     SmallVectorImpl<DevirtCallSite> &DevirtCalls,
     SmallVectorImpl<Instruction *> &LoadedPtrs,
     SmallVectorImpl<Instruction *> &Preds, bool &HasNonCallUses,
@@ -75,12 +75,12 @@ void findDevirtualizableCallsForTypeCheckedLoad(
 /// }
 ///
 /// For such (sub-)expressions, getPointerAtOffset returns the @target pointer.
-Constant *getPointerAtOffset(Constant *I, uint64_t Offset, Module &M,
+LLVM_FUNC_ABI Constant *getPointerAtOffset(Constant *I, uint64_t Offset, Module &M,
                              Constant *TopLevelGlobal = nullptr);
 
 /// Finds the same "relative pointer" pattern as described above, where the
 /// target is `F`, and replaces the entire pattern with a constant zero.
-void replaceRelativePointerUsersWithZero(Function *F);
+LLVM_FUNC_ABI void replaceRelativePointerUsersWithZero(Function *F);
 
 } // namespace llvm
 

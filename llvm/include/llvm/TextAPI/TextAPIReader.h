@@ -20,7 +20,7 @@ namespace MachO {
 
 class InterfaceFile;
 
-class TextAPIReader {
+class LLVM_CLASS_ABI TextAPIReader {
 public:
   static Expected<std::unique_ptr<InterfaceFile>>
   get(MemoryBufferRef InputBuffer);

@@ -23,7 +23,7 @@ namespace llvm {
 class Loop;
 class LPMUpdater;
 
-class IndVarSimplifyPass : public PassInfoMixin<IndVarSimplifyPass> {
+class LLVM_CLASS_ABI IndVarSimplifyPass : public PassInfoMixin<IndVarSimplifyPass> {
   /// Perform IV widening during the pass.
   bool WidenIndVars;
 

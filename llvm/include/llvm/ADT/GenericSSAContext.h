@@ -22,7 +22,7 @@
 
 namespace llvm {
 
-template <typename _FunctionT> class GenericSSAContext {
+template <typename _FunctionT> class LLVM_CLASS_ABI GenericSSAContext {
 public:
   // Specializations should provide the following types that are similar to how
   // LLVM IR is structured:

@@ -21,7 +21,7 @@ namespace llvm {
 
 class Function;
 
-class PromotePass : public PassInfoMixin<PromotePass> {
+class LLVM_CLASS_ABI PromotePass : public PassInfoMixin<PromotePass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

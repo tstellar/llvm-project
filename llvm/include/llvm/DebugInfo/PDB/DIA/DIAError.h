@@ -28,19 +28,19 @@ enum class dia_error_code {
 
 namespace std {
 template <>
-struct is_error_code_enum<llvm::pdb::dia_error_code> : std::true_type {};
+struct LLVM_CLASS_ABI is_error_code_enum<llvm::pdb::dia_error_code> : std::true_type {};
 } // namespace std
 
 namespace llvm {
 namespace pdb {
-const std::error_category &DIAErrCategory();
+LLVM_FUNC_ABI const std::error_category &DIAErrCategory();
 
 inline std::error_code make_error_code(dia_error_code E) {
   return std::error_code(static_cast<int>(E), DIAErrCategory());
 }
 
 /// Base class for errors originating in DIA SDK, e.g. COM calls
-class DIAError : public ErrorInfo<DIAError, StringError> {
+class LLVM_CLASS_ABI DIAError : public ErrorInfo<DIAError, StringError> {
 public:
   using ErrorInfo<DIAError, StringError>::ErrorInfo;
   DIAError(const Twine &S) : ErrorInfo(S, dia_error_code::unspecified) {}

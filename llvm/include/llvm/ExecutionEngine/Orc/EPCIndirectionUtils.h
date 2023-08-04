@@ -28,7 +28,7 @@ class ExecutorProcessControl;
 
 /// Provides ExecutorProcessControl based indirect stubs, trampoline pool and
 /// lazy call through manager.
-class EPCIndirectionUtils {
+class LLVM_CLASS_ABI EPCIndirectionUtils {
   friend class EPCIndirectionUtilsAccess;
 
 public:
@@ -171,12 +171,12 @@ private:
 /// called.
 ///
 /// This function is experimental and likely subject to revision.
-Error setUpInProcessLCTMReentryViaEPCIU(EPCIndirectionUtils &EPCIU);
+LLVM_FUNC_ABI Error setUpInProcessLCTMReentryViaEPCIU(EPCIndirectionUtils &EPCIU);
 
 namespace detail {
 
 template <typename ORCABI>
-class ABISupportImpl : public EPCIndirectionUtils::ABISupport {
+class LLVM_CLASS_ABI ABISupportImpl : public EPCIndirectionUtils::ABISupport {
 public:
   ABISupportImpl()
       : ABISupport(ORCABI::PointerSize, ORCABI::TrampolineSize,

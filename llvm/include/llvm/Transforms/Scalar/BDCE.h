@@ -24,7 +24,7 @@ namespace llvm {
 class Function;
 
 // The Bit-Tracking Dead Code Elimination pass.
-struct BDCEPass : PassInfoMixin<BDCEPass> {
+struct LLVM_CLASS_ABI BDCEPass : PassInfoMixin<BDCEPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 }

@@ -21,7 +21,7 @@ namespace llvm {
 class raw_ostream;
 class DwarfStreamer;
 
-class DWARFDebugMacro {
+class LLVM_CLASS_ABI DWARFDebugMacro {
   friend DwarfStreamer;
 
   /// DWARFv5 section 6.3.1 Macro Information Header.

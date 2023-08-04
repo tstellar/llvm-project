@@ -59,7 +59,7 @@ class Type;
 /// We cannot write all values to metadata, as the mere presence of some info,
 /// for example 'force', means a decision has been made. So, we need to be
 /// careful NOT to add them if the user hasn't specifically asked so.
-class LoopVectorizeHints {
+class LLVM_CLASS_ABI LoopVectorizeHints {
   enum HintKind {
     HK_WIDTH,
     HK_INTERLEAVE,
@@ -212,7 +212,7 @@ private:
 /// example, by specifying #pragma clang loop vectorize or -ffast-math. Late
 /// evaluation should be used only when diagnostics can generated that can be
 /// followed by a non-expert user.
-class LoopVectorizationRequirements {
+class LLVM_CLASS_ABI LoopVectorizationRequirements {
 public:
   /// Track the 1st floating-point instruction that can not be reassociated.
   void addExactFPMathInst(Instruction *I) {
@@ -239,7 +239,7 @@ private:
 /// etc. This code reflects the capabilities of InnerLoopVectorizer.
 /// This class is also used by InnerLoopVectorizer for identifying
 /// induction variable and the different reduction variables.
-class LoopVectorizationLegality {
+class LLVM_CLASS_ABI LoopVectorizationLegality {
 public:
   LoopVectorizationLegality(
       Loop *L, PredicatedScalarEvolution &PSE, DominatorTree *DT,

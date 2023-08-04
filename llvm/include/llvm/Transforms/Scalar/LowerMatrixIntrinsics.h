@@ -17,7 +17,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-class LowerMatrixIntrinsicsPass
+class LLVM_CLASS_ABI LowerMatrixIntrinsicsPass
     : public PassInfoMixin<LowerMatrixIntrinsicsPass> {
   bool Minimal;
 

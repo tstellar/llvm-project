@@ -38,7 +38,7 @@ class StoreInst;
 class TargetLibraryInfo;
 class Value;
 
-class MemCpyOptPass : public PassInfoMixin<MemCpyOptPass> {
+class LLVM_CLASS_ABI MemCpyOptPass : public PassInfoMixin<MemCpyOptPass> {
   TargetLibraryInfo *TLI = nullptr;
   AAResults *AA = nullptr;
   AssumptionCache *AC = nullptr;

@@ -42,7 +42,7 @@ namespace llvm {
 class raw_ostream;
 
 namespace remarks {
-class RemarkStreamer final {
+class LLVM_CLASS_ABI RemarkStreamer final {
   /// The regex used to filter remarks based on the passes that emit them.
   std::optional<Regex> PassFilter;
   /// The object used to serialize the remarks to a specific format.

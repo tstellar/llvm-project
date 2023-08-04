@@ -52,7 +52,7 @@ enum FeatureKind : uint32_t {
   FK_UAL = 1 << 8,
 };
 
-struct FeatureInfo {
+struct LLVM_CLASS_ABI FeatureInfo {
   StringRef Name;
   FeatureKind Kind;
 };
@@ -62,14 +62,14 @@ enum class ArchKind {
 #include "LoongArchTargetParser.def"
 };
 
-struct ArchInfo {
+struct LLVM_CLASS_ABI ArchInfo {
   StringRef Name;
   ArchKind Kind;
   uint32_t Features;
 };
 
-ArchKind parseArch(StringRef Arch);
-bool getArchFeatures(StringRef Arch, std::vector<StringRef> &Features);
+LLVM_FUNC_ABI ArchKind parseArch(StringRef Arch);
+LLVM_FUNC_ABI bool getArchFeatures(StringRef Arch, std::vector<StringRef> &Features);
 
 } // namespace LoongArch
 

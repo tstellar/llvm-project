@@ -21,7 +21,7 @@ namespace pdb {
 
 class NativeSession;
 
-class NativeEnumSymbols : public IPDBEnumChildren<PDBSymbol> {
+class LLVM_CLASS_ABI NativeEnumSymbols : public IPDBEnumChildren<PDBSymbol> {
 public:
   NativeEnumSymbols(NativeSession &Session, std::vector<SymIndexId> Symbols);
 

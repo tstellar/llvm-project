@@ -33,7 +33,7 @@
 namespace llvm {
 namespace object {
 
-class WasmSymbol {
+class LLVM_CLASS_ABI WasmSymbol {
 public:
   WasmSymbol(const wasm::WasmSymbolInfo &Info,
              const wasm::WasmGlobalType *GlobalType,
@@ -102,7 +102,7 @@ public:
 #endif
 };
 
-struct WasmSection {
+struct LLVM_CLASS_ABI WasmSection {
   WasmSection() = default;
 
   uint32_t Type = 0;         // Section type (See below)
@@ -113,12 +113,12 @@ struct WasmSection {
   std::vector<wasm::WasmRelocation> Relocations; // Relocations for this section
 };
 
-struct WasmSegment {
+struct LLVM_CLASS_ABI WasmSegment {
   uint32_t SectionOffset;
   wasm::WasmDataSegment Data;
 };
 
-class WasmObjectFile : public ObjectFile {
+class LLVM_CLASS_ABI WasmObjectFile : public ObjectFile {
 
 public:
   WasmObjectFile(MemoryBufferRef Object, Error &Err);
@@ -303,7 +303,7 @@ private:
   uint32_t TableSection = 0;
 };
 
-class WasmSectionOrderChecker {
+class LLVM_CLASS_ABI WasmSectionOrderChecker {
 public:
   // We define orders for all core wasm sections and known custom sections.
   enum : int {

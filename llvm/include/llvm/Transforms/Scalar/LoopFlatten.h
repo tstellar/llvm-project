@@ -21,7 +21,7 @@ namespace llvm {
 class LPMUpdater;
 class LoopNest;
 
-class LoopFlattenPass : public PassInfoMixin<LoopFlattenPass> {
+class LLVM_CLASS_ABI LoopFlattenPass : public PassInfoMixin<LoopFlattenPass> {
 public:
   LoopFlattenPass() = default;
 

@@ -65,7 +65,7 @@ class ScalarEvolution;
 class SCEV;
 class TargetMachine;
 
-extern cl::opt<unsigned> PartialUnrollingThreshold;
+LLVM_FUNC_ABI extern cl::opt<unsigned> PartialUnrollingThreshold;
 
 /// Base class which can be used to help build a TTI implementation.
 ///
@@ -77,7 +77,7 @@ extern cl::opt<unsigned> PartialUnrollingThreshold;
 /// We need these methods implemented in the derived class so that this class
 /// doesn't have to duplicate storage for them.
 template <typename T>
-class BasicTTIImplBase : public TargetTransformInfoImplCRTPBase<T> {
+class LLVM_CLASS_ABI BasicTTIImplBase : public TargetTransformInfoImplCRTPBase<T> {
 private:
   using BaseT = TargetTransformInfoImplCRTPBase<T>;
   using TTI = TargetTransformInfo;
@@ -2454,7 +2454,7 @@ public:
 
 /// Concrete BasicTTIImpl that can be used if no further customization
 /// is needed.
-class BasicTTIImpl : public BasicTTIImplBase<BasicTTIImpl> {
+class LLVM_CLASS_ABI BasicTTIImpl : public BasicTTIImplBase<BasicTTIImpl> {
   using BaseT = BasicTTIImplBase<BasicTTIImpl>;
 
   friend class BasicTTIImplBase<BasicTTIImpl>;

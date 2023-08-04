@@ -16,7 +16,7 @@
 
 namespace llvm {
 
-class MCSymbolCOFF : public MCSymbol {
+class LLVM_CLASS_ABI MCSymbolCOFF : public MCSymbol {
   /// This corresponds to the e_type field of the COFF symbol.
   mutable uint16_t Type = 0;
 

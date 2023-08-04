@@ -18,7 +18,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-struct FlattenCFGPass : PassInfoMixin<FlattenCFGPass> {
+struct LLVM_CLASS_ABI FlattenCFGPass : PassInfoMixin<FlattenCFGPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 } // namespace llvm

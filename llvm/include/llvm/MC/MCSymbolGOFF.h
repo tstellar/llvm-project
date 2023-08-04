@@ -18,7 +18,7 @@
 
 namespace llvm {
 
-class MCSymbolGOFF : public MCSymbol {
+class LLVM_CLASS_ABI MCSymbolGOFF : public MCSymbol {
 public:
   MCSymbolGOFF(const StringMapEntry<bool> *Name, bool IsTemporary)
       : MCSymbol(SymbolKindGOFF, Name, IsTemporary) {}

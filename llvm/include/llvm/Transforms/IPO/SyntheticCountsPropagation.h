@@ -15,7 +15,7 @@
 namespace llvm {
 class Module;
 
-class SyntheticCountsPropagation
+class LLVM_CLASS_ABI SyntheticCountsPropagation
     : public PassInfoMixin<SyntheticCountsPropagation> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM);

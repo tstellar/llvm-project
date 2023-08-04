@@ -23,12 +23,12 @@ class MachineFunction;
 class MachineInstr;
 class MachineOperand;
 
-stable_hash stableHashValue(const MachineOperand &MO);
-stable_hash stableHashValue(const MachineInstr &MI, bool HashVRegs = false,
+LLVM_FUNC_ABI stable_hash stableHashValue(const MachineOperand &MO);
+LLVM_FUNC_ABI stable_hash stableHashValue(const MachineInstr &MI, bool HashVRegs = false,
                             bool HashConstantPoolIndices = false,
                             bool HashMemOperands = false);
-stable_hash stableHashValue(const MachineBasicBlock &MBB);
-stable_hash stableHashValue(const MachineFunction &MF);
+LLVM_FUNC_ABI stable_hash stableHashValue(const MachineBasicBlock &MBB);
+LLVM_FUNC_ABI stable_hash stableHashValue(const MachineFunction &MF);
 
 } // namespace llvm
 

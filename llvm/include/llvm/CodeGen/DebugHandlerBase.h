@@ -29,7 +29,7 @@ class MachineInstr;
 class MachineModuleInfo;
 
 /// Represents the location at which a variable is stored.
-struct DbgVariableLocation {
+struct LLVM_CLASS_ABI DbgVariableLocation {
   /// Base register.
   unsigned Register;
 
@@ -51,7 +51,7 @@ struct DbgVariableLocation {
 
 /// Base class for debug information backends. Common functionality related to
 /// tracking which variables and scopes are alive at a given PC live here.
-class DebugHandlerBase : public AsmPrinterHandler {
+class LLVM_CLASS_ABI DebugHandlerBase : public AsmPrinterHandler {
 protected:
   DebugHandlerBase(AsmPrinter *A);
 

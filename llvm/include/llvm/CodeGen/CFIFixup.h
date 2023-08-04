@@ -19,7 +19,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-class CFIFixup : public MachineFunctionPass {
+class LLVM_CLASS_ABI CFIFixup : public MachineFunctionPass {
 public:
   static char ID;
 

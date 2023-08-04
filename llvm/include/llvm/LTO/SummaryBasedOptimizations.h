@@ -15,7 +15,7 @@ namespace llvm {
 class ModuleSummaryIndex;
 
 /// Compute synthetic function entry counts.
-void computeSyntheticCounts(ModuleSummaryIndex &Index);
+LLVM_FUNC_ABI void computeSyntheticCounts(ModuleSummaryIndex &Index);
 
 } // namespace llvm
 #endif

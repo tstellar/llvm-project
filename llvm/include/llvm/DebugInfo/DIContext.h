@@ -30,7 +30,7 @@
 namespace llvm {
 
 /// A format-neutral container for source line information.
-struct DILineInfo {
+struct LLVM_CLASS_ABI DILineInfo {
   // DILineInfo contains "<invalid>" for function/filename it cannot fetch.
   static constexpr const char *const BadString = "<invalid>";
   // Use "??" instead of "<invalid>" to make our output closer to addr2line.
@@ -86,7 +86,7 @@ struct DILineInfo {
 using DILineInfoTable = SmallVector<std::pair<uint64_t, DILineInfo>, 16>;
 
 /// A format-neutral container for inlined code description.
-class DIInliningInfo {
+class LLVM_CLASS_ABI DIInliningInfo {
   SmallVector<DILineInfo, 4> Frames;
 
 public:
@@ -112,7 +112,7 @@ public:
 };
 
 /// Container for description of a global variable.
-struct DIGlobal {
+struct LLVM_CLASS_ABI DIGlobal {
   std::string Name;
   uint64_t Start = 0;
   uint64_t Size = 0;
@@ -122,7 +122,7 @@ struct DIGlobal {
   DIGlobal() : Name(DILineInfo::BadString) {}
 };
 
-struct DILocal {
+struct LLVM_CLASS_ABI DILocal {
   std::string FunctionName;
   std::string Name;
   std::string DeclFile;
@@ -138,7 +138,7 @@ enum class DINameKind { None, ShortName, LinkageName };
 
 /// Controls which fields of DILineInfo container should be filled
 /// with data.
-struct DILineInfoSpecifier {
+struct LLVM_CLASS_ABI DILineInfoSpecifier {
   enum class FileLineInfoKind {
     None,
     // RawValue is whatever the compiler stored in the filename table.  Could be
@@ -187,7 +187,7 @@ enum DIDumpType : unsigned {
 
 /// Container for dump options that control which debug information will be
 /// dumped.
-struct DIDumpOptions {
+struct LLVM_CLASS_ABI DIDumpOptions {
   unsigned DumpType = DIDT_All;
   unsigned ChildRecurseDepth = -1U;
   unsigned ParentRecurseDepth = -1U;
@@ -227,7 +227,7 @@ struct DIDumpOptions {
   std::function<void(Error)> WarningHandler = WithColor::defaultWarningHandler;
 };
 
-class DIContext {
+class LLVM_CLASS_ABI DIContext {
 public:
   enum DIContextKind { CK_DWARF, CK_PDB };
 
@@ -265,7 +265,7 @@ private:
 /// An inferface for inquiring the load address of a loaded object file
 /// to be used by the DIContext implementations when applying relocations
 /// on the fly.
-class LoadedObjectInfo {
+class LLVM_CLASS_ABI LoadedObjectInfo {
 protected:
   LoadedObjectInfo() = default;
   LoadedObjectInfo(const LoadedObjectInfo &) = default;
@@ -308,7 +308,7 @@ public:
 };
 
 template <typename Derived, typename Base = LoadedObjectInfo>
-struct LoadedObjectInfoHelper : Base {
+struct LLVM_CLASS_ABI LoadedObjectInfoHelper : Base {
 protected:
   LoadedObjectInfoHelper(const LoadedObjectInfoHelper &) = default;
   LoadedObjectInfoHelper() = default;

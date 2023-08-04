@@ -59,7 +59,7 @@ class GCRelocateInst;
 /// Represents a gc.statepoint intrinsic call.  This extends directly from
 /// CallBase as the IntrinsicInst only supports calls and gc.statepoint is
 /// invokable.
-class GCStatepointInst : public CallBase {
+class LLVM_CLASS_ABI GCStatepointInst : public CallBase {
 public:
   GCStatepointInst() = delete;
   GCStatepointInst(const GCStatepointInst &) = delete;
@@ -233,7 +233,7 @@ std::vector<const GCRelocateInst *> GCStatepointInst::getGCRelocates() const {
 /// RewriteStatepointsForGC and potentially in other passes in the future) can
 /// have attributes that describe properties of gc.statepoint call they will be
 /// eventually be wrapped in.  This struct is used represent such directives.
-struct StatepointDirectives {
+struct LLVM_CLASS_ABI StatepointDirectives {
   std::optional<uint32_t> NumPatchBytes;
   std::optional<uint64_t> StatepointID;
 
@@ -243,11 +243,11 @@ struct StatepointDirectives {
 
 /// Parse out statepoint directives from the function attributes present in \p
 /// AS.
-StatepointDirectives parseStatepointDirectivesFromAttrs(AttributeList AS);
+LLVM_FUNC_ABI StatepointDirectives parseStatepointDirectivesFromAttrs(AttributeList AS);
 
 /// Return \c true if the \p Attr is an attribute that is a statepoint
 /// directive.
-bool isStatepointDirectiveAttr(Attribute Attr);
+LLVM_FUNC_ABI bool isStatepointDirectiveAttr(Attribute Attr);
 
 } // end namespace llvm
 

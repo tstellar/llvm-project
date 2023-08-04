@@ -27,7 +27,7 @@ class Function;
 class BasicBlock;
 class DotFuncBCIInfo;
 
-class BlockCoverageInference {
+class LLVM_CLASS_ABI BlockCoverageInference {
   friend class DotFuncBCIInfo;
 
 public:

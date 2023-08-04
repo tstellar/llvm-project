@@ -47,7 +47,7 @@ const char *const LLVMLoopUnrollFollowupRemainder =
     "llvm.loop.unroll.followup_remainder";
 /// @}
 
-const Loop* addClonedBlockToLoopInfo(BasicBlock *OriginalBB,
+LLVM_FUNC_ABI const Loop* addClonedBlockToLoopInfo(BasicBlock *OriginalBB,
                                      BasicBlock *ClonedBB, LoopInfo *LI,
                                      NewLoopsMap &NewLoops);
 
@@ -66,7 +66,7 @@ enum class LoopUnrollResult {
   FullyUnrolled
 };
 
-struct UnrollLoopOptions {
+struct LLVM_CLASS_ABI UnrollLoopOptions {
   unsigned Count;
   bool Force;
   bool Runtime;
@@ -75,21 +75,21 @@ struct UnrollLoopOptions {
   bool ForgetAllSCEV;
 };
 
-LoopUnrollResult UnrollLoop(Loop *L, UnrollLoopOptions ULO, LoopInfo *LI,
+LLVM_FUNC_ABI LoopUnrollResult UnrollLoop(Loop *L, UnrollLoopOptions ULO, LoopInfo *LI,
                             ScalarEvolution *SE, DominatorTree *DT,
                             AssumptionCache *AC,
                             const llvm::TargetTransformInfo *TTI,
                             OptimizationRemarkEmitter *ORE, bool PreserveLCSSA,
                             Loop **RemainderLoop = nullptr);
 
-bool UnrollRuntimeLoopRemainder(
+LLVM_FUNC_ABI bool UnrollRuntimeLoopRemainder(
     Loop *L, unsigned Count, bool AllowExpensiveTripCount,
     bool UseEpilogRemainder, bool UnrollRemainder, bool ForgetAllSCEV,
     LoopInfo *LI, ScalarEvolution *SE, DominatorTree *DT, AssumptionCache *AC,
     const TargetTransformInfo *TTI, bool PreserveLCSSA,
     Loop **ResultLoop = nullptr);
 
-LoopUnrollResult UnrollAndJamLoop(Loop *L, unsigned Count, unsigned TripCount,
+LLVM_FUNC_ABI LoopUnrollResult UnrollAndJamLoop(Loop *L, unsigned Count, unsigned TripCount,
                                   unsigned TripMultiple, bool UnrollRemainder,
                                   LoopInfo *LI, ScalarEvolution *SE,
                                   DominatorTree *DT, AssumptionCache *AC,
@@ -97,10 +97,10 @@ LoopUnrollResult UnrollAndJamLoop(Loop *L, unsigned Count, unsigned TripCount,
                                   OptimizationRemarkEmitter *ORE,
                                   Loop **EpilogueLoop = nullptr);
 
-bool isSafeToUnrollAndJam(Loop *L, ScalarEvolution &SE, DominatorTree &DT,
+LLVM_FUNC_ABI bool isSafeToUnrollAndJam(Loop *L, ScalarEvolution &SE, DominatorTree &DT,
                           DependenceInfo &DI, LoopInfo &LI);
 
-bool computeUnrollCount(Loop *L, const TargetTransformInfo &TTI,
+LLVM_FUNC_ABI bool computeUnrollCount(Loop *L, const TargetTransformInfo &TTI,
                         DominatorTree &DT, LoopInfo *LI, AssumptionCache *AC,
                         ScalarEvolution &SE,
                         const SmallPtrSetImpl<const Value *> &EphValues,
@@ -111,14 +111,14 @@ bool computeUnrollCount(Loop *L, const TargetTransformInfo &TTI,
                         TargetTransformInfo::PeelingPreferences &PP,
                         bool &UseUpperBound);
 
-void simplifyLoopAfterUnroll(Loop *L, bool SimplifyIVs, LoopInfo *LI,
+LLVM_FUNC_ABI void simplifyLoopAfterUnroll(Loop *L, bool SimplifyIVs, LoopInfo *LI,
                              ScalarEvolution *SE, DominatorTree *DT,
                              AssumptionCache *AC,
                              const TargetTransformInfo *TTI);
 
-MDNode *GetUnrollMetadata(MDNode *LoopID, StringRef Name);
+LLVM_FUNC_ABI MDNode *GetUnrollMetadata(MDNode *LoopID, StringRef Name);
 
-TargetTransformInfo::UnrollingPreferences gatherUnrollingPreferences(
+LLVM_FUNC_ABI TargetTransformInfo::UnrollingPreferences gatherUnrollingPreferences(
     Loop *L, ScalarEvolution &SE, const TargetTransformInfo &TTI,
     BlockFrequencyInfo *BFI, ProfileSummaryInfo *PSI,
     llvm::OptimizationRemarkEmitter &ORE, int OptLevel,
@@ -127,7 +127,7 @@ TargetTransformInfo::UnrollingPreferences gatherUnrollingPreferences(
     std::optional<bool> UserUpperBound,
     std::optional<unsigned> UserFullUnrollMaxCount);
 
-InstructionCost ApproximateLoopSize(const Loop *L, unsigned &NumCalls,
+LLVM_FUNC_ABI InstructionCost ApproximateLoopSize(const Loop *L, unsigned &NumCalls,
     bool &NotDuplicatable, bool &Convergent, const TargetTransformInfo &TTI,
     const SmallPtrSetImpl<const Value *> &EphValues, unsigned BEInsns);
 

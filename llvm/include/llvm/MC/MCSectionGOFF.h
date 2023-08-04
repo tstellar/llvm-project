@@ -24,7 +24,7 @@ namespace llvm {
 
 class MCExpr;
 
-class MCSectionGOFF final : public MCSection {
+class LLVM_CLASS_ABI MCSectionGOFF final : public MCSection {
 private:
   MCSection *Parent;
   const MCExpr *SubsectionId;

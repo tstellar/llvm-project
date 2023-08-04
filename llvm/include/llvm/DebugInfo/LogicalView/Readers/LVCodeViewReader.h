@@ -29,7 +29,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-template <> struct BinaryItemTraits<codeview::CVType> {
+template <> struct LLVM_CLASS_ABI BinaryItemTraits<codeview::CVType> {
   static size_t length(const codeview::CVType &Item) { return Item.length(); }
   static ArrayRef<uint8_t> bytes(const codeview::CVType &Item) {
     return Item.data();
@@ -65,7 +65,7 @@ using LVNames = SmallVector<StringRef, 16>;
 // As the CodeView constants are different to the DWARF constants, the
 // CodeView reader will map them to the DWARF ones.
 
-class LVCodeViewReader final : public LVBinaryReader {
+class LLVM_CLASS_ABI LVCodeViewReader final : public LVBinaryReader {
   friend class LVTypeVisitor;
   friend class LVSymbolVisitor;
   friend class LVSymbolVisitorDelegate;

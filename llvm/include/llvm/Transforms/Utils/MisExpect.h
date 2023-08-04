@@ -35,7 +35,7 @@ namespace misexpect {
 ///
 /// \param I The Instruction being checked
 /// \param RealWeights A vector of profile weights for each target block
-void checkBackendInstrumentation(Instruction &I,
+LLVM_FUNC_ABI void checkBackendInstrumentation(Instruction &I,
                                  const llvm::ArrayRef<uint32_t> RealWeights);
 
 /// checkFrontendInstrumentation - compares PGO counters to the thresholds used
@@ -49,7 +49,7 @@ void checkBackendInstrumentation(Instruction &I,
 /// \param I The Instruction being checked
 /// \param ExpectedWeights A vector of the expected weights for each target
 /// block, this determines the threshold values used when emiting diagnostics
-void checkFrontendInstrumentation(Instruction &I,
+LLVM_FUNC_ABI void checkFrontendInstrumentation(Instruction &I,
                                   const ArrayRef<uint32_t> ExpectedWeights);
 
 /// veryifyMisExpect - compares RealWeights to the thresholds used
@@ -59,7 +59,7 @@ void checkFrontendInstrumentation(Instruction &I,
 /// \param I The Instruction being checked
 /// \param RealWeights A vector of profile weights from the profile data
 /// \param ExpectedWeights A vector of the weights attatch by llvm.expect
-void verifyMisExpect(Instruction &I, ArrayRef<uint32_t> RealWeights,
+LLVM_FUNC_ABI void verifyMisExpect(Instruction &I, ArrayRef<uint32_t> RealWeights,
                      const ArrayRef<uint32_t> ExpectedWeights);
 
 /// checkExpectAnnotations - compares PGO counters to the thresholds used
@@ -73,7 +73,7 @@ void verifyMisExpect(Instruction &I, ArrayRef<uint32_t> RealWeights,
 /// \param I The Instruction being checked
 /// \param ExistingWeights A vector of profile weights for each target block
 /// \param IsFrontend A boolean describing if this is Frontend instrumentation
-void checkExpectAnnotations(Instruction &I,
+LLVM_FUNC_ABI void checkExpectAnnotations(Instruction &I,
                             const ArrayRef<uint32_t> ExistingWeights,
                             bool IsFrontend);
 

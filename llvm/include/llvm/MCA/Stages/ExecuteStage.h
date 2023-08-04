@@ -26,7 +26,7 @@
 namespace llvm {
 namespace mca {
 
-class ExecuteStage final : public Stage {
+class LLVM_CLASS_ABI ExecuteStage final : public Stage {
   Scheduler &HWS;
 
   unsigned NumDispatchedOpcodes;

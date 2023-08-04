@@ -29,7 +29,7 @@ using MachineUniformityInfo = GenericUniformityInfo<MachineSSAContext>;
 ///
 /// If \p HasBranchDivergence is false, produces a dummy result which assumes
 /// everything is uniform.
-MachineUniformityInfo computeMachineUniformityInfo(
+LLVM_FUNC_ABI MachineUniformityInfo computeMachineUniformityInfo(
     MachineFunction &F, const MachineCycleInfo &cycleInfo,
     const MachineDomTree &domTree, bool HasBranchDivergence);
 

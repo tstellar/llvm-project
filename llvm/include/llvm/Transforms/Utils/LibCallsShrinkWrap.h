@@ -16,7 +16,7 @@
 
 namespace llvm {
 
-class LibCallsShrinkWrapPass : public PassInfoMixin<LibCallsShrinkWrapPass> {
+class LLVM_CLASS_ABI LibCallsShrinkWrapPass : public PassInfoMixin<LibCallsShrinkWrapPass> {
 public:
   static StringRef name() { return "LibCallsShrinkWrapPass"; }
 

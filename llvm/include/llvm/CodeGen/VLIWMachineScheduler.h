@@ -29,7 +29,7 @@ class SUnit;
 class TargetInstrInfo;
 class TargetSubtargetInfo;
 
-class VLIWResourceModel {
+class LLVM_CLASS_ABI VLIWResourceModel {
 protected:
   const TargetInstrInfo *TII;
 
@@ -68,7 +68,7 @@ protected:
 
 /// Extend the standard ScheduleDAGMILive to provide more context and override
 /// the top-level schedule() driver.
-class VLIWMachineScheduler : public ScheduleDAGMILive {
+class LLVM_CLASS_ABI VLIWMachineScheduler : public ScheduleDAGMILive {
 public:
   VLIWMachineScheduler(MachineSchedContext *C,
                        std::unique_ptr<MachineSchedStrategy> S)
@@ -87,7 +87,7 @@ public:
 // MachineSchedStrategy.
 //===----------------------------------------------------------------------===//
 
-class ConvergingVLIWScheduler : public MachineSchedStrategy {
+class LLVM_CLASS_ABI ConvergingVLIWScheduler : public MachineSchedStrategy {
 protected:
   /// Store the state used by ConvergingVLIWScheduler heuristics, required
   ///  for the lifetime of one invocation of pickNode().

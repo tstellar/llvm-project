@@ -34,7 +34,7 @@ class raw_ostream;
 ///
 /// Note that this class must remain a simple POD value class, because we need
 /// it to live in unions etc.
-class MCValue {
+class LLVM_CLASS_ABI MCValue {
   const MCSymbolRefExpr *SymA = nullptr, *SymB = nullptr;
   int64_t Cst = 0;
   uint32_t RefKind = 0;

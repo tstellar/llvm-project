@@ -25,7 +25,7 @@ namespace llvm::jitlink {
 /// outlives the graph.
 ///
 /// WARNING: The big-endian backend has not been tested yet.
-Expected<std::unique_ptr<LinkGraph>>
+LLVM_FUNC_ABI Expected<std::unique_ptr<LinkGraph>>
 createLinkGraphFromELFObject_ppc64(MemoryBufferRef ObjectBuffer);
 
 /// Create a LinkGraph from an ELF/ppc64le relocatable object.
@@ -33,17 +33,17 @@ createLinkGraphFromELFObject_ppc64(MemoryBufferRef ObjectBuffer);
 /// Note: The graph does not take ownership of the underlying buffer, nor copy
 /// its contents. The caller is responsible for ensuring that the object buffer
 /// outlives the graph.
-Expected<std::unique_ptr<LinkGraph>>
+LLVM_FUNC_ABI Expected<std::unique_ptr<LinkGraph>>
 createLinkGraphFromELFObject_ppc64le(MemoryBufferRef ObjectBuffer);
 
 /// jit-link the given object buffer, which must be a ELF ppc64le object file.
 ///
 /// WARNING: The big-endian backend has not been tested yet.
-void link_ELF_ppc64(std::unique_ptr<LinkGraph> G,
+LLVM_FUNC_ABI void link_ELF_ppc64(std::unique_ptr<LinkGraph> G,
                     std::unique_ptr<JITLinkContext> Ctx);
 
 /// jit-link the given object buffer, which must be a ELF ppc64le object file.
-void link_ELF_ppc64le(std::unique_ptr<LinkGraph> G,
+LLVM_FUNC_ABI void link_ELF_ppc64le(std::unique_ptr<LinkGraph> G,
                       std::unique_ptr<JITLinkContext> Ctx);
 
 } // end namespace llvm::jitlink

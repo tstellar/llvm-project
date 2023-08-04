@@ -66,7 +66,7 @@ constexpr StringLiteral ObjC2EHTypePrefix = "_OBJC_EHTYPE_$_";
 constexpr StringLiteral ObjC2IVarPrefix = "_OBJC_IVAR_$_";
 
 using TargetList = SmallVector<Target, 5>;
-class Symbol {
+class LLVM_CLASS_ABI Symbol {
 public:
   Symbol(SymbolKind Kind, StringRef Name, TargetList Targets, SymbolFlags Flags)
       : Name(Name), Targets(std::move(Targets)), Kind(Kind), Flags(Flags) {}

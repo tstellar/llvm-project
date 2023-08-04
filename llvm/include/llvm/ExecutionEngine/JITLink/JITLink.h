@@ -47,7 +47,7 @@ class Section;
 
 /// Base class for errors originating in JIT linker, e.g. missing relocation
 /// support.
-class JITLinkError : public ErrorInfo<JITLinkError> {
+class LLVM_CLASS_ABI JITLinkError : public ErrorInfo<JITLinkError> {
 public:
   static char ID;
 
@@ -62,7 +62,7 @@ private:
 };
 
 /// Represents fixups and constraints in the LinkGraph.
-class Edge {
+class LLVM_CLASS_ABI Edge {
 public:
   using Kind = uint8_t;
 
@@ -103,10 +103,10 @@ private:
 
 /// Returns the string name of the given generic edge kind, or "unknown"
 /// otherwise. Useful for debugging.
-const char *getGenericEdgeKindName(Edge::Kind K);
+LLVM_FUNC_ABI const char *getGenericEdgeKindName(Edge::Kind K);
 
 /// Base class for Addressable entities (externals, absolutes, blocks).
-class Addressable {
+class LLVM_CLASS_ABI Addressable {
   friend class LinkGraph;
 
 protected:
@@ -153,7 +153,7 @@ protected:
 using SectionOrdinal = unsigned;
 
 /// An Addressable with content and edges.
-class Block : public Addressable {
+class LLVM_CLASS_ABI Block : public Addressable {
   friend class LinkGraph;
 
 private:
@@ -369,7 +369,7 @@ inline orc::ExecutorAddr alignToBlock(orc::ExecutorAddr Addr, const Block &B) {
 // Returns true if the given blocks contains exactly one valid c-string.
 // Zero-fill blocks of size 1 count as valid empty strings. Content blocks
 // must end with a zero, and contain no zeros before the end.
-bool isCStringBlock(Block &B);
+LLVM_FUNC_ABI bool isCStringBlock(Block &B);
 
 /// Describes symbol linkage. This can be used to resolve definition clashes.
 enum class Linkage : uint8_t {
@@ -381,7 +381,7 @@ enum class Linkage : uint8_t {
 using TargetFlagsType = uint8_t;
 
 /// For errors and debugging output.
-const char *getLinkageName(Linkage L);
+LLVM_FUNC_ABI const char *getLinkageName(Linkage L);
 
 /// Defines the scope in which this symbol should be visible:
 ///   Default -- Visible in the public interface of the linkage unit.
@@ -394,9 +394,9 @@ enum class Scope : uint8_t {
 };
 
 /// For debugging output.
-const char *getScopeName(Scope S);
+LLVM_FUNC_ABI const char *getScopeName(Scope S);
 
-raw_ostream &operator<<(raw_ostream &OS, const Block &B);
+LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, const Block &B);
 
 /// Symbol representation.
 ///
@@ -411,7 +411,7 @@ raw_ostream &operator<<(raw_ostream &OS, const Block &B);
 ///   - External: Has neither linkage nor visibility, points to an external
 ///     Addressable.
 ///
-class Symbol {
+class LLVM_CLASS_ABI Symbol {
   friend class LinkGraph;
 
 private:
@@ -683,13 +683,13 @@ private:
   size_t Size = 0;
 };
 
-raw_ostream &operator<<(raw_ostream &OS, const Symbol &A);
+LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, const Symbol &A);
 
-void printEdge(raw_ostream &OS, const Block &B, const Edge &E,
+LLVM_FUNC_ABI void printEdge(raw_ostream &OS, const Block &B, const Edge &E,
                StringRef EdgeKindName);
 
 /// Represents an object file section.
-class Section {
+class LLVM_CLASS_ABI Section {
   friend class LinkGraph;
 
 private:
@@ -803,7 +803,7 @@ private:
 
 /// Represents a section address range via a pair of Block pointers
 /// to the first and last Blocks in the section.
-class SectionRange {
+class LLVM_CLASS_ABI SectionRange {
 public:
   SectionRange() = default;
   SectionRange(const Section &Sec) {
@@ -846,7 +846,7 @@ private:
   Block *Last = nullptr;
 };
 
-class LinkGraph {
+class LLVM_CLASS_ABI LinkGraph {
 private:
   using SectionMap = DenseMap<StringRef, std::unique_ptr<Section>>;
   using ExternalSymbolSet = DenseSet<Symbol *>;
@@ -1536,7 +1536,7 @@ inline MutableArrayRef<char> Block::getMutableContent(LinkGraph &G) {
 }
 
 /// Enables easy lookup of blocks by addresses.
-class BlockAddressMap {
+class LLVM_CLASS_ABI BlockAddressMap {
 public:
   using AddrToBlockMap = std::map<orc::ExecutorAddr, Block *>;
   using const_iterator = AddrToBlockMap::const_iterator;
@@ -1646,7 +1646,7 @@ private:
 };
 
 /// A map of addresses to Symbols.
-class SymbolAddressMap {
+class LLVM_CLASS_ABI SymbolAddressMap {
 public:
   using SymbolVector = SmallVector<Symbol *, 1>;
 
@@ -1683,7 +1683,7 @@ using LinkGraphPassList = std::vector<LinkGraphPassFunction>;
 
 /// An LinkGraph pass configuration, consisting of a list of pre-prune,
 /// post-prune, and post-fixup passes.
-struct PassConfiguration {
+struct LLVM_CLASS_ABI PassConfiguration {
 
   /// Pre-prune passes.
   ///
@@ -1743,14 +1743,14 @@ struct PassConfiguration {
 ///        the two types once we have an OrcSupport library.
 enum class SymbolLookupFlags { RequiredSymbol, WeaklyReferencedSymbol };
 
-raw_ostream &operator<<(raw_ostream &OS, const SymbolLookupFlags &LF);
+LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, const SymbolLookupFlags &LF);
 
 /// A map of symbol names to resolved addresses.
 using AsyncLookupResult = DenseMap<StringRef, orc::ExecutorSymbolDef>;
 
 /// A function object to call with a resolved symbol map (See AsyncLookupResult)
 /// or an error if resolution failed.
-class JITLinkAsyncLookupContinuation {
+class LLVM_CLASS_ABI JITLinkAsyncLookupContinuation {
 public:
   virtual ~JITLinkAsyncLookupContinuation() = default;
   virtual void run(Expected<AsyncLookupResult> LR) = 0;
@@ -1764,7 +1764,7 @@ template <typename Continuation>
 std::unique_ptr<JITLinkAsyncLookupContinuation>
 createLookupContinuation(Continuation Cont) {
 
-  class Impl final : public JITLinkAsyncLookupContinuation {
+  class LLVM_CLASS_ABI Impl final : public JITLinkAsyncLookupContinuation {
   public:
     Impl(Continuation C) : C(std::move(C)) {}
     void run(Expected<AsyncLookupResult> LR) override { C(std::move(LR)); }
@@ -1777,7 +1777,7 @@ createLookupContinuation(Continuation Cont) {
 }
 
 /// Holds context for a single jitLink invocation.
-class JITLinkContext {
+class LLVM_CLASS_ABI JITLinkContext {
 public:
   using LookupMap = DenseMap<StringRef, SymbolLookupFlags>;
 
@@ -1843,13 +1843,13 @@ private:
 
 /// Marks all symbols in a graph live. This can be used as a default,
 /// conservative mark-live implementation.
-Error markAllSymbolsLive(LinkGraph &G);
+LLVM_FUNC_ABI Error markAllSymbolsLive(LinkGraph &G);
 
 /// Create an out of range error for the given edge in the given block.
-Error makeTargetOutOfRangeError(const LinkGraph &G, const Block &B,
+LLVM_FUNC_ABI Error makeTargetOutOfRangeError(const LinkGraph &G, const Block &B,
                                 const Edge &E);
 
-Error makeAlignmentError(llvm::orc::ExecutorAddr Loc, uint64_t Value, int N,
+LLVM_FUNC_ABI Error makeAlignmentError(llvm::orc::ExecutorAddr Loc, uint64_t Value, int N,
                          const Edge &E);
 
 /// Base case for edge-visitors where the visitor-list is empty.
@@ -1887,11 +1887,11 @@ void visitExistingEdges(LinkGraph &G, VisitorTs &&...Vs) {
 /// Note: The graph does not take ownership of the underlying buffer, nor copy
 /// its contents. The caller is responsible for ensuring that the object buffer
 /// outlives the graph.
-Expected<std::unique_ptr<LinkGraph>>
+LLVM_FUNC_ABI Expected<std::unique_ptr<LinkGraph>>
 createLinkGraphFromObject(MemoryBufferRef ObjectBuffer);
 
 /// Link the given graph.
-void link(std::unique_ptr<LinkGraph> G, std::unique_ptr<JITLinkContext> Ctx);
+LLVM_FUNC_ABI void link(std::unique_ptr<LinkGraph> G, std::unique_ptr<JITLinkContext> Ctx);
 
 } // end namespace jitlink
 } // end namespace llvm

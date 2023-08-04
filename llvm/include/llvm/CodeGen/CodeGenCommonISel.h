@@ -114,7 +114,7 @@ enum FPClassTest : unsigned;
 ///        conclude by code-gening the failure basic block if we have not
 ///        code-gened it already (all stack protector checks we generate in
 ///        the same function, use the same failure basic block).
-class StackProtectorDescriptor {
+class LLVM_CLASS_ABI StackProtectorDescriptor {
 public:
   StackProtectorDescriptor() = default;
 
@@ -212,7 +212,7 @@ private:
 /// terminator sequence so that we can ensure that we splice off not just the
 /// terminator, but additionally the copies that move the vregs into the
 /// physical registers.
-MachineBasicBlock::iterator
+LLVM_FUNC_ABI MachineBasicBlock::iterator
 findSplitPointForStackProtector(MachineBasicBlock *BB,
                                 const TargetInstrInfo &TII);
 
@@ -222,11 +222,11 @@ findSplitPointForStackProtector(MachineBasicBlock *BB,
 /// \param Test The test as specified in 'is_fpclass' intrinsic invocation.
 /// \returns The inverted test, or fcNone, if inversion does not produce a
 /// simpler test.
-FPClassTest invertFPClassTestIfSimpler(FPClassTest Test);
+LLVM_FUNC_ABI FPClassTest invertFPClassTestIfSimpler(FPClassTest Test);
 
 /// Assuming the instruction \p MI is going to be deleted, attempt to salvage
 /// debug users of \p MI by writing the effect of \p MI in a DIExpression.
-void salvageDebugInfoForDbgValue(const MachineRegisterInfo &MRI,
+LLVM_FUNC_ABI void salvageDebugInfoForDbgValue(const MachineRegisterInfo &MRI,
                                  MachineInstr &MI,
                                  ArrayRef<MachineOperand *> DbgUsers);
 

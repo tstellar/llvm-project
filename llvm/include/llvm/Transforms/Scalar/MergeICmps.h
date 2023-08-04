@@ -16,7 +16,7 @@ namespace llvm {
 
 class Function;
 
-struct MergeICmpsPass
+struct LLVM_CLASS_ABI MergeICmpsPass
     : PassInfoMixin<MergeICmpsPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

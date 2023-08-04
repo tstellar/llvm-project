@@ -27,14 +27,14 @@
 
 namespace llvm {
   namespace sys {
-    void MemoryFence();
+    LLVM_FUNC_ABI void MemoryFence();
 
 #ifdef _MSC_VER
     typedef long cas_flag;
 #else
     typedef uint32_t cas_flag;
 #endif
-    cas_flag CompareAndSwap(volatile cas_flag* ptr,
+    LLVM_FUNC_ABI cas_flag CompareAndSwap(volatile cas_flag* ptr,
                             cas_flag new_value,
                             cas_flag old_value);
   }

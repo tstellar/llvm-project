@@ -18,12 +18,12 @@
 #include <vector>
 
 namespace llvm {
-struct RISCVExtensionInfo {
+struct LLVM_CLASS_ABI RISCVExtensionInfo {
   unsigned MajorVersion;
   unsigned MinorVersion;
 };
 
-class RISCVISAInfo {
+class LLVM_CLASS_ABI RISCVISAInfo {
 public:
   RISCVISAInfo(const RISCVISAInfo &) = delete;
   RISCVISAInfo &operator=(const RISCVISAInfo &) = delete;

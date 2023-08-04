@@ -21,7 +21,7 @@ namespace llvm {
 
 class MCSymbol;
 
-class MCSectionSPIRV final : public MCSection {
+class LLVM_CLASS_ABI MCSectionSPIRV final : public MCSection {
   friend class MCContext;
 
   MCSectionSPIRV(SectionKind K, MCSymbol *Begin)

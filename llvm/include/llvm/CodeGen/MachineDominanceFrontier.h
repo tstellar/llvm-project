@@ -18,7 +18,7 @@
 
 namespace llvm {
 
-class MachineDominanceFrontier : public MachineFunctionPass {
+class LLVM_CLASS_ABI MachineDominanceFrontier : public MachineFunctionPass {
   ForwardDominanceFrontierBase<MachineBasicBlock> Base;
 
 public:

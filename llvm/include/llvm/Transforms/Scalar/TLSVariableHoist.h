@@ -82,7 +82,7 @@ namespace tlshoist {
 
 /// Keeps track of the user of a TLS variable and the operand index
 /// where the variable is used.
-struct TLSUser {
+struct LLVM_CLASS_ABI TLSUser {
   Instruction *Inst;
   unsigned OpndIdx;
 
@@ -90,7 +90,7 @@ struct TLSUser {
 };
 
 /// Keeps track of a TLS variable candidate and its users.
-struct TLSCandidate {
+struct LLVM_CLASS_ABI TLSCandidate {
   SmallVector<TLSUser, 8> Users;
 
   /// Add the user to the use list and update the cost.
@@ -101,7 +101,7 @@ struct TLSCandidate {
 
 } // end namespace tlshoist
 
-class TLSVariableHoistPass : public PassInfoMixin<TLSVariableHoistPass> {
+class LLVM_CLASS_ABI TLSVariableHoistPass : public PassInfoMixin<TLSVariableHoistPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 

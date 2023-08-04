@@ -58,7 +58,7 @@ using CreateCmpXchgInstFun =
 ///     [...]
 ///
 /// Returns true if the containing function was modified.
-bool expandAtomicRMWToCmpXchg(AtomicRMWInst *AI, CreateCmpXchgInstFun CreateCmpXchg);
+LLVM_FUNC_ABI bool expandAtomicRMWToCmpXchg(AtomicRMWInst *AI, CreateCmpXchgInstFun CreateCmpXchg);
 
 } // end namespace llvm
 

@@ -35,7 +35,7 @@ using EdgeCountT = std::pair<EdgeT, uint64_t>;
 /// \p EdgeCounts: The execution counts of every edge (jump) in the profile. The
 ///    map also defines the edges in CFG and should include 0-count edges.
 /// \returns The best block order found.
-std::vector<uint64_t>
+LLVM_FUNC_ABI std::vector<uint64_t>
 applyExtTspLayout(const std::vector<uint64_t> &NodeSizes,
                   const std::vector<uint64_t> &NodeCounts,
                   const std::vector<EdgeCountT> &EdgeCounts);
@@ -44,13 +44,13 @@ applyExtTspLayout(const std::vector<uint64_t> &NodeSizes,
 /// the better the order is. The score is designed to reflect the locality of
 /// the given order, which is anti-correlated with the number of I-cache misses
 /// in a typical execution of the function.
-double calcExtTspScore(const std::vector<uint64_t> &Order,
+LLVM_FUNC_ABI double calcExtTspScore(const std::vector<uint64_t> &Order,
                        const std::vector<uint64_t> &NodeSizes,
                        const std::vector<uint64_t> &NodeCounts,
                        const std::vector<EdgeCountT> &EdgeCounts);
 
 /// Estimate the "quality" of the current node order in CFG.
-double calcExtTspScore(const std::vector<uint64_t> &NodeSizes,
+LLVM_FUNC_ABI double calcExtTspScore(const std::vector<uint64_t> &NodeSizes,
                        const std::vector<uint64_t> &NodeCounts,
                        const std::vector<EdgeCountT> &EdgeCounts);
 

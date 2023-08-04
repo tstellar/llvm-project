@@ -14,7 +14,7 @@
 
 namespace llvm {
 
-class CFGSCCPrinterPass : public PassInfoMixin<CFGSCCPrinterPass> {
+class LLVM_CLASS_ABI CFGSCCPrinterPass : public PassInfoMixin<CFGSCCPrinterPass> {
   raw_ostream &OS;
 
 public:

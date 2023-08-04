@@ -173,8 +173,8 @@ class TestEventRepeater;
 class UnitTestRecordPropertyTestHelper;
 class WindowsDeathTest;
 class FuchsiaDeathTest;
-class UnitTestImpl* GetUnitTestImpl();
-void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
+LLVM_FUNC_ABI class UnitTestImpl* GetUnitTestImpl();
+LLVM_FUNC_ABI void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
                                     const std::string& message);
 
 }  // namespace internal
@@ -1418,9 +1418,9 @@ class GTEST_API_ UnitTest {
   friend class internal::AssertHelper;
   friend class internal::StreamingListenerTest;
   friend class internal::UnitTestRecordPropertyTestHelper;
-  friend Environment* AddGlobalTestEnvironment(Environment* env);
-  friend internal::UnitTestImpl* internal::GetUnitTestImpl();
-  friend void internal::ReportFailureInUnknownLocation(
+  friend LLVM_FUNC_ABI Environment* AddGlobalTestEnvironment(Environment* env);
+  friend LLVM_FUNC_ABI internal::UnitTestImpl* internal::GetUnitTestImpl();
+  friend LLVM_FUNC_ABI void internal::ReportFailureInUnknownLocation(
       TestPartResult::Type result_type,
       const std::string& message);
 
@@ -2466,7 +2466,7 @@ TestInfo* RegisterTest(const char* test_suite_name, const char* test_name,
 //
 // This function was formerly a macro; thus, it is in the global
 // namespace and has an all-caps name.
-int RUN_ALL_TESTS() GTEST_MUST_USE_RESULT_;
+LLVM_FUNC_ABI int RUN_ALL_TESTS() GTEST_MUST_USE_RESULT_;
 
 inline int RUN_ALL_TESTS() {
   return ::testing::UnitTest::GetInstance()->Run();

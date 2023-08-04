@@ -32,7 +32,7 @@ namespace llvm {
 class Function;
 class LLVMTargetMachine;
 
-class PhysicalRegisterUsageInfo : public ImmutablePass {
+class LLVM_CLASS_ABI PhysicalRegisterUsageInfo : public ImmutablePass {
 public:
   static char ID;
 

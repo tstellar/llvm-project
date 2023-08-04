@@ -35,7 +35,7 @@ enum class DwarfLinkerClient { Dsymutil, LLD, General };
 /// by debug information. Valid addresses are those which points to
 /// live code sections. i.e. relocations for these addresses point
 /// into sections which would be/are placed into resulting binary.
-class AddressesMap {
+class LLVM_CLASS_ABI AddressesMap {
 public:
   virtual ~AddressesMap();
 
@@ -77,7 +77,7 @@ public:
 using Offset2UnitMap = DenseMap<uint64_t, CompileUnit *>;
 
 /// DwarfEmitter presents interface to generate all debug info tables.
-class DwarfEmitter {
+class LLVM_CLASS_ABI DwarfEmitter {
 public:
   virtual ~DwarfEmitter();
 
@@ -232,7 +232,7 @@ using UnitListTy = std::vector<std::unique_ptr<CompileUnit>>;
 
 /// This class represents DWARF information for source file
 /// and its address map.
-class DWARFFile {
+class LLVM_CLASS_ABI DWARFFile {
 public:
   DWARFFile(StringRef Name, std::unique_ptr<DWARFContext> Dwarf,
             std::unique_ptr<AddressesMap> Addresses,
@@ -272,7 +272,7 @@ typedef function_ref<void(const DWARFUnit &Unit)> CompileUnitHandler;
 /// a variable). These relocations are called ValidRelocs in the
 /// AddressesInfo and are gathered as a very first step when we start
 /// processing a object file.
-class DWARFLinker {
+class LLVM_CLASS_ABI DWARFLinker {
 public:
   typedef std::function<void(const Twine &Warning, StringRef Context,
                              const DWARFDie *DIE)>

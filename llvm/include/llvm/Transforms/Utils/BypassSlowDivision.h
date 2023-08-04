@@ -28,7 +28,7 @@ namespace llvm {
 class BasicBlock;
 class Value;
 
-struct DivRemMapKey {
+struct LLVM_CLASS_ABI DivRemMapKey {
   bool SignedOp;
   AssertingVH<Value> Dividend;
   AssertingVH<Value> Divisor;
@@ -39,7 +39,7 @@ struct DivRemMapKey {
       : SignedOp(InSignedOp), Dividend(InDividend), Divisor(InDivisor) {}
 };
 
-template <> struct DenseMapInfo<DivRemMapKey> {
+template <> struct LLVM_CLASS_ABI DenseMapInfo<DivRemMapKey> {
   static bool isEqual(const DivRemMapKey &Val1, const DivRemMapKey &Val2) {
     return Val1.SignedOp == Val2.SignedOp && Val1.Dividend == Val2.Dividend &&
            Val1.Divisor == Val2.Divisor;
@@ -67,7 +67,7 @@ template <> struct DenseMapInfo<DivRemMapKey> {
 ///
 /// This optimization may add basic blocks immediately after BB; for obvious
 /// reasons, you shouldn't pass those blocks to bypassSlowDivision.
-bool bypassSlowDivision(
+LLVM_FUNC_ABI bool bypassSlowDivision(
     BasicBlock *BB, const DenseMap<unsigned int, unsigned int> &BypassWidth);
 
 } // end namespace llvm

@@ -35,7 +35,7 @@ class IntrinsicInst;
 /// * first instruction of any basic block
 /// Interesting instructions are numbered in the depth-first walk of the CFG,
 /// and in the program order inside each basic block.
-class StackLifetime {
+class LLVM_CLASS_ABI StackLifetime {
   /// A class representing liveness information for a single basic block.
   /// Each bit in the BitVector represents the liveness property
   /// for a different stack slot.
@@ -63,7 +63,7 @@ public:
   /// live.
   class LiveRange {
     BitVector Bits;
-    friend raw_ostream &operator<<(raw_ostream &OS,
+    friend LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS,
                                    const StackLifetime::LiveRange &R);
 
   public:
@@ -182,7 +182,7 @@ inline raw_ostream &operator<<(raw_ostream &OS,
 }
 
 /// Printer pass for testing.
-class StackLifetimePrinterPass
+class LLVM_CLASS_ABI StackLifetimePrinterPass
     : public PassInfoMixin<StackLifetimePrinterPass> {
   StackLifetime::LivenessType Type;
   raw_ostream &OS;

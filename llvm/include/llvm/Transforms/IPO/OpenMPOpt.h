@@ -25,21 +25,21 @@ using Kernel = Function *;
 using KernelSet = SetVector<Kernel>;
 
 /// Helper to determine if \p M contains OpenMP.
-bool containsOpenMP(Module &M);
+LLVM_FUNC_ABI bool containsOpenMP(Module &M);
 
 /// Helper to determine if \p M is a OpenMP target offloading device module.
-bool isOpenMPDevice(Module &M);
+LLVM_FUNC_ABI bool isOpenMPDevice(Module &M);
 
 /// Return true iff \p Fn is a GPU kernel; \p Fn has the "kernel" attribute.
-bool isKernel(Function &Fn);
+LLVM_FUNC_ABI bool isKernel(Function &Fn);
 
 /// Get OpenMP device kernels in \p M.
-KernelSet getDeviceKernels(Module &M);
+LLVM_FUNC_ABI KernelSet getDeviceKernels(Module &M);
 
 } // namespace omp
 
 /// OpenMP optimizations pass.
-class OpenMPOptPass : public PassInfoMixin<OpenMPOptPass> {
+class LLVM_CLASS_ABI OpenMPOptPass : public PassInfoMixin<OpenMPOptPass> {
 public:
   OpenMPOptPass() = default;
   OpenMPOptPass(ThinOrFullLTOPhase LTOPhase) : LTOPhase(LTOPhase) {}
@@ -50,7 +50,7 @@ private:
   const ThinOrFullLTOPhase LTOPhase = ThinOrFullLTOPhase::None;
 };
 
-class OpenMPOptCGSCCPass : public PassInfoMixin<OpenMPOptCGSCCPass> {
+class LLVM_CLASS_ABI OpenMPOptCGSCCPass : public PassInfoMixin<OpenMPOptCGSCCPass> {
 public:
   OpenMPOptCGSCCPass() = default;
   OpenMPOptCGSCCPass(ThinOrFullLTOPhase LTOPhase) : LTOPhase(LTOPhase) {}

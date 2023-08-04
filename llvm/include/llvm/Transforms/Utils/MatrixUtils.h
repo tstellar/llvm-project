@@ -29,7 +29,7 @@ class IRBuilderBase;
 ///   for ColumnLoop.Index = 0..NumColumns
 ///     for RowLoop.Index = 0..NumRows
 ///       for KLoop.Index = 0..NumInner
-struct TileInfo {
+struct LLVM_CLASS_ABI TileInfo {
   /// Number of rows of the matrix.
   unsigned NumRows;
 

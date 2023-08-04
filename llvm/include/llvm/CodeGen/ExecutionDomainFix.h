@@ -49,7 +49,7 @@ class TargetInstrInfo;
 /// domain, but if we were forced to pay the penalty of a domain crossing, we
 /// keep track of the fact that the register is now available in multiple
 /// domains.
-struct DomainValue {
+struct LLVM_CLASS_ABI DomainValue {
   /// Basic reference counting.
   unsigned Refs = 0;
 
@@ -114,7 +114,7 @@ struct DomainValue {
   }
 };
 
-class ExecutionDomainFix : public MachineFunctionPass {
+class LLVM_CLASS_ABI ExecutionDomainFix : public MachineFunctionPass {
   SpecificBumpPtrAllocator<DomainValue> Allocator;
   SmallVector<DomainValue *, 16> Avail;
 

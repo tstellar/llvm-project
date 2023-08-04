@@ -27,15 +27,15 @@ class Function;
 class FunctionPass;
 
 /// Run the safepoint verifier over a single function.  Crashes on failure.
-void verifySafepointIR(Function &F);
+LLVM_FUNC_ABI void verifySafepointIR(Function &F);
 
 /// Create an instance of the safepoint verifier pass which can be added to
 /// a pass pipeline to check for relocation bugs.
-FunctionPass *createSafepointIRVerifierPass();
+LLVM_FUNC_ABI FunctionPass *createSafepointIRVerifierPass();
 
 /// Create an instance of the safepoint verifier pass which can be added to
 /// a pass pipeline to check for relocation bugs.
-class SafepointIRVerifierPass : public PassInfoMixin<SafepointIRVerifierPass> {
+class LLVM_CLASS_ABI SafepointIRVerifierPass : public PassInfoMixin<SafepointIRVerifierPass> {
 
 public:
   explicit SafepointIRVerifierPass() = default;

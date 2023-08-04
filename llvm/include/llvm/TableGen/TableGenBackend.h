@@ -26,13 +26,13 @@ class raw_ostream;
 namespace TableGen::Emitter {
 using FnT = void (*)(RecordKeeper &Records, raw_ostream &OS);
 
-struct OptCreatorT {
+struct LLVM_CLASS_ABI OptCreatorT {
   static void *call();
 };
 
-extern ManagedStatic<cl::opt<FnT>, OptCreatorT> Action;
+LLVM_FUNC_ABI extern ManagedStatic<cl::opt<FnT>, OptCreatorT> Action;
 
-struct Opt {
+struct LLVM_CLASS_ABI Opt {
   Opt(StringRef Name, FnT CB, StringRef Desc, bool ByDefault = false) {
     if (ByDefault)
       Action->setInitialValue(CB);
@@ -40,7 +40,7 @@ struct Opt {
   }
 };
 
-template <class EmitterC> class OptClass : Opt {
+template <class EmitterC> class LLVM_CLASS_ABI OptClass : Opt {
   static void run(RecordKeeper &RK, raw_ostream &OS) { EmitterC(RK).run(OS); }
 
 public:
@@ -51,7 +51,7 @@ public:
 
 /// emitSourceFileHeader - Output an LLVM style file header to the specified
 /// raw_ostream.
-void emitSourceFileHeader(StringRef Desc, raw_ostream &OS);
+LLVM_FUNC_ABI void emitSourceFileHeader(StringRef Desc, raw_ostream &OS);
 
 } // End llvm namespace
 

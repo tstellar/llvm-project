@@ -65,7 +65,7 @@ class raw_ostream;
 /// Because partial unswitching of switches is extremely unlikely to be possible
 /// in practice and significantly complicates the implementation, this pass does
 /// not currently implement that in any mode.
-class SimpleLoopUnswitchPass : public PassInfoMixin<SimpleLoopUnswitchPass> {
+class LLVM_CLASS_ABI SimpleLoopUnswitchPass : public PassInfoMixin<SimpleLoopUnswitchPass> {
   bool NonTrivial;
   bool Trivial;
 
@@ -83,7 +83,7 @@ public:
 /// Create the legacy pass object for the simple loop unswitcher.
 ///
 /// See the documentaion for `SimpleLoopUnswitchPass` for details.
-Pass *createSimpleLoopUnswitchLegacyPass(bool NonTrivial = false);
+LLVM_FUNC_ABI Pass *createSimpleLoopUnswitchLegacyPass(bool NonTrivial = false);
 
 } // end namespace llvm
 

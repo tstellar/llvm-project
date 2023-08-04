@@ -22,7 +22,7 @@ namespace llvm {
 class Module;
 
 /// A pass that transforms external global definitions into declarations.
-class EliminateAvailableExternallyPass
+class LLVM_CLASS_ABI EliminateAvailableExternallyPass
     : public PassInfoMixin<EliminateAvailableExternallyPass> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &);

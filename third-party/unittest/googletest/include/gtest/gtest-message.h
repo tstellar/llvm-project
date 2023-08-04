@@ -61,7 +61,7 @@ GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
 
 // Ensures that there is at least one operator<< in the global namespace.
 // See Message& operator<<(...) below for why.
-void operator<<(const testing::internal::Secret&, int);
+LLVM_FUNC_ABI void operator<<(const testing::internal::Secret&, int);
 
 namespace testing {
 

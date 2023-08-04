@@ -20,7 +20,7 @@ namespace llvm {
 namespace pdb {
 class NativeSession;
 
-class NativeTypeVTShape : public NativeRawSymbol {
+class LLVM_CLASS_ABI NativeTypeVTShape : public NativeRawSymbol {
 public:
   // Create a pointer record for a non-simple type.
   NativeTypeVTShape(NativeSession &Session, SymIndexId Id,

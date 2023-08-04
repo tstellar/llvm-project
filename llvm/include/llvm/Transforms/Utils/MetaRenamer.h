@@ -19,7 +19,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-struct MetaRenamerPass : PassInfoMixin<MetaRenamerPass> {
+struct LLVM_CLASS_ABI MetaRenamerPass : PassInfoMixin<MetaRenamerPass> {
   PreservedAnalyses run(Module &, ModuleAnalysisManager &);
 };
 } // namespace llvm

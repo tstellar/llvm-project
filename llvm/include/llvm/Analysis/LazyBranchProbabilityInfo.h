@@ -48,7 +48,7 @@ class TargetLibraryInfo;
 ///
 /// Note that it is expected that we wouldn't need this functionality for the
 /// new PM since with the new PM, analyses are executed on demand.
-class LazyBranchProbabilityInfoPass : public FunctionPass {
+class LLVM_CLASS_ABI LazyBranchProbabilityInfoPass : public FunctionPass {
 
   /// Wraps a BPI to allow lazy computation of the branch probabilities.
   ///
@@ -107,15 +107,15 @@ public:
 };
 
 /// Helper for client passes to initialize dependent passes for LBPI.
-void initializeLazyBPIPassPass(PassRegistry &Registry);
+LLVM_FUNC_ABI void initializeLazyBPIPassPass(PassRegistry &Registry);
 
 /// Simple trait class that provides a mapping between BPI passes and the
 /// corresponding BPInfo.
-template <typename PassT> struct BPIPassTrait {
+template <typename PassT> struct LLVM_CLASS_ABI BPIPassTrait {
   static PassT &getBPI(PassT *P) { return *P; }
 };
 
-template <> struct BPIPassTrait<LazyBranchProbabilityInfoPass> {
+template <> struct LLVM_CLASS_ABI BPIPassTrait<LazyBranchProbabilityInfoPass> {
   static BranchProbabilityInfo &getBPI(LazyBranchProbabilityInfoPass *P) {
     return P->getBPI();
   }

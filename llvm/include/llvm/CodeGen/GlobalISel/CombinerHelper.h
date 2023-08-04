@@ -48,31 +48,31 @@ class RegisterBankInfo;
 class TargetLowering;
 class TargetRegisterInfo;
 
-struct PreferredTuple {
+struct LLVM_CLASS_ABI PreferredTuple {
   LLT Ty;                // The result type of the extend.
   unsigned ExtendOpcode; // G_ANYEXT/G_SEXT/G_ZEXT
   MachineInstr *MI;
 };
 
-struct IndexedLoadStoreMatchInfo {
+struct LLVM_CLASS_ABI IndexedLoadStoreMatchInfo {
   Register Addr;
   Register Base;
   Register Offset;
   bool IsPre;
 };
 
-struct PtrAddChain {
+struct LLVM_CLASS_ABI PtrAddChain {
   int64_t Imm;
   Register Base;
   const RegisterBank *Bank;
 };
 
-struct RegisterImmPair {
+struct LLVM_CLASS_ABI RegisterImmPair {
   Register Reg;
   int64_t Imm;
 };
 
-struct ShiftOfShiftedLogic {
+struct LLVM_CLASS_ABI ShiftOfShiftedLogic {
   MachineInstr *Logic;
   MachineInstr *Shift2;
   Register LogicNonShiftReg;
@@ -83,7 +83,7 @@ using BuildFnTy = std::function<void(MachineIRBuilder &)>;
 
 using OperandBuildSteps =
     SmallVector<std::function<void(MachineInstrBuilder &)>, 4>;
-struct InstructionBuildSteps {
+struct LLVM_CLASS_ABI InstructionBuildSteps {
   unsigned Opcode = 0;          /// The opcode for the produced instruction.
   OperandBuildSteps OperandFns; /// Operands to be added to the instruction.
   InstructionBuildSteps() = default;
@@ -91,7 +91,7 @@ struct InstructionBuildSteps {
       : Opcode(Opcode), OperandFns(OperandFns) {}
 };
 
-struct InstructionStepsMatchInfo {
+struct LLVM_CLASS_ABI InstructionStepsMatchInfo {
   /// Describes instructions to be built during a combine.
   SmallVector<InstructionBuildSteps, 2> InstrsToBuild;
   InstructionStepsMatchInfo() = default;
@@ -100,7 +100,7 @@ struct InstructionStepsMatchInfo {
       : InstrsToBuild(InstrsToBuild) {}
 };
 
-class CombinerHelper {
+class LLVM_CLASS_ABI CombinerHelper {
 protected:
   MachineIRBuilder &Builder;
   MachineRegisterInfo &MRI;

@@ -67,7 +67,7 @@ namespace consthoist {
 
 /// Keeps track of the user of a constant and the operand index where the
 /// constant is used.
-struct ConstantUser {
+struct LLVM_CLASS_ABI ConstantUser {
   Instruction *Inst;
   unsigned OpndIdx;
 
@@ -77,7 +77,7 @@ struct ConstantUser {
 using ConstantUseListType = SmallVector<ConstantUser, 8>;
 
 /// Keeps track of a constant candidate and its uses.
-struct ConstantCandidate {
+struct LLVM_CLASS_ABI ConstantCandidate {
   ConstantUseListType Uses;
   // If the candidate is a ConstantExpr (currely only constant GEP expressions
   // whose base pointers are GlobalVariables are supported), ConstInt records
@@ -98,7 +98,7 @@ struct ConstantCandidate {
 
 /// This represents a constant that has been rebased with respect to a
 /// base constant. The difference to the base constant is recorded in Offset.
-struct RebasedConstantInfo {
+struct LLVM_CLASS_ABI RebasedConstantInfo {
   ConstantUseListType Uses;
   Constant *Offset;
   Type *Ty;
@@ -110,7 +110,7 @@ struct RebasedConstantInfo {
 using RebasedConstantListType = SmallVector<RebasedConstantInfo, 4>;
 
 /// A base constant and all its rebased constants.
-struct ConstantInfo {
+struct LLVM_CLASS_ABI ConstantInfo {
   // If the candidate is a ConstantExpr (currely only constant GEP expressions
   // whose base pointers are GlobalVariables are supported), ConstInt records
   // its offset from the base GV, ConstExpr tracks the candidate GEP expr.
@@ -121,7 +121,7 @@ struct ConstantInfo {
 
 } // end namespace consthoist
 
-class ConstantHoistingPass : public PassInfoMixin<ConstantHoistingPass> {
+class LLVM_CLASS_ABI ConstantHoistingPass : public PassInfoMixin<ConstantHoistingPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 

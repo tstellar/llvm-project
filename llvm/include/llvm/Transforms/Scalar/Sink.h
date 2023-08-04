@@ -22,7 +22,7 @@ namespace llvm {
 class Function;
 
 /// Move instructions into successor blocks when possible.
-class SinkingPass : public PassInfoMixin<SinkingPass> {
+class LLVM_CLASS_ABI SinkingPass : public PassInfoMixin<SinkingPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

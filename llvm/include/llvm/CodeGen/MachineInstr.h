@@ -65,7 +65,7 @@ class TargetRegisterInfo;
 /// MachineFunction is deleted, all the contained MachineInstrs are deallocated
 /// without having their destructor called.
 ///
-class MachineInstr
+class LLVM_CLASS_ABI MachineInstr
     : public ilist_node_with_parent<MachineInstr, MachineBasicBlock,
                                     ilist_sentinel_tracking<true>> {
 public:
@@ -2023,7 +2023,7 @@ private:
 /// instruction rather than by pointer value.
 /// The hashing and equality testing functions ignore definitions so this is
 /// useful for CSE, etc.
-struct MachineInstrExpressionTrait : DenseMapInfo<MachineInstr*> {
+struct LLVM_CLASS_ABI MachineInstrExpressionTrait : DenseMapInfo<MachineInstr*> {
   static inline MachineInstr *getEmptyKey() {
     return nullptr;
   }

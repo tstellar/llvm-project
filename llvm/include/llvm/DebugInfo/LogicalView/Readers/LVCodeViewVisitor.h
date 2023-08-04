@@ -38,7 +38,7 @@ class LVCodeViewReader;
 class LVLogicalVisitor;
 struct LVShared;
 
-class LVTypeVisitor final : public TypeVisitorCallbacks {
+class LLVM_CLASS_ABI LVTypeVisitor final : public TypeVisitorCallbacks {
   ScopedPrinter &W;
   LVLogicalVisitor *LogicalVisitor;
   LazyRandomTypeCollection &Types;
@@ -84,7 +84,7 @@ public:
   Error visitUnknownType(CVType &Record) override;
 };
 
-class LVSymbolVisitorDelegate final : public SymbolVisitorDelegate {
+class LLVM_CLASS_ABI LVSymbolVisitorDelegate final : public SymbolVisitorDelegate {
   LVCodeViewReader *Reader;
   const llvm::object::coff_section *CoffSection;
   StringRef SectionContents;
@@ -123,7 +123,7 @@ class LVSymbol;
 class LVType;
 
 // Visitor for CodeView symbol streams found in COFF object files and PDB files.
-class LVSymbolVisitor final : public SymbolVisitorCallbacks {
+class LLVM_CLASS_ABI LVSymbolVisitor final : public SymbolVisitorCallbacks {
   LVCodeViewReader *Reader;
   ScopedPrinter &W;
   LVLogicalVisitor *LogicalVisitor;
@@ -229,7 +229,7 @@ public:
 };
 
 // Visitor for CodeView types and symbols to populate elements.
-class LVLogicalVisitor final {
+class LLVM_CLASS_ABI LVLogicalVisitor final {
   LVCodeViewReader *Reader;
   ScopedPrinter &W;
 

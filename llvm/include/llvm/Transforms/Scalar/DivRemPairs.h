@@ -21,7 +21,7 @@ namespace llvm {
 
 /// Hoist/decompose integer division and remainder instructions to enable CFG
 /// improvements and better codegen.
-struct DivRemPairsPass : public PassInfoMixin<DivRemPairsPass> {
+struct LLVM_CLASS_ABI DivRemPairsPass : public PassInfoMixin<DivRemPairsPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &);
 };

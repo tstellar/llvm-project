@@ -25,7 +25,7 @@ class LPMUpdater;
 class Loop;
 class Function;
 
-struct GuardWideningPass : public PassInfoMixin<GuardWideningPass> {
+struct LLVM_CLASS_ABI GuardWideningPass : public PassInfoMixin<GuardWideningPass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
   PreservedAnalyses run(Loop &L, LoopAnalysisManager &AM,
                         LoopStandardAnalysisResults &AR, LPMUpdater &U);

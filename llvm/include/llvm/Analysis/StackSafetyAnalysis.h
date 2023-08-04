@@ -24,7 +24,7 @@ class AllocaInst;
 class ScalarEvolution;
 
 /// Interface to access stack safety analysis results for single function.
-class StackSafetyInfo {
+class LLVM_CLASS_ABI StackSafetyInfo {
 public:
   struct InfoTy;
 
@@ -56,7 +56,7 @@ public:
   getParamAccesses(ModuleSummaryIndex &Index) const;
 };
 
-class StackSafetyGlobalInfo {
+class LLVM_CLASS_ABI StackSafetyGlobalInfo {
 public:
   struct InfoTy;
 
@@ -90,7 +90,7 @@ public:
 };
 
 /// StackSafetyInfo wrapper for the new pass manager.
-class StackSafetyAnalysis : public AnalysisInfoMixin<StackSafetyAnalysis> {
+class LLVM_CLASS_ABI StackSafetyAnalysis : public AnalysisInfoMixin<StackSafetyAnalysis> {
   friend AnalysisInfoMixin<StackSafetyAnalysis>;
   static AnalysisKey Key;
 
@@ -100,7 +100,7 @@ public:
 };
 
 /// Printer pass for the \c StackSafetyAnalysis results.
-class StackSafetyPrinterPass : public PassInfoMixin<StackSafetyPrinterPass> {
+class LLVM_CLASS_ABI StackSafetyPrinterPass : public PassInfoMixin<StackSafetyPrinterPass> {
   raw_ostream &OS;
 
 public:
@@ -109,7 +109,7 @@ public:
 };
 
 /// StackSafetyInfo wrapper for the legacy pass manager
-class StackSafetyInfoWrapperPass : public FunctionPass {
+class LLVM_CLASS_ABI StackSafetyInfoWrapperPass : public FunctionPass {
   StackSafetyInfo SSI;
 
 public:
@@ -126,7 +126,7 @@ public:
 
 /// This pass performs the global (interprocedural) stack safety analysis (new
 /// pass manager).
-class StackSafetyGlobalAnalysis
+class LLVM_CLASS_ABI StackSafetyGlobalAnalysis
     : public AnalysisInfoMixin<StackSafetyGlobalAnalysis> {
   friend AnalysisInfoMixin<StackSafetyGlobalAnalysis>;
   static AnalysisKey Key;
@@ -137,7 +137,7 @@ public:
 };
 
 /// Printer pass for the \c StackSafetyGlobalAnalysis results.
-class StackSafetyGlobalPrinterPass
+class LLVM_CLASS_ABI StackSafetyGlobalPrinterPass
     : public PassInfoMixin<StackSafetyGlobalPrinterPass> {
   raw_ostream &OS;
 
@@ -148,7 +148,7 @@ public:
 
 /// This pass performs the global (interprocedural) stack safety analysis
 /// (legacy pass manager).
-class StackSafetyGlobalInfoWrapperPass : public ModulePass {
+class LLVM_CLASS_ABI StackSafetyGlobalInfoWrapperPass : public ModulePass {
   StackSafetyGlobalInfo SSGI;
 
 public:
@@ -165,9 +165,9 @@ public:
   bool runOnModule(Module &M) override;
 };
 
-bool needsParamAccessSummary(const Module &M);
+LLVM_FUNC_ABI bool needsParamAccessSummary(const Module &M);
 
-void generateParamAccessSummary(ModuleSummaryIndex &Index);
+LLVM_FUNC_ABI void generateParamAccessSummary(ModuleSummaryIndex &Index);
 
 } // end namespace llvm
 

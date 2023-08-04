@@ -13,7 +13,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-struct FixIrreduciblePass : PassInfoMixin<FixIrreduciblePass> {
+struct LLVM_CLASS_ABI FixIrreduciblePass : PassInfoMixin<FixIrreduciblePass> {
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };
 } // namespace llvm

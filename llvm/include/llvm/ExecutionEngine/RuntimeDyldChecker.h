@@ -72,7 +72,7 @@ class raw_ostream;
 ///             | expr '<<' expr
 ///             | expr '>>' expr
 ///
-class RuntimeDyldChecker {
+class LLVM_CLASS_ABI RuntimeDyldChecker {
 public:
   class MemoryRegionInfo {
   public:

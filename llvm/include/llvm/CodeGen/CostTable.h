@@ -23,7 +23,7 @@ namespace llvm {
 
 /// Cost Table Entry
 template <typename CostType>
-struct CostTblEntryT {
+struct LLVM_CLASS_ABI CostTblEntryT {
   int ISD;
   MVT::SimpleValueType Type;
   CostType Cost;
@@ -53,7 +53,7 @@ CostTableLookup(const CostTblEntryT<CostType> (&Table)[N], int ISD, MVT Ty) {
 
 /// Type Conversion Cost Table
 template <typename CostType>
-struct TypeConversionCostTblEntryT {
+struct LLVM_CLASS_ABI TypeConversionCostTblEntryT {
   int ISD;
   MVT::SimpleValueType Dst;
   MVT::SimpleValueType Src;

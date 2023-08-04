@@ -18,7 +18,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-class CrossDSOCFIPass : public PassInfoMixin<CrossDSOCFIPass> {
+class LLVM_CLASS_ABI CrossDSOCFIPass : public PassInfoMixin<CrossDSOCFIPass> {
 public:
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
 };

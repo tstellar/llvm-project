@@ -65,7 +65,7 @@ class InstrumentManager;
 struct SourceMgr;
 } // namespace mca
 
-MCStreamer *createNullStreamer(MCContext &Ctx);
+LLVM_FUNC_ABI MCStreamer *createNullStreamer(MCContext &Ctx);
 // Takes ownership of \p TAB and \p CE.
 
 /// Create a machine code streamer which will print out assembly for the native
@@ -84,59 +84,59 @@ MCStreamer *createNullStreamer(MCContext &Ctx);
 ///
 /// \param ShowInst - Whether to show the MCInst representation inline with
 /// the assembly.
-MCStreamer *
+LLVM_FUNC_ABI MCStreamer *
 createAsmStreamer(MCContext &Ctx, std::unique_ptr<formatted_raw_ostream> OS,
                   bool isVerboseAsm, bool useDwarfDirectory,
                   MCInstPrinter *InstPrint, std::unique_ptr<MCCodeEmitter> &&CE,
                   std::unique_ptr<MCAsmBackend> &&TAB, bool ShowInst);
 
-MCStreamer *createELFStreamer(MCContext &Ctx,
+LLVM_FUNC_ABI MCStreamer *createELFStreamer(MCContext &Ctx,
                               std::unique_ptr<MCAsmBackend> &&TAB,
                               std::unique_ptr<MCObjectWriter> &&OW,
                               std::unique_ptr<MCCodeEmitter> &&CE,
                               bool RelaxAll);
-MCStreamer *createMachOStreamer(MCContext &Ctx,
+LLVM_FUNC_ABI MCStreamer *createMachOStreamer(MCContext &Ctx,
                                 std::unique_ptr<MCAsmBackend> &&TAB,
                                 std::unique_ptr<MCObjectWriter> &&OW,
                                 std::unique_ptr<MCCodeEmitter> &&CE,
                                 bool RelaxAll, bool DWARFMustBeAtTheEnd,
                                 bool LabelSections = false);
-MCStreamer *createWasmStreamer(MCContext &Ctx,
+LLVM_FUNC_ABI MCStreamer *createWasmStreamer(MCContext &Ctx,
                                std::unique_ptr<MCAsmBackend> &&TAB,
                                std::unique_ptr<MCObjectWriter> &&OW,
                                std::unique_ptr<MCCodeEmitter> &&CE,
                                bool RelaxAll);
-MCStreamer *createXCOFFStreamer(MCContext &Ctx,
+LLVM_FUNC_ABI MCStreamer *createXCOFFStreamer(MCContext &Ctx,
                                 std::unique_ptr<MCAsmBackend> &&TAB,
                                 std::unique_ptr<MCObjectWriter> &&OW,
                                 std::unique_ptr<MCCodeEmitter> &&CE,
                                 bool RelaxAll);
-MCStreamer *createSPIRVStreamer(MCContext &Ctx,
+LLVM_FUNC_ABI MCStreamer *createSPIRVStreamer(MCContext &Ctx,
                                 std::unique_ptr<MCAsmBackend> &&TAB,
                                 std::unique_ptr<MCObjectWriter> &&OW,
                                 std::unique_ptr<MCCodeEmitter> &&CE,
                                 bool RelaxAll);
-MCStreamer *createDXContainerStreamer(MCContext &Ctx,
+LLVM_FUNC_ABI MCStreamer *createDXContainerStreamer(MCContext &Ctx,
                                       std::unique_ptr<MCAsmBackend> &&TAB,
                                       std::unique_ptr<MCObjectWriter> &&OW,
                                       std::unique_ptr<MCCodeEmitter> &&CE,
                                       bool RelaxAll);
 
-MCRelocationInfo *createMCRelocationInfo(const Triple &TT, MCContext &Ctx);
+LLVM_FUNC_ABI MCRelocationInfo *createMCRelocationInfo(const Triple &TT, MCContext &Ctx);
 
-MCSymbolizer *createMCSymbolizer(const Triple &TT, LLVMOpInfoCallback GetOpInfo,
+LLVM_FUNC_ABI MCSymbolizer *createMCSymbolizer(const Triple &TT, LLVMOpInfoCallback GetOpInfo,
                                  LLVMSymbolLookupCallback SymbolLookUp,
                                  void *DisInfo, MCContext *Ctx,
                                  std::unique_ptr<MCRelocationInfo> &&RelInfo);
 
-mca::CustomBehaviour *createCustomBehaviour(const MCSubtargetInfo &STI,
+LLVM_FUNC_ABI mca::CustomBehaviour *createCustomBehaviour(const MCSubtargetInfo &STI,
                                             const mca::SourceMgr &SrcMgr,
                                             const MCInstrInfo &MCII);
 
-mca::InstrPostProcess *createInstrPostProcess(const MCSubtargetInfo &STI,
+LLVM_FUNC_ABI mca::InstrPostProcess *createInstrPostProcess(const MCSubtargetInfo &STI,
                                               const MCInstrInfo &MCII);
 
-mca::InstrumentManager *createInstrumentManager(const MCSubtargetInfo &STI,
+LLVM_FUNC_ABI mca::InstrumentManager *createInstrumentManager(const MCSubtargetInfo &STI,
                                                 const MCInstrInfo &MCII);
 
 /// Target - Wrapper for Target specific information.
@@ -147,7 +147,7 @@ mca::InstrumentManager *createInstrumentManager(const MCSubtargetInfo &STI,
 /// Targets should implement a single global instance of this class (which
 /// will be zero initialized), and pass that instance to the TargetRegistry as
 /// part of their initialization.
-class Target {
+class LLVM_CLASS_ABI Target {
 public:
   friend struct TargetRegistry;
 
@@ -733,7 +733,7 @@ public:
 };
 
 /// TargetRegistry - Generic interface to target specific features.
-struct TargetRegistry {
+struct LLVM_CLASS_ABI TargetRegistry {
   // FIXME: Make this a namespace, probably just move all the Register*
   // functions into Target (currently they all just set members on the Target
   // anyway, and Target friends this class so those functions can...
@@ -1134,7 +1134,7 @@ struct TargetRegistry {
 /// }
 template <Triple::ArchType TargetArchType = Triple::UnknownArch,
           bool HasJIT = false>
-struct RegisterTarget {
+struct LLVM_CLASS_ABI RegisterTarget {
   RegisterTarget(Target &T, const char *Name, const char *Desc,
                  const char *BackendName) {
     TargetRegistry::RegisterTarget(T, Name, Desc, BackendName, &getArchMatch,
@@ -1154,7 +1154,7 @@ struct RegisterTarget {
 ///   extern Target TheFooTarget;
 ///   RegisterMCAsmInfo<FooMCAsmInfo> X(TheFooTarget);
 /// }
-template <class MCAsmInfoImpl> struct RegisterMCAsmInfo {
+template <class MCAsmInfoImpl> struct LLVM_CLASS_ABI RegisterMCAsmInfo {
   RegisterMCAsmInfo(Target &T) {
     TargetRegistry::RegisterMCAsmInfo(T, &Allocator);
   }
@@ -1174,7 +1174,7 @@ private:
 ///   extern Target TheFooTarget;
 ///   RegisterMCAsmInfoFn X(TheFooTarget, TheFunction);
 /// }
-struct RegisterMCAsmInfoFn {
+struct LLVM_CLASS_ABI RegisterMCAsmInfoFn {
   RegisterMCAsmInfoFn(Target &T, Target::MCAsmInfoCtorFnTy Fn) {
     TargetRegistry::RegisterMCAsmInfo(T, Fn);
   }
@@ -1188,7 +1188,7 @@ struct RegisterMCAsmInfoFn {
 ///   extern Target TheFooTarget;
 ///   RegisterMCObjectFileInfo<FooMCObjectFileInfo> X(TheFooTarget);
 /// }
-template <class MCObjectFileInfoImpl> struct RegisterMCObjectFileInfo {
+template <class MCObjectFileInfoImpl> struct LLVM_CLASS_ABI RegisterMCObjectFileInfo {
   RegisterMCObjectFileInfo(Target &T) {
     TargetRegistry::RegisterMCObjectFileInfo(T, &Allocator);
   }
@@ -1207,7 +1207,7 @@ private:
 ///   extern Target TheFooTarget;
 ///   RegisterMCObjectFileInfoFn X(TheFooTarget, TheFunction);
 /// }
-struct RegisterMCObjectFileInfoFn {
+struct LLVM_CLASS_ABI RegisterMCObjectFileInfoFn {
   RegisterMCObjectFileInfoFn(Target &T, Target::MCObjectFileInfoCtorFnTy Fn) {
     TargetRegistry::RegisterMCObjectFileInfo(T, Fn);
   }
@@ -1221,7 +1221,7 @@ struct RegisterMCObjectFileInfoFn {
 ///   extern Target TheFooTarget;
 ///   RegisterMCInstrInfo<FooMCInstrInfo> X(TheFooTarget);
 /// }
-template <class MCInstrInfoImpl> struct RegisterMCInstrInfo {
+template <class MCInstrInfoImpl> struct LLVM_CLASS_ABI RegisterMCInstrInfo {
   RegisterMCInstrInfo(Target &T) {
     TargetRegistry::RegisterMCInstrInfo(T, &Allocator);
   }
@@ -1238,7 +1238,7 @@ private:
 ///   extern Target TheFooTarget;
 ///   RegisterMCInstrInfoFn X(TheFooTarget, TheFunction);
 /// }
-struct RegisterMCInstrInfoFn {
+struct LLVM_CLASS_ABI RegisterMCInstrInfoFn {
   RegisterMCInstrInfoFn(Target &T, Target::MCInstrInfoCtorFnTy Fn) {
     TargetRegistry::RegisterMCInstrInfo(T, Fn);
   }
@@ -1252,7 +1252,7 @@ struct RegisterMCInstrInfoFn {
 ///   extern Target TheFooTarget;
 ///   RegisterMCInstrAnalysis<FooMCInstrAnalysis> X(TheFooTarget);
 /// }
-template <class MCInstrAnalysisImpl> struct RegisterMCInstrAnalysis {
+template <class MCInstrAnalysisImpl> struct LLVM_CLASS_ABI RegisterMCInstrAnalysis {
   RegisterMCInstrAnalysis(Target &T) {
     TargetRegistry::RegisterMCInstrAnalysis(T, &Allocator);
   }
@@ -1271,7 +1271,7 @@ private:
 ///   extern Target TheFooTarget;
 ///   RegisterMCInstrAnalysisFn X(TheFooTarget, TheFunction);
 /// }
-struct RegisterMCInstrAnalysisFn {
+struct LLVM_CLASS_ABI RegisterMCInstrAnalysisFn {
   RegisterMCInstrAnalysisFn(Target &T, Target::MCInstrAnalysisCtorFnTy Fn) {
     TargetRegistry::RegisterMCInstrAnalysis(T, Fn);
   }
@@ -1285,7 +1285,7 @@ struct RegisterMCInstrAnalysisFn {
 ///   extern Target TheFooTarget;
 ///   RegisterMCRegInfo<FooMCRegInfo> X(TheFooTarget);
 /// }
-template <class MCRegisterInfoImpl> struct RegisterMCRegInfo {
+template <class MCRegisterInfoImpl> struct LLVM_CLASS_ABI RegisterMCRegInfo {
   RegisterMCRegInfo(Target &T) {
     TargetRegistry::RegisterMCRegInfo(T, &Allocator);
   }
@@ -1304,7 +1304,7 @@ private:
 ///   extern Target TheFooTarget;
 ///   RegisterMCRegInfoFn X(TheFooTarget, TheFunction);
 /// }
-struct RegisterMCRegInfoFn {
+struct LLVM_CLASS_ABI RegisterMCRegInfoFn {
   RegisterMCRegInfoFn(Target &T, Target::MCRegInfoCtorFnTy Fn) {
     TargetRegistry::RegisterMCRegInfo(T, Fn);
   }
@@ -1318,7 +1318,7 @@ struct RegisterMCRegInfoFn {
 ///   extern Target TheFooTarget;
 ///   RegisterMCSubtargetInfo<FooMCSubtargetInfo> X(TheFooTarget);
 /// }
-template <class MCSubtargetInfoImpl> struct RegisterMCSubtargetInfo {
+template <class MCSubtargetInfoImpl> struct LLVM_CLASS_ABI RegisterMCSubtargetInfo {
   RegisterMCSubtargetInfo(Target &T) {
     TargetRegistry::RegisterMCSubtargetInfo(T, &Allocator);
   }
@@ -1338,7 +1338,7 @@ private:
 ///   extern Target TheFooTarget;
 ///   RegisterMCSubtargetInfoFn X(TheFooTarget, TheFunction);
 /// }
-struct RegisterMCSubtargetInfoFn {
+struct LLVM_CLASS_ABI RegisterMCSubtargetInfoFn {
   RegisterMCSubtargetInfoFn(Target &T, Target::MCSubtargetInfoCtorFnTy Fn) {
     TargetRegistry::RegisterMCSubtargetInfo(T, Fn);
   }
@@ -1352,7 +1352,7 @@ struct RegisterMCSubtargetInfoFn {
 ///   extern Target TheFooTarget;
 ///   RegisterTargetMachine<FooTargetMachine> X(TheFooTarget);
 /// }
-template <class TargetMachineImpl> struct RegisterTargetMachine {
+template <class TargetMachineImpl> struct LLVM_CLASS_ABI RegisterTargetMachine {
   RegisterTargetMachine(Target &T) {
     TargetRegistry::RegisterTargetMachine(T, &Allocator);
   }
@@ -1375,7 +1375,7 @@ private:
 ///   extern Target TheFooTarget;
 ///   RegisterMCAsmBackend<FooAsmLexer> X(TheFooTarget);
 /// }
-template <class MCAsmBackendImpl> struct RegisterMCAsmBackend {
+template <class MCAsmBackendImpl> struct LLVM_CLASS_ABI RegisterMCAsmBackend {
   RegisterMCAsmBackend(Target &T) {
     TargetRegistry::RegisterMCAsmBackend(T, &Allocator);
   }
@@ -1396,7 +1396,7 @@ private:
 ///   extern Target TheFooTarget;
 ///   RegisterMCAsmParser<FooAsmParser> X(TheFooTarget);
 /// }
-template <class MCAsmParserImpl> struct RegisterMCAsmParser {
+template <class MCAsmParserImpl> struct LLVM_CLASS_ABI RegisterMCAsmParser {
   RegisterMCAsmParser(Target &T) {
     TargetRegistry::RegisterMCAsmParser(T, &Allocator);
   }
@@ -1417,7 +1417,7 @@ private:
 ///   extern Target TheFooTarget;
 ///   RegisterAsmPrinter<FooAsmPrinter> X(TheFooTarget);
 /// }
-template <class AsmPrinterImpl> struct RegisterAsmPrinter {
+template <class AsmPrinterImpl> struct LLVM_CLASS_ABI RegisterAsmPrinter {
   RegisterAsmPrinter(Target &T) {
     TargetRegistry::RegisterAsmPrinter(T, &Allocator);
   }
@@ -1437,7 +1437,7 @@ private:
 ///   extern Target TheFooTarget;
 ///   RegisterMCCodeEmitter<FooCodeEmitter> X(TheFooTarget);
 /// }
-template <class MCCodeEmitterImpl> struct RegisterMCCodeEmitter {
+template <class MCCodeEmitterImpl> struct LLVM_CLASS_ABI RegisterMCCodeEmitter {
   RegisterMCCodeEmitter(Target &T) {
     TargetRegistry::RegisterMCCodeEmitter(T, &Allocator);
   }

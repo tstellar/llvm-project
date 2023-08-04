@@ -68,7 +68,7 @@ template <class T> class SmallVectorImpl;
 
 using ParamLoadedValue = std::pair<MachineOperand, DIExpression*>;
 
-struct DestSourcePair {
+struct LLVM_CLASS_ABI DestSourcePair {
   const MachineOperand *Destination;
   const MachineOperand *Source;
 
@@ -77,7 +77,7 @@ struct DestSourcePair {
 };
 
 /// Used to describe a register and immediate addition.
-struct RegImmPair {
+struct LLVM_CLASS_ABI RegImmPair {
   Register Reg;
   int64_t Imm;
 
@@ -86,7 +86,7 @@ struct RegImmPair {
 
 /// Used to describe addressing mode similar to ExtAddrMode in CodeGenPrepare.
 /// It holds the register values, the scale value and the displacement.
-struct ExtAddrMode {
+struct LLVM_CLASS_ABI ExtAddrMode {
   Register BaseReg;
   Register ScaledReg;
   int64_t Scale;
@@ -97,7 +97,7 @@ struct ExtAddrMode {
 ///
 /// TargetInstrInfo - Interface to description of machine instruction set
 ///
-class TargetInstrInfo : public MCInstrInfo {
+class LLVM_CLASS_ABI TargetInstrInfo : public MCInstrInfo {
 public:
   TargetInstrInfo(unsigned CFSetupOpcode = ~0u, unsigned CFDestroyOpcode = ~0u,
                   unsigned CatchRetOpcode = ~0u, unsigned ReturnOpcode = ~0u)
@@ -2141,7 +2141,7 @@ private:
 };
 
 /// Provide DenseMapInfo for TargetInstrInfo::RegSubRegPair.
-template <> struct DenseMapInfo<TargetInstrInfo::RegSubRegPair> {
+template <> struct LLVM_CLASS_ABI DenseMapInfo<TargetInstrInfo::RegSubRegPair> {
   using RegInfo = DenseMapInfo<unsigned>;
 
   static inline TargetInstrInfo::RegSubRegPair getEmptyKey() {

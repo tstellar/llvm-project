@@ -21,7 +21,7 @@ class NativeSession;
 
 class DbiStream;
 
-class NativeExeSymbol : public NativeRawSymbol {
+class LLVM_CLASS_ABI NativeExeSymbol : public NativeRawSymbol {
   // EXE symbol is the authority on the various symbol types.
   DbiStream *Dbi = nullptr;
 

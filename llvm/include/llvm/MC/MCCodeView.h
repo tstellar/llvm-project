@@ -36,7 +36,7 @@ class MCStreamer;
 
 /// Instances of this class represent the information from a
 /// .cv_loc directive.
-class MCCVLoc {
+class LLVM_CLASS_ABI MCCVLoc {
   const MCSymbol *Label = nullptr;
   uint32_t FunctionId;
   uint32_t FileNum;
@@ -96,7 +96,7 @@ public:
 /// .cv_func_id or .cv_inline_site_id. Accumulates information from .cv_loc
 /// directives used with this function's id or the id of an inlined call site
 /// within this function or inlined call site.
-struct MCCVFunctionInfo {
+struct LLVM_CLASS_ABI MCCVFunctionInfo {
   /// If this represents an inlined call site, then ParentFuncIdPlusOne will be
   /// the parent function id plus one. If this represents a normal function,
   /// then there is no parent, and ParentFuncIdPlusOne will be FunctionSentinel.
@@ -142,7 +142,7 @@ struct MCCVFunctionInfo {
 };
 
 /// Holds state from .cv_file and .cv_loc directives for later emission.
-class CodeViewContext {
+class LLVM_CLASS_ABI CodeViewContext {
 public:
   CodeViewContext();
   ~CodeViewContext();

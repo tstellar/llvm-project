@@ -49,7 +49,7 @@ class TargetTransformInfo;
 /// makes them available to the loop passes "for free". Each loop pass is
 /// expected to update these analyses if necessary to ensure they're
 /// valid after it runs.
-struct LoopStandardAnalysisResults {
+struct LLVM_CLASS_ABI LoopStandardAnalysisResults {
   AAResults &AA;
   AssumptionCache &AC;
   DominatorTree &DT;
@@ -157,7 +157,7 @@ typedef OuterAnalysisManagerProxy<FunctionAnalysisManager, Loop,
     FunctionAnalysisManagerLoopProxy;
 
 /// Returns the minimum set of Analyses that all loop passes must preserve.
-PreservedAnalyses getLoopPassPreservedAnalyses();
+LLVM_FUNC_ABI PreservedAnalyses getLoopPassPreservedAnalyses();
 }
 
 #endif // LLVM_ANALYSIS_LOOPANALYSISMANAGER_H

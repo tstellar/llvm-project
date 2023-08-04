@@ -33,7 +33,7 @@ enum LoopPeelDirection {
 /// clone so as to execute a single iteration.
 ///
 /// The trip count of Loop is not updated.
-MachineBasicBlock *PeelSingleBlockLoop(LoopPeelDirection Direction,
+LLVM_FUNC_ABI MachineBasicBlock *PeelSingleBlockLoop(LoopPeelDirection Direction,
                                        MachineBasicBlock *Loop,
                                        MachineRegisterInfo &MRI,
                                        const TargetInstrInfo *TII);

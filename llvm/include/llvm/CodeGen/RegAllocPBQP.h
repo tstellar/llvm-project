@@ -51,7 +51,7 @@ inline unsigned getSpillOptionIdx() { return 0; }
 /// Metadata to speed allocatability test.
 ///
 /// Keeps track of the number of infinities in each row and column.
-class MatrixMetadata {
+class LLVM_CLASS_ABI MatrixMetadata {
 public:
   MatrixMetadata(const Matrix& M)
     : UnsafeRows(new bool[M.getRows() - 1]()),
@@ -92,8 +92,8 @@ private:
 };
 
 /// Holds a vector of the allowed physical regs for a vreg.
-class AllowedRegVector {
-  friend hash_code hash_value(const AllowedRegVector &);
+class LLVM_CLASS_ABI AllowedRegVector {
+  friend LLVM_FUNC_ABI hash_code hash_value(const AllowedRegVector &);
 
 public:
   AllowedRegVector() = default;
@@ -130,7 +130,7 @@ inline hash_code hash_value(const AllowedRegVector &OptRegs) {
 }
 
 /// Holds graph-level metadata relevant to PBQP RA problems.
-class GraphMetadata {
+class LLVM_CLASS_ABI GraphMetadata {
 private:
   using AllowedRegVecPool = ValuePool<AllowedRegVector>;
 
@@ -167,7 +167,7 @@ private:
 };
 
 /// Holds solver state and other metadata relevant to each PBQP RA node.
-class NodeMetadata {
+class LLVM_CLASS_ABI NodeMetadata {
 public:
   using AllowedRegVector = RegAlloc::AllowedRegVector;
 
@@ -268,7 +268,7 @@ private:
 #endif
 };
 
-class RegAllocSolverImpl {
+class LLVM_CLASS_ABI RegAllocSolverImpl {
 private:
   using RAMatrix = MDMatrix<MatrixMetadata>;
 
@@ -501,7 +501,7 @@ private:
   NodeSet NotProvablyAllocatableNodes;
 };
 
-class PBQPRAGraph : public PBQP::Graph<RegAllocSolverImpl> {
+class LLVM_CLASS_ABI PBQPRAGraph : public PBQP::Graph<RegAllocSolverImpl> {
 private:
   using BaseT = PBQP::Graph<RegAllocSolverImpl>;
 
@@ -531,7 +531,7 @@ inline Solution solve(PBQPRAGraph& G) {
 } // end namespace PBQP
 
 /// Create a PBQP register allocator instance.
-FunctionPass *
+LLVM_FUNC_ABI FunctionPass *
 createPBQPRegisterAllocator(char *customPassID = nullptr);
 
 } // end namespace llvm

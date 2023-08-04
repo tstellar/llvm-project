@@ -29,7 +29,7 @@ namespace object {
 ///
 /// Specifies protected member functions to manipulate the record. These should
 /// be called from deriving classes to change values as that record specifies.
-class Record {
+class LLVM_CLASS_ABI Record {
 public:
   static Error getContinuousData(const uint8_t *Record, uint16_t DataLength,
                                  int DataIndex, SmallString<256> &CompleteData);
@@ -75,7 +75,7 @@ protected:
   }
 };
 
-class HDRRecord : public Record {
+class LLVM_CLASS_ABI HDRRecord : public Record {
 public:
   static Error getData(const uint8_t *Record, SmallString<256> &CompleteData);
 
@@ -86,7 +86,7 @@ public:
   }
 };
 
-class ESDRecord : public Record {
+class LLVM_CLASS_ABI ESDRecord : public Record {
 public:
   /// \brief Number of bytes for name; any more must go in continuation.
   /// This is the number of bytes that can fit into the data field of an ESD
@@ -268,7 +268,7 @@ public:
   }
 };
 
-class ENDRecord : public Record {
+class LLVM_CLASS_ABI ENDRecord : public Record {
 public:
   static Error getData(const uint8_t *Record, SmallString<256> &CompleteData);
 

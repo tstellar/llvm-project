@@ -40,7 +40,7 @@ class MachineOperand;
 class MachineRegisterInfo;
 class TargetRegisterInfo;
 
-class DeadLaneDetector {
+class LLVM_CLASS_ABI DeadLaneDetector {
 public:
   /// Contains a bitmask of which lanes of a given virtual register are
   /// defined and which ones are actually used.

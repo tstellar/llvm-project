@@ -30,12 +30,12 @@ class Function;
 ///
 /// This should only be used for debugging, because it plays games with
 /// PassManagers and stuff.
-void lintModule(const Module &M);
+LLVM_FUNC_ABI void lintModule(const Module &M);
 
 // Lint a function.
-void lintFunction(const Function &F);
+LLVM_FUNC_ABI void lintFunction(const Function &F);
 
-class LintPass : public PassInfoMixin<LintPass> {
+class LLVM_CLASS_ABI LintPass : public PassInfoMixin<LintPass> {
 public:
   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 };

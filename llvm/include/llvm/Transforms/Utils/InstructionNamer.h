@@ -13,7 +13,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-struct InstructionNamerPass : PassInfoMixin<InstructionNamerPass> {
+struct LLVM_CLASS_ABI InstructionNamerPass : PassInfoMixin<InstructionNamerPass> {
   PreservedAnalyses run(Function &, FunctionAnalysisManager &);
 };
 } // namespace llvm

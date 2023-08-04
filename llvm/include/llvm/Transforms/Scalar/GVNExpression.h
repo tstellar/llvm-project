@@ -57,7 +57,7 @@ enum ExpressionType {
   ET_BasicEnd
 };
 
-class Expression {
+class LLVM_CLASS_ABI Expression {
 private:
   ExpressionType EType;
   unsigned Opcode;
@@ -133,7 +133,7 @@ inline raw_ostream &operator<<(raw_ostream &OS, const Expression &E) {
   return OS;
 }
 
-class BasicExpression : public Expression {
+class LLVM_CLASS_ABI BasicExpression : public Expression {
 private:
   using RecyclerType = ArrayRecycler<Value *>;
   using RecyclerCapacity = RecyclerType::Capacity;
@@ -240,7 +240,7 @@ public:
   }
 };
 
-class op_inserter {
+class LLVM_CLASS_ABI op_inserter {
 private:
   using Container = BasicExpression;
 
@@ -265,7 +265,7 @@ public:
   op_inserter &operator++(int) { return *this; }
 };
 
-class MemoryExpression : public BasicExpression {
+class LLVM_CLASS_ABI MemoryExpression : public BasicExpression {
 private:
   const MemoryAccess *MemoryLeader;
 
@@ -298,7 +298,7 @@ public:
   void setMemoryLeader(const MemoryAccess *ML) { MemoryLeader = ML; }
 };
 
-class CallExpression final : public MemoryExpression {
+class LLVM_CLASS_ABI CallExpression final : public MemoryExpression {
 private:
   CallInst *Call;
 
@@ -325,7 +325,7 @@ public:
   }
 };
 
-class LoadExpression final : public MemoryExpression {
+class LLVM_CLASS_ABI LoadExpression final : public MemoryExpression {
 private:
   LoadInst *Load;
 
@@ -367,7 +367,7 @@ public:
   }
 };
 
-class StoreExpression final : public MemoryExpression {
+class LLVM_CLASS_ABI StoreExpression final : public MemoryExpression {
 private:
   StoreInst *Store;
   Value *StoredValue;
@@ -408,7 +408,7 @@ public:
   }
 };
 
-class AggregateValueExpression final : public BasicExpression {
+class LLVM_CLASS_ABI AggregateValueExpression final : public BasicExpression {
 private:
   unsigned MaxIntOperands;
   unsigned NumIntOperands = 0;
@@ -477,7 +477,7 @@ public:
   }
 };
 
-class int_op_inserter {
+class LLVM_CLASS_ABI int_op_inserter {
 private:
   using Container = AggregateValueExpression;
 
@@ -502,7 +502,7 @@ public:
   int_op_inserter &operator++(int) { return *this; }
 };
 
-class PHIExpression final : public BasicExpression {
+class LLVM_CLASS_ABI PHIExpression final : public BasicExpression {
 private:
   BasicBlock *BB;
 
@@ -538,7 +538,7 @@ public:
   }
 };
 
-class DeadExpression final : public Expression {
+class LLVM_CLASS_ABI DeadExpression final : public Expression {
 public:
   DeadExpression() : Expression(ET_Dead) {}
   DeadExpression(const DeadExpression &) = delete;
@@ -549,7 +549,7 @@ public:
   }
 };
 
-class VariableExpression final : public Expression {
+class LLVM_CLASS_ABI VariableExpression final : public Expression {
 private:
   Value *VariableValue;
 
@@ -585,7 +585,7 @@ public:
   }
 };
 
-class ConstantExpression final : public Expression {
+class LLVM_CLASS_ABI ConstantExpression final : public Expression {
 private:
   Constant *ConstantValue = nullptr;
 
@@ -622,7 +622,7 @@ public:
   }
 };
 
-class UnknownExpression final : public Expression {
+class LLVM_CLASS_ABI UnknownExpression final : public Expression {
 private:
   Instruction *Inst;
 

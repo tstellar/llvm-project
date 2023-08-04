@@ -29,7 +29,7 @@ class MCCodeEmitter;
 class MCExpr;
 class MCInst;
 
-class MCELFStreamer : public MCObjectStreamer {
+class LLVM_CLASS_ABI MCELFStreamer : public MCObjectStreamer {
 public:
   MCELFStreamer(MCContext &Context, std::unique_ptr<MCAsmBackend> TAB,
                 std::unique_ptr<MCObjectWriter> OW,
@@ -153,7 +153,7 @@ private:
   SmallVector<MCDataFragment *, 4> BundleGroups;
 };
 
-MCELFStreamer *createARMELFStreamer(MCContext &Context,
+LLVM_FUNC_ABI MCELFStreamer *createARMELFStreamer(MCContext &Context,
                                     std::unique_ptr<MCAsmBackend> TAB,
                                     std::unique_ptr<MCObjectWriter> OW,
                                     std::unique_ptr<MCCodeEmitter> Emitter,

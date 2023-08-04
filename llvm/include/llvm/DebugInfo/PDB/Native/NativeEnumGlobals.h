@@ -21,7 +21,7 @@ namespace pdb {
 
 class NativeSession;
 
-class NativeEnumGlobals : public IPDBEnumChildren<PDBSymbol> {
+class LLVM_CLASS_ABI NativeEnumGlobals : public IPDBEnumChildren<PDBSymbol> {
 public:
   NativeEnumGlobals(NativeSession &Session,
                     std::vector<codeview::SymbolKind> Kinds);

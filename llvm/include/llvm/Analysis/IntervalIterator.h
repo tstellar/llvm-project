@@ -86,7 +86,7 @@ inline void addNodeToInterval(Interval *Int, Interval *I) {
 
 template<class NodeTy, class OrigContainer_t, class GT = GraphTraits<NodeTy *>,
          class IGT = GraphTraits<Inverse<NodeTy *>>>
-class IntervalIterator {
+class LLVM_CLASS_ABI IntervalIterator {
   std::vector<std::pair<Interval *, typename Interval::succ_iterator>> IntStack;
   std::set<BasicBlock *> Visited;
   OrigContainer_t *OrigContainer;

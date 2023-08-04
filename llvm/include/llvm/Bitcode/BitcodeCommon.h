@@ -19,7 +19,7 @@
 
 namespace llvm {
 
-struct AllocaPackedValues {
+struct LLVM_CLASS_ABI AllocaPackedValues {
   // We increased the number of bits needed to represent alignment to be more
   // than 5, but to preserve backward compatibility we store the upper bits
   // separately.

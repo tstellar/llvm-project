@@ -22,7 +22,7 @@ class Loop;
 class LPMUpdater;
 
 /// A pass that canonicalizes freeze instructions in a loop.
-class CanonicalizeFreezeInLoopsPass
+class LLVM_CLASS_ABI CanonicalizeFreezeInLoopsPass
     : public PassInfoMixin<CanonicalizeFreezeInLoopsPass> {
 public:
   PreservedAnalyses run(Loop &L, LoopAnalysisManager &AM,

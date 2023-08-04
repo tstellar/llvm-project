@@ -28,14 +28,14 @@ namespace llvm {
   class TargetRegisterInfo;
 
   /// Sorting functions for the Available queue.
-  struct resource_sort {
+  struct LLVM_CLASS_ABI resource_sort {
     ResourcePriorityQueue *PQ;
     explicit resource_sort(ResourcePriorityQueue *pq) : PQ(pq) {}
 
     bool operator()(const SUnit* LHS, const SUnit* RHS) const;
   };
 
-  class ResourcePriorityQueue : public SchedulingPriorityQueue {
+  class LLVM_CLASS_ABI ResourcePriorityQueue : public SchedulingPriorityQueue {
     /// SUnits - The SUnits for the current graph.
     std::vector<SUnit> *SUnits;
 

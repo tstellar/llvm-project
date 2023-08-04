@@ -25,7 +25,7 @@ class MCSymbol;
 class StringRef;
 class raw_pwrite_stream;
 
-class MCWinCOFFStreamer : public MCObjectStreamer {
+class LLVM_CLASS_ABI MCWinCOFFStreamer : public MCObjectStreamer {
 public:
   MCWinCOFFStreamer(MCContext &Context, std::unique_ptr<MCAsmBackend> MAB,
                     std::unique_ptr<MCCodeEmitter> CE,

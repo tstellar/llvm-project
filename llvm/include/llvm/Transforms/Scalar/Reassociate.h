@@ -44,7 +44,7 @@ class Value;
 /// These are implementation details and should not be used by clients.
 namespace reassociate {
 
-struct ValueEntry {
+struct LLVM_CLASS_ABI ValueEntry {
   unsigned Rank;
   Value *Op;
 
@@ -57,7 +57,7 @@ inline bool operator<(const ValueEntry &LHS, const ValueEntry &RHS) {
 
 /// Utility class representing a base and exponent pair which form one
 /// factor of some product.
-struct Factor {
+struct LLVM_CLASS_ABI Factor {
   Value *Base;
   unsigned Power;
 
@@ -69,7 +69,7 @@ class XorOpnd;
 } // end namespace reassociate
 
 /// Reassociate commutative expressions.
-class ReassociatePass : public PassInfoMixin<ReassociatePass> {
+class LLVM_CLASS_ABI ReassociatePass : public PassInfoMixin<ReassociatePass> {
 public:
   using OrderedSet =
       SetVector<AssertingVH<Instruction>, std::deque<AssertingVH<Instruction>>>;

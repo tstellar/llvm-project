@@ -32,7 +32,7 @@ using namespace llvm;
 namespace llvm {
 
 // The cluster information for a machine basic block.
-struct BBClusterInfo {
+struct LLVM_CLASS_ABI BBClusterInfo {
   // Unique ID for this basic block.
   unsigned BBID;
   // Cluster ID this basic block belongs to.
@@ -43,7 +43,7 @@ struct BBClusterInfo {
 
 using ProgramBBClusterInfoMapTy = StringMap<SmallVector<BBClusterInfo>>;
 
-class BasicBlockSectionsProfileReader : public ImmutablePass {
+class LLVM_CLASS_ABI BasicBlockSectionsProfileReader : public ImmutablePass {
 public:
   static char ID;
 
@@ -111,7 +111,7 @@ private:
 // Creates a BasicBlockSectionsProfileReader pass to parse the basic block
 // sections profile. \p Buf is a memory buffer that contains the list of
 // functions and basic block ids to selectively enable basic block sections.
-ImmutablePass *
+LLVM_FUNC_ABI ImmutablePass *
 createBasicBlockSectionsProfileReaderPass(const MemoryBuffer *Buf);
 
 } // namespace llvm

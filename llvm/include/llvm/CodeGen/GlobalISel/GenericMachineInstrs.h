@@ -24,7 +24,7 @@
 namespace llvm {
 
 /// A base class for all GenericMachineInstrs.
-class GenericMachineInstr : public MachineInstr {
+class LLVM_CLASS_ABI GenericMachineInstr : public MachineInstr {
 public:
   GenericMachineInstr() = delete;
 
@@ -39,7 +39,7 @@ public:
 
 /// Represents any type of generic load or store.
 /// G_LOAD, G_STORE, G_ZEXTLOAD, G_SEXTLOAD.
-class GLoadStore : public GenericMachineInstr {
+class LLVM_CLASS_ABI GLoadStore : public GenericMachineInstr {
 public:
   /// Get the source register of the pointer value.
   Register getPointerReg() const { return getOperand(1).getReg(); }
@@ -77,7 +77,7 @@ public:
 };
 
 /// Represents any generic load, including sign/zero extending variants.
-class GAnyLoad : public GLoadStore {
+class LLVM_CLASS_ABI GAnyLoad : public GLoadStore {
 public:
   /// Get the definition register of the loaded value.
   Register getDstReg() const { return getOperand(0).getReg(); }
@@ -95,7 +95,7 @@ public:
 };
 
 /// Represents a G_LOAD.
-class GLoad : public GAnyLoad {
+class LLVM_CLASS_ABI GLoad : public GAnyLoad {
 public:
   static bool classof(const MachineInstr *MI) {
     return MI->getOpcode() == TargetOpcode::G_LOAD;
@@ -103,7 +103,7 @@ public:
 };
 
 /// Represents either a G_SEXTLOAD or G_ZEXTLOAD.
-class GExtLoad : public GAnyLoad {
+class LLVM_CLASS_ABI GExtLoad : public GAnyLoad {
 public:
   static bool classof(const MachineInstr *MI) {
     return MI->getOpcode() == TargetOpcode::G_SEXTLOAD ||
@@ -112,7 +112,7 @@ public:
 };
 
 /// Represents a G_SEXTLOAD.
-class GSExtLoad : public GExtLoad {
+class LLVM_CLASS_ABI GSExtLoad : public GExtLoad {
 public:
   static bool classof(const MachineInstr *MI) {
     return MI->getOpcode() == TargetOpcode::G_SEXTLOAD;
@@ -120,7 +120,7 @@ public:
 };
 
 /// Represents a G_ZEXTLOAD.
-class GZExtLoad : public GExtLoad {
+class LLVM_CLASS_ABI GZExtLoad : public GExtLoad {
 public:
   static bool classof(const MachineInstr *MI) {
     return MI->getOpcode() == TargetOpcode::G_ZEXTLOAD;
@@ -128,7 +128,7 @@ public:
 };
 
 /// Represents a G_STORE.
-class GStore : public GLoadStore {
+class LLVM_CLASS_ABI GStore : public GLoadStore {
 public:
   /// Get the stored value register.
   Register getValueReg() const { return getOperand(0).getReg(); }
@@ -139,7 +139,7 @@ public:
 };
 
 /// Represents a G_UNMERGE_VALUES.
-class GUnmerge : public GenericMachineInstr {
+class LLVM_CLASS_ABI GUnmerge : public GenericMachineInstr {
 public:
   /// Returns the number of def registers.
   unsigned getNumDefs() const { return getNumOperands() - 1; }
@@ -154,7 +154,7 @@ public:
 /// Represents G_BUILD_VECTOR, G_CONCAT_VECTORS or G_MERGE_VALUES.
 /// All these have the common property of generating a single value from
 /// multiple sources.
-class GMergeLikeInstr : public GenericMachineInstr {
+class LLVM_CLASS_ABI GMergeLikeInstr : public GenericMachineInstr {
 public:
   /// Returns the number of source registers.
   unsigned getNumSources() const { return getNumOperands() - 1; }
@@ -174,7 +174,7 @@ public:
 };
 
 /// Represents a G_MERGE_VALUES.
-class GMerge : public GMergeLikeInstr {
+class LLVM_CLASS_ABI GMerge : public GMergeLikeInstr {
 public:
   static bool classof(const MachineInstr *MI) {
     return MI->getOpcode() == TargetOpcode::G_MERGE_VALUES;
@@ -182,7 +182,7 @@ public:
 };
 
 /// Represents a G_CONCAT_VECTORS.
-class GConcatVectors : public GMergeLikeInstr {
+class LLVM_CLASS_ABI GConcatVectors : public GMergeLikeInstr {
 public:
   static bool classof(const MachineInstr *MI) {
     return MI->getOpcode() == TargetOpcode::G_CONCAT_VECTORS;
@@ -190,7 +190,7 @@ public:
 };
 
 /// Represents a G_BUILD_VECTOR.
-class GBuildVector : public GMergeLikeInstr {
+class LLVM_CLASS_ABI GBuildVector : public GMergeLikeInstr {
 public:
   static bool classof(const MachineInstr *MI) {
     return MI->getOpcode() == TargetOpcode::G_BUILD_VECTOR;
@@ -198,7 +198,7 @@ public:
 };
 
 /// Represents a G_PTR_ADD.
-class GPtrAdd : public GenericMachineInstr {
+class LLVM_CLASS_ABI GPtrAdd : public GenericMachineInstr {
 public:
   Register getBaseReg() const { return getReg(1); }
   Register getOffsetReg() const { return getReg(2); }
@@ -209,7 +209,7 @@ public:
 };
 
 /// Represents a G_IMPLICIT_DEF.
-class GImplicitDef : public GenericMachineInstr {
+class LLVM_CLASS_ABI GImplicitDef : public GenericMachineInstr {
 public:
   static bool classof(const MachineInstr *MI) {
     return MI->getOpcode() == TargetOpcode::G_IMPLICIT_DEF;
@@ -217,7 +217,7 @@ public:
 };
 
 /// Represents a G_SELECT.
-class GSelect : public GenericMachineInstr {
+class LLVM_CLASS_ABI GSelect : public GenericMachineInstr {
 public:
   Register getCondReg() const { return getReg(1); }
   Register getTrueReg() const { return getReg(2); }
@@ -229,7 +229,7 @@ public:
 };
 
 /// Represent a G_ICMP or G_FCMP.
-class GAnyCmp : public GenericMachineInstr {
+class LLVM_CLASS_ABI GAnyCmp : public GenericMachineInstr {
 public:
   CmpInst::Predicate getCond() const {
     return static_cast<CmpInst::Predicate>(getOperand(1).getPredicate());
@@ -244,7 +244,7 @@ public:
 };
 
 /// Represent a G_ICMP.
-class GICmp : public GAnyCmp {
+class LLVM_CLASS_ABI GICmp : public GAnyCmp {
 public:
   static bool classof(const MachineInstr *MI) {
     return MI->getOpcode() == TargetOpcode::G_ICMP;
@@ -252,7 +252,7 @@ public:
 };
 
 /// Represent a G_FCMP.
-class GFCmp : public GAnyCmp {
+class LLVM_CLASS_ABI GFCmp : public GAnyCmp {
 public:
   static bool classof(const MachineInstr *MI) {
     return MI->getOpcode() == TargetOpcode::G_FCMP;
@@ -264,7 +264,7 @@ public:
 /// G_UADDO, G_SADDO, G_USUBO, G_SSUBO, G_UMULO, G_SMULO
 /// Carry-in and carry-out:
 /// G_UADDE, G_SADDE, G_USUBE, G_SSUBE
-class GBinOpCarryOut : public GenericMachineInstr {
+class LLVM_CLASS_ABI GBinOpCarryOut : public GenericMachineInstr {
 public:
   Register getDstReg() const { return getReg(0); }
   Register getCarryOutReg() const { return getReg(1); }
@@ -295,7 +295,7 @@ public:
 /// G_UADDO, G_SADDO, G_USUBO, G_SSUBO
 /// Carry-in and carry-out:
 /// G_UADDE, G_SADDE, G_USUBE, G_SSUBE
-class GAddSubCarryOut : public GBinOpCarryOut {
+class LLVM_CLASS_ABI GAddSubCarryOut : public GBinOpCarryOut {
 public:
   bool isAdd() const {
     switch (getOpcode()) {
@@ -342,7 +342,7 @@ public:
 
 /// Represents overflowing add/sub operations that also consume a carry-in.
 /// G_UADDE, G_SADDE, G_USUBE, G_SSUBE
-class GAddSubCarryInOut : public GAddSubCarryOut {
+class LLVM_CLASS_ABI GAddSubCarryInOut : public GAddSubCarryOut {
 public:
   Register getCarryInReg() const { return getReg(4); }
 

@@ -34,7 +34,7 @@
 
 DEMANGLE_NAMESPACE_BEGIN
 
-template <class T, size_t N> class PODSmallVector {
+template <class T, size_t N> class LLVM_CLASS_ABI PODSmallVector {
   static_assert(std::is_pod<T>::value,
                 "T is required to be a plain old data type");
 
@@ -156,7 +156,7 @@ public:
 
 // Base class of all AST nodes. The AST is built by the parser, then is
 // traversed by the printLeft/Right functions to produce a demangled string.
-class Node {
+class LLVM_CLASS_ABI Node {
 public:
   enum Kind : unsigned char {
 #define NODE(NodeKind) K##NodeKind,
@@ -299,7 +299,7 @@ public:
 #endif
 };
 
-class NodeArray {
+class LLVM_CLASS_ABI NodeArray {
   Node **Elements;
   size_t NumElements;
 
@@ -337,7 +337,7 @@ public:
   }
 };
 
-struct NodeArrayNode : Node {
+struct LLVM_CLASS_ABI NodeArrayNode : Node {
   NodeArray Array;
   NodeArrayNode(NodeArray Array_) : Node(KNodeArrayNode), Array(Array_) {}
 
@@ -346,7 +346,7 @@ struct NodeArrayNode : Node {
   void printLeft(OutputBuffer &OB) const override { Array.printWithComma(OB); }
 };
 
-class DotSuffix final : public Node {
+class LLVM_CLASS_ABI DotSuffix final : public Node {
   const Node *Prefix;
   const std::string_view Suffix;
 
@@ -364,7 +364,7 @@ public:
   }
 };
 
-class VendorExtQualType final : public Node {
+class LLVM_CLASS_ABI VendorExtQualType final : public Node {
   const Node *Ty;
   std::string_view Ext;
   const Node *TA;
@@ -405,7 +405,7 @@ inline Qualifiers operator|=(Qualifiers &Q1, Qualifiers Q2) {
   return Q1 = static_cast<Qualifiers>(Q1 | Q2);
 }
 
-class QualType final : public Node {
+class LLVM_CLASS_ABI QualType final : public Node {
 protected:
   const Qualifiers Quals;
   const Node *Child;
@@ -448,7 +448,7 @@ public:
   void printRight(OutputBuffer &OB) const override { Child->printRight(OB); }
 };
 
-class ConversionOperatorType final : public Node {
+class LLVM_CLASS_ABI ConversionOperatorType final : public Node {
   const Node *Ty;
 
 public:
@@ -463,7 +463,7 @@ public:
   }
 };
 
-class PostfixQualifiedType final : public Node {
+class LLVM_CLASS_ABI PostfixQualifiedType final : public Node {
   const Node *Ty;
   const std::string_view Postfix;
 
@@ -479,7 +479,7 @@ public:
   }
 };
 
-class NameType final : public Node {
+class LLVM_CLASS_ABI NameType final : public Node {
   const std::string_view Name;
 
 public:
@@ -493,7 +493,7 @@ public:
   void printLeft(OutputBuffer &OB) const override { OB += Name; }
 };
 
-class BitIntType final : public Node {
+class LLVM_CLASS_ABI BitIntType final : public Node {
   const Node *Size;
   bool Signed;
 
@@ -513,7 +513,7 @@ public:
   }
 };
 
-class ElaboratedTypeSpefType : public Node {
+class LLVM_CLASS_ABI ElaboratedTypeSpefType : public Node {
   std::string_view Kind;
   Node *Child;
 public:
@@ -529,7 +529,7 @@ public:
   }
 };
 
-struct AbiTagAttr : Node {
+struct LLVM_CLASS_ABI AbiTagAttr : Node {
   Node *Base;
   std::string_view Tag;
 
@@ -550,7 +550,7 @@ struct AbiTagAttr : Node {
   }
 };
 
-class EnableIfAttr : public Node {
+class LLVM_CLASS_ABI EnableIfAttr : public Node {
   NodeArray Conditions;
 public:
   EnableIfAttr(NodeArray Conditions_)
@@ -565,7 +565,7 @@ public:
   }
 };
 
-class ObjCProtoName : public Node {
+class LLVM_CLASS_ABI ObjCProtoName : public Node {
   const Node *Ty;
   std::string_view Protocol;
 
@@ -590,7 +590,7 @@ public:
   }
 };
 
-class PointerType final : public Node {
+class LLVM_CLASS_ABI PointerType final : public Node {
   const Node *Pointee;
 
 public:
@@ -640,7 +640,7 @@ enum class ReferenceKind {
 };
 
 // Represents either a LValue or an RValue reference type.
-class ReferenceType : public Node {
+class LLVM_CLASS_ABI ReferenceType : public Node {
   const Node *Pointee;
   ReferenceKind RK;
 
@@ -716,7 +716,7 @@ public:
   }
 };
 
-class PointerToMemberType final : public Node {
+class LLVM_CLASS_ABI PointerToMemberType final : public Node {
   const Node *ClassType;
   const Node *MemberType;
 
@@ -748,7 +748,7 @@ public:
   }
 };
 
-class ArrayType final : public Node {
+class LLVM_CLASS_ABI ArrayType final : public Node {
   const Node *Base;
   Node *Dimension;
 
@@ -777,7 +777,7 @@ public:
   }
 };
 
-class FunctionType final : public Node {
+class LLVM_CLASS_ABI FunctionType final : public Node {
   const Node *Ret;
   NodeArray Params;
   Qualifiers CVQuals;
@@ -837,7 +837,7 @@ public:
   }
 };
 
-class NoexceptSpec : public Node {
+class LLVM_CLASS_ABI NoexceptSpec : public Node {
   const Node *E;
 public:
   NoexceptSpec(const Node *E_) : Node(KNoexceptSpec), E(E_) {}
@@ -852,7 +852,7 @@ public:
   }
 };
 
-class DynamicExceptionSpec : public Node {
+class LLVM_CLASS_ABI DynamicExceptionSpec : public Node {
   NodeArray Types;
 public:
   DynamicExceptionSpec(NodeArray Types_)
@@ -868,7 +868,7 @@ public:
   }
 };
 
-class FunctionEncoding final : public Node {
+class LLVM_CLASS_ABI FunctionEncoding final : public Node {
   const Node *Ret;
   const Node *Name;
   NodeArray Params;
@@ -933,7 +933,7 @@ public:
   }
 };
 
-class LiteralOperator : public Node {
+class LLVM_CLASS_ABI LiteralOperator : public Node {
   const Node *OpName;
 
 public:
@@ -948,7 +948,7 @@ public:
   }
 };
 
-class SpecialName final : public Node {
+class LLVM_CLASS_ABI SpecialName final : public Node {
   const std::string_view Special;
   const Node *Child;
 
@@ -964,7 +964,7 @@ public:
   }
 };
 
-class CtorVtableSpecialName final : public Node {
+class LLVM_CLASS_ABI CtorVtableSpecialName final : public Node {
   const Node *FirstType;
   const Node *SecondType;
 
@@ -983,7 +983,7 @@ public:
   }
 };
 
-struct NestedName : Node {
+struct LLVM_CLASS_ABI NestedName : Node {
   Node *Qual;
   Node *Name;
 
@@ -1001,7 +1001,7 @@ struct NestedName : Node {
   }
 };
 
-struct ModuleName : Node {
+struct LLVM_CLASS_ABI ModuleName : Node {
   ModuleName *Parent;
   Node *Name;
   bool IsPartition;
@@ -1023,7 +1023,7 @@ struct ModuleName : Node {
   }
 };
 
-struct ModuleEntity : Node {
+struct LLVM_CLASS_ABI ModuleEntity : Node {
   ModuleName *Module;
   Node *Name;
 
@@ -1041,7 +1041,7 @@ struct ModuleEntity : Node {
   }
 };
 
-struct LocalName : Node {
+struct LLVM_CLASS_ABI LocalName : Node {
   Node *Encoding;
   Node *Entity;
 
@@ -1057,7 +1057,7 @@ struct LocalName : Node {
   }
 };
 
-class QualifiedName final : public Node {
+class LLVM_CLASS_ABI QualifiedName final : public Node {
   // qualifier::name
   const Node *Qualifier;
   const Node *Name;
@@ -1077,7 +1077,7 @@ public:
   }
 };
 
-class VectorType final : public Node {
+class LLVM_CLASS_ABI VectorType final : public Node {
   const Node *BaseType;
   const Node *Dimension;
 
@@ -1099,7 +1099,7 @@ public:
   }
 };
 
-class PixelVectorType final : public Node {
+class LLVM_CLASS_ABI PixelVectorType final : public Node {
   const Node *Dimension;
 
 public:
@@ -1116,7 +1116,7 @@ public:
   }
 };
 
-class BinaryFPType final : public Node {
+class LLVM_CLASS_ABI BinaryFPType final : public Node {
   const Node *Dimension;
 
 public:
@@ -1139,7 +1139,7 @@ enum class TemplateParamKind { Type, NonType, Template };
 /// This node is created when parsing the <lambda-sig> for a lambda with
 /// explicit template arguments, which might be referenced in the parameter
 /// types appearing later in the <lambda-sig>.
-class SyntheticTemplateParamName final : public Node {
+class LLVM_CLASS_ABI SyntheticTemplateParamName final : public Node {
   TemplateParamKind Kind;
   unsigned Index;
 
@@ -1167,7 +1167,7 @@ public:
 };
 
 /// A template type parameter declaration, 'typename T'.
-class TypeTemplateParamDecl final : public Node {
+class LLVM_CLASS_ABI TypeTemplateParamDecl final : public Node {
   Node *Name;
 
 public:
@@ -1182,7 +1182,7 @@ public:
 };
 
 /// A non-type template parameter declaration, 'int N'.
-class NonTypeTemplateParamDecl final : public Node {
+class LLVM_CLASS_ABI NonTypeTemplateParamDecl final : public Node {
   Node *Name;
   Node *Type;
 
@@ -1206,7 +1206,7 @@ public:
 
 /// A template template parameter declaration,
 /// 'template<typename T> typename N'.
-class TemplateTemplateParamDecl final : public Node {
+class LLVM_CLASS_ABI TemplateTemplateParamDecl final : public Node {
   Node *Name;
   NodeArray Params;
 
@@ -1228,7 +1228,7 @@ public:
 };
 
 /// A template parameter pack declaration, 'typename ...T'.
-class TemplateParamPackDecl final : public Node {
+class LLVM_CLASS_ABI TemplateParamPackDecl final : public Node {
   Node *Param;
 
 public:
@@ -1253,7 +1253,7 @@ public:
 /// <encoding>, and is stored in the TemplateParams table. In order for this to
 /// appear in the final AST, it has to referenced via a <template-param> (ie,
 /// T_).
-class ParameterPack final : public Node {
+class LLVM_CLASS_ABI ParameterPack final : public Node {
   NodeArray Data;
 
   // Setup OutputBuffer for a pack expansion, unless we're already expanding
@@ -1324,7 +1324,7 @@ public:
 /// one of it's Elements is. The parser inserts a ParameterPack into the
 /// TemplateParams table if the <template-args> this pack belongs to apply to an
 /// <encoding>.
-class TemplateArgumentPack final : public Node {
+class LLVM_CLASS_ABI TemplateArgumentPack final : public Node {
   NodeArray Elements;
 public:
   TemplateArgumentPack(NodeArray Elements_)
@@ -1341,7 +1341,7 @@ public:
 
 /// A pack expansion. Below this node, there are some unexpanded ParameterPacks
 /// which each have Child->ParameterPackSize elements.
-class ParameterPackExpansion final : public Node {
+class LLVM_CLASS_ABI ParameterPackExpansion final : public Node {
   const Node *Child;
 
 public:
@@ -1385,7 +1385,7 @@ public:
   }
 };
 
-class TemplateArgs final : public Node {
+class LLVM_CLASS_ABI TemplateArgs final : public Node {
   NodeArray Params;
 
 public:
@@ -1421,7 +1421,7 @@ public:
 /// for the corresponding argument while parsing. Instead, we create a
 /// \c ForwardTemplateReference node that is resolved after we parse the
 /// template arguments.
-struct ForwardTemplateReference : Node {
+struct LLVM_CLASS_ABI ForwardTemplateReference : Node {
   size_t Index;
   Node *Ref = nullptr;
 
@@ -1480,7 +1480,7 @@ struct ForwardTemplateReference : Node {
   }
 };
 
-struct NameWithTemplateArgs : Node {
+struct LLVM_CLASS_ABI NameWithTemplateArgs : Node {
   // name<template_args>
   Node *Name;
   Node *TemplateArgs;
@@ -1498,7 +1498,7 @@ struct NameWithTemplateArgs : Node {
   }
 };
 
-class GlobalQualifiedName final : public Node {
+class LLVM_CLASS_ABI GlobalQualifiedName final : public Node {
   Node *Child;
 
 public:
@@ -1525,7 +1525,7 @@ enum class SpecialSubKind {
 };
 
 class SpecialSubstitution;
-class ExpandedSpecialSubstitution : public Node {
+class LLVM_CLASS_ABI ExpandedSpecialSubstitution : public Node {
 protected:
   SpecialSubKind SSK;
 
@@ -1573,7 +1573,7 @@ private:
   }
 };
 
-class SpecialSubstitution final : public ExpandedSpecialSubstitution {
+class LLVM_CLASS_ABI SpecialSubstitution final : public ExpandedSpecialSubstitution {
 public:
   SpecialSubstitution(SpecialSubKind SSK_)
       : ExpandedSpecialSubstitution(SSK_, KSpecialSubstitution) {}
@@ -1599,7 +1599,7 @@ inline ExpandedSpecialSubstitution::ExpandedSpecialSubstitution(
     SpecialSubstitution const *SS)
     : ExpandedSpecialSubstitution(SS->SSK) {}
 
-class CtorDtorName final : public Node {
+class LLVM_CLASS_ABI CtorDtorName final : public Node {
   const Node *Basename;
   const bool IsDtor;
   const int Variant;
@@ -1618,7 +1618,7 @@ public:
   }
 };
 
-class DtorName : public Node {
+class LLVM_CLASS_ABI DtorName : public Node {
   const Node *Base;
 
 public:
@@ -1632,7 +1632,7 @@ public:
   }
 };
 
-class UnnamedTypeName : public Node {
+class LLVM_CLASS_ABI UnnamedTypeName : public Node {
   const std::string_view Count;
 
 public:
@@ -1648,7 +1648,7 @@ public:
   }
 };
 
-class ClosureTypeName : public Node {
+class LLVM_CLASS_ABI ClosureTypeName : public Node {
   NodeArray TemplateParams;
   NodeArray Params;
   std::string_view Count;
@@ -1683,7 +1683,7 @@ public:
   }
 };
 
-class StructuredBindingName : public Node {
+class LLVM_CLASS_ABI StructuredBindingName : public Node {
   NodeArray Bindings;
 public:
   StructuredBindingName(NodeArray Bindings_)
@@ -1700,7 +1700,7 @@ public:
 
 // -- Expression Nodes --
 
-class BinaryExpr : public Node {
+class LLVM_CLASS_ABI BinaryExpr : public Node {
   const Node *LHS;
   const std::string_view InfixOperator;
   const Node *RHS;
@@ -1734,7 +1734,7 @@ public:
   }
 };
 
-class ArraySubscriptExpr : public Node {
+class LLVM_CLASS_ABI ArraySubscriptExpr : public Node {
   const Node *Op1;
   const Node *Op2;
 
@@ -1754,7 +1754,7 @@ public:
   }
 };
 
-class PostfixExpr : public Node {
+class LLVM_CLASS_ABI PostfixExpr : public Node {
   const Node *Child;
   const std::string_view Operator;
 
@@ -1772,7 +1772,7 @@ public:
   }
 };
 
-class ConditionalExpr : public Node {
+class LLVM_CLASS_ABI ConditionalExpr : public Node {
   const Node *Cond;
   const Node *Then;
   const Node *Else;
@@ -1795,7 +1795,7 @@ public:
   }
 };
 
-class MemberExpr : public Node {
+class LLVM_CLASS_ABI MemberExpr : public Node {
   const Node *LHS;
   const std::string_view Kind;
   const Node *RHS;
@@ -1816,7 +1816,7 @@ public:
   }
 };
 
-class SubobjectExpr : public Node {
+class LLVM_CLASS_ABI SubobjectExpr : public Node {
   const Node *Type;
   const Node *SubExpr;
   std::string_view Offset;
@@ -1851,7 +1851,7 @@ public:
   }
 };
 
-class EnclosingExpr : public Node {
+class LLVM_CLASS_ABI EnclosingExpr : public Node {
   const std::string_view Prefix;
   const Node *Infix;
   const std::string_view Postfix;
@@ -1874,7 +1874,7 @@ public:
   }
 };
 
-class CastExpr : public Node {
+class LLVM_CLASS_ABI CastExpr : public Node {
   // cast_kind<to>(from)
   const std::string_view CastKind;
   const Node *To;
@@ -1903,7 +1903,7 @@ public:
   }
 };
 
-class SizeofParamPackExpr : public Node {
+class LLVM_CLASS_ABI SizeofParamPackExpr : public Node {
   const Node *Pack;
 
 public:
@@ -1921,7 +1921,7 @@ public:
   }
 };
 
-class CallExpr : public Node {
+class LLVM_CLASS_ABI CallExpr : public Node {
   const Node *Callee;
   NodeArray Args;
 
@@ -1941,7 +1941,7 @@ public:
   }
 };
 
-class NewExpr : public Node {
+class LLVM_CLASS_ABI NewExpr : public Node {
   // new (expr_list) type(init_list)
   NodeArray ExprList;
   Node *Type;
@@ -1979,7 +1979,7 @@ public:
   }
 };
 
-class DeleteExpr : public Node {
+class LLVM_CLASS_ABI DeleteExpr : public Node {
   Node *Op;
   bool IsGlobal;
   bool IsArray;
@@ -2004,7 +2004,7 @@ public:
   }
 };
 
-class PrefixExpr : public Node {
+class LLVM_CLASS_ABI PrefixExpr : public Node {
   std::string_view Prefix;
   Node *Child;
 
@@ -2022,7 +2022,7 @@ public:
   }
 };
 
-class FunctionParam : public Node {
+class LLVM_CLASS_ABI FunctionParam : public Node {
   std::string_view Number;
 
 public:
@@ -2037,7 +2037,7 @@ public:
   }
 };
 
-class ConversionExpr : public Node {
+class LLVM_CLASS_ABI ConversionExpr : public Node {
   const Node *Type;
   NodeArray Expressions;
 
@@ -2059,7 +2059,7 @@ public:
   }
 };
 
-class PointerToMemberConversionExpr : public Node {
+class LLVM_CLASS_ABI PointerToMemberConversionExpr : public Node {
   const Node *Type;
   const Node *SubExpr;
   std::string_view Offset;
@@ -2084,7 +2084,7 @@ public:
   }
 };
 
-class InitListExpr : public Node {
+class LLVM_CLASS_ABI InitListExpr : public Node {
   const Node *Ty;
   NodeArray Inits;
 public:
@@ -2102,7 +2102,7 @@ public:
   }
 };
 
-class BracedExpr : public Node {
+class LLVM_CLASS_ABI BracedExpr : public Node {
   const Node *Elem;
   const Node *Init;
   bool IsArray;
@@ -2127,7 +2127,7 @@ public:
   }
 };
 
-class BracedRangeExpr : public Node {
+class LLVM_CLASS_ABI BracedRangeExpr : public Node {
   const Node *First;
   const Node *Last;
   const Node *Init;
@@ -2149,7 +2149,7 @@ public:
   }
 };
 
-class FoldExpr : public Node {
+class LLVM_CLASS_ABI FoldExpr : public Node {
   const Node *Pack, *Init;
   std::string_view OperatorName;
   bool IsLeftFold;
@@ -2196,7 +2196,7 @@ public:
   }
 };
 
-class ThrowExpr : public Node {
+class LLVM_CLASS_ABI ThrowExpr : public Node {
   const Node *Op;
 
 public:
@@ -2210,7 +2210,7 @@ public:
   }
 };
 
-class BoolExpr : public Node {
+class LLVM_CLASS_ABI BoolExpr : public Node {
   bool Value;
 
 public:
@@ -2223,7 +2223,7 @@ public:
   }
 };
 
-class StringLiteral : public Node {
+class LLVM_CLASS_ABI StringLiteral : public Node {
   const Node *Type;
 
 public:
@@ -2238,7 +2238,7 @@ public:
   }
 };
 
-class LambdaExpr : public Node {
+class LLVM_CLASS_ABI LambdaExpr : public Node {
   const Node *Type;
 
 public:
@@ -2254,7 +2254,7 @@ public:
   }
 };
 
-class EnumLiteral : public Node {
+class LLVM_CLASS_ABI EnumLiteral : public Node {
   // ty(integer)
   const Node *Ty;
   std::string_view Integer;
@@ -2277,7 +2277,7 @@ public:
   }
 };
 
-class IntegerLiteral : public Node {
+class LLVM_CLASS_ABI IntegerLiteral : public Node {
   std::string_view Type;
   std::string_view Value;
 
@@ -2318,7 +2318,7 @@ constexpr Node::Kind getFloatLiteralKind(long double *) {
 }
 }
 
-template <class Float> class FloatLiteralImpl : public Node {
+template <class Float> class LLVM_CLASS_ABI FloatLiteralImpl : public Node {
   const std::string_view Contents;
 
   static constexpr Kind KindForClass =
@@ -2384,7 +2384,7 @@ template<typename NodeT> struct NodeKind;
   };
 #include "ItaniumNodes.def"
 
-template <typename Derived, typename Alloc> struct AbstractManglingParser {
+template <typename Derived, typename Alloc> struct LLVM_CLASS_ABI AbstractManglingParser {
   const char *First;
   const char *Last;
 
@@ -2662,7 +2662,7 @@ template <typename Derived, typename Alloc> struct AbstractManglingParser {
   Node *parse();
 };
 
-const char* parse_discriminator(const char* first, const char* last);
+LLVM_FUNC_ABI const char* parse_discriminator(const char* first, const char* last);
 
 // <name> ::= <nested-name> // N
 //        ::= <local-name> # See Scope Encoding below  // Z
@@ -5029,7 +5029,7 @@ template <typename Derived, typename Alloc>
 Node *AbstractManglingParser<Derived, Alloc>::parseEncoding() {
   // The template parameters of an encoding are unrelated to those of the
   // enclosing context.
-  class SaveTemplateParams {
+  class LLVM_CLASS_ABI SaveTemplateParams {
     AbstractManglingParser *Parser;
     decltype(TemplateParams) OldParams;
     decltype(OuterTemplateParams) OldOuterParams;
@@ -5112,7 +5112,7 @@ template <class Float>
 struct FloatData;
 
 template <>
-struct FloatData<float>
+struct LLVM_CLASS_ABI FloatData<float>
 {
     static const size_t mangled_size = 8;
     static const size_t max_demangled_size = 24;
@@ -5120,7 +5120,7 @@ struct FloatData<float>
 };
 
 template <>
-struct FloatData<double>
+struct LLVM_CLASS_ABI FloatData<double>
 {
     static const size_t mangled_size = 16;
     static const size_t max_demangled_size = 32;
@@ -5128,7 +5128,7 @@ struct FloatData<double>
 };
 
 template <>
-struct FloatData<long double>
+struct LLVM_CLASS_ABI FloatData<long double>
 {
 #if defined(__mips__) && defined(__mips_n64) || defined(__aarch64__) || \
     defined(__wasm__) || defined(__riscv) || defined(__loongarch__)
@@ -5503,7 +5503,7 @@ Node *AbstractManglingParser<Derived, Alloc>::parse() {
 }
 
 template <typename Alloc>
-struct ManglingParser : AbstractManglingParser<ManglingParser<Alloc>, Alloc> {
+struct LLVM_CLASS_ABI ManglingParser : AbstractManglingParser<ManglingParser<Alloc>, Alloc> {
   using AbstractManglingParser<ManglingParser<Alloc>,
                                Alloc>::AbstractManglingParser;
 };

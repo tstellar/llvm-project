@@ -40,7 +40,7 @@ using LiveVirtRegBitSet = SparseBitVector<128>;
 /// single register (either physical or virtual depending on the context).  We
 /// expect the constituent live intervals to be disjoint, although we may
 /// eventually make exceptions to handle value-based interference.
-class LiveIntervalUnion {
+class LLVM_CLASS_ABI LiveIntervalUnion {
   // A set of live virtual register segments that supports fast insertion,
   // intersection, and removal.
   // Mapping SlotIndex intervals to virtual register numbers.

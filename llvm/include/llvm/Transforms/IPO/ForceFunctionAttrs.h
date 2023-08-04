@@ -21,7 +21,7 @@ class Module;
 
 /// Pass which forces specific function attributes into the IR, primarily as
 /// a debugging tool.
-struct ForceFunctionAttrsPass : PassInfoMixin<ForceFunctionAttrsPass> {
+struct LLVM_CLASS_ABI ForceFunctionAttrsPass : PassInfoMixin<ForceFunctionAttrsPass> {
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &);
 };
 

@@ -23,8 +23,8 @@ namespace PBQP {
 using PBQPNum = float;
 
 /// PBQP Vector class.
-class Vector {
-  friend hash_code hash_value(const Vector &);
+class LLVM_CLASS_ABI Vector {
+  friend LLVM_FUNC_ABI hash_code hash_value(const Vector &);
 
 public:
   /// Construct a PBQP vector of the given size.
@@ -119,9 +119,9 @@ OStream& operator<<(OStream &OS, const Vector &V) {
 }
 
 /// PBQP Matrix class
-class Matrix {
+class LLVM_CLASS_ABI Matrix {
 private:
-  friend hash_code hash_value(const Matrix &);
+  friend LLVM_FUNC_ABI hash_code hash_value(const Matrix &);
 
 public:
   /// Construct a PBQP Matrix with the given dimensions.
@@ -253,7 +253,7 @@ OStream& operator<<(OStream &OS, const Matrix &M) {
 }
 
 template <typename Metadata>
-class MDVector : public Vector {
+class LLVM_CLASS_ABI MDVector : public Vector {
 public:
   MDVector(const Vector &v) : Vector(v), md(*this) {}
   MDVector(Vector &&v) : Vector(std::move(v)), md(*this) { }
@@ -270,7 +270,7 @@ inline hash_code hash_value(const MDVector<Metadata> &V) {
 }
 
 template <typename Metadata>
-class MDMatrix : public Matrix {
+class LLVM_CLASS_ABI MDMatrix : public Matrix {
 public:
   MDMatrix(const Matrix &m) : Matrix(m), md(*this) {}
   MDMatrix(Matrix &&m) : Matrix(std::move(m)), md(*this) { }

@@ -23,7 +23,7 @@ class Module;
 
 /// A pass which infers function attributes from the names and signatures of
 /// function declarations in a module.
-struct InferFunctionAttrsPass : PassInfoMixin<InferFunctionAttrsPass> {
+struct LLVM_CLASS_ABI InferFunctionAttrsPass : PassInfoMixin<InferFunctionAttrsPass> {
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
 };
 

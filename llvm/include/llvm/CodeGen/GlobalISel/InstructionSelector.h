@@ -17,7 +17,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-class InstructionSelector : public GIMatchTableExecutor {
+class LLVM_CLASS_ABI InstructionSelector : public GIMatchTableExecutor {
 public:
   virtual ~InstructionSelector();
 

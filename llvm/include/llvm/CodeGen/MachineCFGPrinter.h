@@ -18,7 +18,7 @@
 namespace llvm {
 
 template <class GraphType> struct GraphTraits;
-class DOTMachineFuncInfo {
+class LLVM_CLASS_ABI DOTMachineFuncInfo {
 private:
   const MachineFunction *F;
 
@@ -29,7 +29,7 @@ public:
 };
 
 template <>
-struct GraphTraits<DOTMachineFuncInfo *>
+struct LLVM_CLASS_ABI GraphTraits<DOTMachineFuncInfo *>
     : public GraphTraits<const MachineBasicBlock *> {
   static NodeRef getEntryNode(DOTMachineFuncInfo *CFGInfo) {
     return &(CFGInfo->getFunction()->front());
@@ -52,7 +52,7 @@ struct GraphTraits<DOTMachineFuncInfo *>
 };
 
 template <>
-struct DOTGraphTraits<DOTMachineFuncInfo *> : public DefaultDOTGraphTraits {
+struct LLVM_CLASS_ABI DOTGraphTraits<DOTMachineFuncInfo *> : public DefaultDOTGraphTraits {
 
   DOTGraphTraits(bool isSimple = false) : DefaultDOTGraphTraits(isSimple) {}
 

@@ -32,7 +32,7 @@ class MCSymbol;
 class Module;
 class TargetMachine;
 
-class TargetLoweringObjectFileELF : public TargetLoweringObjectFile {
+class LLVM_CLASS_ABI TargetLoweringObjectFileELF : public TargetLoweringObjectFile {
   bool UseInitArray = false;
   mutable unsigned NextUniqueID = 1;  // ID 0 is reserved for execute-only sections
   SmallPtrSet<GlobalObject *, 2> Used;
@@ -113,7 +113,7 @@ public:
   MCSection *getSectionForCommandLines() const override;
 };
 
-class TargetLoweringObjectFileMachO : public TargetLoweringObjectFile {
+class LLVM_CLASS_ABI TargetLoweringObjectFileMachO : public TargetLoweringObjectFile {
 public:
   TargetLoweringObjectFileMachO();
   ~TargetLoweringObjectFileMachO() override = default;
@@ -159,7 +159,7 @@ public:
                          const TargetMachine &TM) const override;
 };
 
-class TargetLoweringObjectFileCOFF : public TargetLoweringObjectFile {
+class LLVM_CLASS_ABI TargetLoweringObjectFileCOFF : public TargetLoweringObjectFile {
   mutable unsigned NextUniqueID = 0;
   const TargetMachine *TM = nullptr;
 
@@ -204,7 +204,7 @@ private:
   void emitLinkerDirectives(MCStreamer &Streamer, Module &M) const;
 };
 
-class TargetLoweringObjectFileWasm : public TargetLoweringObjectFile {
+class LLVM_CLASS_ABI TargetLoweringObjectFileWasm : public TargetLoweringObjectFile {
   mutable unsigned NextUniqueID = 0;
 
 public:
@@ -231,7 +231,7 @@ public:
                                        const TargetMachine &TM) const override;
 };
 
-class TargetLoweringObjectFileXCOFF : public TargetLoweringObjectFile {
+class LLVM_CLASS_ABI TargetLoweringObjectFileXCOFF : public TargetLoweringObjectFile {
 public:
   TargetLoweringObjectFileXCOFF() = default;
   ~TargetLoweringObjectFileXCOFF() override = default;
@@ -299,7 +299,7 @@ public:
                                const TargetMachine &TM) const override;
 };
 
-class TargetLoweringObjectFileGOFF : public TargetLoweringObjectFile {
+class LLVM_CLASS_ABI TargetLoweringObjectFileGOFF : public TargetLoweringObjectFile {
 public:
   TargetLoweringObjectFileGOFF();
   ~TargetLoweringObjectFileGOFF() override = default;

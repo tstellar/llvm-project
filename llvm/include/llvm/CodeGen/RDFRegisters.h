@@ -51,7 +51,7 @@ bool disjoint(const std::set<T> &A, const std::set<T> &B) {
 // The map will act like an indexed set: upon insertion of a new object,
 // it will automatically assign a new index to it. Index of 0 is treated
 // as invalid and is never allocated.
-template <typename T, unsigned N = 32> struct IndexedSet {
+template <typename T, unsigned N = 32> struct LLVM_CLASS_ABI IndexedSet {
   IndexedSet() { Map.reserve(N); }
 
   T get(uint32_t Idx) const {
@@ -86,7 +86,7 @@ private:
   std::vector<T> Map;
 };
 
-struct RegisterRef {
+struct LLVM_CLASS_ABI RegisterRef {
   RegisterId Reg = 0;
   LaneBitmask Mask = LaneBitmask::getNone(); // Only for registers.
 
@@ -139,7 +139,7 @@ struct RegisterRef {
   bool operator!=(RegisterRef) const = delete;
 };
 
-struct PhysicalRegisterInfo {
+struct LLVM_CLASS_ABI PhysicalRegisterInfo {
   PhysicalRegisterInfo(const TargetRegisterInfo &tri,
                        const MachineFunction &mf);
 
@@ -202,7 +202,7 @@ private:
   std::vector<AliasInfo> AliasInfos;
 };
 
-struct RegisterAggr {
+struct LLVM_CLASS_ABI RegisterAggr {
   RegisterAggr(const PhysicalRegisterInfo &pri)
       : Units(pri.getTRI().getNumRegUnits()), PRI(pri) {}
   RegisterAggr(const RegisterAggr &RG) = default;
@@ -288,7 +288,7 @@ private:
 
 // This is really a std::map, except that it provides a non-trivial
 // default constructor to the element accessed via [].
-template <typename KeyType> struct RegisterAggrMap {
+template <typename KeyType> struct LLVM_CLASS_ABI RegisterAggrMap {
   RegisterAggrMap(const PhysicalRegisterInfo &pri) : Empty(pri) {}
 
   RegisterAggr &operator[](KeyType Key) {
@@ -311,33 +311,33 @@ public:
   using value_type = typename decltype(Map)::value_type;
 };
 
-raw_ostream &operator<<(raw_ostream &OS, const RegisterAggr &A);
+LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, const RegisterAggr &A);
 
 // Print the lane mask in a short form (or not at all if all bits are set).
-struct PrintLaneMaskShort {
+struct LLVM_CLASS_ABI PrintLaneMaskShort {
   PrintLaneMaskShort(LaneBitmask M) : Mask(M) {}
   LaneBitmask Mask;
 };
-raw_ostream &operator<<(raw_ostream &OS, const PrintLaneMaskShort &P);
+LLVM_FUNC_ABI raw_ostream &operator<<(raw_ostream &OS, const PrintLaneMaskShort &P);
 
 } // end namespace rdf
 } // end namespace llvm
 
 namespace std {
 
-template <> struct hash<llvm::rdf::RegisterRef> {
+template <> struct LLVM_CLASS_ABI hash<llvm::rdf::RegisterRef> {
   size_t operator()(llvm::rdf::RegisterRef A) const { //
     return A.hash();
   }
 };
 
-template <> struct hash<llvm::rdf::RegisterAggr> {
+template <> struct LLVM_CLASS_ABI hash<llvm::rdf::RegisterAggr> {
   size_t operator()(const llvm::rdf::RegisterAggr &A) const { //
     return A.hash();
   }
 };
 
-template <> struct equal_to<llvm::rdf::RegisterRef> {
+template <> struct LLVM_CLASS_ABI equal_to<llvm::rdf::RegisterRef> {
   constexpr equal_to(const llvm::rdf::PhysicalRegisterInfo &pri) : PRI(&pri) {}
 
   bool operator()(llvm::rdf::RegisterRef A, llvm::rdf::RegisterRef B) const {
@@ -349,14 +349,14 @@ private:
   const llvm::rdf::PhysicalRegisterInfo *PRI;
 };
 
-template <> struct equal_to<llvm::rdf::RegisterAggr> {
+template <> struct LLVM_CLASS_ABI equal_to<llvm::rdf::RegisterAggr> {
   bool operator()(const llvm::rdf::RegisterAggr &A,
                   const llvm::rdf::RegisterAggr &B) const {
     return A == B;
   }
 };
 
-template <> struct less<llvm::rdf::RegisterRef> {
+template <> struct LLVM_CLASS_ABI less<llvm::rdf::RegisterRef> {
   constexpr less(const llvm::rdf::PhysicalRegisterInfo &pri) : PRI(&pri) {}
 
   bool operator()(llvm::rdf::RegisterRef A, llvm::rdf::RegisterRef B) const {

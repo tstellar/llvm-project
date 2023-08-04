@@ -13,7 +13,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-class MCSymbolMachO : public MCSymbol {
+class LLVM_CLASS_ABI MCSymbolMachO : public MCSymbol {
   /// We store the value for the 'desc' symbol field in the
   /// lowest 16 bits of the implementation defined flags.
   enum MachOSymbolFlags : uint16_t { // See <mach-o/nlist.h>.

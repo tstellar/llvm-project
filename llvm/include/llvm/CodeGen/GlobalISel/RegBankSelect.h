@@ -89,7 +89,7 @@ class TargetRegisterInfo;
 
 /// This pass implements the reg bank selector pass used in the GlobalISel
 /// pipeline. At the end of this pass, all register operands have been assigned
-class RegBankSelect : public MachineFunctionPass {
+class LLVM_CLASS_ABI RegBankSelect : public MachineFunctionPass {
 public:
   static char ID;
 

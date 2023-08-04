@@ -26,7 +26,7 @@ namespace llvm {
   class SourceMgr;
   class LLVMContext;
 
-  class LLLexer {
+  class LLVM_CLASS_ABI LLLexer {
     const char *CurPtr;
     StringRef CurBuf;
     SMDiagnostic &ErrorInfo;

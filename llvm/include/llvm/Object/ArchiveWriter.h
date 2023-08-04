@@ -18,7 +18,7 @@
 
 namespace llvm {
 
-struct NewArchiveMember {
+struct LLVM_CLASS_ABI NewArchiveMember {
   std::unique_ptr<MemoryBuffer> Buf;
   StringRef MemberName;
   sys::TimePoint<std::chrono::seconds> ModTime;
@@ -39,9 +39,9 @@ struct NewArchiveMember {
                                             bool Deterministic);
 };
 
-Expected<std::string> computeArchiveRelativePath(StringRef From, StringRef To);
+LLVM_FUNC_ABI Expected<std::string> computeArchiveRelativePath(StringRef From, StringRef To);
 
-Error writeArchive(StringRef ArcName, ArrayRef<NewArchiveMember> NewMembers,
+LLVM_FUNC_ABI Error writeArchive(StringRef ArcName, ArrayRef<NewArchiveMember> NewMembers,
                    bool WriteSymtab, object::Archive::Kind Kind,
                    bool Deterministic, bool Thin,
                    std::unique_ptr<MemoryBuffer> OldArchiveBuf = nullptr,
@@ -49,7 +49,7 @@ Error writeArchive(StringRef ArcName, ArrayRef<NewArchiveMember> NewMembers,
 
 // writeArchiveToBuffer is similar to writeArchive but returns the Archive in a
 // buffer instead of writing it out to a file.
-Expected<std::unique_ptr<MemoryBuffer>>
+LLVM_FUNC_ABI Expected<std::unique_ptr<MemoryBuffer>>
 writeArchiveToBuffer(ArrayRef<NewArchiveMember> NewMembers, bool WriteSymtab,
                      object::Archive::Kind Kind, bool Deterministic, bool Thin);
 }

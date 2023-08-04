@@ -49,7 +49,7 @@ class TargetInstrInfo;
 
 // This class extends ScheduleDAGInstrs and overrides the schedule method
 // to build the dependence graph.
-class DefaultVLIWScheduler : public ScheduleDAGInstrs {
+class LLVM_CLASS_ABI DefaultVLIWScheduler : public ScheduleDAGInstrs {
 private:
   AAResults *AA;
   /// Ordered list of DAG postprocessing steps.
@@ -71,7 +71,7 @@ protected:
   void postProcessDAG();
 };
 
-class DFAPacketizer {
+class LLVM_CLASS_ABI DFAPacketizer {
 private:
   const InstrItineraryData *InstrItins;
   Automaton<uint64_t> A;
@@ -134,7 +134,7 @@ public:
 // in the current packet. If no dependency is found, I is added to current
 // packet and the machine resource is marked as taken. If any dependency is
 // found, a target API call is made to prune the dependence.
-class VLIWPacketizerList {
+class LLVM_CLASS_ABI VLIWPacketizerList {
 protected:
   MachineFunction &MF;
   const TargetInstrInfo *TII;

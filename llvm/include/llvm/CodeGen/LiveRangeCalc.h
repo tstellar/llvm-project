@@ -43,7 +43,7 @@ class MachineRegisterInfo;
 
 using MachineDomTreeNode = DomTreeNodeBase<MachineBasicBlock>;
 
-class LiveRangeCalc {
+class LLVM_CLASS_ABI LiveRangeCalc {
   const MachineFunction *MF = nullptr;
   const MachineRegisterInfo *MRI = nullptr;
   SlotIndexes *Indexes = nullptr;

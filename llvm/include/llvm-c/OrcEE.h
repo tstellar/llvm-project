@@ -47,7 +47,7 @@ typedef void (*LLVMMemoryManagerNotifyTerminatingCallback)(void *CtxCtx);
  * Create a RTDyldObjectLinkingLayer instance using the standard
  * SectionMemoryManager for memory management.
  */
-LLVMOrcObjectLayerRef
+LLVM_FUNC_ABI LLVMOrcObjectLayerRef
 LLVMOrcCreateRTDyldObjectLinkingLayerWithSectionMemoryManager(
     LLVMOrcExecutionSessionRef ES);
 
@@ -75,7 +75,7 @@ LLVMOrcCreateRTDyldObjectLinkingLayerWithSectionMemoryManager(
  * This scheme simply reuses the CreateContextCtx pointer as the one-and-only
  * allocation context.
  */
-LLVMOrcObjectLayerRef
+LLVM_FUNC_ABI LLVMOrcObjectLayerRef
 LLVMOrcCreateRTDyldObjectLinkingLayerWithMCJITMemoryManagerLikeCallbacks(
     LLVMOrcExecutionSessionRef ES, void *CreateContextCtx,
     LLVMMemoryManagerCreateContextCallback CreateContext,
@@ -91,7 +91,7 @@ LLVMOrcCreateRTDyldObjectLinkingLayerWithMCJITMemoryManagerLikeCallbacks(
  * Note: Layer must be an RTDyldObjectLinkingLayer instance or
  * behavior is undefined.
  */
-void LLVMOrcRTDyldObjectLinkingLayerRegisterJITEventListener(
+LLVM_FUNC_ABI void LLVMOrcRTDyldObjectLinkingLayerRegisterJITEventListener(
     LLVMOrcObjectLayerRef RTDyldObjLinkingLayer,
     LLVMJITEventListenerRef Listener);
 

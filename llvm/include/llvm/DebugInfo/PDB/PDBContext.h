@@ -30,7 +30,7 @@ namespace pdb {
   /// need for a transparent interface to different debug information formats
   /// (e.g. PDB and DWARF).  More control and power over the debug information
   /// access can be had by using the PDB interfaces directly.
-  class PDBContext : public DIContext {
+  class LLVM_CLASS_ABI PDBContext : public DIContext {
   public:
     PDBContext(const object::COFFObjectFile &Object,
                std::unique_ptr<IPDBSession> PDBSession);

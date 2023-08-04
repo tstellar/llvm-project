@@ -19,7 +19,7 @@
 #include "llvm/Support/Compiler.h"
 
 namespace llvm {
-class MCAsmInfoGOFF : public MCAsmInfo {
+class LLVM_CLASS_ABI MCAsmInfoGOFF : public MCAsmInfo {
   virtual void anchor();
 
 protected:

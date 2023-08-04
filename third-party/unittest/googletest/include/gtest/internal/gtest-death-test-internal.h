@@ -296,7 +296,7 @@ class InternalRunDeathTestFlag {
 // Returns a newly created InternalRunDeathTestFlag object with fields
 // initialized from the GTEST_FLAG(internal_run_death_test) flag if
 // the flag is specified; otherwise returns NULL.
-InternalRunDeathTestFlag* ParseInternalRunDeathTestFlag();
+LLVM_FUNC_ABI InternalRunDeathTestFlag* ParseInternalRunDeathTestFlag();
 
 #endif  // GTEST_HAS_DEATH_TEST
 

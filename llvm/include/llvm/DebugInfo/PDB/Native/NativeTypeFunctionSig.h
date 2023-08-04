@@ -19,7 +19,7 @@
 namespace llvm {
 namespace pdb {
 
-class NativeTypeFunctionSig : public NativeRawSymbol {
+class LLVM_CLASS_ABI NativeTypeFunctionSig : public NativeRawSymbol {
 protected:
   void initialize() override;
 

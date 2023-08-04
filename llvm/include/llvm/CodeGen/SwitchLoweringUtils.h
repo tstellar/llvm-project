@@ -40,7 +40,7 @@ enum CaseClusterKind {
 };
 
 /// A cluster of case labels.
-struct CaseCluster {
+struct LLVM_CLASS_ABI CaseCluster {
   CaseClusterKind Kind;
   const ConstantInt *Low, *High;
   union {
@@ -88,9 +88,9 @@ using CaseClusterVector = std::vector<CaseCluster>;
 using CaseClusterIt = CaseClusterVector::iterator;
 
 /// Sort Clusters and merge adjacent cases.
-void sortAndRangeify(CaseClusterVector &Clusters);
+LLVM_FUNC_ABI void sortAndRangeify(CaseClusterVector &Clusters);
 
-struct CaseBits {
+struct LLVM_CLASS_ABI CaseBits {
   uint64_t Mask = 0;
   MachineBasicBlock *BB = nullptr;
   unsigned Bits = 0;
@@ -107,7 +107,7 @@ using CaseBitsVector = std::vector<CaseBits>;
 /// This structure is used to communicate between SelectionDAGBuilder and
 /// SDISel for the code generation of additional basic blocks needed by
 /// multi-case switch statements.
-struct CaseBlock {
+struct LLVM_CLASS_ABI CaseBlock {
   // For the GISel interface.
   struct PredInfoPair {
     CmpInst::Predicate Pred;
@@ -163,7 +163,7 @@ struct CaseBlock {
         DbgLoc(dl), TrueProb(trueprob), FalseProb(falseprob) {}
 };
 
-struct JumpTable {
+struct LLVM_CLASS_ABI JumpTable {
   /// The virtual register containing the index of the jump table entry
   /// to jump to.
   unsigned Reg;
@@ -178,7 +178,7 @@ struct JumpTable {
   JumpTable(unsigned R, unsigned J, MachineBasicBlock *M, MachineBasicBlock *D)
       : Reg(R), JTI(J), MBB(M), Default(D) {}
 };
-struct JumpTableHeader {
+struct LLVM_CLASS_ABI JumpTableHeader {
   APInt First;
   APInt Last;
   const Value *SValue;
@@ -193,7 +193,7 @@ struct JumpTableHeader {
 };
 using JumpTableBlock = std::pair<JumpTableHeader, JumpTable>;
 
-struct BitTestCase {
+struct LLVM_CLASS_ABI BitTestCase {
   uint64_t Mask;
   MachineBasicBlock *ThisBB;
   MachineBasicBlock *TargetBB;
@@ -206,7 +206,7 @@ struct BitTestCase {
 
 using BitTestInfo = SmallVector<BitTestCase, 3>;
 
-struct BitTestBlock {
+struct LLVM_CLASS_ABI BitTestBlock {
   APInt First;
   APInt Range;
   const Value *SValue;
@@ -230,14 +230,14 @@ struct BitTestBlock {
 };
 
 /// Return the range of values within a range.
-uint64_t getJumpTableRange(const CaseClusterVector &Clusters, unsigned First,
+LLVM_FUNC_ABI uint64_t getJumpTableRange(const CaseClusterVector &Clusters, unsigned First,
                            unsigned Last);
 
 /// Return the number of cases within a range.
-uint64_t getJumpTableNumCases(const SmallVectorImpl<unsigned> &TotalCases,
+LLVM_FUNC_ABI uint64_t getJumpTableNumCases(const SmallVectorImpl<unsigned> &TotalCases,
                               unsigned First, unsigned Last);
 
-struct SwitchWorkListItem {
+struct LLVM_CLASS_ABI SwitchWorkListItem {
   MachineBasicBlock *MBB = nullptr;
   CaseClusterIt FirstCluster;
   CaseClusterIt LastCluster;
@@ -247,7 +247,7 @@ struct SwitchWorkListItem {
 };
 using SwitchWorkList = SmallVector<SwitchWorkListItem, 4>;
 
-class SwitchLowering {
+class LLVM_CLASS_ABI SwitchLowering {
 public:
   SwitchLowering(FunctionLoweringInfo &funcinfo) : FuncInfo(funcinfo) {}
 

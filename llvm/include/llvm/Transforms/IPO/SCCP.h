@@ -33,7 +33,7 @@ class Module;
 ///   false - disabling the transformation.
 /// Intended use is to create a default object, modify parameters with
 /// additional setters and then pass it to IPSCCP.
-struct IPSCCPOptions {
+struct LLVM_CLASS_ABI IPSCCPOptions {
   bool AllowFuncSpec;
 
   IPSCCPOptions(bool AllowFuncSpec = true) : AllowFuncSpec(AllowFuncSpec) {}
@@ -46,7 +46,7 @@ struct IPSCCPOptions {
 };
 
 /// Pass to perform interprocedural constant propagation.
-class IPSCCPPass : public PassInfoMixin<IPSCCPPass> {
+class LLVM_CLASS_ABI IPSCCPPass : public PassInfoMixin<IPSCCPPass> {
   IPSCCPOptions Options;
 
 public:

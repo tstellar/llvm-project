@@ -32,7 +32,7 @@ class Loop;
 ///                                  C
 ///                                }
 ///                              }
-class LoopBoundSplitPass : public PassInfoMixin<LoopBoundSplitPass> {
+class LLVM_CLASS_ABI LoopBoundSplitPass : public PassInfoMixin<LoopBoundSplitPass> {
 public:
   PreservedAnalyses run(Loop &L, LoopAnalysisManager &AM,
                         LoopStandardAnalysisResults &AR, LPMUpdater &U);

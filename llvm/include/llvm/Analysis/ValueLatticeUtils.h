@@ -24,18 +24,18 @@ class GlobalVariable;
 /// Determine if the values of the given function's arguments can be tracked
 /// interprocedurally. The value of an argument can be tracked if the function
 /// has local linkage and its address is not taken.
-bool canTrackArgumentsInterprocedurally(Function *F);
+LLVM_FUNC_ABI bool canTrackArgumentsInterprocedurally(Function *F);
 
 /// Determine if the values of the given function's returns can be tracked
 /// interprocedurally. Return values can be tracked if the function has an
 /// exact definition and it doesn't have the "naked" attribute. Naked functions
 /// may contain assembly code that returns untrackable values.
-bool canTrackReturnsInterprocedurally(Function *F);
+LLVM_FUNC_ABI bool canTrackReturnsInterprocedurally(Function *F);
 
 /// Determine if the value maintained in the given global variable can be
 /// tracked interprocedurally. A value can be tracked if the global variable
 /// has local linkage and is only used by non-volatile loads and stores.
-bool canTrackGlobalVariableInterprocedurally(GlobalVariable *GV);
+LLVM_FUNC_ABI bool canTrackGlobalVariableInterprocedurally(GlobalVariable *GV);
 
 } // end namespace llvm
 

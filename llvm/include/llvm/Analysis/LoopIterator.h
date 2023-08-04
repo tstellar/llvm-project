@@ -38,7 +38,7 @@ class LoopBlocksTraversal;
 //
 // TODO: Explore the possibility to implement LoopBlocksTraversal in terms of
 //       LoopBodyTraits, so that insertEdge doesn't have to be specialized.
-struct LoopBodyTraits {
+struct LLVM_CLASS_ABI LoopBodyTraits {
   using NodeRef = std::pair<const Loop *, BasicBlock *>;
 
   // This wraps a const Loop * into the iterator, so we know which edges to
@@ -95,7 +95,7 @@ struct LoopBodyTraits {
 /// single loop.
 ///
 /// TODO: This could be generalized for any CFG region, or the entire CFG.
-class LoopBlocksDFS {
+class LLVM_CLASS_ABI LoopBlocksDFS {
 public:
   /// Postorder list iterators.
   typedef std::vector<BasicBlock*>::const_iterator POIterator;
@@ -170,7 +170,7 @@ public:
 
 /// Wrapper class to LoopBlocksDFS that provides a standard begin()/end()
 /// interface for the DFS reverse post-order traversal of blocks in a loop body.
-class LoopBlocksRPO {
+class LLVM_CLASS_ABI LoopBlocksRPO {
 private:
   LoopBlocksDFS DFS;
 
@@ -188,7 +188,7 @@ public:
 };
 
 /// Specialize po_iterator_storage to record postorder numbers.
-template<> class po_iterator_storage<LoopBlocksTraversal, true> {
+template<> class LLVM_CLASS_ABI po_iterator_storage<LoopBlocksTraversal, true> {
   LoopBlocksTraversal &LBT;
 public:
   po_iterator_storage(LoopBlocksTraversal &lbs) : LBT(lbs) {}
@@ -198,7 +198,7 @@ public:
 };
 
 /// Traverse the blocks in a loop using a depth-first search.
-class LoopBlocksTraversal {
+class LLVM_CLASS_ABI LoopBlocksTraversal {
 public:
   /// Graph traversal iterator.
   typedef po_iterator<BasicBlock*, LoopBlocksTraversal, true> POTIterator;

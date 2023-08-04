@@ -28,7 +28,7 @@ class GlobalValueSummary;
 class Module;
 class OptimizationRemarkEmitter;
 
-class MemProfContextDisambiguation
+class LLVM_CLASS_ABI MemProfContextDisambiguation
     : public PassInfoMixin<MemProfContextDisambiguation> {
   /// Run the context disambiguator on \p M, returns true if any changes made.
   bool processModule(

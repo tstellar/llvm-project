@@ -19,7 +19,7 @@ class Loop;
 class raw_ostream;
 
 /// Printer pass for the \c IVUsers for a loop.
-class IVUsersPrinterPass : public PassInfoMixin<IVUsersPrinterPass> {
+class LLVM_CLASS_ABI IVUsersPrinterPass : public PassInfoMixin<IVUsersPrinterPass> {
   raw_ostream &OS;
 
 public:

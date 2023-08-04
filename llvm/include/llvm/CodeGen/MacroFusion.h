@@ -37,26 +37,26 @@ using ShouldSchedulePredTy = std::function<bool(const TargetInstrInfo &TII,
 
 /// Checks if the number of cluster edges between SU and its predecessors is
 /// less than FuseLimit
-bool hasLessThanNumFused(const SUnit &SU, unsigned FuseLimit);
+LLVM_FUNC_ABI bool hasLessThanNumFused(const SUnit &SU, unsigned FuseLimit);
 
 /// Create an artificial edge between FirstSU and SecondSU.
 /// Make data dependencies from the FirstSU also dependent on the SecondSU to
 /// prevent them from being scheduled between the FirstSU and the SecondSU
 /// and vice-versa.
 /// Fusing more than 2 instructions is not currently supported.
-bool fuseInstructionPair(ScheduleDAGInstrs &DAG, SUnit &FirstSU,
+LLVM_FUNC_ABI bool fuseInstructionPair(ScheduleDAGInstrs &DAG, SUnit &FirstSU,
                          SUnit &SecondSU);
 
 /// Create a DAG scheduling mutation to pair instructions back to back
 /// for instructions that benefit according to the target-specific
 /// shouldScheduleAdjacent predicate function.
-std::unique_ptr<ScheduleDAGMutation>
+LLVM_FUNC_ABI std::unique_ptr<ScheduleDAGMutation>
 createMacroFusionDAGMutation(ShouldSchedulePredTy shouldScheduleAdjacent);
 
 /// Create a DAG scheduling mutation to pair branch instructions with one
 /// of their predecessors back to back for instructions that benefit according
 /// to the target-specific shouldScheduleAdjacent predicate function.
-std::unique_ptr<ScheduleDAGMutation>
+LLVM_FUNC_ABI std::unique_ptr<ScheduleDAGMutation>
 createBranchMacroFusionDAGMutation(ShouldSchedulePredTy shouldScheduleAdjacent);
 
 } // end namespace llvm

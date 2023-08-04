@@ -35,7 +35,7 @@ class DominatorTree;
 class PHITransAddr;
 
 /// A memory dependence query can return one of three different answers.
-class MemDepResult {
+class LLVM_CLASS_ABI MemDepResult {
   enum DepType {
     /// Clients of MemDep never see this.
     ///
@@ -204,7 +204,7 @@ private:
 /// This is an entry in the NonLocalDepInfo cache.
 ///
 /// For each BasicBlock (the BB entry) it keeps a MemDepResult.
-class NonLocalDepEntry {
+class LLVM_CLASS_ABI NonLocalDepEntry {
   BasicBlock *BB;
   MemDepResult Result;
 
@@ -229,7 +229,7 @@ public:
 ///
 /// For each BasicBlock (the BB entry) it keeps a MemDepResult and the
 /// (potentially phi translated) address that was live in the block.
-class NonLocalDepResult {
+class LLVM_CLASS_ABI NonLocalDepResult {
   NonLocalDepEntry Entry;
   Value *Address;
 
@@ -270,7 +270,7 @@ public:
 /// b) they load from *must-aliased* pointers.  Returning a dependence on
 /// must-alias'd pointers instead of all pointers interacts well with the
 /// internal caching mechanism.
-class MemoryDependenceResults {
+class LLVM_CLASS_ABI MemoryDependenceResults {
   // A map from instructions to their dependency.
   using LocalDepMapType = DenseMap<Instruction *, MemDepResult>;
   LocalDepMapType LocalDeps;
@@ -511,7 +511,7 @@ private:
 ///
 /// This is essentially a no-op because the results are computed entirely
 /// lazily.
-class MemoryDependenceAnalysis
+class LLVM_CLASS_ABI MemoryDependenceAnalysis
     : public AnalysisInfoMixin<MemoryDependenceAnalysis> {
   friend AnalysisInfoMixin<MemoryDependenceAnalysis>;
 
@@ -530,7 +530,7 @@ public:
 
 /// A wrapper analysis pass for the legacy pass manager that exposes a \c
 /// MemoryDepnedenceResults instance.
-class MemoryDependenceWrapperPass : public FunctionPass {
+class LLVM_CLASS_ABI MemoryDependenceWrapperPass : public FunctionPass {
   std::optional<MemoryDependenceResults> MemDep;
 
 public:

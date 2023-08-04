@@ -17,14 +17,14 @@
 
 namespace llvm {
 
-extern cl::opt<bool> ForgetSCEVInLoopUnroll;
+LLVM_FUNC_ABI extern cl::opt<bool> ForgetSCEVInLoopUnroll;
 
 class Function;
 class Loop;
 class LPMUpdater;
 
 /// Loop unroll pass that only does full loop unrolling and peeling.
-class LoopFullUnrollPass : public PassInfoMixin<LoopFullUnrollPass> {
+class LLVM_CLASS_ABI LoopFullUnrollPass : public PassInfoMixin<LoopFullUnrollPass> {
   const int OptLevel;
 
   /// If false, use a cost model to determine whether unrolling of a loop is
@@ -59,7 +59,7 @@ public:
 /// Intended use is to create a default object, modify parameters with
 /// additional setters and then pass it to LoopUnrollPass.
 ///
-struct LoopUnrollOptions {
+struct LLVM_CLASS_ABI LoopUnrollOptions {
   std::optional<bool> AllowPartial;
   std::optional<bool> AllowPeeling;
   std::optional<bool> AllowRuntime;
@@ -131,7 +131,7 @@ struct LoopUnrollOptions {
 /// Loop unroll pass that will support both full and partial unrolling.
 /// It is a function pass to have access to function and module analyses.
 /// It will also put loops into canonical form (simplified and LCSSA).
-class LoopUnrollPass : public PassInfoMixin<LoopUnrollPass> {
+class LLVM_CLASS_ABI LoopUnrollPass : public PassInfoMixin<LoopUnrollPass> {
   LoopUnrollOptions UnrollOpts;
 
 public:

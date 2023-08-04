@@ -59,7 +59,7 @@ class TargetRegisterInfo;
 /// definition for the predicates in use in <Target>GenGlobalISel.inc when
 /// GET_GLOBALISEL_PREDICATE_BITSET is defined.
 template <std::size_t MaxPredicates>
-class PredicateBitsetImpl : public std::bitset<MaxPredicates> {
+class LLVM_CLASS_ABI PredicateBitsetImpl : public std::bitset<MaxPredicates> {
 public:
   // Cannot inherit constructors because it's not supported by VC++..
   PredicateBitsetImpl() = default;
@@ -461,7 +461,7 @@ enum {
 /// Provides the logic to execute GlobalISel match tables, which are used by the
 /// instruction selector and instruction combiners as their engine to match and
 /// apply MIR patterns.
-class GIMatchTableExecutor {
+class LLVM_CLASS_ABI GIMatchTableExecutor {
 public:
   virtual ~GIMatchTableExecutor() = default;
 
