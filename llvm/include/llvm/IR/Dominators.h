@@ -63,7 +63,7 @@ using BBUpdates = ArrayRef<llvm::cfg::Update<BasicBlock *>>;
 using BBDomTreeGraphDiff = GraphDiff<BasicBlock *, false>;
 using BBPostDomTreeGraphDiff = GraphDiff<BasicBlock *, true>;
 
-extern template void Calculate<BBDomTree>(BBDomTree &DT);
+extern template LLVM_FUNC_ABI void Calculate<BBDomTree>(BBDomTree &DT);
 extern template void CalculateWithUpdates<BBDomTree>(BBDomTree &DT,
                                                      BBUpdates U);
 

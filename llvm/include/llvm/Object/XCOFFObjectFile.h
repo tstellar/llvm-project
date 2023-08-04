@@ -511,8 +511,8 @@ public:
   uint8_t getRelocatedLength() const;
 };
 
-extern template struct XCOFFRelocation<llvm::support::ubig32_t>;
-extern template struct XCOFFRelocation<llvm::support::ubig64_t>;
+extern template struct LLVM_CLASS_ABI XCOFFRelocation<llvm::support::ubig32_t>;
+extern template struct LLVM_CLASS_ABI XCOFFRelocation<llvm::support::ubig64_t>;
 
 struct LLVM_CLASS_ABI XCOFFRelocation32 : XCOFFRelocation<llvm::support::ubig32_t> {};
 struct LLVM_CLASS_ABI XCOFFRelocation64 : XCOFFRelocation<llvm::support::ubig64_t> {};
@@ -717,6 +717,11 @@ public:
 
   static bool classof(const Binary *B) { return B->isXCOFF(); }
 }; // XCOFFObjectFile
+
+extern template Expected<ArrayRef<ExceptionSectionEntry32>> LLVM_FUNC_ABI
+XCOFFObjectFile::getExceptionEntries() const;
+extern template Expected<ArrayRef<ExceptionSectionEntry64>> LLVM_FUNC_ABI
+XCOFFObjectFile::getExceptionEntries() const;
 
 typedef struct LLVM_CLASS_ABI {
   uint8_t LanguageId;
