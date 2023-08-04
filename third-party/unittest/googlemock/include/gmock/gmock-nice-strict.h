@@ -71,7 +71,7 @@
 namespace testing {
 
 template <class MockClass>
-class LLVM_CLASS_ABI NiceMock : public MockClass {
+class NiceMock : public MockClass {
  public:
   NiceMock() : MockClass() {
     ::testing::Mock::AllowUninterestingCalls(
@@ -109,7 +109,7 @@ class LLVM_CLASS_ABI NiceMock : public MockClass {
 };
 
 template <class MockClass>
-class LLVM_CLASS_ABI NaggyMock : public MockClass {
+class NaggyMock : public MockClass {
  public:
   NaggyMock() : MockClass() {
     ::testing::Mock::WarnUninterestingCalls(
@@ -147,7 +147,7 @@ class LLVM_CLASS_ABI NaggyMock : public MockClass {
 };
 
 template <class MockClass>
-class LLVM_CLASS_ABI StrictMock : public MockClass {
+class StrictMock : public MockClass {
  public:
   StrictMock() : MockClass() {
     ::testing::Mock::FailUninterestingCalls(

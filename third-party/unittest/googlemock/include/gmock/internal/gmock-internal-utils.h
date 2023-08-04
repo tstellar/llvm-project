@@ -79,14 +79,14 @@ GTEST_API_ std::string ConvertIdentifierNameToWords(const char* id_name);
 // following default implementation is for the case where Pointer is a
 // smart pointer.
 template <typename Pointer>
-struct LLVM_CLASS_ABI PointeeOf {
+struct PointeeOf {
   // Smart pointer classes define type element_type as the type of
   // their pointees.
   typedef typename Pointer::element_type type;
 };
 // This specialization is for the raw pointer case.
 template <typename T>
-struct LLVM_CLASS_ABI PointeeOf<T*> { typedef T type; };  // NOLINT
+struct PointeeOf<T*> { typedef T type; };  // NOLINT
 
 // GetRawPointer(p) returns the raw pointer underlying p when p is a
 // smart pointer, or returns p itself when p is already a raw pointer.
@@ -119,7 +119,7 @@ enum TypeKind {
 };
 
 // KindOf<T>::value is the kind of type T.
-template <typename T> struct LLVM_CLASS_ABI KindOf {
+template <typename T> struct KindOf {
   enum { value = kOther };  // The default kind.
 };
 
@@ -173,32 +173,32 @@ GMOCK_DECLARE_KIND_(long double, kFloatingPoint);
 // From, and kToKind is the kind of To; the value is
 // implementation-defined when the above pre-condition is violated.
 template <TypeKind kFromKind, typename From, TypeKind kToKind, typename To>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl : public std::false_type {};
+struct LosslessArithmeticConvertibleImpl : public std::false_type {};
 
 // Converting bool to bool is lossless.
 template <>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<kBool, bool, kBool, bool>
+struct LosslessArithmeticConvertibleImpl<kBool, bool, kBool, bool>
     : public std::true_type {};
 
 // Converting bool to any integer type is lossless.
 template <typename To>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<kBool, bool, kInteger, To>
+struct LosslessArithmeticConvertibleImpl<kBool, bool, kInteger, To>
     : public std::true_type {};
 
 // Converting bool to any floating-point type is lossless.
 template <typename To>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<kBool, bool, kFloatingPoint, To>
+struct LosslessArithmeticConvertibleImpl<kBool, bool, kFloatingPoint, To>
     : public std::true_type {};
 
 // Converting an integer to bool is lossy.
 template <typename From>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<kInteger, From, kBool, bool>
+struct LosslessArithmeticConvertibleImpl<kInteger, From, kBool, bool>
     : public std::false_type {};
 
 // Converting an integer to another non-bool integer is lossless
 // if and only if the target type's range encloses the source type's range.
 template <typename From, typename To>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<kInteger, From, kInteger, To>
+struct LosslessArithmeticConvertibleImpl<kInteger, From, kInteger, To>
     : public bool_constant<
       // When converting from a smaller size to a larger size, we are
       // fine as long as we are not converting from signed to unsigned.
@@ -213,23 +213,23 @@ struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<kInteger, From, kInteger
 // Converting an integer to a floating-point type may be lossy, since
 // the format of a floating-point number is implementation-defined.
 template <typename From, typename To>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<kInteger, From, kFloatingPoint, To>
+struct LosslessArithmeticConvertibleImpl<kInteger, From, kFloatingPoint, To>
     : public std::false_type {};
 
 // Converting a floating-point to bool is lossy.
 template <typename From>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<kFloatingPoint, From, kBool, bool>
+struct LosslessArithmeticConvertibleImpl<kFloatingPoint, From, kBool, bool>
     : public std::false_type {};
 
 // Converting a floating-point to an integer is lossy.
 template <typename From, typename To>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<kFloatingPoint, From, kInteger, To>
+struct LosslessArithmeticConvertibleImpl<kFloatingPoint, From, kInteger, To>
     : public std::false_type {};
 
 // Converting a floating-point to another floating-point is lossless
 // if and only if the target type is at least as big as the source type.
 template <typename From, typename To>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<
+struct LosslessArithmeticConvertibleImpl<
   kFloatingPoint, From, kFloatingPoint, To>
     : public bool_constant<sizeof(From) <= sizeof(To)> {};  // NOLINT
 
@@ -241,13 +241,13 @@ struct LLVM_CLASS_ABI LosslessArithmeticConvertibleImpl<
 // reference) built-in arithmetic types; the value is
 // implementation-defined when the above pre-condition is violated.
 template <typename From, typename To>
-struct LLVM_CLASS_ABI LosslessArithmeticConvertible
+struct LosslessArithmeticConvertible
     : public LosslessArithmeticConvertibleImpl<
   GMOCK_KIND_OF_(From), From, GMOCK_KIND_OF_(To), To> {};  // NOLINT
 
 // This interface knows how to report a Google Mock failure (either
 // non-fatal or fatal).
-class LLVM_CLASS_ABI FailureReporterInterface {
+class FailureReporterInterface {
  public:
   // The type of a failure (either non-fatal or fatal).
   enum FailureType {
@@ -328,7 +328,7 @@ GTEST_API_ void Log(LogSeverity severity, const std::string& message,
 //
 //    ON_CALL(mock, Method({}, nullptr))...
 //
-class LLVM_CLASS_ABI WithoutMatchers {
+class WithoutMatchers {
  private:
   WithoutMatchers() {}
   friend GTEST_API_ WithoutMatchers GetWithoutMatchers();
@@ -381,7 +381,7 @@ inline T Invalid() {
 // This generic version is used when RawContainer itself is already an
 // STL-style container.
 template <class RawContainer>
-class LLVM_CLASS_ABI StlContainerView {
+class StlContainerView {
  public:
   typedef RawContainer type;
   typedef const type& const_reference;
@@ -396,7 +396,7 @@ class LLVM_CLASS_ABI StlContainerView {
 
 // This specialization is used when RawContainer is a native array type.
 template <typename Element, size_t N>
-class LLVM_CLASS_ABI StlContainerView<Element[N]> {
+class StlContainerView<Element[N]> {
  public:
   typedef typename std::remove_const<Element>::type RawElement;
   typedef internal::NativeArray<RawElement> type;
@@ -420,7 +420,7 @@ class LLVM_CLASS_ABI StlContainerView<Element[N]> {
 // This specialization is used when RawContainer is a native array
 // represented as a (pointer, size) tuple.
 template <typename ElementPointer, typename Size>
-class LLVM_CLASS_ABI StlContainerView< ::std::tuple<ElementPointer, Size> > {
+class StlContainerView< ::std::tuple<ElementPointer, Size> > {
  public:
   typedef typename std::remove_const<
       typename internal::PointeeOf<ElementPointer>::type>::type RawElement;
@@ -445,13 +445,13 @@ template <typename T> class StlContainerView<T&>;
 // Pairs like that are used as the value_type of associative containers,
 // and this transform produces a similar but assignable pair.
 template <typename T>
-struct LLVM_CLASS_ABI RemoveConstFromKey {
+struct RemoveConstFromKey {
   typedef T type;
 };
 
 // Partially specialized to remove constness from std::pair<const K, V>.
 template <typename K, typename V>
-struct LLVM_CLASS_ABI RemoveConstFromKey<std::pair<const K, V> > {
+struct RemoveConstFromKey<std::pair<const K, V> > {
   typedef std::pair<K, V> type;
 };
 
@@ -491,7 +491,7 @@ template <typename T>
 struct Function;
 
 template <typename R, typename... Args>
-struct LLVM_CLASS_ABI Function<R(Args...)> {
+struct Function<R(Args...)> {
   using Result = R;
   static constexpr size_t ArgumentCount = sizeof...(Args);
   template <size_t I>

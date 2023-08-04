@@ -1139,11 +1139,11 @@ GTEST_API_ std::vector<std::string> GetArgvs();
 
 #if GTEST_HAS_DEATH_TEST
 
-LLVM_FUNC_ABI std::vector<std::string> GetInjectableArgvs();
+std::vector<std::string> GetInjectableArgvs();
 // Deprecated: pass the args vector by value instead.
-LLVM_FUNC_ABI void SetInjectableArgvs(const std::vector<std::string>* new_argvs);
-LLVM_FUNC_ABI void SetInjectableArgvs(const std::vector<std::string>& new_argvs);
-LLVM_FUNC_ABI void ClearInjectableArgvs();
+void SetInjectableArgvs(const std::vector<std::string>* new_argvs);
+void SetInjectableArgvs(const std::vector<std::string>& new_argvs);
+void ClearInjectableArgvs();
 
 #endif  // GTEST_HAS_DEATH_TEST
 
@@ -2200,14 +2200,14 @@ typedef TypeWithSize<8>::Int TimeInMillis;  // Represents time in milliseconds.
 // Parses 'str' for a 32-bit signed integer.  If successful, writes the result
 // to *value and returns true; otherwise leaves *value unchanged and returns
 // false.
-LLVM_FUNC_ABI bool ParseInt32(const Message& src_text, const char* str, Int32* value);
+bool ParseInt32(const Message& src_text, const char* str, Int32* value);
 
 // Parses a bool/Int32/string from the environment variable
 // corresponding to the given Google Test flag.
-LLVM_FUNC_ABI bool BoolFromGTestEnv(const char* flag, bool default_val);
+bool BoolFromGTestEnv(const char* flag, bool default_val);
 GTEST_API_ Int32 Int32FromGTestEnv(const char* flag, Int32 default_val);
-LLVM_FUNC_ABI std::string OutputFlagAlsoCheckEnvVar();
-LLVM_FUNC_ABI const char* StringFromGTestEnv(const char* flag, const char* default_val);
+std::string OutputFlagAlsoCheckEnvVar();
+const char* StringFromGTestEnv(const char* flag, const char* default_val);
 
 }  // namespace internal
 }  // namespace testing

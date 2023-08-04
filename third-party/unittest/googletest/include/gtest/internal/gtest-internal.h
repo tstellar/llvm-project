@@ -648,7 +648,7 @@ inline std::string GetPrefixUntilComma(const char* str) {
 
 // Splits a given string on a given delimiter, populating a given
 // vector with the fields.
-LLVM_FUNC_ABI void SplitString(const ::std::string& str, char delimiter,
+void SplitString(const ::std::string& str, char delimiter,
                  ::std::vector< ::std::string>* dest);
 
 // The default argument to the template below for the case when the user does

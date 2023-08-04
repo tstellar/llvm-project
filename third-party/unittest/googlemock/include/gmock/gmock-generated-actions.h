@@ -66,11 +66,11 @@ namespace internal {
 // instead of testing::internal.  However, this is an INTERNAL TYPE
 // and subject to change without notice, so a user MUST NOT USE THIS
 // TYPE DIRECTLY.
-struct LLVM_CLASS_ABI ExcessiveArg {};
+struct ExcessiveArg {};
 
 // A helper class needed for implementing the ACTION* macros.
 template <typename Result, class Impl>
-class LLVM_CLASS_ABI ActionHelper {
+class ActionHelper {
  public:
   static Result Perform(Impl* impl, const ::std::tuple<>& args) {
     return impl->template gmock_PerformImpl<>(args, ExcessiveArg(),
@@ -1637,7 +1637,7 @@ namespace invoke_argument {
 
 // Appears in InvokeArgumentAdl's argument list to help avoid
 // accidental calls to user functions of the same name.
-struct LLVM_CLASS_ABI AdlTag {};
+struct AdlTag {};
 
 // InvokeArgumentAdl - a helper for InvokeArgument.
 // The basic overloads are provided here for generic functors.

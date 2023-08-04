@@ -64,7 +64,7 @@ namespace testing {
 // management as Cardinality objects can now be copied like plain values.
 
 // The implementation of a cardinality.
-class LLVM_CLASS_ABI CardinalityInterface {
+class CardinalityInterface {
  public:
   virtual ~CardinalityInterface() {}
 

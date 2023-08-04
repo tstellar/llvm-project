@@ -251,7 +251,7 @@ class GTEST_API_ UntypedFunctionMockerBase {
 };  // class UntypedFunctionMockerBase
 
 // Untyped base class for OnCallSpec<F>.
-class LLVM_CLASS_ABI UntypedOnCallSpecBase {
+class UntypedOnCallSpecBase {
  public:
   // The arguments are the location of the ON_CALL() statement.
   UntypedOnCallSpecBase(const char* a_file, int a_line)
@@ -293,7 +293,7 @@ class LLVM_CLASS_ABI UntypedOnCallSpecBase {
 
 // This template class implements an ON_CALL spec.
 template <typename F>
-class LLVM_CLASS_ABI OnCallSpec : public UntypedOnCallSpecBase {
+class OnCallSpec : public UntypedOnCallSpecBase {
  public:
   typedef typename Function<F>::ArgumentTuple ArgumentTuple;
   typedef typename Function<F>::ArgumentMatcherTuple ArgumentMatcherTuple;
@@ -573,7 +573,7 @@ class GTEST_API_ Expectation {
 // after the first two have both been satisfied.
 //
 // This class is copyable and has value semantics.
-class LLVM_CLASS_ABI ExpectationSet {
+class ExpectationSet {
  public:
   // A bidirectional iterator that can read a const element in the set.
   typedef Expectation::Set::const_iterator const_iterator;
@@ -887,7 +887,7 @@ class GTEST_API_ ExpectationBase {
 
 // Impements an expectation for the given function type.
 template <typename F>
-class LLVM_CLASS_ABI TypedExpectation : public ExpectationBase {
+class TypedExpectation : public ExpectationBase {
  public:
   typedef typename Function<F>::ArgumentTuple ArgumentTuple;
   typedef typename Function<F>::ArgumentMatcherTuple ArgumentMatcherTuple;
@@ -1250,7 +1250,7 @@ GTEST_API_ void LogWithLocation(testing::internal::LogSeverity severity,
                                 const std::string& message);
 
 template <typename F>
-class LLVM_CLASS_ABI MockSpec {
+class MockSpec {
  public:
   typedef typename internal::Function<F>::ArgumentTuple ArgumentTuple;
   typedef typename internal::Function<F>::ArgumentMatcherTuple
@@ -1309,7 +1309,7 @@ class LLVM_CLASS_ABI MockSpec {
 // comments describe the contract for the whole template (including
 // specializations).
 template <typename T>
-class LLVM_CLASS_ABI ReferenceOrValueWrapper {
+class ReferenceOrValueWrapper {
  public:
   // Constructs a wrapper from the given value/reference.
   explicit ReferenceOrValueWrapper(T value)
@@ -1336,7 +1336,7 @@ class LLVM_CLASS_ABI ReferenceOrValueWrapper {
 // Specialization for lvalue reference types. See primary template
 // for documentation.
 template <typename T>
-class LLVM_CLASS_ABI ReferenceOrValueWrapper<T&> {
+class ReferenceOrValueWrapper<T&> {
  public:
   // Workaround for debatable pass-by-reference lint warning (c-library-team
   // policy precludes NOLINT in this context)
@@ -1365,7 +1365,7 @@ GTEST_DISABLE_MSC_WARNINGS_PUSH_(4355)
 // non-void-returning mock functions.
 
 // Untyped base class for ActionResultHolder<T>.
-class LLVM_CLASS_ABI UntypedActionResultHolderBase {
+class UntypedActionResultHolderBase {
  public:
   virtual ~UntypedActionResultHolderBase() {}
 
@@ -1375,7 +1375,7 @@ class LLVM_CLASS_ABI UntypedActionResultHolderBase {
 
 // This generic definition is used when T is not void.
 template <typename T>
-class LLVM_CLASS_ABI ActionResultHolder : public UntypedActionResultHolderBase {
+class ActionResultHolder : public UntypedActionResultHolderBase {
  public:
   // Returns the held value. Must not be called more than once.
   T Unwrap() {
@@ -1423,7 +1423,7 @@ class LLVM_CLASS_ABI ActionResultHolder : public UntypedActionResultHolderBase {
 
 // Specialization for T = void.
 template <>
-class LLVM_CLASS_ABI ActionResultHolder<void> : public UntypedActionResultHolderBase {
+class ActionResultHolder<void> : public UntypedActionResultHolderBase {
  public:
   void Unwrap() { }
 
@@ -1458,7 +1458,7 @@ template <typename F>
 class FunctionMocker;
 
 template <typename R, typename... Args>
-class LLVM_CLASS_ABI FunctionMocker<R(Args...)> final : public UntypedFunctionMockerBase {
+class FunctionMocker<R(Args...)> final : public UntypedFunctionMockerBase {
   using F = R(Args...);
 
  public:
@@ -1790,7 +1790,7 @@ GTEST_DISABLE_MSC_WARNINGS_POP_()  //  4355
 
 // Reports an uninteresting call (whose description is in msg) in the
 // manner specified by 'reaction'.
-LLVM_FUNC_ABI void ReportUninterestingCall(CallReaction reaction, const std::string& msg);
+void ReportUninterestingCall(CallReaction reaction, const std::string& msg);
 
 }  // namespace internal
 
@@ -1844,7 +1844,7 @@ template <typename F>
 class MockFunction;
 
 template <typename R, typename... Args>
-class LLVM_CLASS_ABI MockFunction<R(Args...)> {
+class MockFunction<R(Args...)> {
  public:
   MockFunction() {}
   MockFunction(const MockFunction&) = delete;
