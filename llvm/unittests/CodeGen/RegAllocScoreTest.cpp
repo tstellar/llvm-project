@@ -29,11 +29,6 @@
 #include "gtest/gtest.h"
 
 using namespace llvm;
-extern cl::opt<double> CopyWeight;
-extern cl::opt<double> LoadWeight;
-extern cl::opt<double> StoreWeight;
-extern cl::opt<double> CheapRematWeight;
-extern cl::opt<double> ExpensiveRematWeight;
 
 namespace {
 // Include helper functions to ease the manipulation of MachineFunctions.

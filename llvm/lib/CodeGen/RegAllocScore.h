@@ -16,6 +16,13 @@
 #define LLVM_CODEGEN_REGALLOCSCORE_H_
 
 #include "llvm/ADT/STLFunctionalExtras.h"
+#include "llvm/Support/CommandLine.h"
+
+LLVM_FUNC_ABI extern llvm::cl::opt<double> CopyWeight;
+LLVM_FUNC_ABI extern llvm::cl::opt<double> LoadWeight;
+LLVM_FUNC_ABI extern llvm::cl::opt<double> StoreWeight;
+LLVM_FUNC_ABI extern llvm::cl::opt<double> CheapRematWeight;
+LLVM_FUNC_ABI extern llvm::cl::opt<double> ExpensiveRematWeight;
 
 namespace llvm {
 
