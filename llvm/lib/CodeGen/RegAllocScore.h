@@ -17,6 +17,7 @@
 
 #include "llvm/ADT/STLFunctionalExtras.h"
 #include "llvm/Support/CommandLine.h"
+#include "llvm/Support/Compiler.h"
 
 LLVM_FUNC_ABI extern llvm::cl::opt<double> CopyWeight;
 LLVM_FUNC_ABI extern llvm::cl::opt<double> LoadWeight;
@@ -32,7 +33,7 @@ class MachineFunction;
 class MachineInstr;
 
 /// Regalloc score.
-class RegAllocScore final {
+class LLVM_CLASS_ABI RegAllocScore final {
   double CopyCounts = 0.0;
   double LoadCounts = 0.0;
   double StoreCounts = 0.0;
@@ -67,11 +68,11 @@ public:
 /// Calculate a score. When comparing 2 scores for the same function but
 /// different policies, the better policy would have a smaller score.
 /// The implementation is the overload below (which is also easily unittestable)
-RegAllocScore calculateRegAllocScore(const MachineFunction &MF,
+LLVM_FUNC_ABI RegAllocScore calculateRegAllocScore(const MachineFunction &MF,
                                      const MachineBlockFrequencyInfo &MBFI);
 
 /// Implementation of the above, which is also more easily unittestable.
-RegAllocScore calculateRegAllocScore(
+LLVM_FUNC_ABI RegAllocScore calculateRegAllocScore(
     const MachineFunction &MF,
     llvm::function_ref<double(const MachineBasicBlock &)> GetBBFreq,
     llvm::function_ref<bool(const MachineInstr &)> IsTriviallyRematerializable);

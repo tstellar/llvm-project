@@ -19,6 +19,7 @@
 #include "llvm/ADT/StringMap.h"
 #include "llvm/ADT/StringRef.h"
 #include "llvm/FileCheck/FileCheck.h"
+#include "llvm/Support/Compiler.h"
 #include "llvm/Support/Error.h"
 #include "llvm/Support/SourceMgr.h"
 #include <map>
@@ -433,7 +434,7 @@ public:
 /// Class holding the Pattern global state, shared by all patterns: tables
 /// holding values of variables and whether they are defined or not at any
 /// given time in the matching process.
-class FileCheckPatternContext {
+class LLVM_CLASS_ABI FileCheckPatternContext {
   friend class Pattern;
 
 private:
@@ -588,7 +589,7 @@ public:
   }
 };
 
-class Pattern {
+class LLVM_CLASS_ABI Pattern {
   SMLoc PatternLoc;
 
   /// A fixed string to match as the pattern or empty if this pattern requires

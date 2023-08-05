@@ -104,7 +104,7 @@ struct SpillLoc {
 /// The obvious limits of a 1M block function or 1M instruction blocks are
 /// problematic; but by that point we should probably have bailed out of
 /// trying to analyse the function.
-class ValueIDNum {
+class LLVM_CLASS_ABI ValueIDNum {
   union {
     struct {
       uint64_t BlockNo : 20; /// The block where the def happens.

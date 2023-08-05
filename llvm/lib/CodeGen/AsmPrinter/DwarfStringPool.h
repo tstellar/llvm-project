@@ -13,6 +13,7 @@
 #include "llvm/ADT/StringRef.h"
 #include "llvm/CodeGen/DwarfStringPoolEntry.h"
 #include "llvm/Support/Allocator.h"
+#include "llvm/Support/Compiler.h"
 
 namespace llvm {
 
@@ -23,7 +24,7 @@ class MCSymbol;
 // Collection of strings for this unit and assorted symbols.
 // A String->Symbol mapping of strings used by indirect
 // references.
-class DwarfStringPool {
+class LLVM_CLASS_ABI DwarfStringPool {
   using EntryTy = DwarfStringPoolEntry;
 
   StringMap<EntryTy, BumpPtrAllocator &> Pool;

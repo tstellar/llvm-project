@@ -2411,7 +2411,7 @@ public:
 /// output IR instructions to generate, and their cost. VPlan holds a
 /// Hierarchical-CFG of VPBasicBlocks and VPRegionBlocks rooted at an Entry
 /// VPBasicBlock.
-class VPlan {
+class LLVM_CLASS_ABI VPlan {
   friend class VPlanPrinter;
   friend class VPSlotTracker;
 
@@ -2861,7 +2861,7 @@ public:
 
 /// Class that maps (parts of) an existing VPlan to trees of combined
 /// VPInstructions.
-class VPlanSlp {
+class LLVM_CLASS_ABI VPlanSlp {
   enum class OpMode { Failed, Load, Opcode };
 
   /// A DenseMapInfo implementation for using SmallVector<VPValue *, 4> as
