@@ -8,6 +8,7 @@
 
 #include <llvm/BinaryFormat/ELF.h>
 #include <llvm/ExecutionEngine/JITLink/aarch32.h>
+#include <llvm/Object/ELF.h>
 
 #include "gtest/gtest.h"
 

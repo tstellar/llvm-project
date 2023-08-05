@@ -17,6 +17,7 @@
 #include "llvm/Analysis/MLModelRunner.h"
 #include "llvm/CodeGen/MachineBasicBlock.h"
 #include "llvm/CodeGen/SlotIndexes.h"
+#include "llvm/Support/Compiler.h"
 
 using namespace llvm;
 
@@ -31,6 +32,7 @@ struct LRStartEndInfo {
   size_t Pos = 0;
 };
 
+LLVM_FUNC_ABI
 void extractInstructionFeatures(
     llvm::SmallVectorImpl<LRStartEndInfo> &LRPosInfo,
     MLModelRunner *RegallocRunner, function_ref<int(SlotIndex)> GetOpcode,
@@ -40,6 +42,7 @@ void extractInstructionFeatures(
     const int MBBFreqIndex, const int MBBMappingIndex,
     const SlotIndex LastIndex);
 
+LLVM_FUNC_ABI
 void extractMBBFrequency(const SlotIndex CurrentIndex,
                          const size_t CurrentInstructionIndex,
                          std::map<MachineBasicBlock *, size_t> &VisitedMBBs,
