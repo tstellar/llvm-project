@@ -21,9 +21,12 @@
 #include "llvm/IR/PassManager.h"
 #include "llvm/IR/ProfileSummary.h"
 #include "llvm/Pass.h"
+#include "llvm/Support/CommandLine.h"
 #include "llvm/Support/Compiler.h"
 #include <memory>
 #include <optional>
+
+LLVM_FUNC_ABI extern llvm::cl::opt<bool> ScalePartialSampleProfileWorkingSetSize;
 
 namespace llvm {
 class BasicBlock;
