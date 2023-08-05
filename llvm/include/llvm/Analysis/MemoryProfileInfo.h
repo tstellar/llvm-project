@@ -18,10 +18,14 @@
 #include "llvm/IR/Metadata.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/ModuleSummaryIndex.h"
+#include "llvm/Support/Commandline.h"
 #include "llvm/Support/Compiler.h"
 #include <map>
 
 namespace llvm {
+
+LLVM_FUNC_ABI extern cl::opt<unsigned> MemProfAveLifetimeColdThreshold;
+
 namespace memprof {
 
 /// Return the allocation type for a given set of memory profile values.
