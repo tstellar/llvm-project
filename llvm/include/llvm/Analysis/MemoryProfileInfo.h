@@ -22,10 +22,9 @@
 #include "llvm/Support/Compiler.h"
 #include <map>
 
+LLVM_FUNC_ABI extern llvm::cl::opt<unsigned> MemProfAveLifetimeColdThreshold;
+
 namespace llvm {
-
-LLVM_FUNC_ABI extern cl::opt<unsigned> MemProfAveLifetimeColdThreshold;
-
 namespace memprof {
 
 /// Return the allocation type for a given set of memory profile values.
