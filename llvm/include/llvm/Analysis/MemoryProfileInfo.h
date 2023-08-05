@@ -22,7 +22,9 @@
 #include "llvm/Support/Compiler.h"
 #include <map>
 
+LLVM_FUNC_ABI extern llvm::cl::opt<float> MemProfLifetimeAccessDensityColdThreshold;
 LLVM_FUNC_ABI extern llvm::cl::opt<unsigned> MemProfAveLifetimeColdThreshold;
+LLVM_FUNC_ABI extern llvm::cl::opt<unsigned> MemProfMinAveLifetimeAccessDensityHotThreshold;
 
 namespace llvm {
 namespace memprof {
