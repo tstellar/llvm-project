@@ -20,10 +20,6 @@
 
 using namespace llvm;
 
-namespace llvm {
-extern cl::opt<bool> ShouldPreserveAllAttributes;
-} // namespace llvm
-
 static void RunTest(
     StringRef Head, StringRef Tail,
     std::vector<std::pair<StringRef, llvm::function_ref<void(Instruction *)>>>
