@@ -21,10 +21,6 @@
 using namespace llvm;
 using namespace llvm::memprof;
 
-extern cl::opt<float> MemProfLifetimeAccessDensityColdThreshold;
-extern cl::opt<unsigned> MemProfAveLifetimeColdThreshold;
-extern cl::opt<unsigned> MemProfMinAveLifetimeAccessDensityHotThreshold;
-
 namespace {
 
 class MemoryProfileInfoTest : public testing::Test {
