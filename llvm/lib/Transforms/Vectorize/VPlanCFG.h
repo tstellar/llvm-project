@@ -31,7 +31,7 @@ namespace llvm {
 // directly and not their successors. Those will be traversed when a region's
 // exiting block is traversed
 template <typename BlockPtrTy>
-class VPAllSuccessorsIterator
+class LLVM_CLASS_ABI VPAllSuccessorsIterator
     : public iterator_facade_base<VPAllSuccessorsIterator<BlockPtrTy>,
                                   std::bidirectional_iterator_tag,
                                   VPBlockBase> {
@@ -112,7 +112,7 @@ public:
 };
 
 /// Helper for GraphTraits specialization that traverses through VPRegionBlocks.
-template <typename BlockTy> class VPBlockDeepTraversalWrapper {
+template <typename BlockTy> class LLVM_CLASS_ABI VPBlockDeepTraversalWrapper {
   BlockTy Entry;
 
 public:
@@ -125,7 +125,7 @@ public:
 /// implicitly have their parent region's successors. This ensures all blocks in
 /// a region are visited before any blocks in a successor region when doing a
 /// reverse post-order traversal of the graph.
-template <> struct GraphTraits<VPBlockDeepTraversalWrapper<VPBlockBase *>> {
+template <> struct LLVM_CLASS_ABI GraphTraits<VPBlockDeepTraversalWrapper<VPBlockBase *>> {
   using NodeRef = VPBlockBase *;
   using ChildIteratorType = VPAllSuccessorsIterator<VPBlockBase *>;
 
@@ -143,7 +143,7 @@ template <> struct GraphTraits<VPBlockDeepTraversalWrapper<VPBlockBase *>> {
 };
 
 template <>
-struct GraphTraits<VPBlockDeepTraversalWrapper<const VPBlockBase *>> {
+struct LLVM_CLASS_ABI GraphTraits<VPBlockDeepTraversalWrapper<const VPBlockBase *>> {
   using NodeRef = const VPBlockBase *;
   using ChildIteratorType = VPAllSuccessorsIterator<const VPBlockBase *>;
 
@@ -163,7 +163,7 @@ struct GraphTraits<VPBlockDeepTraversalWrapper<const VPBlockBase *>> {
 
 /// Helper for GraphTraits specialization that does not traverses through
 /// VPRegionBlocks.
-template <typename BlockTy> class VPBlockShallowTraversalWrapper {
+template <typename BlockTy> class LLVM_CLASS_ABI VPBlockShallowTraversalWrapper {
   BlockTy Entry;
 
 public:
@@ -171,7 +171,7 @@ public:
   BlockTy getEntry() { return Entry; }
 };
 
-template <> struct GraphTraits<VPBlockShallowTraversalWrapper<VPBlockBase *>> {
+template <> struct LLVM_CLASS_ABI GraphTraits<VPBlockShallowTraversalWrapper<VPBlockBase *>> {
   using NodeRef = VPBlockBase *;
   using ChildIteratorType = SmallVectorImpl<VPBlockBase *>::iterator;
 
@@ -189,7 +189,7 @@ template <> struct GraphTraits<VPBlockShallowTraversalWrapper<VPBlockBase *>> {
 };
 
 template <>
-struct GraphTraits<VPBlockShallowTraversalWrapper<const VPBlockBase *>> {
+struct LLVM_CLASS_ABI GraphTraits<VPBlockShallowTraversalWrapper<const VPBlockBase *>> {
   using NodeRef = const VPBlockBase *;
   using ChildIteratorType = SmallVectorImpl<VPBlockBase *>::const_iterator;
 
@@ -238,7 +238,7 @@ vp_depth_first_deep(const VPBlockBase *G) {
 // VPBlockBase is a VPRegionBlock, this specialization provides access to its
 // successors/predecessors but not to the blocks inside the region.
 
-template <> struct GraphTraits<VPBlockBase *> {
+template <> struct LLVM_CLASS_ABI GraphTraits<VPBlockBase *> {
   using NodeRef = VPBlockBase *;
   using ChildIteratorType = VPAllSuccessorsIterator<VPBlockBase *>;
 
@@ -253,7 +253,7 @@ template <> struct GraphTraits<VPBlockBase *> {
   }
 };
 
-template <> struct GraphTraits<const VPBlockBase *> {
+template <> struct LLVM_CLASS_ABI GraphTraits<const VPBlockBase *> {
   using NodeRef = const VPBlockBase *;
   using ChildIteratorType = VPAllSuccessorsIterator<const VPBlockBase *>;
 
@@ -271,7 +271,7 @@ template <> struct GraphTraits<const VPBlockBase *> {
 /// Inverse graph traits are not implemented yet.
 /// TODO: Implement a version of VPBlockNonRecursiveTraversalWrapper to traverse
 /// predecessors recursively through regions.
-template <> struct GraphTraits<Inverse<VPBlockBase *>> {
+template <> struct LLVM_CLASS_ABI GraphTraits<Inverse<VPBlockBase *>> {
   using NodeRef = VPBlockBase *;
   using ChildIteratorType = SmallVectorImpl<VPBlockBase *>::iterator;
 
@@ -288,7 +288,7 @@ template <> struct GraphTraits<Inverse<VPBlockBase *>> {
   }
 };
 
-template <> struct GraphTraits<VPlan *> {
+template <> struct LLVM_CLASS_ABI GraphTraits<VPlan *> {
   using GraphRef = VPlan *;
   using NodeRef = VPBlockBase *;
   using nodes_iterator = df_iterator<NodeRef>;

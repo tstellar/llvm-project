@@ -25,7 +25,7 @@ class TargetRegisterInfo;
   /// A helper class for register coalescers. When deciding if
   /// two registers can be coalesced, CoalescerPair can determine if a copy
   /// instruction would become an identity copy after coalescing.
-  class CoalescerPair {
+  class LLVM_CLASS_ABI CoalescerPair {
     const TargetRegisterInfo &TRI;
 
     /// The register that will be left after coalescing. It can be a

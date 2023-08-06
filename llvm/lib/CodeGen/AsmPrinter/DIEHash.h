@@ -23,7 +23,7 @@ class AsmPrinter;
 
 /// An object containing the capability of hashing and adding hash
 /// attributes onto a DIE.
-class DIEHash {
+class LLVM_CLASS_ABI DIEHash {
   // Collection of all attributes used in hashing a particular DIE.
   struct DIEAttrs {
 #define HANDLE_DIE_HASH_ATTR(NAME) DIEValue NAME;

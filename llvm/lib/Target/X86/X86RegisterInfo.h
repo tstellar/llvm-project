@@ -21,7 +21,7 @@
 namespace llvm {
   class Triple;
 
-class X86RegisterInfo final : public X86GenRegisterInfo {
+class LLVM_CLASS_ABI X86RegisterInfo final : public X86GenRegisterInfo {
 private:
   /// Is64Bit - Is the target 64-bits.
   ///

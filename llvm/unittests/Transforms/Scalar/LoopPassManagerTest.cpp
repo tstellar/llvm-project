@@ -23,6 +23,7 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/PassManager.h"
 #include "llvm/Support/SourceMgr.h"
+#include "llvm/Transforms/Utils/LoopUtils.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"

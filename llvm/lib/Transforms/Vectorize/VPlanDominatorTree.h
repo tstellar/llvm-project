@@ -23,7 +23,7 @@
 
 namespace llvm {
 
-template <> struct DomTreeNodeTraits<VPBlockBase> {
+template <> struct LLVM_CLASS_ABI DomTreeNodeTraits<VPBlockBase> {
   using NodeType = VPBlockBase;
   using NodePtr = VPBlockBase *;
   using ParentPtr = VPlan *;
@@ -41,12 +41,12 @@ using VPDomTreeNode = DomTreeNodeBase<VPBlockBase>;
 
 /// Template specializations of GraphTraits for VPDomTreeNode.
 template <>
-struct GraphTraits<VPDomTreeNode *>
+struct LLVM_CLASS_ABI GraphTraits<VPDomTreeNode *>
     : public DomTreeGraphTraitsBase<VPDomTreeNode,
                                     VPDomTreeNode::const_iterator> {};
 
 template <>
-struct GraphTraits<const VPDomTreeNode *>
+struct LLVM_CLASS_ABI GraphTraits<const VPDomTreeNode *>
     : public DomTreeGraphTraitsBase<const VPDomTreeNode,
                                     VPDomTreeNode::const_iterator> {};
 } // namespace llvm

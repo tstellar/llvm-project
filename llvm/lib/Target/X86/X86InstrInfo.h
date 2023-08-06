@@ -35,46 +35,46 @@ enum AsmComments {
 
 /// Return a pair of condition code for the given predicate and whether
 /// the instruction operands should be swaped to match the condition code.
-std::pair<CondCode, bool> getX86ConditionCode(CmpInst::Predicate Predicate);
+LLVM_FUNC_ABI std::pair<CondCode, bool> getX86ConditionCode(CmpInst::Predicate Predicate);
 
 /// Return a cmov opcode for the given register size in bytes, and operand type.
-unsigned getCMovOpcode(unsigned RegBytes, bool HasMemoryOperand = false);
+LLVM_FUNC_ABI unsigned getCMovOpcode(unsigned RegBytes, bool HasMemoryOperand = false);
 
 /// Return the source operand # for condition code by \p MCID. If the
 /// instruction doesn't have a condition code, return -1.
-int getCondSrcNoFromDesc(const MCInstrDesc &MCID);
+LLVM_FUNC_ABI int getCondSrcNoFromDesc(const MCInstrDesc &MCID);
 
 /// Return the condition code of the instruction. If the instruction doesn't
 /// have a condition code, return X86::COND_INVALID.
-CondCode getCondFromMI(const MachineInstr &MI);
+LLVM_FUNC_ABI CondCode getCondFromMI(const MachineInstr &MI);
 
 // Turn JCC instruction into condition code.
-CondCode getCondFromBranch(const MachineInstr &MI);
+LLVM_FUNC_ABI CondCode getCondFromBranch(const MachineInstr &MI);
 
 // Turn SETCC instruction into condition code.
-CondCode getCondFromSETCC(const MachineInstr &MI);
+LLVM_FUNC_ABI CondCode getCondFromSETCC(const MachineInstr &MI);
 
 // Turn CMOV instruction into condition code.
-CondCode getCondFromCMov(const MachineInstr &MI);
+LLVM_FUNC_ABI CondCode getCondFromCMov(const MachineInstr &MI);
 
 /// GetOppositeBranchCondition - Return the inverse of the specified cond,
 /// e.g. turning COND_E to COND_NE.
-CondCode GetOppositeBranchCondition(CondCode CC);
+LLVM_FUNC_ABI CondCode GetOppositeBranchCondition(CondCode CC);
 
 /// Get the VPCMP immediate for the given condition.
-unsigned getVPCMPImmForCond(ISD::CondCode CC);
+LLVM_FUNC_ABI unsigned getVPCMPImmForCond(ISD::CondCode CC);
 
 /// Get the VPCMP immediate if the opcodes are swapped.
-unsigned getSwappedVPCMPImm(unsigned Imm);
+LLVM_FUNC_ABI unsigned getSwappedVPCMPImm(unsigned Imm);
 
 /// Get the VPCOM immediate if the opcodes are swapped.
-unsigned getSwappedVPCOMImm(unsigned Imm);
+LLVM_FUNC_ABI unsigned getSwappedVPCOMImm(unsigned Imm);
 
 /// Get the VCMP immediate if the opcodes are swapped.
-unsigned getSwappedVCMPImm(unsigned Imm);
+LLVM_FUNC_ABI unsigned getSwappedVCMPImm(unsigned Imm);
 
 /// Check if the instruction is X87 instruction.
-bool isX87Instruction(MachineInstr &MI);
+LLVM_FUNC_ABI bool isX87Instruction(MachineInstr &MI);
 } // namespace X86
 
 /// isGlobalStubReference - Return true if the specified TargetFlag operand is
@@ -135,7 +135,7 @@ inline static bool isMem(const MachineInstr &MI, unsigned Op) {
          MI.getOperand(Op + X86::AddrSegmentReg).isReg() && isLeaMem(MI, Op);
 }
 
-class X86InstrInfo final : public X86GenInstrInfo {
+class LLVM_CLASS_ABI X86InstrInfo final : public X86GenInstrInfo {
   X86Subtarget &Subtarget;
   const X86RegisterInfo RI;
 

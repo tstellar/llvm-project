@@ -38,7 +38,7 @@ class ExpressionValue;
 /// Type representing the format an expression value should be textualized into
 /// for matching. Used to represent both explicit format specifiers as well as
 /// implicit format from using numeric variables.
-struct ExpressionFormat {
+struct LLVM_CLASS_ABI ExpressionFormat {
   enum class Kind {
     /// Denote absence of format. Used for implicit format of literals and
     /// empty expressions.
@@ -108,7 +108,7 @@ public:
 
 /// Class to represent an overflow error that might result when manipulating a
 /// value.
-class OverflowError : public ErrorInfo<OverflowError> {
+class LLVM_CLASS_ABI OverflowError : public ErrorInfo<OverflowError> {
 public:
   static char ID;
 
@@ -120,7 +120,7 @@ public:
 };
 
 /// Class representing a numeric value.
-class ExpressionValue {
+class LLVM_CLASS_ABI ExpressionValue {
 private:
   APInt Value;
 
@@ -134,21 +134,21 @@ public:
 
 /// Performs operation and \returns its result or an error in case of failure,
 /// such as if an overflow occurs.
-Expected<ExpressionValue> operator+(const ExpressionValue &Lhs,
+LLVM_FUNC_ABI Expected<ExpressionValue> operator+(const ExpressionValue &Lhs,
                                     const ExpressionValue &Rhs);
-Expected<ExpressionValue> operator-(const ExpressionValue &Lhs,
+LLVM_FUNC_ABI Expected<ExpressionValue> operator-(const ExpressionValue &Lhs,
                                     const ExpressionValue &Rhs);
-Expected<ExpressionValue> operator*(const ExpressionValue &Lhs,
+LLVM_FUNC_ABI Expected<ExpressionValue> operator*(const ExpressionValue &Lhs,
                                     const ExpressionValue &Rhs);
-Expected<ExpressionValue> operator/(const ExpressionValue &Lhs,
+LLVM_FUNC_ABI Expected<ExpressionValue> operator/(const ExpressionValue &Lhs,
                                     const ExpressionValue &Rhs);
-Expected<ExpressionValue> max(const ExpressionValue &Lhs,
+LLVM_FUNC_ABI Expected<ExpressionValue> max(const ExpressionValue &Lhs,
                               const ExpressionValue &Rhs);
-Expected<ExpressionValue> min(const ExpressionValue &Lhs,
+LLVM_FUNC_ABI Expected<ExpressionValue> min(const ExpressionValue &Lhs,
                               const ExpressionValue &Rhs);
 
 /// Base class representing the AST of a given expression.
-class ExpressionAST {
+class LLVM_CLASS_ABI ExpressionAST {
 private:
   StringRef ExpressionStr;
 
@@ -174,7 +174,7 @@ public:
 };
 
 /// Class representing an unsigned literal in the AST of an expression.
-class ExpressionLiteral : public ExpressionAST {
+class LLVM_CLASS_ABI ExpressionLiteral : public ExpressionAST {
 private:
   /// Actual value of the literal.
   ExpressionValue Value;
@@ -190,7 +190,7 @@ public:
 
 /// Class to represent an undefined variable error, which quotes that
 /// variable's name when printed.
-class UndefVarError : public ErrorInfo<UndefVarError> {
+class LLVM_CLASS_ABI UndefVarError : public ErrorInfo<UndefVarError> {
 private:
   StringRef VarName;
 
@@ -212,7 +212,7 @@ public:
 };
 
 /// Class representing an expression and its matching format.
-class Expression {
+class LLVM_CLASS_ABI Expression {
 private:
   /// Pointer to AST of the expression.
   std::unique_ptr<ExpressionAST> AST;
@@ -234,7 +234,7 @@ public:
 };
 
 /// Class representing a numeric variable and its associated current value.
-class NumericVariable {
+class LLVM_CLASS_ABI NumericVariable {
 private:
   /// Name of the numeric variable.
   StringRef Name;
@@ -303,7 +303,7 @@ public:
 
 /// Class representing the use of a numeric variable in the AST of an
 /// expression.
-class NumericVariableUse : public ExpressionAST {
+class LLVM_CLASS_ABI NumericVariableUse : public ExpressionAST {
 private:
   /// Pointer to the class instance for the variable this use is about.
   NumericVariable *Variable;
@@ -326,7 +326,7 @@ using binop_eval_t = Expected<ExpressionValue> (*)(const ExpressionValue &,
                                                    const ExpressionValue &);
 
 /// Class representing a single binary operation in the AST of an expression.
-class BinaryOperation : public ExpressionAST {
+class LLVM_CLASS_ABI BinaryOperation : public ExpressionAST {
 private:
   /// Left operand.
   std::unique_ptr<ExpressionAST> LeftOperand;
@@ -363,7 +363,7 @@ public:
 class FileCheckPatternContext;
 
 /// Class representing a substitution to perform in the RegExStr string.
-class Substitution {
+class LLVM_CLASS_ABI Substitution {
 protected:
   /// Pointer to a class instance holding, among other things, the table with
   /// the values of live string variables at the start of any given CHECK line.
@@ -398,7 +398,7 @@ public:
   virtual Expected<std::string> getResult() const = 0;
 };
 
-class StringSubstitution : public Substitution {
+class LLVM_CLASS_ABI StringSubstitution : public Substitution {
 public:
   StringSubstitution(FileCheckPatternContext *Context, StringRef VarName,
                      size_t InsertIdx)
@@ -409,7 +409,7 @@ public:
   Expected<std::string> getResult() const override;
 };
 
-class NumericSubstitution : public Substitution {
+class LLVM_CLASS_ABI NumericSubstitution : public Substitution {
 private:
   /// Pointer to the class representing the expression whose value is to be
   /// substituted.
@@ -511,7 +511,7 @@ private:
 
 /// Class to represent an error holding a diagnostic with location information
 /// used when printing it.
-class ErrorDiagnostic : public ErrorInfo<ErrorDiagnostic> {
+class LLVM_CLASS_ABI ErrorDiagnostic : public ErrorInfo<ErrorDiagnostic> {
 private:
   SMDiagnostic Diagnostic;
   SMRange Range;
@@ -545,7 +545,7 @@ public:
   }
 };
 
-class NotFoundError : public ErrorInfo<NotFoundError> {
+class LLVM_CLASS_ABI NotFoundError : public ErrorInfo<NotFoundError> {
 public:
   static char ID;
 
@@ -569,7 +569,7 @@ public:
 /// an error except, in the former case, (1) there is no confusion over polarity
 /// and (2) the caller must either check the result or explicitly ignore it with
 /// a call like \c consumeError.
-class ErrorReported final : public ErrorInfo<ErrorReported> {
+class LLVM_CLASS_ABI ErrorReported final : public ErrorInfo<ErrorReported> {
 public:
   static char ID;
 
@@ -840,7 +840,7 @@ private:
 //===----------------------------------------------------------------------===//
 
 /// A check that we found in the input file.
-struct FileCheckString {
+struct LLVM_CLASS_ABI FileCheckString {
   /// The pattern to match.
   Pattern Pat;
 

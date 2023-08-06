@@ -26,7 +26,7 @@ using namespace llvm;
 // is assigned to (or 1 above the phys reg count if its the candidate).
 // Used when extracting per-instruction features in the context of a
 // specific eviction problem.
-struct LRStartEndInfo {
+struct LLVM_CLASS_ABI LRStartEndInfo {
   SlotIndex Begin;
   SlotIndex End;
   size_t Pos = 0;

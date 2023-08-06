@@ -36,7 +36,7 @@ class VPlan;
 class VPlanTestBase;
 
 /// Main class to build the VPlan H-CFG for an incoming IR.
-class VPlanHCFGBuilder {
+class LLVM_CLASS_ABI VPlanHCFGBuilder {
   friend VPlanTestBase;
 
 private:

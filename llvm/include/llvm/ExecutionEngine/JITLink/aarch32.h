@@ -291,6 +291,13 @@ private:
 template <>
 Symbol &StubsManager<Thumbv7>::createEntry(LinkGraph &G, Symbol &Target);
 
+LLVM_FUNC_ABI HalfWords encodeRegMovtT1MovwT3(int64_t Value);
+LLVM_FUNC_ABI int64_t decodeRegMovtT1MovwT3(unsigned int, unsigned int);
+LLVM_FUNC_ABI uint16_t decodeImmMovtT1MovwT3(uint32_t Hi, uint32_t Lo);
+LLVM_FUNC_ABI int64_t decodeImmBT4BlT1BlxT2_J1J2(uint32_t Hi, uint32_t Lo);
+LLVM_FUNC_ABI HalfWords encodeImmMovtT1MovwT3(uint16_t Value);
+LLVM_FUNC_ABI HalfWords encodeImmBT4BlT1BlxT2_J1J2(int64_t Value);
+
 } // namespace aarch32
 } // namespace jitlink
 } // namespace llvm

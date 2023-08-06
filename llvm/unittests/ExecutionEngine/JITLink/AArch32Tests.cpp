@@ -8,6 +8,7 @@
 
 #include <llvm/BinaryFormat/ELF.h>
 #include <llvm/ExecutionEngine/JITLink/aarch32.h>
+#include <llvm/ExecutionEngine/JITLink/ELF_aarch32.h>
 #include <llvm/Object/ELF.h>
 
 #include "gtest/gtest.h"
@@ -29,15 +30,6 @@ struct MutableHalfWords {
   uint16_t Hi; // First halfword
   uint16_t Lo; // Second halfword
 };
-
-namespace llvm {
-namespace jitlink {
-
-Expected<aarch32::EdgeKind_aarch32> getJITLinkEdgeKind(uint32_t ELFType);
-Expected<uint32_t> getELFRelocationType(Edge::Kind Kind);
-
-} // namespace jitlink
-} // namespace llvm
 
 TEST(AArch32_ELF, EdgeKinds) {
   // Fails: Invalid ELF type -> JITLink kind

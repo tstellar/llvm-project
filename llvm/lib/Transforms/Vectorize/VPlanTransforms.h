@@ -28,7 +28,7 @@ class TargetLibraryInfo;
 class VPBuilder;
 class VPRecipeBuilder;
 
-struct VPlanTransforms {
+struct LLVM_CLASS_ABI VPlanTransforms {
   /// Replaces the VPInstructions in \p Plan with corresponding
   /// widen recipes.
   static void

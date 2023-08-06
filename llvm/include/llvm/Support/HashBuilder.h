@@ -33,13 +33,13 @@ namespace hashbuilder_detail {
 /// Trait to indicate whether a type's bits can be hashed directly (after
 /// endianness correction).
 template <typename U>
-struct IsHashableData
+struct LLVM_CLASS_ABI IsHashableData
     : std::integral_constant<bool, is_integral_or_enum<U>::value> {};
 
 } // namespace hashbuilder_detail
 
 /// Declares the hasher member, and functions forwarding directly to the hasher.
-template <typename HasherT> class HashBuilderBase {
+template <typename HasherT> class LLVM_CLASS_ABI HashBuilderBase {
 public:
   template <typename HasherT_ = HasherT>
   using HashResultTy = decltype(std::declval<HasherT_ &>().final());
@@ -92,7 +92,7 @@ private:
 /// expected to canonicalize `support::endianness::native` to one of
 /// `support::endianness::big` or `support::endianness::little`.
 template <typename HasherT, support::endianness Endianness>
-class HashBuilderImpl : public HashBuilderBase<HasherT> {
+class LLVM_CLASS_ABI HashBuilderImpl : public HashBuilderBase<HasherT> {
   static_assert(Endianness != support::endianness::native,
                 "HashBuilder should canonicalize endianness");
 
@@ -402,7 +402,7 @@ using HashBuilder =
                                   : Endianness)>;
 
 namespace hashbuilder_detail {
-class HashCodeHasher {
+class LLVM_CLASS_ABI HashCodeHasher {
 public:
   HashCodeHasher() : Code(0) {}
   void update(ArrayRef<uint8_t> Data) {

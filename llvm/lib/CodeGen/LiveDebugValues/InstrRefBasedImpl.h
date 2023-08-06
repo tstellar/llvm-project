@@ -40,7 +40,7 @@ using namespace llvm;
 /// without concern for where that location is. Practically, this allows us to
 /// treat the state of the machine at a particular point as an array of values,
 /// rather than a map of values.
-class LocIdx {
+class LLVM_CLASS_ABI LocIdx {
   unsigned Location;
 
   // Default constructor is private, initializing to an illegal location number.
@@ -79,7 +79,7 @@ public:
 
 // The location at which a spilled value resides. It consists of a register and
 // an offset.
-struct SpillLoc {
+struct LLVM_CLASS_ABI SpillLoc {
   unsigned SpillBase;
   StackOffset SpillOffset;
   bool operator==(const SpillLoc &Other) const {
@@ -175,7 +175,7 @@ public:
 namespace llvm {
 using namespace LiveDebugValues;
 
-template <> struct DenseMapInfo<LocIdx> {
+template <> struct LLVM_CLASS_ABI DenseMapInfo<LocIdx> {
   static inline LocIdx getEmptyKey() { return LocIdx::MakeIllegalLoc(); }
   static inline LocIdx getTombstoneKey() { return LocIdx::MakeTombstoneLoc(); }
 
@@ -184,7 +184,7 @@ template <> struct DenseMapInfo<LocIdx> {
   static bool isEqual(const LocIdx &A, const LocIdx &B) { return A == B; }
 };
 
-template <> struct DenseMapInfo<ValueIDNum> {
+template <> struct LLVM_CLASS_ABI DenseMapInfo<ValueIDNum> {
   static inline ValueIDNum getEmptyKey() { return ValueIDNum::EmptyValue; }
   static inline ValueIDNum getTombstoneKey() {
     return ValueIDNum::TombstoneValue;
@@ -213,7 +213,7 @@ using FuncValueTable = std::unique_ptr<ValueTable[]>;
 
 /// Thin wrapper around an integer -- designed to give more type safety to
 /// spill location numbers.
-class SpillLocationNo {
+class LLVM_CLASS_ABI SpillLocationNo {
 public:
   explicit SpillLocationNo(unsigned SpillNo) : SpillNo(SpillNo) {}
   unsigned SpillNo;
@@ -233,7 +233,7 @@ public:
 
 /// Meta qualifiers for a value. Pair of whatever expression is used to qualify
 /// the value, and Boolean of whether or not it's indirect.
-class DbgValueProperties {
+class LLVM_CLASS_ABI DbgValueProperties {
 public:
   DbgValueProperties(const DIExpression *DIExpr, bool Indirect, bool IsVariadic)
       : DIExpr(DIExpr), Indirect(Indirect), IsVariadic(IsVariadic) {}
@@ -279,7 +279,7 @@ public:
 /// Stores a single debug operand, which can either be a MachineOperand for
 /// directly storing immediate values, or a ValueIDNum representing some value
 /// computed at some point in the program. IsConst is used as a discriminator.
-struct DbgOp {
+struct LLVM_CLASS_ABI DbgOp {
   union {
     ValueIDNum ID;
     MachineOperand MO;
@@ -301,7 +301,7 @@ struct DbgOp {
 /// when working with concrete debug values, i.e. when joining MLocs and VLocs
 /// in the TransferTracker or emitting DBG_VALUE/DBG_VALUE_LIST instructions in
 /// the MLocTracker.
-struct ResolvedDbgOp {
+struct LLVM_CLASS_ABI ResolvedDbgOp {
   union {
     LocIdx Loc;
     MachineOperand MO;
@@ -331,7 +331,7 @@ struct ResolvedDbgOp {
 /// should be equal for all equal DbgOps, and also encodes whether the mapped
 /// DbgOp is a constant, meaning that for simple equality or const-ness checks
 /// it is not necessary to lookup this ID.
-struct DbgOpID {
+struct LLVM_CLASS_ABI DbgOpID {
   struct IsConstIndexPair {
     uint32_t IsConst : 1;
     uint32_t Index : 31;
@@ -368,7 +368,7 @@ struct DbgOpID {
 /// within the current function. Allows 2-way lookup, with `find` returning the
 /// Op for a given ID and `insert` returning the ID for a given Op (creating one
 /// if none exists).
-class DbgOpIDMap {
+class LLVM_CLASS_ABI DbgOpIDMap {
 
   SmallVector<ValueIDNum, 0> ValueOps;
   SmallVector<MachineOperand, 0> ConstOps;
@@ -438,7 +438,7 @@ private:
 /// This class also stores meta-information about how the value is qualified.
 /// Used to reason about variable values when performing the second
 /// (DebugVariable specific) dataflow analysis.
-class DbgValue {
+class LLVM_CLASS_ABI DbgValue {
 private:
   /// If Kind is Def or VPHI, the set of IDs corresponding to the DbgOps that
   /// are used. VPHIs set every ID to EmptyID when we have not found a valid
@@ -575,7 +575,7 @@ public:
   }
 };
 
-class LocIdxToIndexFunctor {
+class LLVM_CLASS_ABI LocIdxToIndexFunctor {
 public:
   using argument_type = LocIdx;
   unsigned operator()(const LocIdx &L) const { return L.asU64(); }
@@ -618,7 +618,7 @@ public:
 /// Register mask operands cause trouble by technically defining every register;
 /// various hacks are used to avoid tracking registers that are never read and
 /// only written by regmasks.
-class MLocTracker {
+class LLVM_CLASS_ABI MLocTracker {
 public:
   MachineFunction &MF;
   const TargetInstrInfo &TII;
@@ -962,7 +962,7 @@ using OverlapMap =
 /// variable and the value the DBG_VALUE refers to. Requires the machine value
 /// location dataflow algorithm to have run already, so that values can be
 /// identified.
-class VLocTracker {
+class LLVM_CLASS_ABI VLocTracker {
 public:
   /// Map DebugVariable to the latest Value it's defined to have.
   /// Needs to be a MapVector because we determine order-in-the-input-MIR from
@@ -1034,7 +1034,7 @@ public:
 };
 
 // XXX XXX docs
-class InstrRefBasedLDV : public LDVImpl {
+class LLVM_CLASS_ABI InstrRefBasedLDV : public LDVImpl {
 public:
   friend class ::InstrRefLDVTest;
 

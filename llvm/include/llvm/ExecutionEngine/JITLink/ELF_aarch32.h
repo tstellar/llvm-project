@@ -33,6 +33,9 @@ createLinkGraphFromELFObject_aarch32(MemoryBufferRef ObjectBuffer);
 LLVM_FUNC_ABI void link_ELF_aarch32(std::unique_ptr<LinkGraph> G,
                       std::unique_ptr<JITLinkContext> Ctx);
 
+LLVM_FUNC_ABI Expected<uint32_t> getELFRelocationType(Edge::Kind Kind);
+LLVM_FUNC_ABI Expected<aarch32::EdgeKind_aarch32> getJITLinkEdgeKind(uint32_t ELFType);
+
 } // end namespace jitlink
 } // end namespace llvm
 
