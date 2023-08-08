@@ -150,8 +150,10 @@
 #else
 # if defined(LLVM_ABI_EXPORTS)
 #   define LLVM_ABI __declspec(dllexport)
-# else
+# elif defined(LLVM_DLL_IMPORT)
 #   define LLVM_ABI __declspec(dllimport)
+# else
+#   define LLVM_ABI
 # endif
 # define LLVM_CLASS_ABI
 # define LLVM_FUNC_ABI LLVM_ABI
