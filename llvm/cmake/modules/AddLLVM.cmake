@@ -1049,6 +1049,10 @@ macro(add_llvm_executable name)
   endif()
 
   llvm_codesign(${name} ENTITLEMENTS ${ARG_ENTITLEMENTS} BUNDLE_PATH ${ARG_BUNDLE_PATH})
+
+  if (LLVM_LINK_LLVM_DYLIB AND NOT DISABLE_LLVM_LINK_LLVM_DYLIB)
+    target_compile_options(${name} PRIVATE -DLLVM_DLL_IMPORT)
+  endif()
 endmacro(add_llvm_executable name)
 
 # add_llvm_pass_plugin(name [NO_MODULE] ...)
