@@ -2,7 +2,8 @@ name: PR Subscriber
 
 on:
   pull_request:
-    - opened
+    types:
+      - opened
 
 permissions:
   contents: read
