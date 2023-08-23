@@ -2,6 +2,7 @@ name: PR Subscriber
 
 on:
   pull_request:
+    - opened
 
 permissions:
   contents: read
@@ -19,4 +20,7 @@ jobs:
 
       - name: Update watchers
         run: |
-          cat ${{ github.event_path }}
+          ./github-automation.py \
+          --token '${{ secrets.ISSUE_SUBSCRIBER_TOKEN }}' \
+          pr-subscriber \
+          --issue-number '${{ github.event.pull_request.number }}'
