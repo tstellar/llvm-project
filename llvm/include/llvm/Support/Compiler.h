@@ -155,7 +155,7 @@
 # else
 #   define LLVM_ABI
 # endif
-# define LLVM_CLASS_ABI
+# define LLVM_CLASS_ABI LLVM_ABI
 # define LLVM_FUNC_ABI LLVM_ABI
 #endif
 
