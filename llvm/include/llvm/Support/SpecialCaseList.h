@@ -128,7 +128,7 @@ protected:
 
   private:
     StringMap<unsigned> Strings;
-    std::vector<std::pair<std::unique_ptr<Regex>, unsigned>> RegExes;
+    noncopyable<std::vector<std::pair<std::unique_ptr<Regex>, unsigned>>> RegExes;
   };
 
   using SectionEntries = StringMap<StringMap<Matcher>>;
