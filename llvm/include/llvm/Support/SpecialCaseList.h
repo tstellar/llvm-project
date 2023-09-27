@@ -137,7 +137,7 @@ protected:
     Section(std::unique_ptr<Matcher> M) : SectionMatcher(std::move(M)){};
 
     std::unique_ptr<Matcher> SectionMatcher;
-    SectionEntries Entries;
+    noncopyable<SectionEntries> Entries;
   };
 
   std::vector<Section> Sections;
