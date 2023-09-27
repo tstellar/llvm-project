@@ -67,7 +67,7 @@ void *StringMapEntryBase::allocateWithKey(size_t EntrySize, size_t EntryAlign,
 /// This is primarily intended to support StringSet, which doesn't need a value
 /// stored at all.
 template <typename ValueTy>
-class LLVM_CLASS_ABI StringMapEntryStorage : public StringMapEntryBase {
+class LLVM_CLASS_ABI StringMapEntryStorage : public StringMapEntryBase, noncopyable2 {
 public:
   ValueTy second;
 

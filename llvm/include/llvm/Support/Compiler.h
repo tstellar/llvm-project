@@ -598,6 +598,13 @@ struct noncopyable : T {
   using T::T;
   using T::operator =;
 };
+
+struct noncopyable2 {
+ ~noncopyable2() = default;
+  noncopyable2() = default;
+  noncopyable2(noncopyable2 &&) = default;
+  struct noncopyable2 &operator=(noncopyable2 &&) = default;
+};
 }
 #endif
 
