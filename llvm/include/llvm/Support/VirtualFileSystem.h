@@ -947,7 +947,7 @@ private:
   }
 
   /// The root(s) of the virtual file system.
-  std::vector<std::unique_ptr<Entry>> Roots;
+  noncopyable<std::vector<std::unique_ptr<Entry>>> Roots;
 
   /// The current working directory of the file system.
   std::string WorkingDirectory;
