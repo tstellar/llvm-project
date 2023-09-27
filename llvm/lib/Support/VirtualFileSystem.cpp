@@ -1786,7 +1786,7 @@ private:
     DenseMap<StringRef, KeyStatus> Keys(std::begin(Fields), std::end(Fields));
 
     enum { CF_NotSet, CF_List, CF_External } ContentsField = CF_NotSet;
-    noncopyable<std::vector<std::unique_ptr<RedirectingFileSystem::Entry>>>
+    std::vector<std::unique_ptr<RedirectingFileSystem::Entry>>
         EntryArrayContents;
     SmallString<256> ExternalContentsPath;
     SmallString<256> Name;
@@ -1985,7 +1985,7 @@ private:
     for (sys::path::reverse_iterator I = sys::path::rbegin(Parent, path_style),
                                      E = sys::path::rend(Parent);
          I != E; ++I) {
-      noncopyable<std::vector<std::unique_ptr<RedirectingFileSystem::Entry>>> Entries;
+      std::vector<std::unique_ptr<RedirectingFileSystem::Entry>> Entries;
       Entries.push_back(std::move(Result));
       Result = std::make_unique<RedirectingFileSystem::DirectoryEntry>(
           *I, std::move(Entries),
