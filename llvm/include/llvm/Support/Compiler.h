@@ -159,16 +159,6 @@
 # define LLVM_FUNC_ABI LLVM_ABI
 #endif
 
-namespace llvm {
-/// Helper struct for making classes non-copyable. This prevents Error C2280
-/// with the ABI annotations enabled when building on Windows.
-struct noncopyable {
- ~noncopyable() = default;
-  noncopyable() = default;
-  noncopyable(noncopyable &&) = default;
-  noncopyable &operator=(noncopyable &&) = default;
-};
-}
 
 
 #if defined(__GNUC__)
@@ -593,6 +583,22 @@ void AnnotateIgnoreWritesEnd(const char *file, int line);
   __attribute__((no_profile_instrument_function))
 #else
 #define LLVM_NO_PROFILE_INSTRUMENT_FUNCTION
+#endif
+
+#ifdef __cplusplus
+namespace llvm {
+/// Helper struct for making classes non-copyable. This prevents Error C2280
+/// with the ABI annotations enabled when building on Windows.
+template<class T>
+struct noncopyable : T {
+ ~noncopyable() = default;
+  noncopyable() = default;
+  noncopyable(noncopyable &&) = default;
+  struct noncopyable &operator=(noncopyable &&) = default;
+  using T::T;
+  using T::operator =;
+};
+}
 #endif
 
 #endif
