@@ -418,7 +418,7 @@ private:
         new ErrorList(E1.takePayload(), E2.takePayload())));
   }
 
-  std::vector<std::unique_ptr<ErrorInfoBase>> Payloads;
+  noncopyable<std::vector<std::unique_ptr<ErrorInfoBase>>> Payloads;
 };
 
 /// Concatenate errors. The resulting Error is unchecked, and contains the
