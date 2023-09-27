@@ -159,6 +159,16 @@
 # define LLVM_FUNC_ABI LLVM_ABI
 #endif
 
+namespace llvm {
+/// Helper struct for making classes non-copyable. This prevents Error C2280
+/// with the ABI annotations enabled when building on Windows.
+struct noncopyable {
+ ~noncopyable() = default;
+  noncopyable() = default;
+  noncopyable(noncopyable &&) = default;
+  noncopyable &operator=(noncopyable &&) = default;
+};
+}
 
 
 #if defined(__GNUC__)
