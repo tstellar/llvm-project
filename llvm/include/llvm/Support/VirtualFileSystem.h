@@ -783,12 +783,12 @@ public:
 
   /// A directory in the vfs with explicitly specified contents.
   class DirectoryEntry : public Entry {
-    std::vector<std::unique_ptr<Entry>> Contents;
+    noncopyable<std::vector<std::unique_ptr<Entry>>> Contents;
     Status S;
 
   public:
     /// Constructs a directory entry with explicitly specified contents.
-    DirectoryEntry(StringRef Name, std::vector<std::unique_ptr<Entry>> Contents,
+    DirectoryEntry(StringRef Name, noncopyable<std::vector<std::unique_ptr<Entry>>> Contents,
                    Status S)
         : Entry(EK_Directory, Name), Contents(std::move(Contents)),
           S(std::move(S)) {}
