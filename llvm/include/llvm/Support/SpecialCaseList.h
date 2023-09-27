@@ -140,7 +140,7 @@ protected:
     noncopyable<SectionEntries> Entries;
   };
 
-  std::vector<Section> Sections;
+  noncopyable<std::vector<Section>> Sections;
 
   /// Parses just-constructed SpecialCaseList entries from a memory buffer.
   bool parse(const MemoryBuffer *MB, StringMap<size_t> &SectionsMap,
