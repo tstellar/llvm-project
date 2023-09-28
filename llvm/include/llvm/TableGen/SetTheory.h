@@ -103,7 +103,7 @@ private:
   StringMap<std::unique_ptr<Operator>> Operators;
 
   // Typed expanders by class name.
-  StringMap<std::unique_ptr<Expander>> Expanders;
+  noncopyable<StringMap<std::unique_ptr<Expander>>> Expanders;
 
 public:
   /// Create a SetTheory instance with only the standard operators.
