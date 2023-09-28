@@ -367,7 +367,7 @@ private:
 /// A SetVector that performs no allocations if smaller than
 /// a certain size.
 template <typename T, unsigned N>
-class LLVM_CLASS_ABI SmallSetVector : public SetVector<T, SmallVector<T, N>, DenseSet<T>, N>, noncopyable2 {
+class LLVM_CLASS_ABI SmallSetVector : public SetVector<T, SmallVector<T, N>, DenseSet<T>, N> {
 public:
   SmallSetVector() = default;
 

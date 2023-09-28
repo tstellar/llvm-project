@@ -469,7 +469,7 @@ private:
 
   /// Vector holding pointers to all substitutions. Used to automatically free
   /// them once they are guaranteed to no longer be used.
-  uncopyable<std::vector<std::unique_ptr<Substitution>>> Substitutions;
+  noncopyable<std::vector<std::unique_ptr<Substitution>>> Substitutions;
 
 public:
   /// \returns the value of string variable \p VarName or an error if no such
