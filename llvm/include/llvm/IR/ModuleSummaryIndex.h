@@ -153,7 +153,7 @@ struct LLVM_CLASS_ABI alignas(8) GlobalValueSummaryInfo {
   /// List of global value summary structures for a particular value held
   /// in the GlobalValueMap. Requires a vector in the case of multiple
   /// COMDAT values of the same name.
-  GlobalValueSummaryList SummaryList;
+  noncopyable<GlobalValueSummaryList> SummaryList;
 };
 
 /// Map from global value GUID to corresponding summary structures. Use a
