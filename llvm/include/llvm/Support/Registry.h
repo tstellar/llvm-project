@@ -53,7 +53,8 @@ namespace llvm {
     Registry() = delete;
 
     friend class node;
-    static node *Head, *Tail;
+    static node *Head;
+    static node *Tail;
 
   public:
     /// Node in linked list of entries.
