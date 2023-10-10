@@ -19,11 +19,12 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/ModuleSummaryIndex.h"
 #include "llvm/Support/CommandLine.h"
+#include "llvm/Support/Compiler.h"
 #include <map>
 
-LLVM_FUNC_ABI extern llvm::cl::opt<float> MemProfLifetimeAccessDensityColdThreshold;
-LLVM_FUNC_ABI extern llvm::cl::opt<unsigned> MemProfAveLifetimeColdThreshold;
-LLVM_FUNC_ABI extern llvm::cl::opt<unsigned> MemProfMinAveLifetimeAccessDensityHotThreshold;
+extern llvm::cl::opt<float> MemProfLifetimeAccessDensityColdThreshold;
+extern llvm::cl::opt<unsigned> MemProfAveLifetimeColdThreshold;
+extern llvm::cl::opt<unsigned> MemProfMinAveLifetimeAccessDensityHotThreshold;
 
 namespace llvm {
 namespace memprof {
