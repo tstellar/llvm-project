@@ -18,11 +18,11 @@
 #include "llvm/ADT/STLFunctionalExtras.h"
 #include "llvm/Support/CommandLine.h"
 
-LLVM_FUNC_ABI extern llvm::cl::opt<double> CopyWeight;
-LLVM_FUNC_ABI extern llvm::cl::opt<double> LoadWeight;
-LLVM_FUNC_ABI extern llvm::cl::opt<double> StoreWeight;
-LLVM_FUNC_ABI extern llvm::cl::opt<double> CheapRematWeight;
-LLVM_FUNC_ABI extern llvm::cl::opt<double> ExpensiveRematWeight;
+extern llvm::cl::opt<double> CopyWeight;
+extern llvm::cl::opt<double> LoadWeight;
+extern llvm::cl::opt<double> StoreWeight;
+extern llvm::cl::opt<double> CheapRematWeight;
+extern llvm::cl::opt<double> ExpensiveRematWeight;
 
 namespace llvm {
 
