@@ -102,7 +102,7 @@ using ConstMap = DenseMap<Value *, Constant *>;
 
 // Specialization signature, used to uniquely designate a specialization within
 // a function.
-struct SpecSig {
+struct LLVM_CLASS_ABI SpecSig {
   // Hashing support, used to distinguish between ordinary, empty, or tombstone
   // keys.
   unsigned Key = 0;
@@ -121,7 +121,7 @@ struct SpecSig {
 };
 
 // Specialization instance.
-struct Spec {
+struct LLVM_CLASS_ABI Spec {
   // Original function.
   Function *F;
 
@@ -143,7 +143,7 @@ struct Spec {
       : F(F), Sig(S), Score(Score) {}
 };
 
-struct Bonus {
+struct LLVM_CLASS_ABI Bonus {
   unsigned CodeSize = 0;
   unsigned Latency = 0;
 
@@ -175,7 +175,7 @@ struct Bonus {
   }
 };
 
-class InstCostVisitor : public InstVisitor<InstCostVisitor, Constant *> {
+class LLVM_CLASS_ABI InstCostVisitor : public InstVisitor<InstCostVisitor, Constant *> {
   const DataLayout &DL;
   BlockFrequencyInfo &BFI;
   TargetTransformInfo &TTI;
@@ -233,7 +233,7 @@ private:
   Constant *visitBinaryOperator(BinaryOperator &I);
 };
 
-class FunctionSpecializer {
+class LLVM_CLASS_ABI FunctionSpecializer {
 
   /// The IPSCCP Solver.
   SCCPSolver &Solver;

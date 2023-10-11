@@ -39,7 +39,7 @@ class MachineFunction;
 extern template class AnalysisManager<MachineFunction>;
 
 /// An AnalysisManager<MachineFunction> that also exposes IR analysis results.
-class MachineFunctionAnalysisManager : public AnalysisManager<MachineFunction> {
+class LLVM_CLASS_ABI MachineFunctionAnalysisManager : public AnalysisManager<MachineFunction> {
 public:
   using Base = AnalysisManager<MachineFunction>;
 
@@ -130,7 +130,7 @@ extern template class PassManager<MachineFunction>;
 ///
 /// - Support codegening in the SCC order. Users include interprocedural
 ///   register allocation (IPRA).
-class MachineFunctionPassManager
+class LLVM_CLASS_ABI MachineFunctionPassManager
     : public PassManager<MachineFunction, MachineFunctionAnalysisManager> {
   using Base = PassManager<MachineFunction, MachineFunctionAnalysisManager>;
 

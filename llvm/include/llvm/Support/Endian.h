@@ -39,7 +39,7 @@ namespace detail {
 
 /// ::value is either alignment, or alignof(T) if alignment is 0.
 template<class T, int alignment>
-struct PickAlignment {
+struct LLVM_CLASS_ABI PickAlignment {
  enum { value = alignment == 0 ? alignof(T) : alignment };
 };
 
@@ -209,7 +209,7 @@ namespace detail {
 
 template <typename ValueType, endianness Endian, std::size_t Alignment,
           std::size_t ALIGN = PickAlignment<ValueType, Alignment>::value>
-struct packed_endian_specific_integral {
+struct LLVM_CLASS_ABI packed_endian_specific_integral {
   using value_type = ValueType;
   static constexpr endianness endian = Endian;
   static constexpr std::size_t alignment = Alignment;

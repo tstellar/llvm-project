@@ -22,7 +22,7 @@ namespace llvm {
 
 /// A parser for the latest stackmap format.  At the moment, latest=V3.
 template <support::endianness Endianness>
-class StackMapParser {
+class LLVM_CLASS_ABI StackMapParser {
 public:
   template <typename AccessorT>
   class AccessorIterator {

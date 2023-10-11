@@ -113,7 +113,7 @@ class StringRef;
 /// in the bucket via a singly linked list.  The last node in the list points
 /// back to the bucket to facilitate node removal.
 ///
-class FoldingSetBase {
+class LLVM_CLASS_ABI FoldingSetBase {
 protected:
   /// Buckets - Array of bucket chains.
   void **Buckets;
@@ -229,7 +229,7 @@ protected:
 
 /// DefaultFoldingSetTrait - This class provides default implementations
 /// for FoldingSetTrait implementations.
-template<typename T> struct DefaultFoldingSetTrait {
+template<typename T> struct LLVM_CLASS_ABI DefaultFoldingSetTrait {
   static void Profile(const T &X, FoldingSetNodeID &ID) {
     X.Profile(ID);
   }
@@ -259,12 +259,12 @@ template<typename T> struct DefaultFoldingSetTrait {
 /// types.  Combined with the FoldingSetNodeWrapper class, one can add objects
 /// to FoldingSets that were not originally designed to have that behavior.
 template <typename T, typename Enable = void>
-struct FoldingSetTrait : public DefaultFoldingSetTrait<T> {};
+struct LLVM_CLASS_ABI FoldingSetTrait : public DefaultFoldingSetTrait<T> {};
 
 /// DefaultContextualFoldingSetTrait - Like DefaultFoldingSetTrait, but
 /// for ContextualFoldingSets.
 template<typename T, typename Ctx>
-struct DefaultContextualFoldingSetTrait {
+struct LLVM_CLASS_ABI DefaultContextualFoldingSetTrait {
   static void Profile(T &X, FoldingSetNodeID &ID, Ctx Context) {
     X.Profile(ID, Context);
   }
@@ -277,7 +277,7 @@ struct DefaultContextualFoldingSetTrait {
 
 /// ContextualFoldingSetTrait - Like FoldingSetTrait, but for
 /// ContextualFoldingSets.
-template<typename T, typename Ctx> struct ContextualFoldingSetTrait
+template<typename T, typename Ctx> struct LLVM_CLASS_ABI ContextualFoldingSetTrait
   : public DefaultContextualFoldingSetTrait<T, Ctx> {};
 
 //===--------------------------------------------------------------------===//
@@ -286,7 +286,7 @@ template<typename T, typename Ctx> struct ContextualFoldingSetTrait
 /// than using plain FoldingSetNodeIDs, since the 32-element SmallVector
 /// is often much larger than necessary, and the possibility of heap
 /// allocation means it requires a non-trivial destructor call.
-class FoldingSetNodeIDRef {
+class LLVM_CLASS_ABI FoldingSetNodeIDRef {
   const unsigned *Data = nullptr;
   size_t Size = 0;
 
@@ -316,7 +316,7 @@ public:
 /// FoldingSetNodeID - This class is used to gather all the unique data bits of
 /// a node.  When all the bits are gathered this class is used to produce a
 /// hash value for the node.
-class FoldingSetNodeID {
+class LLVM_CLASS_ABI FoldingSetNodeID {
   /// Bits - Vector of all the data bits that make the node unique.
   /// Use a SmallVector to avoid a heap allocation in the common case.
   SmallVector<unsigned, 32> Bits;
@@ -433,7 +433,7 @@ DefaultContextualFoldingSetTrait<T, Ctx>::ComputeHash(T &X,
 //===----------------------------------------------------------------------===//
 /// FoldingSetImpl - An implementation detail that lets us share code between
 /// FoldingSet and ContextualFoldingSet.
-template <class Derived, class T> class FoldingSetImpl : public FoldingSetBase {
+template <class Derived, class T> class LLVM_CLASS_ABI FoldingSetImpl : public FoldingSetBase {
 protected:
   explicit FoldingSetImpl(unsigned Log2InitSize)
       : FoldingSetBase(Log2InitSize) {}
@@ -518,7 +518,7 @@ public:
 /// move-assigning and destroying. This is primarily to enable movable APIs
 /// that incorporate these objects.
 template <class T>
-class FoldingSet : public FoldingSetImpl<FoldingSet<T>, T> {
+class LLVM_CLASS_ABI FoldingSet : public FoldingSetImpl<FoldingSet<T>, T> {
   using Super = FoldingSetImpl<FoldingSet, T>;
   using Node = typename Super::Node;
 
@@ -570,7 +570,7 @@ public:
 /// function with signature
 ///   void Profile(FoldingSetNodeID &, Ctx);
 template <class T, class Ctx>
-class ContextualFoldingSet
+class LLVM_CLASS_ABI ContextualFoldingSet
     : public FoldingSetImpl<ContextualFoldingSet<T, Ctx>, T> {
   // Unfortunately, this can't derive from FoldingSet<T> because the
   // construction of the vtable for FoldingSet<T> requires
@@ -629,7 +629,7 @@ public:
 /// order based on the insertion order. T must be a subclass of FoldingSetNode
 /// and implement a Profile function.
 template <class T, class VectorT = SmallVector<T*, 8>>
-class FoldingSetVector {
+class LLVM_CLASS_ABI FoldingSetVector {
   FoldingSet<T> Set;
   VectorT Vector;
 
@@ -690,7 +690,7 @@ public:
 //===----------------------------------------------------------------------===//
 /// FoldingSetIteratorImpl - This is the common iterator support shared by all
 /// folding sets, which knows how to walk the folding set hash table.
-class FoldingSetIteratorImpl {
+class LLVM_CLASS_ABI FoldingSetIteratorImpl {
 protected:
   FoldingSetNode *NodePtr;
 
@@ -707,7 +707,7 @@ public:
   }
 };
 
-template <class T> class FoldingSetIterator : public FoldingSetIteratorImpl {
+template <class T> class LLVM_CLASS_ABI FoldingSetIterator : public FoldingSetIteratorImpl {
 public:
   explicit FoldingSetIterator(void **Bucket) : FoldingSetIteratorImpl(Bucket) {}
 
@@ -732,7 +732,7 @@ public:
 /// FoldingSetBucketIteratorImpl - This is the common bucket iterator support
 /// shared by all folding sets, which knows how to walk a particular bucket
 /// of a folding set hash table.
-class FoldingSetBucketIteratorImpl {
+class LLVM_CLASS_ABI FoldingSetBucketIteratorImpl {
 protected:
   void *Ptr;
 
@@ -756,7 +756,7 @@ public:
 };
 
 template <class T>
-class FoldingSetBucketIterator : public FoldingSetBucketIteratorImpl {
+class LLVM_CLASS_ABI FoldingSetBucketIterator : public FoldingSetBucketIteratorImpl {
 public:
   explicit FoldingSetBucketIterator(void **Bucket) :
     FoldingSetBucketIteratorImpl(Bucket) {}
@@ -780,7 +780,7 @@ public:
 /// FoldingSetNodeWrapper - This template class is used to "wrap" arbitrary
 /// types in an enclosing object so that they can be inserted into FoldingSets.
 template <typename T>
-class FoldingSetNodeWrapper : public FoldingSetNode {
+class LLVM_CLASS_ABI FoldingSetNodeWrapper : public FoldingSetNode {
   T data;
 
 public:
@@ -803,7 +803,7 @@ public:
 /// each time it is needed. This trades space for speed (which can be
 /// significant if the ID is long), and it also permits nodes to drop
 /// information that would otherwise only be required for recomputing an ID.
-class FastFoldingSetNode : public FoldingSetNode {
+class LLVM_CLASS_ABI FastFoldingSetNode : public FoldingSetNode {
   FoldingSetNodeID FastID;
 
 protected:
@@ -816,13 +816,13 @@ public:
 //===----------------------------------------------------------------------===//
 // Partial specializations of FoldingSetTrait.
 
-template<typename T> struct FoldingSetTrait<T*> {
+template<typename T> struct LLVM_CLASS_ABI FoldingSetTrait<T*> {
   static inline void Profile(T *X, FoldingSetNodeID &ID) {
     ID.AddPointer(X);
   }
 };
 template <typename T1, typename T2>
-struct FoldingSetTrait<std::pair<T1, T2>> {
+struct LLVM_CLASS_ABI FoldingSetTrait<std::pair<T1, T2>> {
   static inline void Profile(const std::pair<T1, T2> &P,
                              FoldingSetNodeID &ID) {
     ID.Add(P.first);
@@ -831,7 +831,7 @@ struct FoldingSetTrait<std::pair<T1, T2>> {
 };
 
 template <typename T>
-struct FoldingSetTrait<T, std::enable_if_t<std::is_enum<T>::value>> {
+struct LLVM_CLASS_ABI FoldingSetTrait<T, std::enable_if_t<std::is_enum<T>::value>> {
   static void Profile(const T &X, FoldingSetNodeID &ID) {
     ID.AddInteger(static_cast<std::underlying_type_t<T>>(X));
   }
