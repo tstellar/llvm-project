@@ -18,14 +18,16 @@
 #include "llvm/ADT/iterator_range.h"
 #include "llvm/IR/InstrTypes.h"
 #include "llvm/IR/PassManager.h"
+#include "llvm/Support/CommandLine.h"
 #include "llvm/Support/Compiler.h"
+
+extern llvm::cl::opt<bool> EnableDetailedFunctionProperties;
 
 namespace llvm {
 class DominatorTree;
 class Function;
 class LoopInfo;
 
-extern llvm::cl::opt<bool> EnableDetailedFunctionProperties;
 
 class LLVM_CLASS_ABI FunctionPropertiesInfo {
   friend class FunctionPropertiesUpdater;
