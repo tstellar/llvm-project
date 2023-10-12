@@ -25,6 +25,8 @@ class DominatorTree;
 class Function;
 class LoopInfo;
 
+extern llvm::cl::opt<bool> EnableDetailedFunctionProperties;
+
 class LLVM_CLASS_ABI FunctionPropertiesInfo {
   friend class FunctionPropertiesUpdater;
   void updateForBB(const BasicBlock &BB, int64_t Direction);
