@@ -21,7 +21,7 @@
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/Compiler.h"
 
-extern llvm::cl::opt<bool> EnableDetailedFunctionProperties;
+LLVM_FUNC_ABI extern llvm::cl::opt<bool> EnableDetailedFunctionProperties;
 
 namespace llvm {
 class DominatorTree;
