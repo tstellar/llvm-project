@@ -577,12 +577,12 @@ protected:
   std::vector<std::unique_ptr<PassConceptT>> Passes;
 };
 
-extern template class PassManager<Module>;
+extern template class LLVM_CLASS_ABI PassManager<Module>;
 
 /// Convenience typedef for a pass manager over modules.
 using ModulePassManager = PassManager<Module>;
 
-extern template class PassManager<Function>;
+extern template class LLVM_CLASS_ABI PassManager<Function>;
 
 /// Convenience typedef for a pass manager over functions.
 using FunctionPassManager = PassManager<Function>;
@@ -902,12 +902,12 @@ private:
   AnalysisResultMapT AnalysisResults;
 };
 
-extern template class AnalysisManager<Module>;
+extern template class LLVM_CLASS_ABI AnalysisManager<Module>;
 
 /// Convenience typedef for the Module analysis manager.
 using ModuleAnalysisManager = AnalysisManager<Module>;
 
-extern template class AnalysisManager<Function>;
+extern template class LLVM_CLASS_ABI AnalysisManager<Function>;
 
 /// Convenience typedef for the Function analysis manager.
 using FunctionAnalysisManager = AnalysisManager<Function>;
