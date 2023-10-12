@@ -467,7 +467,7 @@ class PassInstrumentationAnalysis;
 template <typename IRUnitT,
           typename AnalysisManagerT = AnalysisManager<IRUnitT>,
           typename... ExtraArgTs>
-class LLVM_CLASS_ABI PassManager : public PassInfoMixin<
+class LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI PassManager : public PassInfoMixin<
                         PassManager<IRUnitT, AnalysisManagerT, ExtraArgTs...>> {
 public:
   /// Construct a pass manager.

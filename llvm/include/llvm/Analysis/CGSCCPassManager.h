@@ -112,7 +112,7 @@ class Module;
 /// Extern template declaration for the analysis set for this IR unit.
 extern template class AllAnalysesOn<LazyCallGraph::SCC>;
 
-extern template class AnalysisManager<LazyCallGraph::SCC, LazyCallGraph &>;
+extern template class LLVM_CLASS_ABI AnalysisManager<LazyCallGraph::SCC, LazyCallGraph &>;
 
 /// The CGSCC analysis manager.
 ///
