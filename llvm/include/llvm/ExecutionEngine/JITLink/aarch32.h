@@ -342,6 +342,7 @@ LLVM_FUNC_ABI uint16_t decodeImmMovtT1MovwT3(uint32_t Hi, uint32_t Lo);
 LLVM_FUNC_ABI int64_t decodeImmBT4BlT1BlxT2_J1J2(uint32_t Hi, uint32_t Lo);
 LLVM_FUNC_ABI HalfWords encodeImmMovtT1MovwT3(uint16_t Value);
 LLVM_FUNC_ABI HalfWords encodeImmBT4BlT1BlxT2_J1J2(int64_t Value);
+LLVM_FUNC_ABI int64_t decodeRegMovtA1MovwA2(uint64_t Value);
 
 } // namespace aarch32
 } // namespace jitlink
