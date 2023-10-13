@@ -931,7 +931,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<bool>;
+extern template class LLVM_CLASS_ABI basic_parser<bool>;
 
 template <> class LLVM_CLASS_ABI parser<bool> : public basic_parser<bool> {
 public:
@@ -958,7 +958,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<boolOrDefault>;
+extern template class LLVM_CLASS_ABI basic_parser<boolOrDefault>;
 
 template <> class LLVM_CLASS_ABI parser<boolOrDefault> : public basic_parser<boolOrDefault> {
 public:
@@ -983,7 +983,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<int>;
+extern template class LLVM_CLASS_ABI basic_parser<int>;
 
 template <> class LLVM_CLASS_ABI parser<int> : public basic_parser<int> {
 public:
@@ -1004,7 +1004,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<long>;
+extern template class LLVM_CLASS_ABI basic_parser<long>;
 
 template <> class LLVM_CLASS_ABI parser<long> final : public basic_parser<long> {
 public:
@@ -1025,7 +1025,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<long long>;
+extern template class LLVM_CLASS_ABI basic_parser<long long>;
 
 template <> class LLVM_CLASS_ABI parser<long long> : public basic_parser<long long> {
 public:
@@ -1046,7 +1046,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<unsigned>;
+extern template class LLVM_CLASS_ABI basic_parser<unsigned>;
 
 template <> class LLVM_CLASS_ABI parser<unsigned> : public basic_parser<unsigned> {
 public:
@@ -1067,7 +1067,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<unsigned long>;
+extern template class LLVM_CLASS_ABI basic_parser<unsigned long>;
 
 template <>
 class LLVM_CLASS_ABI parser<unsigned long> final : public basic_parser<unsigned long> {
@@ -1089,7 +1089,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<unsigned long long>;
+extern template class LLVM_CLASS_ABI basic_parser<unsigned long long>;
 
 template <>
 class LLVM_CLASS_ABI parser<unsigned long long> : public basic_parser<unsigned long long> {
@@ -1112,7 +1112,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<double>;
+extern template class LLVM_CLASS_ABI basic_parser<double>;
 
 template <> class LLVM_CLASS_ABI parser<double> : public basic_parser<double> {
 public:
@@ -1133,7 +1133,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<float>;
+extern template class LLVM_CLASS_ABI basic_parser<float>;
 
 template <> class LLVM_CLASS_ABI parser<float> : public basic_parser<float> {
 public:
@@ -1154,7 +1154,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<std::string>;
+extern template class LLVM_CLASS_ABI basic_parser<std::string>;
 
 template <> class LLVM_CLASS_ABI parser<std::string> : public basic_parser<std::string> {
 public:
@@ -1178,7 +1178,7 @@ public:
 
 //--------------------------------------------------
 
-extern template class basic_parser<char>;
+extern template class LLVM_CLASS_ABI basic_parser<char>;
 
 template <> class LLVM_CLASS_ABI parser<char> : public basic_parser<char> {
 public:
@@ -1502,11 +1502,11 @@ public:
       [](const typename ParserClass::parser_data_type &) {};
 };
 
-extern template class opt<unsigned>;
-extern template class opt<int>;
-extern template class opt<std::string>;
-extern template class opt<char>;
-extern template class opt<bool>;
+extern template class LLVM_CLASS_ABI opt<unsigned>;
+extern template class LLVM_CLASS_ABI opt<int>;
+extern template class LLVM_CLASS_ABI opt<std::string>;
+extern template class LLVM_CLASS_ABI opt<char>;
+extern template class LLVM_CLASS_ABI opt<bool>;
 
 //===----------------------------------------------------------------------===//
 // Default storage class definition: external storage.  This implementation

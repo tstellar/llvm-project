@@ -98,8 +98,8 @@ private:
 
 template <typename IRUnitT> AnalysisSetKey AllAnalysesOn<IRUnitT>::SetKey;
 
-extern template class AllAnalysesOn<Module>;
-extern template class AllAnalysesOn<Function>;
+extern template class LLVM_CLASS_ABI AllAnalysesOn<Module>;
+extern template class LLVM_CLASS_ABI AllAnalysesOn<Function>;
 
 /// Represents analyses that only rely on functions' control flow.
 ///
@@ -929,7 +929,7 @@ using FunctionAnalysisManager = AnalysisManager<Function>;
 /// Note that the proxy's result is a move-only RAII object.  The validity of
 /// the analyses in the inner analysis manager is tied to its lifetime.
 template <typename AnalysisManagerT, typename IRUnitT, typename... ExtraArgTs>
-class LLVM_CLASS_ABI InnerAnalysisManagerProxy
+class LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI LLVM_CLASS_ABI InnerAnalysisManagerProxy
     : public AnalysisInfoMixin<
           InnerAnalysisManagerProxy<AnalysisManagerT, IRUnitT>> {
 public:
@@ -1162,7 +1162,7 @@ template <typename AnalysisManagerT, typename IRUnitT, typename... ExtraArgTs>
 AnalysisKey
     OuterAnalysisManagerProxy<AnalysisManagerT, IRUnitT, ExtraArgTs...>::Key;
 
-extern template class OuterAnalysisManagerProxy<ModuleAnalysisManager,
+extern template class LLVM_CLASS_ABI OuterAnalysisManagerProxy<ModuleAnalysisManager,
                                                 Function>;
 /// Provide the \c ModuleAnalysisManager to \c Function proxy.
 using ModuleAnalysisManagerFunctionProxy =
