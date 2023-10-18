@@ -13,7 +13,6 @@ jobs:
   validate-tag:
     name: Validate Tag
     runs-on: ubuntu-latest
-    if: github.repository == 'llvm/llvm-project'
     permissions:
       contents: write # For creating the release
     outputs:
