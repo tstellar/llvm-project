@@ -33,6 +33,11 @@ jobs:
     env:
       upload: ${{ inputs.upload && !contains(inputs.release-version, 'rc') }}
     steps:
+      - name: Checkout LLVM
+        uses: actions/checkout@v4
+        with:
+          ref: "llvmorg-${{ inputs.release-version }}"
+
       - name: Install Dependencies
         run: |
           sudo apt-get update
@@ -44,11 +49,6 @@ jobs:
               texlive-font-utils
           pip3 install --user -r ./llvm/docs/requirements.txt
           echo "UPLOAD SETTING: $upload"
-
-      - name: Checkout LLVM
-        uses: actions/checkout@v4
-        with:
-          ref: "llvmorg-${{ inputs.release-version }}"
 
       - name: Build Documentation
         env:
