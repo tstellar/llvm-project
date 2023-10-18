@@ -37,9 +37,9 @@ jobs:
               texlive-font-utils
           pip3 install --user -r ./llvm/docs/requirements.txt
 
-      - name: Create Release
-        run: |
-          ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release ${{ steps.validate-tag.outputs.release-version }} create
+          #      - name: Create Release
+          #        run: |
+          #          ./llvm/utils/release/./github-upload-release.py --token ${{ github.token }} --release ${{ steps.validate-tag.outputs.release-version }} create
 
       - name: Build Documentation
         run: |
