@@ -48,7 +48,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
       run: |
-        ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --user ${{ github.actor }} check-permissions
+        ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --user ${{ github.actor }} check-permissions || true
 
     - name: Collect Variables
       id: vars

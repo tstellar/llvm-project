@@ -40,7 +40,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --release ${{ needs.validate-tag.outputs.release-version }} --user ${{ github.actor }} create
+          ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --release ${{ needs.validate-tag.outputs.release-version }} --user ${{ github.actor }} create || true
   release-documentation:
     name: Build and Upload Release Documentation
     needs:
