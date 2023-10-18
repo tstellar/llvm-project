@@ -31,7 +31,7 @@ jobs:
     name: Build and Upload Release Documentation
     runs-on: ubuntu-latest
     env:
-      upload: ${{ inputs.upload && !contains(inputs.release-version, 'rc' }}
+      upload: ${{ inputs.upload && !contains(inputs.release-version, 'rc') }}
     steps:
       - name: Install Dependencies
         run: |
