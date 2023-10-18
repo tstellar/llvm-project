@@ -13,8 +13,6 @@ jobs:
   validate-tag:
     name: Validate Tag
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # For creating the release
     outputs:
       release-version: ${{ steps.validate-tag.outputs.release-version }}
     steps:
@@ -27,7 +25,10 @@ jobs:
 
   release-create:
     name: Create a New Release
+    runs-on: ubuntu-latest
     needs: validate-tag
+    permissions:
+      contents: write # For creating the release
     steps:
       - name: Install Dependencies
         run: |
