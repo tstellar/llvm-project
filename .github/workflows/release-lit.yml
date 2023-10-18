@@ -28,6 +28,11 @@ jobs:
         with:
           ref: "llvmorg-${{ inputs.release-version }}"
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-setuptools python3-psutil python3-github
+
       - name: Check Permissions
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -40,11 +45,6 @@ jobs:
           compiler: llvm-16.0.6
           cmake: true
           ninja: true
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-setuptools python3-psutil
 
       - name: Test lit
         run: |
