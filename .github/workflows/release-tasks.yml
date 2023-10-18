@@ -76,7 +76,6 @@ jobs:
 
   release-lit:
     runs-on: ubuntu-latest
-    if: github.repository == 'llvm/llvm-project'
     steps:
       - name: Checkout LLVM
         uses: actions/checkout@v4
