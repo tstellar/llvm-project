@@ -46,7 +46,7 @@ jobs:
           pwd
           # du -h --max-depth=2 / 2>/dev/null | sort -h
   
-  disk-space-vm-mac:
+  disk-space-vm-windows:
     runs-on: windows-latest
     steps:
       - name: Check Disk Space
