@@ -32,6 +32,8 @@ jobs:
           sudo apt-get update
           sudo apt-get remove php
           df -h
+          dpkg -S /usr/local/.ghcub
+          dpkg -S /usr/local/lib/android
 
 
 
