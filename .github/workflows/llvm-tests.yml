@@ -6,8 +6,6 @@ permissions:
 on:
   workflow_dispatch:
   push:
-    branches:
-      - 'release/**'
     paths:
       - 'llvm/**'
       - '.github/workflows/llvm-tests.yml'
@@ -29,11 +27,11 @@ concurrency:
 jobs:
   check_all:
     if: github.repository_owner == 'llvm'
-    name: Test llvm,clang,libclc
+    name: Test llvm,clang,libclc,lld
     uses: ./.github/workflows/llvm-project-tests.yml
     with:
       build_target: check-all
-      projects: clang;libclc
+      projects: clang;libclc;lld
 
   # These need to be separate from the check_all job, becuase there is not enough disk
   # space to build all these projects on Windows.
