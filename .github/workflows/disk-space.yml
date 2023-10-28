@@ -1,0 +1,24 @@
+name: Disk Space
+
+permissions:
+  contents: read
+
+on:
+  push:
+
+jobs:
+  disk-space-container:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:latest
+    steps:
+      - name: Check Disk Space
+        run: df
+  disk-space-vm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Disk Space
+        run: df
+
+
+
