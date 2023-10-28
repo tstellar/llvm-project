@@ -25,11 +25,12 @@ jobs:
           df -h
           pwd
           du -h --max-depth=2 / 2>/dev/null | sort -h
+          du -h --max-depth=2 /usr/local /opt/ 2>/dev/null | sort -h
 
       - name: Remove some largefiles
         run: |
-          apt-get update
-          apt-get remove php
+          sudo apt-get update
+          sudo apt-get remove php
 
 
 
