@@ -24,17 +24,18 @@ jobs:
         run: |
           df -h
           pwd
-          du -h --max-depth=2 / 2>/dev/null | sort -h
-          du -h --max-depth=2 /usr/local /opt/ 2>/dev/null | sort -h
+          # du -h --max-depth=2 / 2>/dev/null | sort -h
+          #du -h --max-depth=2 /usr/local /opt/ 2>/dev/null | sort -h
 
       - name: Remove some largefiles
         run: |
-          sudo apt-get update
-          sudo apt-get remove php
-          df -h
+          #sudo apt-get update
+          #sudo apt-get remove php
+          #df -h
           #dpkg -S /usr/local/.ghcub
           #dpkg -S /usr/local/lib/android
-          dpkg --get-selections
+          dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
+          #dpkg --get-selections
 
 
 
