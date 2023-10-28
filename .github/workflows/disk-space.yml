@@ -13,12 +13,23 @@ jobs:
       image: ubuntu:latest
     steps:
       - name: Check Disk Space
-        run: df
+        run: |
+          df -h
+          pwd
+           
   disk-space-vm:
     runs-on: ubuntu-latest
     steps:
       - name: Check Disk Space
-        run: df
+        run: |
+          df -h
+          pwd
+          du --max-depth=2 /
+
+      - name: Remove some largefiles
+        run: |
+          apt-get update
+          apt-get remove php
 
 
 
