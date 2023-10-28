@@ -97,13 +97,13 @@ jobs:
           ninja -C libclc-build
           ninja -C libclc-build test
 
-    - name: Check Disk Space
-      if: "!startsWith(matrix.os, 'windows')"
-      run:
-        df -h
+      - name: Check Disk Space
+        if: "!startsWith(matrix.os, 'windows')"
+        run:
+          df -h
 
-    - name: Check Disk Space
-      if: "startsWith(matrix.os, 'windows')"
-      run: |
-        wmic logicaldisk get size,freespace,caption
+      - name: Check Disk Space
+        if: "startsWith(matrix.os, 'windows')"
+        run: |
+          wmic logicaldisk get size,freespace,caption
 
