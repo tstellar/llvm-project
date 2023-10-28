@@ -51,7 +51,7 @@ jobs:
     steps:
       - name: Check Disk Space
         run: |
-          wmic logicaldisk get freespace
+          wmic logicaldisk get size,freespace,caption
 
 
 
