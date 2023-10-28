@@ -36,6 +36,15 @@ jobs:
           #dpkg -S /usr/local/lib/android
           dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
           #dpkg --get-selections
+          
+  disk-space-vm-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Check Disk Space
+        run: |
+          df -h
+          pwd
+          # du -h --max-depth=2 / 2>/dev/null | sort -h
 
 
 
