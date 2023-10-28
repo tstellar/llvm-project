@@ -45,6 +45,15 @@ jobs:
           df -h
           pwd
           # du -h --max-depth=2 / 2>/dev/null | sort -h
+  
+  disk-space-vm-mac:
+    runs-on: windows-latest
+    steps:
+      - name: Check Disk Space
+        run: |
+          wmic logicaldisk get freespace
+
+
 
 
 
