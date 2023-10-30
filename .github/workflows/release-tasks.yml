@@ -45,8 +45,17 @@ jobs:
     name: Build and Upload Release Documentation
     needs:
       - validate-tag
-      - release-create
     uses: ./.github/workflows/release-documentation.yml
+    with:
+      release-version: ${{ needs.validate-tag.outputs.release-version }}
+      upload: true
+
+  release-doxygen:
+    name: Build and Upload Release Doxygen
+    needs:
+      - validate-tag
+      - release-create
+    uses: ./.github/workflows/release-doxygen.yml
     with:
       release-version: ${{ needs.validate-tag.outputs.release-version }}
       upload: true
