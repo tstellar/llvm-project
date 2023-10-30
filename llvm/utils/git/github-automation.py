@@ -465,6 +465,7 @@ class ReleaseWorkflow:
     def get_main_commit(self, cherry_pick_sha: str) -> github.Commit.Commit:
         commit = self.repo.get_commit(cherry_pick_sha)
         message = commit.commit.message
+        print("Commit message =", message)
         m = re.search('\(cherry picked from commit ([0-9a-f]+)\)', message)
         if not m:
             return None
@@ -481,11 +482,15 @@ class ReleaseWorkflow:
         """
         reviewers = []
         for commit in pr.get_commits():
+            print("Commit is ", commit.sha)
             main_commit = self.get_main_commit(commit.sha)
             if not main_commit:
+                print("Can't find main commit")
                 continue
             for pull in main_commit.get_pulls():
+                print ("Looking at pull ", pull.number)
                 for review in pull.get_reviews():
+                    print("Review state: ", review.state, 'user: ', review.user.login)
                     if review.state != 'APPROVED':
                         continue
                 reviewers.append(review.user.login)
@@ -494,7 +499,7 @@ class ReleaseWorkflow:
                 " ".join(["@" + r for r in reviewers])
             )
             pr.create_issue_comment(message)
-            pr.create_review_request(reviewers)
+            pr.create_review_request(['tstellar'])
 
     def create_branch(self, commits: List[str]) -> bool:
         """
