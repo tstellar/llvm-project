@@ -34,7 +34,6 @@ jobs:
     name: Backport Commits
     runs-on: ubuntu-latest
     if: >-
-      (github.repository == 'llvm/llvm-project') &&
       !startswith(github.event.comment.body, '<!--IGNORE-->') &&
       contains(github.event.action == 'opened' && github.event.issue.body || github.event.comment.body, '/cherry-pick')
     steps:
