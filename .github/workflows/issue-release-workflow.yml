@@ -66,7 +66,6 @@ jobs:
     name: Create Pull Request
     runs-on: ubuntu-latest
     if: >-
-      (github.repository == 'llvm/llvm-project') &&
       !startswith(github.event.comment.body, '<!--IGNORE-->') &&
       contains(github.event.comment.body, '/branch ')
 
