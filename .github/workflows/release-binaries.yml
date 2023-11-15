@@ -154,7 +154,6 @@ jobs:
         ${{ needs.prepare.outputs.flags }} \
         -triple ${{ matrix.target.triple }} \
         -use-ninja \
-        -no-checkout \
         -no-flang \
         -no-compare-files \
         -no-test-suite \
