@@ -26,7 +26,6 @@ jobs:
   prepare:
     name: Prepare to build binaries
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     outputs:
       release-version: ${{ steps.validate-tag.outputs.release-version }}
       flags: ${{ steps.validate-tag.outputs.flags }}
@@ -118,7 +117,7 @@ jobs:
             runs-on: macos-13-xlarge
           - triple: x86_64-linux-gnu-ubuntu-22.04
             os: ubuntu-22.04
-            runs-on: ubuntu-22.04-16x64
+            runs-on: ubuntu-22.04
             debian-build-deps: >
               chrpath
               gcc-multilib
@@ -128,7 +127,7 @@ jobs:
     - name: Checkout LLVM
       uses: actions/checkout@v4
       with:
-        ref: ${{ needs.prepare.outputs.ref }}
+        ref: main
         path: ${{ needs.prepare.outputs.build-dir }}/llvm-project
 
     - name: Setup sccache
@@ -136,7 +135,6 @@ jobs:
       with:
         max-size: 250M
         key: sccache-${{ matrix.target.os }}-release
-        save: false
         variant: sccache
 
     - name: Install Brew build dependencies
@@ -156,7 +154,6 @@ jobs:
         ${{ needs.prepare.outputs.flags }} \
         -triple ${{ matrix.target.triple }} \
         -use-ninja \
-        -no-checkout \
         -no-test-suite \
         -configure-flags "-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache"
 
