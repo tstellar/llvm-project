@@ -74,6 +74,7 @@ jobs:
     strategy:
       matrix:
         os:
+          - macos-13
           - ubuntu-22.04
     steps:
     - name: Checkout LLVM
@@ -109,6 +110,12 @@ jobs:
       fail-fast: false
       matrix:
         target:
+          - triple: x86_64-apple-darwin22.0
+            os: macos-13
+            runs-on: macos-13-large
+          - triple: aarch64-apple-darwin22.0
+            os: macos-13-aarch64
+            runs-on: macos-13-xlarge
           - triple: x86_64-linux-gnu-ubuntu-22.04
             os: ubuntu-22.04
             runs-on: ubuntu-22.04-16x64
@@ -140,10 +147,8 @@ jobs:
       if: matrix.target.debian-build-deps != ''
       run: sudo apt install ${{ matrix.target.debian-build-deps }}
 
-    - name: Set macOS build env variables
-      if: runner.os == 'macOS'
-      run: |
-        echo "MACOSX_DEPLOYMENT_TARGET=10.9" >> "$GITHUB_ENV"
+    - name: Install Ninja
+      uses: llvm/actions/install-ninja@main
 
     - name: Build and test release
       run: |
