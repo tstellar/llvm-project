@@ -111,10 +111,10 @@ jobs:
         target:
           - triple: x86_64-apple-darwin22.0
             os: macos-13
-            runs-on: macos-13-large
+            runs-on: macos-13
           - triple: aarch64-apple-darwin22.0
             os: macos-13-aarch64
-            runs-on: macos-13-xlarge
+            runs-on: macos-13
           - triple: x86_64-linux-gnu-ubuntu-22.04
             os: ubuntu-22.04
             runs-on: ubuntu-22.04
