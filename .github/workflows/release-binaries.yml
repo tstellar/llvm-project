@@ -17,7 +17,7 @@ on:
         type: string
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '0 8 1 * *'
+    - cron:  '5 15 * * *'
 
 permissions:
   contents: read # Default everything to read-only
