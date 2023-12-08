@@ -258,5 +258,8 @@ size_t llvm::getDefaultPrecision(FloatStyle Style) {
   case FloatStyle::Percent:
     return 2; // Number of decimal places.
   }
+  // Workaround for MSVC bug: https://developercommunity.visualstudio.com/t/Prev-Issue---with-__assume-isnan-/1597317
+#ifndef _MSC_VER
   LLVM_BUILTIN_UNREACHABLE;
+#endif
 }
