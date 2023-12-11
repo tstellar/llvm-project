@@ -1,0 +1,44 @@
+
+name: Build CI Container
+
+permissions:
+  contents: read
+
+on:
+  push:
+    paths:
+      - .github/workflows/build-ci-container.yml
+      - .github/workflows/containers/github-action-ci/**
+  pull_request:
+    paths:
+      - .github/workflows/build-ci-container.yml
+      - .github/workflows/containers/github-action-ci/**
+
+jobs:
+  build-ci-container:
+    if: github.repository_owner == 'llvm'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Write Variables
+        id: vars
+        run: |
+          echo "container-name=ghcr.io/llvm/ci-ubuntu-22.04" >> $GITHUB_OUTPUT
+
+      - name: Checkout LLVM
+        uses: actions:checkout@v4
+
+      - name: Build Container
+        working-directory: ./llvm-project/.github/workflows/containers/github-action-ci/
+        run: |
+          # TODO: Ideally, we would give each container build a unique name,
+          # but we have limited space in the container registry, so we can't
+          # do this until we implement some kind of garbage collection for
+          # old containers.
+          podman build -t ${{ steps.vars.outputs.container-name }} .
+
+      - name: Push Container
+        if: github.event_name == "push"
+        run: |
+          podman push ${{ steps.vars.outputs.container-name }}
