@@ -20,7 +20,7 @@ on:
 
 jobs:
   build-ci-container:
-    if: github.repository_owner == 'llvm'
+    #if: github.repository_owner == 'llvm'
     runs-on: ubuntu-latest
     permissions:
       packages: write
