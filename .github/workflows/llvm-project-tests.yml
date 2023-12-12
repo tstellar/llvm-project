@@ -54,6 +54,8 @@ jobs:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.os_list) }}
+    container:
+      image: ${{ (matrix.os == 'ubuntu-latest' && 'ghcr.io/tstellar/ci-ubuntu-22.04:latest') || null }}
     steps:
       - name: Setup Windows
         if: startsWith(matrix.os, 'windows')
@@ -70,6 +72,7 @@ jobs:
           python-version: '3.11'
       - name: Install Ninja
         uses: llvm/actions/install-ninja@main
+        if: "!startsWith(matrix.os, 'ubuntu')"
       # actions/checkout deletes any existing files in the new git directory,
       # so this needs to either run before ccache-action or it has to use
       # clean: false.
