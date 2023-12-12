@@ -5,6 +5,7 @@ import re
 import subprocess
 import sys
 import errno
+import getpass
 
 import lit.util
 from lit.llvm.subst import FindTool
@@ -153,6 +154,9 @@ class LLVMConfig(object):
                 features.add("target-arm")
             if re.match(r'^ppc64le.*-linux', target_triple):
                 features.add('target=powerpc64le-linux')
+
+        if getpass.getuser() != 'root':
+            features.add('non-root-user')
 
         use_gmalloc = lit_config.params.get("use_gmalloc", None)
         if lit.util.pythonize_bool(use_gmalloc):
