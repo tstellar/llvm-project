@@ -28,7 +28,6 @@ concurrency:
 
 jobs:
   check_all:
-    if: github.repository_owner == 'llvm'
     name: Test llvm,clang,libclc
     uses: ./.github/workflows/llvm-project-tests.yml
     with:
