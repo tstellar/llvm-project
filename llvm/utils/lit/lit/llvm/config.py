@@ -13,6 +13,17 @@ from lit.llvm.subst import ToolSubst
 
 lit_path_displayed = False
 
+def user_is_root():
+    # getpass.getuser() can throw an exception in some cases:
+    # See https://github.com/python/cpython/issues/76912
+    try:
+        if getpass.getuser() == 'root':
+            return True
+    except:
+        pass
+
+    return False
+
 
 class LLVMConfig(object):
     def __init__(self, lit_config, config):
@@ -155,7 +166,7 @@ class LLVMConfig(object):
             if re.match(r'^ppc64le.*-linux', target_triple):
                 features.add('target=powerpc64le-linux')
 
-        if getpass.getuser() != 'root':
+        if not user_is_root():
             features.add('non-root-user')
 
         use_gmalloc = lit_config.params.get("use_gmalloc", None)
