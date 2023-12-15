@@ -42,6 +42,7 @@ do_polly="yes"
 do_mlir="yes"
 do_flang="yes"
 do_silent_log="no"
+do_native_phase1_2="no"
 BuildDir="`pwd`"
 ExtraConfigureFlags=""
 ExportBranch=""
@@ -87,6 +88,7 @@ function usage() {
     echo " -no-mlir             Disable check-out & build MLIR"
     echo " -no-flang            Disable check-out & build Flang"
     echo " -silent-log          Don't output build logs to stdout"
+    echo " -native-phase1-2     Only build native targets for Phase 1 and 2.  This implies -no-compare-files"
 }
 
 while [ $# -gt 0 ]; do
@@ -199,6 +201,10 @@ while [ $# -gt 0 ]; do
             ;;
         -silent-log )
             do_silent_log="yes"
+            ;;
+        -native-phase-1-2 )
+            do_native_phase1_2="yes"
+            do_compare="no"
             ;;
         -help | --help | -h | --h | -\? )
             usage
@@ -416,8 +422,12 @@ function configure_llvmCore() {
     # During the first two phases, there is no need to build any of the projects
     # except clang, since these phases are only meant to produce a bootstrapped
     # clang compiler, capable of building the third phase.
+    target_flag=""
     if [ "$Phase" -lt "3" ]; then
       project_list="clang"
+      if [ "$do_native_phase1_2" = "yes" ]; then
+          target_flag="-DLLVM_TARGETS_TO_BUILD=Native"
+      fi
     else
       project_list="$projects"
     fi
@@ -447,6 +457,7 @@ function configure_llvmCore() {
         -DLLVM_ENABLE_PROJECTS="$project_list" \
         -DLLVM_LIT_ARGS="-j $NumJobs $LitVerbose" \
         -DLLVM_ENABLE_RUNTIMES="$runtime_list" \
+        $target_flag \
         $ExtraConfigureFlags $BuildDir/llvm-project/llvm \
         2>&1 | tee $LogDir/llvm.configure-Phase$Phase-$Flavor.log
     env CC="$c_compiler" CXX="$cxx_compiler" \
@@ -456,6 +467,7 @@ function configure_llvmCore() {
         -DLLVM_ENABLE_PROJECTS="$project_list" \
         -DLLVM_LIT_ARGS="-j $NumJobs $LitVerbose" \
         -DLLVM_ENABLE_RUNTIMES="$runtime_list" \
+        $target_flag \
         $ExtraConfigureFlags $BuildDir/llvm-project/llvm \
         2>&1 | tee $LogDir/llvm.configure-Phase$Phase-$Flavor.log
 

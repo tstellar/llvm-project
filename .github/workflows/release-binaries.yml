@@ -93,7 +93,7 @@ jobs:
 
     - name: Build Clang
       run: |
-        cmake -G Ninja  -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_BUILD_TYPE=Release -DCMAKE_ENABLE_ASSERTIONS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DLLVM_ENABLE_PROJECTS=clang -S llvm -B build
+        cmake -G Ninja -DLLVM_TARGETS_TO_BUILD=Native -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_BUILD_TYPE=Release -DCMAKE_ENABLE_ASSERTIONS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DLLVM_ENABLE_PROJECTS=clang -S llvm -B build
         ninja -v -C build
 
 
@@ -156,6 +156,7 @@ jobs:
         -use-ninja \
         -no-checkout \
         -no-compare-files \
+        -native-phase1-2 \
         -no-test-suite \
         -configure-flags "-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache"
 
