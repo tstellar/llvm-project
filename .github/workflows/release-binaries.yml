@@ -154,6 +154,7 @@ jobs:
         ${{ needs.prepare.outputs.flags }} \
         -triple ${{ matrix.target.triple }} \
         -use-ninja \
+        -no-checkout \
         -no-compare-files \
         -no-test-suite \
         -configure-flags "-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache"
