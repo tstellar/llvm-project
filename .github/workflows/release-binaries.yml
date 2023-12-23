@@ -82,9 +82,6 @@ jobs:
       with:
         ref: ${{ needs.prepare.outputs.ref }}
 
-    - name: Install Ninja
-      uses: llvm/actions/install-ninja@main
-
     - name: Setup sccache
       uses: hendrikmuhs/ccache-action@v1
       with:
@@ -138,10 +135,6 @@ jobs:
     - name: Install Brew build dependencies
       if: matrix.target.brew-build-deps != ''
       run: brew install ${{ matrix.target.brew-build-deps }}
-
-    - name: Install Debian build dependencies
-      if: matrix.target.debian-build-deps != ''
-      run: sudo apt install ${{ matrix.target.debian-build-deps }}
 
     - name: Set macOS build env variables
       if: runner.os == 'macOS'
