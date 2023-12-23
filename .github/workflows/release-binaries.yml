@@ -71,7 +71,7 @@ jobs:
     needs: prepare
     runs-on: ${{ matrix.os }}
     container:
-      image: ghcr.io/$GITHUB_REPOSITORY_OWNER/ci-ubuntu-22.04:latest
+      image: ghcr.io/${{ github.repository_owner }}/ci-ubuntu-22.04:latest
     strategy:
       matrix:
         os:
@@ -107,7 +107,7 @@ jobs:
       - fill-cache
     runs-on: ${{ matrix.target.runs-on }}
     container:
-      image: ghcr.io/$GITHUB_REPOSITORY_OWNER/ci-ubuntu-22.04:latest
+      image: ghcr.io/${{ github.repository_owner }}/ci-ubuntu-22.04:latest
     strategy:
       fail-fast: false
       matrix:
