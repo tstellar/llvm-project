@@ -26,7 +26,6 @@ jobs:
   prepare:
     name: Prepare to build binaries
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     outputs:
       release-version: ${{ steps.validate-tag.outputs.release-version }}
       flags: ${{ steps.validate-tag.outputs.flags }}
