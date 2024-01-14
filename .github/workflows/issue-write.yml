@@ -48,6 +48,8 @@ jobs:
             var fs = require('fs');
             const data = JSON.parse(fs.readFileSync('./pr'));
             const comment = fs.readFileSync('./comment').toString('utf-8');
+            console.log(data);
+            console.log(comment);
             if (data.id) {
               await github.issues.updateComment({
                 owner: context.repo.owner,
