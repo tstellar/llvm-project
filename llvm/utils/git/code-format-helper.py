@@ -323,7 +323,7 @@ def hook_main():
         if fmt.has_tool():
             if not fmt.run(args.changed_files, args):
                 failed_fmts.append(fmt.name)
-            print(fmt.comment)
+            print('COMMENT IS', fmt.comment)
             if fmt.comment:
               comments.append(fmt.comment)
         else:
