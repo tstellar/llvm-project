@@ -66,5 +66,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: json
-          path: json
+          name: artifact
+          path: |
+            pr
+            comment
