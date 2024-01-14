@@ -124,7 +124,7 @@ View the diff from {self.name} here.
 
         if args.write_comment_to_file:
             with open('pr', 'w') as f:
-                f.write(f'{{"number":{pr.number}"')
+                f.write(f'{{"number":{pr.number}')
                 if existing_comment:
                     f.write(f',"id":{existing_comment.id}')
                 f.write("}")
