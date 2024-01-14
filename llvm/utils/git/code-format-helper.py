@@ -61,6 +61,7 @@ class FormatHelper:
     COMMENT_TAG = "<!--LLVM CODE FORMAT COMMENT: {fmt}-->"
     name: str
     friendly_name: str
+    comment: dict = None
 
     @property
     def comment_tag(self) -> str:
@@ -123,14 +124,12 @@ View the diff from {self.name} here.
         existing_comment = self.find_comment(pr)
 
         if args.write_comment_to_file:
-            with open('pr', 'w') as f:
-                f.write(f'{{"number":{pr.number}')
-                if existing_comment:
-                    f.write(f',"id":{existing_comment.id}')
-                f.write("}")
-
-            with open('comment', 'w') as f:
-                f.write(comment_text)
+            self.comment = {
+                'number' : pr.number,
+                'body' : comment_text
+            }
+            if existing_comment:
+                self.comment['id'] =  existing_comment.id
             return
 
         if existing_comment:
@@ -319,12 +318,20 @@ def hook_main():
         args.changed_files.append(line)
 
     failed_fmts = []
+    comments = []
     for fmt in ALL_FORMATTERS:
         if fmt.has_tool():
             if not fmt.run(args.changed_files, args):
                 failed_fmts.append(fmt.name)
+            if fmt.comment:
+              comments.append(fmt.comment)
         else:
             print(f"Couldn't find {fmt.name}, can't check " + fmt.friendly_name.lower())
+
+    if len(comments):
+        with open('comments') as f:
+            import json
+            json.dump(comments, f)
 
     if len(failed_fmts) > 0:
         sys.exit(1)
@@ -366,7 +373,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--write-comment-to-file",
         action='store_true',
-        help="Don't create a comment on the PR, instead write the comment to a file called 'comment', and the PR info to a file called 'pr'"   )
+        help="Don't create a comments on the PR, instead write the comments and metadata a file called 'comment'"   )
 
     args = FormatArgs(parser.parse_args())
 

@@ -70,5 +70,4 @@ jobs:
         with:
           name: workflow-args
           path: |
-            pr
-            comment
+            comments
