@@ -110,23 +110,17 @@ View the diff from {self.name} here.
         return None
 
     def update_pr(self, comment_text: str, args: FormatArgs, create_new: bool) -> None:
-        try: 
-            import github
-            from github import IssueComment, PullRequest
+            
+        import github
+        from github import IssueComment, PullRequest
 
-            repo = github.Github(args.token).get_repo(args.repo)
-            pr = repo.get_issue(args.issue_number).as_pull_request()
+        repo = github.Github(args.token).get_repo(args.repo)
+        pr = repo.get_issue(args.issue_number).as_pull_request()
 
-            comment_text = self.comment_tag + "\n\n" + comment_text
+        comment_text = self.comment_tag + "\n\n" + comment_text
+        existing_comment = self.find_comment(pr)
 
-            existing_comment = self.find_comment(pr)
-            if existing_comment:
-                existing_comment.edit(comment_text)
-            elif create_new:
-                pr.as_issue().create_comment(comment_text)
-        except:
-            # If we failed to add a comment (most likely due to permissions
-            # issues).  Output data about the comment:
+        if args.write_comment_to_file:
             with open('pr', 'w') as f:
                 f.write(f'{{"number":{pr.number}"')
                 if exisiting_comment:
@@ -135,6 +129,12 @@ View the diff from {self.name} here.
 
             with open('comment', 'w') as f:
                 f.write(comment)
+            return
+
+        if existing_comment:
+            existing_comment.edit(comment_text)
+        elif create_new:
+            pr.as_issue().create_comment(comment_text)
 
     def run(self, changed_files: List[str], args: FormatArgs) -> bool:
         diff = self.format_run(changed_files, args)
@@ -361,6 +361,11 @@ if __name__ == "__main__":
         type=str,
         help="Comma separated list of files that has been changed",
     )
+    parser.add_argument(
+        "--write-comment-to-file",
+        type=bool,
+        default=False,
+        help="Don't create a comment on the PR, instead write the comment to a file called 'comment', and the PR info to a file called 'pr'"   )
 
     args = FormatArgs(parser.parse_args())
 
