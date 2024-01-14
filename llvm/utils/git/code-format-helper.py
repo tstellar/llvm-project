@@ -366,7 +366,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--write-comment-to-file",
         type=bool,
-        action='store_true'
+        action='store_true',
         help="Don't create a comment on the PR, instead write the comment to a file called 'comment', and the PR info to a file called 'pr'"   )
 
     args = FormatArgs(parser.parse_args())
