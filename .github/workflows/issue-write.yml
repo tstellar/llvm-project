@@ -47,21 +47,26 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             var fs = require('fs');
-            const data = JSON.parse(fs.readFileSync('./pr'));
-            const comment = fs.readFileSync('./comment').toString('utf-8');
-            if (data.id) {
-              await github.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: data.number,
-                comment_id: data.id,
-                body: comment
-              });
-            } else {
-              await github.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: data.number,
-                body: comment
-              });
+            const comments = JSON.parse(fs.readFileSync('./comments'));
+            if (!comments) {
+              return;
             }
+            console.log(comments);
+            comments.forEach(function (comment) {
+              if (comment.id) {
+                await github.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: comment.number,
+                  comment_id: comment.id,
+                  body: comment.body
+                });
+              } else {
+                await github.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: comment.number,
+                  body: comment.body
+                });
+              }
+            });
