@@ -126,7 +126,7 @@ View the diff from {self.name} here.
             with open('pr', 'w') as f:
                 f.write(f'{{"number":{pr.number}"')
                 if existing_comment:
-                    f.write('f,{{"id":{existing_comment.id}')
+                    f.write(f',"id":{existing_comment.id}')
                 f.write("}")
 
             with open('comment', 'w') as f:
