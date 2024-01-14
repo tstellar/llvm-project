@@ -127,14 +127,14 @@ View the diff from {self.name} here.
         except:
             # If we failed to add a comment (most likely due to permissions
             # issues).  Output data about the comment:
-            import json
-            comment = {}
-            comment['body'] = comment_text
-            comment['number'] = pr.number
-            if exisiting_comment:
-                comment['id'] = exiting_comment.id
-            json.dumps(comment)
+            with open('pr', 'w') as f:
+                f.write(f'{{"number":{pr.number}"')
+                if exisiting_comment:
+                    f.write('f,{{"id":{existing_comment.id}')
+                f.write("}")
 
+            with open('comment', 'w') as f:
+                f.write(comment)
 
     def run(self, changed_files: List[str], args: FormatArgs) -> bool:
         diff = self.format_run(changed_files, args)
