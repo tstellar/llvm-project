@@ -58,6 +58,7 @@ jobs:
         # the merge base.
         run: |
           python ./llvm/utils/git/code-format-helper.py \
+            --write-comment-to-file \
             --token ${{ secrets.GITHUB_TOKEN }} \
             --issue-number $GITHUB_PR_NUMBER \
             --start-rev $(git merge-base $START_REV $END_REV) \

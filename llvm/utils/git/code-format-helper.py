@@ -44,6 +44,7 @@ class FormatArgs:
     token: str = None
     verbose: bool = True
     issue_number: int = 0
+    write_comment_to_file: bool = False
 
     def __init__(self, args: argparse.Namespace = None) -> None:
         if not args is None:
@@ -53,6 +54,7 @@ class FormatArgs:
             self.token = args.token
             self.changed_files = args.changed_files
             self.issue_number = args.issue_number
+            self.write_comment_to_file = args.write_comment_to_file
 
 
 class FormatHelper:
