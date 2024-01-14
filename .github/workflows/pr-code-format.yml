@@ -1,7 +1,5 @@
 name: "Check code formatting"
-on: pull_request_target
-permissions:
-  pull-requests: write
+on: pull_request
 
 jobs:
   code_formatter:
@@ -77,4 +75,9 @@ jobs:
             --issue-number $GITHUB_PR_NUMBER \
             --start-rev $(git merge-base $START_REV $END_REV) \
             --end-rev $END_REV \
-            --changed-files "$CHANGED_FILES"
+            --changed-files "$CHANGED_FILES" > json
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: json
+          path: json

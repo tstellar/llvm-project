@@ -110,19 +110,31 @@ View the diff from {self.name} here.
         return None
 
     def update_pr(self, comment_text: str, args: FormatArgs, create_new: bool) -> None:
-        import github
-        from github import IssueComment, PullRequest
+        try: 
+            import github
+            from github import IssueComment, PullRequest
 
-        repo = github.Github(args.token).get_repo(args.repo)
-        pr = repo.get_issue(args.issue_number).as_pull_request()
+            repo = github.Github(args.token).get_repo(args.repo)
+            pr = repo.get_issue(args.issue_number).as_pull_request()
 
-        comment_text = self.comment_tag + "\n\n" + comment_text
+            comment_text = self.comment_tag + "\n\n" + comment_text
 
-        existing_comment = self.find_comment(pr)
-        if existing_comment:
-            existing_comment.edit(comment_text)
-        elif create_new:
-            pr.as_issue().create_comment(comment_text)
+            existing_comment = self.find_comment(pr)
+            if existing_comment:
+                existing_comment.edit(comment_text)
+            elif create_new:
+                pr.as_issue().create_comment(comment_text)
+        except:
+            # If we failed to add a comment (most likely due to permissions
+            # issues).  Output data about the comment:
+            import json
+            comment = {}
+            comment['body'] = comment_text
+            comment['number'] = pr.number
+            if exisiting_comment:
+                comment['id'] = exiting_comment.id
+            json.dumps(comment)
+
 
     def run(self, changed_files: List[str], args: FormatArgs) -> bool:
         diff = self.format_run(changed_files, args)
