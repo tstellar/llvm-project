@@ -65,12 +65,10 @@ jobs:
             --end-rev $END_REV \
             --changed-files "$CHANGED_FILES"
 
-      - if: always()
-        run: cat pr comment
-
       - uses: actions/upload-artifact@v2
+        if: always()
         with:
-          name: artifact
+          name: workflow-args
           path: |
             pr
             comment
