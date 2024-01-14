@@ -130,7 +130,7 @@ View the diff from {self.name} here.
                 f.write("}")
 
             with open('comment', 'w') as f:
-                f.write(comment)
+                f.write(comment_text)
             return
 
         if existing_comment:
