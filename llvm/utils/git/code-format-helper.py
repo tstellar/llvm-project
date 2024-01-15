@@ -324,7 +324,9 @@ def hook_main():
     failed_fmts = []
     comments = []
     for fmt in ALL_FORMATTERS:
+        print("Running a fmtter")
         if fmt.has_tool():
+            print("fmt has tool")
             if not fmt.run(args.changed_files, args):
                 failed_fmts.append(fmt.name)
             print('COMMENT IS', fmt.comment)
