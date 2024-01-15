@@ -388,7 +388,7 @@ if __name__ == "__main__":
             comments.append(fmt.comment)
     
     if len(comments):
-        with open('comments') as f:
+        with open('comments', 'w') as f:
             import json
             json.dump(comments, f)
 
