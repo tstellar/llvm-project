@@ -141,18 +141,21 @@ View the diff from {self.name} here.
         diff = self.format_run(changed_files, args)
         should_update_gh = args.token is not None and args.repo is not None
 
+        print("running")
         if diff is None:
             if should_update_gh:
                 comment_text = (
                     ":white_check_mark: With the latest revision "
                     f"this PR passed the {self.friendly_name}."
                 )
+                print("UPDATE with", comment_text)
                 self.update_pr(comment_text, args, create_new=False)
             return True
         elif len(diff) > 0:
             if should_update_gh:
                 comment_text = self.pr_comment_text_for_diff(diff)
                 self.update_pr(comment_text, args, create_new=True)
+                print("UPDATE with", comment_text)
             else:
                 print(
                     f"Warning: {self.friendly_name}, {self.name} detected "
@@ -166,6 +169,7 @@ View the diff from {self.name} here.
                 f":warning: The {self.friendly_name} failed without printing "
                 "a diff. Check the logs for stderr output. :warning:"
             )
+            print("UPDATE with", comment_text)
             self.update_pr(comment_text, args, create_new=False)
             return False
 
