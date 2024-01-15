@@ -52,9 +52,9 @@ jobs:
               return;
             }
             console.log(comments);
-            comments.forEach(function (comment) {
+            await comments.forEach(function (comment) {
               if (comment.id) {
-                await github.issues.updateComment({
+                github.issues.updateComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: comment.number,
@@ -62,7 +62,7 @@ jobs:
                   body: comment.body
                 });
               } else {
-                await github.issues.createComment({
+                github.issues.createComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: comment.number,
