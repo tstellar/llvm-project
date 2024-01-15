@@ -322,24 +322,14 @@ def hook_main():
         args.changed_files.append(line)
 
     failed_fmts = []
-    comments = []
     for fmt in ALL_FORMATTERS:
-        print("Running a fmtter")
         if fmt.has_tool():
-            print("fmt has tool")
             if not fmt.run(args.changed_files, args):
                 failed_fmts.append(fmt.name)
-            print('COMMENT IS', fmt.comment)
             if fmt.comment:
               comments.append(fmt.comment)
         else:
             print(f"Couldn't find {fmt.name}, can't check " + fmt.friendly_name.lower())
-
-    print("There are ", len(comments), 'comments.')
-    if len(comments):
-        with open('comments') as f:
-            import json
-            json.dump(comments, f)
 
     if len(failed_fmts) > 0:
         sys.exit(1)
@@ -390,9 +380,17 @@ if __name__ == "__main__":
         changed_files = args.changed_files.split(",")
 
     failed_formatters = []
+    comments = []
     for fmt in ALL_FORMATTERS:
         if not fmt.run(changed_files, args):
             failed_formatters.append(fmt.name)
+        if fmt.comment:
+            comments.append(fmt.comment)
+    
+    if len(comments):
+        with open('comments') as f:
+            import json
+            json.dump(comments, f)
 
     if len(failed_formatters) > 0:
         print(f"error: some formatters failed: {' '.join(failed_formatters)}")
