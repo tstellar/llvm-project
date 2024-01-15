@@ -165,8 +165,7 @@ View the diff from {self.name} here.
             # infrastructure failure).
             comment_text = (
                 f":warning: The {self.friendly_name} failed without printing "
-                "a diff. Check the logs for stderr output. :warning:"
-            )
+                "a diff. Check the logs for stderr output. :warning:")
             self.update_pr(comment_text, args, create_new=False)
             return False
 
