@@ -6,7 +6,13 @@ on:
 
 jobs:
   cpu-check:
-    runs-on: [ubunutu-latest, windows-latest, macos-latest]
+    strategy:
+      matrix:
+        runner:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+    runs-on: ${{ matrix.runner }}
     steps:
       - run: nproc
         shell: bash
