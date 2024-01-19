@@ -1,0 +1,12 @@
+name: CPU check
+
+on:
+  push:
+
+
+jobs:
+  cpu-check:
+    runs-on: [ubunutu-latest, windows-latest, macos-latest]
+    steps:
+      - run: nproc
+        shell: bash
