@@ -19,7 +19,7 @@
 #include "AMDGPUExportClustering.h"
 #include "AMDGPUIGroupLP.h"
 #include "AMDGPUMacroFusion.h"
-      #include "AMDGPURegBankSelect.h"
+#include "AMDGPURegBankSelect.h"
 #include "AMDGPUTargetObjectFile.h"
 #include "AMDGPUTargetTransformInfo.h"
 #include "AMDGPUUnifyDivergentExitNodes.h"
