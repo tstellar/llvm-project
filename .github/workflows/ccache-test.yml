@@ -27,6 +27,6 @@ jobs:
       - name: Test ccache
         run: |
           echo "int main(){}" > test.c
-          SCCACHE_DEBUG=verbose sccache clang test.c
+          SSCCACHE_ERROR_LOG=/tmp/sccache_log.txt SCCACHE_LOG=debug CCACHE_DEBUG=verbose sccache clang -c test.c
+          cat /tmp/sccache_log.txt
           sccache -s
-        
