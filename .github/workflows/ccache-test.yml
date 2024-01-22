@@ -28,5 +28,5 @@ jobs:
         run: |
           echo "int main(){}" > test.c
           SSCCACHE_ERROR_LOG=/tmp/sccache_log.txt SCCACHE_LOG=debug CCACHE_DEBUG=verbose sccache clang -c test.c
-          cat /tmp/sccache_log.txt
+          test -e /tmp/sccache_log.txt && cat /tmp/sccache_log.txt
           sccache -s
