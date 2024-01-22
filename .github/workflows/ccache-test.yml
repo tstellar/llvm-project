@@ -24,9 +24,9 @@ jobs:
           key: ${{ matrix.os }}-ccache-test
           variant: sccache
 
-     - name: Test ccache
-       run: |
-         echo "int main(){}" > test.c
-         SCCACHE_DEBUG=verbose sccache clang test.c
-         sccache -s
+      - name: Test ccache
+        run: |
+          echo "int main(){}" > test.c
+          SCCACHE_DEBUG=verbose sccache clang test.c
+          sccache -s
         
