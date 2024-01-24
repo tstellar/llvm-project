@@ -86,8 +86,8 @@ jobs:
           # enough cache space for all the tests to run at once and still
           # fit under the 10 GB limit.
           #
-          # Bump cache size to 1G due to https://github.com/hendrikmuhs/ccache-action/issues/174
-          max-size: 1G
+          # Bump cache size to 2G due to https://github.com/hendrikmuhs/ccache-action/issues/174
+          max-size: 2G
           key: ${{ matrix.os }}
           variant: sccache
       - name: Build and Test
