@@ -13,6 +13,7 @@ jobs:
   pr-comment:
     runs-on: ubuntu-latest
     permissions:
+      actions: read # This is needed to download artifacts from another workflow.
       pull-requests: write
     if: >
       github.event.workflow_run.event == 'pull_request'
