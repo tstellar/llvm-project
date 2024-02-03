@@ -89,23 +89,23 @@ jobs:
                 // Security check: Ensure that this comment was created by
                 // the github-actions bot, so a malisious input won't overwrite
                 // a user's comment.
-                await comment_data = github.issues.getComment({
+                github.issues.getComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   comment_id: comment.id
-                });
-                console.log(comment_data);
-                if (comment_data.user.login != "github-actions[bot]") {
-                  console.log("Invalid comment id: " + comment.id);
-                  return;
-                }
-
-                github.issues.updateComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: pr_number,
-                  comment_id: comment.id,
-                  body: comment.body
+                }).then((comment_data) => {
+                  console.log(comment_data);
+                  if (comment_data.user.login != "github-actions[bot]") {
+                    console.log("Invalid comment id: " + comment.id);
+                    return;
+                  }
+                  github.issues.updateComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr_number,
+                    comment_id: comment.id,
+                    body: comment.body
+                  });
                 });
               } else {
                 github.issues.createComment({
