@@ -89,7 +89,7 @@ jobs:
                 // Security check: Ensure that this comment was created by
                 // the github-actions bot, so a malisious input won't overwrite
                 // a user's comment.
-                const comment_data = github.issues.getComment({
+                await comment_data = github.issues.getComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   comment_id: comment.id
