@@ -42,8 +42,9 @@ jobs:
             });
 
             console.log(runInfo);
-            const head_sha = runInfo.data.head_sha
-            const search_query = "type:pr repo:llvm/llvm-project commit:" + head_sha
+
+
+            // Query to find the number of the pull request that triggered this job.
             const gql_query = `
               query($repo_owner : String!, $repo_name : String!, $branch: String!) {
                 repository(owner: $repo_owner, name: $repo_name) {
@@ -85,6 +86,19 @@ jobs:
             
             await comments.forEach(function (comment) {
               if (comment.id) {
+                // Security check: Ensure that this comment was created by
+                // the github-actions bot, so a malisious input won't overwrite
+                // a user's comment.
+                const comment_data = github.issues.getComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: comment.id
+                });
+                if (comment_data.user.login != "github-actions[bot]") {
+                  console.log("Invalid comment id: " + comment.id");
+                  return;
+                }
+
                 github.issues.updateComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
