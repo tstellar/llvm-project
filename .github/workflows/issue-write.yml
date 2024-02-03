@@ -93,9 +93,9 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   comment_id: comment.id
-                }).then((comment_data) => {
-                  console.log(comment_data);
-                  if (comment_data.user.login != "github-actions[bot]") {
+                }).then((old_comment) => {
+                  console.log(old_comment);
+                  if (old_comment.data.user.login != "github-actions[bot]") {
                     console.log("Invalid comment id: " + comment.id);
                     return;
                   }
