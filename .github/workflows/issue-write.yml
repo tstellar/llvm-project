@@ -94,6 +94,7 @@ jobs:
                   repo: context.repo.repo,
                   comment_id: comment.id
                 });
+                console.log(comment_data);
                 if (comment_data.user.login != "github-actions[bot]") {
                   console.log("Invalid comment id: " + comment.id);
                   return;
