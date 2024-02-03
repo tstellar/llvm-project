@@ -62,6 +62,7 @@ jobs:
           --repo "$GITHUB_REPOSITORY" \
           --token "${{ secrets.RELEASE_WORKFLOW_PR_CREATE }}" \
           release-workflow \
+          --branch-repo "tstellar/llvm-project" \
           --branch-repo-token ${{ secrets.RELEASE_WORKFLOW_PUSH_SECRET }} \
           --issue-number ${{ github.event.issue.number }} \
           auto
