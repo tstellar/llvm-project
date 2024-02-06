@@ -108,9 +108,8 @@ jobs:
         run: |
           if [ "${{ runner.os }}" == "Linux" ]; then
             builddir="/mnt/build/"
-            ls -ltr /mnt
-            mkdir -p $builddir
-            #sudo chown `whoami`:`whoami` $builddir
+            sudo mkdir -p $builddir
+            sudo chown `whoami`:`whoami` $builddir
           else
             builddir="$(pwd)"/build
           fi
