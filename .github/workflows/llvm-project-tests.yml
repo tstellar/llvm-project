@@ -103,6 +103,7 @@ jobs:
           max-size: 2G
           key: ${{ matrix.os }}
           variant: sccache
+          restore: false
       - name: Build and Test
         env:
           # Workaround for https://github.com/actions/virtual-environments/issues/5900.
