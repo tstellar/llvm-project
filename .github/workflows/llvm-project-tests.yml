@@ -58,10 +58,6 @@ jobs:
   lit-tests:
     name: Lit Tests
     runs-on: ${{ matrix.os }}
-    container:
-      image: ${{(startsWith(matrix.os, 'ubuntu') && format('ghcr.io/{0}/ci-ubuntu-22.04:latest', github.repository_owner)) || null}}
-      volumes:
-        - /mnt/:/mnt/
     strategy:
       fail-fast: false
       matrix:
@@ -81,7 +77,6 @@ jobs:
         with:
           python-version: ${{ inputs.python_version }}
       - name: Install Ninja
-        if: runner.os != 'Linux'
         uses: llvm/actions/install-ninja@main
       # actions/checkout deletes any existing files in the new git directory,
       # so this needs to either run before ccache-action or it has to use
@@ -114,8 +109,8 @@ jobs:
         run: |
           if [ "${{ runner.os }}" == "Linux" ]; then
             builddir="/mnt/build/"
-            mkdir -p $builddir
-            extra_cmake_args="-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang"
+            sudo mkdir -p $builddir
+            sudo chown `whoami`:`whoami` $builddir
           else
             builddir="$(pwd)"/build
           fi
@@ -129,7 +124,6 @@ jobs:
                 -DLLDB_INCLUDE_TESTS=OFF \
                 -DCMAKE_C_COMPILER_LAUNCHER=sccache \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
-                $extra_cmake_args \
                 ${{ inputs.extra_cmake_args }}
           ninja -C "$builddir" '${{ inputs.build_target }}'
 
