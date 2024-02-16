@@ -116,3 +116,19 @@ jobs:
           cmake -G Ninja -S libclc -B libclc-build -DLLVM_DIR="$(pwd)"/build/lib/cmake/llvm -DLIBCLC_TARGETS_TO_BUILD="amdgcn--;amdgcn--amdhsa;r600--;nvptx--;nvptx64--;nvptx--nvidiacl;nvptx64--nvidiacl"
           ninja -C libclc-build
           ninja -C libclc-build test
+
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: lld-artifacts
+          path: |
+            /Users/runner/work/llvm-project/llvm-project/build/tools/lld/test/ELF/Output/partition-notes.s.tmp.o
+            /Users/runner/work/llvm-project/llvm-project/build/tools/lld/test/ELF/Output/partition-notes.s.tmp
+            /Users/runner/work/llvm-project/llvm-project/build/tools/lld/test/ELF/Output/partition-notes.s.tmp0
+            /Users/runner/work/llvm-project/llvm-project/build/tools/lld/test/ELF/Output/partition-notes.s.tmp1
+            /Users/runner/work/llvm-project/llvm-project/build/tools/lld/test/ELF/Output/build-id.s.tmp
+            /Users/runner/work/llvm-project/llvm-project/build/tools/lld/test/ELF/Output/build-id.s.tmp2
+
+
