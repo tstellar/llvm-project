@@ -12,7 +12,6 @@ on:
 
 jobs:
   user-branch-rules:
-    if: github.repository_owner == 'llvm'
     runs-on: ubuntu-latest
     steps:
       - name: Check branch length
