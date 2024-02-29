@@ -142,3 +142,13 @@ jobs:
           cmake -G Ninja -S libclc -B libclc-build -DLLVM_DIR="$LLVM_BUILDDIR"/lib/cmake/llvm -DLIBCLC_TARGETS_TO_BUILD="amdgcn--;amdgcn--amdhsa;r600--;nvptx--;nvptx64--;nvptx--nvidiacl;nvptx64--nvidiacl"
           ninja -C libclc-build
           ninja -C libclc-build test
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        env:
+          LLVM_BUILDDIR: ${{ steps.build-llvm.outputs.llvm-builddir }}
+        with:
+          name: ${{ matrix.os }}
+          path: ${{ steps.build-llvm.outputs.llvm-builddir }}/lib/Support/BLAKE3/CMakeFiles/LLVMSupportBlake3.dir/**
+
