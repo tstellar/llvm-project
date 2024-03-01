@@ -71,6 +71,7 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           dnf install -y clang ninja-build git cmake tar curl gzip
+          echo "PATH=/usr/bin/" >> $GITHUB_ENV
       - name: Dump CPU Info
         if: startsWith(matrix.os, 'mac')
         run: |
