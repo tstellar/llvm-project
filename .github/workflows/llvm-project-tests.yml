@@ -67,6 +67,9 @@ jobs:
       matrix:
         os: ${{ fromJSON(inputs.os_list) }}
     steps:
+      - name: Dump CPU Info
+        run: |
+          sysctl -a | grep machdep.cpu
       - name: Setup Windows
         if: startsWith(matrix.os, 'windows')
         uses: llvm/actions/setup-windows@main
