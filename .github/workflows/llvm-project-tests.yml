@@ -80,6 +80,10 @@ jobs:
         uses: llvm/actions/setup-windows@main
         with:
           arch: amd64
+      - name: Workaround for Mac OS
+        if: runner.os == 'macOS'
+        run: |
+          echo "MACOSX_DEPLOYMENT_TARGET=13.1" >> $GITHUB_ENV
       # On Windows, starting with win19/20220814.1, cmake choose the 32-bit
       # python3.10.6 libraries instead of the 64-bit libraries when building
       # lldb.  Using this setup-python action to make 3.10 the default
