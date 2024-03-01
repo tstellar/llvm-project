@@ -70,7 +70,7 @@ jobs:
       - name: Install deps
         if: startsWith(matrix.os, 'ubuntu')
         run: |
-          dnf install -y clang ninja-build git cmake
+          dnf install -y clang ninja-build git cmake tar curl gzip
       - name: Dump CPU Info
         if: startsWith(matrix.os, 'mac')
         run: |
