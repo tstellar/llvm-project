@@ -68,8 +68,13 @@ jobs:
         os: ${{ fromJSON(inputs.os_list) }}
     steps:
       - name: Dump CPU Info
+        if: startsWith(matrix.os, 'mac')
         run: |
           sysctl -a | grep machdep.cpu
+      - name: Dump CPU Info
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          cat /proc/cpuinfo
       - name: Setup Windows
         if: startsWith(matrix.os, 'windows')
         uses: llvm/actions/setup-windows@main
