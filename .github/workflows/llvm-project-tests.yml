@@ -132,7 +132,7 @@ jobs:
           fi
           if [ "${{ runner.os }}" == "macOS" ]; then
             # Workaround https://github.com/llvm/llvm-project/issues/81967 
-            extra_cmake_args="-DCMAKE_CXX_COMPILER=/Applications/Xcode_14.2.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ -DCMAKE_C_COMPILER=/Applications/Xcode_14.2.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++"
+            extra_cmake_args="-DCMAKE_CXX_COMPILER=/Applications/Xcode_14.2.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ -DCMAKE_C_COMPILER=/Applications/Xcode_14.2.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc"
             
           fi
           echo "llvm-builddir=$builddir" >> "$GITHUB_OUTPUT"
