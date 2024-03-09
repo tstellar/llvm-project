@@ -35,7 +35,6 @@ jobs:
   prepare:
     name: Prepare to build binaries
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     outputs:
       release-version: ${{ steps.vars.outputs.release-version }}
       flags: ${{ steps.vars.outputs.flags }}
@@ -133,7 +132,7 @@ jobs:
         target:
           - triple: x86_64-linux-gnu-ubuntu-22.04
             os: ubuntu-22.04
-            runs-on: ubuntu-22.04-16x64
+            runs-on: ubuntu-22.04
             debian-build-deps: >
               chrpath
               gcc-multilib
