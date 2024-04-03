@@ -27,6 +27,7 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron:  '0 8 1 * *'
+  push:
 
 permissions:
   contents: read # Default everything to read-only
@@ -35,7 +36,6 @@ jobs:
   prepare:
     name: Prepare to build binaries
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     outputs:
       release-version: ${{ steps.vars.outputs.release-version }}
       flags: ${{ steps.vars.outputs.flags }}
@@ -91,7 +91,6 @@ jobs:
     name: "Fill Cache ${{ matrix.os }}"
     needs: prepare
     runs-on: ${{ matrix.os }}
-    if: github.repository == 'llvm/llvm-project'
     strategy:
       matrix:
         os:
@@ -124,16 +123,14 @@ jobs:
       contents: write # To upload assets to release.
     needs:
       - prepare
-      - fill-cache
     runs-on: ${{ matrix.target.runs-on }}
-    if: github.repository == 'llvm/llvm-project'
     strategy:
       fail-fast: false
       matrix:
         target:
           - triple: x86_64-linux-gnu-ubuntu-22.04
             os: ubuntu-22.04
-            runs-on: ubuntu-22.04-16x64
+            runs-on: ubuntu-22.04
             debian-build-deps: >
               chrpath
               gcc-multilib
