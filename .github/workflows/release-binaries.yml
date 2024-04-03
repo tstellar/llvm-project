@@ -176,7 +176,7 @@ jobs:
         -no-checkout \
         -use-cmake-cache \
         -no-test-suite \
-        -configure-flags "-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache"
+        -configure-flags "-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DBOOTSTRAP_BOOTSTRAP_LLVM_LIT_ARGS=--timeout=600"
 
     - name: Upload binaries
       if: ${{ always() && needs.prepare.outputs.upload == 'true' }}
