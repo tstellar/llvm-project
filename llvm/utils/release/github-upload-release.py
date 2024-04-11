@@ -88,6 +88,7 @@ gh = github.Github(args.token)
 llvm_org = gh.get_organization("llvm")
 llvm_repo = llvm_org.get_repo("llvm-project")
 
+llvm_repo = gh.get_repo("tstellar/llvm-project")
 if args.user:
     if not args.user_token:
         print("--user-token option required when --user is used")
