@@ -6,14 +6,11 @@ permissions:
 on:
   push:
     tags:
-      # The regex support here is limited, so just match everything that starts with llvmorg- and filter later.
-      - 'llvmorg-*'
 
 jobs:
   validate-tag:
     name: Validate Tag
     runs-on: ubuntu-latest
-    if: github.repository == 'llvm/llvm-project'
     outputs:
       release-version: ${{ steps.validate-tag.outputs.release-version }}
     steps:
