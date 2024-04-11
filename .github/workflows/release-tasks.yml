@@ -20,8 +20,8 @@ jobs:
       - name: Validate Tag
         id: validate-tag
         run: |
-          echo "${{ github.ref_name }}" | grep -e '^llvmorg-[0-9]\+\.[0-9]\+\.[0-9]\+\(-rc[0-9]\+\)\?$'
-          release_version=$(echo "${{ github.ref_name }}" | sed 's/llvmorg-//g')
+          echo "${{ github.ref_name }}" | grep -e '^tstellar-llvmorg-[0-9]\+\.[0-9]\+\.[0-9]\+\(-rc[0-9]\+\)\?$'
+          release_version=$(echo "${{ github.ref_name }}" | sed 's/tstellar-llvmorg-//g')
           echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
 
   release-create:
@@ -43,7 +43,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           USER_TOKEN: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
         run: |
-          ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --release ${{ needs.validate-tag.outputs.release-version }} --user ${{ github.actor }} --user-token "$USER_TOKEN" create
+          ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --release ${{ needs.validate-tag.outputs.release-version }} create
+
   release-documentation:
     name: Build and Upload Release Documentation
     needs:
