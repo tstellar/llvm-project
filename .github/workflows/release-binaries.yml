@@ -225,7 +225,7 @@ jobs:
       run: |
         dir
         dir ${{ needs.prepare.outputs.build-dir }}\llvm-project\llvm\utils\release\
-        ${{ needs.prepare.outputs.build-dir }}\llvm-project\llvm\utils\release\build_llvm_release.bat --${{ matrix.target.variant }} --version=${{ needs.prepare.outputs.release-version }} --local-python
+        ${{ needs.prepare.outputs.build-dir }}\llvm-project\llvm\utils\release\build_llvm_release.bat --${{ matrix.target.variant }} --version=${{ needs.prepare.outputs.release-version }} --local-python --skip-checkout
 
     - name: Upload binaries
       if: ${{ always() && needs.prepare.outputs.upload == 'true' }}
