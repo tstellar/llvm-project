@@ -187,3 +187,56 @@ jobs:
         --release ${{ needs.prepare.outputs.release-version }} \
         upload \
         --files ${{ needs.prepare.outputs.build-dir }}/clang+llvm-${{ needs.prepare.outputs.release-version }}-${{ matrix.target.triple }}.tar.xz
+
+  build-binaries-windows:
+    name: Windows ${{ matrix.target.variant }} Release Build
+    permissions:
+      contents: write # To upload assets to the release
+    needs:
+      - prepare  
+    runs-on: ${{ matrix.target.runs-on }}
+    if: github.repository == 'llvm/llvm-project'
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - variant: x64
+            runs-on: windows-2019
+            file-suffix: -win64
+            build-dir: build64
+          - variant: x86
+            runs-on: windows-2019
+            file-suffix: -win32
+            build-dir: build32
+    steps:
+    - name: Checkout LLVM
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      with:
+        ref: ${{ needs.prepare.outputs.ref }}
+        path: ${{ needs.prepare.outputs.build-dir }}/llvm-project
+
+    - name: Setup sccache
+      uses: hendrikmuhs/ccache-action@ca3acd2731eef11f1572ccb126356c2f9298d35e # v1.2.9
+      with:
+        max-size: 250M
+        key: sccache-${{ matrix.target.os }}-release
+        save: false
+        variant: sccache
+    
+    - name: Build and test release
+      run: |
+        llvm-project\llvm\utils\release\build_llvm_release.bat --${{ matrix.target.variant }} --version=${{ steps.vars.outputs.release-version }}
+
+    - name: Upload binaries
+      if: ${{ always() && needs.prepare.outputs.upload == 'true' }}
+      shell: bash
+      run: |
+        ls
+        ls llvm_package_${{ steps.vars.outputs.release-version }}/${{ matrix.target.build-dir }}/ || true
+        pip install github
+        python3 llvm-project/llvm/utils/release/github-upload-release.py \
+        --token ${{ github.token }} \
+        --release ${{ needs.prepare.outputs.release-version }} \
+        upload \
+        --files llvm_package_${{ steps.vars.outputs.release-version }}/${{ matrix.target.build-dir }}/LLVM-${{ matrix.target.release-version }}-${{ matrix.target.file-suffix }}.exe 
+
