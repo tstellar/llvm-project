@@ -216,7 +216,7 @@ jobs:
     
     - name: Build and test release
       run: |
-        llvm-project\llvm\utils\release\build_llvm_release.bat --${{ matrix.target.variant }} --version=${{ steps.vars.outputs.release-version }}
+        llvm\utils\release\build_llvm_release.bat --${{ matrix.target.variant }} --version=${{ steps.vars.outputs.release-version }}
 
     - name: Upload binaries
       if: ${{ always() && needs.prepare.outputs.upload == 'true' }}
