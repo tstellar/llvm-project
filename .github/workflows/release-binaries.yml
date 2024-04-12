@@ -203,7 +203,7 @@ jobs:
     - name: Checkout LLVM
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       with:
-        ref: ${{ needs.prepare.outputs.ref }}
+        ref: main
         path: ${{ needs.prepare.outputs.build-dir }}/llvm-project
 
     - name: Setup sccache
@@ -225,7 +225,7 @@ jobs:
       run: |
         dir
         dir ${{ needs.prepare.outputs.build-dir }}\llvm-project\llvm\utils\release\
-        ${{ needs.prepare.outputs.build-dir }}\llvm-project\llvm\utils\release\build_llvm_release.bat --${{ matrix.target.variant }} --version=${{ needs.prepare.outputs.release-version }} --local-python --skip-checkout
+        ${{ needs.prepare.outputs.build-dir }}\llvm-project\llvm\utils\release\build_llvm_release.bat --${{ matrix.target.variant }} --version=${{ needs.prepare.outputs.release-version }} --local-python
 
     - name: Upload binaries
       if: ${{ always() && needs.prepare.outputs.upload == 'true' }}
