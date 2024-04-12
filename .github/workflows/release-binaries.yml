@@ -215,6 +215,7 @@ jobs:
         variant: sccache
     
     - name: Build and test release
+      shell: cmd
       run: |
         llvm\utils\release\build_llvm_release.bat --${{ matrix.target.variant }} --version=${{ steps.vars.outputs.release-version }}
 
