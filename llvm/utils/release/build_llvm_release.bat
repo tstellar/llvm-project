@@ -163,6 +163,7 @@ set common_cmake_flags=^
   -DCLANG_ENABLE_LIBXML2=OFF ^
   -DCMAKE_C_FLAGS="%common_compiler_flags%" ^
   -DCMAKE_CXX_FLAGS="%common_compiler_flags%" ^
+  -DLLVM_TARGETS_TO_BUILD=Native ^
   -DLLVM_ENABLE_PROJECTS="clang;lld;compiler-rt"
 
 set cmake_profile_flags=""
