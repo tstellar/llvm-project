@@ -219,6 +219,7 @@ jobs:
       run: |
         dir
         dir llvm\utils\release\
+        ./llvm\utils\release\build_llvm_release.bat --${{ matrix.target.variant }} --version=${{ needs.prepare.outputs.release-version }}
 
     - name: Upload binaries
       if: ${{ always() && needs.prepare.outputs.upload == 'true' }}
@@ -231,5 +232,5 @@ jobs:
         --token ${{ github.token }} \
         --release ${{ needs.prepare.outputs.release-version }} \
         upload \
-        --files llvm_package_${{ steps.vars.outputs.release-version }}/${{ matrix.target.build-dir }}/LLVM-${{ matrix.target.release-version }}-${{ matrix.target.file-suffix }}.exe 
+        --files llvm_package_${{ needs.prepare.outputs.release-version }}/${{ matrix.target.build-dir }}/LLVM-${{ matrix.target.release-version }}-${{ matrix.target.file-suffix }}.exe 
 
