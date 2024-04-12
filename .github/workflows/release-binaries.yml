@@ -213,6 +213,12 @@ jobs:
         key: sccache-${{ matrix.target.os }}-release
         save: false
         variant: sccache
+      
+    - name: Setup Windows
+      if: startsWith(matrix.os, 'windows')
+      uses: llvm/actions/setup-windows@main
+      with:
+        arch: amd64
     
     - name: Build and test release
       shell: cmd
