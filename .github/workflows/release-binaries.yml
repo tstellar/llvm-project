@@ -35,7 +35,6 @@ jobs:
   prepare:
     name: Prepare to build binaries
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     outputs:
       release-version: ${{ steps.vars.outputs.release-version }}
       flags: ${{ steps.vars.outputs.flags }}
@@ -119,6 +118,7 @@ jobs:
 
 
   build-binaries:
+    if: false
     name: ${{ matrix.target.triple }}
     permissions:
       contents: write # To upload assets to release.
@@ -126,7 +126,6 @@ jobs:
       - prepare
       - fill-cache
     runs-on: ${{ matrix.target.runs-on }}
-    if: github.repository == 'llvm/llvm-project'
     strategy:
       fail-fast: false
       matrix:
