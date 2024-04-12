@@ -35,7 +35,6 @@ jobs:
   prepare:
     name: Prepare to build binaries
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     outputs:
       release-version: ${{ steps.vars.outputs.release-version }}
       ref: ${{ steps.vars.outputs.ref }}
@@ -48,13 +47,7 @@ jobs:
     - name: Install Dependencies
       run: |
         pip install -r ./llvm/utils/git/requirements.txt
-
-    - name: Check Permissions
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-        USER_TOKEN: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
-      run: |
-        ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --user ${{ github.actor }} --user-token "$USER_TOKEN" check-permissions
+        df -h
 
     - name: Collect Variables
       id: vars
@@ -86,7 +79,6 @@ jobs:
     name: "Build Stage 1 Linux"
     needs: prepare
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     steps:
     - name: Checkout LLVM
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -106,7 +98,8 @@ jobs:
     - name: Build Stage 1 Clang
       run: |
         sudo chown $USER:$USER /mnt/
-        cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -S llvm -B /mnt/build
+        mkdir -p /mnt/build
+        cmake -G Ninja -DLLVM_RELEASE_ENABLE_PROJECTS="clang;lld" -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -S llvm -B /mnt/build
         ninja -v -C /mnt/build
 
     # We need to create an archive of the build directory, because it has too
@@ -137,7 +130,6 @@ jobs:
       - prepare
       - build-stage1-linux
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
@@ -190,8 +182,7 @@ jobs:
       - build-stage2-linux
     outputs:
       filename: ${{ steps.package-info.outputs.release-filename }}
-    runs-on: ubuntu-22.04-16x64
-    if: github.repository == 'llvm/llvm-project'
+    runs-on: ubuntu-22.04
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
@@ -216,7 +207,7 @@ jobs:
 
     - id: package-info
       run: |
-        filename="LLVM-${{ needs.prepare.outputs.release-version }}-Linux.tar.gz"
+        filename="LLVM-18.1.3-Linux.tar.gz"
         echo "filename=$filename" >> $GITHUB_OUTPUT
         echo "path=/mnt/build/tools/clang/stage2-instrumented-bins/tools/clang/stage2-bins/$filename" >> $GITHUB_OUTPUT
 
@@ -285,7 +276,6 @@ jobs:
       - prepare
       - build-stage3-linux
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
