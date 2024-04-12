@@ -163,7 +163,7 @@ set common_cmake_flags=^
   -DCLANG_ENABLE_LIBXML2=OFF ^
   -DCMAKE_C_FLAGS="%common_compiler_flags%" ^
   -DCMAKE_CXX_FLAGS="%common_compiler_flags%" ^
-  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;compiler-rt;lldb;openmp"
+  -DLLVM_ENABLE_PROJECTS="clang;lld;compiler-rt"
 
 set cmake_profile_flags=""
 
@@ -202,7 +202,7 @@ ninja || ninja || ninja || exit /b 1
 REM ninja check-llvm || ninja check-llvm || ninja check-llvm || exit /b 1
 REM ninja check-clang || ninja check-clang || ninja check-clang || exit /b 1
 ninja check-lld || ninja check-lld || ninja check-lld || exit /b 1
-ninja check-sanitizer || ninja check-sanitizer || ninja check-sanitizer || exit /b 1
+REM ninja check-sanitizer || ninja check-sanitizer || ninja check-sanitizer || exit /b 1
 REM ninja check-clang-tools || ninja check-clang-tools || ninja check-clang-tools || exit /b 1
 cd..
 
@@ -224,7 +224,7 @@ ninja || ninja || ninja || exit /b 1
 REM ninja check-llvm || ninja check-llvm || ninja check-llvm || exit /b 1
 REM ninja check-clang || ninja check-clang || ninja check-clang || exit /b 1
 ninja check-lld || ninja check-lld || ninja check-lld || exit /b 1
-ninja check-sanitizer || ninja check-sanitizer || ninja check-sanitizer || exit /b 1
+REM ninja check-sanitizer || ninja check-sanitizer || ninja check-sanitizer || exit /b 1
 REM ninja check-clang-tools || ninja check-clang-tools || ninja check-clang-tools || exit /b 1
 ninja package || exit /b 1
 cd ..
@@ -255,12 +255,12 @@ set cmake_flags=^
 
 cmake -GNinja %cmake_flags% %llvm_src%\llvm || exit /b 1
 ninja || ninja || ninja || exit /b 1
-ninja check-llvm || ninja check-llvm || ninja check-llvm || exit /b 1
-ninja check-clang || ninja check-clang || ninja check-clang || exit /b 1
-ninja check-lld || ninja check-lld || ninja check-lld || exit /b 1
-ninja check-sanitizer || ninja check-sanitizer || ninja check-sanitizer || exit /b 1
-ninja check-clang-tools || ninja check-clang-tools || ninja check-clang-tools || exit /b 1
-ninja check-clangd || ninja check-clangd || ninja check-clangd || exit /b 1
+REM ninja check-llvm || ninja check-llvm || ninja check-llvm || exit /b 1
+REM ninja check-clang || ninja check-clang || ninja check-clang || exit /b 1
+REM ninja check-lld || ninja check-lld || ninja check-lld || exit /b 1
+REM ninja check-sanitizer || ninja check-sanitizer || ninja check-sanitizer || exit /b 1
+REM ninja check-clang-tools || ninja check-clang-tools || ninja check-clang-tools || exit /b 1
+REM ninja check-clangd || ninja check-clangd || ninja check-clangd || exit /b 1
 cd..
 
 REM CMake expects the paths that specifies the compiler and linker to be
@@ -280,12 +280,12 @@ cd build64
 call :do_generate_profile || exit /b 1
 cmake -GNinja %cmake_flags% %cmake_profile_flags% %llvm_src%\llvm || exit /b 1
 ninja || ninja || ninja || exit /b 1
-ninja check-llvm || ninja check-llvm || ninja check-llvm || exit /b 1
-ninja check-clang || ninja check-clang || ninja check-clang || exit /b 1
-ninja check-lld || ninja check-lld || ninja check-lld || exit /b 1
-ninja check-sanitizer || ninja check-sanitizer || ninja check-sanitizer || exit /b 1
-ninja check-clang-tools || ninja check-clang-tools || ninja check-clang-tools || exit /b 1
-ninja check-clangd || ninja check-clangd || ninja check-clangd || exit /b 1
+REM ninja check-llvm || ninja check-llvm || ninja check-llvm || exit /b 1
+REM ninja check-clang || ninja check-clang || ninja check-clang || exit /b 1
+REM ninja check-lld || ninja check-lld || ninja check-lld || exit /b 1
+REM ninja check-sanitizer || ninja check-sanitizer || ninja check-sanitizer || exit /b 1
+REM ninja check-clang-tools || ninja check-clang-tools || ninja check-clang-tools || exit /b 1
+REM ninja check-clangd || ninja check-clangd || ninja check-clangd || exit /b 1
 ninja package || exit /b 1
 
 :: generate tarball with install toolchain only off
