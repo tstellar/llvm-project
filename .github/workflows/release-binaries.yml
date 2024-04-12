@@ -187,7 +187,6 @@ jobs:
     needs:
       - prepare  
     runs-on: ${{ matrix.target.runs-on }}
-    if: github.repository == 'llvm/llvm-project'
     strategy:
       fail-fast: false
       matrix:
