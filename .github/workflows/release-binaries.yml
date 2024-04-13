@@ -144,55 +144,6 @@ jobs:
         name: LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
         path: ${{ needs.prepare.outputs.build-dir }}/llvm-project/build/LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
 
-    steps:
-    - name: Checkout LLVM
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      with:
-        ref: ${{ needs.prepare.outputs.ref }}
-        path: ${{ needs.prepare.outputs.build-dir }}/llvm-project
-
-    - name: Setup sccache
-      uses: hendrikmuhs/ccache-action@ca3acd2731eef11f1572ccb126356c2f9298d35e # v1.2.9
-      with:
-        max-size: 250M
-        key: sccache-${{ matrix.target.os }}-release
-        save: false
-        variant: sccache
-
-    - name: Install Brew build dependencies
-      if: matrix.target.brew-build-deps != ''
-      run: brew install ${{ matrix.target.brew-build-deps }}
-
-    - name: Install Debian build dependencies
-      if: matrix.target.debian-build-deps != ''
-      run: sudo apt install ${{ matrix.target.debian-build-deps }}
-
-    - name: Set macOS build env variables
-      if: runner.os == 'macOS'
-      run: |
-        echo "MACOSX_DEPLOYMENT_TARGET=10.9" >> "$GITHUB_ENV"
-
-    - name: Build and test release
-      run: |
-        ${{ needs.prepare.outputs.build-dir }}/llvm-project/llvm/utils/release/test-release.sh \
-        ${{ needs.prepare.outputs.flags }} \
-        -triple ${{ matrix.target.triple }} \
-        -use-ninja \
-        -no-checkout \
-        -use-cmake-cache \
-        -no-test-suite \
-        -configure-flags "-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache"
-
-    - name: Upload binaries
-      if: ${{ always() && needs.prepare.outputs.upload == 'true' }}
-      run: |
-        sudo apt install python3-github
-        ${{ needs.prepare.outputs.build-dir }}/llvm-project/llvm/utils/release/github-upload-release.py \
-        --token ${{ github.token }} \
-        --release ${{ needs.prepare.outputs.release-version }} \
-        upload \
-        --files ${{ needs.prepare.outputs.build-dir }}/clang+llvm-${{ needs.prepare.outputs.release-version }}-${{ matrix.target.triple }}.tar.xz
-
   build-binaries-windows:
     name: Windows ${{ matrix.target.variant }} Release Build
     permissions:
