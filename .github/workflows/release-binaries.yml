@@ -108,6 +108,12 @@ jobs:
         cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_POSITION_INDEPENDENT_CODE=ON -S llvm -B build
         ninja -v -C build clang
 
+    # We need to create an archive of the build directory, because it has too
+    # many files to upload.
+    - name: Save Build and Source Directory
+      run: |
+        tar -czf llvm-project.tar.gz .
+
     - name: Upload Stage 1
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
@@ -128,10 +134,15 @@ jobs:
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
+
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
         name: stage1
+
+    - name: Unpack Artifact
+      run: |
+        tar -xzf llvm-project.tar.gz 
 
     - name: Build Stage 2 Clang
       working-directory: ./llvm-project
