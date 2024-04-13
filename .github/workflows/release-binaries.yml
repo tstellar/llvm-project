@@ -227,16 +227,8 @@ jobs:
         dir ${{ needs.prepare.outputs.build-dir }}\llvm-project\llvm\utils\release\
         ${{ needs.prepare.outputs.build-dir }}\llvm-project\llvm\utils\release\build_llvm_release.bat --${{ matrix.target.variant }} --version=${{ needs.prepare.outputs.release-version }} --local-python
 
-    - name: Upload binaries
-      if: ${{ always() && needs.prepare.outputs.upload == 'true' }}
-      shell: bash
-      run: |
-        ls
-        ls llvm_package_${{ steps.vars.outputs.release-version }}/${{ matrix.target.build-dir }}/ || true
-        pip install github
-        python3 llvm-project/llvm/utils/release/github-upload-release.py \
-        --token ${{ github.token }} \
-        --release ${{ needs.prepare.outputs.release-version }} \
-        upload \
-        --files llvm_package_${{ needs.prepare.outputs.release-version }}/${{ matrix.target.build-dir }}/LLVM-${{ matrix.target.release-version }}-${{ matrix.target.file-suffix }}.exe 
-
+    - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+      if: always()
+      with:
+        name: LLVM-${{ matrix.target.release-version }}-${{ matrix.target.file-suffix }}.exe
+        path: ${{ needs.prepare.outputs.build-dir }}\llvm-project\llvm_package_${{ needs.prepare.outputs.release-version }}\${{ matrix.target.build-dir }}\LLVM-${{ needs.prepare.outputs.release-version }}-${{ matrix.target.file-suffix }}.exe
