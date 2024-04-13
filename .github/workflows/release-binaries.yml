@@ -112,13 +112,13 @@ jobs:
     # many files to upload.
     - name: Save Build and Source Directory
       run: |
-        tar -czf llvm-project.tar.gz .
+        tar -czf ../llvm-project.tar.gz .
 
     - name: Upload Stage 1
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
         name: stage1
-        path: .
+        path: ../llvm-project.tar.gz
 
   build-stage2:
     name: "BuildStage 2 ${{ matrix.os }}"
