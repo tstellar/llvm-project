@@ -79,8 +79,8 @@ jobs:
 
   # Try to get around the 6 hour timeout by first running a job to fill
   # the build cache.
-  fill-cache:
-    name: "Fill Cache ${{ matrix.os }}"
+  build-stage1:
+    name: "Build Stage 1 ${{ matrix.os }}"
     needs: prepare
     runs-on: ${{ matrix.os }}
     if: github.repository == 'llvm/llvm-project'
@@ -104,11 +104,44 @@ jobs:
         key: sccache-${{ matrix.os }}-release
         variant: sccache
 
-    - name: Build Clang
+    - name: Build Stage 1 Clang
       run: |
         cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_POSITION_INDEPENDENT_CODE=ON -S llvm -B build
         ninja -v -C build clang
 
+    - name: Upload Stage 1
+      uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+      with:
+        name: stage1
+        path: .
+
+  build-stage2:
+    name: "BuildStage 2 ${{ matrix.os }}"
+    needs:
+      - prepare
+      - build-stage1
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+
+    steps:
+    - name: 'Download artifact'
+      uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
+      with:
+        name: stage1
+
+    - name: Build Stage 2 Clang
+      working-directory: ./llvm-project
+      run: |
+        ninja -C build stage2-package
+
+    - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+      if: always()
+      with:
+        name: LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
+        path: ${{ needs.prepare.outputs.build-dir }}/llvm-project/build/LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
 
   build-binaries:
     if: false
