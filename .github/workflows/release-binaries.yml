@@ -83,7 +83,6 @@ jobs:
     name: "Build Stage 1 ${{ matrix.os }}"
     needs: prepare
     runs-on: ${{ matrix.os }}
-    if: github.repository == 'llvm/llvm-project'
     strategy:
       matrix:
         os:
