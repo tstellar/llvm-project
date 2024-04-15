@@ -146,7 +146,6 @@ jobs:
         tar -xzf llvm-project.tar.gz 
 
     - name: Build Stage 2 Clang
-      working-directory: ./llvm-project
       run: |
         ninja -C build stage2-package
 
