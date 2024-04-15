@@ -58,6 +58,7 @@ set(LLVM_TARGETS_TO_BUILD Native CACHE STRING "")
 set(BOOTSTRAP_CLANG_ENABLE_BOOTSTRAP ON CACHE STRING "")
 set(BOOTSTRAP_CLANG_BOOTSTRAP_TARGETS
   clang
+  package
   check-all
   check-llvm
   check-clang CACHE STRING "")
