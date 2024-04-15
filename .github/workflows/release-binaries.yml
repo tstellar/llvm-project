@@ -121,8 +121,8 @@ jobs:
         name: stage1
         path: ${{ github.workspace }}/llvm-project.tar.gz
 
-  build-stage2:
-    name: "BuildStage 2 ${{ matrix.os }}"
+  build-stage2-instrumented:
+    name: "BuildStage 2 (Instrumented) ${{ matrix.os }}"
     needs:
       - prepare
       - build-stage1
@@ -145,15 +145,97 @@ jobs:
       run: |
         tar -xzf llvm-project.tar.gz 
 
-    - name: Build Stage 2 Clang
+    - name: Build Stage 2 Instrumented Clang
+      run: |
+        ninja -C build stage2-instrumented
+
+    # We need to create an archive of the build directory, because it has too
+    # many files to upload.
+    - name: Save Build and Source Directory
+      run: |
+        tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
+        mv ../llvm-project.tar.gz ${{ github.workspace }}
+    
+    - name: Upload Stage 2 Instrumented
+      uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+      with:
+        name: stage2-instrumented
+        path: ${{ github.workspace }}/llvm-project.tar.gz
+
+  build-stage2:
+    name: "BuildStage 2 ${{ matrix.os }}"
+    needs:
+      - prepare
+      - build-stage2-instrumented
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+
+    steps:
+    - name: Install Ninja
+      uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
+
+    - name: 'Download artifact'
+      uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
+      with:
+        name: stage2-instrumented
+
+    - name: Unpack Artifact
+      run: |
+        tar -xzf llvm-project.tar.gz 
+
+    - name: Build Release Package
       run: |
         ninja -C build stage2-package
-
+    
     - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       if: always()
       with:
         name: LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
         path: ${{ needs.prepare.outputs.build-dir }}/llvm-project/build/LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
+
+    # We need to create an archive of the build directory, because it has too
+    # many files to upload.
+    - name: Save Build and Source Directory
+      run: |
+        tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
+        mv ../llvm-project.tar.gz ${{ github.workspace }}
+    
+    - name: Upload Stage 2 Instrumented
+      uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+      with:
+        name: stage2
+        path: ${{ github.workspace }}/llvm-project.tar.gz
+
+  test-stage2:
+    name: "Test Stage 2"
+    needs:
+      - prepare
+      - build-stage2
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+
+    steps:
+    - name: Install Ninja
+      uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
+
+    - name: 'Download artifact'
+      uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
+      with:
+        name: stage2
+
+    - name: Unpack Artifact
+      run: |
+        tar -xzf llvm-project.tar.gz 
+    
+    - name: Run Tests
+      run: |
+        ninja -C build stage2-check-all
 
   build-binaries-windows:
     if: github.repository == 'llvm/llvm-project'
