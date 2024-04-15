@@ -113,7 +113,7 @@ jobs:
     - name: Save Build and Source Directory
       run: |
         tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
-        mv llvm-project.tar.gz ${{ github.workspace }}
+        mv ../llvm-project.tar.gz ${{ github.workspace }}
 
     - name: Upload Stage 1
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
