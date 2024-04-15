@@ -14,6 +14,7 @@ if (LLVM_RELEASE_ENABLE_PGO)
   set(CLANG_BOOTSTRAP_TARGETS
     generate-profdata
     stage2
+    stage2-package
     stage2-clang
     stage2-distribution
     stage2-install
