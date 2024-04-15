@@ -156,6 +156,7 @@ jobs:
         path: ${{ needs.prepare.outputs.build-dir }}/llvm-project/build/LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
 
   build-binaries-windows:
+    if: github.repository == "llvm/llvm-project"
     name: Windows ${{ matrix.target.variant }} Release Build
     permissions:
       contents: write # To upload assets to the release
