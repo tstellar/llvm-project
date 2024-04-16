@@ -121,8 +121,8 @@ jobs:
         name: stage1
         path: ${{ github.workspace }}/llvm-project.tar.gz
 
-  build-stage2-instrumented:
-    name: "BuildStage 2 (Instrumented) ${{ matrix.os }}"
+  build-stage2:
+    name: "Build Stage 2 ${{ matrix.os }}"
     needs:
       - prepare
       - build-stage1
@@ -145,9 +145,9 @@ jobs:
       run: |
         tar -xzf llvm-project.tar.gz 
 
-    - name: Build Stage 2 Instrumented Clang
+    - name: Build Stage 2
       run: |
-        ninja -C build stage2-instrumented
+        ninja -C build stage2
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
@@ -156,17 +156,17 @@ jobs:
         tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
         mv ../llvm-project.tar.gz ${{ github.workspace }}
     
-    - name: Upload Stage 2 Instrumented
+    - name: Upload Stage 2
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage2-instrumented
+        name: stage2
         path: ${{ github.workspace }}/llvm-project.tar.gz
 
-  build-stage2:
-    name: "BuildStage 2 ${{ matrix.os }}"
+  build-stage3:
+    name: "Build Stage 3 ${{ matrix.os }}"
     needs:
       - prepare
-      - build-stage2-instrumented
+      - build-stage2
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -180,7 +180,7 @@ jobs:
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        name: stage2-instrumented
+        name: stage2
 
     - name: Unpack Artifact
       run: |
@@ -203,17 +203,17 @@ jobs:
         tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
         mv ../llvm-project.tar.gz ${{ github.workspace }}
     
-    - name: Upload Stage 2 Instrumented
+    - name: Upload Stage 3
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage2
+        name: stage3
         path: ${{ github.workspace }}/llvm-project.tar.gz
 
   test-stage2:
-    name: "Test Stage 2"
+    name: "Test Stage 3"
     needs:
       - prepare
-      - build-stage2
+      - build-stage3
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -227,7 +227,7 @@ jobs:
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        name: stage2
+        name: stage3
 
     - name: Unpack Artifact
       run: |
