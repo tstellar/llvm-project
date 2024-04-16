@@ -147,7 +147,7 @@ jobs:
 
     - name: Build Stage 2
       run: |
-        ninja -C build stage2
+        ninja -C build stage2-instrumented
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
