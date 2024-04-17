@@ -105,7 +105,7 @@ jobs:
 
     - name: Build Stage 1 Clang
       run: |
-        cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_POSITION_INDEPENDENT_CODE=ON -S llvm -B build
+        cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_PROJECTS="clang;lld" -S llvm -B build
         ninja -v -C build
 
     # We need to create an archive of the build directory, because it has too
