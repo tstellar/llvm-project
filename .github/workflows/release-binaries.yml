@@ -145,6 +145,7 @@ jobs:
     - name: Unpack Artifact
       run: |
         tar -xzf llvm-project.tar.gz 
+        rm llvm-project.tar.gz
 
     - name: Build Stage 2
       run: |
@@ -186,6 +187,7 @@ jobs:
     - name: Unpack Artifact
       run: |
         tar -xzf llvm-project.tar.gz 
+        rm llvm-project.tar.gz
 
     - name: Build Release Package
       run: |
@@ -233,6 +235,7 @@ jobs:
     - name: Unpack Artifact
       run: |
         tar -xzf llvm-project.tar.gz 
+        rm llvm-project.tar.gz
     
     - name: Run Tests
       run: |
