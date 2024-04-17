@@ -104,6 +104,8 @@ jobs:
 
     - name: Build Stage 1 Clang
       run: |
+        whoami
+        sudo chown $USER:$USER /mnt/
         mkdir -p /mnt/build
         ls -ltr /mnt/build
         cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_POSITION_INDEPENDENT_CODE=ON -S llvm -B /mnt/build
@@ -154,6 +156,7 @@ jobs:
       run: |
         tar -xzf llvm-project.tar.gz 
         rm llvm-project.tar.gz
+        sudo chown $USER:$USER /mnt/
         tar -C /mnt -xzf build.tar.gz
         rm build.tar.gz
         ls -l /mnt
@@ -208,6 +211,7 @@ jobs:
       run: |
         tar -xzf llvm-project.tar.gz 
         rm llvm-project.tar.gz
+        sudo chown $USER:$USER /mnt/
         tar -C /mnt -xzf build.tar.gz
         rm build.tar.gz
 
@@ -266,6 +270,7 @@ jobs:
       run: |
         tar -xzf llvm-project.tar.gz 
         rm llvm-project.tar.gz
+        sudo chown $USER:$USER /mnt/
         tar -C /mnt -xzf build.tar.gz
         rm build.tar.gz
     
