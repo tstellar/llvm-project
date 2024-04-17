@@ -78,8 +78,6 @@ jobs:
         fi
         bash .github/workflows/set-release-binary-outputs.sh "$tag" "$upload"
 
-  # Try to get around the 6 hour timeout by first running a job to fill
-  # the build cache.
   build-stage1:
     name: "Build Stage 1 ${{ matrix.os }}"
     needs: prepare
@@ -106,8 +104,8 @@ jobs:
 
     - name: Build Stage 1 Clang
       run: |
-        cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_PROJECTS="clang;lld" -S llvm -B build
-        ninja -v -C build
+        cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBOOTSTRAP_BOOTSTRAP_LLVM_ENABLE_PROJECTS="clang;lld" -S llvm -B /mnt/build
+        ninja -v -C /mnt/build
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
@@ -115,12 +113,19 @@ jobs:
       run: |
         tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
         mv ../llvm-project.tar.gz ${{ github.workspace }}
+        tar -czf ${{ github.workspace }}/build.tar.gz /mnt/build
 
-    - name: Upload Stage 1
+    - name: Upload Stage 1 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage1
+        name: stage1-source
         path: ${{ github.workspace }}/llvm-project.tar.gz
+    
+    - name: Upload Stage 1 Build Dir
+      uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+      with:
+        name: stage1-build
+        path: ${{ github.workspace }}/bulid.tar.gz
 
   build-stage2:
     name: "Build Stage 2 ${{ matrix.os }}"
@@ -137,19 +142,23 @@ jobs:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
 
-    - name: 'Download artifact'
+    - name: Download Stage 1 Artifacts
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        name: stage1
+        name: stage1-*
+        merge-multiple: true
 
     - name: Unpack Artifact
       run: |
         tar -xzf llvm-project.tar.gz 
         rm llvm-project.tar.gz
+        tar -C /mnt -xzf build.tar.gz
+        rm build.tar.gz
+        ls -l /mnt
 
     - name: Build Stage 2
       run: |
-        ninja -C build stage2-instrumented
+        ninja -C /mnt/build stage2-instrumented
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
@@ -157,12 +166,20 @@ jobs:
       run: |
         tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
         mv ../llvm-project.tar.gz ${{ github.workspace }}
+        tar -czf  ${{ github.workspace }}/build.tar.gz /mnt/build/
     
-    - name: Upload Stage 2
+    - name: Upload Stage 2 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage2
+        name: stage2-source
         path: ${{ github.workspace }}/llvm-project.tar.gz
+    
+    - name: Upload Stage 2 Build Dir
+      uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+      with:
+        name: stage2-build
+        path: ${{ github.workspace }}/build.tar.gz
+
 
   build-stage3:
     name: "Build Stage 3 ${{ matrix.os }}"
@@ -182,22 +199,25 @@ jobs:
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        name: stage2
+        name: stage2-*
+        merge-multiple: true
 
     - name: Unpack Artifact
       run: |
         tar -xzf llvm-project.tar.gz 
         rm llvm-project.tar.gz
+        tar -C /mnt -xzf build.tar.gz
+        rm build.tar.gz
 
     - name: Build Release Package
       run: |
-        ninja -C build stage2-package
+        ninja -C /mnt/build stage2-package
     
     - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       if: always()
       with:
         name: LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
-        path: ${{ needs.prepare.outputs.build-dir }}/llvm-project/build/LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
+        path: /mnt/build/LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
@@ -205,12 +225,19 @@ jobs:
       run: |
         tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
         mv ../llvm-project.tar.gz ${{ github.workspace }}
+        tar -czf ${{ github.workspace }}/build.tar.gz /mnt/build
     
-    - name: Upload Stage 3
+    - name: Upload Stage 3 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage3
+        name: stage3-source
         path: ${{ github.workspace }}/llvm-project.tar.gz
+    
+    - name: Upload Stage 3 Buidl Dir
+      uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+      with:
+        name: stage3-build
+        path: ${{ github.workspace }}/build.tar.gz
 
   test-stage2:
     name: "Test Stage 3"
@@ -230,16 +257,19 @@ jobs:
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        name: stage3
+        name: stage3-*
+        merge-multiple: true
 
     - name: Unpack Artifact
       run: |
         tar -xzf llvm-project.tar.gz 
         rm llvm-project.tar.gz
+        tar -C /mnt -xzf build.tar.gz
+        rm build.tar.gz
     
     - name: Run Tests
       run: |
-        ninja -C build stage2-check-all
+        ninja -C /mnt/build stage2-check-all
 
   build-binaries-windows:
     if: github.repository == 'llvm/llvm-project'
