@@ -149,7 +149,7 @@ jobs:
     - name: Download Stage 1 Artifacts
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        name: stage1-*
+        pattern: stage1-*
         merge-multiple: true
 
     - name: Unpack Artifact
@@ -204,7 +204,7 @@ jobs:
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        name: stage2-*
+        pattern: stage2-*
         merge-multiple: true
 
     - name: Unpack Artifact
@@ -263,7 +263,7 @@ jobs:
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        name: stage3-*
+        pattern: stage3-*
         merge-multiple: true
 
     - name: Unpack Artifact
