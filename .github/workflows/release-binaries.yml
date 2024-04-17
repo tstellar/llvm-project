@@ -50,6 +50,7 @@ jobs:
     - name: Install Dependencies
       run: |
         pip install -r ./llvm/utils/git/requirements.txt
+        df -h
 
     - name: Collect Variables
       id: vars
