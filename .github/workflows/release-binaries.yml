@@ -223,7 +223,7 @@ jobs:
       if: always()
       with:
         name: LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
-        path: /mnt/build/LLVM-${{ matrix.target.release-version }}-Linux.tar.gz
+        path: /mnt/build/tools/clang/stage2-instrumented-bins/tools/clang/stage2-bins/LLVM-${{ matrix.target.release-version }}-Linux.tar.Z
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
@@ -245,7 +245,7 @@ jobs:
         name: stage3-build
         path: ${{ github.workspace }}/build.tar.gz
 
-  test-stage2:
+  test-stage3:
     name: "Test Stage 3"
     needs:
       - prepare
