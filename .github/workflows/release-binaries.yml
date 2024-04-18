@@ -117,7 +117,7 @@ jobs:
       run: |
         tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
         mv ../llvm-project.tar.gz ${{ github.workspace }}
-        tar -czf ${{ github.workspace }}/build.tar.gz /mnt/build
+        tar -C /mnt/ -czf ${{ github.workspace }}/build.tar.gz build/
 
     - name: Upload Stage 1 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
@@ -171,7 +171,7 @@ jobs:
       run: |
         tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
         mv ../llvm-project.tar.gz ${{ github.workspace }}
-        tar -czf  ${{ github.workspace }}/build.tar.gz /mnt/build/
+        tar -C /mnt/ -czf ${{ github.workspace }}/build.tar.gz build/
     
     - name: Upload Stage 2 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
@@ -231,7 +231,7 @@ jobs:
       run: |
         tar -czf ${{ github.workspace }}/../llvm-project.tar.gz .
         mv ../llvm-project.tar.gz ${{ github.workspace }}
-        tar -czf ${{ github.workspace }}/build.tar.gz /mnt/build
+        tar -C /mnt/ -czf ${{ github.workspace }}/build.tar.gz build/
     
     - name: Upload Stage 3 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
