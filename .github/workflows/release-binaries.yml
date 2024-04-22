@@ -207,7 +207,7 @@ jobs:
 
     - id: package-info
       run: |
-        filename="LLVM-18.1.3-Linux.tar.gz"
+        filename="LLVM-18.1.4-Linux.tar.gz"
         echo "filename=$filename" >> $GITHUB_OUTPUT
         echo "path=/mnt/build/tools/clang/stage2-instrumented-bins/tools/clang/stage2-bins/$filename" >> $GITHUB_OUTPUT
 
