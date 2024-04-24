@@ -60,8 +60,6 @@ jobs:
       # | X.Y.Z-rcN | -rc N -test-asserts
       # | X.Y.Z     | -final
       run: |
-        zstd --help
-        pbzip2 --help
         tag="${{ github.ref_name }}"
         trimmed=$(echo ${{ inputs.release-version }} | xargs)
         [[ "$trimmed" != "" ]] && tag="llvmorg-$trimmed"
