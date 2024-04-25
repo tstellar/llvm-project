@@ -99,7 +99,7 @@ jobs:
       run: |
         sudo chown $USER:$USER /mnt/
         mkdir -p /mnt/build
-        cmake -G Ninja -DLLVM_RELEASE_ENABLE_PGO=ON -DLLVM_RELEASE_ENABLE_PROJECTS="clang;lld" -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -S llvm -B /mnt/build
+        cmake -G Ninja -DLLVM_RELEASE_ENABLE_PROJECTS="clang;lld" -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -S llvm -B /mnt/build
         ninja -v -C /mnt/build
 
     # We need to create an archive of the build directory, because it has too
@@ -149,6 +149,7 @@ jobs:
         rm build.tar.gz
 
     - name: Build Stage 2
+      if: false
       run: |
         ninja -C /mnt/build stage2-instrumented
 
