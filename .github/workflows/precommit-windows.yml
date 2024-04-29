@@ -2,6 +2,7 @@ name: "Windows Precommit Tests"
 
 permissions:
   contents: read
+  actions: read
 
 on:
   pull_request:
@@ -53,6 +54,10 @@ jobs:
           max-size: 2G
           variant: sccache
           key: precommit-windows
+      
+      - name: Save sccache for next PR run
+        if: always()
+        uses: ./.github/workflows/pr-sccache-save
 
       - name: Restore sccache from previous PR run
         uses: ./.github/workflows/pr-sccache-restore
