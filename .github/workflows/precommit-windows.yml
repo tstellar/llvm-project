@@ -2,7 +2,7 @@ name: "Windows Precommit Tests"
 
 permissions:
   contents: read
-  actions: read
+  actions: write
 
 on:
   pull_request:
