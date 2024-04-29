@@ -108,7 +108,7 @@ jobs:
           retention-days: 2
 
   check-part1-result:
-    name: "Check Build Result"
+    name: "Check For Timeout"
     if: always()
     outputs:
       result: ${{ steps.part1-status.outputs.result }}
@@ -136,7 +136,7 @@ jobs:
                 return "success";
               }
           
-              if ("${{ needs.build-windows-part1.outputs.build-failed }}" == "true" &&
+              if ("${{ needs.build-windows-part1.outputs.build-failed }}" != "true" &&
                   "${{ needs.build-windows-part1.outputs.build-timeout }}" != "false") {
                 // Failed due to a timeout
                 return "timeout";
@@ -145,7 +145,7 @@ jobs:
             return "failure"
 
   build-windows:
-    name: "Build (Rebuild due to timeout)"
+    name: "Continue Build (due to timeout)"
     if: ${{ needs.check-part1-result.outputs.result == 'timeout' }}
     needs:
       - compute-projects
