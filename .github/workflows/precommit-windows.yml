@@ -34,12 +34,22 @@ jobs:
         uses: ./.github/workflows/compute-projects-to-test
 
   build-windows-part1:
-    name: "Build LLVM/Clang"
+    name: "Build"
     runs-on: windows-2022
+    outputs:
+      job-id: ${{ steps.vars.outputs.job-id }}
+      build-timeout: ${{ steps.build.outputs.timeout }}
+      build-failed: ${{ steps.build.outputs.failed }}
     needs:
       - compute-projects
     if: ${{ needs.compute-projects.outputs.test-build == 'true' }}
     steps:
+      - name: Collect Job ID
+        id: vars
+        shell: bash
+        run: |
+          echo job-id=${{ github.job }} >> $GITHUB_OUTPUT
+
       - name: Setup Windows
         uses: llvm/actions/setup-windows@main
         with:
@@ -55,10 +65,6 @@ jobs:
           variant: sccache
           key: precommit-windows
       
-      - name: Save sccache for next PR run
-        if: always()
-        uses: ./.github/workflows/pr-sccache-save
-
       - name: Restore sccache from previous PR run
         uses: ./.github/workflows/pr-sccache-restore
 
@@ -79,13 +85,12 @@ jobs:
             -S llvm
 
       - name: Build
+        id: build
         shell: bash
+        timeout-minutes: 1
         run: |
-          targets="llc"
-          if echo "${{ needs.compute-projects.outputs.check-targets }}" | grep clang; then
-            targets="$targets clang"
-          fi
-          ninja -C build $targets
+          ninja -C build ${{ needs.compute-projects.outputs.check-targets }} || echo "failed=true" >> $GITHUB_OUTPUT
+          echo "timeout=false" >> $GITHUB_OUTPUT
 
       - name: Save sccache for next PR run
         if: always()
@@ -93,22 +98,57 @@ jobs:
 
       - name: Package Build Directory
         shell: bash
+        if: always() && steps.build.outputs.timeout != 'false'
         run: |
-          ls
           tar -c . | zstd -T0 -c > ../llvm-project.tar.zst
           mv ../llvm-project.tar.zst .
 
       - name: Upload Build
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+        if: always() && steps.build.outputs.timeout != 'false'
         with:
           name: part1
           path: llvm-project.tar.zst
           retention-days: 2
 
-  build-windows-part2:
-    name: "Build All"
+  check-part1-result:
+    name: "Check Part1 Result"
+    if: always()
+    outputs:
+      result: ${{ steps.part1-status.outputs.result }}
     needs:
+      - compute-projects
       - build-windows-part1
+    runs-on: windows-2022
+    steps:
+      - name: Check Status of Part1 Build
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea #v7.0.1
+        id: part1-status
+        with:
+          script: |
+            const data = await github.rest.actions.getJobForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              job_id: "${{ needs.build-windows-part1.outputs.job-id }}"
+            });
+            console.log(data)
+            if (data.data.conclusion == "success") {
+              return "success";
+            }
+          
+            if ("${{ needs.build-windows-part1.outputs.failed }}" == "true" &&
+                "${{ needs.build-windows-part1.outputs.timeout }}" != "false") {
+              // Failed due to a timeout
+              return "timeout";
+            }
+            return "failure"
+
+  build-windows:
+    if: ${{ needs.check-part1-result.outputs.result == 'timeout' }}
+    needs:
+      - compute-projects
+      - build-windows-part1
+      - check-part1-result
     runs-on: windows-2022
     steps:
       - name: Setup Windows
@@ -142,8 +182,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          ls
-          ninja -C build
+          ninja -C build ${{ needs.compute-projects.outputs.check-targets }}
 
       - name: Save sccache for next PR run
         if: always()
@@ -161,46 +200,3 @@ jobs:
           name: part2
           path: llvm-project.tar.zst
           retention-days: 2
-
-  test-windows:
-    name: "Test"
-    needs:
-      - compute-projects
-      - build-windows-part2
-    runs-on: windows-2022
-    steps:
-      - name: Setup Windows
-        uses: llvm/actions/setup-windows@main
-        with:
-          arch: amd64
-
-      - name: Setup ccache
-        uses: hendrikmuhs/ccache-action@v1
-        with:
-          max-size: 2G
-          variant: sccache
-          key: precommit-windows
-          # The llvm-project.zip archive contains the sccache directory from
-          # part 1, so we don't need to restore the cache.
-          restore: false
-
-      - name: Download Artifact
-        uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
-        with:
-          pattern: part2
-          merge-multiple: true
-
-      - name: Unpack Artifact
-        shell: bash
-        run: |
-          tar --zstd -xf llvm-project.tar.zst
-          rm llvm-project.tar.zst
-
-      - name: Check LLVM
-        if: ${{ needs.compute-projects.outputs.check-targets }}
-        run: |
-          ninja -C build ${{ needs.compute-projects.outputs.check-targets }}
-
-      - name: Save sccache for next PR run
-        if: always()
-        uses: ./.github/workflows/pr-sccache-save
