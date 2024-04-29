@@ -134,6 +134,7 @@ jobs:
       - name: Unpack Artifact
         shell: bash
         run: |
+          ls
           tar --zstd -xf llvm-project.tar.zst
           rm llvm-project.tar.zst
 
