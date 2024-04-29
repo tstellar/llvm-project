@@ -10,6 +10,7 @@ runs:
             const data = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
+              run_id: context.runId,
               name: 'sccache-pr' + context.issue.number
             })
           } catch {
