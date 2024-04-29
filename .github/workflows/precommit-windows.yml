@@ -122,7 +122,7 @@ jobs:
         id: part1-status
         with:
           script: |
-            const data = await github.rest.actions.getJobsForWorkflowRun({
+            const data = await github.rest.actions.listJobsForWorkflowRun({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: "${{ github.run_id }}"
