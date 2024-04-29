@@ -94,6 +94,7 @@ jobs:
       - name: Package Build Directory
         shell: bash
         run: |
+          ls
           tar -c . | zstd -T0 -c > ../llvm-project.tar.zst
           mv ../llvm-project.tar.zst .
 
