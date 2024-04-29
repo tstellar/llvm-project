@@ -68,11 +68,7 @@ jobs:
       - name: Restore sccache from previous PR run
         uses: ./.github/workflows/pr-sccache-restore
 
-      - name: Compute projects to test
-        id: compute-projects
-        uses: ./.github/workflows/compute-projects-to-test
-
-      - name: Configure LLVM
+      - name: Configure
         shell: bash
         run: |
           cmake -B build -GNinja \
@@ -112,7 +108,7 @@ jobs:
           retention-days: 2
 
   check-part1-result:
-    name: "Check Part1 Result"
+    name: "Check Build Result"
     if: always()
     outputs:
       result: ${{ steps.part1-status.outputs.result }}
@@ -126,20 +122,25 @@ jobs:
         id: part1-status
         with:
           script: |
-            const data = await github.rest.actions.getJobForWorkflowRun({
+            const data = await github.rest.actions.getJobsForWorkflowRun({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              job_id: "${{ needs.build-windows-part1.outputs.job-id }}"
+              run_id: "${{ github.run_id }}"
             });
             console.log(data)
-            if (data.data.conclusion == "success") {
-              return "success";
-            }
+            for (job of data.data.jobs) {
+              if (job.name != "build-windows-part1") {
+                continue;
+              }
+              if (job.conclusion == "success") {
+                return "success";
+              }
           
-            if ("${{ needs.build-windows-part1.outputs.failed }}" == "true" &&
-                "${{ needs.build-windows-part1.outputs.timeout }}" != "false") {
-              // Failed due to a timeout
-              return "timeout";
+              if ("${{ needs.build-windows-part1.outputs.failed }}" == "true" &&
+                  "${{ needs.build-windows-part1.outputs.timeout }}" != "false") {
+                // Failed due to a timeout
+                return "timeout";
+              }
             }
             return "failure"
 
