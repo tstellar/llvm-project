@@ -129,7 +129,8 @@ jobs:
             });
             console.log(data)
             for (job of data.data.jobs) {
-              if (job.name != "build-windows-part1") {
+              console.log(job)
+              if (job.name != "Build") {
                 continue;
               }
               if (job.conclusion == "success") {
