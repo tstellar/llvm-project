@@ -33,7 +33,7 @@ jobs:
         id: vars
         uses: ./.github/workflows/compute-projects-to-test
 
-  build-windows-part1:
+  build-windows:
     name: "Build"
     runs-on: windows-2022
     outputs:
@@ -127,7 +127,7 @@ jobs:
       result: ${{ steps.part1-status.outputs.result }}
     needs:
       - compute-projects
-      - build-windows-part1
+      - build-windows
     permissions:
       actions: write
     runs-on: windows-2022
@@ -152,8 +152,8 @@ jobs:
                 return "success";
               }
           
-              if ("${{ needs.build-windows-part1.outputs.build-failed }}" != "true" &&
-                  "${{ needs.build-windows-part1.outputs.build-timeout }}" != "false") {
+              if ("${{ needs.build-windows.outputs.build-failed }}" != "true" &&
+                  "${{ needs.build-windows.outputs.build-timeout }}" != "false") {
                 github.rest.actions.reRunJobForWorkflow({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
