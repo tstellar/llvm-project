@@ -55,6 +55,7 @@ jobs:
         if: ${{ steps.timeout-restore.outputs.download-path != '' }}  
         shell: bash
         run: |
+          echo "DOWNLOAD PATH: ${{ steps.timeout-restore.outputs.download-path }}"
           ls
           tar --zstd -xf llvm-project.tar.zst
           rm llvm-project.tar.zst
