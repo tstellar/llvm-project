@@ -19,41 +19,42 @@ jobs:
     steps:
       - name: "Restart Job"
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea #v7.0.1
-        script: |
-          const data = await github.rest.actions.listWorkflowRunArtifacts({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            run_id: context.payload.workflow_run.id
-          })
-          
-          for (artifact of data.data.artifacts) {
-            if (artifact.name != 'timeout') {
-              continue;
-            }
-
-            // Restart the job
-            const job_data = await github.rest.actions.listJobsForWorkflowRun({
+        with:
+          script: |
+            const data = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              run_id: context.payload.workflow_run.id 
-            });
-
-            for (job of job_data.data.jobs) {
-              console.log(job)
-              if (job.name != "Build") {
+              run_id: context.payload.workflow_run.id
+            })
+          
+            for (artifact of data.data.artifacts) {
+              if (artifact.name != 'timeout') {
                 continue;
               }
-              if (job.conclusion == "success") {
-                return "success";
-              }
-          
-              // This function does not exist even though it is in the document
-              //github.rest.actions.reRunJobForWorkflow({
-              await github.request('POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun', {
+
+              // Restart the job
+              const job_data = await github.rest.actions.listJobsForWorkflowRun({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                job_id: job.id
-              })
-              return "timeout"
+                run_id: context.payload.workflow_run.id 
+              });
+
+              for (job of job_data.data.jobs) {
+                console.log(job)
+                if (job.name != "Build") {
+                  continue;
+                }
+                if (job.conclusion == "success") {
+                  return "success";
+                }
+          
+                // This function does not exist even though it is in the document
+                //github.rest.actions.reRunJobForWorkflow({
+                await github.request('POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun', {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  job_id: job.id
+                })
+                return "timeout"
+              }
             }
-          }
