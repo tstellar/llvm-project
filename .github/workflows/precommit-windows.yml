@@ -94,12 +94,21 @@ jobs:
             -S llvm
 
       - name: Build
-        id: build
         shell: bash
         timeout-minutes: 1
         run: |
-          ninja -C build ${{ needs.compute-projects.outputs.check-targets }} || echo "failed=true" >> $GITHUB_OUTPUT
-          echo "timeout=false" >> $GITHUB_OUTPUT
+          touch timeout
+          ninja -C build ${{ needs.compute-projects.outputs.check-targets }}
+          rm timeout
+
+      - name: Upload Timeout Message
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+        id: timeout
+        if: always()
+        with:
+          name: timeout
+          path: timeout
+          retention-days: 2
 
       - name: Save sccache for next PR run
         if: always()
@@ -107,61 +116,15 @@ jobs:
 
       - name: Package Build Directory
         shell: bash
-        if: always() && steps.build.outputs.timeout != 'false'
+        if: always() && steps.timeoutoutputs.artifact-id != ''
         run: |
           tar -c . | zstd -T0 -c > ../llvm-project.tar.zst
           mv ../llvm-project.tar.zst .
 
       - name: Upload Build
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
-        if: always() && steps.build.outputs.timeout != 'false'
+        if: always() && steps.timeoutoutputs.artifact-id != ''
         with:
           name: timeout-save
           path: llvm-project.tar.zst
           retention-days: 2
-
-  check-for-timeout:
-    name: "Check For Timeout"
-    if: always()
-    outputs:
-      result: ${{ steps.part1-status.outputs.result }}
-    needs:
-      - compute-projects
-      - build-windows
-    permissions:
-      actions: write
-    runs-on: windows-2022
-    steps:
-      - name: Check Status of Part1 Build
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea #v7.0.1
-        id: part1-status
-        with:
-          script: |
-            const data = await github.rest.actions.listJobsForWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: "${{ github.run_id }}"
-            });
-            console.log(data)
-            for (job of data.data.jobs) {
-              console.log(job)
-              if (job.name != "Build") {
-                continue;
-              }
-              if (job.conclusion == "success") {
-                return "success";
-              }
-          
-              if ("${{ needs.build-windows.outputs.build-failed }}" != "true" &&
-                  "${{ needs.build-windows.outputs.build-timeout }}" != "false") {
-                // This function does not exist even though it is in the document
-                //github.rest.actions.reRunJobForWorkflow({
-                await github.request('POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun', {
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  job_id: job.id
-                })
-                return "timeout"
-              }
-            }
-            return "failure"
