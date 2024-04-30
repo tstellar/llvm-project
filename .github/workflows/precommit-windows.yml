@@ -44,11 +44,19 @@ jobs:
       - compute-projects
     if: ${{ needs.compute-projects.outputs.test-build == 'true' }}
     steps:
-      - name: Collect Job ID
-        id: vars
+      - name: Download Artifact
+        id: timeout-restore
+        uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
+        with:
+          pattern: timeout-save
+          merge-multiple: true
+
+      - name: Unpack Artifact
         shell: bash
         run: |
-          echo job-id=${{ github.job }} >> $GITHUB_OUTPUT
+          ls
+          tar --zstd -xf llvm-project.tar.zst
+          rm llvm-project.tar.zst
 
       - name: Setup Windows
         uses: llvm/actions/setup-windows@main
@@ -57,6 +65,7 @@ jobs:
 
       - name: Fetch LLVM sources
         uses: actions/checkout@v4
+        if: ${{ steps.timeout-restore.outputs.download-path == '' }}  
 
       - name: Setup sccache
         uses: hendrikmuhs/ccache-action@v1
@@ -103,11 +112,11 @@ jobs:
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
         if: always() && steps.build.outputs.timeout != 'false'
         with:
-          name: part1
+          name: timeout-save
           path: llvm-project.tar.zst
           retention-days: 2
 
-  check-part1-result:
+  check-for-timeout:
     name: "Check For Timeout"
     if: always()
     outputs:
@@ -115,6 +124,8 @@ jobs:
     needs:
       - compute-projects
       - build-windows-part1
+    permissions:
+      actions: write
     runs-on: windows-2022
     steps:
       - name: Check Status of Part1 Build
@@ -139,67 +150,11 @@ jobs:
           
               if ("${{ needs.build-windows-part1.outputs.build-failed }}" != "true" &&
                   "${{ needs.build-windows-part1.outputs.build-timeout }}" != "false") {
-                // Failed due to a timeout
-                return "timeout";
+                github.rest.actions.reRunJobForWorkflow({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  job_id: job.id
+                })
               }
             }
             return "failure"
-
-  build-windows:
-    name: "Continue Build (due to timeout)"
-    if: ${{ needs.check-part1-result.outputs.result == 'timeout' }}
-    needs:
-      - compute-projects
-      - build-windows-part1
-      - check-part1-result
-    runs-on: windows-2022
-    steps:
-      - name: Setup Windows
-        uses: llvm/actions/setup-windows@main
-        with:
-          arch: amd64
-
-      - name: Setup ccache
-        uses: hendrikmuhs/ccache-action@v1
-        with:
-          max-size: 2G
-          variant: sccache
-          key: precommit-windows
-          # The llvm-project.zip archive contains the sccache directory from
-          # part 1, so we don't need to restore the cache.
-          restore: false
-
-      - name: Download Artifact
-        uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
-        with:
-          pattern: part1
-          merge-multiple: true
-
-      - name: Unpack Artifact
-        shell: bash
-        run: |
-          ls
-          tar --zstd -xf llvm-project.tar.zst
-          rm llvm-project.tar.zst
-
-      - name: Build
-        shell: bash
-        run: |
-          ninja -C build ${{ needs.compute-projects.outputs.check-targets }}
-
-      - name: Save sccache for next PR run
-        if: always()
-        uses: ./.github/workflows/pr-sccache-save
- 
-      - name: Package Build Directory
-        shell: bash
-        run: |
-          tar -c . | zstd -T0 -c > ../llvm-project.tar.zst
-          mv ../llvm-project.tar.zst .
-
-      - name: Upload Build
-        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
-        with:
-          name: part2
-          path: llvm-project.tar.zst
-          retention-days: 2
