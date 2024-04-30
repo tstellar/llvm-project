@@ -45,20 +45,22 @@ jobs:
     if: ${{ needs.compute-projects.outputs.test-build == 'true' }}
     steps:
       - name: Download Artifact
-        id: timeout-restore
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
         with:
           pattern: timeout-save
           merge-multiple: true
 
       - name: Unpack Artifact
-        if: ${{ steps.timeout-restore.outputs.download-path != '' }}  
+        id: timeout-artifact
         shell: bash
         run: |
-          echo "DOWNLOAD PATH: ${{ steps.timeout-restore.outputs.download-path }}"
-          ls
-          tar --zstd -xf llvm-project.tar.zst
-          rm llvm-project.tar.zst
+          if [ -e llvm-project.tar.zst ];
+            tar --zstd -xf llvm-project.tar.zst
+            rm llvm-project.tar.zst
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Setup Windows
         uses: llvm/actions/setup-windows@main
@@ -67,7 +69,7 @@ jobs:
 
       - name: Fetch LLVM sources
         uses: actions/checkout@v4
-        if: ${{ steps.timeout-restore.outputs.download-path == '' }}  
+        if: ${{ steps.timeout-artifact.outputs.exists != 'true' }}  
 
       - name: Setup sccache
         uses: hendrikmuhs/ccache-action@v1
