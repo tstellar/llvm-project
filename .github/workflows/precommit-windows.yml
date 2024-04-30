@@ -116,14 +116,15 @@ jobs:
 
       - name: Package Build Directory
         shell: bash
-        if: always() && steps.timeoutoutputs.artifact-id != ''
+        if: always() && steps.timeout.outputs.artifact-id != ''
         run: |
+          echo "TMEOUT: ${{ steps.timeout.outputs.artifact-id }}"
           tar -c . | zstd -T0 -c > ../llvm-project.tar.zst
           mv ../llvm-project.tar.zst .
 
       - name: Upload Build
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
-        if: always() && steps.timeoutoutputs.artifact-id != ''
+        if: always() && steps.timeout.outputs.artifact-id != ''
         with:
           name: timeout-save
           path: llvm-project.tar.zst
