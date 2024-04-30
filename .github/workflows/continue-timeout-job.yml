@@ -36,8 +36,8 @@ jobs:
               // Delete the timeout artifact to prepare for the next run
               await github.rest.actions.deleteArtifact({
                 owner: context.repo.owner,
-                repo: context.repo.repo
-                artifact_id: artifact.is
+                repo: context.repo.repo,
+                artifact_id: artifact.id
               })
 
               const job_data = await github.rest.actions.listJobsForWorkflowRun({
