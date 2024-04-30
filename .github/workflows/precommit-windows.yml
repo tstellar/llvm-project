@@ -154,11 +154,14 @@ jobs:
           
               if ("${{ needs.build-windows.outputs.build-failed }}" != "true" &&
                   "${{ needs.build-windows.outputs.build-timeout }}" != "false") {
-                github.rest.actions.reRunJobForWorkflow({
+                // This function does not exist even though it is in the document
+                //github.rest.actions.reRunJobForWorkflow({
+                await github.request('POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun', {
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   job_id: job.id
                 })
+                return "timeout"
               }
             }
             return "failure"
