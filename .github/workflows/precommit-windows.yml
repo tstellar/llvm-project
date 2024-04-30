@@ -97,8 +97,9 @@ jobs:
         id: build
         timeout-minutes: 330
         run: |
-          ninja -C build ${{ needs.compute-projects.outputs.check-targets }}
+          status=`ninja -C build ${{ needs.compute-projects.outputs.check-targets }}`
           echo "completed=true" >> $GITHUB_OUTPUT
+          exit $status
 
       - name: Save sccache for next PR run
         if: always()
@@ -108,7 +109,6 @@ jobs:
         shell: bash
         if: always() && steps.build.outputs.completed != 'true'
         run: |
-          echo "TMEOUT: ${{ steps.timeout.outputs.artifact-id }}"
           tar -c . | zstd -T0 -c > ../llvm-project.tar.zst
           mv ../llvm-project.tar.zst .
 
