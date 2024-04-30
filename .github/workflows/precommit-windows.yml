@@ -52,7 +52,7 @@ jobs:
           merge-multiple: true
 
       - name: Unpack Artifact
-        if: ${{ steps.timeout-restore.outputs.download-path == '' }}  
+        if: ${{ steps.timeout-restore.outputs.download-path != '' }}  
         shell: bash
         run: |
           ls
