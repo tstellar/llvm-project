@@ -121,7 +121,11 @@ jobs:
         shell: bash
         if: always() && steps.timeout.outputs.artifact-id != ''
         run: |
-          tar -c . | zstd -T0 -c > ../llvm-project.tar.zst
+          # Remove the timeout file, so the next build isn't categorized
+          # as a timeout.
+          rm -f timeout
+          # Dereference symlinks so that this works on Windows.
+          tar -h -c . | zstd -T0 -c > ../llvm-project.tar.zst
           mv ../llvm-project.tar.zst .
 
       - name: Upload Build
