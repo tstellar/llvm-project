@@ -48,7 +48,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
         with:
-          pattern: timeout
+          pattern: timeout-build
           merge-multiple: true
 
       - name: Unpack Artifact
@@ -97,12 +97,21 @@ jobs:
       - name: Build
         shell: bash
         id: build
-        timeout-minutes: 330
+        timeout-minutes: 1
         run: |
-          echo "completed=false" >> $GITHUB_OUTPUT
+          touch timeout
           ninja -C build -k 0 ${{ needs.compute-projects.outputs.check-targets }} && pass=1
-          echo "completed=true" >> $GITHUB_OUTPUT
+          rm timeout
           [ $pass ] || false
+
+      - name: Upload Timeout Message
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+        id: timeout
+        if: always()
+        with:
+          name: timeout
+          path: timeout
+          retention-days: 2
 
       - name: Save sccache for next PR run
         if: always()
@@ -110,15 +119,15 @@ jobs:
 
       - name: Package Build Directory
         shell: bash
-        if: always() && steps.build.outputs.completed == 'false'
+        if: always() && steps.timeout.outputs.artifact-id != ''
         run: |
           tar -c . | zstd -T0 -c > ../llvm-project.tar.zst
           mv ../llvm-project.tar.zst .
 
       - name: Upload Build
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
-        if: always() && steps.build.outputs.completed == 'false'
+        if: always() && steps.timeout.outputs.artifact-id != ''
         with:
-          name: timeout
+          name: timeout-build
           path: llvm-project.tar.zst
           retention-days: 2
