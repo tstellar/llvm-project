@@ -97,7 +97,7 @@ jobs:
         id: build
         timeout-minutes: 330
         run: |
-          ninja -C build ${{ needs.compute-projects.outputs.check-targets }} && pass=1
+          ninja -C build -k 0 ${{ needs.compute-projects.outputs.check-targets }} && pass=1
           echo "completed=true" >> $GITHUB_OUTPUT
           [ $pass ] || false
 
