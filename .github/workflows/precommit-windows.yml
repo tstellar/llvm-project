@@ -97,6 +97,7 @@ jobs:
         id: build
         timeout-minutes: 330
         run: |
+          echo "completed=false" >> $GITHUB_OUTPUT
           ninja -C build -k 0 ${{ needs.compute-projects.outputs.check-targets }} && pass=1
           echo "completed=true" >> $GITHUB_OUTPUT
           [ $pass ] || false
@@ -107,14 +108,14 @@ jobs:
 
       - name: Package Build Directory
         shell: bash
-        if: always() && steps.build.outputs.completed != 'true'
+        if: always() && steps.build.outputs.completed == 'false'
         run: |
           tar -c . | zstd -T0 -c > ../llvm-project.tar.zst
           mv ../llvm-project.tar.zst .
 
       - name: Upload Build
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
-        if: always() && steps.build.outputs.completed != 'true'
+        if: always() && steps.build.outputs.completed == 'false'
         with:
           name: timeout
           path: llvm-project.tar.zst
