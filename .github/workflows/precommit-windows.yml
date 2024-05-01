@@ -36,6 +36,8 @@ jobs:
   build-windows:
     name: "Build"
     runs-on: windows-2022
+    permissions:
+      actions: write #pr-sccache-save may delete artifacts.
     outputs:
       build-timeout: ${{ steps.build.outputs.timeout }}
       build-failed: ${{ steps.build.outputs.failed }}
