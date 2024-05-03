@@ -6,7 +6,7 @@ runs:
     - uses: ./.github/workflows/unprivileged-download-artifact
       id: download-artifact
       with:
-        run-id: ${{ github.event.workflow_run.id }}
+        run-id: ${{ github.run_id }}
         artifact-name: sccache-pr${{ github.event.pull_request.number }}
 
     - shell: bash
