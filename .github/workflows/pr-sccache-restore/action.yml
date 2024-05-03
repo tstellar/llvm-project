@@ -7,7 +7,7 @@ runs:
       id: download-artifact
       with:
         run-id: ${{ github.event.workflow_run.id }}
-        artifact-name: sccache-pr${{ github.event.issue.number }}
+        artifact-name: sccache-pr${{ github.event.pull_request.number }}
 
     - shell: bash
       if: steps.download-artifact.outputs.filename != ''
