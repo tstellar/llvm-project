@@ -34,6 +34,8 @@ jobs:
         uses: ./.github/workflows/compute-projects-to-test
 
   build-windows:
+    # If this job name is chagned, then we need to update the job-name
+    # paramater for the write-timeout-file step below.
     name: "Build"
     runs-on: windows-2022
     permissions:
@@ -95,10 +97,15 @@ jobs:
             -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
             -S llvm
 
+      - name: Write Timeout File
+        uses: ./.github/workflows/write-timeout-file
+        with:
+          job-name: "Build"
+
       - name: Build
         shell: bash
         id: build
-        timeout-minutes: 330
+        timeout-minutes: 1
         run: |
           touch timeout
           ninja -C build -k 0 ${{ needs.compute-projects.outputs.check-targets }} && pass=1
