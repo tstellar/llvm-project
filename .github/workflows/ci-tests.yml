@@ -96,8 +96,7 @@ jobs:
       build-timeout: ${{ steps.build.outputs.timeout }}
       build-failed: ${{ steps.build.outputs.failed }}
     if: >-
-      needs.compute-test-configs.outputs.test-build == 'true' &&
-      matrix.enabled == 'true'
+      needs.compute-test-configs.outputs.test-build == 'true'
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
