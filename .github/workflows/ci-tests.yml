@@ -52,7 +52,7 @@ jobs:
             var enableLinux = false;
             var enableWindows = false;
             var enableMacOS = false
-            if (context.base_ref.startsWith('release/'))) {
+            if (context.base_ref.startsWith('release/')) {
               // This is a pull request against a release branch.
               enableLinux = true;
               enableWindows = true;
