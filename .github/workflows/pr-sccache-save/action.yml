@@ -1,7 +1,7 @@
 name: PR sccache save
 inputs:
   artifact-name-suffix:
-    desciption: The suffix to append to the artifict name (sccache-pr${{ github.event.pull_request.number }})
+    desciption: The suffix to append to the artifict name (sccache-pr#)
     required: true
 
 runs:
