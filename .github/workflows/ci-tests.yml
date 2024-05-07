@@ -223,7 +223,7 @@ jobs:
               }
             }
 
-            if (timeouts.length()) {
+            if (timeouts.length) {
               var fs = require('fs');
               fs.writeFile('timeout', JSON.stringify(timeouts));
             }
