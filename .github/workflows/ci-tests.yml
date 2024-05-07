@@ -52,9 +52,8 @@ jobs:
             var enableLinux = false;
             var enableWindows = false;
             var enableMacOS = false
-            console.log(context)
-            console.log(context.base_ref)
-            if (context.base_ref.startsWith('release/')) {
+            const base_ref = process.env.GITHUB_BASE_REF;
+            if (base_ref.startsWith('release/')) {
               // This is a pull request against a release branch.
               enableLinux = true;
               enableWindows = true;
