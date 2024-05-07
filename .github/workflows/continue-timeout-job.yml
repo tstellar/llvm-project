@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows:
       - "Windows Precommit Tests"
+      - "CI Tests"
     types:
       - completed
 
