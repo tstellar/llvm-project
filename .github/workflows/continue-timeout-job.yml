@@ -67,5 +67,5 @@ jobs:
                   repo: context.repo.repo,
                   job_id: job.job_id
                 })
-                console.log("Restarted job: " + job_id);
+                console.log("Restarted job: " + job.job_id);
               }
