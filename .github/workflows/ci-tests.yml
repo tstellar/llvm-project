@@ -219,7 +219,7 @@ jobs:
             timeouts = []
             for (id of job_ids) {
               if (id) {
-                timeouts.append({job_id : id})
+                timeouts.push({job_id : id})
               }
             }
 
