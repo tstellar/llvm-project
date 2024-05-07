@@ -1,4 +1,8 @@
 name: PR sccache save
+inputs:
+  artifact-name-suffix:
+    desciption: The suffix to append to the artifict name (sccache-pr${{ github.event.pull_request.number }})
+    required: true
 
 runs:
   using: "composite"
@@ -10,7 +14,7 @@ runs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             run_id: context.runId,
-            name: 'sccache-pr' + context.issue.number
+            name: 'sccache-pr' + context.issue.number + "-${{ inputs.artifact-name-suffix }}"
           })
 
           console.log(data.data.artifacts)
