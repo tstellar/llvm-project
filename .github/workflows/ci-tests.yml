@@ -210,16 +210,16 @@ jobs:
       - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea #v7.0.1
         with:
           script: |
+            const job_ids = [
+              "${{ needs.ci-build-test.outputs.job-id-linux-x86_64 }}",
+              "${{ needs.ci-build-test.outputs.job-id-windows-x86_64 }}",
+              "${{ needs.ci-build-test.outputs.job-id-macos-x86_64 }}"
+            ];
+
             timeouts = []
-            console.log(needs)
-            console.log(needs.ci-build-test.outputs)
-            for (var of needs.ci-build-test.outputs) {
-              console.log(var);
-              if (!var.startsWith("job-id")) {
-                continue;
-              }
-              if (needs.ci-build-tests.outputs[var]) {
-                timeouts.append({job_id : needs.ci-build-test.outputs[var]})
+            for (id of job_ids) {
+              if (id) {
+                timeouts.append({job_id : id})
               }
             }
 
