@@ -177,7 +177,7 @@ jobs:
         id: job-id
         uses: ./.github/workflows/get-job-id
         with:
-          job-name: ${{ inputs.job-name }}
+          job-name: "Build (${{ matrix.name }}, ${{ matrix.runs-on }}, ${{ matrix.enabled}})"
 
       - name: Handle Timeout
         shell: bash
