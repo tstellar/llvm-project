@@ -74,6 +74,7 @@ jobs:
       - compute-test-configs
     permissions:
       actions: write #pr-sccache-save may delete artifacts.
+    runs-on: ${{ matrix.runs-on }}
     strategy:
       fail-fast: false
       matrix:

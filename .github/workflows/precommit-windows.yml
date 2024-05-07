@@ -25,7 +25,7 @@ concurrency:
 jobs:
   compute-projects:
     name: "Compute Projects to Test"
-    if: github.event.action != 'closed'
+    if: github.event.action != 'closed' && false
     runs-on: ubuntu-22.04
     outputs:
       projects: ${{ steps.vars.outputs.projects }}
