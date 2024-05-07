@@ -49,6 +49,7 @@ jobs:
         id: platforms
         with:
           script: |
+            console.log(context);
             var enableLinux = false;
             var enableWindows = false;
             var enableMacOS = false
