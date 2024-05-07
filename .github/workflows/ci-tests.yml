@@ -119,7 +119,7 @@ jobs:
 
       - name: Setup Windows
         uses: llvm/actions/setup-windows@main
-        if: ${{ runner.os == "Windows" }}
+        if: ${{ runner.os == 'Windows' }}
         with:
           arch: amd64
 
