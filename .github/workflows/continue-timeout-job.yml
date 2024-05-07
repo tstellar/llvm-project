@@ -49,7 +49,6 @@ jobs:
                 console.log("Could not parse timeout artifact");
                 return;
               }
-              const job_id = json.job_id
 
               // Delete the timeout artifact to prepare for the next run
               await github.rest.actions.deleteArtifact({
@@ -58,13 +57,14 @@ jobs:
                 artifact_id: ${{ steps.download-artifact.outputs.artifact-id }}
               })
 
-              // Restart the job
-              // This function does not exist even though it is in the document
-              //github.rest.actions.reRunJobForWorkflow({
-              await github.request('POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun', {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                job_id: job_id
-              })
-              console.log("Restarted job: " + job_id);
-              return "timeout"
+              for (job of json) {
+                // Restart the job
+                // This function does not exist even though it is in the document
+                //github.rest.actions.reRunJobForWorkflow({
+                await github.request('POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun', {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  job_id: job.job_id
+                })
+                console.log("Restarted job: " + job_id);
+              }
