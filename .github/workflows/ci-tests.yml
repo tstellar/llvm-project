@@ -209,6 +209,7 @@ jobs:
             console.log(needs)
             console.log(needs.ci-build-test.outputs)
             for (var of needs.ci-build-test.outputs) {
+              console.log(var);
               if (!var.startsWith("job-id")) {
                 continue;
               }
