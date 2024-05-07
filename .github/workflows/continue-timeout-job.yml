@@ -46,7 +46,7 @@ jobs:
               console.log(data);
               const json = JSON.parse(data);
               console.log(json);
-              if (!json || !json.job_id) {
+              if (!json) {
                 console.log("Could not parse timeout artifact");
                 return;
               }
