@@ -70,7 +70,7 @@ jobs:
               // This is a pull request against a release branch.
             }
 
-            return JSON.stringify(configs);
+            return configs;
 
   ci-build-test:
     # If this job name is chagned, then we need to update the job-name
