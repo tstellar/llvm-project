@@ -59,11 +59,16 @@ jobs:
               name: "macos-x86_64",
               runs_on: "macos-13"
             }
+            macArmConfig = {
+              name: "macos-aarch64",
+              runs_on: "macos-14"
+            }
 
             configs = [
               linuxConfig,
               windowsConfig,
-              macConfig
+              macConfig,
+              macArmConfig
             ]
             const base_ref = process.env.GITHUB_BASE_REF;
             if (base_ref.startsWith('release/')) {
@@ -132,7 +137,7 @@ jobs:
 
       - name: Build
         shell: bash
-        timeout-minutes: 1
+        timeout-minutes: 330
         run: |
           ninja -C build -k 0 ${{ needs.compute-test-configs.outputs.check-targets }}
 
@@ -143,7 +148,7 @@ jobs:
           job-name: "Build (${{ matrix.name }}, ${{ matrix.runs_on }})"
           artifact-name-suffix: ${{ matrix.name }}
           timeout-step: "Build"
-          timeout-minutes: 1 
+          timeout-minutes: 330
 
       - name: Save sccache for next PR run
         if: always()
