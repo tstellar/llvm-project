@@ -87,6 +87,9 @@ jobs:
         include: ${{ fromJson(needs.compute-test-configs.outputs.test-platforms) }}
     if: needs.compute-test-configs.outputs.test-build == 'true'
     steps:
+      - name: Fetch LLVM sources
+        uses: actions/checkout@v4
+
       - name: Timeout Restore
         id: timeout
         uses: ./.github/workflows/timeout-restore
@@ -101,10 +104,6 @@ jobs:
       
       - name: Install Ninja
         uses: llvm/actions/install-ninja@main
-
-      - name: Fetch LLVM sources
-        if: ${{ steps.timeout.outputs.exists != 'true' }}
-        uses: actions/checkout@v4
 
       - name: Setup sccache
         uses: hendrikmuhs/ccache-action@v1
