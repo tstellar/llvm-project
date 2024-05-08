@@ -1,8 +1,11 @@
 name: Write Timeout File
 inputs:
   job-name:
-    required: false
+    required: true
     type: 'string'
+  filename:
+    required: false
+    default: timeout
 
 runs:
   using: "composite"
@@ -14,4 +17,4 @@ runs:
 
       - shell: bash
         run: |
-          echo '{"job_id": "${{ steps.job-id.outputs.job-id }}"}' > timeout
+          echo '{"job_id": "${{ steps.job-id.outputs.job-id }}"}' > ${{ inputs.filename }}

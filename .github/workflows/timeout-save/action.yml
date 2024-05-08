@@ -62,6 +62,7 @@ runs:
       uses: ./.github/workflows/write-timeout-file
       with:
         job-name: ${{ inputs.job-name }}
+        filename: timeout-${{ inputs.artifact-name-suffix }}
 
     - name: Handle Timeout
       shell: bash
@@ -81,7 +82,8 @@ runs:
         retention-days: 2
 
     - name: Upload Timeout File
+      if: steps.timeout.outputs.result == 'true'
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
         name: timeout-${{ inputs.artifact-name-suffix }}
-        path: timeout
+        path: timeout-${{ inputs.artifact-name-suffix }}

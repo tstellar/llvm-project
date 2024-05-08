@@ -6,7 +6,8 @@ inputs:
     required: true
   artifact-name:
     desciption: The name of the artifact to download.
-    required: true
+    required: false
+
 
 outputs:
   filename:
