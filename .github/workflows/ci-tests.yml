@@ -31,9 +31,7 @@ jobs:
       projects: ${{ steps.vars.outputs.projects }}
       check-targets: ${{ steps.vars.outputs.check-targets }}
       test-build: ${{ steps.vars.outputs.check-targets != '' }}
-      enable-windows: ${{ steps.vars.platforms.enable-windows }}
-      enable-linux: ${{ steps.vars.platforms.enable-linux }}
-      enable-macos: $${ steps.vars.platforms.enable-macos }}
+      test-platforms: ${{ steps.platforms.outputs.result }}
     steps:
       - name: Fetch LLVM sources
         uses: actions/checkout@v4
@@ -49,24 +47,30 @@ jobs:
         id: platforms
         with:
           script: |
-            console.log(context);
-            var enableLinux = false;
-            var enableWindows = false;
-            var enableMacOS = false
+            linuxConfig = {
+              name: "linux-x86_64",
+              runs-on: "ubuntu-22.04"
+            }
+            windowsConfig = {
+              name: "windows-x86_64",
+              runs-on: "windows-2022"
+            }
+            macConfig = {
+              name: "macos-x86_64",
+              runs-on: "macos-13"
+            }
+
+            configs = [
+              linuxConfig,
+              windowsConfig,
+              macConfig
+            ]
             const base_ref = process.env.GITHUB_BASE_REF;
             if (base_ref.startsWith('release/')) {
               // This is a pull request against a release branch.
-              enableLinux = true;
-              enableWindows = true;
-              enableMacOS = true;
             }
-              enableLinux = true;
-              enableWindows = true;
-              enableMacOS = true;
-            core.setOutput("enable-windows", enableWindows);
-            core.setOutput("enable-linux", enableLinux);
-            core.setOutput("enable-macos", enableMacOS);
 
+            return JSON.stringify(configs);
 
   ci-build-test:
     # If this job name is chagned, then we need to update the job-name
@@ -79,17 +83,7 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - name: "linux-x86_64"
-            runs-on: ubuntu-22.04
-            enabled: ${{ needs.compute-test-configs.enable-llvm == 'true' }}
-          - name: "windows-x86_64"
-            runs-on: windows-2022
-            enabled: ${{ needs.compute-test-configs.enable-windows == 'true' }}
-          - name: "macos-x86_64"
-            runs-on: macos-13
-            enabled: ${{ needs.compute-test-configs.enable-macos == 'true' }}
+      matrix: ${{ fromJson(needs.compute-test-configs.outputs.test-platforms) }}
     outputs:
       job-id-linux-x86_64: ${{ steps.timeout.outputs.job-id-linux-x86_64 }}
       job-id-windows-x86_64: ${{ steps.timeout.outputs.job-id-windows-x86_64 }}
@@ -97,8 +91,7 @@ jobs:
 
       build-timeout: ${{ steps.build.outputs.timeout }}
       build-failed: ${{ steps.build.outputs.failed }}
-    if: >-
-      needs.compute-test-configs.outputs.test-build == 'true'
+    if: needs.compute-test-configs.outputs.test-build == 'true'
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
