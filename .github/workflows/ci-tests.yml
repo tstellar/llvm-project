@@ -73,8 +73,8 @@ jobs:
             return configs;
 
   ci-build-test:
-    # If this job name is chagned, then we need to update the job-name
-    # paramater for the write-timeout-file step below.
+    # If this job name is changed, then we need to update the job-name
+    # paramater for the timeout-save step below.
     name: "Build"
     needs:
       - compute-test-configs
