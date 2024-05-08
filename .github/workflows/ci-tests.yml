@@ -83,7 +83,8 @@ jobs:
     runs-on: ${{ matrix.runs_on }}
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.compute-test-configs.outputs.test-platforms) }}
+      matrix:
+        include: ${{ fromJson(needs.compute-test-configs.outputs.test-platforms) }}
     outputs:
       job-id-linux-x86_64: ${{ steps.timeout.outputs.job-id-linux-x86_64 }}
       job-id-windows-x86_64: ${{ steps.timeout.outputs.job-id-windows-x86_64 }}
