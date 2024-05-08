@@ -85,32 +85,13 @@ jobs:
       fail-fast: false
       matrix:
         include: ${{ fromJson(needs.compute-test-configs.outputs.test-platforms) }}
-    outputs:
-      job-id-linux-x86_64: ${{ steps.timeout.outputs.job-id-linux-x86_64 }}
-      job-id-windows-x86_64: ${{ steps.timeout.outputs.job-id-windows-x86_64 }}
-      job-id-macos-x86_64: ${{ steps.timeout.outputs.job-id-macos-x86_64 }}
-
-      build-timeout: ${{ steps.build.outputs.timeout }}
-      build-failed: ${{ steps.build.outputs.failed }}
     if: needs.compute-test-configs.outputs.test-build == 'true'
     steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
+      - name: Timeout Restore
+        id: timeout
+        uses: ./.github/workflows/timeout-restore
         with:
-          pattern: timeout-build-${{ matrix.name }}
-          merge-multiple: true
-
-      - name: Unpack Artifact
-        id: timeout-artifact
-        shell: bash
-        run: |
-          if [ -e llvm-project.tar.zst ]; then
-            tar --zstd -xf llvm-project.tar.zst
-            rm llvm-project.tar.zst
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
+          artifact-name-suffix: ${{ matrix.name }}
 
       - name: Setup Windows
         uses: llvm/actions/setup-windows@main
@@ -122,7 +103,7 @@ jobs:
         uses: llvm/actions/install-ninja@main
 
       - name: Fetch LLVM sources
-        if: ${{ steps.timeout-artifact.outputs.exists != 'true' }}
+        if: ${{ steps.timeout.outputs.exists != 'true' }}
         uses: actions/checkout@v4
 
       - name: Setup sccache
@@ -138,7 +119,7 @@ jobs:
           artifact-name-suffix: ${{ matrix.name }}
 
       - name: Configure
-        if: ${{ steps.timeout-artifact.outputs.exists != 'true' }}
+        if: ${{ steps.timeout.outputs.exists != 'true' }}
         shell: bash
         run: |
           cmake -B build -GNinja \
@@ -152,77 +133,21 @@ jobs:
 
       - name: Build
         shell: bash
-        id: build
         timeout-minutes: 1
         run: |
-          echo "timeout=true" >> $GITHUB_OUTPUT
-          ninja -C build -k 0 ${{ needs.compute-test-configs.outputs.check-targets }} && pass=1
-          echo "timeout=false" >> $GITHUB_OUTPUT
-          [ $pass ] || false
+          ninja -C build -k 0 ${{ needs.compute-test-configs.outputs.check-targets }}
+
+      - name: Timeout Save
+        if: always()
+        uses: ./.github/workflows/timeout-save
+        with:
+          job-name: "Build (${{ matrix.name }}, ${{ matrix.runs_on }})"
+          artifact-name-suffix: ${{ matrix.name }}
+          timeout-step: "Build"
+          timeout-minutes: 1 
 
       - name: Save sccache for next PR run
         if: always()
         uses: ./.github/workflows/pr-sccache-save
         with:
           artifact-name-suffix: ${{ matrix.name }}
-
-      - name: Get Job ID
-        if: always() && steps.build.outputs.timeout == 'true'
-        id: job-id
-        uses: ./.github/workflows/get-job-id
-        with:
-          job-name: "Build (${{ matrix.name }}, ${{ matrix.runs_on }})"
-
-      - name: Handle Timeout
-        shell: bash
-        if: always() && steps.build.outputs.timeout == 'true'
-        id: timeout
-        run: |
-          # Dereference symlinks so that this works on Windows.
-          tar -h -c . | zstd -T0 -c > ../llvm-project.tar.zst
-          mv ../llvm-project.tar.zst .
-          # Save the job-id so we can restart the job
-          echo "job-id-${{ matrix.name }}=${{ steps.job-id.outputs.job-id }}" >> $GITHUB_OUTPUT
-
-      - name: Upload Build
-        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
-        if: always() && steps.build.outputs.timeout == 'true'
-        with:
-          name: timeout-build-${{ matrix.name }}
-          path: llvm-project.tar.zst
-          retention-days: 2
-
-  handle-timeout:
-    # If this job name is chagned, then we need to update the job-name
-    # paramater for the write-timeout-file step below.
-    name: "Handle Timeout"
-    if: always()
-    needs:
-      - ci-build-test
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea #v7.0.1
-        with:
-          script: |
-            const job_ids = [
-              "${{ needs.ci-build-test.outputs.job-id-linux-x86_64 }}",
-              "${{ needs.ci-build-test.outputs.job-id-windows-x86_64 }}",
-              "${{ needs.ci-build-test.outputs.job-id-macos-x86_64 }}"
-            ];
-
-            timeouts = []
-            for (id of job_ids) {
-              if (id) {
-                timeouts.push({job_id : id})
-              }
-            }
-
-            if (timeouts.length) {
-              var fs = require('fs');
-              fs.writeFileSync('timeout', JSON.stringify(timeouts));
-            }
-
-      - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
-        with:
-          name: timeout
-          path: timeout
