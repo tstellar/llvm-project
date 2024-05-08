@@ -31,11 +31,16 @@ runs:
             artifact_id: artifact_id
           })
 
+    - name: Package sccache Directory
+      shell: bash
+      run: |
+        # Dereference symlinks so that this works on Windows.
+        tar -h -c .sccache | zstd -T0 -c > sccache.tar.zst
 
     - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
         name: 'sccache-pr${{ github.event.number }}-${{ inputs.artifact-name-suffix }}'
-        path: .sccache
+        path: sccache.tar.zst
         retention-days: 7
 
     - shell: bash

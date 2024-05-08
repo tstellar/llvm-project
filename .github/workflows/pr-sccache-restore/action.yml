@@ -21,3 +21,7 @@ runs:
         rm -Rf .sccache/
         unzip ${{ steps.download-artifact.outputs.filename }}
         rm ${{ steps.download-artifact.outputs.filename }}
+        tar --zstd -xf sccache.tar.zst
+        rm sccache.tar.zst
+        ls -ltr
+
