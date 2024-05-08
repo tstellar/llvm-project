@@ -32,7 +32,7 @@ jobs:
             job_ids = [];
 
             for (artifact of response.data.artifacts) {
-
+              console.log(artifact);
               const match = artifact.name.match(/timeout-([0-9]+)/);
               console.log(match);
               if (!match) {
