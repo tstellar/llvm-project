@@ -14,11 +14,6 @@ inputs:
     description: The value of timeout-minutes for this step.
     required: true
 
-outputs:
-  job-id:
-    description: "The job id for the job that timed out.  If the job did not timeout, then this is the empty string."
-    value: ${{ steps.job-id.outputs.job-id }}
-
 runs:
   using: "composite"
   steps:
@@ -57,14 +52,8 @@ runs:
           }
           return false;
     
-    - name: Write Timeout File 
-      if: steps.timeout.outputs.result == 'true'
-      uses: ./.github/workflows/write-timeout-file
-      with:
-        job-name: ${{ inputs.job-name }}
-        filename: timeout-${{ inputs.artifact-name-suffix }}
 
-    - name: Handle Timeout
+    - name: Save Working Directory
       shell: bash
       if: steps.timeout.outputs.result == 'true'
       id: timeout
@@ -73,7 +62,7 @@ runs:
         tar -h -c . | zstd -T0 -c > ../llvm-project.tar.zst
         mv ../llvm-project.tar.zst .
 
-    - name: Upload Build
+    - name: Upload Working Directory
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       if: steps.timeout.outputs.result == 'true'
       with:
@@ -81,9 +70,20 @@ runs:
         path: llvm-project.tar.zst
         retention-days: 2
 
+    - name: Get Job ID
+      id: job-id
+      if: steps.timeout.outputs.result == 'true'
+      uses: ./.github/workflows/get-job-id
+      with:
+        job-name: ${{ inputs.job-name }}
+
+    - name: Create Timeout File
+      shell: bash
+      run: touch timeout-${{ steps.job-id.outputs.job-id }}
+
     - name: Upload Timeout File
       if: steps.timeout.outputs.result == 'true'
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
         name: timeout-${{ inputs.artifact-name-suffix }}
-        path: timeout-${{ inputs.artifact-name-suffix }}
+        path: timeout-${{ steps.job-id.outputs.job-id }}

@@ -17,4 +17,4 @@ runs:
 
       - shell: bash
         run: |
-          echo '{"job_id": "${{ steps.job-id.outputs.job-id }}"}' > ${{ inputs.filename }}
+          echo '{"job_id": "${{ steps.job-id.outputs.job-id }}"}' > timeout-${{ steps.job-id
