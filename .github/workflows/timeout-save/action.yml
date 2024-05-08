@@ -50,9 +50,9 @@ runs:
               started_at = Date.parse(step.started_at);
               console.log(completed_at)
               console.log(started_at)
-              const diff = completed_at - started_at;
+              const diff = (completed_at - started_at) / 1000;
               console.log(diff);
-              if (diff > ${{ inputs.timeout-minutes }})
+              if (diff > 60 * ${{ inputs.timeout-minutes }})
                 return true;
             }
           }
