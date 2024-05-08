@@ -137,7 +137,7 @@ jobs:
 
       - name: Build
         shell: bash
-        timeout-minutes: 330
+        timeout-minutes: 1
         run: |
           ninja -C build -k 0 ${{ needs.compute-test-configs.outputs.check-targets }}
 
@@ -148,7 +148,7 @@ jobs:
           job-name: "Build (${{ matrix.name }}, ${{ matrix.runs_on }})"
           artifact-name-suffix: ${{ matrix.name }}
           timeout-step: "Build"
-          timeout-minutes: 330
+          timeout-minutes: 1
 
       - name: Save sccache for next PR run
         if: always()
