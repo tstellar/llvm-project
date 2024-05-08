@@ -134,6 +134,7 @@ jobs:
         shell: bash
         timeout-minutes: 1
         run: |
+          false
           ninja -C build -k 0 ${{ needs.compute-test-configs.outputs.check-targets }}
 
       - name: Timeout Save
