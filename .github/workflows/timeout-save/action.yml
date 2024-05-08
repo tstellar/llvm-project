@@ -46,7 +46,11 @@ runs:
               // This run failed, check for timeout.
               console.log(step.completed_at)
               console.log(step.started_at)
-              const diff = step.completed_at - step.started_at;
+              completed_at = Date.parse(step.completed_at);
+              started_at = Date.parse(step.started_at);
+              console.log(completed_at)
+              console.log(started_at)
+              const diff = completed_at - started_at;
               console.log(diff);
               if (diff > ${{ inputs.timeout-minutes }})
                 return true;
