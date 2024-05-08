@@ -90,5 +90,5 @@ runs:
       if: steps.timeout.outputs.result == 'true'
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: timeout-${{ inputs.artifact-name-suffix }}
+        name: timeout-${{ steps.job-id.outupts.job-id }}
         path: timeout-${{ steps.job-id.outputs.job-id }}
