@@ -45,5 +45,6 @@ runs:
 
     - shell: bash
       run: |
+        rm sccache.tar.zst
         sccache --show-stats
 
