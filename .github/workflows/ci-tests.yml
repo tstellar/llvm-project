@@ -49,15 +49,15 @@ jobs:
           script: |
             linuxConfig = {
               name: "linux-x86_64",
-              runs-on: "ubuntu-22.04"
+              runs_on: "ubuntu-22.04"
             }
             windowsConfig = {
               name: "windows-x86_64",
-              runs-on: "windows-2022"
+              runs_on: "windows-2022"
             }
             macConfig = {
               name: "macos-x86_64",
-              runs-on: "macos-13"
+              runs_on: "macos-13"
             }
 
             configs = [
@@ -80,7 +80,7 @@ jobs:
       - compute-test-configs
     permissions:
       actions: write #pr-sccache-save may delete artifacts.
-    runs-on: ${{ matrix.runs-on }}
+    runs-on: ${{ matrix.runs_on }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.compute-test-configs.outputs.test-platforms) }}
