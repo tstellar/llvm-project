@@ -36,7 +36,7 @@ runs:
             const response = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              run_id: ${{ inputs.run-id }},
+              run_id: "${{ inputs.run-id }}",
               name: "${{ inputs.artifact-name }}"
             })
           }
