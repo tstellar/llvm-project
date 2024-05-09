@@ -26,7 +26,7 @@ runs:
       with:
         script: |
           var response;
-          if (!"${{ inputs.run-id }}) {
+          if (!"${{ inputs.run-id }}") {
             response = await github.rest.actions.listArtifactsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
