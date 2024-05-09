@@ -1,13 +1,17 @@
 name: PR sccache restore
 
+inputs:
+  artifact-name-suffix:
+    desciption: The suffix to append to the artifict name (sccache-pr#)
+    required: true
+
 runs:
   using: "composite"
   steps:
     - uses: ./.github/workflows/unprivileged-download-artifact
       id: download-artifact
       with:
-        run-id: ${{ github.run_id }}
-        artifact-name: sccache-pr${{ github.event.pull_request.number }}
+        artifact-name: sccache-pr${{ github.event.pull_request.number }}-${{ inputs.artifact-name-suffix }}
 
     - shell: bash
       if: steps.download-artifact.outputs.filename != ''
@@ -16,3 +20,7 @@ runs:
         rm -Rf .sccache/
         unzip ${{ steps.download-artifact.outputs.filename }}
         rm ${{ steps.download-artifact.outputs.filename }}
+        tar --zstd -xf sccache.tar.zst
+        rm sccache.tar.zst
+        ls -ltr
+
