@@ -32,7 +32,7 @@ runs:
               repo: context.repo.repo,
               name: "${{ inputs.artifact-name }}"
             })
-        } else {
+          } else {
             const response = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
