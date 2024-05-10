@@ -11,7 +11,6 @@ on:
 jobs:
   request-release-note:
     if: >-
-      github.repository_owner == 'llvm' &&
       github.ref.startsWith('refs/heads/release') # This checks that this PR was merged into a release branch.
 
     runs-on: ubuntu-latest
