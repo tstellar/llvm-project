@@ -691,7 +691,7 @@ def request_release_note(token:str, repo_name:str, pr_number:int):
         mention = f'@{submitter}'
 
     comment = f"{mention} (or anyone else). If you would like to add a note about this fix in the release notes (completely optional). Please reply to this comment with a one or two sentence description of the fix.  When you are done, please add the release:note label to this PR. "
-    self.pr.as_issue().create_comment(comment)
+    pr.as_issue().create_comment(comment)
 
 
 parser = argparse.ArgumentParser()
