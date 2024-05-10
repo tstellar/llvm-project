@@ -11,7 +11,7 @@ on:
 jobs:
   request-release-note:
     if: >-
-      github.ref.startsWith('refs/heads/release') # This checks that this PR was merged into a release branch.
+      startsWith(github.ref, 'refs/heads/release') # This checks that this PR was merged into a release branch.
 
     runs-on: ubuntu-latest
     steps:
