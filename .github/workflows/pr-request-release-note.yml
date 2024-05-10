@@ -2,6 +2,7 @@ name: PR Request Release Note
 
 permissions:
   contents: read
+  pull_requests: write
 
 on:
   pull_request:
