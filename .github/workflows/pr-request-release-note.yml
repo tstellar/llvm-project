@@ -32,7 +32,7 @@ jobs:
       - name: Request Release Note
         env:
           # We need to use an llvmbot token here, because we are mentioning a user.
-          GITHUB_TOKEN: ${{ secrets.ISSUE_SUBSCRIBER_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           python3 llvm/utils/git/github-automation.py \
             --repo "$GITHUB_REPOSITORY" \
