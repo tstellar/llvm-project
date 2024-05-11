@@ -36,6 +36,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           USER_TOKEN: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
+        if: false
         run: |
           ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --user ${{ github.actor }} --user-token "$USER_TOKEN" check-permissions
       - name: Create Tarballs
