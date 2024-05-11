@@ -19,7 +19,6 @@ on:
 jobs:
   release-sources:
     name: Package Release Sources
-    if: github.repository_owner == 'llvm'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
