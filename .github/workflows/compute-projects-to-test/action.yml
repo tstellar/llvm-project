@@ -13,13 +13,24 @@ inputs:
     default: "Linux Windows macOS"
 
 outputs:
-  check-targets:
+  Linux-check-targets:
     description: "A space delimited list of check-targets to pass to ninja."
-    value: ${{ steps.compute-projects.outputs.check-targets }}
-
-  projects:
+    value: ${{ steps.compute-projects.outputs.Linux-check-targets }}
+  Linux-projects:
     description: "A semi-colon delimited list of projects to pass to -DLLVM_ENABLE_PROJECTS."
-    value: ${{ steps.compute-projects.outputs.projects }}
+    value: ${{ steps.compute-projects.outputs.Linux-projects }}
+  Windows-check-targets:
+    description: "A space delimited list of check-targets to pass to ninja."
+    value: ${{ steps.compute-projects.outputs.Windows-check-targets }}
+  Windows-projects:
+    description: "A semi-colon delimited list of projects to pass to -DLLVM_ENABLE_PROJECTS."
+    value: ${{ steps.compute-projects.outputs.Windows-projects }}
+  macOS-check-targets:
+    description: "A space delimited list of check-targets to pass to ninja."
+    value: ${{ steps.compute-projects.outputs.macOS-check-targets }}
+  macOS-projects:
+    description: "A semi-colon delimited list of projects to pass to -DLLVM_ENABLE_PROJECTS."
+    value: ${{ steps.compute-projects.outputs.macOS-projects }}
 
 
 runs:
