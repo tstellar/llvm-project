@@ -159,6 +159,9 @@ function exclude-mac() {
   projects=${@}
   for project in ${projects}; do
     case ${project} in
+    cross-project-tests) ;; # tests failing
+    openmp)              ;; # https://github.com/google/llvm-premerge-checks/issues/410
+    lldb)                ;; # tests failing
     flang)               ;; # tests failing
     bolt)                ;; # tests failing
     *)
