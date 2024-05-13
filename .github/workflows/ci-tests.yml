@@ -82,10 +82,10 @@ jobs:
             const base_ref = process.env.GITHUB_BASE_REF;
             if (base_ref.startsWith('release/')) {
               // This is a pull request against a release branch.
-              configs.push(macConfig)
-              configs.push(macArmConfig)
-              configs.push(linuxConfig)
-              configs.push(windowsConfig)
+              add_config(configs, macConfig)
+              add_config(configs, macArmConfig)
+              add_config(configs, linuxConfig)
+              add_config(configs, windowsConfig)
             }
 
             if (configs.length == 0) {
