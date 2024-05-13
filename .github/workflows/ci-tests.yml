@@ -142,6 +142,9 @@ jobs:
         if: ${{ steps.timeout.outputs.exists != 'true' }}
         shell: bash
         run: |
+          # -DLLVM_DISABLE_ASSEMBLY_FILES=ON is a
+          # workaround for a test failure on some lld tests on MacOS
+          # https://github.com/llvm/llvm-project/issues/81967
           cmake -B build -GNinja \
             -DCMAKE_BUILD_TYPE=Release \
             -DLLVM_ENABLE_PROJECTS="${{ matrix.projects }}" \
@@ -149,6 +152,7 @@ jobs:
             -DLLVM_LIT_ARGS="-v --no-progress-bar" \
             -DCMAKE_C_COMPILER_LAUNCHER=sccache \
             -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
+            ${{ (runner.os == 'macOS' && '-DLLVM_DISABLE_ASSEMBLY_FILES=ON') || ''}} \
             -S llvm
 
       - name: Build
