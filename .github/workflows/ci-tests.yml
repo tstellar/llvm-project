@@ -25,7 +25,6 @@ jobs:
   compute-test-configs:
     name: "Compute Configurations to Test"
     if: >-
-      github.repository_owner == 'llvm' &&
       github.event.action != 'closed'
     runs-on: ubuntu-22.04
     outputs:
