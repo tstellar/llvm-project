@@ -3,6 +3,14 @@ inputs:
   projects:
     required: false
     type: 'string'
+  
+  os-list:
+    description: >-
+      A space delimited list of operating systems that will be tested.  The
+      operating system values should match those used for GitHub's runner.os
+      context value: Linux, Windows, macOS.
+    required: false
+    default: "Linux Windows macOS"
 
 outputs:
   check-targets:
@@ -13,9 +21,13 @@ outputs:
     description: "A semi-colon delimited list of projects to pass to -DLLVM_ENABLE_PROJECTS."
     value: ${{ steps.compute-projects.outputs.projects }}
 
+
 runs:
   using: "composite"
   steps:
     - id: compute-projects
-      run: .github/workflows/compute-projects-to-test/compute-projects-to-test.sh ${{ inputs.projects }}
       shell: bash
+      run: |
+        for os in ${{ intputs.os-list }}; do
+          RUNNER_OS=$os .github/workflows/compute-projects-to-test/compute-projects-to-test.sh ${{ inputs.projects }}
+        done

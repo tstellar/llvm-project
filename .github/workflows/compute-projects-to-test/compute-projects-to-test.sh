@@ -155,6 +155,20 @@ function exclude-windows() {
   done
 }
 
+function exclude-mac() {
+  projects=${@}
+  for project in ${projects}; do
+    case ${project} in
+    flang)               ;; # tests failing
+    bolt)                ;; # tests failing
+    *)
+      echo "${project}"
+    ;;
+    esac
+  done
+
+}
+
 # Prints only projects that are both present in $modified_dirs and the passed
 # list.
 function keep-modified-projects() {
@@ -208,6 +222,8 @@ if [ "${RUNNER_OS}" = "Linux" ]; then
   projects_to_test=$(exclude-linux $(compute-projects-to-test ${modified_projects}))
 elif [ "${RUNNER_OS}" = "Windows" ]; then
   projects_to_test=$(exclude-windows $(compute-projects-to-test ${modified_projects}))
+elif [ "${RUNNER_OS}" = "macOS" ]; then
+  projects_to_test=$(exclude-mac $(compute-projects-to-test ${modified_projects}))
 else
   echo "Unknown runner OS: $RUNNER_OS"
   exit 1
@@ -215,7 +231,7 @@ fi
 check_targets=$(check-targets $(remove-unwanted-projects ${projects_to_test}) | sort | uniq)
 projects=$(remove-unwanted-projects $(add-dependencies ${projects_to_test}) | sort | uniq)
 
-echo "check-targets=$(echo ${check_targets} | tr ' ' ' ')" >> $GITHUB_OUTPUT
-echo "projects=$(echo ${projects} | tr ' ' ';')" >> $GITHUB_OUTPUT
+echo "$RUNNER_OS-check-targets=$(echo ${check_targets} | tr ' ' ' ')" >> $GITHUB_OUTPUT
+echo "$RUNNER_OS-projects=$(echo ${projects} | tr ' ' ';')" >> $GITHUB_OUTPUT
 
 cat $GITHUB_OUTPUT

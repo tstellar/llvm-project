@@ -29,9 +29,7 @@ jobs:
       github.event.action != 'closed'
     runs-on: ubuntu-22.04
     outputs:
-      projects: ${{ steps.vars.outputs.projects }}
-      check-targets: ${{ steps.vars.outputs.check-targets }}
-      test-build: ${{ steps.vars.outputs.check-targets != '' }}
+      skip-build: ${{ steps.vars.outputs.skip-build }}
       test-platforms: ${{ steps.platforms.outputs.result }}
     steps:
       - name: Fetch LLVM sources
@@ -48,21 +46,36 @@ jobs:
         id: platforms
         with:
           script: |
+
+            function add_config(configs, config) {
+              if(config.check_targets) {
+                conigs.push(config);
+              }
+            }
+
             linuxConfig = {
               name: "linux-x86_64",
-              runs_on: "ubuntu-22.04"
+              runs_on: "ubuntu-22.04",
+              check_targets: "${{ steps.vars.outputs.Linux-check-targets }}",
+              projects: "${{ steps.vars.outputs.Linux-projects }}"
             }
             windowsConfig = {
               name: "windows-x86_64",
-              runs_on: "windows-2022"
+              runs_on: "windows-2022",
+              check_targets: "${{ steps.vars.outputs.Windows-check-targets }}",
+              projects: "${{ steps.vars.outputs.Windows-projects }}"
             }
             macConfig = {
               name: "macos-x86_64",
-              runs_on: "macos-13"
+              runs_on: "macos-13",
+              check_targets: "${{ steps.vars.outputs.macOS-check-targets }}",
+              projects: "${{ steps.vars.outputs.macOS-projects }}"
             }
             macArmConfig = {
               name: "macos-aarch64",
-              runs_on: "macos-14"
+              runs_on: "macos-14",
+              check_targets: "${{ steps.vars.outputs.macOS-check-targets }}",
+              projects: "${{ steps.vars.outputs.macOS-projects }}"
             }
 
             configs = []
@@ -74,6 +87,9 @@ jobs:
               configs.push(macArmConfig)
             }
 
+            if (configs.length == 0) {
+              core.setOutput('skip-build', 'true');
+            }
             return configs;
 
   ci-build-test:
@@ -89,7 +105,7 @@ jobs:
       fail-fast: false
       matrix:
         include: ${{ fromJson(needs.compute-test-configs.outputs.test-platforms) }}
-    if: needs.compute-test-configs.outputs.test-build == 'true'
+    if: needs.compute-test-configs.outputs.skip-build != 'true'
     steps:
       - name: Fetch LLVM sources
         uses: actions/checkout@v4
@@ -127,7 +143,7 @@ jobs:
         run: |
           cmake -B build -GNinja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DLLVM_ENABLE_PROJECTS="${{ needs.compute-test-configs.outputs.projects }}" \
+            -DLLVM_ENABLE_PROJECTS="${{ matrix.projects }}" \
             -DLLVM_ENABLE_ASSERTIONS=ON \
             -DLLVM_LIT_ARGS="-v --no-progress-bar" \
             -DCMAKE_C_COMPILER_LAUNCHER=sccache \
@@ -138,13 +154,13 @@ jobs:
         shell: bash
         timeout-minutes: 330
         run: |
-          ninja -C build -k 0 ${{ needs.compute-test-configs.outputs.check-targets }}
+          ninja -C build -k 0 ${{ matrix.check_targets }}
 
       - name: Timeout Save
         if: always()
         uses: ./.github/workflows/timeout-save
         with:
-          job-name: "Build (${{ matrix.name }}, ${{ matrix.runs_on }})"
+          job-name: "Build (${{ matrix.name }}, ${{ matrix.runs_on }} ${{ matrix.check_targets }} ${{ matrix.projects }})"
           artifact-name-suffix: ${{ matrix.name }}
           timeout-step: "Build"
           timeout-minutes: 330
