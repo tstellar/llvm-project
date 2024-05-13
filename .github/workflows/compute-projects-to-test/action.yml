@@ -28,6 +28,6 @@ runs:
     - id: compute-projects
       shell: bash
       run: |
-        for os in ${{ intputs.os-list }}; do
+        for os in ${{ inputs.os-list }}; do
           RUNNER_OS=$os .github/workflows/compute-projects-to-test/compute-projects-to-test.sh ${{ inputs.projects }}
         done
