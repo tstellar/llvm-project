@@ -48,7 +48,7 @@ jobs:
 
             function add_config(configs, config) {
               if(config.check_targets) {
-                conigs.push(config);
+                configs.push(config);
               }
             }
 
