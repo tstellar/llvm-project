@@ -84,6 +84,8 @@ jobs:
               // This is a pull request against a release branch.
               configs.push(macConfig)
               configs.push(macArmConfig)
+              configs.push(linuxConfig)
+              configs.push(windowsConfig)
             }
 
             if (configs.length == 0) {
