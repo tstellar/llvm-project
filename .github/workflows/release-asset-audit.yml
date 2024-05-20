@@ -29,6 +29,7 @@ jobs:
         run: |
           pip install --require-hashes -r ./llvm/utils/git/requirements.txt
           python3 ./.github/workflows/release-asset-audit.py $GITHUB_TOKEN
+          false
       - name: "File Issue"
         if: >-
           github.event_name != 'pull_request' &&
