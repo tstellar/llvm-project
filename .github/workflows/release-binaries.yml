@@ -250,11 +250,11 @@ jobs:
     - name: Timeout Save
       if: always()
       uses: ./.github/workflows/timeout-save
-        with:
-          job-name: "Build (${{ matrix.runs-on}})"
-          artifact-name-suffix: ${{ matrix.name }}
-          timeout-step: "Build"
-          timeout-minutes: 330
+      with:
+        job-name: "Build (${{ matrix.runs-on}})"
+        artifact-name-suffix: ${{ matrix.name }}
+        timeout-step: "Build"
+        timeout-minutes: 330
 
     - id: package-info
       shell: bash
