@@ -111,11 +111,17 @@ jobs:
         variant: sccache
 
     - name: Build Stage 1 Clang
+      id: build
       shell: bash
       run: |
-        sudo chown $USER:$USER /mnt/
-        cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -S llvm -B /mnt/build
-        ninja -v -C /mnt/build
+        build_prefix=`pwd`
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          sudo chown $USER:$USER /mnt/
+          build_prefix=/mnt/
+        fi
+        cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -S llvm -B $build_prefix/build
+        ninja -v -C $build_prefix/build
+        echo "build-prefix=$build_prefix" >> $GITHUB_OUTPUT
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
@@ -123,7 +129,7 @@ jobs:
       shell: bash
       run: |
         tar -c . | zstd -T0 -c > llvm-project.tar.zst
-        tar -C /mnt/ -c build/ | zstd -T0 -c > build.tar.zst
+        tar ${{ steps.build.outputs.build_prefix }} -c build/ | zstd -T0 -c > build.tar.zst
 
     - name: Upload Stage 1 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
@@ -165,18 +171,24 @@ jobs:
 
     - name: Unpack Artifacts
       shell: bash
+      id: unpack
       run: |
+        build_prefix=`pwd`
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          sudo chown $USER:$USER /mnt/
+          build_prefix=/mnt/
+        fi
         tar --zstd -xf llvm-project.tar.zst
         rm llvm-project.tar.zst
-        sudo chown $USER:$USER /mnt/
-        tar --zstd -C /mnt -xf build.tar.zst
+        tar --zstd -C $build_prefix -xf build.tar.zst
         rm build.tar.zst
+        echo "build-prefix=$build_prefix" >> $GITHUB_OUTPUT
 
     - name: Build Stage 2
       if: false
       shell: bash
       run: |
-        ninja -C /mnt/build stage2-instrumented
+        ninja -C ${{ steps.unpack.outputs.build-prefix}}/build stage2-instrumented
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
@@ -184,7 +196,7 @@ jobs:
       shell: bash
       run: |
         tar -c . | zstd -T0 -c > llvm-project.tar.zst
-        tar -C /mnt/ -c build/ | zstd -T0 -c > build.tar.zst
+        tar -C ${{ steps.unpack.outputs.build-prefix }} -c build/ | zstd -T0 -c > build.tar.zst
 
     - name: Upload Stage 2 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
@@ -229,12 +241,18 @@ jobs:
 
     - name: Unpack Artifact
       shell: bash
+      id: unpack
       run: |
+        build_prefix=`pwd`
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          sudo chown $USER:$USER /mnt/
+          build_prefix=/mnt/
+        fi
         tar --zstd -xf llvm-project.tar.zst
         rm llvm-project.tar.zst
-        sudo chown $USER:$USER /mnt/
-        tar --zstd -C /mnt -xf build.tar.zst
+        tar --zstd -C $build_prefix -xf build.tar.zst
         rm build.tar.zst
+        echo "build-prefix=$build_prefix" >> $GITHUB_OUTPUT
 
     - name: Timeout Restore
       id: timeout
@@ -245,7 +263,7 @@ jobs:
     - name: Build Release Package
       shell: bash
       run: |
-        ninja -C /mnt/build stage2-package
+        ninja -C ${{ steps.unpack.outputs.build-preifx }}/build stage2-package
 
     - name: Timeout Save
       if: always()
@@ -261,7 +279,7 @@ jobs:
       run: |
         filename="LLVM-${{ needs.prepare.outputs.release-version }}-Linux.tar.gz"
         echo "filename=$filename" >> $GITHUB_OUTPUT
-        echo "path=/mnt/build/tools/clang/stage2-bins/$filename" >> $GITHUB_OUTPUT
+        echo "path=${{ steps.unpack.outputs.build-prefix  }}/build/tools/clang/stage2-bins/$filename" >> $GITHUB_OUTPUT
 
     - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       if: always()
@@ -273,7 +291,7 @@ jobs:
     - name: Clean Up Build Directory
       shell: bash
       run: |
-        find /mnt/build -iname ${{ steps.package-info.outputs.filename }} -delete
+        find ${{ steps.unpack.outputs.build-prefix }}/build -iname ${{ steps.package-info.outputs.filename }} -delete
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
@@ -281,7 +299,7 @@ jobs:
       shell: bash
       run: |
         tar -c . | zstd -T0 -c > llvm-project.tar.zst
-        tar -C /mnt/ -c build/ | zstd -T0 -c > build.tar.zst
+        tar -C ${{ steps.unpack.outputs.build-prefix }} -c build/ | zstd -T0 -c > build.tar.zst
 
     - name: Upload Stage 3 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
@@ -350,14 +368,20 @@ jobs:
 
     - name: Unpack Artifact
       shell: bash
+      id: unpack
       run: |
+        build_prefix=`pwd`
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          sudo chown $USER:$USER /mnt/
+          build_prefix=/mnt/
+        fi
         tar --zstd -xf llvm-project.tar.zst
         rm llvm-project.tar.zst
-        sudo chown $USER:$USER /mnt/
-        tar --zstd -C /mnt -xf build.tar.zst
+        tar --zstd -C $build_prefix -xf build.tar.zst
         rm build.tar.zst
+        echo "build-prefix=$build_prefix" >> $GITHUB_OUTPUT
 
     - name: Run Tests
       shell: bash
       run: |
-        ninja -C /mnt/build stage2-check-all
+        ninja -C ${{ steps.unpack.outputs.build-prefix }}/build stage2-check-all
