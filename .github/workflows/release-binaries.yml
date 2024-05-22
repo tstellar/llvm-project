@@ -242,7 +242,6 @@ jobs:
         artifact-name-suffix: ${{ runner.os }}-${{ runner.arch }}
 
     - name: Build Release Package
-      name: Build
       shell: bash
       run: |
         ninja -C /mnt/build stage2-package
@@ -253,7 +252,7 @@ jobs:
       with:
         job-name: "Build (${{ matrix.runs-on}})"
         artifact-name-suffix: ${{ matrix.name }}
-        timeout-step: "Build"
+        timeout-step: "Build Release Package"
         timeout-minutes: 330
 
     - id: package-info
