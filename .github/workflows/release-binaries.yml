@@ -35,7 +35,6 @@ jobs:
   prepare:
     name: Prepare to build binaries
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     outputs:
       release-version: ${{ steps.vars.outputs.release-version }}
       ref: ${{ steps.vars.outputs.ref }}
@@ -86,7 +85,6 @@ jobs:
     name: "Build Stage 1 Linux"
     needs: prepare
     runs-on: ${{ matrix.runs-on }}
-    if: github.repository == 'llvm/llvm-project'
     strategy:
       fail-fast: false
       matrix:
@@ -144,7 +142,6 @@ jobs:
       - prepare
       - build-stage1-linux
     runs-on: ${{ matrix.runs-on }}
-    if: github.repository == 'llvm/llvm-project'
     strategy:
       fail-fast: false
       matrix:
@@ -206,7 +203,6 @@ jobs:
     outputs:
       filename: ${{ steps.package-info.outputs.release-filename }}
     runs-on: ubuntu-22.04-16x64
-    if: github.repository == 'llvm/llvm-project'
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
@@ -315,7 +311,6 @@ jobs:
       - prepare
       - build-stage3-linux
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     strategy:
       fail-fast: false
       matrix:
