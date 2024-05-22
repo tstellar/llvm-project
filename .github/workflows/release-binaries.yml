@@ -310,7 +310,7 @@ jobs:
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        pattern: *-release-binary
+        pattern: '*-release-binary'
 
     - name: Upload Release
       shell: bash
