@@ -82,8 +82,8 @@ jobs:
         fi
         bash .github/workflows/set-release-binary-outputs.sh "$tag" "$upload"
 
-  build-stage1-linux:
-    name: "Build Stage 1 Linux"
+  build-stage1:
+    name: "Build Stage 1"
     needs: prepare
     runs-on: ${{ matrix.runs-on }}
     strategy:
@@ -139,11 +139,11 @@ jobs:
         path: build.tar.zst
         retention-days: 2
 
-  build-stage2-linux:
-    name: "Build Stage 2 Linux"
+  build-stage2:
+    name: "Build Stage 2"
     needs:
       - prepare
-      - build-stage1-linux
+      - build-stage1
     runs-on: ${{ matrix.runs-on }}
     strategy:
       fail-fast: false
@@ -201,11 +201,11 @@ jobs:
         retention-days: 2
 
 
-  build-stage3-linux:
-    name: "Build Stage 3 Linux"
+  build-stage3:
+    name: "Build Stage 3"
     needs:
       - prepare
-      - build-stage2-linux
+      - build-stage2
     outputs:
       filename: ${{ steps.package-info.outputs.release-filename }}
     runs-on: ${{ matrix.runs-on }}
@@ -297,11 +297,11 @@ jobs:
         path: build.tar.zst
         retention-days: 2
 
-  upload-release-binaries-linux:
-    name: "Upload Linux Release Binaries"
+  upload-release-binaries:
+    name: "Upload Release Binaries"
     needs:
       - prepare
-      - build-stage3-linux
+      - build-stage3
     if : ${{ needs.prepare.outputs.upload == 'true' }}
     runs-on: ubuntu-22.04
     permissions:
@@ -321,14 +321,14 @@ jobs:
         --token ${{ github.token }} \
         --release ${{ needs.prepare.outputs.release-version }} \
         upload \
-        --files *.tar.gz #${{ needs.build-stage3-linux.outputs.release-filename }}
+        --files *.tar.gz #${{ needs.build-stage3.outputs.release-filename }}
 
 
-  test-stage3-linux:
-    name: "Test Stage 3 Linux"
+  test-stage3:
+    name: "Test Stage 3"
     needs:
       - prepare
-      - build-stage3-linux
+      - build-stage3
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
