@@ -110,6 +110,7 @@ jobs:
         variant: sccache
 
     - name: Build Stage 1 Clang
+      shell: bash
       run: |
         sudo chown $USER:$USER /mnt/
         cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -S llvm -B /mnt/build
@@ -118,6 +119,7 @@ jobs:
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
     - name: Package Build and Source Directories
+      shell: bash
       run: |
         tar -c . | zstd -T0 -c > llvm-project.tar.zst
         tar -C /mnt/ -c build/ | zstd -T0 -c > build.tar.zst
@@ -161,6 +163,7 @@ jobs:
         merge-multiple: true
 
     - name: Unpack Artifacts
+      shell: bash
       run: |
         tar --zstd -xf llvm-project.tar.zst
         rm llvm-project.tar.zst
@@ -170,12 +173,14 @@ jobs:
 
     - name: Build Stage 2
       if: false
+      shell: bash
       run: |
         ninja -C /mnt/build stage2-instrumented
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
     - name: Save Build and Source Directories
+      shell: bash
       run: |
         tar -c . | zstd -T0 -c > llvm-project.tar.zst
         tar -C /mnt/ -c build/ | zstd -T0 -c > build.tar.zst
@@ -202,7 +207,15 @@ jobs:
       - build-stage2-linux
     outputs:
       filename: ${{ steps.package-info.outputs.release-filename }}
-    runs-on: ubuntu-22.04-16x64
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+       runs-on:
+         - ubuntu-22.04
+         - windows-2022
+         - macos-13
+         - macos-14
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
@@ -214,6 +227,7 @@ jobs:
         merge-multiple: true
 
     - name: Unpack Artifact
+      shell: bash
       run: |
         tar --zstd -xf llvm-project.tar.zst
         rm llvm-project.tar.zst
@@ -229,6 +243,7 @@ jobs:
 
     - name: Build Release Package
       name: Build
+      shell: bash
       run: |
         ninja -C /mnt/build stage2-package
 
@@ -242,6 +257,7 @@ jobs:
           timeout-minutes: 330
 
     - id: package-info
+      shell: bash
       run: |
         filename="LLVM-${{ needs.prepare.outputs.release-version }}-Linux.tar.gz"
         echo "filename=$filename" >> $GITHUB_OUTPUT
@@ -255,12 +271,14 @@ jobs:
 
     # Clean up some build files to reduce size of artifact.
     - name: Clean Up Build Directory
+      shell: bash
       run: |
         find /mnt/build -iname ${{ steps.package-info.outputs.filename }} -delete
 
     # We need to create an archive of the build directory, because it has too
     # many files to upload.
     - name: Save Build and Source Directories
+      shell: bash
       run: |
         tar -c . | zstd -T0 -c > llvm-project.tar.zst
         tar -C /mnt/ -c build/ | zstd -T0 -c > build.tar.zst
@@ -296,6 +314,7 @@ jobs:
         pattern: *-release-binary
 
     - name: Upload Release
+      shell: bash
       run: |
         sudo apt install python3-github
         ./llvm-project/llvm/utils/release/github-upload-release.py \
@@ -330,6 +349,7 @@ jobs:
         merge-multiple: true
 
     - name: Unpack Artifact
+      shell: bash
       run: |
         tar --zstd -xf llvm-project.tar.zst
         rm llvm-project.tar.zst
@@ -338,5 +358,6 @@ jobs:
         rm build.tar.zst
 
     - name: Run Tests
+      shell: bash
       run: |
         ninja -C /mnt/build stage2-check-all
