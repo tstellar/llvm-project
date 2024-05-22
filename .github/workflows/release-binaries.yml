@@ -85,8 +85,16 @@ jobs:
   build-stage1-linux:
     name: "Build Stage 1 Linux"
     needs: prepare
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.runs-on }}
     if: github.repository == 'llvm/llvm-project'
+    strategy:
+      fail-fast: false
+      matrix:
+       runs-on:
+         - ubuntu-22.04
+         - windows-2022
+         - macos-13
+         - macos-14
     steps:
     - name: Checkout LLVM
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -100,7 +108,7 @@ jobs:
       uses: hendrikmuhs/ccache-action@ca3acd2731eef11f1572ccb126356c2f9298d35e # v1.2.9
       with:
         max-size: 250M
-        key: sccache-${{ runner.os }}-release
+        key: sccache-${{ runner.os }}-${{ runner.arch }}-release
         variant: sccache
 
     - name: Build Stage 1 Clang
@@ -119,14 +127,14 @@ jobs:
     - name: Upload Stage 1 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage1-source
+        name: ${{ runner.os }}-${{ runner.arch }}-stage1-source
         path: llvm-project.tar.zst
         retention-days: 2
 
     - name: Upload Stage 1 Build Dir
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage1-build
+        name: ${{ runner.os}}-${{ runner.arch }}-stage1-build
         path: build.tar.zst
         retention-days: 2
 
@@ -135,8 +143,16 @@ jobs:
     needs:
       - prepare
       - build-stage1-linux
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.runs-on }}
     if: github.repository == 'llvm/llvm-project'
+    strategy:
+      fail-fast: false
+      matrix:
+       runs-on:
+         - ubuntu-22.04
+         - windows-2022
+         - macos-13
+         - macos-14
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
@@ -144,7 +160,7 @@ jobs:
     - name: Download Stage 1 Artifacts
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        pattern: stage1-*
+        pattern: ${{ runner.os }}-${{ runner.arch }}-stage1-*
         merge-multiple: true
 
     - name: Unpack Artifacts
@@ -156,6 +172,7 @@ jobs:
         rm build.tar.zst
 
     - name: Build Stage 2
+      if: false
       run: |
         ninja -C /mnt/build stage2-instrumented
 
@@ -169,14 +186,14 @@ jobs:
     - name: Upload Stage 2 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage2-source
+        name: ${{ runner.os }}-${{ runner.arch }}-stage2-source
         path: ${{ github.workspace }}/llvm-project.tar.zst
         retention-days: 2
 
     - name: Upload Stage 2 Build Dir
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage2-build
+        name: ${{ runner.os }}-${{ runner.arch }}-stage2-build
         path: ${{ github.workspace }}/build.tar.zst
         retention-days: 2
 
@@ -197,7 +214,7 @@ jobs:
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        pattern: stage2-*
+        pattern: ${{ runner.os }}-${{ runner.arch }}-stage2-*
         merge-multiple: true
 
     - name: Unpack Artifact
@@ -208,9 +225,25 @@ jobs:
         tar --zstd -C /mnt -xf build.tar.zst
         rm build.tar.zst
 
+    - name: Timeout Restore
+      id: timeout
+      uses: ./.github/workflows/timeout-restore
+      with:
+        artifact-name-suffix: ${{ runner.os }}-${{ runner.arch }}
+
     - name: Build Release Package
+      name: Build
       run: |
         ninja -C /mnt/build stage2-package
+
+    - name: Timeout Save
+      if: always()
+      uses: ./.github/workflows/timeout-save
+        with:
+          job-name: "Build (${{ matrix.runs-on}})"
+          artifact-name-suffix: ${{ matrix.name }}
+          timeout-step: "Build"
+          timeout-minutes: 330
 
     - id: package-info
       run: |
@@ -221,7 +254,7 @@ jobs:
     - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       if: always()
       with:
-        name: release-binary
+        name: ${{ runner.os }}-${{ runner.arch }}-release-binary
         path: ${{ steps.package-info.outputs.path }}
 
     # Clean up some build files to reduce size of artifact.
@@ -239,14 +272,14 @@ jobs:
     - name: Upload Stage 3 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage3-source
+        name: ${{ runner.os }}-${{ runner.arch }}-stage3-source
         path: llvm-project.tar.zst
         retention-days: 2
 
     - name: Upload Stage 3 Build Dir
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
       with:
-        name: stage3-build
+        name: ${{ runner.os }}-${{ runner.arch }}-stage3-build
         path: build.tar.zst
         retention-days: 2
 
@@ -264,7 +297,7 @@ jobs:
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        name: release-binary
+        pattern: *-release-binary
 
     - name: Upload Release
       run: |
@@ -273,7 +306,7 @@ jobs:
         --token ${{ github.token }} \
         --release ${{ needs.prepare.outputs.release-version }} \
         upload \
-        --files ${{ needs.build-stage3-linux.outputs.release-filename }}
+        --files *.tar.gz #${{ needs.build-stage3-linux.outputs.release-filename }}
 
 
   test-stage3-linux:
@@ -283,6 +316,14 @@ jobs:
       - build-stage3-linux
     runs-on: ubuntu-22.04
     if: github.repository == 'llvm/llvm-project'
+    strategy:
+      fail-fast: false
+      matrix:
+       runs-on:
+         - ubuntu-22.04
+         - windows-2022
+         - macos-13
+         - macos-14
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
@@ -290,7 +331,7 @@ jobs:
     - name: 'Download artifact'
       uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
       with:
-        pattern: stage3-*
+        pattern: ${{ runner.os }}-${{ runner.arch }}-stage3-*
         merge-multiple: true
 
     - name: Unpack Artifact
