@@ -89,7 +89,7 @@ def run_graphql_query(query: str, variables: dict, token: str, retry: bool = Tru
             "Failed to run graphql query\nquery: {}\nerror: {}".format(query, request.json()))
 
 
-def check_manual_requests(start_date) -> bool:
+def check_manual_requests(start_date, token) -> bool:
     query = """
         query ($query: String!) {
           search(query: $query, type: ISSUE, first: 100) {
@@ -126,7 +126,7 @@ def check_manual_requests(start_date) -> bool:
     return users
 
 
-def get_num_commits(user, start_date) -> bool:
+def get_num_commits(user, start_date, token) -> bool:
     variables = {
         "owner" : 'llvm',
         'user' : user,
@@ -175,7 +175,7 @@ def get_num_commits(user, start_date) -> bool:
             break
     return count
 
-def is_new_committer_query_user(user, start_date):
+def is_new_committer_query_user(user, start_date, token):
     user_query = """
         query {
           organization(login: "llvm") {
@@ -206,7 +206,7 @@ def is_new_committer_query_user(user, start_date):
         return False
     return True
 
-def is_new_committer_query_repo(user, start_date):
+def is_new_committer_query_repo(user, start_date, token):
     variables = {
         'user' : user,
     }
@@ -254,7 +254,7 @@ def is_new_committer_query_repo(user, start_date):
         return False
     return True
 
-def is_new_committer_pr_author(user, start_date):
+def is_new_committer_pr_author(user, start_date, token):
     query = """
         query ($query: String!) {
           search(query: $query, type: ISSUE, first: 5) {
@@ -274,14 +274,14 @@ def is_new_committer_pr_author(user, start_date):
     return int(data['search']['issueCount']) > 0
 
 
-def is_new_committer(user, start_date):
+def is_new_committer(user, start_date, token):
     try:
-        return is_new_committer_query_repo(user, start_date)
+        return is_new_committer_query_repo(user, start_date, token)
     except:
         pass
     return True
 
-def get_review_count(user, start_date):
+def get_review_count(user, start_date, token):
 
     query = """
         query ($query: String!) {
@@ -302,7 +302,7 @@ def get_review_count(user, start_date):
     return int(data['search']['issueCount'])
 
 
-def count_prs(triage_list, start_date):
+def count_prs(triage_list, start_date, token):
     query = """
         query ($query: String!, $after: String) {
           search(query: $query, type: ISSUE, first: 100, after: $after) {
@@ -375,14 +375,14 @@ def main():
     print("Start:", len(triage_list), "triagers")
     # Step 0 Check if users have requested commit access in the last year.
 
-    for user in check_manual_requests(one_year_ago):
+    for user in check_manual_requests(one_year_ago, token):
         if user in triage_list:
             print(user, "requested commit access in the last year.")
             del triage_list[user]
     print("After Request Check:", len(triage_list), "triagers")
 
     # Step 1 count all PRs authored or merged
-    count_prs(triage_list, one_year_ago)
+    count_prs(triage_list, one_year_ago, token)
 
     print("After PRs:", len(triage_list), "triagers")
 
@@ -391,7 +391,7 @@ def main():
 
     # Step 2 check for reviews
     for user in list(triage_list.keys()):
-        review_count = get_review_count(user, one_year_ago)
+        review_count = get_review_count(user, one_year_ago, token)
         triage_list[user].add_reviewed(review_count)
 
     print("After Reviews:", len(triage_list), "triagers")
@@ -401,7 +401,7 @@ def main():
 
     # Step 3 check for number of commits
     for user in list(triage_list.keys()):
-        num_commits = get_num_commits(user, one_year_ago)
+        num_commits = get_num_commits(user, one_year_ago, token)
         # Override the total number of commits to not double count commits and
         # authored PRs.
         triage_list[user].set_authored(num_commits)
@@ -411,7 +411,7 @@ def main():
     # Step 4 check for new committers
     for user in list(triage_list.keys()):
         print ("Checking", user)
-        if is_new_committer(user, one_year_ago):
+        if is_new_committer(user, one_year_ago, token):
             print("Removing new committer: ", user)
             del triage_list[user]
 
