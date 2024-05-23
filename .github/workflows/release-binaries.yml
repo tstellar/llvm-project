@@ -129,7 +129,7 @@ jobs:
       shell: bash
       run: |
         tar -c . | zstd -T0 -c > llvm-project.tar.zst
-        tar ${{ steps.build.outputs.build_prefix }} -c build/ | zstd -T0 -c > build.tar.zst
+        tar ${{ steps.build.outputs.build-prefix }} -c build/ | zstd -T0 -c > build.tar.zst
 
     - name: Upload Stage 1 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
@@ -150,6 +150,7 @@ jobs:
     needs:
       - prepare
       - build-stage1
+    if: always()
     runs-on: ${{ matrix.runs-on }}
     strategy:
       fail-fast: false
@@ -218,6 +219,7 @@ jobs:
     needs:
       - prepare
       - build-stage2
+    if: always()
     outputs:
       filename: ${{ steps.package-info.outputs.release-filename }}
     runs-on: ${{ matrix.runs-on }}
@@ -320,7 +322,9 @@ jobs:
     needs:
       - prepare
       - build-stage3
-    if : ${{ needs.prepare.outputs.upload == 'true' }}
+    if: >-
+      always() &&
+      ${{ needs.prepare.outputs.upload == 'true' }}
     runs-on: ubuntu-22.04
     permissions:
       contents: write # For release uploads
@@ -347,6 +351,7 @@ jobs:
     needs:
       - prepare
       - build-stage3
+    if: always()
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
