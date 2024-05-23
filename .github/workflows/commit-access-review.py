@@ -116,8 +116,6 @@ def check_manual_requests(start_date, token) -> bool:
     data = run_graphql_query(query, variables, token)
     users = []
     for issue in data['search']['nodes']:
-        print(issue['body'])
-        print([user[1:] for user in re.findall('@[^ ,\n]+', issue['body'])])
         users.extend([user[1:] for user in re.findall('@[^ ,\n]+', issue['body'])])
         # Do we need to check comments if we are checking mentions??
         #for comment in issue['comments']['nodes']:
