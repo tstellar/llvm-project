@@ -115,10 +115,10 @@ jobs:
       shell: bash
       run: |
         build_prefix=`pwd`
-        if [ "${{ runner.os }}" = "Linux" ]; then
-          sudo chown $USER:$USER /mnt/
-          build_prefix=/mnt/
-        fi
+        #if [ "${{ runner.os }}" = "Linux" ]; then
+        #  sudo chown $USER:$USER /mnt/
+        #  build_prefix=/mnt/
+        #fi
         cmake -G Ninja -C clang/cmake/caches/Release.cmake -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache -S llvm -B $build_prefix/build
         ninja -v -C $build_prefix/build
         echo "build-prefix=$build_prefix" >> $GITHUB_OUTPUT
@@ -129,7 +129,7 @@ jobs:
       shell: bash
       run: |
         tar -c . | zstd -T0 -c > llvm-project.tar.zst
-        tar ${{ steps.build.outputs.build-prefix }} -c build/ | zstd -T0 -c > build.tar.zst
+        tar -C ${{ steps.build.outputs.build-prefix }} -c build/ | zstd -T0 -c > build.tar.zst
 
     - name: Upload Stage 1 Source
       uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
@@ -265,7 +265,7 @@ jobs:
     - name: Build Release Package
       shell: bash
       run: |
-        ninja -C ${{ steps.unpack.outputs.build-preifx }}/build stage2-package
+        ninja -C ${{ steps.unpack.outputs.build-prefix }}/build stage2-package
 
     - name: Timeout Save
       if: always()
