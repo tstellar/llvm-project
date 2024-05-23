@@ -262,6 +262,7 @@ jobs:
 
     - name: Timeout Restore
       id: timeout
+      if: false
       uses: ./.github/workflows/timeout-restore
       with:
         artifact-name-suffix: ${{ runner.os }}-${{ runner.arch }}
@@ -272,7 +273,7 @@ jobs:
         ninja -C ${{ steps.unpack.outputs.build-prefix }}/build stage2-package
 
     - name: Timeout Save
-      if: always()
+      if: false && always()
       uses: ./.github/workflows/timeout-save
       with:
         job-name: "Build (${{ matrix.runs-on}})"
