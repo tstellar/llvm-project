@@ -128,7 +128,9 @@ jobs:
     - name: Package Build and Source Directories
       shell: bash
       run: |
-        tar -c . | zstd -T0 -c > llvm-project.tar.zst
+        # Dereference symlinks so that this works on Windows.
+        tar -h -c . | zstd -T0 -c > ../llvm-project.tar.zst
+        mv ../llvm-project.tar.zst .
         tar -C ${{ steps.build.outputs.build-prefix }} -c build/ | zstd -T0 -c > build.tar.zst
 
     - name: Upload Stage 1 Source
@@ -196,7 +198,9 @@ jobs:
     - name: Save Build and Source Directories
       shell: bash
       run: |
-        tar -c . | zstd -T0 -c > llvm-project.tar.zst
+        # Dereference symlinks so that this works on Windows.
+        tar -h -c . | zstd -T0 -c > ../llvm-project.tar.zst
+        mv ../llvm-project.tar.zst .
         tar -C ${{ steps.unpack.outputs.build-prefix }} -c build/ | zstd -T0 -c > build.tar.zst
 
     - name: Upload Stage 2 Source
@@ -300,7 +304,9 @@ jobs:
     - name: Save Build and Source Directories
       shell: bash
       run: |
-        tar -c . | zstd -T0 -c > llvm-project.tar.zst
+        # Dereference symlinks so that this works on Windows.
+        tar -h -c . | zstd -T0 -c > ../llvm-project.tar.zst
+        mv ../llvm-project.tar.zst .
         tar -C ${{ steps.unpack.outputs.build-prefix }} -c build/ | zstd -T0 -c > build.tar.zst
 
     - name: Upload Stage 3 Source
