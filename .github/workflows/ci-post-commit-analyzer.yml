@@ -28,7 +28,7 @@ jobs:
 
       - name: Configure
         run: |
-          scan-build -o ./analyzer-results \
+          scan-build \
               --use-c++=clang++ \
               --use-cc=clang \
               cmake -B build -S llvm -G Ninja \
@@ -39,11 +39,7 @@ jobs:
 
       - name: Build
         run: |
-          CCC_CXX=clang++ CCC_CC=clang ninja -v -C build lib/Support/CMakeFiles/LLVMSupport.dir/SpecialCaseList.cpp.o
-          ls
-          echo "NEXT LS"
-          ls analyzer-results/
-          cat analyzer-results/
+           scan-build -o analyzer-results --use-c++=clang++ --use-cc=clang ninja -v -C build lib/Support/CMakeFiles/LLVMSupport.dir/SpecialCaseList.cpp.o
 
       - name: Upload Results
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
