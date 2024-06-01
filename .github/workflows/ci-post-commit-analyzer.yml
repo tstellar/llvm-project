@@ -39,7 +39,7 @@ jobs:
 
       - name: Build
         run: |
-           scan-build -o analyzer-results --use-c++=clang++ --use-cc=clang ninja -v -C build lib/Support/CMakeFiles/LLVMSupport.dir/SpecialCaseList.cpp.o
+           scan-build -o analyzer-results --use-c++=clang++ --use-cc=clang ninja -v -C build LLVMSupport
 
       - name: Upload Results
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
