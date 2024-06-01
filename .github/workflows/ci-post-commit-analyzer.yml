@@ -41,11 +41,11 @@ jobs:
         run: |
           CCC_CXX=clang++ CCC_CC=clang ninja -v -C build LLVMSupport
           ls
-          ls build/
+          ls analyzer-results/
 
       - name: Upload Results
         uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
         with:
           name: analyzer-results
-          path: 'build/analyzer-results/**/*'
+          path: 'analyzer-results/**/*'
 
