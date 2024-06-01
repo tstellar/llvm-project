@@ -39,7 +39,7 @@ jobs:
 
       - name: Build
         run: |
-          CCC_CXX=clang++ CCC_CC=clang ninja -v -C build lib/Support/CMakeFiles/LLVMSupport.dir/xxhash.cpp.o
+          CCC_CXX=clang++ CCC_CC=clang ninja -v -C build lib/Support/CMakeFiles/LLVMSupport.dir/SpecialCaseList.cpp.o
           ls
           echo "NEXT LS"
           ls analyzer-results/
