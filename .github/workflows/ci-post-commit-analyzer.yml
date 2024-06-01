@@ -33,13 +33,14 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main" > etc/apt/sources.list.d/llvm.list
           sudo apt-get update
           sudo apt-get install \
             cmake \
             ninja-build \
             perl \
-            clang-tools \
-            clang
+            clang-tools-18 \
+            clang-18
 
       - name: Configure
         run: |
