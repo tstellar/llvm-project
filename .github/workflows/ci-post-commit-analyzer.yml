@@ -31,7 +31,7 @@ jobs:
           scan-build -o ./analyzer-results \
               --use-c++=clang++ \
               --use-cc=clang \
-              cmake -B build -S llvm \
+              cmake -B build -S llvm -G Ninja \
                   -DLLVM_ENABLE_ASSERTIONS=ON \
                   -DLLVM_BUILD_LLVM_DYLIB=ON \
                   -DLLVM_LINK_LLVM_DYLIB=ON \
