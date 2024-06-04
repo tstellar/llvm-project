@@ -27,6 +27,8 @@ jobs:
     if: >-
       github.event.action != 'closed'
     runs-on: ubuntu-22.04
+    container:
+      image: 'ghcr.io/llvm/ci-ubuntu-22.04:latest'
     env:
       LLVM_VERSION: 18
     steps:
