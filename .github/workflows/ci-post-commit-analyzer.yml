@@ -78,7 +78,7 @@ jobs:
           # FIXME: We need to build all the generated header files in order to be able to run
           # the analyzer on every file.  Building libLLVM and libclang is probably overkill for
           # this, but it's better than building every target.
-          ninja -v -C build libLLVM.so libclang.so
+          ninja -v -C build LLVMSupport
 
           # Run the analyzer.
           python3 .github/workflows/ci-post-commit-analyzer-run.py build/compile_commands.json
