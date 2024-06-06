@@ -12,6 +12,8 @@ def run_analyzer(data):
         data["command"]
         + f" --analyze --analyzer-output html -o analyzer-results -Xclang -analyzer-config -Xclang max-nodes=75000"
     )
+    if 'lib/Support' not in data['file']:
+        return
     print(command)
     subprocess.run(command, shell=True, check=True)
 
