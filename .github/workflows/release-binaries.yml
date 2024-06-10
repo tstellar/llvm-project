@@ -350,15 +350,7 @@ jobs:
       - prepare
       - build-stage3
     if: always()
-    runs-on: ubuntu-22.04
-    strategy:
-      fail-fast: false
-      matrix:
-       runs-on:
-         - ubuntu-22.04
-         - windows-2022
-         - macos-13
-         - macos-14
+    runs-on: ${{ inputs.runs-on }}
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
