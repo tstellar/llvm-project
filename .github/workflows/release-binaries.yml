@@ -270,7 +270,7 @@ jobs:
 
     - name: Build Release Package
       shell: bash
-      timeout: 330
+      timeout-minutes: 330
       run: |
         ninja -C ${{ steps.unpack.outputs.build-prefix }}/build stage2-package
 
