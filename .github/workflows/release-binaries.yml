@@ -12,6 +12,15 @@ on:
         required: true
         default: false
         type: boolean
+      runs-on:
+        description: "Runner to use for the build"
+        required: true
+        type: choice
+        options:
+          - ubuntu-22.04
+          - windows-2022
+          - macos-13
+          - macos-14
 
   workflow_call:
     inputs:
@@ -24,6 +33,11 @@ on:
         required: true
         default: false
         type: boolean
+      runs-on:
+        description: "Runner to use for the build"
+        required: true
+        type: string
+
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron:  '0 8 1 * *'
@@ -85,15 +99,7 @@ jobs:
   build-stage1:
     name: "Build Stage 1"
     needs: prepare
-    runs-on: ${{ matrix.runs-on }}
-    strategy:
-      fail-fast: false
-      matrix:
-       runs-on:
-         - ubuntu-22.04
-         - windows-2022
-         - macos-13
-         - macos-14
+    runs-on: ${{ inputs.runs-on }}
     steps:
     - name: Checkout LLVM
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -154,15 +160,7 @@ jobs:
       - prepare
       - build-stage1
     if: always()
-    runs-on: ${{ matrix.runs-on }}
-    strategy:
-      fail-fast: false
-      matrix:
-       runs-on:
-         - ubuntu-22.04
-         - windows-2022
-         - macos-13
-         - macos-14
+    runs-on: ${{ inputs.runs-on }}
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
