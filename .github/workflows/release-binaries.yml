@@ -225,7 +225,7 @@ jobs:
     if: always()
     outputs:
       filename: ${{ steps.package-info.outputs.release-filename }}
-    runs-on: ${{ ( inputs.runs-on == 'ubuntu-22.04' && 'ubuntu-22.04-16x64') || input.runs-on }}
+    runs-on: ${{ ( false && inputs.runs-on == 'ubuntu-22.04' && 'ubuntu-22.04-16x64') || input.runs-on }}
     steps:
     - name: Install Ninja
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
