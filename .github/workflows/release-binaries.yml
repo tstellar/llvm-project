@@ -270,11 +270,12 @@ jobs:
 
     - name: Build Release Package
       shell: bash
+      timeout: 330
       run: |
         ninja -C ${{ steps.unpack.outputs.build-prefix }}/build stage2-package
 
     - name: Timeout Save
-      if: false && always()
+      if: always()
       uses: ./.github/workflows/timeout-save
       with:
         job-name: "Build (${{ matrix.runs-on}})"
@@ -290,7 +291,6 @@ jobs:
         echo "path=${{ steps.unpack.outputs.build-prefix  }}/build/tools/clang/stage2-bins/$filename" >> $GITHUB_OUTPUT
 
     - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
-      if: always()
       with:
         name: ${{ runner.os }}-${{ runner.arch }}-release-binary
         path: ${{ steps.package-info.outputs.path }}
