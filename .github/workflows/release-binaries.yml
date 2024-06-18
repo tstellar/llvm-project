@@ -221,7 +221,6 @@ jobs:
     needs:
       - prepare
       - build-stage2
-    if: github.repository == 'llvm/llvm-project'
     runs-on: ${{ inputs.runs-on }}
     steps:
     - name: Checkout Actions
