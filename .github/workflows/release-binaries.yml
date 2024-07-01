@@ -44,12 +44,7 @@ permissions:
 jobs:
   prepare:
     name: Prepare to build binaries
-<<<<<<< HEAD
     runs-on: ${{ inputs.runs-on }}
-    if: github.repository == 'llvm/llvm-project'
-=======
-    runs-on: ubuntu-22.04
->>>>>>> 61d8fa30c159 (XXX: Debug)
     outputs:
       release-version: ${{ steps.vars.outputs.release-version }}
       ref: ${{ steps.vars.outputs.ref }}
