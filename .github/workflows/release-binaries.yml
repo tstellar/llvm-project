@@ -165,7 +165,10 @@ jobs:
       run: |
         # There were some issues on the ARM64 MacOS runners with trying to build x86 object,
         # so we need to set some extra cmake flags to disable this.
-        cmake -G Ninja ${{ needs.prepare.outputs.target-cmake-flags }} -C clang/cmake/caches/Release.cmake -S llvm -B ${{ steps.setup-stage.outputs.build-prefix }}/build \
+        cmake -G Ninja -S llvm -B ${{ steps.setup-stage.outputs.build-prefix }}/build \
+            ${{ needs.prepare.outputs.target-cmake-flags }} \
+            -DLLVM_RELEASE_ENABLE_PGO=OFF \
+            -C clang/cmake/caches/Release.cmake \
             -DBOOTSTRAP_LLVM_PARALLEL_LINK_JOBS=1 \
             -DBOOTSTRAP_CPACK_PACKAGE_FILE_NAME="LLVM-${{ needs.prepare.outputs.release-version }}-${{ runner.os }}-${{ runner.arch }}" \
             -DCMAKE_C_COMPILER_LAUNCHER=sccache \
