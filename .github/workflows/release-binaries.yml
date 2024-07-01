@@ -288,11 +288,19 @@ jobs:
           ninja -C ${{ steps.setup-stage.outputs.build-prefix }}/build/tools/clang/stage2-bins/ -j2 flang-new bbc
         fi
         ninja -C ${{ steps.setup-stage.outputs.build-prefix }}/build/tools/clang/stage2-bins/ -t targets | grep '^mlir-capi' | cut -d ":" -f 1 | xargs ninja -C ${{ steps.setup-stage.outputs.build-prefix }}/build/tools/clang/stage2-bins/ \
+            mlir-bytecode-parser-fuzzer \
             mlir-cpu-runner \
             mlir-lsp-server \
             mlir-opt \
             mlir-query \
             mlir-reduce \
+            mlir-text-parser-fuzzer \
+            mlir-translate \
+            mlir-transform-opt \
+            mlir-cat \
+            mlir-minimal-opt \
+            mlir-minimal-opt-canonicalize \
+            mlir-pdll-lsp-server \
             llvm-bolt \
             llvm-bolt-heatmap
     
