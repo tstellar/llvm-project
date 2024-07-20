@@ -336,9 +336,12 @@ def warn_anyx86_excessive_regsave : Warning<
   " with attribute 'no_caller_saved_registers'"
   " or be compiled with '-mgeneral-regs-only'">,
   InGroup<DiagGroup<"excessive-regsave">>;
-def warn_arm_interrupt_calling_convention : Warning<
-   "call to function without interrupt attribute could clobber interruptee's VFP registers">,
-   InGroup<Extra>;
+def warn_arm_interrupt_vfp_clobber : Warning<
+  "interrupt service routine with vfp enabled may clobber the "
+  "interruptee's vfp state">,
+  InGroup<DiagGroup<"arm-interrupt-vfp-clobber">>;
+def err_arm_interrupt_called : Error<
+  "interrupt service routine cannot be called directly">;
 def warn_interrupt_attribute_invalid : Warning<
    "%select{MIPS|MSP430|RISC-V}0 'interrupt' attribute only applies to "
    "functions that have %select{no parameters|a 'void' return type}1">,
@@ -6013,7 +6016,7 @@ def note_deleted_assign_field : Note<
   "because field %2 is of %select{reference|const-qualified}4 type %3">;
 
 // These should be errors.
-def warn_undefined_internal : Warning<
+def warn_undefined_internal : ExtWarn<
   "%select{function|variable}0 %q1 has internal linkage but is not defined">,
   InGroup<DiagGroup<"undefined-internal">>;
 def err_undefined_internal_type : Error<
@@ -6072,7 +6075,7 @@ def note_extern_c_global_conflict : Note<
 def note_extern_c_begins_here : Note<
   "extern \"C\" language linkage specification begins here">;
 def warn_weak_import : Warning <
-  "an already-declared variable is made a weak_import declaration %0">;
+  "%0 cannot be declared 'weak_import' because its definition has been provided">;
 def ext_static_non_static : Extension<
   "redeclaring non-static %0 as static is a Microsoft extension">,
   InGroup<MicrosoftRedeclareStatic>;
@@ -7246,7 +7249,10 @@ def err_array_init_utf8_string_into_char : Error<
 def warn_cxx20_compat_utf8_string : Warning<
   "type of UTF-8 string literal will change from array of const char to "
   "array of const char8_t in C++20">, InGroup<CXX20Compat>, DefaultIgnore;
-def note_cxx20_compat_utf8_string_remove_u8 : Note<
+def warn_c23_compat_utf8_string : Warning<
+  "type of UTF-8 string literal will change from array of char to "
+  "array of char8_t in C23">, InGroup<C23Compat>, DefaultIgnore;
+def note_cxx20_c23_compat_utf8_string_remove_u8 : Note<
   "remove 'u8' prefix to avoid a change of behavior; "
   "Clang encodes unprefixed narrow string literals as UTF-8">;
 def err_array_init_different_type : Error<
@@ -7574,6 +7580,8 @@ def err_explicit_object_lambda_ambiguous_base : Error<
 def err_explicit_object_lambda_inaccessible_base : Error<
   "invalid explicit object parameter type %0 in lambda with capture; "
   "the type must derive publicly from the lambda">;
+def err_explicit_object_parameter_invalid: Error<
+  "an explicit object parameter can only appear as the first parameter of a member function">;
 
 def err_ref_qualifier_overload : Error<
   "cannot overload a member function %select{without a ref-qualifier|with "
@@ -10116,6 +10124,9 @@ def warn_dangling_lifetime_pointer : Warning<
   "object backing the pointer "
   "will be destroyed at the end of the full-expression">,
   InGroup<DanglingGsl>;
+def warn_dangling_lifetime_pointer_assignment : Warning<"object backing the "
+  "pointer %0 will be destroyed at the end of the full-expression">,
+  InGroup<DanglingAssignmentGsl>, DefaultIgnore;
 def warn_new_dangling_initializer_list : Warning<
   "array backing "
   "%select{initializer list subobject of the allocated object|"
