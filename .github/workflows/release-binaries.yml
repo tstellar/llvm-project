@@ -113,11 +113,13 @@ jobs:
         # The macOS builds try to cross compile some libraries so we need to
         # add extra CMake args to disable them.
         if [ "${{ runner.os }}" = "macOS" ]; then
+          target_cmake_flags="$target_cmake_flags -DBOOTSTRAP_COMPILER_RT_ENABLE_IOS=OFF"
           if [ "${{ runner.arch }}" = "ARM64" ]; then
             arches=arm64
           else
             arches=x86_64
           fi
+          target_cmake_flags="$target_cmake_flags -DBOOTSTRAP_DARWIN_osx_ARCHS=$arches -DBOOTSTRAP_DARWIN_osx_BUILTIN_ARCHS=$arches"
         fi
 
         # x86 macOS and x86 Windows have trouble building flang, so disable it.
