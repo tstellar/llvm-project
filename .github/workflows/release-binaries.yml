@@ -181,6 +181,7 @@ jobs:
         # There were some issues on the ARM64 MacOS runners with trying to build x86 object,
         # so we need to set some extra cmake flags to disable this.
         which cmake
+        ls -l `which cmake`
         cmake -G Ninja -S llvm -B ${{ steps.setup-stage.outputs.build-prefix }}/build \
             ${{ needs.prepare.outputs.target-cmake-flags }} \
             -C clang/cmake/caches/Release.cmake \
@@ -263,6 +264,7 @@ jobs:
         touch ${{ steps.setup-stage.outputs.build-prefix }}/build/build.ninja
         ls -ltr ${{ steps.setup-stage.outputs.build-prefix }}/build
         which cmake
+        ls -l `which cmake`
         ninja -C ${{ steps.setup-stage.outputs.build-prefix }}/build stage2-clang
         # Build some of the larger binaries here too.
         ninja -C ${{ steps.setup-stage.outputs.build-prefix }}/build/tools/clang/stage2-bins/ \
