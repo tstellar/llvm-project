@@ -257,6 +257,8 @@ jobs:
         # There is a race condition on the MacOS builders and this command is here
         # to help debug that when it happens.
         ls -ltr ${{ steps.setup-stage.outputs.build-prefix }}/build
+        touch ${{ steps.setup-stage.outputs.build-prefix }}/build/build.ninja
+        ls -ltr ${{ steps.setup-stage.outputs.build-prefix }}/build
         ninja -C ${{ steps.setup-stage.outputs.build-prefix }}/build stage2-clang
         # Build some of the larger binaries here too.
         ninja -C ${{ steps.setup-stage.outputs.build-prefix }}/build/tools/clang/stage2-bins/ \
