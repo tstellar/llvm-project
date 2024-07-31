@@ -95,6 +95,7 @@ jobs:
       release-version: ${{ needs.validate-tag.outputs.release-version }}
       upload: true
       runs-on: ${{ matrix.runs-on }}
+      release-tasks-user-token: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
 
   release-sources:
     name: Package Release Sources

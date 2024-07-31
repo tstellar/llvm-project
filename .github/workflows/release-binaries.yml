@@ -37,6 +37,10 @@ on:
         description: "Runner to use for the build"
         required: true
         type: string
+      release-tasks-user-token:
+        description: >-
+          Token to use to check user permissions.  Needs read permissions for
+          Organization members.
 
 permissions:
   contents: read # Default everything to read-only
@@ -69,7 +73,9 @@ jobs:
       if: github.event_name != 'pull_request'
       env:
         GITHUB_TOKEN: ${{ github.token }}
-        USER_TOKEN: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
+        # Secrets aren't available for workflow_call events so we need to use
+        # input token instead.
+        USER_TOKEN: ${{ inputs.release-tasks-user-token || secrets.RELEASE_TASKS_USER_TOKEN }}
       shell: bash
       run: |
         ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --user ${{ github.actor }} --user-token "$USER_TOKEN" check-permissions
