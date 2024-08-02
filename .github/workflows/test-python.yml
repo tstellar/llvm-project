@@ -11,8 +11,8 @@ permissions:
 jobs:
   test-python:
     runs-on: macos-14
-  steps:
-    - shell: bash
-      run: |
-        pip install pygithub
-        python3 -c 'import github'
+    steps:
+      - shell: bash
+        run: |
+          pip install pygithub
+          python3 -c 'import github'
