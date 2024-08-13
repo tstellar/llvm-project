@@ -2,12 +2,13 @@
 # statistics for the LLVM project.
 # Example Usage:
 #
-# cmake -G Ninja -S llvm -B coverage-build -C clang/cmake/caches/CodeCoverage.cmake -DCMAKE_BUILD_TYPE=Release
-# ninja -C coverage-build stage2-generate-coverage-report
+# cmake -G Ninja -S llvm -B build -C clang/cmake/caches/CodeCoverage.cmake
+# ninja -C build stage2-generate-coverage-report
 #
 
 
 # Stage 1: Build clang, llvm tools, and compiler-rt
+set(CMAKE_BUILD_TYPE Release CACHE STRING "")
 set(LLVM_ENABLE_PROJECTS "clang;lld" CACHE STRING "")
 set(LLVM_ENABLE_RUNTIMES compiler-rt CACHE STRING "")
 set(LLVM_TARGETS_TO_BUILD Native CACHE STRING "")
