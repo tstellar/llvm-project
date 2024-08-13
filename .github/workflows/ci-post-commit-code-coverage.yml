@@ -1,0 +1,59 @@
+name: Post-Commit Code Coverage
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+    paths:
+      - '.github/workflows/ci-post-commit-code-coverage.yml'
+      - 'clang/cmake/caches/CodeCoverage.cmake'
+      - 'llvm/cmake/modules/CoverageReport.cmake'
+  schedule:
+    - cron: '30 4 * * *'
+
+concurrency:
+  group: >-
+    llvm-project-${{ github.workflow }}-${{ github.event_name == 'pull_request' &&
+      ( github.event.pull_request.number || github.ref) }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+  post-commit-analyzer:
+    if: >-
+      github.repository_owner == 'llvm' &&
+      github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    container:
+      image: 'ghcr.io/llvm/ci-ubuntu-22.04:latest'
+      volumes:
+        - /mnt/:/mnt/
+    env:
+      BUILD_DIR: /mnt/build/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Configure
+        run: |
+          cmake -G Ninja -S llvm -B $BUILD_DIR -C clang/cmake/caches/CodeCoverage.cmake -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: |
+          ninja -C $BUILD_DIR stage2-generate-coverage-report
+
+      - name: Package Report
+        run: |
+          mv $BUILD_DIR/tools/clang/stage2-bins/report llvm-code-coverage-${{ github.sha }}
+          tar -cJf llvm-code-coverage-${{ github.sha }}.tar.xz llvm-code-coverage-${{ github.sh }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+        with:
+          name: llvm-code-coverage-${{ github.sha }}
+          path: llvm-code-coverage-${{ github.sha }}.tar.xz

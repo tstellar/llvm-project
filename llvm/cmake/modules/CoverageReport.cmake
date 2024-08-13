@@ -55,10 +55,11 @@ add_custom_target(clear-profile-data
 # This currently only works for LLVM, but could be expanded to work for all
 # sub-projects. The current limitation is based on not having a good way to
 # automaticall plumb through the targets that we want to run coverage against.
+set(LLVM_COVERAGE_REPORT_DEPENDS "check-llvm" CACHE STRING "The targets to run to generate coverage data.")
 add_custom_target(generate-coverage-report
                   COMMAND ${Python3_EXECUTABLE} ${PREPARE_CODE_COV_ARTIFACT}
                           ${LLVM_PROFDATA} ${LLVM_COV} ${LLVM_PROFILE_DATA_DIR}
                           ${REPORT_DIR} ${coverage_binaries}
                           --unified-report ${restrict_flags}
                   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-                  DEPENDS check-llvm) # Run tests
+                  DEPENDS ${LLVM_COVERAGE_REPORT_DEPENDS}) # Run tests
