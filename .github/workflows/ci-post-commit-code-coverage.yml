@@ -43,6 +43,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          # Default to 2G to workaround: https://github.com/hendrikmuhs/ccache-action/issues/174
+          max-size: 2G
+          key: post-commit-code-coverage
+          variant: sccache
+
       - name: Configure
         run: |
           cmake -G Ninja -S llvm -B $BUILD_DIR -C clang/cmake/caches/CodeCoverage.cmake \
