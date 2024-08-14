@@ -21,9 +21,11 @@ set(LLVM_INCLUDE_TESTS OFF CACHE BOOL "")
 
 # Stage 2
 set(BOOTSTRAP_LLVM_BUILD_INSTRUMENTED_COVERAGE ON CACHE BOOL "")
-set(BOOTSTRAP_COMPILER_RT_INCLUDE_TESTS OFF CACHE BOOL "")
 set(BOOTSTRAP_LLVM_COVERAGE_REPORT_DEPENDS "check-all" CACHE BOOL "")
 set(BOOTSTRAP_LLVM_ENABLE_PROJECTS "clang;lld;clang-tools-extra" CACHE STRING "")
+# The LLVM_ENABLE_RUNTIMES variable is passed through from stage1 to stage2, so
+# we need to clear it here, since we don't want to build the runtimes by default.
+set(BOOTSTRAP_LLVM_ENABLE_RUNTIMES "" CACHE STRING "")
 set(BOOTSTRAP_LLVM_LINK_LLVM_DYLIB ON CACHE BOOL "")
 set(BOOTSTRAP_LLVM_ENABLE_LLD ON CACHE BOOL "")
 set(BOOTSTRAP_LLVM_CODE_COVERAGE_TARGETS "LLVM;libclang;clang-cpp;lld;clangd;clang-tidy;clang-format" CACHE STRING "")
