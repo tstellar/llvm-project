@@ -65,6 +65,6 @@ jobs:
           name: llvm-code-coverage-${{ github.sha }}
           path: llvm-code-coverage-${{ github.sha }}.tar.xz
       
-     - name: Disk Check
+      - name: Disk Check
         if: always()
         run: df -h
