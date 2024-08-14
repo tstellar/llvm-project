@@ -36,6 +36,10 @@ jobs:
     env:
       BUILD_DIR: /mnt/build/
     steps:
+      - name: Disk Check
+        if: always()
+        run: df -h
+
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
@@ -60,3 +64,7 @@ jobs:
         with:
           name: llvm-code-coverage-${{ github.sha }}
           path: llvm-code-coverage-${{ github.sha }}.tar.xz
+      
+     - name: Disk Check
+        if: always()
+        run: df -h
