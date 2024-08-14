@@ -12,10 +12,14 @@ function(llvm_ExternalProject_BuildCmd out_var target bin_dir)
     set(${out_var} "$(MAKE)" "-C" "${bin_dir}" "${target}" PARENT_SCOPE)
   else()
     set(tool_args "${LLVM_EXTERNAL_PROJECT_BUILD_TOOL_ARGS}")
+    message("TOOL ARGS: ${tool_args}")
     if(NOT tool_args STREQUAL "")
       string(CONFIGURE "${tool_args}" tool_args @ONLY)
+      message("After configure: ${tool_args}")
       string(PREPEND tool_args "-- ")
+      message("After prepend: ${tool_args}")
       separate_arguments(tool_args UNIX_COMMAND "${tool_args}")
+      message("After seperate: ${tool_args}")
     endif()
     set(${out_var} ${CMAKE_COMMAND} --build ${bin_dir} --target ${target}
                                     --config ${ARG_CONFIGURATION} ${tool_args} PARENT_SCOPE)
@@ -382,6 +386,7 @@ function(llvm_ExternalProject_Add name source_dir)
     set(force_deps DEPENDS ${TOOLCHAIN_BINS})
   endif()
 
+  message("Create clean")
   llvm_ExternalProject_BuildCmd(run_clean clean ${BINARY_DIR})
   ExternalProject_Add_Step(${name} clean
     COMMAND ${run_clean}
@@ -422,6 +427,7 @@ function(llvm_ExternalProject_Add name source_dir)
     else()
       set(external_target "${target}")
     endif()
+  message("Create ${external_target}")
     llvm_ExternalProject_BuildCmd(build_runtime_cmd ${external_target} ${BINARY_DIR})
     add_custom_target(${target}
       COMMAND ${build_runtime_cmd}

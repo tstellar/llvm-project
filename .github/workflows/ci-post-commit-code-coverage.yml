@@ -67,4 +67,6 @@ jobs:
       
       - name: Disk Check
         if: always()
-        run: df -h
+        run: |
+          df -h
+          du --max-depth=8 -h . | sort -h

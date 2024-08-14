@@ -82,6 +82,7 @@ function(builtin_default_target compiler_rt_path)
 
   set_enable_per_target_runtime_dir()
 
+  message("Add Project builtins")
   llvm_ExternalProject_Add(builtins
                            ${compiler_rt_path}/lib/builtins
                            DEPENDS ${ARG_DEPENDS}
@@ -123,6 +124,7 @@ function(builtin_register_target compiler_rt_path name)
     endif()
   endforeach()
 
+  message("Add Project builtins-${name}")
   llvm_ExternalProject_Add(builtins-${name}
                            ${compiler_rt_path}/lib/builtins
                            DEPENDS ${ARG_DEPENDS}
@@ -253,6 +255,7 @@ function(runtime_default_target)
 
   set_enable_per_target_runtime_dir()
 
+  message("Add Project runtimes")
   llvm_ExternalProject_Add(runtimes
                            ${CMAKE_CURRENT_SOURCE_DIR}/../../runtimes
                            DEPENDS ${ARG_DEPENDS}
@@ -388,6 +391,7 @@ function(runtime_register_target name)
 
   set_enable_per_target_runtime_dir()
 
+  message("Add Project runtimes-${name}")
   llvm_ExternalProject_Add(runtimes-${name}
                            ${CMAKE_CURRENT_SOURCE_DIR}/../../runtimes
                            DEPENDS ${ARG_DEPENDS}
