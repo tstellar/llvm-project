@@ -29,6 +29,10 @@ jobs:
     if: >-
       github.event.action != 'closed'
     runs-on: ubuntu-22.04
+    container:
+      image: 'ghcr.io/llvm/ci-ubuntu-22.04:latest'
+      volumes:
+        - /mnt/:/mnt/
     env:
       BUILD_DIR: /mnt/build/
     steps:
@@ -38,9 +42,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      
-      - name: Install Ninja
-        uses: llvm/actions/install-ninja@main
 
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1
@@ -76,4 +77,4 @@ jobs:
         if: always()
         run: |
           df -h
-          du --max-depth=8 -h /mnt/build | sort -h
+          du --max-depth=8 -h . | sort -h
