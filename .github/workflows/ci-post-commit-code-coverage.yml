@@ -58,6 +58,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_C_COMPILER=clang \
             -DCMAKE_CXX_COMPILER=clang++ \
+            -DBOOTSTRAP_LLVM_LIT_ARGS=-v \
             -DLLVM_PROFILE_MERGE_POOL_SIZE=1
 
       - name: Build
