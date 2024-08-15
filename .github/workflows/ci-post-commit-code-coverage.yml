@@ -53,10 +53,12 @@ jobs:
 
       - name: Configure
         run: |
+          # Use the LLVM_PROFILE_MERGE_POOL_SIZE option to save disk space
           cmake -G Ninja -S llvm -B $BUILD_DIR -C clang/cmake/caches/CodeCoverage.cmake \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_C_COMPILER=clang \
-            -DCMAKE_CXX_COMPILER=clang++
+            -DCMAKE_CXX_COMPILER=clang++ \
+            -DLLVM_PROFILE_MERGE_POOL_SIZE=1
 
       - name: Build
         run: |
