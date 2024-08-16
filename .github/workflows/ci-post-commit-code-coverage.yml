@@ -29,16 +29,14 @@ jobs:
     if: >-
       github.event.action != 'closed'
     runs-on: ubuntu-22.04
-    container:
-      image: 'ghcr.io/llvm/ci-ubuntu-22.04:latest'
-      volumes:
-        - /mnt/:/mnt/
     env:
       BUILD_DIR: /mnt/build/
     steps:
       - name: Disk Check
         if: always()
         run: df -h
+      - name: Install Ninja
+        uses: llvm/actions/install-ninja@main
 
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
