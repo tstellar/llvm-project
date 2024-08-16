@@ -80,4 +80,4 @@ jobs:
         if: always()
         run: |
           df -h
-          du --max-depth=8 -h . | sort -h
+          du --max-depth=8 -h $BUILD_DIR | sort -h
