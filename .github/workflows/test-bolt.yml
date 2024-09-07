@@ -13,5 +13,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-        cmake -G Ninja -S llvm -B bolt-build -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;bolt"  -DLLVM_LIT_ARGS="-vv" -DLLVM_TARGETS_TO_BUILD=Native -DBOLT_INCLUDE_TESTS=ON
-        ninja -C bolt-build check-bolt
+          cmake -G Ninja -S llvm -B bolt-build -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld;bolt"  -DLLVM_LIT_ARGS="-vv" -DLLVM_TARGETS_TO_BUILD=Native -DBOLT_INCLUDE_TESTS=ON
+          ninja -C bolt-build check-bolt
