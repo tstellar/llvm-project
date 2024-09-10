@@ -87,5 +87,5 @@ jobs:
           git config user.email "llvmbot@llvm.org"
           git config user.name "llvmbot"
           git commit -a -m "Add ${{ inputs.release-version }} documentation"
-          git push --force  "https://$GH_TOKEN@github.com/llvmbot/www-releases.git" HEAD:refs/heads/${{ inputs.release-version }}
-          gh pr create -f -B main -H ${{ inputs.release-version }} -R llvmbot/www-releases
+          git push --force  "https://$GH_TOKEN@github.com/tstellar/www-releases.git" HEAD:refs/heads/${{ inputs.release-version }}
+          gh pr create -f -B main -H ${{ inputs.release-version }} -R tstellar/www-releases
