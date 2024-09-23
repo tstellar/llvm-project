@@ -1,0 +1,6 @@
+set(CLANG_ENABLE_BOOTSTRAP ON CACHE BOOL "")
+set(CLANG_BOOTSTRAP_CMAKE_ARGS -C ${CMAKE_CURRENT_LIST_DIR}/stage2.cmake CACHE BOOL "")
+set(CLANG_PGO_TRAINING_DATA_SOURCE_DIR ${CMAKE_SOURCE_DIR} CACHE BOOL "")
+set(CLANG_BOOTSTRAP_TARGETS clang check-all distribution install-distribution clang-bolt CACHE BOOL "")
+
+include(${CMAKE_CURRENT_LIST_DIR}/stage2.cmake)
