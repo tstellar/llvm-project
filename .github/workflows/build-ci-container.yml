@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main
+      - container-test
     paths:
       - .github/workflows/build-ci-container.yml
       - '.github/workflows/containers/github-action-ci/**'
@@ -27,9 +28,9 @@ jobs:
           # The arch names should match the names used on dockerhub.
           # See https://github.com/docker-library/official-images#architectures-other-than-amd64
           - arch: amd64
-            runs-on: depot-ubuntu-22.04-16
+            runs-on: ubuntu-22.04
           - arch: arm64v8
-            runs-on: depot-ubuntu-22.04-arm-16
+            runs-on: ubuntu-22.04
     steps:
       - name: Checkout LLVM
         uses: actions/checkout@v4
@@ -69,7 +70,6 @@ jobs:
           done
 
   push-ci-container:
-    if: github.event_name == 'push'
     needs:
       - build-ci-container
     permissions:
