@@ -75,7 +75,7 @@ def PromotableAllocationOpInterface
       "::std::optional<::mlir::PromotableAllocationOpInterface>",
         "handlePromotionComplete",
       (ins
-        "const ::mlir::MemorySlot &":$slot, 
+        "const ::mlir::MemorySlot &":$slot,
         "::mlir::Value":$defaultValue,
         "::mlir::OpBuilder &":$builder)
     >,
@@ -298,14 +298,20 @@ def DestructurableAllocationOpInterface
       "destructure",
       (ins "const ::mlir::DestructurableMemorySlot &":$slot,
            "const ::llvm::SmallPtrSetImpl<::mlir::Attribute> &":$usedIndices,
-           "::mlir::OpBuilder &":$builder)
+           "::mlir::OpBuilder &":$builder,
+           "::mlir::SmallVectorImpl<::mlir::DestructurableAllocationOpInterface> &":
+             $newAllocators)
     >,
     InterfaceMethod<[{
         Hook triggered once the destructuring of a slot is complete, meaning the
         original slot is no longer being refered to and could be deleted.
         This will only be called for slots declared by this operation.
+
+        Must return a new destructurable allocation op if this hook creates
+        a new destructurable op, nullopt otherwise.
       }],
-      "void", "handleDestructuringComplete",
+      "::std::optional<::mlir::DestructurableAllocationOpInterface>",
+      "handleDestructuringComplete",
       (ins "const ::mlir::DestructurableMemorySlot &":$slot,
            "::mlir::OpBuilder &":$builder)
     >,
@@ -332,7 +338,7 @@ def SafeMemorySlotAccessOpInterface
 
         No IR mutation is allowed in this method.
       }],
-      "::mlir::LogicalResult",
+      "::llvm::LogicalResult",
       "ensureOnlySafeAccesses",
       (ins "const ::mlir::MemorySlot &":$slot,
            "::mlir::SmallVectorImpl<::mlir::MemorySlot> &":$mustBeSafelyUsed,

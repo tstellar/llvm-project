@@ -1,8 +1,12 @@
 name: Unprivileged Download Artifact
-description: Download artifacts from another workflow run without using an access token.
+description: >-
+  Download artifacts from another workflow run without using an access token.
 inputs:
   run-id:
-    description: The run-id for the workflow run that you want to download the artifact from.  If ommited it will download the most recently created artifact from the repo with the artifact-name.
+    description: >-
+      The run-id for the workflow run that you want to download the artifact
+      from.  If ommitted it will download the most recently created artifact
+      from the repo with the artifact-name.
     required: false
   artifact-name:
     desciption: The name of the artifact to download.
@@ -11,7 +15,9 @@ inputs:
 
 outputs:
   filename:
-    description: "The filename of the downloaded artifact or the empty string if the artifact was not found."
+    description: >-
+      The filename of the downloaded artifact or the empty string if the
+      artifact was not found.
     value: ${{ steps.download-artifact.outputs.filename }}
   artifact-id:
     description: "The id of the artifact being downloaded."
@@ -33,7 +39,7 @@ runs:
               name: "${{ inputs.artifact-name }}"
             })
           } else {
-            const response = await github.rest.actions.listWorkflowRunArtifacts({
+            response = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: "${{ inputs.run-id }}",
@@ -61,13 +67,6 @@ runs:
 
           core.setOutput("url", url_response.url);
           core.setOutput("id", response.data.artifacts[0].id);
-
-    - shell: bash
-      run: |
-        echo "${{ steps.artifact-url.outputs.url }}"
-        echo "${{ steps.artifact-url.outputs.result }}"
-        echo "${{ steps.artifact-url.outputs.result.url }}"
-        echo "${{ steps.artifact-url.outputs.result.id }}"
 
     - shell: bash
       if: steps.artifact-url.outputs.url != ''
