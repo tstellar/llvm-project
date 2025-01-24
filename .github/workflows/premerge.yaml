@@ -106,6 +106,7 @@ jobs:
           linux_projects_to_test=$modified_projects
           linux_check_targets=$(check-targets ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
           linux_projects=$(add-dependencies ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
+          echo "Raw add deps $(add-dependencies ${linux_projects_to_test})
 
           linux_runtimes_to_test=$(compute-runtimes-to-test ${linux_projects_to_test})
           linux_runtime_check_targets=$(check-targets ${linux_runtimes_to_test} | sort | uniq | tr '\n' ' ')
