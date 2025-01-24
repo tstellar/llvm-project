@@ -98,7 +98,7 @@ jobs:
 
           . ./.ci/compute-projects.sh
 
-          all_projects="bolt clang clang-tools-extra lld lldb llvm mlir"
+          all_projects="clang clang-tools-extra lld lldb llvm mlir"
           echo "ALL: $all_projects"
           modified_projects="$(keep-modified-projects ${all_projects})"
           echo "Modified: $modified_projects"
