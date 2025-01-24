@@ -102,12 +102,12 @@ jobs:
           modified_projects="$(keep-modified-projects ${all_projects})"
 
           linux_projects_to_test=$(exclude-linux $(compute-projects-to-test 0 ${modified_projects}))
-          linux_check_targets=$(check-targets ${linux_projects_to_test} | sort | uniq)
-          linux_projects=$(add-dependencies ${linux_projects_to_test} | sort | uniq)
+          linux_check_targets=$(check-targets ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
+          linux_projects=$(add-dependencies ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
 
           linux_runtimes_to_test=$(compute-runtimes-to-test ${linux_projects_to_test})
-          linux_runtime_check_targets=$(check-targets ${linux_runtimes_to_test} | sort | uniq)
-          linux_runtimes=$(echo ${linux_runtimes_to_test} | tr ' ' '\n' | sort | uniq)
+          linux_runtime_check_targets=$(check-targets ${linux_runtimes_to_test} | sort | uniq | tr '\n' ' ')
+          linux_runtimes=$(echo ${linux_runtimes_to_test} | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
 
           if [[ "${linux_projects}" == "" ]]; then
             echo "No projects to build"
