@@ -103,7 +103,8 @@ jobs:
           modified_projects="$(keep-modified-projects ${all_projects})"
           echo "Modified: $modified_projects"
 
-          linux_projects_to_test=$(exclude-linux $(compute-projects-to-test 0 ${modified_projects}))
+          linux_projects_to_test=$modified_projects
+          (exclude-linux $(compute-projects-to-test 0 ${modified_projects}))
           linux_check_targets=$(check-targets ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
           linux_projects=$(add-dependencies ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
 
