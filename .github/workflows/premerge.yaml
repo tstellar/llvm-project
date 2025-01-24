@@ -123,6 +123,7 @@ jobs:
           echo "Running project checks targets: ${linux_check_targets}"
           echo "Building runtimes: ${linux_runtimes}"
           echo "Running runtimes checks targets: ${linux_runtime_check_targets}"
+          set -x
 
           # https://github.com/llvm/llvm-project/issues/81967
           cmake -G Ninja \
