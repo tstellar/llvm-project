@@ -114,6 +114,8 @@ jobs:
             exit 0
           fi
 
+          echo "Projects to test: ${linux_projects_to_test}"
+          echo "Runtimes to test: ${linux_runtimes_to_test}"
           echo "Building projects: ${linux_projects}"
           echo "Running project checks targets: ${linux_check_targets}"
           echo "Building runtimes: ${linux_runtimes}"
@@ -131,5 +133,5 @@ jobs:
                 -DLLDB_INCLUDE_TESTS=OFF \
                 -DLIBCLC_TARGETS_TO_BUILD="amdgcn--;amdgcn--amdhsa;r600--;nvptx--;nvptx64--;nvptx--nvidiacl;nvptx64--nvidiacl" \
                 -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
           ninja -C build  $linux_check_targets $linux_runtime_check_targets
