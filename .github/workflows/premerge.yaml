@@ -36,6 +36,7 @@ jobs:
         # are ready for people to start recieving notifications.
         continue-on-error: true
         run: |
+          echo "Base Ref: ${{ github.base_ref }}"
           git config --global --add safe.directory '*'
 
           modified_files=$(git diff --name-only HEAD~1...HEAD)
