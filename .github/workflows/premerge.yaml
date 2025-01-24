@@ -130,6 +130,7 @@ jobs:
                 -B build \
                 -S llvm \
                 -DLLVM_ENABLE_PROJECTS="$(echo ${linux_projects} | tr ' ' ';')" \
+                -DLLVM_ENABLE_RUNTIMES="$(echo ${linux_runtimes} | tr ' ' ';')" \
                 -DLLVM_DISABLE_ASSEMBLY_FILES=ON \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DLLVM_ENABLE_ASSERTIONS=ON \
