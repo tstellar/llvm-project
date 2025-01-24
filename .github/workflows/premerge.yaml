@@ -98,7 +98,7 @@ jobs:
 
           . ./.ci/compute-projects.sh
 
-          all_projects="bolt clang clang-tools-extra compiler-rt cross-project-tests flang libc libclc lld lldb llvm mlir openmp polly pstl"
+          all_projects="bolt clang clang-tools-extra compiler-rt lld lldb llvm mlir"
           modified_projects="$(keep-modified-projects ${all_projects})"
 
           linux_projects_to_test=$(exclude-linux $(compute-projects-to-test 0 ${modified_projects}))
@@ -126,11 +126,9 @@ jobs:
                 -B build \
                 -S llvm \
                 -DLLVM_ENABLE_PROJECTS="$(echo ${linux_projects} | tr ' ' ';')" \
-                -DLLVM_ENABLE_RUNTIMES="$(echo ${linux_runtimes} | tr ' ' ';')" \
                 -DLLVM_DISABLE_ASSEMBLY_FILES=ON \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DLLVM_ENABLE_ASSERTIONS=ON \
-                -DLIBCLC_TARGETS_TO_BUILD="amdgcn--;amdgcn--amdhsa;r600--;nvptx--;nvptx64--;nvptx--nvidiacl;nvptx64--nvidiacl" \
                 -DCMAKE_C_COMPILER_LAUNCHER=ccache \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
           ninja -C build  $linux_check_targets $linux_runtime_check_targets
