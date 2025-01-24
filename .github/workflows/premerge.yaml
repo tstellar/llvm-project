@@ -73,7 +73,6 @@ jobs:
 
 
   permerge-check-macos:
-    if: github.repository_owner == 'llvm'
     runs-on: macos-14
     steps:
       - name: Checkout LLVM
