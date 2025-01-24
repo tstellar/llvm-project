@@ -163,7 +163,8 @@ jobs:
           . ./.ci/compute-projects.sh
 
           all_projects="clang clang-tools-extra lld lldb llvm mlir"
-          modified_projects="$(keep-modified-projects ${all_projects})"
+          #modified_projects="$(keep-modified-projects ${all_projects})"
+          modified_projects="$all_projects"
 
           # We have to disable the runtimes builds due to https://github.com/llvm/llvm-project/issues/90568
           # and the lldb tests depend on libcxx, so we need to skip them.
