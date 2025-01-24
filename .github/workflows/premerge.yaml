@@ -99,7 +99,9 @@ jobs:
           . ./.ci/compute-projects.sh
 
           all_projects="bolt clang clang-tools-extra compiler-rt lld lldb llvm mlir"
+          echo "ALL: $all_projects"
           modified_projects="$(keep-modified-projects ${all_projects})"
+          echo "Modified: $modified_projects"
 
           linux_projects_to_test=$(exclude-linux $(compute-projects-to-test 0 ${modified_projects}))
           linux_check_targets=$(check-targets ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
