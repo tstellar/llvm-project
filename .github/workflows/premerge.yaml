@@ -107,7 +107,7 @@ jobs:
 
           linux_runtimes_to_test=$(compute-runtimes-to-test ${linux_projects_to_test})
           linux_runtime_check_targets=$(check-targets ${linux_runtimes_to_test} | sort | uniq)
-          linux_runtimes=$(echo ${linux_runtimes_to_test} | sort | uniq)
+          linux_runtimes=$(echo ${linux_runtimes_to_test} | tr ' ' '\n' | sort | uniq)
 
           if [[ "${linux_projects}" == "" ]]; then
             echo "No projects to build"
