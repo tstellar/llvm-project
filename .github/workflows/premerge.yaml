@@ -10,11 +10,12 @@ on:
   push:
     branches:
       - 'main'
+      - 'test-build'
 
 jobs:
   premerge-checks-linux:
     if: github.repository_owner == 'llvm'
-    runs-on: llvm-premerge-linux-runners
+    runs-on: macos-14 
     concurrency:
       group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
       cancel-in-progress: true

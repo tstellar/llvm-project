@@ -145,9 +145,7 @@ function exclude-windows() {
 function keep-modified-projects() {
   projects=${@}
   for project in ${projects}; do
-    if echo "$modified_dirs" | grep -q -E "^${project}$"; then
       echo "${project}"
-    fi
   done
 }
 
