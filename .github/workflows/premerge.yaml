@@ -104,7 +104,6 @@ jobs:
           echo "Modified: $modified_projects"
 
           linux_projects_to_test=$modified_projects
-          (exclude-linux $(compute-projects-to-test 0 ${modified_projects}))
           linux_check_targets=$(check-targets ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
           linux_projects=$(add-dependencies ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
 
@@ -123,7 +122,6 @@ jobs:
           echo "Running project checks targets: ${linux_check_targets}"
           echo "Building runtimes: ${linux_runtimes}"
           echo "Running runtimes checks targets: ${linux_runtime_check_targets}"
-          set -x
 
           # https://github.com/llvm/llvm-project/issues/81967
           cmake -G Ninja \
