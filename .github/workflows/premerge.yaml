@@ -99,42 +99,39 @@ jobs:
           . ./.ci/compute-projects.sh
 
           all_projects="clang clang-tools-extra lld lldb llvm mlir"
-          echo "ALL: $all_projects"
           modified_projects="$(keep-modified-projects ${all_projects})"
-          echo "Modified: $modified_projects"
 
-          linux_projects_to_test=$modified_projects
-          linux_check_targets=$(check-targets ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
-          linux_projects=$(add-dependencies ${linux_projects_to_test} | sort | uniq | tr '\n' ' ')
-          echo "Raw add deps $(add-dependencies ${linux_projects_to_test})"
+          mac_check_targets=$(check-targets ${modified_projects} | sort | uniq | tr '\n' ' ')
+          mac_projects=$(add-dependencies ${modified_projects} | sort | uniq | tr '\n' ' ')
+          echo "Raw add deps $(add-dependencies ${modified_projects})"
 
-          linux_runtimes_to_test=$(compute-runtimes-to-test ${linux_projects_to_test})
-          linux_runtime_check_targets=$(check-targets ${linux_runtimes_to_test} | sort | uniq | tr '\n' ' ')
-          linux_runtimes=$(echo ${linux_runtimes_to_test} | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
+          mac_runtimes_to_test=$(compute-runtimes-to-test ${modified_projects})
+          mac_runtime_check_targets=$(check-targets ${mac_runtimes_to_test} | sort | uniq | tr '\n' ' ')
+          mac_runtimes=$(echo ${mac_runtimes_to_test} | tr ' ' '\n' | sort | uniq | tr '\n' ' ')
 
-          if [[ "${linux_projects}" == "" ]]; then
+          if [[ "${mac_projects}" == "" ]]; then
             echo "No projects to build"
             exit 0
           fi
 
-          echo "Projects to test: ${linux_projects_to_test}"
-          echo "Runtimes to test: ${linux_runtimes_to_test}"
-          echo "Building projects: ${linux_projects}"
-          echo "Running project checks targets: ${linux_check_targets}"
-          echo "Building runtimes: ${linux_runtimes}"
-          echo "Running runtimes checks targets: ${linux_runtime_check_targets}"
+          echo "Projects to test: ${modified_projects}"
+          echo "Runtimes to test: ${mac_runtimes_to_test}"
+          echo "Building projects: ${mac_projects}"
+          echo "Running project checks targets: ${mac_check_targets}"
+          echo "Building runtimes: ${mac_runtimes}"
+          echo "Running runtimes checks targets: ${mac_runtime_check_targets}"
 
           set -x
           # https://github.com/llvm/llvm-project/issues/81967
           cmake -G Ninja \
                 -B build \
                 -S llvm \
-                -DLLVM_ENABLE_PROJECTS="$(echo ${linux_projects} | tr ' ' ';')" \
-                -DLLVM_ENABLE_RUNTIMES="$(echo ${linux_runtimes} | tr ' ' ';')" \
+                -DLLVM_ENABLE_PROJECTS="$(echo ${mac_projects} | tr ' ' ';')" \
+                -DLLVM_ENABLE_RUNTIMES="$(echo ${mac_runtimes} | tr ' ' ';')" \
                 -DLLVM_DISABLE_ASSEMBLY_FILES=ON \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DLLVM_ENABLE_ASSERTIONS=ON \
                 -DCMAKE_C_COMPILER_LAUNCHER=ccache \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
-          ninja -C build  $linux_check_targets $linux_runtime_check_targets
+          ninja -C build  $mac_check_targets $mac_runtime_check_targets
