@@ -98,7 +98,7 @@ jobs:
 
           . ./.ci/compute-projects.sh
 
-          all_projects="bolt clang clang-tools-extra compiler-rt lld lldb llvm mlir"
+          all_projects="bolt clang clang-tools-extra lld lldb llvm mlir"
           echo "ALL: $all_projects"
           modified_projects="$(keep-modified-projects ${all_projects})"
           echo "Modified: $modified_projects"
@@ -123,6 +123,7 @@ jobs:
           echo "Building runtimes: ${linux_runtimes}"
           echo "Running runtimes checks targets: ${linux_runtime_check_targets}"
 
+          set -x
           # https://github.com/llvm/llvm-project/issues/81967
           cmake -G Ninja \
                 -B build \
