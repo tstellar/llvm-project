@@ -25,7 +25,6 @@ on:
   issues:
     types:
       - opened
-      - milestoned
   pull_request:
     types:
       - milestoned
