@@ -22,9 +22,15 @@ on:
     types:
       - created
       - edited
+  issues:
+    types:
+      # I was unable to get the milestoned event to trigger for pull_requests,
+      # so we need to use the issue event instead (which does trigger for
+      # pull_requests).
+      - milestoned
+      - opened
   pull_request:
     types:
-      - milestoned
       - closed
 
 env:
