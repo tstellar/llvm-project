@@ -30,6 +30,9 @@ on:
       - milestoned
       - opened
       - closed
+  pull_request:
+    types:
+      - closed
 
 env:
   COMMENT_BODY: ${{ github.event.action == 'opened' && github.event.issue.body || github.event.comment.body  }}
