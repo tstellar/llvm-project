@@ -29,8 +29,6 @@ on:
       # pull_requests).
       - milestoned
       - opened
-  pull_request:
-    types:
       - closed
 
 env:
