@@ -25,11 +25,37 @@ on:
   issues:
     types:
       - opened
+  pull_request:
+    types:
+      - milestoned
+      - closed
 
 env:
   COMMENT_BODY: ${{ github.event.action == 'opened' && github.event.issue.body || github.event.comment.body  }}
 
 jobs:
+  job-check:
+    name: Job Check
+    runs-on: ubuntu-22.04
+    if: github.repository == 'llvm/llvm-project'
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Job Check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            if (context.pull_request) {
+              console.log("Is Pull Request");
+            }
+            if (context.issue) {
+              console.log("Is Issue");
+            }
+               
+
   backport-commits:
     name: Backport Commits
     runs-on: ubuntu-latest
