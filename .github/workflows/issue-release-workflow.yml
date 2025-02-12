@@ -29,7 +29,6 @@ on:
       # pull_requests).
       - milestoned
       - opened
-      - closed
   pull_request:
     types:
       - closed
