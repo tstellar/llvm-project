@@ -37,7 +37,6 @@ jobs:
   job-check:
     name: Job Check
     runs-on: ubuntu-22.04
-    if: github.repository == 'llvm/llvm-project'
     steps:
       - name: Dump GitHub context
         env:
