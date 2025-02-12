@@ -22,9 +22,6 @@ on:
     types:
       - created
       - edited
-  issues:
-    types:
-      - opened
   pull_request:
     types:
       - milestoned
