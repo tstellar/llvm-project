@@ -31,30 +31,9 @@ on:
       - closed
 
 env:
-  COMMENT_BODY: ${{ github.event.action == 'opened' && github.event.issue.body || github.event.comment.body  }}
+  COMMENT_BODY: ${{ (github.event_name == 'pull_request' && format('/cherry-pick {0}', github.sha)) || (github.event.action == 'opened' && github.event.issue.body || github.event.comment.body)  }}
 
 jobs:
-  job-check:
-    name: Job Check
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: Job Check
-        uses: actions/github-script@v7
-        with:
-          script: |
-            if (context.pull_request) {
-              console.log("Is Pull Request");
-            }
-            if (context.issue) {
-              console.log("Is Issue");
-            }
-               
-
   backport-commits:
     name: Backport Commits
     runs-on: ubuntu-latest
@@ -63,8 +42,19 @@ jobs:
       pull-requests: write
     if: >-
       (github.repository == 'llvm/llvm-project') &&
-      !startswith(github.event.comment.body, '<!--IGNORE-->') &&
-      contains(github.event.action == 'opened' && github.event.issue.body || github.event.comment.body, '/cherry-pick')
+      (
+        (
+          (github.event_name == "issues" || github.event_name == "issue_comment") &&
+          (!startswith(github.event.comment.body, '<!--IGNORE-->') &&
+          contains(github.event.action == 'opened' && github.event.issue.body || github.event.comment.body, '/cherry-pick'))
+        )
+        ||
+        (
+          github.event_name == "pull_request" &&
+          github.event.pull_request.merged &&
+          contains(github.event.pull_request.milestone.title, "Release")
+        )
+      )
     steps:
       - name: Fetch LLVM sources
         uses: actions/checkout@v4
