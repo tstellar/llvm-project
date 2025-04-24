@@ -15,6 +15,7 @@ jobs:
   commit-access-greeter:
     permissions:
       issues: write
+      pull-requests: read
     runs-on: ubuntu-24.04
     steps:
       - run: |
