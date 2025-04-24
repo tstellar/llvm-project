@@ -18,7 +18,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - run: |
-          pip show pygithub || apt-get cache show pygithub
+          apt-get update
+          pip show pygithub || apt-cache show python3-github
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
