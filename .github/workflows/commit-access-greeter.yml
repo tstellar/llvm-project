@@ -1,6 +1,9 @@
 name: Commit Access Greeter
 
 on:
+  push:
+    branch:
+      - greeter-test
   issues:
     types:
       - labeled
@@ -12,11 +15,11 @@ jobs:
   commit-access-greeter:
     permissions:
       issues: write
-    if: >-
-      github.repository_owner == 'llvm' &&
-      github.event.label.name == 'infra:commit-access-request'
     runs-on: ubuntu-24.04
     steps:
+      - run: |
+        pip show pygithub
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           sparse-checkout: llvm/utils/git/
