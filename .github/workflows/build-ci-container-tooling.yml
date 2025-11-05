@@ -39,7 +39,7 @@ jobs:
             clang-tools-extra/clang-tidy/tool/clang-tidy-diff.py
 
       - name: Build Container
-        uses: ./.github/workflows/get-llvm-version
+        uses: ./.github/workflows/build-container
         with:
           container-name: ci-ubuntu-24.04-${{ matrix.container-name }}
           dockerfile: github/workflows/containers/github-action-ci-tooling/Dockerfile
