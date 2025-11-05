@@ -9,7 +9,7 @@ inputs:
     required: false
   container-name:
     description: >-
-      The name for the container. 
+      The name for the container.
     required: true
   dockerfile:
     description: >-
@@ -27,7 +27,6 @@ inputs:
     description: >-
       Test command to run to ensure the container is working correctly.
     required: false
-      
 
 runs:
   using: "composite"
@@ -74,7 +73,7 @@ runs:
 
         podman build -t $container_name $podman_options
 
-        podman save $container_name > $container_filename 
+        podman save $container_name > $container_filename
 
         echo "container-full-name=$container_name" >> $GITHUB_OUTPUT
 
@@ -87,9 +86,10 @@ runs:
 
     - name: Test container
       shell: bash
+      if: inputs.test-command
       env:
         INPUT_TEST_COMMAND: ${{ inputs.test-command }}
         CONTAINER_FULL_NAME: ${{ steps.build.outputs.container-full-name }}
       run: |
         podman run --pull=never --rm -it $CONTAINER_FULL_NAME /usr/bin/bash -x -c "$INPUT_TEST_COMMAND"
-      
+
