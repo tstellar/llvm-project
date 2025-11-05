@@ -5,8 +5,6 @@ permissions:
 
 on:
   push:
-    branches:
-      - main
     paths:
       - .github/workflows/build-ci-container-tooling.yml
       - '.github/workflows/containers/github-action-ci-tooling/**'
@@ -21,7 +19,6 @@ on:
 
 jobs:
   build-ci-container-tooling:
-    if: github.repository_owner == 'llvm'
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
