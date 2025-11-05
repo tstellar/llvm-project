@@ -28,10 +28,6 @@ inputs:
       Test command to run to ensure the container is working correctly.
     required: false
       
-outputs:
-  name:
-    description: "FOO"
-    value: ${{ steps.id.outputs.name }}
 
 runs:
   using: "composite"
