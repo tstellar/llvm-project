@@ -93,6 +93,7 @@ runs:
       shell: bash
       env:
         INPUT_TEST_COMMAND: ${{ inputs.test-command }}
+        CONTAINER_FULL_NAME: ${{ steps.build.outputs.container-full-name }}
       run: |
-        podman run --pull=never --rm -it ${{ steps.build.container-full-name }} /usr/bin/bash -x -c "$INPUT_TEST_COMMAND"
+        podman run --pull=never --rm -it $CONTAINER_FULL_NAME /usr/bin/bash -x -c "$INPUT_TEST_COMMAND"
       
