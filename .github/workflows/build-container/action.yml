@@ -47,7 +47,7 @@ runs:
       shell: bash
       env:
         INPUT_TAG: ${{inputs.tag }}
-        INPUT_CONTAINER_NAME: ${{ inputs.container_name }}
+        INPUT_CONTAINER_NAME: ${{ inputs.container-name }}
         INPUT_TARGET: ${{ inputs.target }}
         INPUT_DOCKERFILE: ${{ inputs.dockerfile }}
         INPUT_CONTEXT: ${{ inputs.context }}
