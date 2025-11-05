@@ -45,12 +45,6 @@ runs:
 
     - name: Build Container
       shell: bash
-      env:
-        INPUT_TAG: ${{inputs.tag }}
-        INPUT_CONTAINER_NAME: ${{ inputs.container_name }}
-        INPUT_TARGET: ${{ inputs.target }}
-        INPUT_DOCKERFILE: ${{ inputs.dockerfile }}
-        INPUT_CONTEXT: ${{ inputs.context }}
       id: build
       run: |
         tag="${INPUT_TAG:-$(git rev-parse --short=12 HEAD)}"
@@ -64,7 +58,7 @@ runs:
             ;;
         esac
 
-        container_name="ghcr.io/$GITHUB_REPOSITORY_OWNER/$container_arch/$INPUT_CONTAINER_NAME:$tag"
+        container_name="ghcr.io/$GITHUB_REPOSITORY_OWNER/$container_arch/$INPUT_CONTAINER-NAME:$tag"
         container_filename="$(echo $container_name  | sed -e 's/\//-/g' -e 's/:/-/g').tar"
         if [ -n "$INPUT_TARGET" ]; then
           podman_options="$podman_options --target $INPUT_TARGET"
@@ -88,8 +82,6 @@ runs:
 
     - name: Test container
       shell: bash
-      env:
-        INPUT_TEST_COMMAND: ${{ inputs.test_command }}
       run: |
         podman run --pull=never --rm -it ${{ steps.build.container-name }} /usr/bin/bash -x -c "$INPUT_TEST_COMMAND"
       
