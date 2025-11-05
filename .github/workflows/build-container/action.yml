@@ -56,12 +56,11 @@ runs:
         tag="${INPUT_TAG:-$(git rev-parse --short=12 HEAD)}"
 
         case "$RUNNER_ARCH" in
-          X64)
-          *)
-            container_arch="amd64"
-            ;;
           ARM64)
             container_arch="arm64v8"
+            ;;
+          *)
+            container_arch="amd64"
             ;;
         esac
 
