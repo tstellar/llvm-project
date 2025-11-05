@@ -83,7 +83,7 @@ runs:
     - name: Create container artifact
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
-        name: ${{ inputs.container-name}-${{ runner.arch }}
+        name: ${{ inputs.container-name }}-${{ runner.arch }}
         path: "*.tar"
         retention-days: 14
 
