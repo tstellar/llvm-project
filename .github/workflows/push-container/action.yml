@@ -2,6 +2,12 @@ name: Push Container
 description: >-
   Download all container artifacts for this job and push them to the GitHub registry.
 
+inputs:
+  token:
+    description: >-
+      Token to use to authenticate with the container registry.
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -10,7 +16,7 @@ runs:
 
     - name: Push Container
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         function push_container {
           image_name=$1
