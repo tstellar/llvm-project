@@ -39,10 +39,12 @@ runs:
     # podman is not installed by default on the ARM64 images.
     - name: Install Podman
       if: runner.arch == 'ARM64'
+      shell: bash
       run: |
         sudo apt-get install podman
 
     - name: Build Container
+      shell: bash
       env:
         INPUT_TAG: ${{inputs.tag }}
         INPUT_CONTAINER_NAME: ${{ inputs.container_name }}
@@ -86,6 +88,7 @@ runs:
         retention-days: 14
 
     - name: Test container
+      shell: bash
       env:
         INPUT_TEST_COMMAND: ${{ inputs.test_command }}
       run: |
