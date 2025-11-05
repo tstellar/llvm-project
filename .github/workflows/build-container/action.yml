@@ -23,9 +23,10 @@ inputs:
     description: >-
       Path to context for the container build.
     required: false
-  test-command: >=
+  test-command:
     description: >-
       Test command to run to ensure the container is working correctly.
+    required: false
       
 outputs:
     name:
