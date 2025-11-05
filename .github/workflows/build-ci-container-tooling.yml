@@ -42,7 +42,6 @@ jobs:
             llvm/utils/git/requirements_linting.txt
             clang-tools-extra/clang-tidy/tool/clang-tidy-diff.py
             .github/workflows/build-container
-            .github/workflows/push-container
 
       - name: Build Container
         uses: ./.github/workflows/build-container
@@ -62,4 +61,9 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Checkout LLVM
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          sparse-checkout: |
+            .github/workflows/push-container
       - uses: ./.github/workflows/push-container
