@@ -47,6 +47,7 @@ runs:
       shell: bash
       id: build
       run: |
+        env
         tag="${INPUT_TAG:-$(git rev-parse --short=12 HEAD)}"
 
         case "$RUNNER_ARCH" in
