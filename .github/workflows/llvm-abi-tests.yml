@@ -71,7 +71,7 @@ jobs:
     needs: abi-dump-setup
     runs-on: ubuntu-24.04
     container:
-      image: "ghcr.io/llvm/ci-ubuntu-24.04-abi-tests:bb0bd382ab2b"
+      image: "ghcr.io/llvm/ci-ubuntu-24.04-abi-tests@sha256:01e66b0847c1e9c88f0bd0492ed7c3374550a0730b48040f63888393f1ff6c13" #ghcr.io/llvm/ci-ubuntu-24.04-abi-tests:bb0bd382ab2b"
     strategy:
       matrix:
         name:
@@ -130,7 +130,7 @@ jobs:
   abi-compare:
     runs-on: ubuntu-24.04
     container:
-      image: "ghcr.io/llvm/ci-ubuntu-24.04-abi-tests:bb0bd382ab2b"
+      image: "ghcr.io/llvm/ci-ubuntu-24.04-abi-tests@sha256:01e66b0847c1e9c88f0bd0492ed7c3374550a0730b48040f63888393f1ff6c13" #ghcr.io/llvm/ci-ubuntu-24.04-abi-tests:bb0bd382ab2b
     needs:
       - abi-dump-setup
       - abi-dump
