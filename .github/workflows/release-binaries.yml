@@ -210,8 +210,8 @@ jobs:
       id: build
       shell: bash
       env:
-        CC: ${{ github.workspace }}/llvm-project/LLVM-20.1.8-macOS-ARM64/bin/clang
-        CXX: ${{ github.workspace }}/llvm-project/LLVM-20.1.8-macOS-ARM64/bin/clang++
+        CC: ${{ github.workspace }}/LLVM-20.1.8-macOS-ARM64/bin/clang
+        CXX: ${{ github.workspace }}/LLVM-20.1.8-macOS-ARM64/bin/clang++
       run: |
         # There were some issues on the ARM64 MacOS runners with trying to build x86 object,
         # so we need to set some extra cmake flags to disable this.
