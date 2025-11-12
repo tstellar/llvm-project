@@ -146,7 +146,7 @@ jobs:
             if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
               build_runs_on="${{ inputs.runs-on }}"
             else
-              build_runs_on="depot-macos-14"
+              build_runs_on="macos-14"
             fi
             test_runs_on="${{ inputs.runs-on }}"
             ;;
