@@ -32,6 +32,9 @@ on:
         description: "Secret used to check user permissions."
         required: false
 
+  push:
+    branches:
+      - opt-mac-release-fork
   pull_request:
     types:
       - opened
