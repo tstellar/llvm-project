@@ -207,6 +207,9 @@ jobs:
         tar -xJf LLVM-20.1.8-macOS-ARM64.tar.xz
         rm -Rf LLVM-20.1.8-macOS-ARM64/lib/
         rm -Rf LLVM-20.1.8-macOS-ARM64/include/
+         ${{ github.workspace }}/LLVM-20.1.8-macOS-ARM64/bin/clang --version
+         ${{ github.workspace }}/LLVM-20.1.8-macOS-ARM64/bin/clang -print-resource-dir
+         ls `${{ github.workspace }}/LLVM-20.1.8-macOS-ARM64/bin/clang -print-resource-dir`/include
 
     - name: Configure
       id: build
