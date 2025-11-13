@@ -205,6 +205,7 @@ jobs:
       run: |
         curl -O -L https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-macOS-ARM64.tar.xz
         tar -xJf LLVM-20.1.8-macOS-ARM64.tar.xz
+        rm -Rf LLVM-20.1.8-macOS-ARM64/lib/
 
     - name: Configure
       id: build
