@@ -84,7 +84,7 @@ jobs:
       - name: Store Tarball Names
         id: filenames
         run: |
-          echo "filenames=$(ls | jq -R | jq -s -c)" >> $GITHUB_OUTPUT
+          echo "filenames=$(ls *.xz | jq -R | jq -s -c)" >> $GITHUB_OUTPUT
 
 
   upload-release-sources:
