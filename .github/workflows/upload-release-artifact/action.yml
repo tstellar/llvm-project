@@ -41,6 +41,7 @@ runs:
         subject-path: ${{ inputs.filename }}
 
     - name: Rename attestation file
+      shell: bash
       run: |
         mv ${{ steps.provenance.outputs.bundle-path }} ${{ inputs.filename }}.jsonl
 
@@ -51,6 +52,7 @@ runs:
         path: ${{ inputs.filename }}.jsonl
 
     - name: Install Python Requirements
+      shell: bash
       run: |
         pip install --require-hashes -r ./llvm/utils/git/requirements.txt
 
