@@ -17,6 +17,13 @@ inputs:
       is set to false, then the atteastion will still be generated and attached as
       an artifact to the workflow, but won't be uploaded to the release.
     default: true
+  user-token:
+    description: >-
+      Token with premissions to read llvm teams that is used to ensure that
+      the person who triggred the action has permission to upload artifacts.
+      This is required if upload is true.
+    requred: false
+
 
 outputs:
   filename:
@@ -60,7 +67,7 @@ runs:
       if: inputs.upload
       env:
         GITHUB_TOKEN: ${{ github.token }}
-        USER_TOKEN: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
+        USER_TOKEN: ${{ inputs.user-token }}
       shell: bash
       run: |
         ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --user "$GITHUB_ACTOR" --user-token "$USER_TOKEN" check-permissions
