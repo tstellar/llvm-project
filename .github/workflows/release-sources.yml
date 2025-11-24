@@ -92,6 +92,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs:
       - release-sources
+      - inputs
     permissions:
       id-token: write
       attestations: write
@@ -99,6 +100,14 @@ jobs:
       matrix:
         filename: ${{ fromJson(needs.release-sources.outputs.filenames) }} 
     steps:
+      - name: Checkout LLVM
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          ref: ${{ needs.inputs.outputs.ref }}
+          sparse-checkout: |
+            .github/workflows/upload-release-artifact/action.yml
+            llvm/utils/release/github-upload-release.py
+          sparse-checkout-cone-mode: false
       - name: Upload Artifacts
         uses: ./.github/workflows/upload-release-artifact  
         with:
