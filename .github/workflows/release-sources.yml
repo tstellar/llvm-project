@@ -42,7 +42,6 @@ jobs:
   inputs:
     name: Collect Job Inputs
     if: >-
-      github.repository_owner == 'llvm' &&
       github.event.action != 'closed'
     outputs:
       ref: ${{ steps.inputs.outputs.ref }}
@@ -62,7 +61,6 @@ jobs:
 
   release-sources:
     name: Package Release Sources
-    if: github.repository_owner == 'llvm'
     runs-on: ubuntu-24.04
     needs:
       - inputs
@@ -97,7 +95,6 @@ jobs:
 
   upload-release-sources:
     name: Upload Release Source
-    if: github.repository_owner == 'llvm'
     runs-on: ubuntu-24.04
     needs:
       - release-sources
