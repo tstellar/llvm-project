@@ -104,7 +104,7 @@ jobs:
       attestations: write
     strategy:
       matrix:
-        filename: ${{ fromJson(needs.release-sources.outputs.filenames }} 
+        filename: ${{ fromJson(needs.release-sources.outputs.filenames) }} 
     steps:
       - name: Upload Artifacts
         uses: ./.github/workflows/upload-release-artifact  
