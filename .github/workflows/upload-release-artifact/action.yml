@@ -1,0 +1,73 @@
+name: Upload Release Artifact
+description: >-
+  Upload release artifact along with an attestation.  The action assumes that
+  the llvm-project repository has already been checked out.
+inputs:
+  filename:
+    description: >-
+      The file to upload.
+    required: true
+  release-version:
+    description: >-
+      The release where the artifact will be attached.
+    required: true
+  upload:
+    description: >-
+      Whether or not to upload the file and attestation to the release.  If this
+      is set to false, then the atteastion will still be generated and attached as
+      an artifact to the workflow, but won't be uploaded to the release.
+    default: true
+
+outputs:
+  filename:
+    description: >-
+      The filename of the downloaded artifact or the empty string if the
+      artifact was not found.
+    value: ${{ steps.download-artifact.outputs.filename }}
+  artifact-id:
+    description: "The id of the artifact being downloaded."
+    value: ${{ steps.artifact-url.outputs.id }}
+  upload:
+    description: 
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: Attest Build Provenance
+      id: provenance
+      uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
+      with:
+        subject-path: ${{ inputs.filename }}
+
+    - name: Rename attestation file
+      run: |
+        mv ${{ steps.provenance.outputs.bundle-path }} ${{ inputs.filename }}.jsonl
+
+    - name: Upload Build Provenance
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: ${{ inputs.filename }}-attestation
+        path: ${{ inputs.filename }}.jsonl
+
+    - name: Install Python Requirements
+      run: |
+        pip install --require-hashes -r ./llvm/utils/git/requirements.txt
+
+    - name: Check Permissions
+      if: inputs.upload
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        USER_TOKEN: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
+      shell: bash
+      run: |
+        ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --user "$GITHUB_ACTOR" --user-token "$USER_TOKEN" check-permissions
+    - name: Upload Release
+      shell: bash
+      if: inputs.upload
+      run: |
+        ./llvm/utils/release/github-upload-release.py \
+        --token ${{ github.token }} \
+        --release ${{ inputs.release-version }} \
+        upload \
+        --files ${{ inputs.filename }}*
