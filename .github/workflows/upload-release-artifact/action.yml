@@ -48,7 +48,9 @@ runs:
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{ inputs.attestation-name }}
-        path: ${{ inputs.attestation-name }}.jsonl ${{ inputs.files }}
+        path: |
+          ${{ input.files }}
+          ${{ inputs.attestation-name }}.jsonl
 
     - name: Install Python Requirements
       if: inputs.upload == 'true'
