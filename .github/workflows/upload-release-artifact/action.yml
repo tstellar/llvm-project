@@ -48,16 +48,16 @@ runs:
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: ${{ inputs.attestation-name }}
-        path: ${{ inputs.attestation-name }}.jsonl
+        path: ${{ inputs.attestation-name }}.jsonl ${{ inputs.files }}
 
     - name: Install Python Requirements
-      if: inputs.upload
+      if: inputs.upload == 'true'
       shell: bash
       run: |
         pip install --require-hashes -r ./llvm/utils/git/requirements.txt
 
     - name: Check Permissions
-      if: inputs.upload
+      if: inputs.upload == 'true'
       env:
         GITHUB_TOKEN: ${{ github.token }}
         USER_TOKEN: ${{ inputs.user-token }}
@@ -66,7 +66,7 @@ runs:
         ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --user "$GITHUB_ACTOR" --user-token "$USER_TOKEN" check-permissions
     - name: Upload Release
       shell: bash
-      if: inputs.upload
+      if: inputs.upload == 'true'
       run: |
         ./llvm/utils/release/github-upload-release.py \
         --token ${{ github.token }} \
