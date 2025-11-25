@@ -85,7 +85,7 @@ jobs:
       - name: Store Tarball Names
         id: filenames
         run: |
-          echo "filenames=$(ls *.xz)" >> $GITHUB_OUTPUT
+          echo "filenames=$(ls *.xz | xargs)" >> $GITHUB_OUTPUT
 
       - name: Upload Artifacts
         uses: ./.github/workflows/upload-release-artifact  
