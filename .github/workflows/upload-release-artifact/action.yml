@@ -49,7 +49,7 @@ runs:
       with:
         name: ${{ inputs.attestation-name }}
         path: |
-          ${{ input.files }}
+          ${{ inputs.files }}
           ${{ inputs.attestation-name }}.jsonl
 
     - name: Install Python Requirements
