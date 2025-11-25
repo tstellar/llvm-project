@@ -5,7 +5,7 @@ description: >-
 inputs:
   files:
     description: >-
-      Space delimited list of files to upload.
+      Files to be uploaded. This can contain bash wildcards.
     required: true
   release-version:
     description: >-
