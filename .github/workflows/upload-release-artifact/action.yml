@@ -3,9 +3,9 @@ description: >-
   Upload release artifact along with an attestation.  The action assumes that
   the llvm-project repository has already been checked out.
 inputs:
-  filename:
+  files:
     description: >-
-      The file to upload.
+      Space delimited list of files to upload.
     required: true
   release-version:
     description: >-
@@ -23,19 +23,10 @@ inputs:
       the person who triggred the action has permission to upload artifacts.
       This is required if upload is true.
     requred: false
-
-
-outputs:
-  filename:
+  attestation-name:
     description: >-
-      The filename of the downloaded artifact or the empty string if the
-      artifact was not found.
-    value: ${{ steps.download-artifact.outputs.filename }}
-  artifact-id:
-    description: "The id of the artifact being downloaded."
-    value: ${{ steps.artifact-url.outputs.id }}
-  upload:
-    description: 
+      Name to use for the attestation file.
+    required: false
 
 
 runs:
@@ -45,20 +36,22 @@ runs:
       id: provenance
       uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
       with:
-        subject-path: ${{ inputs.filename }}
+        subject-path: ${{ inputs.files }}
 
     - name: Rename attestation file
+      if: inputs.attestation-name
       shell: bash
       run: |
-        mv ${{ steps.provenance.outputs.bundle-path }} ${{ inputs.filename }}.jsonl
+        mv ${{ steps.provenance.outputs.bundle-path }} ${{ inputs.attestation-name }}.jsonl
 
     - name: Upload Build Provenance
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
-        name: ${{ inputs.filename }}-attestation
-        path: ${{ inputs.filename }}.jsonl
+        name: ${{ inputs.attestation-name }}
+        path: ${{ inputs.attestation-name }}.jsonl
 
     - name: Install Python Requirements
+      if: inputs.upload
       shell: bash
       run: |
         pip install --require-hashes -r ./llvm/utils/git/requirements.txt
@@ -79,4 +72,4 @@ runs:
         --token ${{ github.token }} \
         --release ${{ inputs.release-version }} \
         upload \
-        --files ${{ inputs.filename }}*
+        --files ${{ inputs.files }} ${{ inputs.attestation-name}}.jsonl
