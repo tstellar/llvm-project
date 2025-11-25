@@ -91,4 +91,5 @@ jobs:
         uses: ./.github/workflows/upload-release-artifact  
         with:
           files: ${{ steps.filenames.outputs.filenames }}
+          attestation-name: release-sources
           upload: false
