@@ -90,5 +90,5 @@ jobs:
       - name: Upload Artifacts
         uses: ./.github/workflows/upload-release-artifact  
         with:
-          files: ${{ steps.outputs.filenames.filenames }}
+          files: ${{ steps.filenames.outputs.filenames }}
           upload: false
