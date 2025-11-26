@@ -64,6 +64,13 @@ runs:
       run: |
         mv ${{ steps.provenance.outputs.bundle-path }} ${{ steps.vars.outputs.attestation-name }}.jsonl
 
+    - name: Upload Build Provenance
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: ${{ steps.vars.outputs.attestation-name }}-attestation
+        path: |
+          ${{ steps.vars.outputs.attestation-name }}.jsonl
+
     - name: Install Python Requirements
       if: inputs.upload == 'true'
       shell: bash
