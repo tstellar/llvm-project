@@ -91,7 +91,8 @@ jobs:
         id: upload
         with:
           name: ${{ needs.inputs.outputs.ref }}-sources
-          path: *.xz
+          path: |
+            *.xz
 
       - name: Upload Artifacts
         uses: ./.github/workflows/upload-release-artifact
