@@ -37,7 +37,7 @@ runs:
       id: vars
       shell: bash
       env:
-        INPUTS_ATTESTATION_NAME: ${{ inputs.attestation_name }}
+        INPUTS_ATTESTATION_NAME: ${{ inputs.attestation-name }}
         INPUTS_FILES: ${{ inputs.files }}
       run: |
         if [ -z "$INPUTS_ATTESTATION_NAME" ]; then
