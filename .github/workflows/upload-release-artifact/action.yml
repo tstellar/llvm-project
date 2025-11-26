@@ -25,13 +25,27 @@ inputs:
     requred: false
   attestation-name:
     description: >-
-      Name to use for the attestation file.
+      Name to use for the attestation file.  If this is not set, it will default
+      to the falue of `files`.
     required: false
 
 
 runs:
   using: "composite"
   steps:
+    - name: Collect Variables
+      id: vars
+      shell: bash
+      env:
+        INPUTS_ATTESTATION_NAME: ${{ inputs.attestation_name }}
+        INPUTS_FILES: ${{ inputs.files }}
+      run: |
+        if [ -z "$INPUTS_ATTESTATION_NAME" ]; then
+          name="$INPUTS_FILES"
+        else
+          name="$INPUTS_ATTESTATION_NAME"
+        fi
+        echo "attestation-name=$name" >> $GITHUB_OUTPUT
     - name: Attest Build Provenance
       id: provenance
       uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
@@ -39,18 +53,17 @@ runs:
         subject-path: ${{ inputs.files }}
 
     - name: Rename attestation file
-      if: inputs.attestation-name
       shell: bash
       run: |
-        mv ${{ steps.provenance.outputs.bundle-path }} ${{ inputs.attestation-name }}.jsonl
+        mv ${{ steps.provenance.outputs.bundle-path }} ${{ steps.vars.outputs.attestation-name }}.jsonl
 
     - name: Upload Build Provenance
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
-        name: ${{ inputs.attestation-name }}
+        name: ${{ steps.vars.outputs.attestation-name }}
         path: |
           ${{ inputs.files }}
-          ${{ inputs.attestation-name }}.jsonl
+          ${{ steps.vars.outpts.attestation-name }}.jsonl
 
     - name: Install Python Requirements
       if: inputs.upload == 'true'
@@ -74,4 +87,4 @@ runs:
         --token ${{ github.token }} \
         --release ${{ inputs.release-version }} \
         upload \
-        --files ${{ inputs.files }} ${{ inputs.attestation-name}}.jsonl
+        --files ${{ inputs.files }} ${{ steps.vars.outputs.attestation-name}}.jsonl
