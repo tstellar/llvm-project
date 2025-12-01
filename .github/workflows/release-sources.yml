@@ -92,4 +92,4 @@ jobs:
         with:
           files: ${{ steps.filenames.outputs.filenames }}
           attestation-name: ${{ needs.inputs.outputs.ref }}-sources
-          upload: false
+          upload: true
