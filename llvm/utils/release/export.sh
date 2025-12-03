@@ -13,7 +13,7 @@
 
 set -e
 
-projects="llvm bolt"
+projects="cmake bolt"
 
 release=""
 rc=""
