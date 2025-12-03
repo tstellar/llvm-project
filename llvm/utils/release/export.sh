@@ -112,7 +112,7 @@ export_sources() {
     echo "$rc" > $target_dir/llvm-rc-$yyyymmdd.txt
     echo "$git_rev" > $target_dir/llvm-git-revision-$yyyymmdd.txt
     
-    git archive --prefix=llvm-project-$release$rc.src/ $tree_id . | xz -T0 >$target_dir/$(template_file llvm-project)
+    #git archive --prefix=llvm-project-$release$rc.src/ $tree_id . | xz -T0 >$target_dir/$(template_file llvm-project)
     popd
 
     if [ -z "$snapshot" ]; then
