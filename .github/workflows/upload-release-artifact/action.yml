@@ -73,7 +73,7 @@ runs:
       env:
         INPUTS_ATTESTATION_NAME: ${{ inputs.attestation-name }}
       run: |
-        for f in ${{ steps.download-artifact.outputs.download-path/*; do
+        for f in ${{ steps.download-artifact.outputs.download-path }}/*; do
           cp ${{ steps.provenance.outputs.bundle-path }} $f.jsonl
         done
 
