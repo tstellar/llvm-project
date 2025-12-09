@@ -73,11 +73,9 @@ runs:
       env:
         INPUTS_ATTESTATION_NAME: ${{ inputs.attestation-name }}
       run: |
-        ls  ${{ steps.download-artifact.outputs.download-path }}/*
         for f in ${{ steps.download-artifact.outputs.download-path }}/*; do
-          cp ${{ steps.provenance.outputs.bundle-path }} $f.jsonl
+          cp ${{ steps.provenance.outputs.bundle-path }} $(basename $f).jsonl
         done
-        ls
 
     - name: Upload Build Provenance
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
