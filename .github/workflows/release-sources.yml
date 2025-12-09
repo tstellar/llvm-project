@@ -21,6 +21,7 @@ on:
         description: "Secret used to check user permissions."
         required: false
   # Run on pull_requests for testing purposes.
+  push:
   pull_request:
     paths:
       - '.github/workflows/release-sources.yml'
@@ -42,7 +43,6 @@ jobs:
   inputs:
     name: Collect Job Inputs
     if: >-
-      github.repository_owner == 'llvm' &&
       github.event.action != 'closed'
     outputs:
       ref: ${{ steps.inputs.outputs.ref }}
@@ -62,7 +62,6 @@ jobs:
 
   release-sources:
     name: Package Release Sources
-    if: github.repository_owner == 'llvm'
     runs-on: ubuntu-24.04
     outputs:
       digest: ${{ steps.digest.outputs.digest }}
