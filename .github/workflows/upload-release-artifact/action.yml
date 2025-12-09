@@ -106,4 +106,4 @@ runs:
         --token ${{ github.token }} \
         --release ${{ inputs.release-version }} \
         upload \
-        --files ${{ steps.download-artifact.outputs.download-path }}/* ${{ steps.vars.outputs.attestation-name}}.jsonl
+        --files ${{ steps.download-artifact.outputs.download-path }}/* *.jsonl
