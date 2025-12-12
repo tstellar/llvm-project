@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
   push:
     branches:
+      - 'llvm-abi-test-*'
       - 'release/**'
     paths:
       - 'llvm/**'
@@ -26,7 +27,6 @@ concurrency:
 
 jobs:
   abi-dump-setup:
-    if: github.repository_owner == 'llvm'
     runs-on: ubuntu-24.04
     outputs:
       BASELINE_REF: ${{ steps.vars.outputs.BASELINE_REF }}
@@ -69,7 +69,6 @@ jobs:
           fi
 
   abi-dump:
-    if: github.repository_owner == 'llvm'
     needs: abi-dump-setup
     runs-on: ubuntu-24.04
     container:
@@ -130,7 +129,6 @@ jobs:
           path: llvm.symbols
 
   abi-compare:
-    if: github.repository_owner == 'llvm'
     runs-on: ubuntu-24.04
     container:
       image: "ghcr.io/llvm/ci-ubuntu-24.04-abi-tests@sha256:9138b6aea737d935e92ad2afdf5d49325880f9b187b5b979b135ac80cd456135" #ghcr.io/llvm/ci-ubuntu-24.04-abi-tests:bb0bd382ab2b
