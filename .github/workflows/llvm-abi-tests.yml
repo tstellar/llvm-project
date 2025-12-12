@@ -88,10 +88,6 @@ jobs:
             ref: ${{ github.sha }}
             repo: ${{ github.repository }}
     steps:
-      - name: Remove Universal CTags
-        run: |
-          sudo rm -Rf /usr/include/*
-          sudo apt-get install ctags
       - name: Download source code
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
