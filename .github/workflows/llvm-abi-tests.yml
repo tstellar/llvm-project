@@ -116,7 +116,7 @@ jobs:
           else
             touch llvm.symbols
           fi
-          abi-dumper $EXTRA_ARGS -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o ${{ matrix.ref }}.abi ./install/lib/libLLVM.so
+          abi-dumper $EXTRA_ARGS -use-tu-dump -lver ${{ matrix.ref }} -skip-cxx -public-headers ./install/include/${{ needs.abi-dump-setup.outputs.ABI_HEADERS }} -o ${{ matrix.ref }}.abi ./install/lib/libLLVM.so
           # Remove symbol versioning from dumps, so we can compare across major versions.
           sed -i 's/LLVM_${{ matrix.llvm_version_major }}/LLVM_NOVERSION/' ${{ matrix.ref }}.abi
       - name: Upload ABI file
