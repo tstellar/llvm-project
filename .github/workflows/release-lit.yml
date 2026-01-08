@@ -33,8 +33,9 @@ jobs:
     steps:
       - name: Checkout LLVM
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        repository: llvm/llvm-project
         with:
-          ref: "llvmorg-18-14.0"
+          ref: "llvmorg-21.1.8"
 
       - name: Install dependencies
         run: |
