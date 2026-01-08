@@ -21,6 +21,7 @@ on:
       RELEASE_TASKS_USER_TOKEN:
         description: "Secret used to check user permissions."
         required: false
+  push:
 
 jobs:
   release-lit:
