@@ -13,6 +13,7 @@ jobs:
   release-lit:
     permissions:
       id-token: write # Requred for pypi publishing
+      contents: read
     name: Release Lit
     uses: ./.github/workflows/release-lit.yml
     with:
