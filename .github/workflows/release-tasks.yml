@@ -12,7 +12,6 @@ on:
 jobs:
   release-lit:
     name: Release Lit
-    needs: validate-tag
     uses: ./.github/workflows/release-lit.yml
     with:
       release-version: 21.1.0
