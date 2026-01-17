@@ -5,6 +5,7 @@ permissions:
 
 on:
   push:
+    tags:
       # The regex support here is limited, so just match everything that starts with llvmorg- and filter later.
       - 'pypi-test-*'
 
