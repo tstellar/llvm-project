@@ -17,6 +17,7 @@ permissions:
   contents: read # Default everything to read-only
   issues: write
 
+
 jobs:
   audit:
     name: "Release Asset Audit"
