@@ -3,7 +3,6 @@ import re
 import sys
 
 _SPECIAL_CASE_BINARIES = {
-    "keith": {"clang+llvm-18.1.8-arm64-apple-macos11.tar.xz"},
 }
 
 
