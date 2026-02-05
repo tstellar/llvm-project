@@ -35,7 +35,7 @@ jobs:
           python3 ./.github/workflows/release-asset-audit.py $GITHUB_TOKEN
 
       - name: Upload comment file
-        if: failed()
+        if: failure()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: comment
