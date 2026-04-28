@@ -18,7 +18,7 @@ runs:
     - name: Check Permissions
       uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
-        github-token: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
+        github-token: ${{ inputs.LLVM_TOKEN_GENERATOR_PRIVATE_KEY }}
         script: |
           const response = await github.rest.teams.getMembershipForUserInOrg({
              org: context.repo.owner,
@@ -29,7 +29,7 @@ runs:
     - name: Check Permissions 2
       uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
-        github-token: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
+        github-token: ${{ inputs.LLVM_TOKEN_GENERATOR_PRIVATE_KEY }}
         script: |
           const response = await github.rest.teams.getMembershipForUserInOrg({
              org: context.repo.owner,
