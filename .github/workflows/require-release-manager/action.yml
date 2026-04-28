@@ -21,7 +21,7 @@ runs:
         github-token: ${{ inputs.LLVM_TOKEN_GENERATOR_PRIVATE_KEY }}
         script: |
           const response = await github.rest.teams.getMembershipForUserInOrg({
-             org: context.repo.owner,
+             org: "llvm",
              team_slug: "llvm-release-managers",
              username: "tstellar"
           });
@@ -32,7 +32,7 @@ runs:
         github-token: ${{ inputs.LLVM_TOKEN_GENERATOR_PRIVATE_KEY }}
         script: |
           const response = await github.rest.teams.getMembershipForUserInOrg({
-             org: context.repo.owner,
+             org: "llvm",
              team_slug: "llvm-release-managers",
              username: "nikic"
           });
