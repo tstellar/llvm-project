@@ -20,20 +20,8 @@ runs:
       with:
         github-token: ${{ inputs.LLVM_TOKEN_GENERATOR_PRIVATE_KEY }}
         script: |
-          const response = await github.rest.teams.getMembershipForUserInOrg({
+          await github.rest.teams.getMembershipForUserInOrg({
              org: "llvm",
              team_slug: "llvm-release-managers",
              username: "tstellar"
           });
-          console.log(response)
-    - name: Check Permissions 2
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-      with:
-        github-token: ${{ inputs.LLVM_TOKEN_GENERATOR_PRIVATE_KEY }}
-        script: |
-          const response = await github.rest.teams.getMembershipForUserInOrg({
-             org: "llvm",
-             team_slug: "llvm-release-managers",
-             username: "nikic"
-          });
-          console.log(response)
