@@ -14,3 +14,6 @@ jobs:
           sparse-checkout: .github/workflows/
       - name: Test
         uses: ./.github/workflows/require-release-manager
+        with:
+          LLVM_TOKEN_GENERATOR_CLIENT_ID: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
+          LLVM_TOKEN_GENERATOR_PRIVATE_KEY: ${{ secrets.RELEASE_TASKS_USER_TOKEN }}
