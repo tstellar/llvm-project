@@ -22,7 +22,7 @@ runs:
         script: |
           const response = await github.rest.teams.getMembershipForUserInOrg({
              org: context.repo.owner,
-             team_slug: "llvm-release-managers"
+             team_slug: "llvm-release-managers",
              username: "tstellar"
           });
           console.log(response)
@@ -33,7 +33,7 @@ runs:
         script: |
           const response = await github.rest.teams.getMembershipForUserInOrg({
              org: context.repo.owner,
-             team_slug: "llvm-release-managers"
+             team_slug: "llvm-release-managers",
              username: "nikic"
           });
           console.log(response)
