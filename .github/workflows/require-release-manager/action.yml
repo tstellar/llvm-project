@@ -23,5 +23,5 @@ runs:
           await github.rest.teams.getMembershipForUserInOrg({
              org: "llvm",
              team_slug: "llvm-release-managers",
-             username: "tstellar"
+             username: "nikic"
           });
