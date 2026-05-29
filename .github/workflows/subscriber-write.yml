@@ -110,7 +110,7 @@ jobs:
               exit 1
               ;;
           esac
-          echo python3 ./github-automation.py \
+          python3 ./github-automation.py \
             --token "$ISSUE_SUBSCRIBER_TOKEN" \
             "$command" \
             --issue-number "$ISSUE_NUMBER" \
