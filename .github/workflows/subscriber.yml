@@ -19,6 +19,8 @@ jobs:
         run: echo "${{ toJSON(github) }}"
       - id: data
         env:
+          # github.event.number is for pull_request events and
+          # github.event.issue.number is for issues events.
           ISSUE_NUMBER: ${{ github.event.number || github.event.issue.number }}
           LABEL_NAME: ${{ github.event.label.name }}
         run: |
