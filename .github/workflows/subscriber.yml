@@ -14,8 +14,9 @@ permissions:
 jobs:
   subscriber:
     runs-on: ubuntu-24.04
-    if: github.repository == 'llvm/llvm-project'
     steps:
+      - name: Dump GitHub context
+        run: echo "${{ toJSON(github) }}"
       - id: data
         env:
           # github.event.number is for pull_request events and
