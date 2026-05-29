@@ -1,12 +1,6 @@
 name: Subscriber
 
 on:
-  # FIXME: We need to keep this trigger here temporarily, because exisiting PRs.
-  # won't trigger this workflow if they are based on a checkout of main from
-  # before we added the pull_request trigger.
-  pull_request_target:
-    types:
-      - labeled
   pull_request:
     types:
       - labeled
