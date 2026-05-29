@@ -64,8 +64,6 @@ jobs:
               issue_number: process.env.ISSUE_NUMBER
             });
 
-            console.log(labels);
-            console.log(typeof(labels));
             const hasLabel = labels.data.some((label) => label.name === process.env.LABEL_NAME);
             if (hasLabel) {
               return process.env.LABEL_NAME;
