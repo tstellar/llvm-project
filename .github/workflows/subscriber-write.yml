@@ -69,7 +69,7 @@ jobs:
           ISSUE_NUMBER: ${{ steps.data.outputs.issue-number }}
         run: |
           case "$EVENT_TRIGGER" in
-            pull_request)
+            pull_request*)
               command="pr-subscriber
               ;;
             issues)
