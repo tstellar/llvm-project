@@ -19,7 +19,7 @@ jobs:
         run: echo "${{ toJSON(github) }}"
       - id: data
         env:
-          ISSUE_NUMBER: ${{ github.event.number }}
+          ISSUE_NUMBER: ${{ github.event.number || github.event.issue.number }}
           LABEL_NAME: ${{ github.event.label.name }}
         run: |
           filename=subscriber-data
