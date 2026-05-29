@@ -18,7 +18,7 @@ jobs:
       - id: data
         env:
           ISSUE_NUMBER: ${{ github.event.number }}
-          LABEL_NAME: ${{ issue.event.label.name }}
+          LABEL_NAME: ${{ github.event.label.name }}
         run: |
           filename=subscriber-data
           echo "$ISSUE_NUMBER" >> $filename
