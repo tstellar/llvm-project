@@ -64,7 +64,7 @@ jobs:
               issue_number: process.env.ISSUE_NUMBER
             });
 
-            const hasLabel = array.some((label) => label.name === process.env.LABEL_NAME);
+            const hasLabel = labels.some((label) => label.name === process.env.LABEL_NAME);
             if (!hasLabel) {
               throw new Error(`Label ${process.env.LABEL_NAME} does not exist on issue ${process.env.ISSUE_NUMBER}.`);
             } else {
