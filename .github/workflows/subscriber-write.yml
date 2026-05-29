@@ -100,10 +100,10 @@ jobs:
         run: |
           case "$EVENT_TRIGGER" in
             pull_request)
-              command="pr-subscriber
+              command="pr-subscriber"
               ;;
             issues)
-              command="issue-subscriber
+              command="issue-subscriber"
               ;;
             *)
               echo "Unknown event trigger: $EVENT_TRIGGER"
