@@ -65,8 +65,8 @@ jobs:
             });
 
             console.log(labels);
-            sonsole.log(typeof(labels));
-            const hasLabel = labels.some((label) => label.name === process.env.LABEL_NAME);
+            console.log(typeof(labels));
+            const hasLabel = labels.data.some((label) => label.name === process.env.LABEL_NAME);
             if (!hasLabel) {
               throw new Error(`Label ${process.env.LABEL_NAME} does not exist on issue ${process.env.ISSUE_NUMBER}.`);
             } else {
