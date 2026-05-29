@@ -40,7 +40,36 @@ jobs:
           DATA_FILE: subscriber-data
         run: |
           echo "issue-number=$(head -n1 $DATA_FILE)" >> $GITHUB_OUTPUT
-          echo "label=$(tail -n1 $DATA_FILE)" >> $GITHUB_OUTPUT
+          echo "label-name=$(tail -n1 $DATA_FILE)" >> $GITHUB_OUTPUT
+
+      # Data coming from the pull_request event should be consider untrusted
+      # since the PR author will have full control of the information in the
+      # subscriber-data file.  To validate the data we just need to check that
+      # the label actually exists on the given PR.  We probably don't need to
+      # do this for the issues event, but we do it in anyway just to be
+      # extra safe.
+      - name: Validate Data
+        id: validated-label
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          ISSUE_NUMBER: ${{ steps.data.outputs.issue-number }}
+          LABEL_NAME: ${{ steps.data.outputs.label-name }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
+          script: |
+            let labels = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: process.env.ISSUE_NUMBER
+            });
+
+            const hasLabel = array.some((label) => label.name === process.env.LABEL_NAME);
+            if (!hasLabel) {
+              throw new Error(`Label ${process.env.LABEL_NAME} does not exist on issue ${process.env.ISSUE_NUMBER}.`);
+            } else {
+              return process.env.LABEL_NAME;
+            }
 
       - name: Setup Automation Script
         working-directory: ./llvm/utils/git/
@@ -65,7 +94,7 @@ jobs:
         env:
           EVENT_TRIGGER: ${{ github.event.workflow_run.event }}
           ISSUE_SUBSCRIBER_TOKEN: ${{ steps.app-token.outputs.token }}
-          LABEL_NAME: ${{ steps.data.outputs.label }}
+          LABEL_NAME: ${{ steps.validated-label.outputs.result }}
           ISSUE_NUMBER: ${{ steps.data.outputs.issue-number }}
         run: |
           case "$EVENT_TRIGGER" in
