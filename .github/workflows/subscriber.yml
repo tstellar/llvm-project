@@ -28,7 +28,7 @@ jobs:
         run: |
           filename=subscriber-data
           echo "$ISSUE_NUMBER" >> $filename
-          echo "LABEL_NAME" >> $filename
+          echo "$LABEL_NAME" >> $filename
           echo "filename=$filename" >> $GITHUB_OUTPUT
 
 

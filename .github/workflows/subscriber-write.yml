@@ -67,11 +67,10 @@ jobs:
             console.log(labels);
             console.log(typeof(labels));
             const hasLabel = labels.data.some((label) => label.name === process.env.LABEL_NAME);
-            if (!hasLabel) {
-              throw new Error(`Label ${process.env.LABEL_NAME} does not exist on issue ${process.env.ISSUE_NUMBER}.`);
-            } else {
+            if (hasLabel) {
               return process.env.LABEL_NAME;
             }
+            throw new Error(`Label ${process.env.LABEL_NAME} does not exist on issue ${process.env.ISSUE_NUMBER}.`);
 
       - name: Setup Automation Script
         working-directory: ./llvm/utils/git/
