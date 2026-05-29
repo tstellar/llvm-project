@@ -15,6 +15,8 @@ jobs:
   subscriber:
     runs-on: ubuntu-24.04
     steps:
+      - name: Dump GitHub context
+        run: echo "${{ toJSON(github) }}"
       - id: data
         env:
           ISSUE_NUMBER: ${{ github.event.number }}
