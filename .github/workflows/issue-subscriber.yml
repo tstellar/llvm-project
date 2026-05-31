@@ -33,7 +33,6 @@ jobs:
           LABEL_NAME: ${{ github.event.label.name }}
           ISSUE_SUBSCRIBER_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          pip list
           github-automation.py \
             --token "$ISSUE_SUBSCRIBER_TOKEN" \
             issue-subscriber \
