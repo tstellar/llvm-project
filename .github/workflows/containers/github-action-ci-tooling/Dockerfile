@@ -113,3 +113,15 @@ RUN apt-get update && \
     universal-ctags && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+FROM base as github-automation
+ARG LLVM_GIT_CHECKOUT=/home/gha/llvm-project
+ARG LLVM_GITHUB_AUTOMATION_DIR=llvm/utils/git
+
+USER gha
+RUN git clone https://github.com/llvm/llvm-project --depth=1 -b main --no-checkout ${LLVM_GIT_CHECKOUT}
+RUN git -C ${LLVM_GIT_CHECKOUT} sparse-checkout init --cone
+RUN git -C ${LLVM_GIT_CHECKOUT} sparse-checkout set ${LLVM_GITHUB_AUTOMATION_DIR}
+RUN git -C ${LLVM_GIT_CHECKOUT} checkout
+WORKDIR ${LLVM_GIT_CHECKOUT}/${LLVM_GITHUB_AUTOMATION_DIR}
+RUN pip install --require-hashes -r requirements.txt --break-system-packages
