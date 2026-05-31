@@ -127,7 +127,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 USER gha
-RUN git clone https://github.com/llvm/llvm-project --depth=1 -b main --no-checkout ${LLVM_GIT_CHECKOUT}
-RUN git -C ${LLVM_GIT_CHECKOUT} sparse-checkout init --cone
-RUN git -C ${LLVM_GIT_CHECKOUT} sparse-checkout set ${LLVM_GITHUB_AUTOMATION_DIR}
-RUN git -C ${LLVM_GIT_CHECKOUT} checkout
+RUN git clone https://github.com/llvm/llvm-project --depth=1 -b main --no-checkout ${LLVM_GIT_CHECKOUT} && \
+    git -C ${LLVM_GIT_CHECKOUT} sparse-checkout init --cone && \
+    git -C ${LLVM_GIT_CHECKOUT} sparse-checkout set ${LLVM_GITHUB_AUTOMATION_DIR} && \
+    git -C ${LLVM_GIT_CHECKOUT} checkout && \
+    rm -Rf ${LLVM_GIT_CHECKOUT}/.git
