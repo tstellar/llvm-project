@@ -1,0 +1,37 @@
+name: Subscriber
+
+on:
+  pull_request:
+    types:
+      - labeled
+  issues:
+    types:
+      - labeled
+
+permissions:
+  contents: read
+
+jobs:
+  subscriber:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Dump GitHub context
+        run: echo "${{ toJSON(github) }}"
+      - id: data
+        env:
+          # github.event.number is for pull_request events and
+          # github.event.issue.number is for issues events.
+          ISSUE_NUMBER: ${{ github.event.number || github.event.issue.number }}
+          LABEL_NAME: ${{ github.event.label.name }}
+        run: |
+          filename=subscriber-data
+          echo "$ISSUE_NUMBER" >> $filename
+          echo "$LABEL_NAME" >> $filename
+          echo "filename=$filename" >> $GITHUB_OUTPUT
+
+
+      - name: Upload data
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: subscriber-data
+          path: ${{ steps.data.outputs.filename }}
