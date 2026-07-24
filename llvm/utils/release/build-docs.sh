@@ -124,10 +124,10 @@ fi
 
 if [ "${no_man_pages}" != "yes" ]; then
   echo "Man pages: enabled"
-  man_page_targets="install-docs-clang-man install-docs-clang-tools-man install-docs-dsymutil-man install-docs-flang-man install-docs-lldb-man install-docs-llvm-dwarfdump-man install-docs-llvm-man install-docs-polly-man"
+  man_page_targets="install-docs-clang-man install-docs-clang-tools-man install-docs-dsymutil-man install-docs-flang-man install-docs-llvm-dwarfdump-man install-docs-llvm-man install-docs-polly-man"
   install_prefix=${builddir}/install
   man_page_flag=" -DLLVM_ENABLE_SPHINX=ON -DSPHINX_WARNINGS_AS_ERRORS=OFF -DSPHINX_OUTPUT_MAN:BOOL=ON -DCMAKE_INSTALL_PREFIX=${install_prefix}"
-  extra_man_page_projects=";lldb;mlir;bolt"
+  extra_man_page_projects=";mlir;bolt"
   extra_man_page_runtimes=";compiler-rt;openmp;"
 else
   echo "Man pages: disabled"

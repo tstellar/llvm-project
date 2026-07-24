@@ -39,6 +39,23 @@ on:
         description: "Private key for our GitHub App we use for generating access tokens."
         required: true
 
+  pull_request:
+    paths:
+      - '.github/workflows/release-documentation.yml'
+    types:
+      - opened
+      - synchronize
+      - reopened
+      # When a PR is closed, we still start this workflow, but then skip
+      # all the jobs, which makes it effectively a no-op.  The reason to
+      # do this is that it allows us to take advantage of concurrency groups
+      # to cancel in progress CI jobs whenever the PR is closed.
+      - closed
+
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.release-version || github.event.pull_request.number }}
+  cancel-in-progress: True
+
 jobs:
   # This job checks permissions and validates inputs to prevent potential
   # malicious actions.  Since the release-documentation job has contents: write
