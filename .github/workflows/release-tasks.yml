@@ -15,15 +15,26 @@ jobs:
     name: Validate Tag
     runs-on: ubuntu-24.04
     outputs:
-      release-version: ${{ steps.validate-tag.outputs.release-version }}
+      release-version: ${{ steps.validate-tag.outputs.release-version || steps.version.outputs.full-no-suffix }}
+      test-run: ${{ github.ref_type != 'tag' }}
     steps:
       - name: Validate Tag
         id: validate-tag
+        if: github.ref_type == 'tag'
         run: |
-          echo "$GITHUB_REF_NAME $GITHUB_REF_TYPE"
           echo "$GITHUB_REF_NAME" | grep -e '^llvmorg-[0-9]\+\.[0-9]\+\.[0-9]\+\(-rc[0-9]\+\)\?$'
           release_version=$(echo "$GITHUB_REF_NAME" | sed 's/llvmorg-//g')
           echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
+
+      - if: github.ref_type != 'tag'
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/
+          sparse-checkout-cone-mode: false
+      - id: version
+        if: github.ref_type != 'tag'
+        uses: ./.github/workflows/get-llvm-version
 
   release-create:
     name: Create a New Release
@@ -55,12 +66,14 @@ jobs:
           permission-members: read
 
       - name: Create Release
+        if: ${{ !needs.validate-tag.outputs.test-run }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
           USER_TOKEN: ${{ steps.app-token.outputs.token }}
           RELEASE_VERSION: ${{ needs.validate-tag.outputs.release-version }}
         run: |
           ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --release "$RELEASE_VERSION" --user "$GITHUB_ACTOR" --user-token "$USER_TOKEN" create
+
   release-documentation:
     name: Build and Upload Release Documentation and Man Pages
     needs:
