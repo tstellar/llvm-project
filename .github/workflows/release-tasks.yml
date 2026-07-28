@@ -33,6 +33,7 @@ jobs:
           sparse-checkout: |
             .github/
             llvm/utils/release/
+            cmake/Modules/LLVMVersion.cmake
           sparse-checkout-cone-mode: false
       - id: version
         if: github.ref_type != 'tag'
