@@ -67,7 +67,7 @@ jobs:
           permission-members: read
 
       - name: Create Release
-        if: ${{ needs.validate-tag.outputs.test-run == 'true' }}
+        if: ${{ needs.validate-tag.outputs.test-run == 'false' }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
           USER_TOKEN: ${{ steps.app-token.outputs.token }}
