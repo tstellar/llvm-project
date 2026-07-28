@@ -87,7 +87,7 @@ jobs:
     uses: ./.github/workflows/release-documentation.yml
     with:
       release-version: ${{ needs.validate-tag.outputs.release-version }}
-      upload: true
+      upload: ${{ needs.validate-tag.outputs.test_run != 'false' }}
     # Called workflows don't have access to secrets by default, so we need to explicitly pass secrets that we use.
     secrets:
       LLVM_TOKEN_GENERATOR_CLIENT_ID: ${{ secrets.LLVM_TOKEN_GENERATOR_CLIENT_ID }}
@@ -103,7 +103,7 @@ jobs:
     uses: ./.github/workflows/release-doxygen.yml
     with:
       release-version: ${{ needs.validate-tag.outputs.release-version }}
-      upload: true
+      upload: ${{ needs.validate-tag.outputs.test_run != 'false' }}
     # Called workflows don't have access to secrets by default, so we need to explicitly pass secrets that we use.
     secrets:
       LLVM_TOKEN_GENERATOR_CLIENT_ID: ${{ secrets.LLVM_TOKEN_GENERATOR_CLIENT_ID }}
