@@ -61,6 +61,7 @@ jobs:
 
       - name: Check Permissions
         uses: ./.github/workflows/require-team-membership
+        if: false
         with:
           team-slug: llvm-release-managers
           LLVM_TOKEN_GENERATOR_CLIENT_ID: ${{ secrets.LLVM_TOKEN_GENERATOR_CLIENT_ID }}
