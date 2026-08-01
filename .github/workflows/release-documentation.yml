@@ -62,7 +62,6 @@ jobs:
     name: Build and Upload Release Documentation and Man Pages
     runs-on: ubuntu-24.04
     if: >-
-      github.repository_owner == 'llvm' &&
       github.event.action != 'closed'
     outputs:
       man-page-digest: ${{ steps.man-page-digest.outputs.digest }}
