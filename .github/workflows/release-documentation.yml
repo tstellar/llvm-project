@@ -223,14 +223,14 @@ jobs:
             .github/workflows/upload-release-artifact
           sparse-checkout-cone-mode: false
 
-     - name: Upload Man Page Artifacts
-       id: man-page-artifact-upload
-       uses: ./.github/workflows/upload-release-artifact
-       with:
-         release-version: ${{ needs.release-documentation.outputs.man-page-release-version }}
-         artifact-id: ${{ needs.release-documentation.outputs.man-page-artifact-id }}
-         attestation-name: ${{ needs.release-documentation.outputs.man-page-attestation-name }}
-         digest: ${{ needs.release-documentation.outputs.man-page-digest }}
-         upload: ${{ needs.release-documentation.outputs.man-page-upload }}
-         LLVM_TOKEN_GENERATOR_CLIENT_ID: ${{ secrets.LLVM_TOKEN_GENERATOR_CLIENT_ID }}
-         LLVM_TOKEN_GENERATOR_PRIVATE_KEY: ${{ secrets.LLVM_TOKEN_GENERATOR_PRIVATE_KEY }}
+      - name: Upload Man Page Artifacts
+        id: man-page-artifact-upload
+        uses: ./.github/workflows/upload-release-artifact
+        with:
+          release-version: ${{ needs.release-documentation.outputs.man-page-release-version }}
+          artifact-id: ${{ needs.release-documentation.outputs.man-page-artifact-id }}
+          attestation-name: ${{ needs.release-documentation.outputs.man-page-attestation-name }}
+          digest: ${{ needs.release-documentation.outputs.man-page-digest }}
+          upload: ${{ needs.release-documentation.outputs.man-page-upload }}
+          LLVM_TOKEN_GENERATOR_CLIENT_ID: ${{ secrets.LLVM_TOKEN_GENERATOR_CLIENT_ID }}
+          LLVM_TOKEN_GENERATOR_PRIVATE_KEY: ${{ secrets.LLVM_TOKEN_GENERATOR_PRIVATE_KEY }}
