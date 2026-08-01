@@ -54,10 +54,6 @@ on:
       - closed
 
 
-concurrency:
-  group: ${{ github.workflow }}-${{ inputs.release-version || github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
   release-documentation:
     name: Build and Upload Release Documentation and Man Pages
@@ -68,6 +64,8 @@ jobs:
       man-page-digest: ${{ steps.man-page-digest.outputs.digest }}
       man-page-artifact-id: ${{ steps.man-page-artifact-upload.outputs.artifact-id }}
     steps:
+      - run: |
+          echo ${{ github.workflow }}-${{ inputs.release-version || github.event.pull_request.number }}
       - name: Checkout LLVM
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
