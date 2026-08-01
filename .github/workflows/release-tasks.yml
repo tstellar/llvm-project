@@ -61,6 +61,11 @@ jobs:
           ./llvm/utils/release/./github-upload-release.py --token "$GITHUB_TOKEN" --release "$RELEASE_VERSION" --user "$GITHUB_ACTOR" --user-token "$USER_TOKEN" create
   release-documentation:
     name: Build and Upload Release Documentation and Man Pages
+    permission:
+      contents: write     # For man page uploads
+      id-token: write     # For artifact attestations
+      attestations: write # For artifact attestations
+
     needs:
       - validate-tag
       - release-create
