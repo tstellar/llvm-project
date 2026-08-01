@@ -68,7 +68,6 @@ jobs:
 
     needs:
       - validate-tag
-      - release-create
     uses: ./.github/workflows/release-documentation.yml
     with:
       release-version: ${{ needs.validate-tag.outputs.release-version }}
