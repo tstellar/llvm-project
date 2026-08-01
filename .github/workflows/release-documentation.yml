@@ -53,6 +53,7 @@ on:
       # to cancel in progress CI jobs whenever the PR is closed.
       - closed
 
+
 concurrency:
   group: ${{ github.workflow }}-${{ inputs.release-version || github.event.pull_request.number }}
   cancel-in-progress: true
