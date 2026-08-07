@@ -69,7 +69,7 @@ jobs:
       attestations: write
     uses: ./.github/workflows/release-documentation.yml
     with:
-      release-version: ${{ needs.validate-tag.outputs.release-version }}
+      release-version: 23.1.0-rc2
       upload: true
     # Called workflows don't have access to secrets by default, so we need to explicitly pass secrets that we use.
     secrets:
@@ -146,7 +146,7 @@ jobs:
       - validate-tag
     uses: ./.github/workflows/release-binaries-all.yml
     with:
-      release-version: ${{ needs.validate-tag.outputs.release-version }}
+      release-version: 23.1.0-rc2
       upload: true
     # Called workflows don't have access to secrets by default, so we need to explicitly pass secrets that we use.
     secrets:
@@ -163,7 +163,7 @@ jobs:
       - validate-tag
     uses: ./.github/workflows/release-sources.yml
     with:
-      release-version: ${{ needs.validate-tag.outputs.release-version }}
+      release-version: 23.1.0-rc2
     # Called workflows don't have access to secrets by default, so we need to explicitly pass secrets that we use.
     secrets:
       LLVM_TOKEN_GENERATOR_CLIENT_ID: ${{ secrets.LLVM_TOKEN_GENERATOR_CLIENT_ID }}

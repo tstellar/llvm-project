@@ -113,7 +113,7 @@ jobs:
           INPUTS_RELEASE_VERSION: ${{ inputs.release-version }}
         run: |
           ./llvm/utils/release/build-docs.sh \
-            $(test -n "$INPUTS_RELEASE_VERSION" && echo -release "$INPUTS_RELEASE_VERSION" || echo -srcdir llvm)
+            $(echo -srcdir llvm)
           echo "man-page-tarball-name=$(basename $(find . -iname 'llvm_man_pages-*.tar.xz'))" >> "$GITHUB_OUTPUT"
 
       - name: Generate sha256 digest for tarballs
