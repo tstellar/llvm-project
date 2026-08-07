@@ -46,7 +46,6 @@ jobs:
   inputs:
     name: Collect Job Inputs
     if: >-
-      github.repository_owner == 'llvm' &&
       github.event.action != 'closed'
     outputs:
       ref: ${{ steps.inputs.outputs.ref }}
