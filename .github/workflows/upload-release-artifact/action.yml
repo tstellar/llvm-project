@@ -41,18 +41,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Check Permissions
-      uses: $/.github/workflows/require-team-membership
-      with:
-        team-slug: llvm-release-managers
-        LLVM_TOKEN_GENERATOR_CLIENT_ID: ${{ inputs.LLVM_TOKEN_GENERATOR_CLIENT_ID }}
-        LLVM_TOKEN_GENERATOR_PRIVATE_KEY: ${{ inputs.LLVM_TOKEN_GENERATOR_PRIVATE_KEY }}
-
-    - name: Validate Input
-      uses: $/.github/workflows/validate-release-version
-      with:
-        release-version: ${{ inputs.release-version }}
-
     - name: Download Artifact
       uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
       id: download-artifact
