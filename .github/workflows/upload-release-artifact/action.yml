@@ -109,7 +109,7 @@ runs:
 
     - name: Upload Release
       shell: bash
-      if: inputs.upload == 'true'
+      if: false && inputs.upload == 'true'
       env:
         INPUTS_RELEASE_VERSION: ${{ inputs.release-version }}
         DOWNLOAD_PATH: ${{ steps.download-artifact.outputs.download-path }}
