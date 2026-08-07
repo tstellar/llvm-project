@@ -64,7 +64,6 @@ jobs:
     env:
       DOXYGEN_FILE_PATTERN: '*doxygen*.tar.xz'
     if: >-
-      github.repository_owner == 'llvm' &&
       github.event.action != 'closed'
     permissions:
       contents: read
