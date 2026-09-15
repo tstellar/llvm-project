@@ -43,7 +43,7 @@ public:
 };
 
 /// Analysis pass which computes a \ref CycleInfo.
-class CycleAnalysis : public AnalysisInfoMixin<CycleAnalysis> {
+class LLVM_ABI_FOR_TEST CycleAnalysis : public AnalysisInfoMixin<CycleAnalysis> {
   friend AnalysisInfoMixin<CycleAnalysis>;
   static AnalysisKey Key;
 
