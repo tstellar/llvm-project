@@ -1887,7 +1887,7 @@ protected:
 /// VPWidenCastRecipe is a recipe to create vector cast instructions.
 /// TODO: Merge with VPWidenRecipe now that type is associated to every
 /// VPRecipeValue.
-class VPWidenCastRecipe : public VPRecipeWithIRFlags, public VPIRMetadata {
+class LLVM_ABI_FOR_TEST VPWidenCastRecipe : public VPRecipeWithIRFlags, public VPIRMetadata {
   /// Cast instruction opcode.
   Instruction::CastOps Opcode;
 
