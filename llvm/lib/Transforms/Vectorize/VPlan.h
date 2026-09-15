@@ -1934,7 +1934,7 @@ protected:
 };
 
 /// A recipe for widening vector intrinsics.
-class VPWidenIntrinsicRecipe : public VPRecipeWithIRFlags, public VPIRMetadata {
+class LLVM_ABI_FOR_TEST VPWidenIntrinsicRecipe : public VPRecipeWithIRFlags, public VPIRMetadata {
   /// ID of the vector intrinsic to widen.
   Intrinsic::ID VectorIntrinsicID;
 
