@@ -66,7 +66,7 @@ protected:
   bool RequireRegBankSelection = true;
 };
 
-class InstructionSelectImpl {
+class LLVM_ABI_FOR_TEST InstructionSelectImpl {
 public:
   bool selectMachineFunction(MachineFunction &MF);
   void setInstructionSelector(InstructionSelector *NewISel) { ISel = NewISel; }
