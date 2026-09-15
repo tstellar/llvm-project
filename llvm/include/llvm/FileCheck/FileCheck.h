@@ -300,7 +300,7 @@ public:
 /// Abstract base class for recording a FileCheck diagnostic that provides an
 /// additional note (possibly a new error) about the most recent
 /// \c MatchResultDiag.
-class MatchNoteDiag : public FileCheckDiag {
+class LLVM_ABI_FOR_TEST MatchNoteDiag : public FileCheckDiag {
 private:
   const MatchResultDiag *MRD;
 
