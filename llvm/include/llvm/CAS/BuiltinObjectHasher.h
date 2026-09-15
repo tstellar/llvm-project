@@ -15,7 +15,7 @@
 namespace llvm::cas {
 
 /// Hasher for stored objects in builtin CAS.
-template <class HasherT> class BuiltinObjectHasher {
+template <class HasherT> class LLVM_ABI_FOR_TEST BuiltinObjectHasher {
 public:
   using HashT = decltype(HasherT::hash(std::declval<ArrayRef<uint8_t> &>()));
 
