@@ -1019,6 +1019,16 @@ function(add_llvm_component_library name)
     set_target_properties(${name} PROPERTIES FOLDER "${subproject_title}/Libraries/${ARG_ADD_TO_COMPONENT}")
   endif()
 
+  # When building shared obj
+  # that are used across shared objects which we can't hide.
+  if (NOT BUILD_SHARED_LIBS AND NOT APPLE AND
+      (NOT (WIN32 OR CYGWIN) OR ((MINGW OR CYGWIN) AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")) AND
+      NOT ("${CMAKE_SYSTEM_NAME}" MATCHES "AIX") AND
+      NOT DEFINED CMAKE_CXX_VISIBILITY_PRESET)
+    # Set default visibility to hidden, so we don't export all the Target classes
+    # in libLLVM.so.
+    set_target_properties(${name} PROPERTIES CXX_VISIBILITY_PRESET "hidden")
+  endif()
 endfunction()
 
 macro(add_llvm_library name)
