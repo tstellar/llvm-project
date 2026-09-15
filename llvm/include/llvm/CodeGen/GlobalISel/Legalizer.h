@@ -44,7 +44,7 @@ struct LegalizerMFResult {
   const MachineInstr *FailedOn;
 };
 
-LegalizerMFResult legalizeMachineFunction(
+LLVM_ABI_FOR_TEST LegalizerMFResult legalizeMachineFunction(
     MachineFunction &MF, const LegalizerInfo &LI,
     ArrayRef<GISelChangeObserver *> AuxObservers,
     LostDebugLocObserver &LocObserver, MachineIRBuilder &MIRBuilder,
