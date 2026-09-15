@@ -44,7 +44,7 @@ VPValue *getOrCreateVPValueForSCEVExpr(VPlan &Plan, const SCEV *Expr);
 
 /// Return the SCEV expression for \p V. Returns SCEVCouldNotCompute if no
 /// SCEV expression could be constructed.
-const SCEV *getSCEVExprForVPValue(const VPValue *V,
+LLVM_ABI_FOR_TEST const SCEV *getSCEVExprForVPValue(const VPValue *V,
                                   PredicatedScalarEvolution &PSE,
                                   const Loop *L = nullptr);
 
