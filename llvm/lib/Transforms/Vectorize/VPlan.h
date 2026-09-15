@@ -4193,7 +4193,7 @@ protected:
 /// A recipe for converting \p Current into \p Start + \p Current * \p Step.
 /// FastMathFlags are derived from the \p FPBinOp in the case of FP inductions,
 /// and the passed NoWrap \p Flags apply in the case of Ptr and Int inductions.
-class VPDerivedIVRecipe : public VPRecipeWithIRFlags {
+class LLVM_ABI_FOR_TEST VPDerivedIVRecipe : public VPRecipeWithIRFlags {
   /// Kind of the induction.
   const InductionDescriptor::InductionKind Kind;
   /// If not nullptr, the floating point induction binary operator. Must be set
