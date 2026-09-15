@@ -404,7 +404,7 @@ public:
   };
 
   /// Utility class to collect and erase dead instructions.
-  class DeadInstructionMorgue {
+  class LLVM_ABI_FOR_TEST DeadInstructionMorgue {
   public:
     DeadInstructionMorgue() = default;
     DeadInstructionMorgue(const DeadInstructionMorgue &) = delete;
