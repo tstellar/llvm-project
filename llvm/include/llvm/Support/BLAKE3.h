@@ -35,7 +35,7 @@ template <size_t NumBytes = LLVM_BLAKE3_OUT_LEN>
 using BLAKE3Result = std::array<uint8_t, NumBytes>;
 
 /// A class that wraps the BLAKE3 algorithm.
-class BLAKE3 {
+class LLVM_ABI_FOR_TEST BLAKE3 {
 public:
   BLAKE3() { init(); }
 
