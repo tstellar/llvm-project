@@ -27,7 +27,7 @@ namespace mca {
 template <typename T>
 class InstructionError : public ErrorInfo<InstructionError<T>> {
 public:
-  static char ID;
+  LLVM_ABI static char ID;
   std::string Message;
   const T &Inst;
 
