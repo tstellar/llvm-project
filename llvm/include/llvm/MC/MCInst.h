@@ -185,7 +185,7 @@ public:
 
 /// Instances of this class represent a single low-level machine
 /// instruction.
-class MCInst {
+class LLVM_ABI MCInst {
   unsigned Opcode = 0;
   // These flags could be used to pass some info from one target subcomponent
   // to another, for example, from disassembler to asm printer. The values of
