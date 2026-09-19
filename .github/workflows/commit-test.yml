@@ -5,9 +5,9 @@ on:
   pull_request:
 
 jobs:
-  - test:
+  test:
     runs-on: ubuntu-24.04
     steps:
       - run: |
-        echo "${{ toJson(github.event) }}"
+          echo "${{ toJson(github.event) }}"
 
