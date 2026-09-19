@@ -10,4 +10,3 @@ jobs:
     steps:
       - run: |
           echo "${{ toJson(github.event) }}"
-
