@@ -238,7 +238,7 @@ jobs:
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             gh api "repos/${REPO}/pulls/${PR_NUMBER}/files" --paginate --jq '.[].filename' > /tmp/changed_files.txt
           else
-            gh api "repos/${REPO}/compare/${{ github.event.before }}...${{ github.event.after }}" --paginate --jq 'files[].filename' > /tmp/changed_files.txt
+            gh api "repos/${REPO}/compare/${{ github.event.before }}...${{ github.event.after }}" --paginate --jq '.files[].filename' > /tmp/changed_files.txt
           fi
       - name: Compute Projects
         id: vars
