@@ -209,8 +209,7 @@ jobs:
   premerge-compute-macos:
     name: Compute macOS Projects
     if: >-
-        github.repository_owner == 'llvm' &&
-        (github.event_name != 'pull_request' || github.event.action != 'closed')
+        github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: ubuntu-22.04
     permissions:
       contents: read
