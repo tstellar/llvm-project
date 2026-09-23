@@ -307,7 +307,7 @@ private:
 public:
   MatchNoteDiag(FileCheckDiagKind Kind) : FileCheckDiag(Kind), MRD(nullptr) {}
   /// Destructor is purely virtual to ensure this remains an abstract class.
-  virtual ~MatchNoteDiag() = 0;
+  LLVM_ABI virtual ~MatchNoteDiag() = 0;
   /// Is \p FCD an instance of \c MatchNoteDiag?
   static bool classof(const FileCheckDiag *FCD) {
     FileCheckDiagKind Kind = FCD->getKind();
