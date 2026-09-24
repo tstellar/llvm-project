@@ -17,7 +17,6 @@ concurrency:
 
 jobs:
   build:
-    if: github.repository_owner == 'llvm'
     name: Check LLVM_ABI annotations with ids
     runs-on: ubuntu-26.04
     container:
