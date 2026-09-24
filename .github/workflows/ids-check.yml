@@ -50,7 +50,7 @@ jobs:
                 -D LLVM_INCLUDE_BENCHMARKS=OFF \
                 -D CMAKE_EXPORT_COMPILE_COMMANDS=ON \
                 -D CMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
-                -D -DLLVM_BUILD_LLVM_DYLIB_VIS=ON \
+                -D LLVM_BUILD_LLVM_DYLIB_VIS=ON \
                 -D LLVM_LINK_LLVM_DYLIB=ON \
                 -G Ninja
 
