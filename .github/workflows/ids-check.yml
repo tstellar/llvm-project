@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   build:
-    name: Check LLVM_ABI annotations with ids ${{ runner.OS }}
+    name: Check LLVM_ABI annotations with ids
     runs-on: ${{ matrix.runs-on }}
     container:
       image: ${{ matrix.image }} 
