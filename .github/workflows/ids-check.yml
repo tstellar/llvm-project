@@ -1,6 +1,7 @@
 name: "Check LLVM ABI annotations"
 
 on:
+  push:
   pull_request:
     paths:
       - 'llvm/**'
