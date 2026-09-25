@@ -47,6 +47,7 @@ jobs:
           sha: 'HEAD'
 
       - if: runner.os == 'Windows'
+        shell: cmd
         run: |
           call C:\\BuildTools\\Common7\\Tools\\VsDevCmd.bat -arch=amd64 -host_arch=amd64
 
