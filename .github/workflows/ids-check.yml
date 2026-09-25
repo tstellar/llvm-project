@@ -117,6 +117,7 @@ jobs:
             comments
 
       - name: Build and test libLLVM.so
+        shell: bash
         run: |
           ninja -C ./llvm-project/build check-llvm
             --issue-number $GITHUB_PR_NUMBER \
