@@ -2025,7 +2025,7 @@ public:
   }
 
   /// Produce a widened version of the vector intrinsic.
-  LLVM_ABI_FOR_TEST void execute(VPTransformState &State) override;
+  void execute(VPTransformState &State) override;
 
   /// Compute the cost of a vector intrinsic with \p ID and \p Operands.
   static InstructionCost computeCallCost(Intrinsic::ID ID,
