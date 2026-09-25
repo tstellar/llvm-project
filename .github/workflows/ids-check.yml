@@ -47,12 +47,16 @@ jobs:
           sha: 'HEAD'
 
       - name: Configure and build minimal LLVM for use by ids
+        shell: bash
+        env:
+          CC: ${{ case(runner.os == 'Windows', 'cl.exe', 'clang') }}
+          CXX: ${{ case(runner.os == "Windows', 'cl.exe', 'clang++') }} 
         run: |
           cmake -B ./llvm-project/build/ \
                 -S ./llvm-project/llvm/ \
                 -D CMAKE_BUILD_TYPE=Release \
-                -D CMAKE_C_COMPILER=clang \
-                -D CMAKE_CXX_COMPILER=clang++ \
+                -D CMAKE_C_COMPILER=$CC \
+                -D CMAKE_CXX_COMPILER=$CXX \
                 -D LLVM_TARGETS_TO_BUILD="host" \
                 -D LLVM_INCLUDE_BENCHMARKS=OFF \
                 -D CMAKE_EXPORT_COMPILE_COMMANDS=ON \
@@ -84,6 +88,7 @@ jobs:
           ninja -C "$BUILD_DIR" $TABLEGEN_TARGETS
 
       - name: Run ids check
+        if: runner.os != 'Windows'
         env:
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
@@ -100,7 +105,7 @@ jobs:
 
       - name: Upload results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        if: always()
+        if: always() && runner.os != 'Windows'
         with:
           name: workflow-args
           path: |
