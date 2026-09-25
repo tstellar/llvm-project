@@ -55,8 +55,8 @@ jobs:
       - name: Configure and build minimal LLVM for use by ids
         shell: bash
         env:
-          CC: ${{ case(runner.os == 'Windows', 'cl.exe', 'clang') }}
-          CXX: ${{ case(runner.os == 'Windows', 'cl.exe', 'clang++') }}
+          CC: ${{ case(runner.os == 'Windows', 'cl', 'clang') }}
+          CXX: ${{ case(runner.os == 'Windows', 'cl', 'clang++') }}
         run: |
           cmake -B ./llvm-project/build/ \
                 -S ./llvm-project/llvm/ \
