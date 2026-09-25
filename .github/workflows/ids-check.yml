@@ -46,6 +46,10 @@ jobs:
           base_sha: 'HEAD~1'
           sha: 'HEAD'
 
+      - if: runner.os == 'Windows'
+        run: |
+          call C:\\BuildTools\\Common7\\Tools\\VsDevCmd.bat -arch=amd64 -host_arch=amd64
+
       - name: Configure and build minimal LLVM for use by ids
         shell: bash
         env:
