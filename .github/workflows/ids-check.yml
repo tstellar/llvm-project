@@ -49,7 +49,7 @@ jobs:
       - if: runner.os == 'Windows'
         shell: cmd
         run: |
-          C:\BuildTools\Common7\Tools\VsDevCmd.bat -arch=amd64 -host_arch=amd64
+          "C:\Build Tools\Common7\Tools\VsDevCmd.bat" -arch=amd64 -host_arch=amd64
 
       - name: Configure and build minimal LLVM for use by ids
         shell: bash
