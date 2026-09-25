@@ -1917,10 +1917,10 @@ public:
   VP_CLASSOF_IMPL(VPRecipeBase::VPWidenCastSC)
 
   /// Produce widened copies of the cast.
-  LLVM_ABI_FOR_TEST void execute(VPTransformState &State) override;
+  void execute(VPTransformState &State) override;
 
   /// Return the cost of this VPWidenCastRecipe.
-  LLVM_ABI_FOR_TEST InstructionCost
+  InstructionCost
   computeCost(ElementCount VF, VPCostContext &Ctx) const override;
 
   Instruction::CastOps getOpcode() const { return Opcode; }
