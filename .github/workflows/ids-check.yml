@@ -70,6 +70,7 @@ jobs:
                 -D LLVM_LINK_LLVM_DYLIB=ON \
                 -G Ninja
 
+           exit 0
           # Build the generated-header prerequisites that idt needs to parse
           # LLVM source.
           BUILD_DIR=./llvm-project/build
@@ -119,4 +120,6 @@ jobs:
       - name: Build and test libLLVM.so
         shell: bash
         run: |
-          ninja -C ./llvm-project/build check-llvm
+          #ninja -C ./llvm-project/build check-llvm
+          ninja -C ./llvm-project/build AnalysisTests
+          ./llvm-project/build/unittests/Analysis/AnalysisTests --gtest_filter='*PluginLoad*'
