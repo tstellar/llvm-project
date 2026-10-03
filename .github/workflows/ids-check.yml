@@ -120,6 +120,6 @@ jobs:
       - name: Build and test libLLVM.so
         shell: bash
         run: |
-          #ninja -C ./llvm-project/build check-llvm
           ninja -C ./llvm-project/build AnalysisTests
+          ninja -C ./llvm-project/build check-llvm
           ./llvm-project/build/unittests/Analysis/AnalysisTests.exe --gtest_filter='*PluginLoad*'
