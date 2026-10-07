@@ -106,7 +106,6 @@ jobs:
         run: |
           echo "[]" > comments &&
           python ./llvm-project/llvm/utils/git/ids-check-helper.py \
-            --token ${{ secrets.GITHUB_TOKEN }} \
             --idt-path $(which idt) \
             --compile-commands ./llvm-project/build/compile_commands.json \
             --start-rev HEAD~1 \
