@@ -696,6 +696,8 @@ TEST_F(ProgramEnvTest, TestExecuteEmptyEnvironment) {
       ExecuteAndWait(Executable, argv, ArrayRef<StringRef>{}, {}, 0, 0, &Error,
                      &ExecutionFailed);
   EXPECT_FALSE(ExecutionFailed) << Error;
+  dbgs() << "Error: " << Error << "\n";
+
 #ifndef __MINGW32__
   // When running with an empty environment, the child process doesn't in herit
   // the PATH variable. On MinGW, it is common for executables to require a
