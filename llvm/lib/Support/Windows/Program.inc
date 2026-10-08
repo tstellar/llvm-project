@@ -479,6 +479,7 @@ ProcessInfo sys::Wait(const ProcessInfo &PI,
     return WaitResult;
   }
 
+  llvm::dbgs() << "Wait() Status is " << status << "\n";
   if (!status)
     return WaitResult;
 
