@@ -40,7 +40,6 @@ int sys::ExecuteAndWait(StringRef Program, ArrayRef<StringRef> Args,
   ProcessInfo PI;
   if (Execute(PI, Program, Args, Env, Redirects, MemoryLimit, ErrMsg,
               AffinityMask, /*DetachProcess=*/false)) {
-	  llvm::dbgs() << "Return code: " << PI.ReturnCode << "\n";
     if (ExecutionFailed)
       *ExecutionFailed = false;
     ProcessInfo Result = Wait(
