@@ -705,7 +705,7 @@ TEST_F(ProgramEnvTest, TestExecuteEmptyEnvironment) {
   // This can also happens on Windows when the unittest is linked against
   // the LLVM.dll.
   // 0xC0000135 i sthe STATUS_DLL_NOT_FOUND error, so ignore it on Windows.
-  if (RetCode == static_cast<int>(0xC0000135)
+  if (RetCode == static_cast<int>(0xC0000135))
     RetCode = 0;
 #endif
   ASSERT_EQ(0, RetCode);
